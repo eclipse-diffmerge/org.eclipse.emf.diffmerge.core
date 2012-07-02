@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.diffmerge.ui.gmf;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: org.eclipse.emf.diffmerge.ui.gmf.GMFDiffMergeUIPlugin
+Bundle-Vendor: %providerName
+Require-Bundle: org.eclipse.emf.diffmerge.ui;visibility:=reexport,
+ org.eclipse.gmf.runtime.emf.core,
+ org.eclipse.emf.diffmerge.gmf;visibility:=reexport
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true
+Export-Package: org.eclipse.emf.diffmerge.ui.gmf

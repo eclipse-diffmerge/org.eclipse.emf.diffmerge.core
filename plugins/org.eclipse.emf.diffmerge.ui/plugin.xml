@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.eclipse.emf.diffmerge.ui.modelComparisonContext" name="ModelComparisonContext" schema="schema/ModelComparisonContext.exsd"/>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://www.eclipse.org/emf/diffmerge/ui/diffuidata/1.0.0"
+            class="org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage"
+            genModel="model/DiffUIData.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.emf.diffmerge.ui.compareWithEachOther"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="org.eclipse.emf.diffmerge.ui.actions.CompareModelsAction"
+               enablesFor="2+"
+               id="org.eclipse.emf.diffmerge.ui.compareFilesAction"
+               label="Each Other as models"
+               menubarPath="compareWithMenu/compareWithGroup">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
+      <comparisonScope
+            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecificationFactory">
+      </comparisonScope>
+      <comparisonScope
+            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.ResourceScopeSpecificationFactory">
+      </comparisonScope>
+      <comparisonScope
+            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.EObjectScopeSpecificationFactory">
+      </comparisonScope>
+      <comparisonSpecification
+            specificationFactory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecificationFactory">
+      </comparisonSpecification>
+   </extension>
+</plugin>

@@ -1,0 +1,67 @@
+/**
+ * <copyright>
+ * 
+ * Copyright (c) 2010-2012 Thales Global Services S.A.S.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Thales Global Services S.A.S. - initial API and implementation
+ * 
+ * </copyright>
+ */
+package org.eclipse.emf.diffmerge.api.scopes;
+
+import java.util.List;
+
+import org.eclipse.emf.ecore.resource.Resource;
+
+
+/**
+ * A model scope which is aware of the physical, potentially fragmented storage
+ * of its elements.
+ * Resources are assumed to be organized in an acyclic "inclusion" graph derived
+ * from the containment tree, with additional "referencing" arcs.
+ * The "holding" resource defined in the super-interface must be one of those
+ * resources.
+ * @author Olivier Constant
+ */
+public interface IFragmentedModelScope extends IPhysicalModelScope {
+  
+  /**
+   * Return the list of the resources containing elements which belong to
+   * the direct contents of elements of the given resource.
+   * Class invariant: getResources().containsAll(getIncludedResources(_))
+   * Class invariant: getRootResources().retainsAll(getIncludedResources(_)).isEmpty()
+   * @param resource_p a non-null resource belonging to getResources()
+   * @return a non-null, potentially empty list
+   */
+  List<Resource> getIncludedResources(Resource resource_p);
+  
+  /**
+   * Return the list of the resources which are not included in the
+   * given resource and which contain elements that are cross-referenced
+   * by elements of the given resource.
+   * Class invariant: getResources().containsAll(getReferencedResources(_))
+   * Class invariant: getIncludedResources(X).retainsAll(getReferencedResources(X)).isEmpty()
+   * @param resource_p a non-null resource belonging to getResources()
+   * @return a non-null, potentially empty list
+   */
+  List<Resource> getReferencedResources(Resource resource_p);
+  
+  /**
+   * Return the list of the resources which are covered by this scope.
+   * @return a non-null, potentially empty list
+   */
+  List<Resource> getResources();
+  
+  /**
+   * Return the list of the root resources which are covered by this scope.
+   * Class invariant: getResources().containsAll(getRootResources())
+   * @return a non-null, potentially empty list
+   */
+  List<Resource> getRootResources();
+  
+}
