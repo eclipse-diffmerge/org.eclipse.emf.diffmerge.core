@@ -21,9 +21,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
@@ -32,15 +34,19 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
+import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -129,6 +135,19 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 	 */
 	private final BidirectionalComparisonCopier _copier;
 
+  /**
+   * A non-null, stateful but frozen cross-referencer for the TARGET scope
+   * @generated NOT
+   */
+  private final ScopeCrossReferencer _targetCrossReferencer;
+ 
+  /**
+   * A non-null, stateful but frozen cross-referencer for the REFERENCE scope
+   * @generated NOT
+   */
+  private final ScopeCrossReferencer _referenceCrossReferencer;
+
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -137,6 +156,8 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 	protected EMappingImpl() {
 		super();
 		_copier = new BidirectionalComparisonCopier();
+    _targetCrossReferencer = new ScopeCrossReferencer(Role.TARGET);
+    _referenceCrossReferencer = new ScopeCrossReferencer(Role.REFERENCE);
 	}
 
 	/**
@@ -441,6 +462,8 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 		getAncestorMatches().clear();
 		getTargetCompletedMatches().clear();
 		getReferenceCompletedMatches().clear();
+    _targetCrossReferencer.clear();
+    _referenceCrossReferencer.clear();
 	}
 
 	/**
@@ -466,7 +489,21 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 	public boolean covers(EObject element_p, Role role_p) {
 		return getMatchFor(element_p, role_p) != null;
 	}
-
+	
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IMapping.Editable#crossReference(org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  public void crossReference(Role role_p) {
+    ScopeCrossReferencer referencer = null;
+    if (role_p == Role.TARGET)
+      referencer = _targetCrossReferencer;
+    else if (role_p == Role.REFERENCE)
+      referencer = _referenceCrossReferencer;
+    if (referencer != null)
+      referencer.crossReference();
+  }
+  
 	/**
 	 * @see org.eclipse.emf.diffmerge.api.IMapping#getCompletedMatches(org.eclipse.emf.diffmerge.api.Role)
 	 * @generated NOT
@@ -550,7 +587,25 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 				result++;
 		return result;
 	}
-
+	
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IMapping#getCrossReferences(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  public Collection<Setting> getCrossReferences(EObject element_p, Role role_p) {
+    Collection<Setting> result = null;
+    ScopeCrossReferencer referencer = null;
+    if (role_p == Role.TARGET)
+      referencer = _targetCrossReferencer;
+    else if (role_p == Role.REFERENCE)
+      referencer = _referenceCrossReferencer;
+    if (referencer != null)
+      result = referencer.get(element_p);
+    if (result == null)
+      result = Collections.emptyList();
+    return result;
+  }
+  
 	/**
 	 * @see org.eclipse.emf.diffmerge.api.IMapping#isCompleteFor(org.eclipse.emf.diffmerge.api.scopes.IModelScope, org.eclipse.emf.diffmerge.api.Role)
 	 * @generated NOT
@@ -717,4 +772,73 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
 		return ECollections.unmodifiableEMap(result);
 	}
 
+  /**
+   * A cross-referencer for handling cross-references that are not covered by differences
+   * @generated NOT
+   */
+  protected class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
+    private static final long serialVersionUID = 1L;
+    /** The non-null role played by the scope to cross-reference */
+    protected final Role _role;
+    /**
+     * Constructor
+     * @param role_p a role which is TARGET or REFERENCE
+     */
+    public ScopeCrossReferencer(Role role_p) {
+      super(Collections.emptyList());
+      _role = role_p;
+    }
+    /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#crossReference()
+     */
+    @Override
+    public void crossReference() { // Increases visibility
+      super.crossReference();
+    }
+    /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#crossReference(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
+     */
+    @Override
+    protected boolean crossReference(EObject element_p, EReference reference_p, EObject crossReferenced_p) {
+      boolean result = false;
+      if (reference_p.isChangeable() && !reference_p.isDerived()) {
+        IMatch referencingMatch = getMatchFor(element_p, _role);
+        IMatch referencedMatch = getMatchFor(crossReferenced_p, _role);
+        // Unidirectional, modifiable cross-references between unmatched elements
+        if (referencingMatch != null && referencedMatch != null)
+          result = referencingMatch.isPartial() && referencedMatch.isPartial();
+      }
+      return result;
+    }
+    /**
+     * Return the role covered by this cross-referencer
+     * @return TARGET or REFERENCE
+     */
+    public Role getRole() {
+      return _role;
+    }
+    /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#newCollection()
+     */
+    @Override
+    protected Collection<EStructuralFeature.Setting> newCollection() {
+      return new FArrayList<EStructuralFeature.Setting>();
+    }
+    /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#newContentsIterator()
+     */
+    @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected TreeIterator<Notifier> newContentsIterator() {
+      return (TreeIterator)getComparison().getScope(_role).getAllContents();
+    }
+    /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#resolve()
+     */
+    @Override
+    protected boolean resolve() {
+      return false;
+    }
+  }
+  
 } //EMappingImpl

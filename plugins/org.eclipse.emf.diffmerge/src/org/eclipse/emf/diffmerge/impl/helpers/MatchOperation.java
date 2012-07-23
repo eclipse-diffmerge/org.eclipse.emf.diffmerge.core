@@ -175,7 +175,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
    */
   @Override
   protected int getWorkAmount() {
-    return _comparison.isThreeWay()? 3: 4; // 1 init, 2|3 for ID-based matching
+    return _comparison.isThreeWay()? 5: 6; // 1 init, 2|3 for ID-based matching, 2 for cross-refs
   }
   
   /**
@@ -207,6 +207,11 @@ public class MatchOperation extends AbstractExpensiveOperation {
   public IStatus run() {
     getMonitor().worked(1);
     match();
+    IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping(); //OCO
+    mapping.crossReference(Role.TARGET);
+    getMonitor().worked(1);
+    mapping.crossReference(Role.REFERENCE);
+    getMonitor().worked(1);
     return Status.OK_STATUS;
   }
   

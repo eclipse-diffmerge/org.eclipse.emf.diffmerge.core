@@ -19,6 +19,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 
 
 
@@ -57,6 +58,14 @@ public interface IMapping {
    * @return a non-null, potentially empty, unmodifiable collection of matches
    */
   Collection<IMatch> getContents();
+  
+  /**
+   * Return the cross-references to the given element in the given role which are not covered by differences
+   * @param element_p a non-null element
+   * @param role_p a role which is TARGET or REFERENCE
+   * @return a non-null, potentially empty, unmodifiable collection
+   */
+  Collection<Setting> getCrossReferences(EObject element_p, Role role_p);
   
   /**
    * Return the match for the given element playing the given role,
@@ -168,6 +177,12 @@ public interface IMapping {
      * @param role_p a role which is TARGET or REFERENCE
      */
     void completeReferences(Role role_p);
+    
+    /**
+     * Register cross-references which are not covered by differences
+     * @param role_p a role which is TARGET or REFERENCE
+     */
+    void crossReference(Role role_p);
     
     /**
      * Return a modifiable collection of the formerly partial matches

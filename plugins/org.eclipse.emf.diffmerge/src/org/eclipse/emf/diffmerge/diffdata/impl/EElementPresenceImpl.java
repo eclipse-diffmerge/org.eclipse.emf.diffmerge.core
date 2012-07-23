@@ -27,6 +27,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -216,10 +217,17 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
 	 */
 	@Override
 	protected void mergeRemoval() {
-		if (isRoot()) {
-			IFeaturedModelScope presenceScope = getPresenceScope();
-			presenceScope.remove(getElement());
-		} // Else handled by ownership
+      if (isRoot() || getElementMatch().getOwnershipDifference(getPresenceRole()) == null) {
+            IFeaturedModelScope presenceScope = getPresenceScope();
+        EObject element = getElement();
+        presenceScope.remove(element);
+        // Delete element
+        for (EStructuralFeature.Setting setting :
+             getComparison().getMapping().getCrossReferences(element, getPresenceRole())) {
+          presenceScope.remove(
+            setting.getEObject(), (EReference)setting.getEStructuralFeature(), element);
+        }
+      } // Else handled by ownership
 	}
 
 } //EElementPresenceImpl

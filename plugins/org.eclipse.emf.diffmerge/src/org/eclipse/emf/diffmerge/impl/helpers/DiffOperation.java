@@ -481,6 +481,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
         ((IMergeableDifference.Editable)presence_p).markRequires(
             peerPresence, presenceRole.opposite());
+        ((IMergeableDifference.Editable)peerPresence).markRequires(
+                presence_p, presenceRole);
       }
     }
     // Grouped deletion according to policy

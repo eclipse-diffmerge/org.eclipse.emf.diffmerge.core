@@ -265,20 +265,30 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 	 */
 	@Override
 	protected final void mergeValueRemoval() {
-		if (getSymmetrical() == null
-				&& !(hasStrongerOpposite() && !getValue().isPartial())) {
-			IFeaturedModelScope presenceScope = getPresenceScope();
-			EObject valueElement = getValue().get(getPresenceRole());
-			presenceScope.remove(getHolder(), getFeature(), valueElement);
-			// If presence is independent of ownership, re-integrate direct children in scope
-			if (!getComparison().getLastMergePolicy().bindPresenceToOwnership()) {
-				for (EObject child : presenceScope.getContents(valueElement)) {
-					presenceScope.add(child);
-				}
-			}
-		}
-		// Otherwise, we know this difference will be merged implicitly because of dependencies
-		// since a required difference implies this difference
+    if (getSymmetrical() == null && !(hasStrongerOpposite() && !getValue().isPartial())) {
+      IFeaturedModelScope presenceScope = getPresenceScope();
+      EObject valueElement = getValue().get(getPresenceRole());
+      if (getFeature() != null)
+        presenceScope.remove(getHolder(), getFeature(), valueElement);
+      else
+        presenceScope.remove(valueElement);
+      if (getFeature() == null || getFeature().isContainment()) {
+        // Value has been removed from its containment: delete element
+        for (EStructuralFeature.Setting setting :
+             getComparison().getMapping().getCrossReferences(valueElement, getPresenceRole())) {
+          presenceScope.remove(
+              setting.getEObject(), (EReference)setting.getEStructuralFeature(), valueElement);
+        }
+        if (!getComparison().getLastMergePolicy().bindPresenceToOwnership()) {
+          // Re-integrate direct children in scope
+          for (EObject child : presenceScope.getContents(valueElement)) {
+            presenceScope.add(child);
+          }
+        }
+      }
+    }
+    // Otherwise, we know this difference will be merged implicitly because of dependencies
+    // since a required difference implies this difference
 	}
 
 } //EReferenceValuePresenceImpl

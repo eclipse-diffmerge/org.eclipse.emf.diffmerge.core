@@ -235,8 +235,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
    * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#remove(EObject)
    */
   public boolean remove(EObject element_p) {
-    // Warning: redefine if there is a possibility that the element is cross-referenced
-    // by elements outside the scope
+    // Warning: this implementation ignores cross-references from outside the scope
     EcoreUtil.remove(element_p);
     return true;
   }
