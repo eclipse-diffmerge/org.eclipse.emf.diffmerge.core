@@ -3,7 +3,7 @@
   <properties xmi:id="_YBZ1cNWaEeGg-5Vjl_7Xaw" key="sources.folder" value="${build.root}/git"/>
   <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="http://download.eclipse.org/releases/helios/"/>
   <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
-  <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/egf/"/>
+  <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/diffmerge/"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
     <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_rZ6t4NTMEeGOc4hDMM5euQ" path="${sources.folder}/plugins"/>
