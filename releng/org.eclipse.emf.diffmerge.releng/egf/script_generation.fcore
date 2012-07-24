@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fcore:FactoryComponent xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:domain="http://www.eclipse.org/egf/1.0.0/domain"
+    xmlns:fcore="http://www.eclipse.org/egf/1.0.0/fcore" xmlns:fprod="http://www.eclipse.org/egf/1.0.0/fprod"
+    xmlns:types="http://www.eclipse.org/egf/1.0.0/types" xmi:id="_SzDQYNTNEeGOc4hDMM5euQ"
+    name="script_generation">
+  <viewpointContainer xmi:id="_TetcgNTNEeGOc4hDMM5euQ">
+    <viewpoints xmi:type="domain:DomainViewpoint" xmi:id="_TxyJgNTNEeGOc4hDMM5euQ">
+      <domains xmi:type="domain:EMFDomain" xmi:id="_UHiXENTNEeGOc4hDMM5euQ" helperImplementation="org.eclipse.egf.domain.emf.EMFDomainHelper"
+          uri="platform:/resource/org.eclipse.emf.diffmerge.releng/model/diffmerge.egfbuild"/>
+    </viewpoints>
+  </viewpointContainer>
+  <orchestration xmi:type="fprod:ProductionPlan" xmi:id="_WUD5ANTNEeGOc4hDMM5euQ">
+    <invocations xmi:id="_ZrrVENTNEeGOc4hDMM5euQ" invokedActivity="fcore:FactoryComponent platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_N4pRwI6UEd-e7viTqNBNrA">
+      <invocationContractContainer xmi:id="_ZrrVEdTNEeGOc4hDMM5euQ">
+        <invocationContracts xmi:id="_ZrrVEtTNEeGOc4hDMM5euQ" invokedContract="fcore:FactoryComponentContract platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_ad5FkY6VEd-e7viTqNBNrA">
+          <type xmi:type="domain:TypeDomain" xmi:id="_a4tv8NTNEeGOc4hDMM5euQ" domain="#_UHiXENTNEeGOc4hDMM5euQ"/>
+        </invocationContracts>
+        <invocationContracts xmi:id="_ZrrVE9TNEeGOc4hDMM5euQ" invokedContract="fcore:FactoryComponentContract platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_npIcUJlgEd-cRYVfj6AwNg">
+          <type xmi:type="types:TypeString" xmi:id="_b6broNTNEeGOc4hDMM5euQ" value="platform:/resource/org.eclipse.emf.diffmerge.releng/jobs/"/>
+        </invocationContracts>
+      </invocationContractContainer>
+    </invocations>
+  </orchestration>
+</fcore:FactoryComponent>
