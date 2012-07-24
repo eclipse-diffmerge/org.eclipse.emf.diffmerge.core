@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildcore:Job xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildcore="http://www.eclipse.org/egf/1.0.1/buildcore" xmlns:buildstep="http://www.eclipse.org/egf/1.0.2/buildstep" xmi:id="_nq6FgdTMEeGOc4hDMM5euQ" name="diffmerge">
+  <properties xmi:id="_YBZ1cNWaEeGg-5Vjl_7Xaw" key="sources.folder" value="${build.root}/git"/>
   <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="http://download.eclipse.org/releases/helios/"/>
+  <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
+  <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/egf/"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
-    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_rZ6t4NTMEeGOc4hDMM5euQ" path="${build.root}/git/plugins"/>
-    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_H4VPQNTNEeGOc4hDMM5euQ" pattern="" path="${build.root}/git/features"/>
+    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_rZ6t4NTMEeGOc4hDMM5euQ" path="${sources.folder}/plugins"/>
+    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_H4VPQNTNEeGOc4hDMM5euQ" pattern="" path="${sources.folder}/features"/>
     <buildLocations xsi:type="buildstep:UpdateSiteBuildLocation" xmi:id="_y9d-4NTMEeGOc4hDMM5euQ" url="${eclipse.p2}"/>
     <components xsi:type="buildstep:Feature" xmi:id="_EPIT8NTNEeGOc4hDMM5euQ" id="org.eclipse.emf.diffmerge.sdk.feature"/>
   </steps>
