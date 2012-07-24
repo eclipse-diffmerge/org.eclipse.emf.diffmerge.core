@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature_0.1.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature" version="0.1.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <category-def name="org.eclipse.emf.diffmerge.category" label="EMF Diff/Merge"/>
+</site>
