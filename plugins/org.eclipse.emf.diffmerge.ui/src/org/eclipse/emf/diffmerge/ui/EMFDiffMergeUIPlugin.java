@@ -186,6 +186,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
       case FROM_RIGHT_DEL:
         result = ImageID.INC_REM_STAT; break;
       case MODIFIED:
+      case FROM_BOTH:
         result = ImageID.MODIFIED_STAT; break;
       case CONFLICT:
         result = ImageID.CONFLICT_STAT; break;

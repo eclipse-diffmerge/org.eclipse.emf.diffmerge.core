@@ -50,8 +50,8 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -1554,27 +1554,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
         }
       }
     });
-    // Use custom labels
-    final MenuItem useCustomLabelsItem = new MenuItem(synthesisMenu, SWT.CHECK);
-    useCustomLabelsItem.setText(Messages.ComparisonViewer_LabelsMenuItem);
-    useCustomLabelsItem.setSelection(ModelComparisonDiffNode.DEFAULT_USE_CUSTOM_LABELS);
-    useCustomLabelsItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        if (getInput() != null) {
-          getInput().setUseCustomLabels(useCustomLabelsItem.getSelection());
-          _synthesisModelTreeViewer.refresh();
-          _featuresViewer.refresh();
-          _leftValuesViewer.refresh();
-          _rightValuesViewer.refresh();
-        }
-      }
-    });
     // Show merge impact
-    new MenuItem(synthesisMenu, SWT.SEPARATOR);
     final MenuItem showImpactItem = new MenuItem(synthesisMenu, SWT.CHECK);
     showImpactItem.setText(Messages.ComparisonViewer_ImpactMenuItem);
     showImpactItem.setSelection(_showMergeImpact);
