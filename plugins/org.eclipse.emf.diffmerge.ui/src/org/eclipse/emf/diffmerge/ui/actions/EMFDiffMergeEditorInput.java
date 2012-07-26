@@ -97,6 +97,9 @@ implements IEditingDomainProvider {
   /** Whether the comparison originally contained differences (initially true) */
   private boolean _foundDifferences;
   
+  /** Whether the editor is dirty (required for compatibility with Indigo) */ //OCO
+  private boolean _isDirty;
+  
   
   /**
    * Constructor
@@ -111,6 +114,7 @@ implements IEditingDomainProvider {
     _comparisonResource = null;
     _initialResources = new ArrayList<Resource>();
     _foundDifferences = true;
+    _isDirty = false;
     initializeCompareConfiguration();
   }
   
@@ -383,6 +387,15 @@ implements IEditingDomainProvider {
   }
   
   /**
+   * @see org.eclipse.compare.CompareEditorInput#isSaveNeeded()
+   */
+  @Override
+  public boolean isSaveNeeded() {
+    // Redefined for compatibility with Indigo
+    return _isDirty;
+  }
+  
+  /**
    * Load the model scopes
    * @param monitor_p a non-null monitor for reporting progress
    */
@@ -499,6 +512,20 @@ implements IEditingDomainProvider {
         });
         getEditingDomain().getCommandStack().flush();
       }
+    }
+  }
+  
+  /**
+   * @see org.eclipse.compare.CompareEditorInput#setDirty(boolean)
+   */
+  @Override
+  public void setDirty(boolean dirty_p) {
+    // Redefined for compatibility with Indigo
+    boolean oldDirty = isDirty();
+    if (dirty_p != oldDirty) {
+      _isDirty = dirty_p;
+      PropertyChangeEvent event = new PropertyChangeEvent(this, DIRTY_STATE, oldDirty, _isDirty);
+      firePropertyChange(event);
     }
   }
   

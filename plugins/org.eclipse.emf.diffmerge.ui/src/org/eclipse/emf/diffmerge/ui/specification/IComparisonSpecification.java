@@ -71,11 +71,11 @@ public interface IComparisonSpecification extends IEditingDomainProvider, IDispo
   boolean isThreeWay();
   
   /**
-   * Switch the scope specifications that play the given roles
+   * Swap the scope specifications that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
    * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
    */
-  boolean switchScopeSpecifications(Role role1_p, Role role2_p);
+  boolean swapScopeSpecifications(Role role1_p, Role role2_p);
   
 }

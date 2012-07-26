@@ -85,7 +85,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
     createRolesSection(composite);
     createComparisonMethodSection(composite);
     // Init
-    _setup.switchScopeSpecifications(Role.TARGET, Role.TARGET);
+    _setup.swapScopeSpecifications(Role.TARGET, Role.TARGET);
     Point size = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
     ((GridData)parent_p.getLayoutData()).heightHint = size.y + 5;
   }
@@ -315,7 +315,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        _setup.switchScopeSpecifications(Role.TARGET, Role.REFERENCE);
+        _setup.swapScopeSpecifications(Role.TARGET, Role.REFERENCE);
       }
     });
     if (_setup.isThreeWay()) {
@@ -329,7 +329,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent event_p) {
-          _setup.switchScopeSpecifications(Role.REFERENCE, Role.ANCESTOR);
+          _setup.swapScopeSpecifications(Role.REFERENCE, Role.ANCESTOR);
         }
       });
     }

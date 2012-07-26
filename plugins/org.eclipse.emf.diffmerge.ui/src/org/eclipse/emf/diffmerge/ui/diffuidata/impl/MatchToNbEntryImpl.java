@@ -40,7 +40,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-@SuppressWarnings("hiding")
 public class MatchToNbEntryImpl extends EObjectImpl implements BasicEMap.Entry<EMatch,Integer> {
 	/**
 	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.

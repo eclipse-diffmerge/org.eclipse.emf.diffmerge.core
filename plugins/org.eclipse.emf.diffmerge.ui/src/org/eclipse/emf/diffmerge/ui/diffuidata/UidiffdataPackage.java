@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.EReference;
  * @model kind="package"
  * @generated
  */
-@SuppressWarnings("hiding")
 public interface UidiffdataPackage extends EPackage {
 	/**
 	 * The package name.

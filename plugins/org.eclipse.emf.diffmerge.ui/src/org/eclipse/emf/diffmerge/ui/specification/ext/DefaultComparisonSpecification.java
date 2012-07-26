@@ -185,9 +185,9 @@ public class DefaultComparisonSpecification implements IComparisonSpecification 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#switchScopeSpecifications(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#swapScopeSpecifications(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
    */
-  public boolean switchScopeSpecifications(Role role1_p, Role role2_p) {
+  public boolean swapScopeSpecifications(Role role1_p, Role role2_p) {
     boolean result = false;
     IScopeSpecification scope1 = getScopeSpecification(role1_p);
     IScopeSpecification scope2 = getScopeSpecification(role2_p);

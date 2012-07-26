@@ -147,15 +147,15 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
-   * Switch the scope specifications that play the given roles
+   * Swap the scope specifications that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
    * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
    */
-  public boolean switchScopeSpecifications(Role role1_p, Role role2_p) {
+  public boolean swapScopeSpecifications(Role role1_p, Role role2_p) {
     boolean result = true;
     if (_comparisonSpecification != null)
-      result = _comparisonSpecification.switchScopeSpecifications(role1_p, role2_p);
+      result = _comparisonSpecification.swapScopeSpecifications(role1_p, role2_p);
     if (result) {
       IScopeSpecification scope1 = getScopeSpecification(role1_p);
       IScopeSpecification scope2 = getScopeSpecification(role2_p);

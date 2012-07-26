@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.emf.diffmerge.ui;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.compare,
+Require-Bundle: org.eclipse.compare;visibility:=reexport,
  org.eclipse.ui;visibility:=reexport,
  org.eclipse.emf.edit.ui,
  org.eclipse.emf.ecore.edit,
