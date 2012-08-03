@@ -87,7 +87,8 @@ public class GMFScope extends FragmentedModelScope {
   @Override
   public List<EObject> get(EObject source_p, EReference reference_p) {
     List<EObject> result = super.get(source_p, reference_p);
-    if (result.isEmpty() && reference_p == NotationPackage.eINSTANCE.getView_Element())
+    if (result.isEmpty() && reference_p == NotationPackage.eINSTANCE.getView_Element() &&
+        source_p.eIsSet(reference_p))
       result = Collections.singletonList(NULL_ELEMENT);
     return result;
   }

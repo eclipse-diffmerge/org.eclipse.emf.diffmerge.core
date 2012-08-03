@@ -112,7 +112,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
     else
       viewerSelection = new StructuredSelection();
     methodViewer.setSelection(viewerSelection);
-    methodViewer.getControl().setEnabled(_setup.getCompatibleFactories().size() > 1);
+//    methodViewer.getControl().setEnabled(_setup.getCompatibleFactories().size() > 1);
   }
   
   /**
