@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<buildcore:Job xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildcore="http://www.eclipse.org/egf/1.0.1/buildcore" xmlns:buildstep="http://www.eclipse.org/egf/1.0.2/buildstep" xmi:id="_nq6FgdTMEeGOc4hDMM5euQ" name="diffmerge">
-  <properties xmi:id="_YBZ1cNWaEeGg-5Vjl_7Xaw" key="sources.folder" value="${build.root}/git"/>
-  <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="http://download.eclipse.org/releases/helios/"/>
+<buildcore:Job xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildcore="http://www.eclipse.org/egf/1.0.1/buildcore" xmlns:buildscm="http://www.eclipse.org/egf/1.0.0/buildscm" xmlns:buildstep="http://www.eclipse.org/egf/1.0.2/buildstep" xmi:id="_nq6FgdTMEeGOc4hDMM5euQ" name="diffmerge">
+  <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="${eclipse.download.prefix}/releases/helios/"/>
   <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
   <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/diffmerge/"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
-    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_rZ6t4NTMEeGOc4hDMM5euQ" path="${sources.folder}/plugins"/>
-    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_H4VPQNTNEeGOc4hDMM5euQ" pattern="" path="${sources.folder}/features"/>
+    <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_CqnccN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="features"/>
+    <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_DCUKwN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="plugins"/>
     <buildLocations xsi:type="buildstep:UpdateSiteBuildLocation" xmi:id="_y9d-4NTMEeGOc4hDMM5euQ" url="${eclipse.p2}"/>
     <components xsi:type="buildstep:Feature" xmi:id="_EPIT8NTNEeGOc4hDMM5euQ" id="org.eclipse.emf.diffmerge.sdk.feature"/>
   </steps>
   <steps xsi:type="buildstep:PublishStep" xmi:id="_zGibQNWQEeGg-5Vjl_7Xaw" name="Publish results" component="_EPIT8NTNEeGOc4hDMM5euQ" signing="true" generateDropins="true"/>
+  <steps xsi:type="buildstep:JavadocStep" xmi:id="_NQxi0N1NEeGLW89eUbtzmA" name="" sources="_DCUKwN1NEeGLW89eUbtzmA">
+    <includes>**/*.java</includes>
+    <links>http://download.oracle.com/javase/1.5.0/docs/api/</links>
+    <links>http://www.osgi.org/javadoc/r4v42/</links>
+    <links>http://download.eclipse.org/modeling/emf/emf/javadoc/2.5.0/</links>
+    <links>http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/</links>
+  </steps>
+  <scms xsi:type="buildscm:GIT" xmi:id="_8IWCQd1MEeGLW89eUbtzmA">
+    <locations xmi:id="_8hrIQN1MEeGLW89eUbtzmA" url="git.eclipse.org/gitroot/diffmerge/org.eclipse.emf.diffmerge.core.git"/>
+  </scms>
 </buildcore:Job>
