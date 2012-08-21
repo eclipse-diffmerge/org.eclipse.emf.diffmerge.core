@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.eclipse.emf.diffmerge.tests.elements.Elements.presentation.ElementsModelWizardID"
+            name="%_UI_ElementsModelWizard_label"
+            class="org.eclipse.emf.diffmerge.tests.elements.Elements.presentation.ElementsModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ElementsModelFile.gif">
+         <description>%_UI_ElementsModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            id="org.eclipse.emf.diffmerge.tests.elements.Elements.presentation.ElementsEditorID"
+            name="%_UI_ElementsEditor_label"
+            icon="icons/full/obj16/ElementsModelFile.gif"
+            extensions="elements"
+            class="org.eclipse.emf.diffmerge.tests.elements.Elements.presentation.ElementsEditor"
+            contributorClass="org.eclipse.emf.diffmerge.tests.elements.Elements.presentation.ElementsActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

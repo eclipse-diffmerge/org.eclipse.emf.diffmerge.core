@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_s2KhAOuXEeG8ApBgXzSQcA">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_tM9QYuuXEeG8ApBgXzSQcA" name="A" outgoing="_wUfCDeuXEeG8ApBgXzSQcA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_uGoDUuuXEeG8ApBgXzSQcA" name="B" incoming="_wUfCDeuXEeG8ApBgXzSQcA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_uamIMuuXEeG8ApBgXzSQcA" name="C"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Edge" id="_wUfCDeuXEeG8ApBgXzSQcA" name="Z" target="_uGoDUuuXEeG8ApBgXzSQcA" source="_tM9QYuuXEeG8ApBgXzSQcA"/>
+</org.eclipse.emf.diffmerge.tests.elements:Root>

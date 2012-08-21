@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_vwx2MND3EeGkrIQk3UsRcQ">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Element" id="_yi_fJND3EeGkrIQk3UsRcQ" name="E1" singleRef="_z95W4ND3EeGkrIQk3UsRcQ"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Element" id="_EMoGoNJpEeGsPbndICOzvA" name="E4">
+    <manyContent id="_z95W4ND3EeGkrIQk3UsRcQ" name="E2"/>
+  </content>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Element" id="_60lh4ND3EeGkrIQk3UsRcQ" name="E3" singleRef="_z95W4ND3EeGkrIQk3UsRcQ"/>
+</org.eclipse.emf.diffmerge.tests.elements:Root>

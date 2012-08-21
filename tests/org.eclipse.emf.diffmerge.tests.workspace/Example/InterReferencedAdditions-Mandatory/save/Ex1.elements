@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_vwx2MND3EeGkrIQk3UsRcQ">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_JhLzouubEeG8ApBgXzSQcA" name="N1"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:ReferencingNode" id="_P1mYBOubEeG8ApBgXzSQcA" name="RN1" referenced="_JhLzouubEeG8ApBgXzSQcA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:ReferencingNode" id="_RjHpxOubEeG8ApBgXzSQcA" name="RN2" referenced="_P1mYBOubEeG8ApBgXzSQcA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:ReferencingNode" id="_TQyshOubEeG8ApBgXzSQcA" name="RN3" referenced="_RjHpxOubEeG8ApBgXzSQcA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:ReferencingNode" id="_UwKNhOubEeG8ApBgXzSQcA" name="RN4" referenced="_TQyshOubEeG8ApBgXzSQcA"/>
+</org.eclipse.emf.diffmerge.tests.elements:Root>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.tests.elements/src"
+    modelPluginID="org.eclipse.emf.diffmerge.tests.elements" modelName="Elements"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
+    runtimeVersion="2.6">
+  <foreignModel>../../Misc/Elements.ecore</foreignModel>
+  <genPackages prefix="Elements" basePackage="org.eclipse.emf.diffmerge.tests.elements"
+      disposableProviderFactory="true" ecorePackage="Elements.ecore#/">
+    <genClasses image="false" ecoreClass="Elements.ecore#//IdentifiedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//IdentifiedElement/id"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Elements.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//Root">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//Root/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//Root/content"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//Element/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//Element/values"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/manyContent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/singleContent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/manyRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/singleRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/manyFromSingleRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/singleFromManyRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/manyFromManyRef1"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Element/manyFromManyRef2"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//StrictElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//StrictElement/sValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Elements.ecore#//StrictElement/sValues"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sManyContent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sSingleContent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sManyRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sSingleRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sManyFromSingleRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sSingleFromManyRef"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sManyFromManyRef1"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//StrictElement/sManyFromManyRef2"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//Node">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Node/incoming"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Node/outgoing"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Elements.ecore#//Node/subNodes"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//Edge">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Edge/target"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//Edge/source"/>
+    </genClasses>
+    <genClasses ecoreClass="Elements.ecore#//ReferencingNode">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Elements.ecore#//ReferencingNode/referenced"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

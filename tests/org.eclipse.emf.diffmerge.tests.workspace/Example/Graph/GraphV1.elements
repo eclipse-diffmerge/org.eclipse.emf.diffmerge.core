@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_P6nkUNc2EeGTgd5oPA9VyA">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_QP530tc2EeGTgd5oPA9VyA" name="N1" outgoing="___g9E9c2EeGYJOctzO5jVQ"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Edge" id="___g9E9c2EeGYJOctzO5jVQ" name="N1-to-N21" target="_U1x2wtc2EeGTgd5oPA9VyA" source="_QP530tc2EeGTgd5oPA9VyA"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_SkVYktc2EeGTgd5oPA9VyA" name="N2">
+    <subNodes xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_U1x2wtc2EeGTgd5oPA9VyA" name="N21" incoming="___g9E9c2EeGYJOctzO5jVQ" outgoing="_y0z2U9c2EeGYJOctzO5jVQ"/>
+    <subNodes xsi:type="org.eclipse.emf.diffmerge.tests.elements:Edge" id="_y0z2U9c2EeGYJOctzO5jVQ" name="N21-to-N22" target="_V75KQtc2EeGTgd5oPA9VyA" source="_U1x2wtc2EeGTgd5oPA9VyA"/>
+    <subNodes xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_V75KQtc2EeGTgd5oPA9VyA" name="N22" incoming="_y0z2U9c2EeGYJOctzO5jVQ">
+      <subNodes xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_7ggbItc2EeGYJOctzO5jVQ" name="N221" outgoing="_NP3Y09c3EeGYJOctzO5jVQ"/>
+      <subNodes xsi:type="org.eclipse.emf.diffmerge.tests.elements:Edge" id="_NP3Y09c3EeGYJOctzO5jVQ" name="N221-to-N3" target="_JbJKAtc3EeGYJOctzO5jVQ" source="_7ggbItc2EeGYJOctzO5jVQ"/>
+    </subNodes>
+  </content>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Node" id="_JbJKAtc3EeGYJOctzO5jVQ" name="N3" incoming="_NP3Y09c3EeGYJOctzO5jVQ"/>
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:ReferencingNode" id="_XDDmpNc2EeGTgd5oPA9VyA" name="ToN221" referenced="_7ggbItc2EeGYJOctzO5jVQ"/>
+</org.eclipse.emf.diffmerge.tests.elements:Root>
