@@ -1,10 +1,19 @@
-Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: WindowTester-based test plug-in on Elements
-Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.wt.elements
-Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.eclipse.emf.diffmerge.tests.wt.elements.Activator
-Require-Bundle: org.eclipse.core.runtime
-Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Manifest-Version: 1.0
+Bundle-Activator: org.eclipse.emf.diffmerge.tests.wt.elements.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit,
+ com.windowtester.runtime,
+ com.windowtester.swt.runtime,
+ com.windowtester.swing.runtime,
+ com.instantiations.eclipse.debug,
+ org.eclipse.jface,
+ com.instantiations.common.core,
+ com.instantiations.eclipse.util,
+ org.eclipse.swt
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.wt.elements
+Bundle-ActivationPolicy: lazy
+Bundle-Name: WindowTester-based test plug-in on Elements
 Bundle-Vendor: Thales Global Services S.A.S.
