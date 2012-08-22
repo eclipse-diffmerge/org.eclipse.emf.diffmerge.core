@@ -9,7 +9,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IPerspectiveDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import com.windowtester.runtime.IUIContext;
@@ -19,6 +22,7 @@ import com.windowtester.runtime.swt.condition.shell.ShellDisposedCondition;
 import com.windowtester.runtime.swt.condition.shell.ShellShowingCondition;
 import com.windowtester.runtime.swt.locator.ButtonLocator;
 import com.windowtester.runtime.swt.locator.CTabItemLocator;
+import com.windowtester.runtime.swt.locator.SWTWidgetLocator;
 import com.windowtester.runtime.swt.locator.TreeItemLocator;
 import com.windowtester.runtime.swt.locator.eclipse.ViewLocator;
 import com.windowtester.runtime.swt.locator.eclipse.WorkbenchLocator;
@@ -39,14 +43,71 @@ public abstract class DiffMergeTestCase extends UITestCaseSWT {
   
   
   /**
+   * Check that the persistent form of the 2 models at the current path are identical
+   * @throws Exception
+   */
+  protected void checkIdentical() throws Exception {
+    IUIContext ui = getUI();
+    final String current1 = CURRENT_PROJECT_NAME + SEP + MODEL1;
+    final String current2 = CURRENT_PROJECT_NAME + SEP + MODEL2;
+    ui.click(new TreeItemLocator(current1,
+        new ViewLocator("org.eclipse.jdt.ui.PackageExplorer")));
+    ui.click(1, new TreeItemLocator(current2,
+        new ViewLocator("org.eclipse.jdt.ui.PackageExplorer")), WT.CTRL);
+    ui.contextClick(new TreeItemLocator(current1,
+        new ViewLocator("org.eclipse.jdt.ui.PackageExplorer")),
+        "Compare With/Each Other as models");
+    ui.wait(new ShellShowingCondition("EMF Diff/Merge"));
+    ui.click(new ButtonLocator("&Finish"));
+    ui.wait(new ShellShowingCondition("Compare"));
+    ui.click(new ButtonLocator("OK"));
+    ui.wait(new ShellDisposedCondition("Compare"));
+  }
+  
+  /**
+   * Check that the given model is valid
+   * @param isModel1 whether model1 is considered, or model2
+   * @throws Exception
+   */
+  protected void checkModelIsValid(boolean isModel1) throws Exception {
+    IUIContext ui = getUI();
+    String fileName = isModel1? MODEL1: MODEL2;
+    ui.click(new TreeItemLocator(CURRENT_PROJECT_NAME + SEP + fileName,
+        new ViewLocator("org.eclipse.jdt.ui.PackageExplorer")));
+    ui.contextClick(new TreeItemLocator(CURRENT_PROJECT_NAME + SEP + fileName,
+        new ViewLocator("org.eclipse.jdt.ui.PackageExplorer")),
+        "Open With/Elements Model Editor");
+    final String TREE_ROOT_LABEL = "platform:\\\\/resource\\\\/" + CURRENT_PROJECT_NAME + "\\\\/" + fileName;
+    ui.contextClick(
+        new TreeItemLocator(
+            TREE_ROOT_LABEL,
+            new SWTWidgetLocator(Tree.class, new SWTWidgetLocator(
+                ViewForm.class))), "Validate");
+    ui.wait(new ShellShowingCondition("Validation Information"));
+    ui.click(new ButtonLocator("OK"));
+    ui.wait(new ShellDisposedCondition("Validation Information"));
+    ui.wait(new ShellDisposedCondition("Progress Information"));
+    PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        activePage.closeEditor(activePage.getActiveEditor(), false);
+      }
+    });
+  }
+  
+  /**
    * Apply the checks that must hold before and after save 
    * @throws Exception
    */
-  protected void checkPersistency() throws Exception {
+  protected void checkPersistence() throws Exception {
     IUIContext ui = getUI();
-    persistencyChecks(ui);
-    saveAndRecompareInFolder();
-    persistencyChecks(ui);
+    persistenceChecks(ui);
+    closeCompareEditor(true);
+    checkModelIsValid(true);
+    checkModelIsValid(false);
+    compareInFolder(false);
+    persistenceChecks(ui);
   }
   
   /**
@@ -64,6 +125,19 @@ public abstract class DiffMergeTestCase extends UITestCaseSWT {
       ui.click(new ButtonLocator("&Yes"));
       ui.wait(new ShellDisposedCondition("Save Resource"));
     }
+  }
+  
+  /**
+   * Close all editors
+   */
+  protected void closeEditors() {
+    PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+      @Override
+      public void run() {
+        IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        activePage.closeAllEditors(false);
+      }
+    });
   }
   
   /**
@@ -93,14 +167,17 @@ public abstract class DiffMergeTestCase extends UITestCaseSWT {
    * Return the path to the models to be compared
    * @return a non-null path in the examples folder, e.g., "FolderName"
    */
-  protected abstract String getModelPath();
+  protected String getModelPath() {
+    // Default implementation
+    return getClass().getSimpleName();
+  }
   
   /**
    * Define the checks that must hold before and after save
    * @param ui a non-null UI context
    * @throws Exception
    */
-  protected void persistencyChecks(IUIContext ui) throws Exception {
+  protected void persistenceChecks(IUIContext ui) throws Exception {
     // Override if checkPersistency() is used
   }
   
@@ -125,17 +202,6 @@ public abstract class DiffMergeTestCase extends UITestCaseSWT {
     IFile predefinedFile2 = folder.getFile(MODEL2);
     if (predefinedFile2.exists())
       predefinedFile2.copy(file2.getFullPath(), true, null);
-  }
-  
-  /**
-   * Save and close the current comparison and re-open it at the given path
-   * @param ui a non-null WindowTester UI context
-   * @param path a non-null workspace path, e.g., "ProjectName/FolderName"
-   * @throws Exception
-   */
-  protected void saveAndRecompareInFolder() throws Exception {
-    closeCompareEditor(true);
-    compareInFolder(false);
   }
   
   /* @see junit.framework.TestCase#setUp()
