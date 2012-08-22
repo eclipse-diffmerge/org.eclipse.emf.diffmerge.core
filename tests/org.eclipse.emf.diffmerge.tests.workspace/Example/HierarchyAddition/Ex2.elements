@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<com.thalesgroup.mde.compare.demos.m2:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.thalesgroup.mde.compare.demos.m2="http://www.thalesgroup.com/mde/compare/demos/m2/1.0.0" id="_EPuzEAB1EeGyf8Q8nDTssA">
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:Element" id="_EhUSUAB1EeGyf8Q8nDTssA" name="A"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:Element" id="_I1LUMAB1EeGyf8Q8nDTssA" name="B">
-    <manyContent id="_Oj804AB1EeGyf8Q8nDTssA" name="G">
-      <manyContent id="_TrYBsAB1EeGyf8Q8nDTssA" name="H"/>
-    </manyContent>
-  </content>
-</com.thalesgroup.mde.compare.demos.m2:Root>

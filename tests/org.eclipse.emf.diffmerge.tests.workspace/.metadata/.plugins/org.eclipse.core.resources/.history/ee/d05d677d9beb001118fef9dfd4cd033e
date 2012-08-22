@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<com.thalesgroup.mde.compare.demos.m2:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.thalesgroup.mde.compare.demos.m2="http://www.thalesgroup.com/mde/compare/demos/m2/1.0.0" id="_vwx2MND3EeGkrIQk3UsRcQ">
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:Node" id="_JhLzouubEeG8ApBgXzSQcA" name="N1"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:ReferencingNode" id="_P1mYBOubEeG8ApBgXzSQcA" name="RN1" referenced="_JhLzouubEeG8ApBgXzSQcA"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:ReferencingNode" id="_RjHpxOubEeG8ApBgXzSQcA" name="RN2"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:ReferencingNode" id="_TQyshOubEeG8ApBgXzSQcA" name="RN3"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:ReferencingNode" id="_UwKNhOubEeG8ApBgXzSQcA" name="RN4"/>
-</com.thalesgroup.mde.compare.demos.m2:Root>

@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<com.thalesgroup.mde.compare.demos.m2:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.thalesgroup.mde.compare.demos.m2="http://www.thalesgroup.com/mde/compare/demos/m2/1.0.0" id="_J_gpYdD3EeGkrIQk3UsRcQ">
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:Node" id="_V0fTUdD3EeGkrIQk3UsRcQ" name="N1"/>
-  <content xsi:type="com.thalesgroup.mde.compare.demos.m2:ReferencingNode" id="_XIFpM9D3EeGkrIQk3UsRcQ" name="RN1" referenced="_V0fTUdD3EeGkrIQk3UsRcQ"/>
-</com.thalesgroup.mde.compare.demos.m2:Root>

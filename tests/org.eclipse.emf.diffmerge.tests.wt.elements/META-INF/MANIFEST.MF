@@ -3,6 +3,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Manifest-Version: 1.0
 Bundle-Activator: org.eclipse.emf.diffmerge.tests.wt.elements.Activator
 Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
  org.junit,
  com.windowtester.runtime,
  com.windowtester.swt.runtime,
