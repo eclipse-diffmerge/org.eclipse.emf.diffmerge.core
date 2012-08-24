@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<buildcore:Job xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildcore="http://www.eclipse.org/egf/1.0.1/buildcore" xmlns:buildscm="http://www.eclipse.org/egf/1.0.0/buildscm" xmlns:buildstep="http://www.eclipse.org/egf/1.0.2/buildstep" xmi:id="_nq6FgdTMEeGOc4hDMM5euQ" name="diffmerge">
+<buildcore:Job xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildcore="http://www.eclipse.org/egf/1.0.1/buildcore" xmlns:buildscm="http://www.eclipse.org/egf/1.0.0/buildscm" xmlns:buildstep="http://www.eclipse.org/egf/1.0.2/buildstep" xmi:id="_nq6FgdTMEeGOc4hDMM5euQ" name="diffmerge local">
   <properties xmi:id="_K07u0O0tEeGk4JQtqqQ5AQ" key="releaseName" value="helios"/>
   <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="${eclipse.download.prefix}/releases/${releaseName}/"/>
-  <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
-  <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/diffmerge/"/>
   <properties xmi:id="_xVsGke0nEeGk4JQtqqQ5AQ" key="windowtester.p2" value="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
+  <properties xmi:id="_5ehnMO0tEeGk4JQtqqQ5AQ" key="local.git" value="C:/matt/git/org.eclipse.emf.diffmerge.core"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
+    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_Ba9SQO0uEeGk4JQtqqQ5AQ" path="${local.git}/features"/>
+    <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_EW3CsO0uEeGk4JQtqqQ5AQ" path="${local.git}/plugins"/>
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_CqnccN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="features"/>
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_DCUKwN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="plugins"/>
     <buildLocations xsi:type="buildstep:UpdateSiteBuildLocation" xmi:id="_y9d-4NTMEeGOc4hDMM5euQ" url="${eclipse.p2}"/>
     <components xsi:type="buildstep:Feature" xmi:id="_EPIT8NTNEeGOc4hDMM5euQ" id="org.eclipse.emf.diffmerge.sdk.feature"/>
   </steps>
-  <steps xsi:type="buildstep:PublishStep" xmi:id="_zGibQNWQEeGg-5Vjl_7Xaw" name="Publish results" component="_EPIT8NTNEeGOc4hDMM5euQ" signing="true" generateDropins="true"/>
-  <steps xsi:type="buildstep:JavadocStep" xmi:id="_NQxi0N1NEeGLW89eUbtzmA" name="Create JavaDoc" sources="_DCUKwN1NEeGLW89eUbtzmA">
-    <includes>**/*.java</includes>
-    <links>http://download.oracle.com/javase/1.5.0/docs/api/</links>
-    <links>http://www.osgi.org/javadoc/r4v42/</links>
-    <links>http://download.eclipse.org/modeling/emf/emf/javadoc/2.5.0/</links>
-    <links>http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/</links>
-  </steps>
-  <steps xsi:type="buildstep:AntStep" xmi:id="_WfRXUEAzEeCsoY6xB0CJEA" name="Enable P2 Stats" targetName="stats" xml="&lt;target name=&quot;stats&quot;>&#xD;&#xA;&#x9;&lt;property name=&quot;p2.site.path&quot; value=&quot;${publish}/org.eclipse.emf.diffmerge.sdk.feature/site.p2&quot; />&#xD;&#xA;&#xD;&#xA;&#x9;&lt;unzip src=&quot;${p2.site.path}/artifacts.jar&quot; dest=&quot;${p2.site.path}&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.jar&quot; />&#xD;&#xA;&#x9;&lt;move file=&quot;${p2.site.path}/artifacts.xml&quot; tofile=&quot;${p2.site.path}/artifacts.xml.orig&quot; />&#xD;&#xA;&#xD;&#xA;&#x9;&lt;xslt style=&quot;${build.root}/svn/svn_eclipse/releng/org.eclipse.emf.diffmerge.releng/ant/statsURI.xsl&quot; &#xD;&#xA;&#x9;&#x9;in=&quot;${p2.site.path}/artifacts.xml.orig&quot; &#xD;&#xA;&#x9;&#x9;out=&quot;${p2.site.path}/artifacts.xml&quot;>&#xD;&#xA;&#x9;&#x9;&lt;param name=&quot;releaseName&quot; expression=&quot;${releaseName}&quot;/>&#xD;&#xA;&#x9; &lt;/xslt>&#xD;&#xA;&#xD;&#xA;&#x9;&lt;zip destfile=&quot;${p2.site.path}/artifacts.jar&quot; basedir=&quot;${p2.site.path}&quot; includes=&quot;artifacts.xml&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.xml&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.xml.orig&quot; />&#xD;&#xA;&lt;/target>"/>
+  <steps xsi:type="buildstep:PublishStep" xmi:id="_zGibQNWQEeGg-5Vjl_7Xaw" name="Publish results" component="_EPIT8NTNEeGOc4hDMM5euQ" generateDropins="true"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_i_rxse0kEeGUh5cCyocRdQ" name="Import Tests and compile">
     <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_GfNPQO0uEeGk4JQtqqQ5AQ" path="${local.git}/features"/>
     <buildLocations xsi:type="buildstep:LocalBuildLocation" xmi:id="_Gw74cO0uEeGk4JQtqqQ5AQ" path="${local.git}/tests"/>

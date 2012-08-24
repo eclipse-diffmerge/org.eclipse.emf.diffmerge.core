@@ -8,6 +8,8 @@
     <viewpoints xmi:type="domain:DomainViewpoint" xmi:id="_TxyJgNTNEeGOc4hDMM5euQ">
       <domains xmi:type="domain:EMFDomain" xmi:id="_UHiXENTNEeGOc4hDMM5euQ" helperImplementation="org.eclipse.egf.domain.emf.EMFDomainHelper"
           uri="platform:/resource/org.eclipse.emf.diffmerge.releng/model/diffmerge.egfbuild"/>
+      <domains xmi:type="domain:EMFDomain" xmi:id="_xJrLMO0kEeGUh5cCyocRdQ" helperImplementation="org.eclipse.egf.domain.emf.EMFDomainHelper"
+          uri="platform:/resource/org.eclipse.emf.diffmerge.releng/model/diffmerge_local.egfbuild"/>
     </viewpoints>
   </viewpointContainer>
   <orchestration xmi:type="fprod:ProductionPlan" xmi:id="_WUD5ANTNEeGOc4hDMM5euQ">
@@ -18,6 +20,16 @@
         </invocationContracts>
         <invocationContracts xmi:id="_ZrrVE9TNEeGOc4hDMM5euQ" invokedContract="fcore:FactoryComponentContract platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_npIcUJlgEd-cRYVfj6AwNg">
           <type xmi:type="types:TypeString" xmi:id="_b6broNTNEeGOc4hDMM5euQ" value="platform:/resource/org.eclipse.emf.diffmerge.releng/jobs/"/>
+        </invocationContracts>
+      </invocationContractContainer>
+    </invocations>
+    <invocations xmi:id="_yzxVgO0kEeGUh5cCyocRdQ" invokedActivity="fcore:FactoryComponent platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_N4pRwI6UEd-e7viTqNBNrA">
+      <invocationContractContainer xmi:id="_yzxVge0kEeGUh5cCyocRdQ">
+        <invocationContracts xmi:id="_yzxVgu0kEeGUh5cCyocRdQ" invokedContract="fcore:FactoryComponentContract platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_ad5FkY6VEd-e7viTqNBNrA">
+          <type xmi:type="domain:TypeDomain" xmi:id="_yzxVg-0kEeGUh5cCyocRdQ" domain="#_xJrLMO0kEeGUh5cCyocRdQ"/>
+        </invocationContracts>
+        <invocationContracts xmi:id="_yzxVhO0kEeGUh5cCyocRdQ" invokedContract="fcore:FactoryComponentContract platform:/plugin/org.eclipse.egf.portfolio.eclipse.build/egf/Build.fcore#_npIcUJlgEd-cRYVfj6AwNg">
+          <type xmi:type="types:TypeString" xmi:id="_yzxVhe0kEeGUh5cCyocRdQ" value="platform:/resource/org.eclipse.emf.diffmerge.releng/jobs/"/>
         </invocationContracts>
       </invocationContractContainer>
     </invocations>
