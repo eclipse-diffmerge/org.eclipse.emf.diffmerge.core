@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Workspace
+Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.workspace
+Bundle-Version: 1.0.0.qualifier
