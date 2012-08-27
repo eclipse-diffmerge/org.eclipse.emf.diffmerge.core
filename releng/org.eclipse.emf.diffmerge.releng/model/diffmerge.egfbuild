@@ -5,6 +5,7 @@
   <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
   <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/diffmerge/"/>
   <properties xmi:id="_xVsGke0nEeGk4JQtqqQ5AQ" key="windowtester.p2" value="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
+  <properties xmi:id="_Btmb0PArEeGjycAR2_Wk3w" key="target.arch" value="x86"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_CqnccN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="features"/>

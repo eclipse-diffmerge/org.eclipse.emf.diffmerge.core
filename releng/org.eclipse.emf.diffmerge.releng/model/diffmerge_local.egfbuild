@@ -3,6 +3,7 @@
   <properties xmi:id="_K07u0O0tEeGk4JQtqqQ5AQ" key="releaseName" value="helios"/>
   <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="${eclipse.download.prefix}/releases/${releaseName}/"/>
   <properties xmi:id="_xVsGke0nEeGk4JQtqqQ5AQ" key="windowtester.p2" value="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
+  <properties xmi:id="_Btmb0PArEeGjycAR2_Wk3w" key="target.arch" value="x86"/>
   <properties xmi:id="_5ehnMO0tEeGk4JQtqqQ5AQ" key="local.git" value="C:/matt/git/org.eclipse.emf.diffmerge.core"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
