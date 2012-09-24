@@ -207,7 +207,6 @@ implements IEditingDomainProvider {
         }
         for (Resource resource : addedResources) {
           resource.unload();
-          resource.getContents().clear();
         }
         domain.getResourceSet().getResources().removeAll(addedResources);
       }
