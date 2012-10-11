@@ -4,12 +4,7 @@
   <properties xmi:id="_5LBGMNWQEeGg-5Vjl_7Xaw" key="eclipse.p2" value="${eclipse.download.prefix}/releases/${releaseName}/"/>
   <properties xmi:id="_cmqJUNWaEeGg-5Vjl_7Xaw" key="eclipse.download.prefix" value="file:/home/data/httpd/download.eclipse.org"/>
   <properties xmi:id="_c9TuwNWaEeGg-5Vjl_7Xaw" key="eclipse.staging.area" value="/shared/download-staging.priv/modeling/diffmerge/"/>
-  <propertyPackages xmi:id="_Xg42EPA4EeGjycAR2_Wk3w" name="WindowTester properties">
-    <properties xmi:id="_Btmb0PArEeGjycAR2_Wk3w" key="arch" value="x86"/>
-    <properties xmi:id="_XAHEQPA4EeGjycAR2_Wk3w" key="target.arch" value="${arch}"/>
-    <properties xmi:id="_XxRbcPA4EeGjycAR2_Wk3w" key="osgi.arch" value="${arch}"/>
-    <properties xmi:id="_xVsGke0nEeGk4JQtqqQ5AQ" key="windowtester.p2" value="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
-  </propertyPackages>
+  <properties xmi:id="_xVsGke0nEeGk4JQtqqQ5AQ" key="windowtester.p2" value="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
   <steps xsi:type="buildstep:CleanStep" xmi:id="_xv0f8dWQEeGg-5Vjl_7Xaw" name="Clean previous results" type="Result"/>
   <steps xsi:type="buildstep:AntStep" xmi:id="_L5zmwPBPEeGjycAR2_Wk3w" name="Copy director proxy prefs" targetName="copy.director.proxy.prefs" xml="&lt;target name=&quot;copy.director.proxy.prefs&quot;>&#xD;&#xA;  &lt;mkdir dir=&quot;${tools}/director/configuration/.settings&quot;/>&#xD;&#xA;  &lt;copy &#xD;&#xA;    file=&quot;${build.root}/git/releng/org.eclipse.emf.diffmerge.releng/ant/director.org.eclipse.core.net.prefs&quot;&#xD;&#xA;    tofile=&quot;${tools}/director/configuration/.settings/org.eclipse.core.net.prefs&quot;&#xD;&#xA;  />&#xD;&#xA;&lt;/target>"/>
   <steps xsi:type="buildstep:BuildStep" xmi:id="_p8V8oNTMEeGOc4hDMM5euQ" name="Import and compile">
