@@ -27,7 +27,7 @@
     <links>http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/</links>
   </steps>
   <steps xsi:type="buildstep:AntStep" xmi:id="_WfRXUEAzEeCsoY6xB0CJEA" name="Enable P2 Stats" targetName="stats" xml="&lt;target name=&quot;stats&quot;>&#xD;&#xA;&#x9;&lt;property name=&quot;p2.site.path&quot; value=&quot;${publish}/org.eclipse.emf.diffmerge.sdk.feature/site.p2&quot; />&#xD;&#xA;&#xD;&#xA;&#x9;&lt;unzip src=&quot;${p2.site.path}/artifacts.jar&quot; dest=&quot;${p2.site.path}&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.jar&quot; />&#xD;&#xA;&#x9;&lt;move file=&quot;${p2.site.path}/artifacts.xml&quot; tofile=&quot;${p2.site.path}/artifacts.xml.orig&quot; />&#xD;&#xA;&#xD;&#xA;&#x9;&lt;xslt style=&quot;${build.root}/git/releng/org.eclipse.emf.diffmerge.releng/ant/statsURI.xsl&quot; &#xD;&#xA;&#x9;&#x9;in=&quot;${p2.site.path}/artifacts.xml.orig&quot; &#xD;&#xA;&#x9;&#x9;out=&quot;${p2.site.path}/artifacts.xml&quot;>&#xD;&#xA;&#x9;&#x9;&lt;param name=&quot;releaseName&quot; expression=&quot;${releaseName}&quot;/>&#xD;&#xA;&#x9; &lt;/xslt>&#xD;&#xA;&#xD;&#xA;&#x9;&lt;zip destfile=&quot;${p2.site.path}/artifacts.jar&quot; basedir=&quot;${p2.site.path}&quot; includes=&quot;artifacts.xml&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.xml&quot; />&#xD;&#xA;&#x9;&lt;delete file=&quot;${p2.site.path}/artifacts.xml.orig&quot; />&#xD;&#xA;&lt;/target>"/>
-  <steps xsi:type="buildstep:BuildStep" xmi:id="_i_rxse0kEeGUh5cCyocRdQ" name="Import Tests and compile">
+  <steps xsi:type="buildstep:BuildStep" xmi:id="_i_rxse0kEeGUh5cCyocRdQ" name="Import Tests and compile" enabled="false">
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_i_rxsu0kEeGUh5cCyocRdQ" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="features"/>
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_krRw0O0kEeGUh5cCyocRdQ" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="tests"/>
     <buildLocations xsi:type="buildstep:UpdateSiteBuildLocation" xmi:id="_i_rxtO0kEeGUh5cCyocRdQ" url="${eclipse.p2}"/>
@@ -37,7 +37,7 @@
     <components xsi:type="buildstep:Feature" xmi:id="_b7xS4O38EeGW-tAq8y5E2g" id="org.eclipse.emf"/>
     <components xsi:type="buildstep:Feature" xmi:id="_cBuw8O38EeGW-tAq8y5E2g" id="com.windowtester.runtime"/>
   </steps>
-  <steps xsi:type="buildstep:TestStep" xmi:id="__bTBQO0lEeGUh5cCyocRdQ" name="Launch Tests" description="" launchConfigurationPath="org.eclipse.emf.diffmerge.tests.wt.elements/EDM-WT-Tests.launch"/>
+  <steps xsi:type="buildstep:TestStep" xmi:id="__bTBQO0lEeGUh5cCyocRdQ" name="Launch Tests" description="" enabled="false" launchConfigurationPath="org.eclipse.emf.diffmerge.tests.wt.elements/EDM-WT-Tests.launch"/>
   <scms xsi:type="buildscm:GIT" xmi:id="_8IWCQd1MEeGLW89eUbtzmA">
     <locations xmi:id="_8hrIQN1MEeGLW89eUbtzmA" url="git.eclipse.org/gitroot/diffmerge/org.eclipse.emf.diffmerge.core.git"/>
   </scms>
