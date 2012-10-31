@@ -182,6 +182,7 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
 		EObject clone = eltMatch.isPartial() ? mapping.completeMatch(eltMatch)
 				: eltMatch.get(getAbsenceRole());
 		boolean addedToScope = false;
+		boolean actuallyAdded = false;
 		IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
 		if (getComparison().getLastMergePolicy().bindPresenceToOwnership()
 				&& !isRoot()) {
@@ -189,7 +190,7 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
 			if (container != null) {
 				EReference containment = getPresenceScope().getContainment(
 						getElement());
-				boolean actuallyAdded = getAbsenceScope().add(container, containment, clone);
+				actuallyAdded = getAbsenceScope().add(container, containment, clone);
 				addedToScope = true; // Even if !actuallyAdded
 				// Order handling
 				IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
@@ -207,8 +208,9 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
 			// if containment tree of the scope is consistent with matching
 		}
 		if (!addedToScope)
-			getAbsenceScope().add(clone);
-		mergePolicy.copyId(getElement(), clone);
+			actuallyAdded = getAbsenceScope().add(clone);
+		if (actuallyAdded)
+		  mergePolicy.copyId(getElement(), clone);
 	}
 
 	/**

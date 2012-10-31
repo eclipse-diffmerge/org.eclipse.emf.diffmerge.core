@@ -239,16 +239,22 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 		IFeaturedModelScope absenceScope = getAbsenceScope();
 		EObject destinationHolder = getMatchOfHolder();
 		IMatch match = getValue();
-		EObject destinationValue =
-		  match.isPartial()? getComparison().getMapping().completeMatch(match):
-		    match.get(getAbsenceRole());
+		EObject destinationValue;
+		boolean cloned;
+		if (match.isPartial()) {
+		  destinationValue = getComparison().getMapping().completeMatch(match);
+		  cloned = true;
+		} else {
+		  destinationValue = match.get(getAbsenceRole());
+		  cloned = false;
+		}
 		// Assertions are assumed to be enforced by diff dependency handling
 		assert destinationHolder != null && destinationValue != null;
-		boolean added = absenceScope.add(destinationHolder, getFeature(), destinationValue);
+		boolean actuallyAdded = absenceScope.add(destinationHolder, getFeature(), destinationValue);
 		// Order handling
 		IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
 		IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
-		if (diffPolicy != null && added && diffPolicy.considerOrdered(getFeature())) {
+		if (diffPolicy != null && actuallyAdded && diffPolicy.considerOrdered(getFeature())) {
 			// Move added value if required
 			int index = mergePolicy.getDesiredValuePosition(
 			    getComparison(), getAbsenceRole(), getElementMatch(), getFeature(), getValue());
@@ -256,7 +262,8 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 				absenceScope.move(destinationHolder, getFeature(), index, -1);
 		}
 		// ID enforcement
-		mergePolicy.copyId(match.get(getPresenceRole()), destinationValue);
+		if (cloned && actuallyAdded)
+		  mergePolicy.copyId(match.get(getPresenceRole()), destinationValue);
 	}
 
 	/**
