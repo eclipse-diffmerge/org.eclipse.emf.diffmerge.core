@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.emf.diffmerge.sdk.feature"
-      label="EMF Diff/Merge SDK Feature"
+      label="EMF Diff/Merge SDK Feature (Incubation)"
       version="0.1.0.qualifier"
       provider-name="Thales Global Services S.A.S.">
 
    <description>
-      EMF Diff/Merge SDK Feature
+      EMF Diff/Merge SDK Feature (Incubation)
    </description>
 
    <copyright>
