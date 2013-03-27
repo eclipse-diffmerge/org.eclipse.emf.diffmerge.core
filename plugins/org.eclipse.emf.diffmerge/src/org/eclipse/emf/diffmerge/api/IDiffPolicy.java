@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public interface IDiffPolicy {
   
   /**
-   * Return whether the given attribute _values must be considered equal
+   * Return whether the given attribute values must be considered equal
    * @param value1_p the first non-null attribute value
    * @param value2_p the second non-null attribute value
    * @param attribute_p the optional attribute concerned
@@ -41,25 +41,27 @@ public interface IDiffPolicy {
   boolean considerOrdered(EStructuralFeature feature_p);
   
   /**
-   * Return whether the given attribute or reference must be covered.
-   * Precondition: feature_p instanceof EReference =>
-   *  !((EReference)feature_p).isContainment && !((EReference)feature_p).isContainer
+   * Return whether the given attribute or reference must be covered by
+   * the difference detection algorithm.
+   * Precondition: if feature_p instanceof EReference then
+   *  !((EReference)feature_p).isContainment() && !((EReference)feature_p).isContainer()
    * In other terms, this method is never called for containment or container
    * references. This is because those are implicitly determined by the elements
-   * present in the model scopes which are being compared.
+   * that are present in the compared model scopes.
    * @param feature_p a non-null reference or attribute
    */
   boolean coverFeature(EStructuralFeature feature_p);
   
   /**
-   * Return whether the given match must be considered for differences
+   * Return whether the given match must be covered by the difference detection
+   * algorithm
    * @param match_p a non-null match
    */
   boolean coverMatch(IMatch match_p);
   
   /**
    * Return whether differences in terms of the physical storage of elements
-   * must be covered
+   * must be covered [NOT USED YET]
    */
   boolean coverPhysicalStorage();
   

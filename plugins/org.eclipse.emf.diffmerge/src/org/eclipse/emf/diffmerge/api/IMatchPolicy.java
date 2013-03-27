@@ -18,7 +18,6 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EObject;
 
 
-
 /**
  * A policy that defines how model elements from different model scopes are being
  * matched in a comparison.

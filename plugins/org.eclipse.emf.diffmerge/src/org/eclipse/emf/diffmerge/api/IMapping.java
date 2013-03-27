@@ -22,9 +22,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 
 
-
 /**
- * A mapping between model scopes which is such that every element
+ * A mapping between model scopes which is such that every element of either scope
  * is mapped at most once.
  * A mapping is defined as a set of IMatch.
  * @author Olivier Constant
@@ -48,6 +47,7 @@ public interface IMapping {
    * Return the formerly partial matches which have been completed
    * by addition in the given role
    * Postcondition: for every match m in the result, !m.isPartial()
+   * @see IMatch#isPartial()
    * @param destinationRole_p a role which is TARGET or REFERENCE
    * @return a non-null, potentially empty, unmodifiable collection
    */

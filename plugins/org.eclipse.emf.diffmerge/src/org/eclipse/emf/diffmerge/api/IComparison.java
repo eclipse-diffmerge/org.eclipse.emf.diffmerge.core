@@ -30,25 +30,24 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 
-
 /**
  * A comparison between model scopes.
  * A comparison, once defined, can be computed using match, diff and merge policies.
  * After computation, it provides a mapping between the contents of the scopes,
  * a set of differences based on this mapping and the ability to merge a subset of
- * those differences.
+ * those differences according to the merge policy.
  * @author Olivier Constant
  */
 public interface IComparison {
   
   /**
-   * Clear this comparison, going back to its state before computation
+   * Clear this comparison, going back to its state before compute(...) was called
    */
   void clear();
   
   /**
    * Compute this comparison according to the given policies
-   * Postcondition: result.isOk() => getLastMergePolicy() != null
+   * Postcondition: if result.isOk() then getLastMergePolicy() != null
    * @param matchPolicy_p an optional match policy (null stands for default)
    * @param diffPolicy_p an optional diff policy (null stands for default)
    * @param mergePolicy_p an optional merge policy (null stands for default)
@@ -59,7 +58,8 @@ public interface IComparison {
       IMergePolicy mergePolicy_p, IProgressMonitor monitor_p);
   
   /**
-   * Return a tree iterator over matches based on getContentsOf(IMatch, Role).
+   * Return a tree iterator over matches based on getContentsOf(IMatch, Role)
+   * @see IComparison#getContentsOf(IMatch, Role)
    * @param role_p a non-null role
    * @return a non-null iterator
    */
@@ -67,8 +67,8 @@ public interface IComparison {
   
   /**
    * Return the match for the container of the given match in the given role.
-   * Result is null iff there is no container in the corresponding scope or
-   * no element in the role for the given match.
+   * Result is null if and only if there is no container in the corresponding
+   * scope or no element in the role for the given match.
    * @param match_p a non-null match
    * @param role_p a non-null role
    * @return a potentially null match
@@ -147,7 +147,7 @@ public interface IComparison {
   /**
    * Return the number of differences which are not related to the containment
    * tree (on attributes and cross references)
-   * Class invariant: getNbProperElementDifferences() < getNbDifferences()
+   * Class invariant: getNbProperElementDifferences() <= getNbDifferences()
    */
   int getNbProperElementDifferences();
   
@@ -210,7 +210,8 @@ public interface IComparison {
       boolean updateReferences_p, IProgressMonitor monitor_p);
   
   /**
-   * Apply the given merger to the comparison
+   * Apply the given merge selector to the comparison
+   * @see IMergeSelector
    * @param merger_p a non-null merger
    * @param updateReferences_p whether references of the added elements must be set
    * @param monitor_p an optional progress monitor (null for no progress monitoring)

@@ -25,7 +25,7 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 public interface IMergeSelector {
   
   /**
-   * Return the role into which the given difference must be merged, if any
+   * Return the role into which the given difference must be merged, if any.
    * Postcondition: result is in { TARGET, REFERENCE, null }
    * @param difference_p a non-null difference
    * @return a potentially null role, where null stands for no merge

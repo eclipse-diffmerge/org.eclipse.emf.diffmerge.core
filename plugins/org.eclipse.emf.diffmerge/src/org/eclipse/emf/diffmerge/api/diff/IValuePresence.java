@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 
 /**
- * A difference which is due to the unmatched presence of a value of some feature
+ * A difference which is due to the unmatched presence of a value on some feature
  * in a given comparison role.
  * @author Olivier Constant
  */

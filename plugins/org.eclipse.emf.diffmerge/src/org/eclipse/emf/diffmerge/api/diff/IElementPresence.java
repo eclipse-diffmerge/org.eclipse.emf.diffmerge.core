@@ -18,7 +18,6 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.ecore.EObject;
 
 
-
 /**
  * A difference which represents the presence of an unmatched element.
  * @author Olivier Constant

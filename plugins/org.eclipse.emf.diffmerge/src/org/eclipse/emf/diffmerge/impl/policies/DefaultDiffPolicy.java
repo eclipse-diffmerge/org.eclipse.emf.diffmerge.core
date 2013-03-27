@@ -24,12 +24,12 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
 /**
- * A simple, straightforward implementation of IMergePolicy which entirely
+ * A simple, straightforward implementation of IDiffPolicy which entirely
  * relies on the contents of Ecore models.
  * @author Olivier Constant
  */
 public class DefaultDiffPolicy implements IDiffPolicy {
-
+  
   /**
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#considerEqual(Object, Object, EAttribute)
    */
@@ -61,7 +61,7 @@ public class DefaultDiffPolicy implements IDiffPolicy {
   public boolean coverMatch(IMatch match_p) {
     return match_p.coversRole(Role.TARGET) || match_p.coversRole(Role.REFERENCE);
   }
-
+  
   /**
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverPhysicalStorage()
    */

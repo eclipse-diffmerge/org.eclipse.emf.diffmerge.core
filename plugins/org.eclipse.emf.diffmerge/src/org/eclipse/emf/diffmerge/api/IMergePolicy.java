@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public interface IMergePolicy {
   
   /**
-   * Return whether a non-root element is present in its scope iff its ownership
+   * Return whether a non-root element is present in its scope if and only if its ownership
    * (container, containment setting) is present.
    */
   boolean bindPresenceToOwnership();

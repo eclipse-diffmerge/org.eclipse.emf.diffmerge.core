@@ -19,9 +19,8 @@ import java.util.Collection;
 import org.eclipse.emf.diffmerge.api.Role;
 
 
-
 /**
- * A model difference at a level of abstraction where it can be manipulated for merge.
+ * A model difference with features related to merging.
  * @author Olivier Constant
  */
 public interface IMergeableDifference extends IDifference {

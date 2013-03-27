@@ -19,7 +19,8 @@ import org.eclipse.emf.diffmerge.api.Role;
 
 
 /**
- * A difference between models at the highest level of abstraction.
+ * A difference between models or model scopes.
+ * @see IElementPresence, IAttributeValuePresence, IReferenceValuePresence
  * @author Olivier Constant
  */
 public interface IDifference {
