@@ -31,7 +31,7 @@ IPresenceDifference, IMergeableDifference {
   EStructuralFeature getFeature();
   
   /**
-   * Return the difference, if any, which corresponds to this difference in the opposite role. 
+   * Return the difference, if any, which is symmetrical to this one. 
    * @see IValuePresence#isSymmetricalTo(IValuePresence)
    * @return a potentially null value presence (always null if upper bound is not 1)
    */
@@ -55,7 +55,7 @@ IPresenceDifference, IMergeableDifference {
    * True may only be returned if the setting (element and feature) is the same.
    * If the feature is of upper bound 1, then true is returned when the given value
    * presence describes a different value in the same setting.
-   * If the feature is many, then true is returned when both differences are isOrder().
+   * If the feature is many, then false is always returned.
    * @param peer_p a non-null value presence
    */
   boolean isSymmetricalTo(IValuePresence peer_p);
