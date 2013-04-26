@@ -16,4 +16,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.wt.elements
 Bundle-ActivationPolicy: lazy
 Bundle-Name: WindowTester-based test plug-in on Elements
-Bundle-Vendor: Thales Global Services S.A.S.
+Bundle-Vendor: Eclipse Modeling Project

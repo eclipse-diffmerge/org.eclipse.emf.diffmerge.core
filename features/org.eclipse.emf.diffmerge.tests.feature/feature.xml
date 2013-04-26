@@ -3,7 +3,7 @@
       id="org.eclipse.emf.diffmerge.tests.feature"
       label="EMF Diff/Merge Tests Feature"
       version="0.1.0.qualifier"
-      provider-name="Thales Global Services S.A.S.">
+      provider-name="Eclipse Modeling Project">
 
    <description>
       EMF Diff/Merge Tests Feature
