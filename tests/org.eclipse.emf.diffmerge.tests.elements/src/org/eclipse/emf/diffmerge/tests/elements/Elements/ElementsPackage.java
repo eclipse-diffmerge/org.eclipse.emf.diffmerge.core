@@ -37,7 +37,7 @@ public interface ElementsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://www.thalesgroup.com/mde/compare/demos/m2/1.0.0";
+	String eNS_URI = "http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0";
 
 	/**
 	 * The package namespace name.
@@ -45,7 +45,7 @@ public interface ElementsPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_PREFIX = "com.thalesgroup.mde.compare.demos.m2";
+	String eNS_PREFIX = "org.eclipse.emf.diffmerge.tests.elements";
 
 	/**
 	 * The singleton instance of the package.

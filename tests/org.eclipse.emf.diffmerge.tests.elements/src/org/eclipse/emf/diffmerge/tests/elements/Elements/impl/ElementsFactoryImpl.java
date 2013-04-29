@@ -27,7 +27,7 @@ public class ElementsFactoryImpl extends EFactoryImpl implements ElementsFactory
 	 */
 	public static ElementsFactory init() {
 		try {
-			ElementsFactory theElementsFactory = (ElementsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.thalesgroup.com/mde/compare/demos/m2/1.0.0"); 
+			ElementsFactory theElementsFactory = (ElementsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0"); 
 			if (theElementsFactory != null) {
 				return theElementsFactory;
 			}
