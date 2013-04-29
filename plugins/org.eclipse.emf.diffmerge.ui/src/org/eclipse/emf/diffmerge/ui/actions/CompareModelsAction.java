@@ -103,7 +103,7 @@ public class CompareModelsAction implements IObjectActionDelegate {
     int size = allSelected.size();
     if (size == 2 || size == 3) {
       ComparisonContextManager manager = EMFDiffMergeUIPlugin.getDefault().getContextManager();
-      ComparisonSetup setup = manager.createSpecificationSelection(
+      ComparisonSetup setup = manager.createComparisonSetup(
           allSelected.get(0), allSelected.get(1), size == 3? allSelected.get(2): null);
       if (setup != null) {
         ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);

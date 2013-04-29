@@ -76,20 +76,20 @@ public class ComparisonContextManager {
       Object entrypoint2_p, Object entrypoint3_p) {
     EMFDiffMergeEditorInput result = null;
     ComparisonSetup selection =
-      createSpecificationSelection(entrypoint1_p, entrypoint2_p, entrypoint3_p);
+      createComparisonSetup(entrypoint1_p, entrypoint2_p, entrypoint3_p);
     if (selection != null && selection.getComparisonSpecification() != null)
       result = new EMFDiffMergeEditorInput(selection.getComparisonSpecification());
     return result;
   }
   
   /**
-   * Return a specification selection object for the given entry points
+   * Return a comparison setup for the given entry points
    * @param entrypoint1_p a non-null object
    * @param entrypoint2_p a non-null object
    * @param entrypoint3_p an optional object
    * @return a potentially null object (null means failure)
    */
-  public ComparisonSetup createSpecificationSelection(Object entrypoint1_p,
+  public ComparisonSetup createComparisonSetup(Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
     ComparisonSetup result = null;
     List<IScopeSpecificationFactory> factories1 =
