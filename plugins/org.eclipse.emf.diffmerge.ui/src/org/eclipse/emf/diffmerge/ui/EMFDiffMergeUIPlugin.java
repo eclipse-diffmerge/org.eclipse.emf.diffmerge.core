@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -37,7 +38,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
 
 
 /**
@@ -339,11 +339,29 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   }
   
   /**
+   * @see org.eclipse.ui.plugin.AbstractUIPlugin#initializeImageRegistry(org.eclipse.jface.resource.ImageRegistry)
+   */
+  @Override
+  protected void initializeImageRegistry(ImageRegistry reg_p) {
+    super.initializeImageRegistry(reg_p);
+    reg_p.put(ImageID.UP.name(), CompareUI.DESC_CTOOL_PREV);
+    reg_p.put(ImageID.DOWN.name(), CompareUI.DESC_CTOOL_NEXT);
+    Set<ImageID> toRegister = new HashSet<EMFDiffMergeUIPlugin.ImageID>(
+        Arrays.asList(ImageID.values()));
+    toRegister.removeAll(Arrays.asList(new ImageID[] {
+        ImageID.DELETE, ImageID.LEFT, ImageID.REDO, ImageID.RIGHT, ImageID.SHOW,
+        ImageID.UNDO, ImageID.DOWN, ImageID.UP}));
+    for (ImageID imageId : toRegister)
+      registerLocalIcon(imageId, reg_p);
+  }
+  
+  /**
    * Register and return the image descriptor obtained from the given ID of a local icon
    * @param imageID_p a non-null image ID
+   * @param reg_p the non-null image registry in which to register
    * @return a potentially null image descriptor
    */
-  private ImageDescriptor registerLocalIcon(ImageID imageID_p) {
+  private ImageDescriptor registerLocalIcon(ImageID imageID_p, ImageRegistry reg_p) {
     ImageDescriptor result = null;
     String path = ICON_PATH + imageID_p.name().toLowerCase() + ".gif"; //$NON-NLS-1$
     try {
@@ -353,7 +371,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
       // Nothing needed
     }
     if (result != null)
-      getImageRegistry().put(imageID_p.name(), result);
+      reg_p.put(imageID_p.name(), result);
     return result;
   }
   
@@ -364,16 +382,6 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		getImageRegistry().put(ImageID.UP.name(), CompareUI.DESC_CTOOL_PREV);
-    getImageRegistry().put(ImageID.DOWN.name(), CompareUI.DESC_CTOOL_NEXT);
-    Set<ImageID> toRegister = new HashSet<EMFDiffMergeUIPlugin.ImageID>(
-        Arrays.asList(ImageID.values()));
-    toRegister.removeAll(Arrays.asList(
-        new ImageID[] { ImageID.DELETE, ImageID.LEFT, ImageID.REDO, ImageID.RIGHT, ImageID.SHOW,
-                        ImageID.UNDO, ImageID.DOWN, ImageID.UP}));
-    for (ImageID imageId : toRegister) {
-      registerLocalIcon(imageId);
-    }
 	}
 	
 	/**
