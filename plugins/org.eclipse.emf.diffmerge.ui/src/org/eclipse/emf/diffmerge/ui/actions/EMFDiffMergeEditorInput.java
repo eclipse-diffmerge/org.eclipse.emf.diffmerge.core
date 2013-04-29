@@ -222,7 +222,7 @@ implements IEditingDomainProvider {
           PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().dispose(
               context, true, true, false);
         } catch (Exception e) {
-          // Workbench being disposed or EMF Workspace dependency not available: proceed
+          // Workbench being disposed: proceed
         }
       }
     }

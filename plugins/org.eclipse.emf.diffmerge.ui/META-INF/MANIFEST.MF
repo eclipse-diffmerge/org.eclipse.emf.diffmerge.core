@@ -8,10 +8,10 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.compare;visibility:=reexport,
  org.eclipse.ui;visibility:=reexport,
- org.eclipse.emf.edit.ui,
  org.eclipse.emf.ecore.edit,
  org.eclipse.emf.ecore.xmi,
- org.eclipse.emf.workspace;resolution:=optional,
+ org.eclipse.emf.edit.ui;visibility:=reexport,
+ org.eclipse.emf.workspace,
  org.eclipse.emf.diffmerge;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
