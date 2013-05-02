@@ -3,10 +3,10 @@
 <schema targetNamespace="org.eclipse.emf.diffmerge.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.emf.diffmerge.ui" id="org.eclipse.emf.diffmerge.ui.comparisonSpecificationFactory" name="ComparisonSpecificationFactory"/>
+         <meta.schema plugin="org.eclipse.emf.diffmerge.ui" id="modelComparisonContext" name="Model Comparison Context for EMF Diff/Merge GUI"/>
       </appinfo>
       <documentation>
-         Use this extension point to define a new kind of model comparison that can be triggered via the GUI.
+         The purpose of this extension point is to define new comparison methods that can be activated via the GUI. A comparison method is defined by scope factories and/or comparison specification factories. A scope factory defines how a given object can be converted into or interpreted as a model scope, i.e., a set of models elements that can be compared. A comparison specification factory defines match, diff and merge policies which are applicable to certain scopes.
       </documentation>
    </annotation>
 
@@ -85,19 +85,61 @@
          <meta.section type="since"/>
       </appinfo>
       <documentation>
-         1.0.0
+         0.1.0
       </documentation>
    </annotation>
 
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         Following is an example of how a scope factory and a comparison specification factory can be registered: 
+&lt;pre&gt;
+   &lt;extension
+         point=&quot;org.eclipse.emf.diffmerge.ui.modelComparisonContext&quot;&gt;
+      &lt;comparisonScope
+            scopeFactory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecificationFactory&quot;&gt;
+      &lt;/comparisonScope&gt;
+      &lt;comparisonSpecification
+            specificationFactory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecificationFactory&quot;&gt;
+      &lt;/comparisonSpecification&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
 
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         The value of the scopeFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecificationFactory&lt;/samp&gt;. This concrete class may extend class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.DefaultComparisonSpecificationFactory&lt;/samp&gt; or a subclass.
+&lt;p&gt;
+The value of the specificationFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory&lt;/samp&gt;. This concrete class may extend abstract class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecificationFactory&lt;/samp&gt; or a subclass.
 
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         This plug-in extends this extension point to register the following three scope factories: &lt;samp&gt;FileScopeSpecificationFactory&lt;/samp&gt;, &lt;samp&gt;ResourceScopeSpecificationFactory&lt;/samp&gt; and &lt;samp&gt;EObjectScopeSpecificationFactory&lt;/samp&gt;.
+In addition, this plug-in extends this extension point to register the following comparison specification factory: 
+&lt;samp&gt;DefaultComparisonSpecificationFactory&lt;/samp&gt;.
+      </documentation>
+   </annotation>
 
    <annotation>
       <appinfo>
          <meta.section type="copyright"/>
       </appinfo>
       <documentation>
-         THALES
+         Copyright (c) 2010-2012 Thales Global Services S.A.S.&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a 
+href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;
       </documentation>
    </annotation>
 
