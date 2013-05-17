@@ -22,15 +22,15 @@ import java.util.Map;
 
 import org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 
 
-
 /**
- * A model scope covering the full EMF containment tree of a given root element.
+ * A single-resource model scope covering the full EMF containment subtree of a given element.
  * The root cannot be removed from the scope.
  * EMF undo/redo is supported because the local state never changes.
- * Removal of elements which are cross-referenced outside the scope is not supported.
+ * Complete deletion of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant
  */
 public class SubtreeModelScope extends AbstractModelScope implements IPhysicalModelScope {
@@ -56,6 +56,22 @@ public class SubtreeModelScope extends AbstractModelScope implements IPhysicalMo
       getHoldingResource().getContents().add(element_p);
     // The element does not belong to the scope after execution
     return false;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContainer(EObject)
+   */
+  @Override
+  public EObject getContainer(EObject element_p) {
+    return getRoot() == element_p? null: super.getContainer(element_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(EObject)
+   */
+  @Override
+  public EReference getContainment(EObject element_p) {
+    return getRoot() == element_p? null: super.getContainment(element_p);
   }
   
   /**

@@ -60,12 +60,6 @@ public interface IDiffPolicy {
   boolean coverMatch(IMatch match_p);
   
   /**
-   * Return whether differences in terms of the physical storage of elements
-   * must be covered [NOT USED YET]
-   */
-  boolean coverPhysicalStorage();
-  
-  /**
    * Return whether the given value is significant for the given attribute.
    * If not, then its presence is ignored.
    * @param value_p a non-null attribute value

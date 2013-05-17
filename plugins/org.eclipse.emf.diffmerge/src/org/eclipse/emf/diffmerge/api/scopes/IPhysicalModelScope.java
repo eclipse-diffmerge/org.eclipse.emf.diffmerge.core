@@ -18,7 +18,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
- * A model scope whose contents are, at least for a subset, stored in a resource.
+ * A resource-aware model scope: a scope whose contents are, at least for a subset, stored in a
+ * known resource.
  * @author Olivier Constant
  */
 public interface IPhysicalModelScope extends IModelScope {
@@ -39,7 +40,7 @@ public interface IPhysicalModelScope extends IModelScope {
   
   /**
    * Save the scope
-   * @return whether the operation could performed
+   * @return whether the operation could be performed
    * @throws Exception an exception indicating that the operation failed in an unexpected way
    */
   boolean save() throws Exception;

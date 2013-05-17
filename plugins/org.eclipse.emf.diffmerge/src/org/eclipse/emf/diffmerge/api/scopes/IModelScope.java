@@ -30,7 +30,7 @@ public interface IModelScope {
   
   /**
    * Return whether the given element belongs to this scope.
-   * Implementation is allowed to be computationally expensive.
+   * Operation is allowed to be computationally expensive.
    * @param element_p a non-null element
    */
   boolean covers(EObject element_p);
@@ -38,7 +38,7 @@ public interface IModelScope {
   /**
    * Return an iterator over all the contents of this scope.
    * Result must be consistent with getContents() and getAllContents(EObject).
-   * Iterating with the result should not be expensive.
+   * Iterating via the result should not be expensive.
    * @return a non-null iterator
    */
   TreeIterator<EObject> getAllContents();
@@ -55,18 +55,19 @@ public interface IModelScope {
   
   /**
    * Return a set containing all the elements in this scope.
-   * Implementation is allowed to be computationally expensive.
+   * Operation is allowed to be computationally expensive.
    * @return a non-null, potentially empty, unmodifiable set
    */
   Set<EObject> getAllContentsAsSet();
   
   /**
-   * Return the element whose direct contents the given element belongs to.
+   * Return the element whose direct scope contents include the given element, if any.
+   * The returned element must belong to the scope.
    * Result must be consistent with getContents(EObject).
    * Operation should not be expensive.
    * Class invariant:
    *   (this.covers(X) && getContainer(X) == null) == this.getContents().contains(X)
-   * @param element_p a non-null element which may not belong to this scope
+   * @param element_p a non-null element which belongs to this scope
    * @return a potentially null element
    */
   EObject getContainer(EObject element_p);
@@ -74,20 +75,20 @@ public interface IModelScope {
   /**
    * Return the root elements of this scope.
    * Operation should not be expensive.
-   * @return an unmodifiable non-null list of the root elements which does not have to be kept up-to-date
+   * @return an unmodifiable non-null list which may become obsolete
    */
   List<EObject> getContents();
   
   /**
    * Return the direct contents of the given element within this scope.
    * Operation should not be expensive.
-   * @return an unmodifiable non-null list which does not have to be kept up-to-date
+   * @return an unmodifiable non-null list which may become obsolete
    */
   List<EObject> getContents(EObject element_p);
   
   /**
    * Return the number of elements in this scope.
-   * Implementation is allowed to be computationally expensive.
+   * Operation is allowed to be computationally expensive.
    */
   int size();
   

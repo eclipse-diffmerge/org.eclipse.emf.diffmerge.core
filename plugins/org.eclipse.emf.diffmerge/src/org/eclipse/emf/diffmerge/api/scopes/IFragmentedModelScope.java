@@ -20,8 +20,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
- * A model scope which is aware of the physical, potentially fragmented storage
- * of its elements.
+ * A model scope which is aware of its underlying multi-resource structure.
  * Resources are assumed to be organized in an acyclic "inclusion" graph derived
  * from the containment tree, with additional "referencing" arcs.
  * The "holding" resource defined in the super-interface must be one of those

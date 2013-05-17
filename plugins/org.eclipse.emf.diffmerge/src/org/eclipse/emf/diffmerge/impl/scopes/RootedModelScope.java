@@ -24,10 +24,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 
-
 /**
- * A model scope covering the full EMF containment tree, if available,
- * of a set of root elements.
+ * A model scope covering the full EMF containment tree of a modifiable set of root elements.
  * EMF undo/redo is not supported due to the local non-EMF state.
  * Removal of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant

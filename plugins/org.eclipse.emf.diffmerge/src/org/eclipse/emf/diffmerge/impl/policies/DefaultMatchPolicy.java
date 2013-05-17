@@ -19,7 +19,7 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.ComparableSequence;
 import org.eclipse.emf.ecore.EObject;
-
+import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
@@ -61,7 +61,8 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   
   /**
    * Return the qualified name of the given element in the context of the given scope, if any.
-   * A qualified name requires all containers of the element and the element itself to have a name.
+   * A qualified name requires all in-scope containers of the element and the element itself
+   * to have a name.
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which the element belongs
    * @return a potentially null string representing the qualified name
@@ -86,7 +87,11 @@ public class DefaultMatchPolicy implements IMatchPolicy {
    * @return a potentially null string
    */
   protected String getUriFragment(EObject element_p) {
-    return ModelImplUtil.getXmlId(element_p);
+    String result = null;
+    Resource resource = element_p.eResource();
+    if (resource != null)
+      result = resource.getURIFragment(element_p);
+    return result;
   }
   
   /**

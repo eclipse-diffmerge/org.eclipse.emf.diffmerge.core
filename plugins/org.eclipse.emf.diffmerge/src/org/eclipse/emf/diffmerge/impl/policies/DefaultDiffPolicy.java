@@ -22,10 +22,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
-
 /**
- * A simple, straightforward implementation of IDiffPolicy which entirely
- * relies on the contents of Ecore models.
+ * A simple implementation of IDiffPolicy.
+ * @see IDiffPolicy
  * @author Olivier Constant
  */
 public class DefaultDiffPolicy implements IDiffPolicy {
@@ -60,13 +59,6 @@ public class DefaultDiffPolicy implements IDiffPolicy {
    */
   public boolean coverMatch(IMatch match_p) {
     return match_p.coversRole(Role.TARGET) || match_p.coversRole(Role.REFERENCE);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverPhysicalStorage()
-   */
-  public boolean coverPhysicalStorage() {
-    return false;
   }
   
   /**

@@ -214,8 +214,8 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
     Object result = null;
     if (FeatureMapUtil.isMany(source_p, feature_p) && source_p.eIsSet(feature_p) &&
         newPosition_p >= 0) {
-      @SuppressWarnings({ "unchecked", "rawtypes" })
-      EList<Object> values = (EList)source_p.eGet(feature_p, false);
+      @SuppressWarnings("unchecked")
+      EList<Object> values = (EList<Object>)source_p.eGet(feature_p, false);
       int size = values.size();
       int oldPosition = oldPosition_p >= 0? oldPosition_p: size-1;
       int newPosition = oldPosition >= newPosition_p? newPosition_p:
@@ -235,7 +235,8 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
    * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#remove(EObject)
    */
   public boolean remove(EObject element_p) {
-    // Warning: this implementation ignores cross-references from outside the scope
+    // Warning: this implementation ignores cross-references from outside the scope.
+    // Override if complete deletion of the element is needed.
     EcoreUtil.remove(element_p);
     return true;
   }

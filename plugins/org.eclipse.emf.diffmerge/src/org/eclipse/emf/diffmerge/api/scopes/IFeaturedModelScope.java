@@ -23,17 +23,18 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 
 /**
- * A model scope which can be queried and modified via the notions of Attribute,
- * Reference and Containment.
+ * A model scope which can be queried and modified via the EMF notions of attribute,
+ * reference and containment.
  * @author Olivier Constant
  */
 public interface IFeaturedModelScope extends IModelScope {
   
   /**
    * Add the given element to the scope.
-   * Whether its contents belong to the scope after execution is undefined.
-   * Precondition: !covers(element_p)
-   * Postcondition (if success): covers(element_p)
+   * Whether its contents belong to the scope after execution is intentionally undefined.
+   * If the element already belongs to the scope, then the behavior of this operation is
+   * undefined.
+   * Postcondition: if true is returned then covers(element_p)
    * @param element_p a non-null element
    * @return whether the operation succeeded
    */
@@ -43,7 +44,7 @@ public interface IFeaturedModelScope extends IModelScope {
    * Add the given value to the given element on the given attribute if possible,
    * otherwise do nothing.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * @param source_p an non-null element
    * @param attribute_p a non-null attribute
    * @param value_p a non-null attribute value which is type-compatible with the attribute
@@ -55,9 +56,9 @@ public interface IFeaturedModelScope extends IModelScope {
    * Add the given value to the given element on the given reference if possible,
    * otherwise do nothing.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * If the given value does not belong to the scope, it may belong to it after execution
-   * of this method as a side effect.
+   * of this operation as a side effect.
    * @param source_p an non-null element
    * @param reference_p a non-null reference
    * @param value_p a non-null element as value which is type-compatible with the reference
@@ -68,7 +69,7 @@ public interface IFeaturedModelScope extends IModelScope {
   /**
    * Return the values which are held by the given element via the given attribute.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * @param source_p a non-null element
    * @param attribute_p a non-null attribute
    * @return an unmodifiable non-null list of the corresponding values,
@@ -80,7 +81,7 @@ public interface IFeaturedModelScope extends IModelScope {
    * Return the values which are held by the given element via the given
    * reference, if any. The values may not belong to the scope.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * @param source_p a non-null element
    * @param reference_p a non-null reference
    * @return an unmodifiable non-null list of the corresponding elements
@@ -90,8 +91,9 @@ public interface IFeaturedModelScope extends IModelScope {
   
   /**
    * Return the containment reference through which the given element is
-   * being contained, if any.
+   * being contained, if any. Result must be consistent with getContainer(EObject).
    * Postcondition: result == null || result.isContainment()
+   * Postcondition: (result == null) == (getContainer(element_p) == null)
    * @param element_p a non-null element
    * @return a potentially null containment reference
    */
@@ -99,7 +101,7 @@ public interface IFeaturedModelScope extends IModelScope {
   
   /**
    * Move the value held by the given element via the given feature at the given
-   * old position to the given new position.
+   * position to the given new position.
    * @param source_p a non-null element
    * @param feature_p a non-null feature
    * @param newPosition_p a positive int or 0
@@ -111,7 +113,7 @@ public interface IFeaturedModelScope extends IModelScope {
   
   /**
    * Remove the given element from this scope.
-   * Whether its contents still belong to the scope after execution is undefined.
+   * Whether its contents still belong to the scope after execution is intentionally undefined.
    * Precondition: covers(element_p)
    * Postcondition: !covers(element_p)
    * @param element_p a non-null element within the scope
@@ -122,7 +124,7 @@ public interface IFeaturedModelScope extends IModelScope {
   /**
    * Remove the given value on the given attribute from the given element.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * @param source_p a non-null element
    * @param attribute_p a non-null attribute
    * @param value_p a non-null value
@@ -133,7 +135,7 @@ public interface IFeaturedModelScope extends IModelScope {
   /**
    * Remove the given value on the given reference from the given element.
    * If the given element does not belong to this scope, the behavior of this
-   * method is undefined.
+   * operation is undefined.
    * @param source_p a non-null element
    * @param reference_p a non-null reference
    * @param value_p a non-null element as value
