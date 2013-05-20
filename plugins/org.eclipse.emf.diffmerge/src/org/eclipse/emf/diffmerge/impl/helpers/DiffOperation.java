@@ -460,15 +460,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (getMergePolicy().bindPresenceToOwnership() && ownerMatch != null &&
           ownerMatch.isPartial()) {
         IElementPresence ownerPresence = getOrCreateElementPresence(ownerMatch);
-        // Child explicitly requires container from same role for addition
+        // Child addition requires container addition
         ((IMergeableDifference.Editable)presence_p).markRequires(
             ownerPresence, presenceRole.opposite());
-        // Container deletion explicitly requires child deletion
+        // Container deletion requires child deletion
         ((IMergeableDifference.Editable)ownerPresence).markRequires(
             presence_p, presenceRole);
-        // Container addition explicitly requires child addition
-//        ((IMergeableDifference.Editable)ownerPresence).markRequires(
-//            presence_p, presenceRole.opposite());
       }
     }
     // Grouped addition according to policy
@@ -479,8 +476,10 @@ public class DiffOperation extends AbstractExpensiveOperation {
       IMatch peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
+        // Element addition requires group member addition
         ((IMergeableDifference.Editable)presence_p).markRequires(
             peerPresence, presenceRole.opposite());
+        // Group member deletion requires element deletion
         ((IMergeableDifference.Editable)peerPresence).markRequires(
                 presence_p, presenceRole);
       }
@@ -492,6 +491,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
       IMatch peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
+        // Element deletion requires group member deletion
         ((IMergeableDifference.Editable)presence_p).markRequires(
             peerPresence, presenceRole);
       }

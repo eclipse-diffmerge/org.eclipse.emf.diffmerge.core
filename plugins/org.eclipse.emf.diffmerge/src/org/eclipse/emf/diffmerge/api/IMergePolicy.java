@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 
-
 /**
  * A policy that describes the way merges are performed in a comparison.
  * @author Olivier Constant
@@ -60,7 +59,9 @@ public interface IMergePolicy {
   boolean copyOutOfScopeCrossReferences();
   
   /**
-   * Return the set of elements which must be added together with the given one.
+   * Return the set of elements which are essential to the given one, i.e., adding the
+   * given element requires to add the set of elements; conversely, deleting any element
+   * of the set requires to delete the given element
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which element_p belongs
    * @return a non-null, potentially unmodifiable and empty set of elements
@@ -69,7 +70,10 @@ public interface IMergePolicy {
   Collection<EObject> getAdditionGroup(EObject element_p, IFeaturedModelScope scope_p);
   
   /**
-   * Return the set of elements which must be deleted together with the given one.
+   * Return the set of elements which must be deleted if the given element is being
+   * deleted, in addition to those the given element is essential to as defined by
+   * getAdditionGroup
+   * @see IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which element_p belongs
    * @return a non-null, potentially unmodifiable and empty set of elements
@@ -92,16 +96,23 @@ public interface IMergePolicy {
       IMatch source_p, EReference reference_p, IMatch value_p);
   
   /**
-   * Return whether the given reference leads to elements whose addition is imposed
-   * by the addition of the reference owner.
-   * If presenceRequiresOwnership(), operation is only called on cross-references.
+   * Return whether the given reference is essential to its owner, i.e., adding the reference owner
+   * requires to also add its reference to the values, whether the values are already present or not;
+   * conversely, deleting a reference to any of the values requires to delete the reference owner.
+   * Operation is a special case of IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
+   * and must be consistent with that operation.
+   * If bindPresenceToOwnership(), operation is only called on cross-references.
+   * @see IMergePolicy#bindPresenceToOwnership()
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForAddition(EReference reference_p);
   
   /**
-   * Return whether the given reference leads to elements whose deletion is imposed
-   * by the deletion of the reference owner
+   * Return whether the given reference is mandatory for deletion, i.e., removing the owner
+   * requires to remove the value(s).
+   * Operation is a special case of IMergePolicy#getDeletionGroup(EObject, IFeaturedModelScope)
+   * and must be consistent with that operation.
+   * @see IMergePolicy#getDeletionGroup(EObject, IFeaturedModelScope)
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForDeletion(EReference reference_p);
