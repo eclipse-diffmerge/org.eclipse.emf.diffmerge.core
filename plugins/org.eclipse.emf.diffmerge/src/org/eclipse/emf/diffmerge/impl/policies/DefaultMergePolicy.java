@@ -32,9 +32,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
-
 /**
- * A simple, default merge policy.
+ * A default merge policy.
+ * Conformity to references of multiplicity [1] is enforced by default.
  * @author Olivier Constant
  */
 public class DefaultMergePolicy implements IMergePolicy {
@@ -58,12 +58,12 @@ public class DefaultMergePolicy implements IMergePolicy {
    * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyId(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
    */
   public void copyId(EObject source_p, EObject target_p) {
-    if (copyPhysicalIds())
+    if (copyXmlIds())
       ModelImplUtil.copyXmlId(source_p, target_p);
-    if (useNewEcoreIds()) {
+    if (useNewAttributeIds()) {
       String newId = getNewIdFor(target_p);
       if (newId != null)
-        ModelImplUtil.setEcoreId(target_p, newId);
+        ModelImplUtil.setAttributeId(target_p, newId);
     }
   }
   
@@ -75,12 +75,10 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return whether XML IDs must be copied when elements are being copied.
-   * In the case where physical IDs and Ecore IDs are bound together and both are
-   * assigned, priority is given to the Ecore ID.
+   * Return whether extrinsic (XML) IDs must be copied when elements are being copied.
    * @see IMergePolicy#getNewIdFor(EObject)
    */
-  protected boolean copyPhysicalIds() {
+  protected boolean copyXmlIds() {
     return true;
   }
   
@@ -147,17 +145,14 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return a new unique Ecore identifier for the given element, if relevant.
-   * This applies to elements whose meta-class owns an ID attribute.
-   * Note that if null is returned, Ecore IDs can be assigned by standard attribute
-   * copy (if covered) or copy of physical IDs if Ecore and physical IDs are bound together.
+   * Return a new unique intrinsic ID for the given element, if relevant.
+   * This may only be relevant for elements whose meta-class owns an ID attribute.
    * @see EAttribute#isID()
-   * @see IMergePolicy#copyPhysicalIds()
    * @param element_p a non-null element
-   * @return a string which must be null if no business re-identification is needed
+   * @return a potentially null string
    */
   protected String getNewIdFor(EObject element_p) {
-    return copyPhysicalIds()? null: EcoreUtil.generateUUID();
+    return copyXmlIds()? null: EcoreUtil.generateUUID();
   }
   
   /**
@@ -184,11 +179,11 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return whether elements must be given a new unique ID when added to a scope.
-   * Returning true has an impact only if getNewIdFor(EObject) does
-   * not return null for the added elements.
+   * Return whether elements must be given a new intrinsic ID when added to a scope.
+   * Returning true has an impact only for elements that generate a non-null ID via
+   * getNewIdFor(EObject).
    */
-  protected boolean useNewEcoreIds() {
+  protected boolean useNewAttributeIds() {
     return false;
   }
   

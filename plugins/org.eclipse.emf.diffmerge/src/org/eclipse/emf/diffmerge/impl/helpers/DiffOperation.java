@@ -545,22 +545,22 @@ public class DiffOperation extends AbstractExpensiveOperation {
     ((IMergeableDifference.Editable)presence).markRequires(
         referenceDiff_p, presenceRole);
     if (referenceDiff_p.getFeature() != null) {
-      // If containment and presence requires ownership, presence implies ref
-      // and no ref implies absence
+      // If containment and presence requires ownership, value presence implies ref
+      // and no ref implies value absence
       if (referenceDiff_p.getFeature().isContainment() &&
           getMergePolicy().bindPresenceToOwnership()) {
         ((IMergeableDifference.Editable)presence).markImplies(
             referenceDiff_p, presenceRole.opposite());
         referenceDiff.markImplies(presence, presenceRole);
       } else {
-        // Not containment or no ownership/presence coupling
+        // Not a containment or no ownership/presence coupling
         EReference opposite = referenceDiff_p.getFeature().getEOpposite();
         // If reference has an eOpposite which is mandatory for addition, then ...
         if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
-          // ... presence of value requires reference value presence
+          // ... value presence requires ref
           ((IMergeableDifference.Editable)presence).markRequires(
               referenceDiff_p, presenceRole.opposite());
-          // ... and absence of reference value presence requires absence of value
+          // ... and no ref requires value absence
           referenceDiff.markRequires(presence, presenceRole);
         }
       }

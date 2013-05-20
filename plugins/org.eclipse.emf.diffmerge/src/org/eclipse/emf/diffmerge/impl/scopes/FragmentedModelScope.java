@@ -104,7 +104,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
     if (wasRoot && reference_p.isContainment())
       oldResource.getContents().remove(value_p); // Not handled by EMF!
     if (formerId != null)
-      // In case resource has changed, thus changing XMI ID
+      // In case resource has changed, thus changing XML ID
       ModelImplUtil.setXmlId(value_p, formerId);
     return result;
   }

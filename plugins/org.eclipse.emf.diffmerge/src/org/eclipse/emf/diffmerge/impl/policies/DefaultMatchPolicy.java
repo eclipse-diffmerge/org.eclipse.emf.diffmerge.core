@@ -14,27 +14,42 @@
  */
 package org.eclipse.emf.diffmerge.impl.policies;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.ComparableSequence;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 
 /**
- * A default match policy based on unique IDs (Ecore, XML, URI) of model elements.
+ * A default match policy based on unique IDs (intrinsic/extrinsic/URI) of model elements.
  * @author Olivier Constant
  */
 public class DefaultMatchPolicy implements IMatchPolicy {
   
   /**
-   * Return the ID of the given element as defined by its ID Attribute, or null if none
+   * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
+   * @see EcoreUtil#getID(EObject)
    * @param element_p a potentially null element
    * @return a potentially null String
    */
   protected String getAttributeId(EObject element_p) {
     return ModelImplUtil.getEcoreId(element_p);
+  }
+  
+  /**
+   * Return the URI of the given element as a Comparable (String).
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getComparableUri(EObject element_p) {
+    String result = null;
+    URI uri = EcoreUtil.getURI(element_p);
+    if (uri != null)
+      result = uri.toString();
+    return result;
   }
   
   /**
@@ -45,7 +60,7 @@ public class DefaultMatchPolicy implements IMatchPolicy {
     if (result == null)
       result = getXmlId(element_p);
     if (result == null)
-      result = getUriFragment(element_p);
+      result = getComparableUri(element_p);
     return result;
   }
   
@@ -82,20 +97,7 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
-   * Return the URI fragment of the given element in its resource, if any.
-   * @param element_p a non-null element
-   * @return a potentially null string
-   */
-  protected String getUriFragment(EObject element_p) {
-    String result = null;
-    Resource resource = element_p.eResource();
-    if (resource != null)
-      result = resource.getURIFragment(element_p);
-    return result;
-  }
-  
-  /**
-   * Return the XML ID of the given element, or null if none
+   * Return the extrinsic (XML) ID of the given element, or null if none
    * @param element_p a potentially null element
    * @return a potentially null String
    */

@@ -42,9 +42,12 @@ public interface IMergePolicy {
   boolean copyFeature(EStructuralFeature feature_p);
   
   /**
-   * Modify the given target element so that its ID matches that of the given source element,
-   * if possible. Calling this method multiple times on the same elements must have the same
-   * impact as calling it once on those elements.
+   * Modify the ID of the given target element according to that of the given source element,
+   * if relevant and possible.
+   * This operation is called after the target element has been added to a scope as a copy
+   * of the source element from the opposite scope.
+   * Calling this operation multiple times on the same elements must have the same effect as
+   * calling it once (idempotency).
    * @param source_p a non-null element
    * @param target_p a non-null element
    */
@@ -89,14 +92,16 @@ public interface IMergePolicy {
       IMatch source_p, EReference reference_p, IMatch value_p);
   
   /**
-   * Return whether the given reference leads to elements which are mandatory for addition.
-   * If presenceRequiresOwnership(), it is only called on cross-references.
+   * Return whether the given reference leads to elements whose addition is imposed
+   * by the addition of the reference owner.
+   * If presenceRequiresOwnership(), operation is only called on cross-references.
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForAddition(EReference reference_p);
   
   /**
-   * Return whether the given reference leads to values which are mandatory for deletion
+   * Return whether the given reference leads to elements whose deletion is imposed
+   * by the deletion of the reference owner
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForDeletion(EReference reference_p);
