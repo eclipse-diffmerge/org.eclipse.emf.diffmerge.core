@@ -21,7 +21,7 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -178,8 +178,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
   @Override
   public Image getImage(Object element_p) {
     Object element = element_p;
-    if (element instanceof IPhysicalModelScope)
-      element = ((IPhysicalModelScope)element).getHoldingResource();
+    if (element instanceof IPersistentModelScope)
+      element = ((IPersistentModelScope)element).getHoldingResource();
     Image result = UIUtil.getImage(element);
     if (result == null)
       result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY);
@@ -215,8 +215,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
   public String getText(Object element_p) {
     Object element = element_p;
     String result;
-    if (element instanceof IPhysicalModelScope)
-      element = ((IPhysicalModelScope)element).getHoldingResource();
+    if (element instanceof IPersistentModelScope)
+      element = ((IPersistentModelScope)element).getHoldingResource();
     if (element instanceof EObject)
       result = UIUtil.getText(element);
     else if (element instanceof Resource)

@@ -43,7 +43,7 @@ import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
@@ -516,13 +516,13 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       try {
         if (_isLeftModified) {
           IModelScope leftScope = comparison.getScope(getRoleForSide(true));
-          if (leftScope instanceof IPhysicalModelScope)
-            ((IPhysicalModelScope)leftScope).save();
+          if (leftScope instanceof IPersistentModelScope)
+            ((IPersistentModelScope)leftScope).save();
         }
         if (_isRightModified) {
           IModelScope rightScope = comparison.getScope(getRoleForSide(false));
-          if (rightScope instanceof IPhysicalModelScope)
-            ((IPhysicalModelScope)rightScope).save();
+          if (rightScope instanceof IPersistentModelScope)
+            ((IPersistentModelScope)rightScope).save();
         }
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
         if (getEditingDomain() != null)

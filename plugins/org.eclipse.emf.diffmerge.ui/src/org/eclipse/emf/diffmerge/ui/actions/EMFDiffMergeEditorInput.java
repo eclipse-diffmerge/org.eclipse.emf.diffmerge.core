@@ -31,7 +31,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -409,9 +409,9 @@ implements IEditingDomainProvider {
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
     _leftScope = _specification.getScopeSpecification(Role.TARGET).createScope(domain);
-    if (_leftScope instanceof IPhysicalModelScope) {
+    if (_leftScope instanceof IPersistentModelScope) {
       try {
-        ((IPhysicalModelScope)_leftScope).load();
+        ((IPersistentModelScope)_leftScope).load();
       } catch (Exception e) {
         throw new WrappedException(e);
       }
@@ -422,9 +422,9 @@ implements IEditingDomainProvider {
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
     _rightScope = _specification.getScopeSpecification(Role.REFERENCE).createScope(domain);
-    if (_rightScope instanceof IPhysicalModelScope) {
+    if (_rightScope instanceof IPersistentModelScope) {
       try {
-        ((IPhysicalModelScope)_rightScope).load();
+        ((IPersistentModelScope)_rightScope).load();
       } catch (Exception e) {
         throw new WrappedException(e);
       }
@@ -436,9 +436,9 @@ implements IEditingDomainProvider {
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
       _ancestorScope = _specification.getScopeSpecification(Role.ANCESTOR).createScope(domain);
-      if (_ancestorScope instanceof IPhysicalModelScope) {
+      if (_ancestorScope instanceof IPersistentModelScope) {
         try {
-          ((IPhysicalModelScope)_ancestorScope).load();
+          ((IPersistentModelScope)_ancestorScope).load();
         } catch (Exception e) {
           throw new WrappedException(e);
         }
