@@ -6,7 +6,7 @@
       provider-name="Eclipse Modeling Project">
 
    <description>
-      EMF Diff/Merge SDK Feature (Incubation)
+      A diff/merge tool for models. Its main purpose is to help build higher-level tools that need to merge models based on consistency rules. GUI components are also provided. Typical usages include model refactoring, iterative model transformations, bridges between models or modeling tools, collaborative modeling environments, or versioning systems.
    </description>
 
    <copyright>
