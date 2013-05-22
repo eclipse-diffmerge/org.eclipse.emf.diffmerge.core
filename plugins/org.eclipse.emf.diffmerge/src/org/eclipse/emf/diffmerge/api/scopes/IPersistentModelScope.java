@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  * known resource.
  * @author Olivier Constant
  */
-public interface IPhysicalModelScope extends IModelScope {
+public interface IPersistentModelScope extends IModelScope {
   
   /**
    * Return the resource holding all or a subset of the model tree

@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  * Complete deletion of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant
  */
-public class SubtreeModelScope extends AbstractModelScope implements IPhysicalModelScope {
+public class SubtreeModelScope extends AbstractModelScope implements IPersistentModelScope {
   
   /** The root of this scope */
   private final EObject _root;
@@ -82,7 +82,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPhysicalMo
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#getHoldingResource()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#getHoldingResource()
    */
   public Resource getHoldingResource() {
     return getRoot().eResource();
@@ -97,7 +97,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPhysicalMo
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#load()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
   public boolean load() throws Exception {
     return true; // Resource is already loaded since we already have an EObject
@@ -115,7 +115,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPhysicalMo
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#save()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#save()
    */
   public boolean save() throws IOException {
     boolean result = false;

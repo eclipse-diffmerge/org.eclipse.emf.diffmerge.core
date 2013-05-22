@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 
 /**
- * A policy that describes the way merges are performed in a comparison.
+ * A policy that defines how merges are performed in a comparison.
  * @author Olivier Constant
  */
 public interface IMergePolicy {
@@ -100,7 +100,7 @@ public interface IMergePolicy {
    * requires to also add its reference to the values, whether the values are already present or not;
    * conversely, deleting a reference to any of the values requires to delete the reference owner.
    * Operation is a special case of IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
-   * and must be consistent with that operation.
+   * when the values are not present, and must be consistent with that operation.
    * If bindPresenceToOwnership(), operation is only called on cross-references.
    * @see IMergePolicy#bindPresenceToOwnership()
    * @param reference_p a non-null, non-derived, non-container reference

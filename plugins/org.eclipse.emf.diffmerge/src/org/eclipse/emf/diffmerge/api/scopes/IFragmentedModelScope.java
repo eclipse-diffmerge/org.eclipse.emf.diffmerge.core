@@ -20,14 +20,15 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
- * A model scope which is aware of its underlying multi-resource structure.
- * Resources are assumed to be organized in an acyclic "inclusion" graph derived
- * from the containment tree, with additional "referencing" arcs.
- * The "holding" resource defined in the super-interface must be one of those
- * resources.
+ * A model scope which is aware of its underlying multi-resource persistence
+ * structure. Resources are assumed to be organized in an acyclic "inclusion"
+ * graph derived from the containment tree, with additional "referencing" arcs
+ * that manifest the existence of at least one cross-reference between elements
+ * of two resources. The "holding" resource defined in the super-interface must
+ * be one of the resources.
  * @author Olivier Constant
  */
-public interface IFragmentedModelScope extends IPhysicalModelScope {
+public interface IFragmentedModelScope extends IPersistentModelScope {
   
   /**
    * Return the list of the resources containing elements which belong to

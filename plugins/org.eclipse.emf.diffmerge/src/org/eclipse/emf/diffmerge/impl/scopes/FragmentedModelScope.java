@@ -177,7 +177,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#getHoldingResource()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#getHoldingResource()
    */
   public Resource getHoldingResource() {
     return _rootResources.isEmpty()? null: _rootResources.get(0);
@@ -271,7 +271,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#load()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
   public boolean load() throws Exception {
     for (Resource rootResource : _rootResources) {
@@ -315,7 +315,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPhysicalModelScope#save()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#save()
    */
   public boolean save() throws Exception {
     Map<Object, Object> options = new HashMap<Object, Object>();
