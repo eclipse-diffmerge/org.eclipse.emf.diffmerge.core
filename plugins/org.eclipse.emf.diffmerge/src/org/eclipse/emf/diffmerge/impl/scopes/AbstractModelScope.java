@@ -154,7 +154,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
    */
   public TreeIterator<EObject> getAllContents() {
     // Return an iterator which is derived from getAllContents(EObject)
-    return new MultiRootTreeIterator(this, getContents().iterator());
+    return new ModelScopeIterator(this);
   }
   
   /**

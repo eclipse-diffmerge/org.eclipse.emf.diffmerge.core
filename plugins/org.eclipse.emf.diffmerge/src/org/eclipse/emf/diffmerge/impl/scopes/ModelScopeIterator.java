@@ -22,13 +22,11 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EObject;
 
 
-
 /**
- * A TreeIterator of model elements which is derived from a model scope on
- * a list of root model elements, those roots being included in the iteration.
+ * A TreeIterator for model scopes.
  * @author Olivier Constant
  */
-public class MultiRootTreeIterator implements TreeIterator<EObject> {
+public class ModelScopeIterator implements TreeIterator<EObject> {
   
   /** The non-null model scope */
   private final IModelScope _scope;
@@ -51,10 +49,10 @@ public class MultiRootTreeIterator implements TreeIterator<EObject> {
    * @param scope_p a non-null model scope
    * @param rootIterator_p a non-null iterator over the root elements which are assumed to belong to the scope
    */
-  public MultiRootTreeIterator(IModelScope scope_p, Iterator<EObject> rootIterator_p) {
-    assert scope_p != null && rootIterator_p != null;
+  public ModelScopeIterator(IModelScope scope_p) {
+    assert scope_p != null;
     _scope = scope_p;
-    _rootIterator = rootIterator_p;
+    _rootIterator = _scope.getContents().iterator();
     _prunedOnRoot = false;
     _currentIsRoot = false;
   }
@@ -63,8 +61,21 @@ public class MultiRootTreeIterator implements TreeIterator<EObject> {
    * @see java.util.Iterator#hasNext()
    */
   public boolean hasNext() {
-    return _rootContentIterator != null && _rootContentIterator.hasNext() ||
-      _rootIterator.hasNext();
+    return hasNextNonRoot() || hasNextRoot();
+  }
+  
+  /**
+   * Return whether it is possible to get a non-root next element 
+   */
+  protected boolean hasNextNonRoot() {
+    return !_prunedOnRoot && _rootContentIterator != null && _rootContentIterator.hasNext();
+  }
+  
+  /**
+   * Return whether it is possible to get a next root element
+   */
+  protected boolean hasNextRoot() {
+    return _rootIterator.hasNext();
   }
   
   /**
@@ -72,11 +83,10 @@ public class MultiRootTreeIterator implements TreeIterator<EObject> {
    */
   public EObject next() {
     EObject result = null;
-    if (!_prunedOnRoot && _rootContentIterator != null &&
-        _rootContentIterator.hasNext()) {
+    if (hasNextNonRoot()) {
       result = _rootContentIterator.next();
       _currentIsRoot = false;
-    } else if (_rootIterator.hasNext()) {
+    } else if (hasNextRoot()) {
       result = _rootIterator.next();
       _rootContentIterator = _scope.getAllContents(result);
       _currentIsRoot = true;
