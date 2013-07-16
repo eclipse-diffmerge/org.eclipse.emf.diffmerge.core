@@ -180,7 +180,7 @@ public class DiffMergeLabelProvider extends LabelProvider {
     Object element = element_p;
     if (element instanceof IPersistentModelScope)
       element = ((IPersistentModelScope)element).getHoldingResource();
-    Image result = UIUtil.getImage(element);
+    Image result = UIUtil.getEMFImage(element);
     if (result == null)
       result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY);
     return result;
@@ -218,9 +218,9 @@ public class DiffMergeLabelProvider extends LabelProvider {
     if (element instanceof IPersistentModelScope)
       element = ((IPersistentModelScope)element).getHoldingResource();
     if (element instanceof EObject)
-      result = UIUtil.getText(element);
+      result = UIUtil.getEMFText(element);
     else if (element instanceof Resource)
-      result = UIUtil.simplifyURI(((Resource)element).getURI().toString());
+      result = UIUtil.simplifyURI(((Resource)element).getURI());
     else if (element instanceof IFile)
       result = ((IFile)element).getFullPath().toPortableString();
     else {

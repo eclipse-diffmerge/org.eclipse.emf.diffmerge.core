@@ -54,7 +54,7 @@ public class ResourceScopeSpecification extends AbstractScopeSpecification {
   protected static String getLabelForResource(Resource resource_p) {
     String result;
     if (resource_p.getURI() != null)
-      result = UIUtil.simplifyURI(resource_p.getURI().toString());
+      result = UIUtil.simplifyURI(resource_p.getURI());
     else
       result = resource_p.toString();
     return result;

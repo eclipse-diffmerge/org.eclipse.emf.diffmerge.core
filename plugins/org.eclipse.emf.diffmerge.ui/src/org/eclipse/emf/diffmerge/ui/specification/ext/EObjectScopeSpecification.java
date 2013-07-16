@@ -63,7 +63,7 @@ public class EObjectScopeSpecification extends AbstractScopeSpecification {
    * @return a non-null string
    */
   protected static String getLabelForElement(EObject element_p) {
-    String result = UIUtil.getText(element_p);
+    String result = UIUtil.getEMFText(element_p);
     if (result == null)
       result = element_p.toString();
     else {
@@ -71,7 +71,7 @@ public class EObjectScopeSpecification extends AbstractScopeSpecification {
       if (resource != null) {
         URI uri = resource.getURI();
         if (uri != null) {
-          String resourceName = UIUtil.simplifyURI(uri.toString());
+          String resourceName = UIUtil.simplifyURI(uri);
           result = String.format(
               Messages.EObjectScopeSpecification_LabelInResource, result, resourceName);
         }

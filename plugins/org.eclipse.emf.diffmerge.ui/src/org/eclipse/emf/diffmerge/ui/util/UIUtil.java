@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -43,7 +44,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -61,31 +61,6 @@ public final class UIUtil {
 	  //Forbid instantiation
 	}
 	
-  /**
-   * Return the concatenation of the String representation of the given objects
-   */
-  public static String buildString(Object... objects_p) {
-    StringBuilder builder = new StringBuilder();
-    for (Object object : objects_p) {
-      if (null != object)
-        builder.append(object);
-    }
-    return builder.toString();
-  }
-  
-  /**
-   * Center the given shell graphically
-   */
-  public static void centerShell(Shell shell_p) {
-    Rectangle pbounds = shell_p.getDisplay().getBounds();
-    Rectangle bounds = shell_p.getBounds();
-    shell_p.setBounds(
-        pbounds.x + (pbounds.width-bounds.width)/2,
-        pbounds.y + (pbounds.height-bounds.height)/2,
-        bounds.width,
-        bounds.height);
-  }
-  
   /**
    * Create and return a composite within the given one with default characteristics
    * @param parent_p a non-null composite
@@ -167,12 +142,13 @@ public final class UIUtil {
   }
   
   /**
-   * Return an image for the given element solely based on its editing domain, if any
-   * @param element_p a non-null element
-   * @return a potentially null string
+   * Return an image for the given element solely based on EMF mechanisms
+   * @param element_p a non-null object
+   * @return a potentially null image
    */
-  public static Image getImage(Object element_p) {
+  public static Image getEMFImage(Object element_p) {
     Image result = null;
+    // Try editing domain
     EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
     if (rawEditingDomain == null)
       rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
@@ -186,6 +162,31 @@ public final class UIUtil {
           result = ExtendedImageRegistry.getInstance().getImage(rawImage);
       }
     }
+    // Try .edit plugins
+    if (result == null)
+      result = EMFDiffMergeUIPlugin.getDefault().getComposedAdapterFactoryLabelProvider().getImage(element_p);
+    return result;
+  }
+  
+  /**
+   * Return a label for the given element solely based on EMF mechanisms (editing domain, .edit plugins)
+   * @param element_p a potentially null object
+   * @return a potentially null string
+   */
+  public static String getEMFText(Object element_p) {
+    String result = null;
+    EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
+    if (rawEditingDomain == null)
+      rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
+    if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
+      AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
+      IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
+          element_p, IItemLabelProvider.class);
+      if (provider != null)
+        result = provider.getText(element_p);
+    }
+    if (result == null)
+      result = EMFDiffMergeUIPlugin.getDefault().getComposedAdapterFactoryLabelProvider().getText(element_p);
     return result;
   }
   
@@ -201,37 +202,15 @@ public final class UIUtil {
   }
   
 	/**
-	 * Return a label for the given element solely based on its editing domain, if any
-	 * @param element_p a potentially null object
-	 * @return a potentially null string
-	 */
-  public static String getText(Object element_p) {
-    String result = null;
-    EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
-    if (rawEditingDomain == null)
-      rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
-    if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
-      AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
-      IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
-          element_p, IItemLabelProvider.class);
-      if (provider != null)
-        result = provider.getText(element_p);
-    }
-    return result;
-	}
-	
-	/**
-	 * Return a UI variant of the URI representation
-	 * @param uri_p a potentially null string
+	 * Return a UI variant of the representation of the given URI
+	 * @param uri_p a potentially null URI
 	 * @return a string which is null iff uri_p is null
 	 */
-	public static String simplifyURI(String uri_p) {
-	  String result = uri_p;
-	  if (result != null) {
-	    result = result.replaceAll("platform:/resource/", ""); //$NON-NLS-1$ //$NON-NLS-2$
-	    int pos = result.lastIndexOf('#');
-	    if (pos >= 0)
-	      result = result.substring(0, pos);
+	public static String simplifyURI(URI uri_p) {
+	  String result = null;
+	  if (uri_p != null) {
+	    result = uri_p.path();
+	    result = result.replaceAll("/resource/", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	    result = result.replaceAll("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$
 	  }
 	  return result;

@@ -28,6 +28,8 @@ import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
@@ -82,6 +84,9 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   /** The "very dark gray" non-system color (initially null) */
   private Color _veryDarkGray;
   
+  /** A label provider based on the registered .edit plugins (initially null) */
+  private AdapterFactoryLabelProvider _composedAdapterFactoryLabelProvider;
+  
 	
 	/**
 	 * Constructor
@@ -95,6 +100,18 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     _ownershipFeature.setLowerBound(0);
 	  _ownershipFeature.setUpperBound(1);
 	  _veryDarkGray = null;
+	  _composedAdapterFactoryLabelProvider = null;
+	}
+	
+	/**
+	 * Return a label provider based on the registered .edit plugins
+	 * @return a non-null object
+	 */
+	public AdapterFactoryLabelProvider getComposedAdapterFactoryLabelProvider() {
+	  if (_composedAdapterFactoryLabelProvider == null)
+	    _composedAdapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
+	        new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+	  return _composedAdapterFactoryLabelProvider;
 	}
 	
 	/**
@@ -392,6 +409,8 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	  _diffMergeLogger.close();
 	  if (_veryDarkGray != null)
 	    _veryDarkGray.dispose();
+	  if (_composedAdapterFactoryLabelProvider != null)
+	    _composedAdapterFactoryLabelProvider.dispose();
 		plugin = null;
 		super.stop(context);
 	}
