@@ -92,6 +92,8 @@ implements IModifiableBinaryRelation<T, U> {
     List<U> values = _contents.get(source_p);
     if (values != null) {
       values.remove(target_p);
+      if (values.isEmpty())
+        _contents.removeKey(source_p);
     }
   }
 
