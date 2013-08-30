@@ -14,6 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.impl.policies;
 
+import java.util.Comparator;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
@@ -30,21 +32,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 public class DefaultMatchPolicy implements IMatchPolicy {
   
   /**
-   * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
-   * @see EcoreUtil#getID(EObject)
-   * @param element_p a potentially null element
-   * @return a potentially null String
-   */
-  protected String getAttributeId(EObject element_p) {
-    return ModelImplUtil.getEcoreId(element_p);
-  }
-  
-  /**
    * Return the URI of the given element as a Comparable (String).
    * @param element_p a non-null element
    * @return a potentially null string
    */
-  protected String getComparableUri(EObject element_p) {
+  protected String getComparableURI(EObject element_p) {
     String result = null;
     URI uri = EcoreUtil.getURI(element_p);
     if (uri != null)
@@ -53,15 +45,35 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
+   * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
+   * @see EcoreUtil#getID(EObject)
+   * @param element_p a potentially null element
+   * @return a potentially null String
+   */
+  protected String getIntrinsicID(EObject element_p) {
+    return ModelImplUtil.getIntrinsicID(element_p);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#getMatchId(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
-  public Comparable<?> getMatchId(EObject element_p, IModelScope scope_p) {
-    Comparable<?> result = getAttributeId(element_p);
+  public Object getMatchID(EObject element_p, IModelScope scope_p) {
+    Comparable<?> result = getIntrinsicID(element_p);
     if (result == null)
-      result = getXmlId(element_p);
+      result = getXMLID(element_p);
     if (result == null)
-      result = getComparableUri(element_p);
+      result = getComparableURI(element_p);
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#getMatchIDComparator()
+   */
+  public Comparator<Object> getMatchIDComparator() {
+    // Redefine (for example by returning null) if getMatchID
+    // may return objects that are not Comparable or that are
+    // incompatible sorts of Comparable.
+    return NATURAL_ORDER_COMPARATOR;
   }
   
   /**
@@ -101,8 +113,8 @@ public class DefaultMatchPolicy implements IMatchPolicy {
    * @param element_p a potentially null element
    * @return a potentially null String
    */
-  protected String getXmlId(EObject element_p) {
-    return ModelImplUtil.getXmlId(element_p);
+  protected String getXMLID(EObject element_p) {
+    return ModelImplUtil.getXMLID(element_p);
   }
   
 }

@@ -59,11 +59,11 @@ public class DefaultMergePolicy implements IMergePolicy {
    */
   public void copyId(EObject source_p, EObject target_p) {
     if (copyXmlIds())
-      ModelImplUtil.copyXmlId(source_p, target_p);
+      ModelImplUtil.copyXMLID(source_p, target_p);
     if (useNewAttributeIds()) {
       String newId = getNewIdFor(target_p);
       if (newId != null)
-        ModelImplUtil.setAttributeId(target_p, newId);
+        ModelImplUtil.setIntrinsicID(target_p, newId);
     }
   }
   

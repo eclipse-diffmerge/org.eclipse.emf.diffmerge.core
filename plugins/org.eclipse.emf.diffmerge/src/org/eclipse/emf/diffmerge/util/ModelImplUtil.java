@@ -44,8 +44,8 @@ public final class ModelImplUtil {
    * @param target_p a non-null element
    * @return whether the ID was actually copied
    */
-  public static boolean copyXmlId(EObject source_p, EObject target_p) {
-    return ModelImplUtil.setXmlId(target_p, getXmlId(source_p));
+  public static boolean copyXMLID(EObject source_p, EObject target_p) {
+    return ModelImplUtil.setXMLID(target_p, getXMLID(source_p));
   }
   
   /**
@@ -54,7 +54,7 @@ public final class ModelImplUtil {
    * @param element_p a potentially null element
    * @return a potentially null String
    */
-  public static String getEcoreId(EObject element_p) {
+  public static String getIntrinsicID(EObject element_p) {
     String result = null;
     if (element_p != null)
       result = EcoreUtil.getID(element_p);
@@ -62,11 +62,11 @@ public final class ModelImplUtil {
   }
   
   /**
-   * Return the extrinsic (XML) ID of the given element, or null if none
+   * Return the (extrinsic) XML ID of the given element, or null if none
    * @param element_p a potentially null element
    * @return a potentially null String
    */
-  public static String getXmlId(EObject element_p) {
+  public static String getXMLID(EObject element_p) {
     String result = null;
     if (element_p != null && element_p.eResource() instanceof XMLResource)
       result = ((XMLResource)element_p.eResource()).getID(element_p);
@@ -133,7 +133,7 @@ public final class ModelImplUtil {
    * @param id_p a non-null ID
    * @return whether the ID was actually set
    */
-  public static boolean setAttributeId(EObject element_p, String id_p) {
+  public static boolean setIntrinsicID(EObject element_p, String id_p) {
     assert element_p != null && id_p != null;
     boolean result = false;
     if (element_p.eClass().getEIDAttribute() != null &&
@@ -146,13 +146,13 @@ public final class ModelImplUtil {
   }
   
   /**
-   * Set the extrinsic (XML) ID of the given element if applicable and if it does
+   * Set the (extrinsic) XML ID of the given element if applicable and if it does
    * not break ID uniqueness
    * @param element_p a non-null element
    * @param id_p a potentially null ID
    * @return whether the ID was actually set
    */
-  public static boolean setXmlId(EObject element_p, String id_p) {
+  public static boolean setXMLID(EObject element_p, String id_p) {
     assert element_p != null;
     boolean result = false;
     if (id_p != null && element_p.eResource() instanceof XMLResource) {

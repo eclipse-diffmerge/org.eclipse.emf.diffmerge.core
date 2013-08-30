@@ -99,13 +99,13 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     Resource oldResource = value_p.eResource();
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);
-    String formerId = ModelImplUtil.getXmlId(value_p);
+    String formerId = ModelImplUtil.getXMLID(value_p);
     boolean result = super.add(source_p, reference_p, value_p);
     if (wasRoot && reference_p.isContainment())
       oldResource.getContents().remove(value_p); // Not automatically handled
     if (formerId != null)
       // In case resource has changed, thus changing XML ID
-      ModelImplUtil.setXmlId(value_p, formerId);
+      ModelImplUtil.setXMLID(value_p, formerId);
     return result;
   }
   

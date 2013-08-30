@@ -15,6 +15,8 @@
 package org.eclipse.emf.diffmerge.impl.helpers;
 
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,17 +58,30 @@ public class MatchOperation extends AbstractExpensiveOperation {
   }
   
   /**
+   * Create and return a new (match ID, element) empty map 
+   * @return a non-null map
+   */
+  protected Map<Object, EObject> createMatchIDToElementMap() {
+    Map<Object, EObject> result;
+    Comparator<Object> comparator = getMatchPolicy().getMatchIDComparator();;
+    if (comparator == null)
+      result = new HashMap<Object, EObject>();
+    else
+      result = new TreeMap<Object, EObject>(comparator);
+    return result;
+  }
+  
+  /**
    * Explore the scope of the given role and fill the mapping with its elements,
    * not attempting to match them
    * @param role_p a non-null role
-   * @param rememberIds_p whether match IDs must be remembered and returned in a map
-   * @return an unmodifiable map of (criterion, element) with no null value and which is empty if !rememberIds_p
+   * @param rememberIDs_p whether match IDs must be remembered and returned in a map
+   * @return an unmodifiable map of (criterion, element) with no null value and which is empty if !rememberIDs_p
    */
-  protected Map<Comparable<?>, EObject> explore(Role role_p, boolean rememberIds_p) {
-    Map<Comparable<?>, EObject> result;
-    if (rememberIds_p)
-      // Use the natural ordering of comparables in the TreeMap
-      result = new TreeMap<Comparable<?>, EObject>();
+  protected Map<Object, EObject> explore(Role role_p, boolean rememberIDs_p) {
+    Map<Object, EObject> result;
+    if (rememberIDs_p)
+      result = createMatchIDToElementMap();
     else
       result = Collections.emptyMap();
     IModelScope scope = _comparison.getScope(role_p);
@@ -79,13 +94,13 @@ public class MatchOperation extends AbstractExpensiveOperation {
         checkProgress();
         EObject current = it.next();
         mapping.map(current, role_p);
-        if (rememberIds_p) {
-          Comparable<?> id = getMatchPolicy().getMatchId(current, scope);
-          if (id != null) {
-            EObject squatter = result.put(id, current);
+        if (rememberIDs_p) {
+          Object matchID = getMatchPolicy().getMatchID(current, scope);
+          if (matchID != null) {
+            EObject squatter = result.put(matchID, current);
             if (squatter != null)
               EMFDiffMergePlugin.getDefault().warn(
-                  Messages.MatchBuilder_WarningDuplicateIDs + id);
+                  Messages.MatchBuilder_WarningDuplicateIDs + matchID);
           }
         }
       }
@@ -102,18 +117,17 @@ public class MatchOperation extends AbstractExpensiveOperation {
    * @param secondaryRole1_p a non-null role which is different from role_p
    * @param idRegistry2_p a potentially null map of (ID, element)
    * @param secondaryRole2_p a role which is different from role_p and secondaryRole1_p
-   *        and which is null iff IdRegistry2_p is null
-   * @param rememberIds_p whether match IDs must be remembered and returned in a map
-   * @return an unmodifiable map of (ID, element) with no null value and which is empty if !rememberIds_p
+   *        and which is null iff idRegistry2_p is null
+   * @param rememberIDs_p whether match IDs must be remembered and returned in a map
+   * @return an unmodifiable map of (ID, element) with no null value and which is empty if !rememberIDs_p
    */
-  protected Map<Comparable<?>, EObject> exploreAndMatch(Role role_p,
-      Map<Comparable<?>, EObject> idRegistry1_p, Role secondaryRole1_p,
-      Map<Comparable<?>, EObject> idRegistry2_p, Role secondaryRole2_p,
-      boolean rememberId_p) {
-    Map<Comparable<?>, EObject> result;
-    if (rememberId_p)
-      // Use the ordering of Comparables in the TreeMap
-      result = new TreeMap<Comparable<?>, EObject>();
+  protected Map<Object, EObject> exploreAndMatch(Role role_p,
+      Map<Object, EObject> idRegistry1_p, Role secondaryRole1_p,
+      Map<Object, EObject> idRegistry2_p, Role secondaryRole2_p,
+      boolean rememberIDs_p) {
+    Map<Object, EObject> result;
+    if (rememberIDs_p)
+      result = createMatchIDToElementMap();
     else
       result = Collections.emptyMap();
     IModelScope scope = _comparison.getScope(role_p);
@@ -125,9 +139,9 @@ public class MatchOperation extends AbstractExpensiveOperation {
         EObject current = targetIt.next();
         EObject counterpart1 = null;
         EObject counterpart2 = null;
-        Comparable<?> id = getMatchPolicy().getMatchId(current, scope);
+        Object id = getMatchPolicy().getMatchID(current, scope);
         if (id != null) {
-          if (rememberId_p) {
+          if (rememberIDs_p) {
             EObject squatter = result.put(id, current);
             if (squatter != null)
               EMFDiffMergePlugin.getDefault().warn(
@@ -187,15 +201,15 @@ public class MatchOperation extends AbstractExpensiveOperation {
   protected void match() {
     boolean threeWay = _comparison.isThreeWay();
     getMonitor().subTask(Messages.MatchBuilder_Task_RegisteringIDs);
-    Map<Comparable<?>, EObject> referenceIdRegistry = explore(Role.REFERENCE, true);
+    Map<Object, EObject> referenceIDRegistry = explore(Role.REFERENCE, true);
     getMonitor().worked(1);
     getMonitor().subTask(Messages.MatchBuilder_Task_MappingIDs);
-    Map<Comparable<?>, EObject> targetIdRegistry = exploreAndMatch(
-        Role.TARGET, referenceIdRegistry, Role.REFERENCE, null, null, threeWay);
+    Map<Object, EObject> targetIDRegistry = exploreAndMatch(
+        Role.TARGET, referenceIDRegistry, Role.REFERENCE, null, null, threeWay);
     getMonitor().worked(1);
     if (threeWay) {
-      exploreAndMatch(Role.ANCESTOR, referenceIdRegistry, Role.REFERENCE,
-          targetIdRegistry, Role.TARGET, false);
+      exploreAndMatch(Role.ANCESTOR, referenceIDRegistry, Role.REFERENCE,
+          targetIDRegistry, Role.TARGET, false);
       getMonitor().worked(1);
     }
   }

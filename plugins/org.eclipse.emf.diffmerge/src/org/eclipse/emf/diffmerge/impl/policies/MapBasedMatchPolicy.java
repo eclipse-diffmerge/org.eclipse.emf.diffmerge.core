@@ -20,7 +20,6 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EObject;
 
 
-
 /**
  * A match policy with predefined pairs of matching elements.
  * @author Olivier Constant
@@ -32,20 +31,28 @@ public class MapBasedMatchPolicy extends DefaultMatchPolicy {
   
   /**
    * Constructor
-   * @param a non-null mapping of matching elements (modifying it will impact this policy)
+   * @param a non-null mapping of matching elements (modifying it will alter this policy)
    */
   public MapBasedMatchPolicy(Map<? extends EObject, ? extends EObject> mapping_p) {
     _mapping = mapping_p;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchId(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * Return the mapping of matching elements. Modifying it will alter this policy.
+   * @return a non-null, potentially empty map
+   */
+  public Map<? extends EObject, ? extends EObject> getMap() {
+    return _mapping;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
   @Override
-  public Comparable<?> getMatchId(EObject element_p, IModelScope scope_p) {
+  public Object getMatchID(EObject element_p, IModelScope scope_p) {
     EObject mappedElement = _mapping.get(element_p);
     EObject idProvider = mappedElement == null? element_p: mappedElement;
-    return super.getMatchId(idProvider, scope_p);
+    return super.getMatchID(idProvider, scope_p);
   }
   
 }

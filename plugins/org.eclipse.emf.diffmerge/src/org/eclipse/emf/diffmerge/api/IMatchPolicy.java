@@ -14,6 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.api;
 
+import java.util.Comparator;
+
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EObject;
 
@@ -26,9 +28,9 @@ import org.eclipse.emf.ecore.EObject;
 public interface IMatchPolicy {
   
   /**
-   * Return an object which uniquely characterizes the given element within the given scope
+   * Return an object which uniquely discriminates the given element within the given scope
    * and that can be used as a criterion for matching.
-   * The returned object can be a classic EMF ID (intrinsic/extrinsic) or anything else.
+   * The returned object can classically be an ID, or anything else.
    * If null is returned, then the element will have no match.
    * Two elements E1, E2 from scopes S1, S2 will match if and only if
    * getMatchId(E1, S1) != null && getMatchId(E1, S1).equals(getMatchId(E2, S2)).
@@ -39,8 +41,43 @@ public interface IMatchPolicy {
    *  !getMatchId(E1, scope_p).equals(getMatchId(E2, scope_p))
    * @param element_p a non-null element
    * @param scope_p a non-null scope
-   * @return a potentially null comparable object
+   * @return a potentially null object
    */
-  Comparable<?> getMatchId(EObject element_p, IModelScope scope_p);
+  Object getMatchID(EObject element_p, IModelScope scope_p);
+  
+  /**
+   * Optionally return a comparator which is applicable to all objects that getMatchID
+   * may return. Its behavior on other objects has no consequences.
+   * If present, it is used to increase performance.
+   * @return a potentially null comparator
+   */
+  Comparator<Object> getMatchIDComparator();
+  
+  
+  /**
+   * A predefined comparator that is solely based on the natural order of objects
+   * that implement Comparable, such as Strings.
+   * It never throws ClassCastException; instead, its compare method returns 0
+   * when objects cannot be compared, either because they are not Comparable or
+   * because they are incompatible sorts of Comparable. In these cases, this
+   * comparator is thus inconsistent with equals.
+   * @see Comparable
+   */
+  Comparator<Object> NATURAL_ORDER_COMPARATOR = new Comparator<Object>() {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public int compare(Object o1_p, Object o2_p) {
+      int result = 0;
+      if (o1_p instanceof Comparable<?> && o2_p instanceof Comparable<?>) {
+        try {
+          Comparable c1 = (Comparable)o1_p;
+          Comparable c2 = (Comparable)o2_p;
+          result = c1.compareTo(c2);
+        } catch (ClassCastException e) {
+          // Objects cannot be compared: Proceed
+        }
+      }
+      return result;
+    }
+  };
   
 }
