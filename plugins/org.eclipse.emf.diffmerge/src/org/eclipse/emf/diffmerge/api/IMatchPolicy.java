@@ -28,10 +28,14 @@ import org.eclipse.emf.ecore.EObject;
 public interface IMatchPolicy {
   
   /**
-   * Return an object which uniquely discriminates the given element within the given scope
-   * and that can be used as a criterion for matching.
-   * The returned object can classically be an ID, or anything else.
-   * If null is returned, then the element will have no match.
+   * Return an object ("match ID") which uniquely discriminates the given element
+   * within the given scope and that can be used as a criterion for matching.
+   * Two elements from different scopes match when their "match IDs" are equal.
+   * The "match ID" can be an actual ID or anything else.
+   * If null is returned, then the corresponding element will have no match.
+   * Two elements from the same scope must not have the same "match ID", otherwise
+   * the match policy can be considered as not applicable to the scope.
+   * More formally:
    * Two elements E1, E2 from scopes S1, S2 will match if and only if
    * getMatchId(E1, S1) != null && getMatchId(E1, S1).equals(getMatchId(E2, S2)).
    * Precondition: scope_p.covers(element_p)
@@ -49,7 +53,7 @@ public interface IMatchPolicy {
    * Optionally return a comparator which is applicable to all objects that getMatchID
    * may return. Its behavior on other objects has no consequences.
    * If present, it is used to increase performance.
-   * @return a potentially null comparator
+   * @return a comparator or null
    */
   Comparator<Object> getMatchIDComparator();
   
@@ -59,9 +63,9 @@ public interface IMatchPolicy {
    * that implement Comparable, such as Strings.
    * It never throws ClassCastException; instead, its compare method returns 0
    * when objects cannot be compared, either because they are not Comparable or
-   * because they are incompatible sorts of Comparable. In these cases, this
+   * because they are incompatible sorts of Comparable. In this situation, this
    * comparator is thus inconsistent with equals.
-   * @see Comparable
+   * @see Comparable, Comparator
    */
   Comparator<Object> NATURAL_ORDER_COMPARATOR = new Comparator<Object>() {
     @SuppressWarnings({ "rawtypes", "unchecked" })

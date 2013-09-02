@@ -28,8 +28,8 @@ import java.util.List;
  * @param <T> the type of the elements in the sequence
  * @author Olivier Constant
  */
-public class ComparableSequence<T extends Comparable<? super T>>
-implements Comparable<ComparableSequence<? extends T>> {
+public class ComparableSequence<T extends Comparable<T>>
+implements Comparable<ComparableSequence<T>> {
   
   /** The non-null list of elements which form the path.
       We use a LinkedList in order to be able to prepend elements */
@@ -71,9 +71,9 @@ implements Comparable<ComparableSequence<? extends T>> {
   /**
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
-  public int compareTo(ComparableSequence<? extends T> path_p) {
+  public int compareTo(ComparableSequence<T> path_p) {
     Iterator<T> it1 = getContents().iterator();
-    Iterator<? extends T> it2 = path_p.getContents().iterator();
+    Iterator<T> it2 = path_p.getContents().iterator();
     while (it1.hasNext() && it2.hasNext()) {
       int result = it1.next().compareTo(it2.next());
       if (result != 0)
