@@ -30,18 +30,18 @@ public interface IMatchPolicy {
   /**
    * Return an object ("match ID") which uniquely discriminates the given element
    * within the given scope and that can be used as a criterion for matching.
-   * Two elements from different scopes match when their "match IDs" are equal.
-   * The "match ID" can be an actual ID or anything else.
+   * Two elements from different scopes match if their "match IDs" are equal.
+   * The "match ID" can be an actual ID or any other object.
    * If null is returned, then the corresponding element will have no match.
    * Two elements from the same scope must not have the same "match ID", otherwise
-   * the match policy can be considered as not applicable to the scope.
+   * the match policy is considered to be non-applicable to the scope.
    * More formally:
    * Two elements E1, E2 from scopes S1, S2 will match if and only if
    * getMatchId(E1, S1) != null && getMatchId(E1, S1).equals(getMatchId(E2, S2)).
    * Precondition: scope_p.covers(element_p)
    * Class invariant (uniqueness):
-   *  for every E1, E2 in scope_p.getAllContentsAsSet(),
-   *  if E1 != E2 && getMatchId(E1, scope_p) != null then
+   *  FOR EVERY E1, E2 IN scope_p.getAllContentsAsSet() :
+   *  E1 != E2 && getMatchId(E1, scope_p) != null IMPLIES
    *  !getMatchId(E1, scope_p).equals(getMatchId(E2, scope_p))
    * @param element_p a non-null element
    * @param scope_p a non-null scope
@@ -52,19 +52,22 @@ public interface IMatchPolicy {
   /**
    * Optionally return a comparator which is applicable to all objects that getMatchID
    * may return. Its behavior on other objects has no consequences.
-   * If present, it is used to increase performance.
+   * If present, it is used to alter the performance of the matching phase by using
+   * TreeMaps instead of HashMaps (log(n) time cost for the main operations but no
+   * issue related to HashMap's capacity or load factor).
    * @return a comparator or null
+   * @see java.util.TreeMap
    */
-  Comparator<Object> getMatchIDComparator();
+  Comparator<?> getMatchIDComparator();
   
   
   /**
-   * A predefined comparator that is solely based on the natural order of objects
+   * A simple comparator that is solely based on the natural order of objects
    * that implement Comparable, such as Strings.
    * It never throws ClassCastException; instead, its compare method returns 0
    * when objects cannot be compared, either because they are not Comparable or
-   * because they are incompatible sorts of Comparable. In this situation, this
-   * comparator is thus inconsistent with equals.
+   * because they are Comparable which are not mutually comparable.
+   * In this situation, this comparator is thus inconsistent with equals.
    * @see Comparable, Comparator
    */
   Comparator<Object> NATURAL_ORDER_COMPARATOR = new Comparator<Object>() {

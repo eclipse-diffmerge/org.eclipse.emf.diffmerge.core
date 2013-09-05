@@ -63,7 +63,9 @@ public class MatchOperation extends AbstractExpensiveOperation {
    */
   protected Map<Object, EObject> createMatchIDToElementMap() {
     Map<Object, EObject> result;
-    Comparator<Object> comparator = getMatchPolicy().getMatchIDComparator();;
+    @SuppressWarnings("unchecked") // No issue if properly defined, see IMatchPolicy
+    Comparator<Object> comparator =
+      (Comparator<Object>)getMatchPolicy().getMatchIDComparator();
     if (comparator == null)
       result = new HashMap<Object, EObject>();
     else
