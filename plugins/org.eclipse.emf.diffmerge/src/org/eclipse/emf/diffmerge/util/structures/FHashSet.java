@@ -17,7 +17,6 @@ package org.eclipse.emf.diffmerge.util.structures;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 
 
 /**
@@ -29,8 +28,7 @@ import java.util.Set;
  * The "F" prefix stands for "Flexible".
  * @author Olivier Constant
  */
-public class FHashSet<E> extends AbstractSet<E> implements Set<E>,
-IEqualityBasedStructure {
+public class FHashSet<E> extends AbstractSet<E> implements IEqualityBasedStructure {
   
   /** A map which is used to guarantee uniqueness of the elements, by using
       them as keys */

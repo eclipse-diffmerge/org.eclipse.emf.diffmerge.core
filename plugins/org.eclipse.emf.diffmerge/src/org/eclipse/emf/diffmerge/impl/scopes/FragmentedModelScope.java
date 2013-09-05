@@ -99,13 +99,13 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     Resource oldResource = value_p.eResource();
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);
-    String formerId = ModelImplUtil.getXMLID(value_p);
+    Object formerId = getExtrinsicID(value_p);
     boolean result = super.add(source_p, reference_p, value_p);
     if (wasRoot && reference_p.isContainment())
       oldResource.getContents().remove(value_p); // Not automatically handled
     if (formerId != null)
-      // In case resource has changed, thus changing XML ID
-      ModelImplUtil.setXMLID(value_p, formerId);
+      // In case resource has changed, thus changing the extrinsic ID
+      setExtrinsicID(value_p, formerId);
     return result;
   }
   
@@ -174,6 +174,17 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   protected Collection<EReference> getCrossReferencesInScope(EObject element_p) {
     // Override if needed
     return Collections.emptyList();
+  }
+  
+  /**
+   * Return the extrinsic ID of the given element, if any.
+   * An extrinsic ID is an ID which is bound to the persistence format.
+   * @param element_p a non-null element
+   * @return a potentially null object
+   */
+  protected Object getExtrinsicID(EObject element_p) {
+    // Default implementation only covers XML/XMI Resources
+    return ModelImplUtil.getXMLID(element_p);
   }
   
   /**
@@ -325,6 +336,22 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
       resource.save(options);
     }
     return true;
+  }
+  
+  /**
+   * Set the extrinsic ID of the given element if applicable and if it does
+   * not break ID uniqueness
+   * @see FragmentedModelScope#getExtrinsicID(EObject)
+   * @param element_p a non-null element
+   * @param id_p a potentially null extrinsic ID
+   * @return whether the ID was actually set
+   */
+  protected boolean setExtrinsicID(EObject element_p, Object id_p) {
+    // Default implementation only covers XML/XMI Resources
+    boolean result = false;
+    if (id_p instanceof String)
+      result = ModelImplUtil.setXMLID(element_p, (String)id_p);
+    return result;
   }
   
   
