@@ -19,7 +19,7 @@ import java.util.Collection;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -131,7 +131,7 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
 	 */
 	@Override
 	protected void mergeValueAddition() {
-		IFeaturedModelScope absenceScope = getAbsenceScope();
+		IEditableModelScope absenceScope = getAbsenceScope();
 		EObject holderMatch = getMatchOfHolder();
 		assert holderMatch != null; // Must be guaranteed by diff dependency handling
 		absenceScope.add(holderMatch, getFeature(), getValue());
@@ -147,7 +147,7 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
 	 */
 	@Override
 	public void mergeValueRemoval() {
-		IFeaturedModelScope presenceScope = getPresenceScope();
+		IEditableModelScope presenceScope = getPresenceScope();
 		presenceScope.remove(getHolder(), getFeature(), getValue());
 	}
 

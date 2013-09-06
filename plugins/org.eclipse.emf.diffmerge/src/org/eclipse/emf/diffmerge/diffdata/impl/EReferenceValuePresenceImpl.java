@@ -23,7 +23,7 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
@@ -203,7 +203,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 		EReference reference = getFeature();
 		assert sourceHolder != null && destinationHolder != null; // Otherwise order change would not have been detected
 		assert getFeature() != null; // Order merge does not cover root containment at this time
-		IFeaturedModelScope absenceScope = getAbsenceScope();
+		IEditableModelScope absenceScope = getAbsenceScope();
 		IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
 		Role destination = getAbsenceRole();
 		IMatch holderMatch = getElementMatch();
@@ -236,7 +236,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 	 */
 	@Override
 	protected void mergeValueAddition() {
-		IFeaturedModelScope absenceScope = getAbsenceScope();
+		IEditableModelScope absenceScope = getAbsenceScope();
 		EObject destinationHolder = getMatchOfHolder();
 		IMatch match = getValue();
 		EObject destinationValue;
@@ -273,7 +273,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
 	@Override
 	protected final void mergeValueRemoval() {
     if (getSymmetrical() == null && !(hasStrongerOpposite() && !getValue().isPartial())) {
-      IFeaturedModelScope presenceScope = getPresenceScope();
+      IEditableModelScope presenceScope = getPresenceScope();
       EObject valueElement = getValue().get(getPresenceRole());
       if (getFeature() != null)
         presenceScope.remove(getHolder(), getFeature(), valueElement);

@@ -185,6 +185,11 @@ public interface IMapping {
     void crossReference(Role role_p);
     
     /**
+     * @see org.eclipse.emf.diffmerge.api.IMapping#getComparison()
+     */
+    IComparison.Editable getComparison();
+    
+    /**
      * Return a modifiable collection of the formerly partial matches
      * which have been completed by addition in the given role
      * Class invariant: for every role in {TARGET, REFERENCE},

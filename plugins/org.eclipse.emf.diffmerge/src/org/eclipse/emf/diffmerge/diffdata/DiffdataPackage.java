@@ -1550,7 +1550,7 @@ public interface DiffdataPackage extends EPackage {
 	 * The meta object id for the '<em>IModel Scope</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope
+	 * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
 	 * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getIModelScope()
 	 * @generated
 	 */
@@ -2418,11 +2418,11 @@ public interface DiffdataPackage extends EPackage {
 	EClass getIReferenceValuePresence();
 
 	/**
-	 * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope <em>IModel Scope</em>}'.
+	 * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope <em>IModel Scope</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>IModel Scope</em>'.
-	 * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope
+	 * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
 	 * @model instanceClass="org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope"
 	 * @generated
 	 */
@@ -3204,7 +3204,7 @@ public interface DiffdataPackage extends EPackage {
 		 * The meta object literal for the '<em>IModel Scope</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope
+		 * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
 		 * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getIModelScope()
 		 * @generated
 		 */

@@ -19,7 +19,7 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMapping;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
@@ -220,7 +220,7 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
 	@Override
 	protected void mergeRemoval() {
       if (isRoot() || getElementMatch().getOwnershipDifference(getPresenceRole()) == null) {
-            IFeaturedModelScope presenceScope = getPresenceScope();
+            IEditableModelScope presenceScope = getPresenceScope();
         EObject element = getElement();
         presenceScope.remove(element);
         // Delete element

@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
 import org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecification;
@@ -43,7 +43,7 @@ public class GMFScopeFactory extends FileScopeSpecificationFactory {
        * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecification#createScope(org.eclipse.emf.edit.domain.EditingDomain)
        */
       @Override
-      public IFeaturedModelScope createScope(EditingDomain domain_p) {
+      public IEditableModelScope createScope(EditingDomain domain_p) {
         return new GMFScope(getEntrypointResource(domain_p));
       }
     };

@@ -160,7 +160,7 @@ public class FilteredModelScope extends RootedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContents()
+   * @see org.eclipse.emf.diffmerge.impl.scopes.RootedModelScope#getContents()
    */
   @Override
   public List<EObject> getContents() {

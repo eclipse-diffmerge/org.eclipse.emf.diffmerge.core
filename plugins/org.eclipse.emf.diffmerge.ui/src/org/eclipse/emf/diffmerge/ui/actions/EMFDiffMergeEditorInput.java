@@ -30,7 +30,8 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
@@ -89,7 +90,7 @@ implements IEditingDomainProvider {
   protected final Collection<Resource> _initialResources;
   
   /** The comparison scopes (initially null iff URIs are not null) **/
-  protected IFeaturedModelScope _leftScope, _rightScope, _ancestorScope;
+  protected IEditableModelScope _leftScope, _rightScope, _ancestorScope;
   
   /** The initially null viewer */
   protected ComparisonViewer _viewer;
@@ -523,7 +524,8 @@ implements IEditingDomainProvider {
     boolean oldDirty = isDirty();
     if (dirty_p != oldDirty) {
       _isDirty = dirty_p;
-      PropertyChangeEvent event = new PropertyChangeEvent(this, DIRTY_STATE, oldDirty, _isDirty);
+      PropertyChangeEvent event = new PropertyChangeEvent(
+          this, DIRTY_STATE, Boolean.valueOf(oldDirty), Boolean.valueOf(_isDirty));
       firePropertyChange(event);
     }
   }
@@ -534,12 +536,12 @@ implements IEditingDomainProvider {
    */
   public static class ScopeTypedElementWrapper implements ITypedElement {
     /** The non-null scope being wrapped */
-    private final IFeaturedModelScope _scope;
+    private final IModelScope _scope;
     /**
      * Constructor
      * @param scope_p a non-null model scope
      */
-    public ScopeTypedElementWrapper(IFeaturedModelScope scope_p) {
+    public ScopeTypedElementWrapper(IEditableModelScope scope_p) {
       _scope = scope_p;
     }
     /**

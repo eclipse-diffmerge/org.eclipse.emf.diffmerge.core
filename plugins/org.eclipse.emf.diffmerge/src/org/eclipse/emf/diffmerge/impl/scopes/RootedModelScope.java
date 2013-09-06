@@ -35,6 +35,7 @@ public class RootedModelScope extends AbstractModelScope {
   /** The roots of this scope */
   protected final List<EObject> _roots;
   
+  
   /**
    * Constructor
    * @param roots_p a non-null list of elements whose containment trees are disjoint,
@@ -56,9 +57,8 @@ public class RootedModelScope extends AbstractModelScope {
       new FArrayList<EObject>(roots_p, IEqualityTester.BY_REFERENCE);
   }
   
-  
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#add(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
    */
   public boolean add(EObject element_p) {
     // Must be called by redefinitions in subclasses
@@ -93,7 +93,7 @@ public class RootedModelScope extends AbstractModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getContainment(org.eclipse.emf.ecore.EObject)
    */
   @Override
   public EReference getContainment(EObject element_p) {
@@ -101,7 +101,7 @@ public class RootedModelScope extends AbstractModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContents()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContents()
    */
   public List<EObject> getContents() {
     return Collections.unmodifiableList(_roots);

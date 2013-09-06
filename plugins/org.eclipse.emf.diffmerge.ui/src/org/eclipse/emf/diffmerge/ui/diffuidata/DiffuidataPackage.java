@@ -35,6 +35,7 @@ import org.eclipse.emf.ecore.EReference;
  * @model kind="package"
  * @generated
  */
+@SuppressWarnings("hiding")
 public interface DiffuidataPackage extends EPackage {
 	/**
 	 * The package name.
@@ -496,7 +497,7 @@ public interface DiffuidataPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference UI_COMPARISON__ACTUAL_COMPARISON = eINSTANCE.getUIComparison_ActualComparison();
+    EReference UI_COMPARISON__ACTUAL_COMPARISON = eINSTANCE.getUIComparison_ActualComparison();
 
 		/**
 		 * The meta object literal for the '<em><b>Differences To Ignore</b></em>' reference list feature.

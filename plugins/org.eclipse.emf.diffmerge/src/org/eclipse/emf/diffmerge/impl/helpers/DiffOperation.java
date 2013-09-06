@@ -428,7 +428,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
    * Return the comparison which is being built
    * @return a non-null comparison
    */
-  public IComparison getOutput() {
+  public IComparison.Editable getOutput() {
     return _comparison;
   }
   

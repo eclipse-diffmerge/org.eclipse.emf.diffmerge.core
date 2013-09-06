@@ -24,6 +24,7 @@ import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -227,6 +228,14 @@ public interface IComparison {
    * All concrete classes implementing IComparison must also implement this interface.
    */
   public static interface Editable extends IComparison {
+    /**
+     * @see org.eclipse.emf.diffmerge.api.IComparison#getMapping()
+     */
+    IMapping.Editable getMapping();
+    /**
+     * @see org.eclipse.emf.diffmerge.api.IComparison#getScope(org.eclipse.emf.diffmerge.api.Role)
+     */
+    IEditableModelScope getScope(Role role_p);
     /**
      * Create and return an attribute value presence with the given characteristics
      * @param elementMatch_p the non-null match for the element holding the value

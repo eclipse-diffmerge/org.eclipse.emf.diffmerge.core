@@ -22,7 +22,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.util.structures.FHashSet;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -38,10 +38,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * A partial implementation of IFeaturedModelScope based on unbounded EMF containment.
  * @author Olivier Constant
  */
-public abstract class AbstractModelScope implements IFeaturedModelScope {
+public abstract class AbstractModelScope implements IEditableModelScope {
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#add(EObject, EAttribute, Object)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(EObject, EAttribute, Object)
    */
   public boolean add(EObject source_p, EAttribute attribute_p, Object value_p) {
     boolean result;
@@ -57,7 +57,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#add(EObject, EReference, EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(EObject, EReference, EObject)
    */
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     boolean result;
@@ -86,7 +86,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#get(EObject, EReference)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#get(EObject, EReference)
    */
   public List<EObject> get(EObject source_p, EReference reference_p) {
     return get(source_p, reference_p, resolveProxies());
@@ -126,7 +126,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#get(EObject, EAttribute)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#get(EObject, EAttribute)
    */
   @SuppressWarnings("unchecked")
   public List<Object> get(EObject source_p, EAttribute attribute_p) {
@@ -150,7 +150,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getAllContents()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getAllContents()
    */
   public TreeIterator<EObject> getAllContents() {
     // Return an iterator which is derived from getAllContents(EObject)
@@ -158,7 +158,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getAllContents(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getAllContents(EObject)
    */
   @SuppressWarnings("serial")
   public TreeIterator<EObject> getAllContents(EObject root_p) {
@@ -193,21 +193,21 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getContainment(EObject)
    */
   public EReference getContainment(EObject element_p) {
     return element_p.eContainmentFeature();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContents(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getContents(EObject)
    */
   public List<EObject> getContents(EObject element_p) {
     return element_p.eContents();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#move(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EStructuralFeature, int, int)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#move(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EStructuralFeature, int, int)
    */
   public Object move(EObject source_p, EStructuralFeature feature_p, int newPosition_p,
       int oldPosition_p) {
@@ -232,7 +232,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#remove(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#remove(EObject)
    */
   public boolean remove(EObject element_p) {
     // Warning: this implementation ignores cross-references from outside the scope.
@@ -242,14 +242,14 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#remove(EObject, EAttribute, Object)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#remove(EObject, EAttribute, Object)
    */
   public boolean remove(EObject source_p, EAttribute attribute_p, Object value_p) {
     return removeValue(source_p, attribute_p, value_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#remove(EObject, EReference, EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#remove(EObject, EReference, EObject)
    */
   public boolean remove(EObject source_p, EReference reference_p, EObject value_p) {
     return removeValue(source_p, reference_p, value_p);

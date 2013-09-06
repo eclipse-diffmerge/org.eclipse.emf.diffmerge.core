@@ -30,7 +30,7 @@ import org.eclipse.emf.diffmerge.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataFactory;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
@@ -1678,7 +1678,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
 				"IReferenceValuePresence", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Initialize data types
-		initEDataType(iModelScopeEDataType, IFeaturedModelScope.class,
+		initEDataType(iModelScopeEDataType, IEditableModelScope.class,
 				"IModelScope", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(iMatchPolicyEDataType, IMatchPolicy.class,
 				"IMatchPolicy", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

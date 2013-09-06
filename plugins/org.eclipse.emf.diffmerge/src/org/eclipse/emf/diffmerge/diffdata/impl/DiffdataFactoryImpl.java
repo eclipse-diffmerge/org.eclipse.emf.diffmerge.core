@@ -24,7 +24,7 @@ import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.*;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -274,9 +274,9 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IFeaturedModelScope createIModelScopeFromString(EDataType eDataType,
+	public IEditableModelScope createIModelScopeFromString(EDataType eDataType,
 			String initialValue) {
-		return (IFeaturedModelScope) super.createFromString(eDataType,
+		return (IEditableModelScope) super.createFromString(eDataType,
 				initialValue);
 	}
 

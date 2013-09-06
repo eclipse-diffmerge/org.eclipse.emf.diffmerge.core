@@ -40,7 +40,7 @@ import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
@@ -95,7 +95,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IFeaturedModelScope ANCESTOR_SCOPE_EDEFAULT = null;
+	protected static final IEditableModelScope ANCESTOR_SCOPE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getAncestorScope() <em>Ancestor Scope</em>}' attribute.
@@ -105,7 +105,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected IFeaturedModelScope ancestorScope = ANCESTOR_SCOPE_EDEFAULT;
+	protected IEditableModelScope ancestorScope = ANCESTOR_SCOPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getReferenceScope() <em>Reference Scope</em>}' attribute.
@@ -115,7 +115,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IFeaturedModelScope REFERENCE_SCOPE_EDEFAULT = null;
+	protected static final IEditableModelScope REFERENCE_SCOPE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getReferenceScope() <em>Reference Scope</em>}' attribute.
@@ -125,7 +125,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected IFeaturedModelScope referenceScope = REFERENCE_SCOPE_EDEFAULT;
+	protected IEditableModelScope referenceScope = REFERENCE_SCOPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getTargetScope() <em>Target Scope</em>}' attribute.
@@ -135,7 +135,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final IFeaturedModelScope TARGET_SCOPE_EDEFAULT = null;
+	protected static final IEditableModelScope TARGET_SCOPE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getTargetScope() <em>Target Scope</em>}' attribute.
@@ -145,7 +145,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @generated
 	 * @ordered
 	 */
-	protected IFeaturedModelScope targetScope = TARGET_SCOPE_EDEFAULT;
+	protected IEditableModelScope targetScope = TARGET_SCOPE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getLastMatchPolicy() <em>Last Match Policy</em>}' attribute.
@@ -232,8 +232,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
 	 * @generated NOT
 	 */
-	public EComparisonImpl(IFeaturedModelScope targetScope_p,
-			IFeaturedModelScope referenceScope_p) {
+	public EComparisonImpl(IEditableModelScope targetScope_p,
+			IEditableModelScope referenceScope_p) {
 		this(targetScope_p, referenceScope_p, null);
 	}
 
@@ -244,9 +244,9 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
 	 * @generated NOT
 	 */
-	public EComparisonImpl(IFeaturedModelScope targetScope_p,
-			IFeaturedModelScope referenceScope_p,
-			IFeaturedModelScope ancestorScope_p) {
+	public EComparisonImpl(IEditableModelScope targetScope_p,
+			IEditableModelScope referenceScope_p,
+			IEditableModelScope ancestorScope_p) {
 		this();
 		targetScope = targetScope_p;
 		referenceScope = referenceScope_p;
@@ -269,7 +269,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IFeaturedModelScope getAncestorScope() {
+	public IEditableModelScope getAncestorScope() {
 		return ancestorScope;
 	}
 
@@ -278,8 +278,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setAncestorScope(IFeaturedModelScope newAncestorScope) {
-		IFeaturedModelScope oldAncestorScope = ancestorScope;
+	public void setAncestorScope(IEditableModelScope newAncestorScope) {
+		IEditableModelScope oldAncestorScope = ancestorScope;
 		ancestorScope = newAncestorScope;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -292,7 +292,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IFeaturedModelScope getReferenceScope() {
+	public IEditableModelScope getReferenceScope() {
 		return referenceScope;
 	}
 
@@ -301,8 +301,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setReferenceScope(IFeaturedModelScope newReferenceScope) {
-		IFeaturedModelScope oldReferenceScope = referenceScope;
+	public void setReferenceScope(IEditableModelScope newReferenceScope) {
+		IEditableModelScope oldReferenceScope = referenceScope;
 		referenceScope = newReferenceScope;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -315,7 +315,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IFeaturedModelScope getTargetScope() {
+	public IEditableModelScope getTargetScope() {
 		return targetScope;
 	}
 
@@ -324,8 +324,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTargetScope(IFeaturedModelScope newTargetScope) {
-		IFeaturedModelScope oldTargetScope = targetScope;
+	public void setTargetScope(IEditableModelScope newTargetScope) {
+		IEditableModelScope oldTargetScope = targetScope;
 		targetScope = newTargetScope;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
@@ -529,13 +529,13 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case DiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
-			setAncestorScope((IFeaturedModelScope) newValue);
+			setAncestorScope((IEditableModelScope) newValue);
 			return;
 		case DiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
-			setReferenceScope((IFeaturedModelScope) newValue);
+			setReferenceScope((IEditableModelScope) newValue);
 			return;
 		case DiffdataPackage.ECOMPARISON__TARGET_SCOPE:
-			setTargetScope((IFeaturedModelScope) newValue);
+			setTargetScope((IEditableModelScope) newValue);
 			return;
 		case DiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
 			setLastMatchPolicy((IMatchPolicy) newValue);
@@ -904,8 +904,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
 	 * @see org.eclipse.emf.diffmerge.api.IComparison#getScope(org.eclipse.emf.diffmerge.api.Role)
 	 * @generated NOT
 	 */
-	public IFeaturedModelScope getScope(Role role_p) {
-		IFeaturedModelScope result;
+	public IEditableModelScope getScope(Role role_p) {
+		IEditableModelScope result;
 		switch (role_p) {
 		case TARGET:
 			result = getTargetScope();

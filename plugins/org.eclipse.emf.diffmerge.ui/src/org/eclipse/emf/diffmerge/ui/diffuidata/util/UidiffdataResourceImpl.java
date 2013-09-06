@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
  * @see org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImpl
  * @generated
  */
+@SuppressWarnings("hiding")
 public class UidiffdataResourceImpl extends ResourceImpl {
 	/**
 	 * Creates an instance of the resource.

@@ -18,7 +18,7 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.IComparison.Editable;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -53,12 +53,12 @@ public interface EComparison extends EObject, Editable {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ancestor Scope</em>' attribute.
-	 * @see #setAncestorScope(IFeaturedModelScope)
+	 * @see #setAncestorScope(IEditableModelScope)
 	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison_AncestorScope()
 	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.IModelScope"
 	 * @generated
 	 */
-	IFeaturedModelScope getAncestorScope();
+	IEditableModelScope getAncestorScope();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}' attribute.
@@ -68,7 +68,7 @@ public interface EComparison extends EObject, Editable {
 	 * @see #getAncestorScope()
 	 * @generated
 	 */
-	void setAncestorScope(IFeaturedModelScope value);
+	void setAncestorScope(IEditableModelScope value);
 
 	/**
 	 * Returns the value of the '<em><b>Reference Scope</b></em>' attribute.
@@ -79,12 +79,12 @@ public interface EComparison extends EObject, Editable {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Reference Scope</em>' attribute.
-	 * @see #setReferenceScope(IFeaturedModelScope)
+	 * @see #setReferenceScope(IEditableModelScope)
 	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison_ReferenceScope()
 	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.IModelScope" required="true"
 	 * @generated
 	 */
-	IFeaturedModelScope getReferenceScope();
+	IEditableModelScope getReferenceScope();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getReferenceScope <em>Reference Scope</em>}' attribute.
@@ -94,7 +94,7 @@ public interface EComparison extends EObject, Editable {
 	 * @see #getReferenceScope()
 	 * @generated
 	 */
-	void setReferenceScope(IFeaturedModelScope value);
+	void setReferenceScope(IEditableModelScope value);
 
 	/**
 	 * Returns the value of the '<em><b>Target Scope</b></em>' attribute.
@@ -105,12 +105,12 @@ public interface EComparison extends EObject, Editable {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Target Scope</em>' attribute.
-	 * @see #setTargetScope(IFeaturedModelScope)
+	 * @see #setTargetScope(IEditableModelScope)
 	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison_TargetScope()
 	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.IModelScope" required="true"
 	 * @generated
 	 */
-	IFeaturedModelScope getTargetScope();
+	IEditableModelScope getTargetScope();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getTargetScope <em>Target Scope</em>}' attribute.
@@ -120,7 +120,7 @@ public interface EComparison extends EObject, Editable {
 	 * @see #getTargetScope()
 	 * @generated
 	 */
-	void setTargetScope(IFeaturedModelScope value);
+	void setTargetScope(IEditableModelScope value);
 
 	/**
 	 * Returns the value of the '<em><b>Last Match Policy</b></em>' attribute.

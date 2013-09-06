@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
@@ -222,8 +222,8 @@ public abstract class EElementRelativePresenceImpl extends
 	 * @return a non-null scope
 	 * @generated NOT
 	 */
-	protected final IFeaturedModelScope getAbsenceScope() {
-		IFeaturedModelScope result = getComparison().getScope(
+	protected final IEditableModelScope getAbsenceScope() {
+		IEditableModelScope result = getComparison().getScope(
 				getPresenceRole().opposite());
 		assert result != null;
 		return result;
@@ -234,8 +234,8 @@ public abstract class EElementRelativePresenceImpl extends
 	 * @return a non-null scope
 	 * @generated NOT
 	 */
-	protected final IFeaturedModelScope getPresenceScope() {
-		IFeaturedModelScope result = getComparison()
+	protected final IEditableModelScope getPresenceScope() {
+		IEditableModelScope result = getComparison()
 				.getScope(getPresenceRole());
 		assert result != null;
 		return result;

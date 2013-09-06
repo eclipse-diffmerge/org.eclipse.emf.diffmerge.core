@@ -1197,6 +1197,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   /**
    * Setup the menus of the feature viewer
    */
+  @SuppressWarnings("unused")
   protected void setupFeatureMenus() {
     new ToolItem(_featuresToolbar, SWT.SEPARATOR);
     Menu featureMenu = UIUtil.createMenuTool(_featuresToolbar);
@@ -1442,6 +1443,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   /**
    * Setup the menus of the synthesis viewer
    */
+  @SuppressWarnings("unused")
   protected void setupSynthesisMenus() {
     ToolBar synthesisToolBar = _synthesisModelTreeViewer.getToolbar();
     Menu synthesisMenu = UIUtil.createMenuTool(synthesisToolBar);
@@ -1630,6 +1632,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   /**
    * Set up the tools related to the representation of the synthesis view
    */
+  @SuppressWarnings("unused")
   protected void setupSynthesisTools() {
     ToolBar synthesisToolbar = _synthesisModelTreeViewer.getToolbar();
     // Expand all

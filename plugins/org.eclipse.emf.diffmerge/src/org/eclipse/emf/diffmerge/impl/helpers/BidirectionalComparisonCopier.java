@@ -51,7 +51,7 @@ public class BidirectionalComparisonCopier {
    * @param partialMatch_p a non-null partial match
    * @return a non-null element which is a clone of the element in partialMatch_p
    */
-  public EObject completeMatch(IMapping mapping_p, IMatch partialMatch_p) {
+  public EObject completeMatch(IMapping.Editable mapping_p, IMatch partialMatch_p) {
     assert partialMatch_p.isPartial();
     Role sourceRole = partialMatch_p.getUncoveredRole().opposite();
     UnidirectionalComparisonCopier involvedCopier =
@@ -67,7 +67,7 @@ public class BidirectionalComparisonCopier {
    * @param mapping_p a non-null mapping
    * @param role_p a role which is TARGET or REFERENCE
    */
-  public void completeReferences(IMapping mapping_p, Role role_p) {
+  public void completeReferences(IMapping.Editable mapping_p, Role role_p) {
     UnidirectionalComparisonCopier involvedCopier =
       (role_p == Role.TARGET)? _referenceToTargetCopier:
         _targetToReferenceCopier;

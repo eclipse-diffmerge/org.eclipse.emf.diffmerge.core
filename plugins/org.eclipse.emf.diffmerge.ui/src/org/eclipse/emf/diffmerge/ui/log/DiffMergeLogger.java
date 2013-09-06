@@ -128,6 +128,7 @@ public class DiffMergeLogger implements Logger {
    */
   public void log(Object logEntry_p) {
     if (logEntry_p instanceof AbstractLogEvent) {
+      @SuppressWarnings("resource") // Closed when plug-in is stopped
       Writer writer = getWriter();
       if (writer != null) {
         AbstractLogEvent logEvent = (AbstractLogEvent)logEntry_p;

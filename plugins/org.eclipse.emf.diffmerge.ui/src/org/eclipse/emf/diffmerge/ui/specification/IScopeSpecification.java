@@ -14,7 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.specification;
 
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
@@ -29,7 +29,7 @@ public interface IScopeSpecification {
    * @param domain_p a non-null editing domain for the case where resource creation is needed
    * @return a non-null scope
    */
-  IFeaturedModelScope createScope(EditingDomain domain_p);
+  IEditableModelScope createScope(EditingDomain domain_p);
   
   /**
    * Return the object that specifies the scope (model element, file, resource...)

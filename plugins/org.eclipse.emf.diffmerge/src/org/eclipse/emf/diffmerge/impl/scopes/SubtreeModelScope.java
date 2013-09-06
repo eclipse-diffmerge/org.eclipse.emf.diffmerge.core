@@ -49,7 +49,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#add(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
    */
   public boolean add(EObject element_p) {
     if (element_p != getRoot() && getHoldingResource() != null)
@@ -67,7 +67,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getContainment(org.eclipse.emf.ecore.EObject)
    */
   @Override
   public EReference getContainment(EObject element_p) {

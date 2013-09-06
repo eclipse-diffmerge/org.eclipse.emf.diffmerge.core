@@ -15,7 +15,7 @@
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -42,7 +42,7 @@ public class FileScopeSpecification extends AbstractScopeSpecification {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#createScope(org.eclipse.emf.edit.domain.EditingDomain)
    */
-  public IFeaturedModelScope createScope(EditingDomain domain_p) {
+  public IEditableModelScope createScope(EditingDomain domain_p) {
     Resource loadedResource = getEntrypointResource(domain_p);
     return new FragmentedModelScope(loadedResource);
   }

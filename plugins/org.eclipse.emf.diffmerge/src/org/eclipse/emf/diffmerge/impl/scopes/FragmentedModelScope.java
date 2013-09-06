@@ -80,7 +80,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#add(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
    */
   public boolean add(EObject element_p) {
     boolean result = false;
