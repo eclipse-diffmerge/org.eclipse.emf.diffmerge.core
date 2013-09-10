@@ -15,7 +15,6 @@
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
@@ -35,7 +34,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature <em>Feature</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#isOrder <em>Order</em>}</li>
  * </ul>
@@ -44,283 +42,242 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
-		implements EValuePresence {
-	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Object VALUE_EDEFAULT = null;
+    implements EValuePresence {
+  /**
+   * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFeature()
+   * @generated
+   * @ordered
+   */
+  protected EStructuralFeature feature;
 
-	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected Object value = VALUE_EDEFAULT;
+  /**
+   * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOrder()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean ORDER_EDEFAULT = false;
 
-	/**
-	 * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFeature()
-	 * @generated
-	 * @ordered
-	 */
-	protected EStructuralFeature feature;
+  /**
+   * The cached value of the '{@link #isOrder() <em>Order</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isOrder()
+   * @generated
+   * @ordered
+   */
+  protected boolean order = ORDER_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOrder()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean ORDER_EDEFAULT = false;
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected EValuePresenceImpl() {
+    super();
+  }
 
-	/**
-	 * The cached value of the '{@link #isOrder() <em>Order</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isOrder()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean order = ORDER_EDEFAULT;
+  /**
+   * Constructor
+   * @param comparison_p the non-null comparison to which this difference belongs
+   * @param elementMatch_p the non-null match for the element holding the value
+   * @param feature_p the non-null feature holding the value
+   * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
+   * @param isOrder_p whether the value presence is solely due to ordering
+   * @generated NOT
+   */
+  protected EValuePresenceImpl(EComparison comparison_p, EMatch elementMatch_p,
+      EStructuralFeature feature_p, Role presenceRole_p, boolean isOrder_p) {
+    super(comparison_p, elementMatch_p, presenceRole_p);
+    feature = feature_p;
+    order = isOrder_p;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EValuePresenceImpl() {
-		super();
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass() {
+    return DiffdataPackage.Literals.EVALUE_PRESENCE;
+  }
 
-	/**
-	 * Constructor
-	 * @param comparison_p the non-null comparison to which this difference belongs
-	 * @param elementMatch_p the non-null match for the element holding the value
-	 * @param feature_p the non-null feature holding the value
-	 * @param value_p a non-null object which defines the value held
-	 * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
-	 * @param isOrder_p whether the value presence is solely due to ordering
-	 * @generated NOT
-	 */
-	protected EValuePresenceImpl(EComparison comparison_p,
-			EMatch elementMatch_p, EStructuralFeature feature_p,
-			Object value_p, Role presenceRole_p, boolean isOrder_p) {
-		super(comparison_p, elementMatch_p, presenceRole_p);
-		feature = feature_p;
-		value = value_p;
-		order = isOrder_p;
-		((IMatch.Editable) elementMatch).addRelatedDifference(this);
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EStructuralFeature getFeature() {
+    if (feature != null && feature.eIsProxy()) {
+      InternalEObject oldFeature = (InternalEObject) feature;
+      feature = (EStructuralFeature) eResolveProxy(oldFeature);
+      if (feature != oldFeature) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+              DiffdataPackage.EVALUE_PRESENCE__FEATURE, oldFeature, feature));
+      }
+    }
+    return feature;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return DiffdataPackage.Literals.EVALUE_PRESENCE;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EStructuralFeature basicGetFeature() {
+    return feature;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object getValue() {
-		return value;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isOrder() {
+    return order;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EStructuralFeature getFeature() {
-		if (feature != null && feature.eIsProxy()) {
-			InternalEObject oldFeature = (InternalEObject) feature;
-			feature = (EStructuralFeature) eResolveProxy(oldFeature);
-			if (feature != oldFeature) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							DiffdataPackage.EVALUE_PRESENCE__FEATURE,
-							oldFeature, feature));
-			}
-		}
-		return feature;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
+    case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
+      if (resolve)
+        return getFeature();
+      return basicGetFeature();
+    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
+      return isOrder();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EStructuralFeature basicGetFeature() {
-		return feature;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
+    case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
+      return feature != null;
+    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
+      return order != ORDER_EDEFAULT;
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isOrder() {
-		return order;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("boxing")
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-		case DiffdataPackage.EVALUE_PRESENCE__VALUE:
-			return getValue();
-		case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
-			if (resolve)
-				return getFeature();
-			return basicGetFeature();
-		case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-			return isOrder();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (order: "); //$NON-NLS-1$
+    result.append(order);
+    result.append(')');
+    return result.toString();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-		case DiffdataPackage.EVALUE_PRESENCE__VALUE:
-			return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT
-					.equals(value);
-		case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
-			return feature != null;
-		case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-			return order != ORDER_EDEFAULT;
-		}
-		return super.eIsSet(featureID);
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#canMergeTo(org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  @Override
+  public boolean canMergeTo(Role destination_p) {
+    return super.canMergeTo(destination_p) && getFeature().isChangeable();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+  /**
+   * Return the non-null element holding the value in the presence role
+   * @generated NOT
+   */
+  public final EObject getHolder() {
+    return getElementMatch().get(getPresenceRole());
+  }
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (value: "); //$NON-NLS-1$
-		result.append(value);
-		result.append(", order: "); //$NON-NLS-1$
-		result.append(order);
-		result.append(')');
-		return result.toString();
-	}
+  /**
+   * Return the element, in the opposite of the presence role, which matches the element
+   * holding the value
+   * @return a potentially null element in the getAbsenceRole() role
+   * @generated NOT
+   */
+  public final EObject getMatchOfHolder() {
+    return getElementMatch().get(getAbsenceRole());
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#canMergeTo(org.eclipse.emf.diffmerge.api.Role)
-	 * @generated NOT
-	 */
-	@Override
-	public boolean canMergeTo(Role destination_p) {
-		return super.canMergeTo(destination_p) && getFeature().isChangeable();
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeAddition()
+   * @generated NOT
+   */
+  @Override
+  protected final void mergeAddition() {
+    if (isOrder())
+      mergeOrder();
+    else
+      mergeValueAddition();
+  }
 
-	/**
-	 * Return the non-null element holding the value in the presence role
-	 * @generated NOT
-	 */
-	public final EObject getHolder() {
-		return getElementMatch().get(getPresenceRole());
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeRemoval()
+   * @generated NOT
+   */
+  @Override
+  protected final void mergeRemoval() {
+    if (!isOrder())
+      mergeValueRemoval();
+  }
 
-	/**
-	 * Return the element, in the opposite of the presence role, which matches the element
-	 * holding the value
-	 * @return a potentially null element in the getAbsenceRole() role
-	 * @generated NOT
-	 */
-	public final EObject getMatchOfHolder() {
-		return getElementMatch().get(getAbsenceRole());
-	}
+  /**
+   * Copy the order to the opposite scope
+   * @generated NOT
+   */
+  protected abstract void mergeOrder();
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeAddition()
-	 * @generated NOT
-	 */
-	@Override
-	protected final void mergeAddition() {
-		if (isOrder())
-			mergeOrder();
-		else
-			mergeValueAddition();
-	}
+  /**
+   * Add the value to the absence scope
+   * @generated NOT
+   */
+  protected abstract void mergeValueAddition();
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeRemoval()
-	 * @generated NOT
-	 */
-	@Override
-	protected final void mergeRemoval() {
-		if (!isOrder())
-			mergeValueRemoval();
-	}
+  /**
+   * Remove the value from the presence scope
+   * @generated NOT
+   */
+  protected abstract void mergeValueRemoval();
 
-	/**
-	 * Copy the order to the opposite scope
-	 * @generated NOT
-	 */
-	protected abstract void mergeOrder();
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#getSymmetrical()
+   * @generated NOT
+   */
+  public abstract IValuePresence getSymmetrical();
 
-	/**
-	 * Add the value to the absence scope
-	 * @generated NOT
-	 */
-	protected abstract void mergeValueAddition();
-
-	/**
-	 * Remove the value from the presence scope
-	 * @generated NOT
-	 */
-	protected abstract void mergeValueRemoval();
-
-	/**
-	 * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#getSymmetrical()
-	 * @generated NOT
-	 */
-	public abstract IValuePresence getSymmetrical();
-
-	/**
-	 * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#isSymmetricalTo(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
-	 * @generated NOT
-	 */
-	public boolean isSymmetricalTo(IValuePresence peer_p) {
-		return getAbsenceRole() == peer_p.getPresenceRole()
-				&& getFeature() == peer_p.getFeature()
-				&& getFeature().getUpperBound() == 1
-				&& getElementMatch() == peer_p.getElementMatch();
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#isSymmetricalTo(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
+   * @generated NOT
+   */
+  public boolean isSymmetricalTo(IValuePresence peer_p) {
+    return getAbsenceRole() == peer_p.getPresenceRole()
+        && getFeature() == peer_p.getFeature()
+        && getFeature().getUpperBound() == 1
+        && getElementMatch() == peer_p.getElementMatch();
+  }
 
 } //EValuePresenceImpl

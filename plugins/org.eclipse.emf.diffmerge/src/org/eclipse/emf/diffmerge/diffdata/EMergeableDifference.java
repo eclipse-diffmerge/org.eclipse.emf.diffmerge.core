@@ -46,179 +46,179 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface EMergeableDifference extends EObject, Editable {
-	/**
-	 * Returns the value of the '<em><b>Comparison</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Comparison</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Comparison</em>' reference.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Comparison()
-	 * @model required="true" changeable="false"
-	 * @generated
-	 */
-	EComparison getComparison();
+  /**
+   * Returns the value of the '<em><b>Comparison</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Comparison</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Comparison</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Comparison()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EComparison getComparison();
 
-	/**
-	 * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.
-	 * The default value is <code>"true"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Aligned With Ancestor</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Aligned With Ancestor</em>' attribute.
-	 * @see #setAlignedWithAncestor(boolean)
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_AlignedWithAncestor()
-	 * @model default="true" required="true"
-	 * @generated
-	 */
-	boolean isAlignedWithAncestor();
+  /**
+   * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Aligned With Ancestor</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Aligned With Ancestor</em>' attribute.
+   * @see #setAlignedWithAncestor(boolean)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_AlignedWithAncestor()
+   * @model default="true" required="true"
+   * @generated
+   */
+  boolean isAlignedWithAncestor();
 
-	/**
-	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Aligned With Ancestor</em>' attribute.
-	 * @see #isAlignedWithAncestor()
-	 * @generated
-	 */
-	void setAlignedWithAncestor(boolean value);
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Aligned With Ancestor</em>' attribute.
+   * @see #isAlignedWithAncestor()
+   * @generated
+   */
+  void setAlignedWithAncestor(boolean value);
 
-	/**
-	 * Returns the value of the '<em><b>Conflicting</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Conflicting</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Conflicting</em>' attribute.
-	 * @see #setConflicting(boolean)
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Conflicting()
-	 * @model default="false" required="true"
-	 * @generated
-	 */
-	boolean isConflicting();
+  /**
+   * Returns the value of the '<em><b>Conflicting</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Conflicting</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Conflicting</em>' attribute.
+   * @see #setConflicting(boolean)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Conflicting()
+   * @model default="false" required="true"
+   * @generated
+   */
+  boolean isConflicting();
 
-	/**
-	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Conflicting</em>' attribute.
-	 * @see #isConflicting()
-	 * @generated
-	 */
-	void setConflicting(boolean value);
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Conflicting</em>' attribute.
+   * @see #isConflicting()
+   * @generated
+   */
+  void setConflicting(boolean value);
 
-	/**
-	 * Returns the value of the '<em><b>Merge Destination</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Merge Destination</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Merge Destination</em>' attribute.
-	 * @see #setMergeDestination(Role)
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_MergeDestination()
-	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role"
-	 * @generated
-	 */
-	Role getMergeDestination();
+  /**
+   * Returns the value of the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Merge Destination</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Merge Destination</em>' attribute.
+   * @see #setMergeDestination(Role)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_MergeDestination()
+   * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role"
+   * @generated
+   */
+  Role getMergeDestination();
 
-	/**
-	 * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Merge Destination</em>' attribute.
-	 * @see #getMergeDestination()
-	 * @generated
-	 */
-	void setMergeDestination(Role value);
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Merge Destination</em>' attribute.
+   * @see #getMergeDestination()
+   * @generated
+   */
+  void setMergeDestination(Role value);
 
-	/**
-	 * Returns the value of the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-	 * The list contents are of type {@link org.eclipse.emf.diffmerge.api.Role}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Possible Merge Destinations</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Possible Merge Destinations</em>' attribute list.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_PossibleMergeDestinations()
-	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role"
-	 * @generated
-	 */
-	EList<Role> getPossibleMergeDestinations();
+  /**
+   * Returns the value of the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.api.Role}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Possible Merge Destinations</em>' attribute list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Possible Merge Destinations</em>' attribute list.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_PossibleMergeDestinations()
+   * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role"
+   * @generated
+   */
+  EList<Role> getPossibleMergeDestinations();
 
-	/**
-	 * Returns the value of the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Explicit Dependencies For Target</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Explicit Dependencies For Target</em>' reference list.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ExplicitDependenciesForTarget()
-	 * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
-	 * @generated
-	 */
-	EList<IMergeableDifference> getExplicitDependenciesForTarget();
+  /**
+   * Returns the value of the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Explicit Dependencies For Target</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Explicit Dependencies For Target</em>' reference list.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ExplicitDependenciesForTarget()
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
+   * @generated
+   */
+  EList<IMergeableDifference> getExplicitDependenciesForTarget();
 
-	/**
-	 * Returns the value of the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Explicit Dependencies For Reference</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Explicit Dependencies For Reference</em>' reference list.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ExplicitDependenciesForReference()
-	 * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
-	 * @generated
-	 */
-	EList<IMergeableDifference> getExplicitDependenciesForReference();
+  /**
+   * Returns the value of the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Explicit Dependencies For Reference</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Explicit Dependencies For Reference</em>' reference list.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ExplicitDependenciesForReference()
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
+   * @generated
+   */
+  EList<IMergeableDifference> getExplicitDependenciesForReference();
 
-	/**
-	 * Returns the value of the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Implicit Dependencies For Target</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Implicit Dependencies For Target</em>' reference list.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ImplicitDependenciesForTarget()
-	 * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
-	 * @generated
-	 */
-	EList<IMergeableDifference> getImplicitDependenciesForTarget();
+  /**
+   * Returns the value of the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Implicit Dependencies For Target</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Implicit Dependencies For Target</em>' reference list.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ImplicitDependenciesForTarget()
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
+   * @generated
+   */
+  EList<IMergeableDifference> getImplicitDependenciesForTarget();
 
-	/**
-	 * Returns the value of the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-	 * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Implicit Dependencies For Reference</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Implicit Dependencies For Reference</em>' reference list.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ImplicitDependenciesForReference()
-	 * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
-	 * @generated
-	 */
-	EList<IMergeableDifference> getImplicitDependenciesForReference();
+  /**
+   * Returns the value of the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Implicit Dependencies For Reference</em>' reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Implicit Dependencies For Reference</em>' reference list.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_ImplicitDependenciesForReference()
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMergeableDifference"
+   * @generated
+   */
+  EList<IMergeableDifference> getImplicitDependenciesForReference();
 
 } // EMergeableDifference

@@ -151,7 +151,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
     // Update of containments may have changed resources, which may impact on IDs
     if (_mergePolicy != null) {
       for (IMatch updatedMatch : getCompletedMatches())
-        _mergePolicy.copyId(
+        _mergePolicy.copyID(
             updatedMatch.get(_sourceRole), updatedMatch.get(_sourceRole.opposite()));
     }
   }

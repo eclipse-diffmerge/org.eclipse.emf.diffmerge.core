@@ -45,191 +45,191 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class EElementPresenceImpl extends EElementRelativePresenceImpl
-		implements EElementPresence {
-	/**
-	 * The cached value of the '{@link #getOwnerMatch() <em>Owner Match</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOwnerMatch()
-	 * @generated
-	 * @ordered
-	 */
-	protected EMatch ownerMatch;
+    implements EElementPresence {
+  /**
+   * The cached value of the '{@link #getOwnerMatch() <em>Owner Match</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOwnerMatch()
+   * @generated
+   * @ordered
+   */
+  protected EMatch ownerMatch;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EElementPresenceImpl() {
-		super();
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected EElementPresenceImpl() {
+    super();
+  }
 
-	/**
-	 * Constructor
-	 * @param comparison_p the non-null comparison to which this difference belongs
-	 * @param match_p the non-null match to which this difference is relative
-	 * @param ownerMatch_p a potentially null match for the owner of the element
-	 * @generated NOT
-	 */
-	public EElementPresenceImpl(EComparison comparison_p, EMatch match_p,
-			EMatch ownerMatch_p) {
-		super(comparison_p, match_p, match_p.getUncoveredRole().opposite());
-		ownerMatch = ownerMatch_p;
-		((IMatch.Editable) elementMatch).addRelatedDifference(this);
-	}
+  /**
+   * Constructor
+   * @param comparison_p the non-null comparison to which this difference belongs
+   * @param match_p the non-null match to which this difference is relative
+   * @param ownerMatch_p a potentially null match for the owner of the element
+   * @generated NOT
+   */
+  public EElementPresenceImpl(EComparison comparison_p, EMatch match_p,
+      EMatch ownerMatch_p) {
+    super(comparison_p, match_p, match_p.getUncoveredRole().opposite());
+    ownerMatch = ownerMatch_p;
+    ((IMatch.Editable) elementMatch).addRelatedDifference(this);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return DiffdataPackage.Literals.EELEMENT_PRESENCE;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass() {
+    return DiffdataPackage.Literals.EELEMENT_PRESENCE;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EMatch getOwnerMatch() {
-		if (ownerMatch != null && ownerMatch.eIsProxy()) {
-			InternalEObject oldOwnerMatch = (InternalEObject) ownerMatch;
-			ownerMatch = (EMatch) eResolveProxy(oldOwnerMatch);
-			if (ownerMatch != oldOwnerMatch) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH,
-							oldOwnerMatch, ownerMatch));
-			}
-		}
-		return ownerMatch;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EMatch getOwnerMatch() {
+    if (ownerMatch != null && ownerMatch.eIsProxy()) {
+      InternalEObject oldOwnerMatch = (InternalEObject) ownerMatch;
+      ownerMatch = (EMatch) eResolveProxy(oldOwnerMatch);
+      if (ownerMatch != oldOwnerMatch) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+              DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH, oldOwnerMatch,
+              ownerMatch));
+      }
+    }
+    return ownerMatch;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EMatch basicGetOwnerMatch() {
-		return ownerMatch;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EMatch basicGetOwnerMatch() {
+    return ownerMatch;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-		case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-			if (resolve)
-				return getOwnerMatch();
-			return basicGetOwnerMatch();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
+    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
+      if (resolve)
+        return getOwnerMatch();
+      return basicGetOwnerMatch();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-		case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-			return ownerMatch != null;
-		}
-		return super.eIsSet(featureID);
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
+    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
+      return ownerMatch != null;
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.api.diff.IElementPresence#getElement()
-	 * @generated NOT
-	 */
-	public EObject getElement() {
-		return getElementMatch().get(getPresenceRole());
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IElementPresence#getElement()
+   * @generated NOT
+   */
+  public EObject getElement() {
+    return getElementMatch().get(getPresenceRole());
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isProperToElement()
-	 * @generated NOT
-	 */
-	public boolean isProperToElement() {
-		return false;
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isProperToElement()
+   * @generated NOT
+   */
+  public boolean isProperToElement() {
+    return false;
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.api.diff.IElementPresence#isRoot()
-	 * @generated NOT
-	 */
-	public boolean isRoot() {
-		return getOwnerMatch() == null;
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IElementPresence#isRoot()
+   * @generated NOT
+   */
+  public boolean isRoot() {
+    return getOwnerMatch() == null;
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeAddition()
-	 * @generated NOT
-	 */
-	@Override
-	protected void mergeAddition() {
-		IMapping.Editable mapping = getComparison().getMapping();
-		IMatch eltMatch = getElementMatch();
-		EObject clone = eltMatch.isPartial() ? mapping.completeMatch(eltMatch)
-				: eltMatch.get(getAbsenceRole());
-		boolean addedToScope = false;
-		boolean actuallyAdded = false;
-		IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
-		if (getComparison().getLastMergePolicy().bindPresenceToOwnership()
-				&& !isRoot()) {
-			EObject container = getOwnerMatch().get(getAbsenceRole());
-			if (container != null) {
-				EReference containment = getPresenceScope().getContainment(
-						getElement());
-				actuallyAdded = getAbsenceScope().add(container, containment, clone);
-				addedToScope = true; // Even if !actuallyAdded
-				// Order handling
-				IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
-				if (diffPolicy != null && actuallyAdded
-						&& diffPolicy.considerOrdered(containment)) {
-					// Move added value if required
-					int index = mergePolicy.getDesiredValuePosition(
-							getComparison(), getAbsenceRole(), getOwnerMatch(),
-							containment, eltMatch);
-					if (index >= 0)
-						getAbsenceScope().move(container, containment, index, -1);
-				}
-			}
-			// Else container will be created and ownership automatically applied by the copier,
-			// if containment tree of the scope is consistent with matching
-		}
-		if (!addedToScope)
-			actuallyAdded = getAbsenceScope().add(clone);
-		if (actuallyAdded)
-		  mergePolicy.copyId(getElement(), clone);
-	}
-
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeRemoval()
-	 * @generated NOT
-	 */
-	@Override
-	protected void mergeRemoval() {
-      if (isRoot() || getElementMatch().getOwnershipDifference(getPresenceRole()) == null) {
-            IEditableModelScope presenceScope = getPresenceScope();
-        EObject element = getElement();
-        presenceScope.remove(element);
-        // Delete element
-        for (EStructuralFeature.Setting setting :
-             getComparison().getMapping().getCrossReferences(element, getPresenceRole())) {
-          presenceScope.remove(
-            setting.getEObject(), (EReference)setting.getEStructuralFeature(), element);
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeAddition()
+   * @generated NOT
+   */
+  @Override
+  protected void mergeAddition() {
+    IMapping.Editable mapping = getComparison().getMapping();
+    IMatch eltMatch = getElementMatch();
+    EObject clone = eltMatch.isPartial() ? mapping.completeMatch(eltMatch)
+        : eltMatch.get(getAbsenceRole());
+    boolean addedToScope = false;
+    boolean actuallyAdded = false;
+    IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
+    if (getComparison().getLastMergePolicy().bindPresenceToOwnership()
+        && !isRoot()) {
+      EObject container = getOwnerMatch().get(getAbsenceRole());
+      if (container != null) {
+        EReference containment = getPresenceScope()
+            .getContainment(getElement());
+        actuallyAdded = getAbsenceScope().add(container, containment, clone);
+        addedToScope = true; // Even if !actuallyAdded
+        // Order handling
+        IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
+        if (diffPolicy != null && actuallyAdded
+            && diffPolicy.considerOrdered(containment)) {
+          // Move added value if required
+          int index = mergePolicy.getDesiredValuePosition(getComparison(),
+              getAbsenceRole(), getOwnerMatch(), containment, eltMatch);
+          if (index >= 0)
+            getAbsenceScope().move(container, containment, index, -1);
         }
-      } // Else handled by ownership
-	}
+      }
+      // Else container will be created and ownership automatically applied by the copier,
+      // if containment tree of the scope is consistent with matching
+    }
+    if (!addedToScope)
+      actuallyAdded = getAbsenceScope().add(clone);
+    if (actuallyAdded)
+      mergePolicy.copyID(getElement(), clone);
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl#mergeRemoval()
+   * @generated NOT
+   */
+  @Override
+  protected void mergeRemoval() {
+    if (isRoot()
+        || getElementMatch().getOwnershipDifference(getPresenceRole()) == null) {
+      IEditableModelScope presenceScope = getPresenceScope();
+      EObject element = getElement();
+      presenceScope.remove(element);
+      // Delete element
+      for (EStructuralFeature.Setting setting : getComparison().getMapping()
+          .getCrossReferences(element, getPresenceRole())) {
+        presenceScope.remove(setting.getEObject(),
+            (EReference) setting.getEStructuralFeature(), element);
+      }
+    } // Else handled by ownership
+  }
 
 } //EElementPresenceImpl

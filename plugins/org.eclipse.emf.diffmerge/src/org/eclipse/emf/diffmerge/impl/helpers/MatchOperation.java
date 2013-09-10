@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IStatus;
@@ -45,16 +46,23 @@ public class MatchOperation extends AbstractExpensiveOperation {
   /** The non-null comparison whose mapping is being built */
   private final IComparison _comparison;
   
+  /** The optional map from roles to sets of duplicate match IDs */
+  private final Map<Role, Set<Object>> _duplicateIDs;
+  
   
   /**
    * Constructor
    * @param comparison_p a non-null comparison whose mapping is to be built
    * @param policy_p a non-null match policy
+   * @param duplicateIDs_p an optional map that associates each role with an empty,
+   *          modifiable set of duplicate match IDs, to be filled by this operation
    */
-  public MatchOperation(IComparison comparison_p, IMatchPolicy policy_p) {
+  public MatchOperation(IComparison comparison_p, IMatchPolicy policy_p,
+      Map<Role, Set<Object>> duplicateIDs_p) {
     super();
     _comparison = comparison_p;
     _policy = policy_p;
+    _duplicateIDs = duplicateIDs_p;
   }
   
   /**
@@ -100,9 +108,12 @@ public class MatchOperation extends AbstractExpensiveOperation {
           Object matchID = getMatchPolicy().getMatchID(current, scope);
           if (matchID != null) {
             EObject squatter = result.put(matchID, current);
-            if (squatter != null)
+            if (squatter != null) {
+              if (_duplicateIDs != null)
+                _duplicateIDs.get(role_p).add(matchID);
               EMFDiffMergePlugin.getDefault().warn(
                   Messages.MatchBuilder_WarningDuplicateIDs + matchID);
+            }
           }
         }
       }
@@ -141,16 +152,19 @@ public class MatchOperation extends AbstractExpensiveOperation {
         EObject current = targetIt.next();
         EObject counterpart1 = null;
         EObject counterpart2 = null;
-        Object id = getMatchPolicy().getMatchID(current, scope);
-        if (id != null) {
+        Object matchID = getMatchPolicy().getMatchID(current, scope);
+        if (matchID != null) {
           if (rememberIDs_p) {
-            EObject squatter = result.put(id, current);
-            if (squatter != null)
+            EObject squatter = result.put(matchID, current);
+            if (squatter != null) {
+              if (_duplicateIDs != null)
+                _duplicateIDs.get(role_p).add(matchID);
               EMFDiffMergePlugin.getDefault().warn(
-                  Messages.MatchBuilder_WarningDuplicateIDs + id);
+                  Messages.MatchBuilder_WarningDuplicateIDs + matchID);
+            }
           }
-          counterpart1 = idRegistry1_p.get(id);
-          counterpart2 = idRegistry2_p != null? idRegistry2_p.get(id): null;
+          counterpart1 = idRegistry1_p.get(matchID);
+          counterpart2 = idRegistry2_p != null? idRegistry2_p.get(matchID): null;
         }
         if (counterpart1 != null)
           mapping.mapIncrementally(current, role_p, counterpart1, secondaryRole1_p);
@@ -223,7 +237,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
   public IStatus run() {
     getMonitor().worked(1);
     match();
-    IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping(); //OCO
+    IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping();
     mapping.crossReference(Role.TARGET);
     getMonitor().worked(1);
     mapping.crossReference(Role.REFERENCE);

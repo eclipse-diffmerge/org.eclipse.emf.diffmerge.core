@@ -207,13 +207,6 @@ public interface IMapping {
     Collection<? extends IMatch> getModifiableContents();
     
     /**
-     * Return the match map corresponding to the given role
-     * @param role_p a non-null role
-     * @return a non-null, potentially empty, modifiable map
-     */
-    EMap<EObject, IMatch> getModifiableMatchMap(Role role_p);
-    
-    /**
      * Map the given element from the given role to no other element.
      * @param element_p a non-null element playing role role_p
      * @param role_p a non-null role

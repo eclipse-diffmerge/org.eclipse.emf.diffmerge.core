@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature <em>Feature</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#isOrder <em>Order</em>}</li>
  * </ul>
@@ -36,51 +35,36 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @generated
  */
 public interface EValuePresence extends EElementRelativePresence,
-		IValuePresence {
-	/**
-	 * Returns the value of the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Value</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Value</em>' attribute.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Value()
-	 * @model required="true" changeable="false"
-	 * @generated
-	 */
-	Object getValue();
+    IValuePresence {
+  /**
+   * Returns the value of the '<em><b>Feature</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Feature</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Feature</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Feature()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EStructuralFeature getFeature();
 
-	/**
-	 * Returns the value of the '<em><b>Feature</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Feature</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Feature</em>' reference.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Feature()
-	 * @model required="true" changeable="false"
-	 * @generated
-	 */
-	EStructuralFeature getFeature();
-
-	/**
-	 * Returns the value of the '<em><b>Order</b></em>' attribute.
-	 * The default value is <code>"false"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Order</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Order</em>' attribute.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Order()
-	 * @model default="false" required="true" changeable="false"
-	 * @generated
-	 */
-	boolean isOrder();
+  /**
+   * Returns the value of the '<em><b>Order</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Order</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Order</em>' attribute.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Order()
+   * @model default="false" required="true" changeable="false"
+   * @generated
+   */
+  boolean isOrder();
 
 } // EValuePresence

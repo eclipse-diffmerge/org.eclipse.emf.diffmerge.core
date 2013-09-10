@@ -17,7 +17,6 @@ package org.eclipse.emf.diffmerge.diffdata.util;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 
-
 /**
  * <!-- begin-user-doc -->
  * The <b>Resource </b> associated with the package.
@@ -25,16 +24,17 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
  * @see org.eclipse.emf.diffmerge.diffdata.util.DiffdataResourceFactoryImpl
  * @generated
  */
+@SuppressWarnings("hiding")
 public class DiffdataResourceImpl extends ResourceImpl {
-	/**
-	 * Creates an instance of the resource.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param uri_p the URI of the new resource.
-	 * @generated
-	 */
-	public DiffdataResourceImpl(URI uri_p) {
-		super(uri_p);
-	}
+  /**
+   * Creates an instance of the resource.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param uri the URI of the new resource.
+   * @generated
+   */
+  public DiffdataResourceImpl(URI uri) {
+    super(uri);
+  }
 
 } //DiffdataResourceImpl

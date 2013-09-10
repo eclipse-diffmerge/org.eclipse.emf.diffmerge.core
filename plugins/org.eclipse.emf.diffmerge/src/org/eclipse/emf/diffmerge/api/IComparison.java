@@ -116,6 +116,16 @@ public interface IComparison {
   List<IDifference> getDifferences(Role role_p);
   
   /**
+   * Return the set of duplicate match IDs for the given role, if any.
+   * If the result is not empty, then it means that the match policy that
+   * was used is not applicable to the scope of the given role.
+   * @see 
+   * @param role_p a non-null role
+   * @return a non-null, possibly empty collection
+   */
+  Collection<Object> getDuplicateMatchIDs(Role role_p);
+  
+  /**
    * Return the last diff policy used by this comparison
    * @return a possibly null diff policy (non-null if the last compute(...) succeeded)
    */
@@ -174,11 +184,11 @@ public interface IComparison {
   boolean hasRemainingDifferences();
   
   /**
-   * Return whether every element in the scope of the given role is covered
-   * by the mapping of the matching phase
-   * @param role_p a non-null comparison role
+   * Return whether this comparison was consistently computed, i.e., no duplicate
+   * match ID was encountered during computation.
+   * If false, then consistency of merge operations is not guaranteed.
    */
-  boolean isCompleteFor(Role role_p);
+  boolean isConsistent();
   
   /**
    * Return whether this comparison is three-way and not two-way, that is,

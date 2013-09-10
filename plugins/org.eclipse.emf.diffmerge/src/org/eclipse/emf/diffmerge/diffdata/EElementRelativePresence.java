@@ -35,35 +35,35 @@ import org.eclipse.emf.diffmerge.api.diff.IElementRelativePresence;
  * @generated
  */
 public interface EElementRelativePresence extends EMergeableDifference,
-		IElementRelativePresence {
-	/**
-	 * Returns the value of the '<em><b>Element Match</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Element Match</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Element Match</em>' reference.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementRelativePresence_ElementMatch()
-	 * @model required="true" changeable="false"
-	 * @generated
-	 */
-	EMatch getElementMatch();
+    IElementRelativePresence {
+  /**
+   * Returns the value of the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Element Match</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Element Match</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementRelativePresence_ElementMatch()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EMatch getElementMatch();
 
-	/**
-	 * Returns the value of the '<em><b>Presence Role</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Presence Role</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Presence Role</em>' attribute.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementRelativePresence_PresenceRole()
-	 * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role" required="true" changeable="false"
-	 * @generated
-	 */
-	Role getPresenceRole();
+  /**
+   * Returns the value of the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Presence Role</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Presence Role</em>' attribute.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementRelativePresence_PresenceRole()
+   * @model dataType="org.eclipse.emf.diffmerge.diffdata.Role" required="true" changeable="false"
+   * @generated
+   */
+  Role getPresenceRole();
 
 } // EElementRelativePresence

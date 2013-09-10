@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diffdata"
-    nsURI="http://www.eclipse.org/emf/diffmerge/1.0.0/diffdata" nsPrefix="org.eclipse.emf.diffmerge">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diffdata" nsURI="http://www.eclipse.org/emf/diffmerge/1.0.0/diffdata"
+    nsPrefix="org.eclipse.emf.diffmerge">
   <eClassifiers xsi:type="ecore:EClass" name="EComparison" eSuperTypes="#//IEditableComparison">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestorScope" eType="#//IModelScope"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestorScope" eType="#//IEditableModelScope"
+        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceScope" lowerBound="1"
-        eType="#//IModelScope"/>
+        eType="#//IEditableModelScope" transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetScope" lowerBound="1"
-        eType="#//IModelScope"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMatchPolicy" eType="#//IMatchPolicy"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDiffPolicy" eType="#//IDiffPolicy"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMergePolicy" eType="#//IMergePolicy"/>
+        eType="#//IEditableModelScope" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMatchPolicy" eType="#//IMatchPolicy"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDiffPolicy" eType="#//IDiffPolicy"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMergePolicy" eType="#//IMergePolicy"
+        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" lowerBound="1"
-        eType="#//EMapping" containment="true" eOpposite="#//EMapping/comparison"/>
+        eType="#//EMapping" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMapping" eSuperTypes="#//IEditableMapping">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="comparison" lowerBound="1"
-        eType="#//EComparison" changeable="false" eOpposite="#//EComparison/mapping"/>
+    <eOperations name="getComparison" eType="#//EComparison"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         eType="#//EMatch" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceCompletedMatches"
         upperBound="-1" eType="#//IMatch"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetCompletedMatches"
         upperBound="-1" eType="#//IMatch"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="ancestorMatches" upperBound="-1"
-        eType="#//ElementToMatchEntry" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceMatches" upperBound="-1"
-        eType="#//ElementToMatchEntry" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="targetMatches" upperBound="-1"
-        eType="#//ElementToMatchEntry" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMatch" eSuperTypes="#//IEditableMatch">
     <eOperations name="getMapping" eType="#//EMapping"/>
@@ -83,19 +79,19 @@
         eType="#//EMatch" changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EValuePresence" abstract="true" eSuperTypes="#//EElementRelativePresence #//IValuePresence">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
-        changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
         eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"
         changeable="false"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="order" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"
         changeable="false" defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EAttributeValuePresence" eSuperTypes="#//EValuePresence #//IAttributeValuePresence"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EReferenceValuePresence" eSuperTypes="#//EValuePresence #//IReferenceValuePresence"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ElementToMatchEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//IMatch"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EAttributeValuePresence" eSuperTypes="#//EValuePresence #//IAttributeValuePresence">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
+        changeable="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EReferenceValuePresence" eSuperTypes="#//EValuePresence #//IReferenceValuePresence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//EMatch"
+        changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeToValueToDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
@@ -141,7 +137,7 @@
       abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="IReferenceValuePresence" instanceClassName="org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence"
       abstract="true" interface="true"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="IModelScope" instanceClassName="org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IEditableModelScope" instanceClassName="org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope"/>
   <eClassifiers xsi:type="ecore:EDataType" name="IMatchPolicy" instanceClassName="org.eclipse.emf.diffmerge.api.IMatchPolicy"/>
   <eClassifiers xsi:type="ecore:EDataType" name="IDiffPolicy" instanceClassName="org.eclipse.emf.diffmerge.api.IDiffPolicy"/>
   <eClassifiers xsi:type="ecore:EDataType" name="IMergePolicy" instanceClassName="org.eclipse.emf.diffmerge.api.IMergePolicy"/>

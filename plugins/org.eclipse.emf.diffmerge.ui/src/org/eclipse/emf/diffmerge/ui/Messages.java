@@ -71,12 +71,16 @@ public class Messages extends NLS {
   public static String ComparisonViewer_ShowValueDiffs;
   public static String ComparisonViewer_SortTooltip;
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
+  public static String EMFDiffMergeEditorInput_AncestorScope;
+  public static String EMFDiffMergeEditorInput_DuplicateIDs;
   public static String EMFDiffMergeEditorInput_Failure;
   public static String EMFDiffMergeEditorInput_Loading;
   public static String EMFDiffMergeEditorInput_LoadingAncestor;
   public static String EMFDiffMergeEditorInput_LoadingLeft;
   public static String EMFDiffMergeEditorInput_LoadingRight;
   public static String EMFDiffMergeEditorInput_MigrationNeeded;
+  public static String EMFDiffMergeEditorInput_ReferenceScope;
+  public static String EMFDiffMergeEditorInput_TargetScope;
   public static String EMFDiffMergeEditorInput_WrongMetamodel;
   public static String EMFDiffMergeLabelProvider_Addition;
   public static String EMFDiffMergeLabelProvider_AdditionInto;

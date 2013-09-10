@@ -22,13 +22,13 @@ import java.util.Set;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
-import org.eclipse.compare.ICompareContainer;
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.WrappedException;
+import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
@@ -263,13 +263,24 @@ implements IEditingDomainProvider {
   }
   
   /**
+   * Return the current shell, if available
+   * @return a potentially null shell
+   */
+  protected Shell getShell() {
+    Shell result = null;
+    IWorkbenchSite site = getSite();
+    if (site != null)
+      result = site.getShell();
+    return result;
+  }
+  
+  /**
    * Return the contextual workbench site, if any
    * @return a potentially null workbench site
    */
   protected IWorkbenchSite getSite() {
     IWorkbenchSite result = null;
-    ICompareContainer container = getCompareConfiguration().getContainer();
-    IWorkbenchPart part = container.getWorkbenchPart();
+    IWorkbenchPart part = getWorkbenchPart();
     if (part != null)
       result = part.getSite();
     return result;
@@ -337,18 +348,15 @@ implements IEditingDomainProvider {
       message = MiscUtil.buildString(
           Messages.EMFDiffMergeEditorInput_Failure, "\n", msg);  //$NON-NLS-1$
     }
-    Shell shell = null;
-    if (getWorkbenchPart() != null && getWorkbenchPart().getSite() != null)
-      shell = getWorkbenchPart().getSite().getShell();
+    final Shell shell = getShell();
     if (shell != null) {
       final String finalMessage = message;
-      final Shell finalShell = shell;
       shell.getDisplay().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
         public void run() {
-          MessageDialog.openError(finalShell, EMFDiffMergeUIPlugin.LABEL, finalMessage);
+          MessageDialog.openError(shell, EMFDiffMergeUIPlugin.LABEL, finalMessage);
         }
       });
     }
@@ -474,6 +482,8 @@ implements IEditingDomainProvider {
       EComparison comparison = new EComparisonImpl(_leftScope, _rightScope, _ancestorScope);
       comparison.compute(_specification.getMatchPolicy(), _specification.getDiffPolicy(),
           _specification.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
+      if (!comparison.isConsistent())
+        handleInconsistency(comparison);
       _foundDifferences = comparison.hasRemainingDifferences();
       if (_foundDifferences)
         result = initializeDiffNode(comparison);
@@ -488,6 +498,42 @@ implements IEditingDomainProvider {
       handleDispose();
     }
     return result;
+  }
+  
+  /**
+   * Warn the user that the comparison is not consistent due to duplicate match IDs
+   * @see IComparison#isConsistent()
+   * @param comparison_p a non-null inconsistent comparison
+   */
+  private void handleInconsistency(final IComparison comparison_p) {
+    final Shell shell = getShell();
+    if (shell != null) {
+      final StringBuilder builder = new StringBuilder();
+      builder.append(Messages.EMFDiffMergeEditorInput_DuplicateIDs);
+      for (Role role : Role.values()) {
+        Collection<Object> duplicates = comparison_p.getDuplicateMatchIDs(role);
+        if (!duplicates.isEmpty()) {
+          builder.append('\n');
+          String scopeName = (role == Role.ANCESTOR)?
+              Messages.EMFDiffMergeEditorInput_AncestorScope: (role == Role.REFERENCE)?
+                  Messages.EMFDiffMergeEditorInput_ReferenceScope: Messages.EMFDiffMergeEditorInput_TargetScope;
+          builder.append(scopeName);
+          builder.append('\n');
+          for (Object duplicate: duplicates) {
+            builder.append(duplicate);
+            builder.append('\n');
+          }
+        }
+      }
+      shell.getDisplay().syncExec(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          MessageDialog.openWarning(shell, EMFDiffMergeUIPlugin.LABEL, builder.toString());
+        }
+      });
+    }
   }
   
   /**

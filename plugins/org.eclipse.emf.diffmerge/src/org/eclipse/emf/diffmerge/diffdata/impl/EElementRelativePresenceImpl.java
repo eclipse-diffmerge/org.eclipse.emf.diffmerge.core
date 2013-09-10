@@ -40,217 +40,214 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public abstract class EElementRelativePresenceImpl extends
-		EMergeableDifferenceImpl implements EElementRelativePresence {
-	/**
-	 * The cached value of the '{@link #getElementMatch() <em>Element Match</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getElementMatch()
-	 * @generated
-	 * @ordered
-	 */
-	protected EMatch elementMatch;
+    EMergeableDifferenceImpl implements EElementRelativePresence {
+  /**
+   * The cached value of the '{@link #getElementMatch() <em>Element Match</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getElementMatch()
+   * @generated
+   * @ordered
+   */
+  protected EMatch elementMatch;
 
-	/**
-	 * The default value of the '{@link #getPresenceRole() <em>Presence Role</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPresenceRole()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Role PRESENCE_ROLE_EDEFAULT = null;
+  /**
+   * The default value of the '{@link #getPresenceRole() <em>Presence Role</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPresenceRole()
+   * @generated
+   * @ordered
+   */
+  protected static final Role PRESENCE_ROLE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getPresenceRole() <em>Presence Role</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPresenceRole()
-	 * @generated
-	 * @ordered
-	 */
-	protected Role presenceRole = PRESENCE_ROLE_EDEFAULT;
+  /**
+   * The cached value of the '{@link #getPresenceRole() <em>Presence Role</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getPresenceRole()
+   * @generated
+   * @ordered
+   */
+  protected Role presenceRole = PRESENCE_ROLE_EDEFAULT;
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EElementRelativePresenceImpl() {
-		super();
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected EElementRelativePresenceImpl() {
+    super();
+  }
 
-	/**
-	 * Constructor
-	 * @param comparison_p the non-null comparison to which this difference belongs
-	 * @param match_p the non-null match to which this difference is relative
-	 * @param presenceRole_p the role of the presence: TARGET or REFERENCE
-	 * @generated NOT
-	 */
-	protected EElementRelativePresenceImpl(EComparison comparison_p,
-			EMatch match_p, Role presenceRole_p) {
-		this();
-		comparison = comparison_p;
-		elementMatch = match_p;
-		presenceRole = presenceRole_p;
-	}
+  /**
+   * Constructor
+   * @param comparison_p the non-null comparison to which this difference belongs
+   * @param match_p the non-null match to which this difference is relative
+   * @param presenceRole_p the role of the presence: TARGET or REFERENCE
+   * @generated NOT
+   */
+  protected EElementRelativePresenceImpl(EComparison comparison_p,
+      EMatch match_p, Role presenceRole_p) {
+    this();
+    comparison = comparison_p;
+    elementMatch = match_p;
+    presenceRole = presenceRole_p;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return DiffdataPackage.Literals.EELEMENT_RELATIVE_PRESENCE;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EClass eStaticClass() {
+    return DiffdataPackage.Literals.EELEMENT_RELATIVE_PRESENCE;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EMatch getElementMatch() {
-		if (elementMatch != null && elementMatch.eIsProxy()) {
-			InternalEObject oldElementMatch = (InternalEObject) elementMatch;
-			elementMatch = (EMatch) eResolveProxy(oldElementMatch);
-			if (elementMatch != oldElementMatch) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(
-							this,
-							Notification.RESOLVE,
-							DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH,
-							oldElementMatch, elementMatch));
-			}
-		}
-		return elementMatch;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EMatch getElementMatch() {
+    if (elementMatch != null && elementMatch.eIsProxy()) {
+      InternalEObject oldElementMatch = (InternalEObject) elementMatch;
+      elementMatch = (EMatch) eResolveProxy(oldElementMatch);
+      if (elementMatch != oldElementMatch) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+              DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH,
+              oldElementMatch, elementMatch));
+      }
+    }
+    return elementMatch;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EMatch basicGetElementMatch() {
-		return elementMatch;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EMatch basicGetElementMatch() {
+    return elementMatch;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Role getPresenceRole() {
-		return presenceRole;
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Role getPresenceRole() {
+    return presenceRole;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-		case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
-			if (resolve)
-				return getElementMatch();
-			return basicGetElementMatch();
-		case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
-			return getPresenceRole();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
+    case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
+      if (resolve)
+        return getElementMatch();
+      return basicGetElementMatch();
+    case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
+      return getPresenceRole();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-		case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
-			return elementMatch != null;
-		case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
-			return PRESENCE_ROLE_EDEFAULT == null ? presenceRole != null
-					: !PRESENCE_ROLE_EDEFAULT.equals(presenceRole);
-		}
-		return super.eIsSet(featureID);
-	}
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean eIsSet(int featureID) {
+    switch (featureID) {
+    case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
+      return elementMatch != null;
+    case DiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
+      return PRESENCE_ROLE_EDEFAULT == null ? presenceRole != null
+          : !PRESENCE_ROLE_EDEFAULT.equals(presenceRole);
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy())
-			return super.toString();
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (presenceRole: "); //$NON-NLS-1$
-		result.append(presenceRole);
-		result.append(')');
-		return result.toString();
-	}
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (presenceRole: "); //$NON-NLS-1$
+    result.append(presenceRole);
+    result.append(')');
+    return result.toString();
+  }
 
-	/**
-	 * @see org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#doMergeIn(org.eclipse.emf.diffmerge.api.Role)
-	 * @generated NOT
-	 */
-	@Override
-	public final void doMergeIn(Role destination_p) {
-		if (destination_p == getPresenceRole())
-			mergeRemoval();
-		else
-			mergeAddition();
-	}
+  /**
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#doMergeIn(org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  @Override
+  public final void doMergeIn(Role destination_p) {
+    if (destination_p == getPresenceRole())
+      mergeRemoval();
+    else
+      mergeAddition();
+  }
 
-	/**
-	 * Return the role which is opposite to the presence role
-	 * @return a non-null role which is TARGET or REFERENCE
-	 * @generated NOT
-	 */
-	protected final Role getAbsenceRole() {
-		return getPresenceRole().opposite();
-	}
+  /**
+   * Return the role which is opposite to the presence role
+   * @return a non-null role which is TARGET or REFERENCE
+   * @generated NOT
+   */
+  protected final Role getAbsenceRole() {
+    return getPresenceRole().opposite();
+  }
 
-	/**
-	 * Return the scope of the role opposite to the presence role
-	 * @return a non-null scope
-	 * @generated NOT
-	 */
-	protected final IEditableModelScope getAbsenceScope() {
-		IEditableModelScope result = getComparison().getScope(
-				getPresenceRole().opposite());
-		assert result != null;
-		return result;
-	}
+  /**
+   * Return the scope of the role opposite to the presence role
+   * @return a non-null scope
+   * @generated NOT
+   */
+  protected final IEditableModelScope getAbsenceScope() {
+    IEditableModelScope result = getComparison().getScope(
+        getPresenceRole().opposite());
+    assert result != null;
+    return result;
+  }
 
-	/**
-	 * Return the scope of the presence role
-	 * @return a non-null scope
-	 * @generated NOT
-	 */
-	protected final IEditableModelScope getPresenceScope() {
-		IEditableModelScope result = getComparison()
-				.getScope(getPresenceRole());
-		assert result != null;
-		return result;
-	}
+  /**
+   * Return the scope of the presence role
+   * @return a non-null scope
+   * @generated NOT
+   */
+  protected final IEditableModelScope getPresenceScope() {
+    IEditableModelScope result = getComparison().getScope(getPresenceRole());
+    assert result != null;
+    return result;
+  }
 
-	/**
-	 * Add the element or value in the opposite role
-	 * @generated NOT
-	 */
-	protected abstract void mergeAddition();
+  /**
+   * Add the element or value in the opposite role
+   * @generated NOT
+   */
+  protected abstract void mergeAddition();
 
-	/**
-	 * Remove the element or value from the presence role
-	 * @generated NOT
-	 */
-	protected abstract void mergeRemoval();
+  /**
+   * Remove the element or value from the presence role
+   * @generated NOT
+   */
+  protected abstract void mergeRemoval();
 
 } //EElementRelativePresenceImpl

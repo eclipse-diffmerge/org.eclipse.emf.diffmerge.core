@@ -55,13 +55,13 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyId(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
    */
-  public void copyId(EObject source_p, EObject target_p) {
-    if (copyXmlIds())
+  public void copyID(EObject source_p, EObject target_p) {
+    if (copyXMLIDs())
       ModelImplUtil.copyXMLID(source_p, target_p);
-    if (useNewAttributeIds()) {
-      String newId = getNewIdFor(target_p);
+    if (useNewIntrinsicIDs()) {
+      String newId = getNewIntrinsicIDFor(target_p);
       if (newId != null)
         ModelImplUtil.setIntrinsicID(target_p, newId);
     }
@@ -76,9 +76,9 @@ public class DefaultMergePolicy implements IMergePolicy {
   
   /**
    * Return whether extrinsic (XML) IDs must be copied when elements are being copied.
-   * @see IMergePolicy#getNewIdFor(EObject)
+   * @see IMergePolicy#getNewIntrinsicIDFor(EObject)
    */
-  protected boolean copyXmlIds() {
+  protected boolean copyXMLIDs() {
     return true;
   }
   
@@ -145,14 +145,15 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return a new unique intrinsic ID for the given element, if relevant.
-   * This may only be relevant for elements whose meta-class owns an ID attribute.
+   * Return a new unique intrinsic ID for the given element, or null if not relevant.
+   * It cannot be relevant for elements whose EClass does not own an ID attribute;
+   * for such elements, this operation has no impact.
    * @see EAttribute#isID()
    * @param element_p a non-null element
    * @return a potentially null string
    */
-  protected String getNewIdFor(EObject element_p) {
-    return copyXmlIds()? null: EcoreUtil.generateUUID();
+  protected String getNewIntrinsicIDFor(EObject element_p) {
+    return copyXMLIDs()? null: EcoreUtil.generateUUID();
   }
   
   /**
@@ -183,7 +184,7 @@ public class DefaultMergePolicy implements IMergePolicy {
    * Returning true has an impact only for elements that generate a non-null ID via
    * getNewIdFor(EObject).
    */
-  protected boolean useNewAttributeIds() {
+  protected boolean useNewIntrinsicIDs() {
     return false;
   }
   

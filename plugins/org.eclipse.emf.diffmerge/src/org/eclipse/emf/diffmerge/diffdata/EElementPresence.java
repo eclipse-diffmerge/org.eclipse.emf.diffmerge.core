@@ -33,20 +33,20 @@ import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
  * @generated
  */
 public interface EElementPresence extends EElementRelativePresence,
-		IElementPresence {
-	/**
-	 * Returns the value of the '<em><b>Owner Match</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Owner Match</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Owner Match</em>' reference.
-	 * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence_OwnerMatch()
-	 * @model required="true" changeable="false"
-	 * @generated
-	 */
-	EMatch getOwnerMatch();
+    IElementPresence {
+  /**
+   * Returns the value of the '<em><b>Owner Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Owner Match</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Owner Match</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence_OwnerMatch()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EMatch getOwnerMatch();
 
 } // EElementPresence

@@ -21,12 +21,33 @@ import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
  * A representation of the model object '<em><b>EReference Value Presence</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
+ * </ul>
+ * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence()
  * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EValuePresence org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence"
  * @generated
  */
 public interface EReferenceValuePresence extends EValuePresence,
-		IReferenceValuePresence {
-	// Nothing needed
+    IReferenceValuePresence {
+
+  /**
+   * Returns the value of the '<em><b>Value</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Value</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Value</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_Value()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EMatch getValue();
+  // Nothing needed
 } // EReferenceValuePresence

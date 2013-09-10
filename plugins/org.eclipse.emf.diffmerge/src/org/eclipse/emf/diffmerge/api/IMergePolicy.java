@@ -50,7 +50,7 @@ public interface IMergePolicy {
    * @param source_p a non-null element
    * @param target_p a non-null element
    */
-  void copyId(EObject source_p, EObject target_p);
+  void copyID(EObject source_p, EObject target_p);
   
   /**
    * Return whether cross-references outside the destination scope should be copied when

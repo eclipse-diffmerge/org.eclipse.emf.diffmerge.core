@@ -17,4 +17,11 @@
             genModel="model/DiffData.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated DiffData -->
+      <parser
+            type="diffdata"
+            class="org.eclipse.emf.diffmerge.diffdata.util.DiffdataResourceFactoryImpl"/>
+   </extension>
+
 </plugin>
