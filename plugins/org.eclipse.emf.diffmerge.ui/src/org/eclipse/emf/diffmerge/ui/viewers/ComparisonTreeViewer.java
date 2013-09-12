@@ -21,15 +21,18 @@ import java.util.List;
 
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
+import org.eclipse.emf.diffmerge.api.IPureMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ITreePathContentProvider;
 import org.eclipse.jface.viewers.ITreePathLabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -70,6 +73,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     super(parent_p, style_p);
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
+    ColumnViewerToolTipSupport.enableFor(this);
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
   }
   
@@ -538,6 +542,20 @@ public class ComparisonTreeViewer extends TreeViewer {
       int nb = getInput().getUIDifferenceNumber(match);
       if (nb > 0)
         result = result + " (" + nb + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+      return result;
+    }
+    
+    /**
+     * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
+     */
+    @Override
+    public String getToolTipText(Object element_p) {
+      String result = null;
+      if (element_p instanceof IPureMatch) {
+        Object matchID = ((IPureMatch)element_p).getMatchID();
+        if (matchID != null)
+          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchID.toString();
+      }
       return result;
     }
     

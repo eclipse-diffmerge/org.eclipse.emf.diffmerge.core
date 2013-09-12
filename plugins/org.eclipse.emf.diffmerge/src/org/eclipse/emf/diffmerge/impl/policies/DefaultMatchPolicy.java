@@ -117,4 +117,11 @@ public class DefaultMatchPolicy implements IMatchPolicy {
     return ModelImplUtil.getXMLID(element_p);
   }
   
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#rememberMatchIDs()
+   */
+  public boolean rememberMatchIDs() {
+    return true;
+  }
+  
 }

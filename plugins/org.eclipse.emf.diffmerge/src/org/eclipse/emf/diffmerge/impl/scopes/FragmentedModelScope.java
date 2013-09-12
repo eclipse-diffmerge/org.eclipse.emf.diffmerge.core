@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
@@ -177,14 +178,12 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * Return the extrinsic ID of the given element, if any.
-   * An extrinsic ID is an ID which is bound to the persistence format.
-   * @param element_p a non-null element
-   * @return a potentially null object
+   * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
-  protected Object getExtrinsicID(EObject element_p) {
-    // Default implementation only covers XML/XMI Resources
-    return ModelImplUtil.getXMLID(element_p);
+  @Override
+  public Object getExtrinsicID(EObject element_p) {
+    // Increases visibility
+    return super.getExtrinsicID(element_p);
   }
   
   /**
@@ -339,19 +338,12 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * Set the extrinsic ID of the given element if applicable and if it does
-   * not break ID uniqueness
-   * @see FragmentedModelScope#getExtrinsicID(EObject)
-   * @param element_p a non-null element
-   * @param id_p a potentially null extrinsic ID
-   * @return whether the ID was actually set
+   * @see IPersistentModelScope#setExtrinsicID(EObject, Object)
    */
-  protected boolean setExtrinsicID(EObject element_p, Object id_p) {
-    // Default implementation only covers XML/XMI Resources
-    boolean result = false;
-    if (id_p instanceof String)
-      result = ModelImplUtil.setXMLID(element_p, (String)id_p);
-    return result;
+  @Override
+  public boolean setExtrinsicID(EObject element_p, Object id_p) {
+    // Increases visibility
+    return super.setExtrinsicID(element_p, id_p);
   }
   
   

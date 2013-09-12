@@ -105,9 +105,9 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
     EObject element = partialMatch_p.get(_sourceRole);
     EObject result = copy(element);
     assert result != null;
-    IMatch updatedMatch = _mapping.mapIncrementally(
+    _mapping.mapIncrementally(
         element, _sourceRole, result, _sourceRole.opposite());
-    getCompletedMatches().add(updatedMatch);
+    getCompletedMatches().add(_mapping.getMatchFor(element, _sourceRole));
     return result;
   }
   
@@ -150,9 +150,12 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
       copyReferences(updatedMatch);
     // Update of containments may have changed resources, which may impact on IDs
     if (_mergePolicy != null) {
-      for (IMatch updatedMatch : getCompletedMatches())
-        _mergePolicy.copyID(
-            updatedMatch.get(_sourceRole), updatedMatch.get(_sourceRole.opposite()));
+      for (IMatch updatedMatch : getCompletedMatches()) {
+        EObject source = updatedMatch.get(_sourceRole);
+        EObject target = updatedMatch.get(_sourceRole.opposite());
+        BidirectionalComparisonCopier.handleIDCopy(
+            source, _sourceScope, target, _destinationScope, _mergePolicy);
+      }
     }
   }
   
@@ -215,7 +218,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
    * @param feature_p a non-null feature
    */
   protected boolean coverFeature(EStructuralFeature feature_p) {
-    return _mergePolicy != null && _mergePolicy.copyFeature(feature_p);
+    return _mergePolicy != null && _mergePolicy.copyFeature(feature_p, _destinationScope);
   }
   
   /**
@@ -263,7 +266,8 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
     _destinationScope = comparison_p.getScope(_sourceRole.opposite());
     _mergePolicy = comparison_p.getLastMergePolicy();
     if (_mergePolicy != null)
-      useOriginalReferences = _mergePolicy.copyOutOfScopeCrossReferences();
+      useOriginalReferences = _mergePolicy.copyOutOfScopeCrossReferences(
+          _sourceScope, _destinationScope);
   }
   
 }

@@ -29,6 +29,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMatch" eSuperTypes="#//IEditableMatch">
     <eOperations name="getMapping" eType="#//EMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchID" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
+        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ancestor" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>

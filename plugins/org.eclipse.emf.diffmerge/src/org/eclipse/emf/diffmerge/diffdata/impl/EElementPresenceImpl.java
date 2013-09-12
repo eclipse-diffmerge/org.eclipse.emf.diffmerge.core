@@ -24,6 +24,7 @@ import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -184,7 +185,7 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
     boolean addedToScope = false;
     boolean actuallyAdded = false;
     IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
-    if (getComparison().getLastMergePolicy().bindPresenceToOwnership()
+    if (getComparison().getLastMergePolicy().bindPresenceToOwnership(getAbsenceScope())
         && !isRoot()) {
       EObject container = getOwnerMatch().get(getAbsenceRole());
       if (container != null) {
@@ -209,7 +210,8 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
     if (!addedToScope)
       actuallyAdded = getAbsenceScope().add(clone);
     if (actuallyAdded)
-      mergePolicy.copyID(getElement(), clone);
+      BidirectionalComparisonCopier.handleIDCopy(
+          getElement(), getPresenceScope(), clone, getAbsenceScope(), mergePolicy);
   }
 
   /**

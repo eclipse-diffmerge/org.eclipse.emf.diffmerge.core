@@ -64,6 +64,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getMatchID <em>Match ID</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getTarget <em>Target</em>}</li>
@@ -79,6 +80,26 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class EMatchImpl extends EObjectImpl implements EMatch {
+
+  /**
+   * The default value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMatchID()
+   * @generated
+   * @ordered
+   */
+  protected static final Object MATCH_ID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getMatchID()
+   * @generated
+   * @ordered
+   */
+  protected Object matchID = MATCH_ID_EDEFAULT;
 
   /**
    * A constant key representing order in the TARGET side in (reference, value presence) maps
@@ -228,6 +249,28 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   @Override
   protected EClass eStaticClass() {
     return DiffdataPackage.Literals.EMATCH;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Object getMatchID() {
+    return matchID;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setMatchID(Object newMatchID) {
+    Object oldMatchID = matchID;
+    matchID = newMatchID;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EMATCH__MATCH_ID, oldMatchID, matchID));
   }
 
   /**
@@ -568,6 +611,8 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
+    case DiffdataPackage.EMATCH__MATCH_ID:
+      return getMatchID();
     case DiffdataPackage.EMATCH__ANCESTOR:
       if (resolve)
         return getAncestor();
@@ -617,6 +662,9 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
+    case DiffdataPackage.EMATCH__MATCH_ID:
+      setMatchID(newValue);
+      return;
     case DiffdataPackage.EMATCH__ANCESTOR:
       setAncestor((EObject) newValue);
       return;
@@ -658,6 +706,9 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
+    case DiffdataPackage.EMATCH__MATCH_ID:
+      setMatchID(MATCH_ID_EDEFAULT);
+      return;
     case DiffdataPackage.EMATCH__ANCESTOR:
       setAncestor((EObject) null);
       return;
@@ -697,6 +748,9 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
+    case DiffdataPackage.EMATCH__MATCH_ID:
+      return MATCH_ID_EDEFAULT == null ? matchID != null : !MATCH_ID_EDEFAULT
+          .equals(matchID);
     case DiffdataPackage.EMATCH__ANCESTOR:
       return ancestor != null;
     case DiffdataPackage.EMATCH__REFERENCE:
@@ -720,6 +774,23 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
       return targetOwnershipDifference != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (matchID: "); //$NON-NLS-1$
+    result.append(matchID);
+    result.append(')');
+    return result.toString();
   }
 
   /**

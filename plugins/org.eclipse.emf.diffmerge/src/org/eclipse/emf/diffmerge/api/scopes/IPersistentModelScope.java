@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.api.scopes;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
 
@@ -31,6 +32,14 @@ public interface IPersistentModelScope extends IModelScope {
   Resource getHoldingResource();
   
   /**
+   * Return the extrinsic ID of the given element, if any.
+   * An extrinsic ID is an ID which is bound to the persistence format.
+   * @param element_p a non-null element
+   * @return a potentially null object
+   */
+  Object getExtrinsicID(EObject element_p);
+  
+  /**
    * Initialize the scope by loading at least the elements that are required
    * for exploring the scope
    * @return whether the operation could performed
@@ -44,5 +53,15 @@ public interface IPersistentModelScope extends IModelScope {
    * @throws Exception an exception indicating that the operation failed in an unexpected way
    */
   boolean save() throws Exception;
+  
+  /**
+   * Set the extrinsic ID of the given element if applicable and if it does
+   * not break ID uniqueness
+   * @see IPersistentModelScope#getExtrinsicID(EObject)
+   * @param element_p a non-null element
+   * @param id_p a potentially null extrinsic ID
+   * @return whether the ID was actually set
+   */
+  boolean setExtrinsicID(EObject element_p, Object id_p);
   
 }

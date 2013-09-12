@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getTarget <em>Target</em>}</li>
@@ -51,6 +52,32 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public interface EMatch extends EObject, Editable {
+  /**
+   * Returns the value of the '<em><b>Match ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Match ID</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Match ID</em>' attribute.
+   * @see #setMatchID(Object)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_MatchID()
+   * @model transient="true"
+   * @generated
+   */
+  Object getMatchID();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Match ID</em>' attribute.
+   * @see #getMatchID()
+   * @generated
+   */
+  void setMatchID(Object value);
+
   /**
    * <!-- begin-user-doc -->
    * <p>

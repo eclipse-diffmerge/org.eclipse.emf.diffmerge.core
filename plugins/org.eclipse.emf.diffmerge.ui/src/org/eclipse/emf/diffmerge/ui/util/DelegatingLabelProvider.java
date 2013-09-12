@@ -14,23 +14,23 @@
  */
 package org.eclipse.emf.diffmerge.ui.util;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
 
 /**
- * A label provider that delegates to another one.
+ * A label provider supporting colors, fonts and tooltips, that delegates to
+ * another label provider for certain operations.
  * This class is intended to be sub-classed.
  * Sub-classes must define what part of the behavior diverges from the delegate.
  * @author Olivier Constant
  */
-public class DelegatingLabelProvider extends LabelProvider
-implements IFontProvider, IColorProvider {
+public class DelegatingLabelProvider extends ColumnLabelProvider {
   
   /** The non-null label provider to which behavior is delegated */
   private final ILabelProvider _delegate;
@@ -45,8 +45,9 @@ implements IFontProvider, IColorProvider {
   }
   
   /**
-   * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
+   * @see org.eclipse.jface.viewers.ColumnLabelProvider#getFont(java.lang.Object)
    */
+  @Override
   public Font getFont(Object element_p) {
     Font result = null;
     if (_delegate instanceof IFontProvider)
@@ -55,8 +56,9 @@ implements IFontProvider, IColorProvider {
   }
   
   /**
-   * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+   * @see org.eclipse.jface.viewers.ColumnLabelProvider#getBackground(java.lang.Object)
    */
+  @Override
   public Color getBackground(Object element_p) {
     Color result = null;
     if (_delegate instanceof IColorProvider)
@@ -73,8 +75,9 @@ implements IFontProvider, IColorProvider {
   }
   
   /**
-   * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+   * @see org.eclipse.jface.viewers.ColumnLabelProvider#getForeground(java.lang.Object)
    */
+  @Override
   public Color getForeground(Object element_p) {
     Color result = null;
     if (_delegate instanceof IColorProvider)

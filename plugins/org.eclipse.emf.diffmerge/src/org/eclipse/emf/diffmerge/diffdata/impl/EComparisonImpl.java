@@ -220,18 +220,17 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
    * @ordered
    */
   protected EMapping mapping;
-  
+
   /**
    * The non-null sets of duplicate match IDs per role
    * @generated NOT
    */
   private final Map<Role, Set<Object>> _duplicateIDs;
-  
-  
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected EComparisonImpl() {
     super();
@@ -685,7 +684,8 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
    */
   protected IStatus computeMatch(IMatchPolicy matchPolicy_p,
       IProgressMonitor monitor_p) {
-    IExpensiveOperation matchOperation = getMatchOperation(matchPolicy_p, _duplicateIDs);
+    IExpensiveOperation matchOperation = getMatchOperation(matchPolicy_p,
+        _duplicateIDs);
     IStatus result = matchOperation.run(monitor_p);
     return result;
   }
@@ -840,7 +840,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
       IMergePolicy mergePolicy_p) {
     return new DiffOperation(this, diffPolicy_p, mergePolicy_p);
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.api.IComparison#getDuplicateMatchIDs(org.eclipse.emf.diffmerge.api.Role)
    * @generated NOT
@@ -848,7 +848,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
   public Collection<Object> getDuplicateMatchIDs(Role role_p) {
     return _duplicateIDs.get(role_p);
   }
-  
+
   /**
    * Return an operation for executing the Match phase
    * @param policy_p an optional match policy

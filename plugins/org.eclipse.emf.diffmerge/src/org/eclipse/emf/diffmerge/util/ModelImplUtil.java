@@ -38,17 +38,6 @@ public final class ModelImplUtil {
   }
   
   /**
-   * Copy the XML ID from the given source to the given target element
-   * if applicable
-   * @param source_p a non-null element
-   * @param target_p a non-null element
-   * @return whether the ID was actually copied
-   */
-  public static boolean copyXMLID(EObject source_p, EObject target_p) {
-    return ModelImplUtil.setXMLID(target_p, getXMLID(source_p));
-  }
-  
-  /**
    * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
    * @see EcoreUtil#getID(EObject)
    * @param element_p a potentially null element

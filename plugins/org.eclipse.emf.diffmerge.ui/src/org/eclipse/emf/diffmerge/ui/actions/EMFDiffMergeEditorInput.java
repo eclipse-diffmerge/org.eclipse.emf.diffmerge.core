@@ -505,7 +505,7 @@ implements IEditingDomainProvider {
    * @see IComparison#isConsistent()
    * @param comparison_p a non-null inconsistent comparison
    */
-  private void handleInconsistency(final IComparison comparison_p) {
+  protected void handleInconsistency(final IComparison comparison_p) {
     final Shell shell = getShell();
     if (shell != null) {
       final StringBuilder builder = new StringBuilder();

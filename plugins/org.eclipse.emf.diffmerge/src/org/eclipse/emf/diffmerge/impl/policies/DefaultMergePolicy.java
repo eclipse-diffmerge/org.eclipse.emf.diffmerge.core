@@ -22,13 +22,10 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.FHashSet;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
@@ -40,45 +37,33 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 public class DefaultMergePolicy implements IMergePolicy {
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#bindPresenceToOwnership()
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#bindPresenceToOwnership(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
    */
-  public boolean bindPresenceToOwnership() {
+  public boolean bindPresenceToOwnership(IFeaturedModelScope scope_p) {
     return true;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature)
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyExtrinsicIDs(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
    */
-  public boolean copyFeature(EStructuralFeature feature_p) {
+  public boolean copyExtrinsicIDs(IFeaturedModelScope sourceScope_p,
+      IFeaturedModelScope targetScope_p) {
+    return true;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   */
+  public boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p) {
     return !feature_p.isDerived() && feature_p.isChangeable() &&
       !FeatureMapUtil.isFeatureMap(feature_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyOutOfScopeCrossReferences(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
    */
-  public void copyID(EObject source_p, EObject target_p) {
-    if (copyXMLIDs())
-      ModelImplUtil.copyXMLID(source_p, target_p);
-    if (useNewIntrinsicIDs()) {
-      String newId = getNewIntrinsicIDFor(target_p);
-      if (newId != null)
-        ModelImplUtil.setIntrinsicID(target_p, newId);
-    }
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyOutOfScopeCrossReferences()
-   */
-  public boolean copyOutOfScopeCrossReferences() {
-    return true;
-  }
-  
-  /**
-   * Return whether extrinsic (XML) IDs must be copied when elements are being copied.
-   * @see IMergePolicy#getNewIntrinsicIDFor(EObject)
-   */
-  protected boolean copyXMLIDs() {
+  public boolean copyOutOfScopeCrossReferences(
+      IFeaturedModelScope sourceScope_p, IFeaturedModelScope targetScope_p) {
     return true;
   }
   
@@ -90,7 +75,7 @@ public class DefaultMergePolicy implements IMergePolicy {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
       if (!reference.isDerived() && !reference.isContainer() &&
-          (!reference.isContainment() || !bindPresenceToOwnership()) &&
+          (!reference.isContainment() || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForAddition(reference))
         result.addAll(scope_p.get(element_p, reference));
     }
@@ -105,7 +90,7 @@ public class DefaultMergePolicy implements IMergePolicy {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
       if (!reference.isDerived() && !reference.isContainer() &&
-          (!reference.isContainment() || !bindPresenceToOwnership()) &&
+          (!reference.isContainment() || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForDeletion(reference))
         result.addAll(scope_p.get(element_p, reference));
     }
@@ -145,18 +130,6 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return a new unique intrinsic ID for the given element, or null if not relevant.
-   * It cannot be relevant for elements whose EClass does not own an ID attribute;
-   * for such elements, this operation has no impact.
-   * @see EAttribute#isID()
-   * @param element_p a non-null element
-   * @return a potentially null string
-   */
-  protected String getNewIntrinsicIDFor(EObject element_p) {
-    return copyXMLIDs()? null: EcoreUtil.generateUUID();
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.api.IMergePolicy#isMandatoryForAddition(org.eclipse.emf.ecore.EReference)
    */
   public boolean isMandatoryForAddition(EReference reference_p) {
@@ -180,12 +153,11 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return whether elements must be given a new intrinsic ID when added to a scope.
-   * Returning true has an impact only for elements that generate a non-null ID via
-   * getNewIdFor(EObject).
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#setIntrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
    */
-  protected boolean useNewIntrinsicIDs() {
-    return false;
+  public void setIntrinsicID(EObject source_p, IFeaturedModelScope sourceScope_p,
+      EObject target_p, IFeaturedModelScope targetScope_p) {
+    // Nothing by default: intrinsic IDs are copied like other attributes
   }
   
 }

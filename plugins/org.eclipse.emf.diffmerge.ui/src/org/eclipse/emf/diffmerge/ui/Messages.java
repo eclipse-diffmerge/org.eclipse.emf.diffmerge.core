@@ -35,6 +35,7 @@ public class Messages extends NLS {
   public static String ComparisonSetupWizardPage_SwapLeftRight;
   public static String ComparisonSetupWizardPage_SwapRightAncestor;
   public static String ComparisonSetupWizardPage_Title;
+  public static String ComparisonTreeViewer_MatchIDTooltip;
   public static String ComparisonViewer_CollapseTooltip;
   public static String ComparisonViewer_CountAddLeftMenuItem;
   public static String ComparisonViewer_CountAddRightMenuItem;

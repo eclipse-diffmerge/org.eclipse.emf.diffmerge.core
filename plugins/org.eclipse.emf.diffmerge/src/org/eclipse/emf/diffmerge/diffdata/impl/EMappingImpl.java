@@ -336,7 +336,7 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     return Collections
         .unmodifiableCollection(getModifiableCompletedMatches(destinationRole_p));
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.diffdata.EMapping#getComparison()
    * @generated NOT
@@ -485,10 +485,10 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    * @see org.eclipse.emf.diffmerge.api.IMapping.Editable#map(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
    * @generated NOT
    */
-  public IMatch map(EObject element_p, Role role_p) {
+  public IMatch.Editable map(EObject element_p, Role role_p) {
     assert element_p != null && role_p != null;
-    // Enforce consistency by removing previous match if any
     IMatch previous = getMatchFor(element_p, role_p);
+    // Enforce consistency by removing previous match if any
     if (previous != null)
       getModifiableContents().remove(previous);
     EMatch result = (EMatch) getComparison().newMatch(
@@ -503,10 +503,11 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    * @see org.eclipse.emf.diffmerge.api.IMapping.Editable#mapIncrementally(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
    * @generated NOT
    */
-  public IMatch mapIncrementally(EObject element1_p, Role role1_p,
+  public boolean mapIncrementally(EObject element1_p, Role role1_p,
       EObject element2_p, Role role2_p) {
     assert role1_p != null && role2_p != null && role1_p != role2_p;
-    IMatch result = null;
+    IMatch newMatch = null;
+    boolean result = false;
     Map<Role, EObject> elements = new HashMap<Role, EObject>(3);
     elements.put(role1_p, element1_p);
     elements.put(role2_p, element2_p);
@@ -514,31 +515,37 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     EObject element3 = null;
     // Checking existing match in role1_p
     if (element1_p != null) {
-      result = getMatchFor(element1_p, role1_p);
-      if (result != null)
-        element3 = result.get(role3);
+      newMatch = getMatchFor(element1_p, role1_p);
+      if (newMatch != null) {
+        element3 = newMatch.get(role3);
+        EObject foundElement2 = newMatch.get(role2_p);
+        result = foundElement2 != null && foundElement2 != element2_p;
+      }
     }
     // Checking existing match in role2_p
     if (element2_p != null) {
       IMatch found = getMatchFor(element2_p, role2_p);
       if (found != null) {
+        EObject foundElement1 = found.get(role1_p);
+        result = result || foundElement1 != null && foundElement1 != element1_p;
         EObject inRole3 = found.get(role3);
         if (inRole3 != null)
           element3 = inRole3;
-        if (result != null && result != found)
+        // Match found for role2_p which is different from that of role1_p
+        if (newMatch != null && newMatch != found)
           getModifiableContents().remove(found);
         else
-          result = found;
+          newMatch = found;
       }
     }
     elements.put(role3, element3);
-    if (result == null) {
-      result = getComparison().newMatch(elements.get(Role.TARGET),
+    if (newMatch == null) {
+      newMatch = getComparison().newMatch(elements.get(Role.TARGET),
           elements.get(Role.REFERENCE), elements.get(Role.ANCESTOR));
       // We assume the type of the match is compatible with the mapping
-      getModifiableContents().add((EMatch) result);
+      getModifiableContents().add((EMatch) newMatch);
     } else {
-      ((IMatch.Editable) result).reset(elements.get(Role.TARGET),
+      ((IMatch.Editable) newMatch).reset(elements.get(Role.TARGET),
           elements.get(Role.REFERENCE), elements.get(Role.ANCESTOR));
     }
     return result;

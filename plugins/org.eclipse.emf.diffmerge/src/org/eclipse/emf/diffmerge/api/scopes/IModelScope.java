@@ -23,7 +23,8 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * A high-level definition of a model as a forest of model elements.
- * Model scopes are intended to be used as "logical views" over EMF instance models. 
+ * Model scopes are intended to be used as "logical views" over EMF instance models
+ * with arbitrary boundaries. 
  * @author Olivier Constant
  */
 public interface IModelScope {

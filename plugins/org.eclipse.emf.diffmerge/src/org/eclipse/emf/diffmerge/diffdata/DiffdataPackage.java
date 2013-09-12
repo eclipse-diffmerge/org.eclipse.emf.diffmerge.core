@@ -266,13 +266,22 @@ public interface DiffdataPackage extends EPackage {
   int EMATCH = 2;
 
   /**
+   * The feature id for the '<em><b>Match ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EMATCH__MATCH_ID = IEDITABLE_MATCH_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Ancestor</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EMATCH__ANCESTOR = IEDITABLE_MATCH_FEATURE_COUNT + 0;
+  int EMATCH__ANCESTOR = IEDITABLE_MATCH_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Reference</b></em>' reference.
@@ -281,7 +290,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 1;
+  int EMATCH__REFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Target</b></em>' reference.
@@ -290,7 +299,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET = IEDITABLE_MATCH_FEATURE_COUNT + 2;
+  int EMATCH__TARGET = IEDITABLE_MATCH_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
@@ -299,7 +308,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = IEDITABLE_MATCH_FEATURE_COUNT + 3;
+  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = IEDITABLE_MATCH_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Modifiable Attribute Map</b></em>' map.
@@ -308,7 +317,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = IEDITABLE_MATCH_FEATURE_COUNT + 4;
+  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = IEDITABLE_MATCH_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Modifiable Reference Map</b></em>' map.
@@ -317,7 +326,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_REFERENCE_MAP = IEDITABLE_MATCH_FEATURE_COUNT + 5;
+  int EMATCH__MODIFIABLE_REFERENCE_MAP = IEDITABLE_MATCH_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
@@ -326,7 +335,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 6;
+  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
@@ -335,7 +344,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 7;
+  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
@@ -344,7 +353,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 8;
+  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = IEDITABLE_MATCH_FEATURE_COUNT + 9;
 
   /**
    * The number of structural features of the '<em>EMatch</em>' class.
@@ -353,7 +362,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH_FEATURE_COUNT = IEDITABLE_MATCH_FEATURE_COUNT + 9;
+  int EMATCH_FEATURE_COUNT = IEDITABLE_MATCH_FEATURE_COUNT + 10;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.api.diff.IMergeableDifference.Editable <em>IEditable Mergeable Difference</em>}' class.
@@ -1655,6 +1664,17 @@ public interface DiffdataPackage extends EPackage {
   EClass getEMatch();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Match ID</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID()
+   * @see #getEMatch()
+   * @generated
+   */
+  EAttribute getEMatch_MatchID();
+
+  /**
    * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getAncestor <em>Ancestor</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2463,6 +2483,14 @@ public interface DiffdataPackage extends EPackage {
      * @generated
      */
     EClass EMATCH = eINSTANCE.getEMatch();
+
+    /**
+     * The meta object literal for the '<em><b>Match ID</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EMATCH__MATCH_ID = eINSTANCE.getEMatch_MatchID();
 
     /**
      * The meta object literal for the '<em><b>Ancestor</b></em>' reference feature.

@@ -30,7 +30,6 @@ public class Messages extends NLS {
   public static String MatchBuilder_Task_Main;
   public static String MatchBuilder_Task_MappingIDs;
   public static String MatchBuilder_Task_RegisteringIDs;
-  public static String MatchBuilder_WarningDuplicateIDs;
   public static String MergeOperation_Name;
   static {
     // initialize resource bundle

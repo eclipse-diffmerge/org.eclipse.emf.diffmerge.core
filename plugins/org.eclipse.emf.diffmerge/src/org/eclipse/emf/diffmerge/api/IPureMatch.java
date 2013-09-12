@@ -50,6 +50,12 @@ public interface IPureMatch {
   IMapping getMapping();
   
   /**
+   * Return the match ID that corresponds to this match, if available
+   * @return a potentially null object
+   */
+  Object getMatchID();
+  
+  /**
    * Return the role (TARGET or REFERENCE only) which is not covered by this match, if any
    * @return a potentially null role
    */
@@ -109,6 +115,12 @@ public interface IPureMatch {
      * @param element_p a potentially null element
      */
     void set(Role role_p, EObject element_p);
+    
+    /**
+     * Set the match ID that corresponds to this match
+     * @param matchID_p a potentially null object
+     */
+    void setMatchID(Object matchID_p);
   }
   
 }

@@ -29,6 +29,7 @@ import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -330,7 +331,9 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     }
     // ID enforcement
     if (cloned && actuallyAdded)
-      mergePolicy.copyID(match.get(getPresenceRole()), destinationValue);
+      BidirectionalComparisonCopier.handleIDCopy(
+          match.get(getPresenceRole()), getPresenceScope(),
+          destinationValue, getAbsenceScope(), mergePolicy);
   }
 
   /**
@@ -354,7 +357,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
           presenceScope.remove(setting.getEObject(),
               (EReference) setting.getEStructuralFeature(), valueElement);
         }
-        if (!getComparison().getLastMergePolicy().bindPresenceToOwnership()) {
+        if (!getComparison().getLastMergePolicy().bindPresenceToOwnership(presenceScope)) {
           // Re-integrate direct children in scope
           for (EObject child : presenceScope.getContents(valueElement)) {
             presenceScope.add(child);

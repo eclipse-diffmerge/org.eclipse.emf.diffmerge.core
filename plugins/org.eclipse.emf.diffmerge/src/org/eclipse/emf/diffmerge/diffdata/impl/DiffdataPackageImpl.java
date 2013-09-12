@@ -464,8 +464,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Ancestor() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(0);
+  public EAttribute getEMatch_MatchID() {
+    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -473,7 +473,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Reference() {
+  public EReference getEMatch_Ancestor() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(1);
   }
 
@@ -482,7 +482,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Target() {
+  public EReference getEMatch_Reference() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(2);
   }
 
@@ -491,7 +491,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ModifiableRelatedDifferences() {
+  public EReference getEMatch_Target() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(3);
   }
 
@@ -500,7 +500,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ModifiableAttributeMap() {
+  public EReference getEMatch_ModifiableRelatedDifferences() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(4);
   }
 
@@ -509,7 +509,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ModifiableReferenceMap() {
+  public EReference getEMatch_ModifiableAttributeMap() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(5);
   }
 
@@ -518,7 +518,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ElementPresenceDifference() {
+  public EReference getEMatch_ModifiableReferenceMap() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(6);
   }
 
@@ -527,7 +527,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ReferenceOwnershipDifference() {
+  public EReference getEMatch_ElementPresenceDifference() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(7);
   }
 
@@ -536,8 +536,17 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_TargetOwnershipDifference() {
+  public EReference getEMatch_ReferenceOwnershipDifference() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(8);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEMatch_TargetOwnershipDifference() {
+    return (EReference) eMatchEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1073,6 +1082,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     createEReference(eMappingEClass, EMAPPING__TARGET_COMPLETED_MATCHES);
 
     eMatchEClass = createEClass(EMATCH);
+    createEAttribute(eMatchEClass, EMATCH__MATCH_ID);
     createEReference(eMatchEClass, EMATCH__ANCESTOR);
     createEReference(eMatchEClass, EMATCH__REFERENCE);
     createEReference(eMatchEClass, EMATCH__TARGET);
@@ -1295,6 +1305,10 @@ public class DiffdataPackageImpl extends EPackageImpl implements
 
     initEClass(eMatchEClass, EMatch.class,
         "EMatch", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(
+        getEMatch_MatchID(),
+        theEcorePackage.getEJavaObject(),
+        "matchID", null, 0, 1, EMatch.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
     initEReference(
         getEMatch_Ancestor(),
         ecorePackage.getEObject(),

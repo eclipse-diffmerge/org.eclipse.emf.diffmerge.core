@@ -17,6 +17,7 @@ package org.eclipse.emf.diffmerge.api;
 import java.util.Collection;
 
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,34 +30,42 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public interface IMergePolicy {
   
   /**
-   * Return whether a non-root element is present in its scope if and only if its ownership
-   * (container, containment setting) is present.
+   * Return whether a non-root element may only be present in the given scope if its ownership
+   * (value in containment setting) is present
+   * @param scope_p a non-null scope
    */
-  boolean bindPresenceToOwnership();
+  boolean bindPresenceToOwnership(IFeaturedModelScope scope_p);
   
   /**
-   * Return whether the given structural feature must be copied when elements are being copied.
+   * Return whether the given structural feature must be copied when elements are being copied
+   * to the given scope.
+   * Note that if false is returned for some features while the diff policy specifies that
+   * those feature are covered by the diff phase, then copying an element to the given scope
+   * may result in new differences when the comparison is re-computed.
+   * @see IDiffPolicy#coverFeature(EStructuralFeature)
    * @param feature_p a non-null reference or attribute
+   * @param scope_p a non-null scope
    */
-  boolean copyFeature(EStructuralFeature feature_p);
+  boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p);
   
   /**
-   * Modify the ID of the given target element according to that of the given source element,
-   * if relevant and possible.
-   * This operation is called after the target element has been added to a scope as a copy
-   * of the source element from the opposite scope.
-   * Calling this operation multiple times on the same elements must have the same effect as
-   * calling it once (idempotency).
-   * @param source_p a non-null element
-   * @param target_p a non-null element
+   * Return whether the extrinsic IDs of elements must be kept when elements
+   * are copied from the given source scope to the given target scope,
+   * if applicable
+   * @param sourceScope_p a non-null scope
+   * @param targetScope_p a non-null scope
    */
-  void copyID(EObject source_p, EObject target_p);
+  boolean copyExtrinsicIDs(IFeaturedModelScope sourceScope_p,
+      IFeaturedModelScope targetScope_p);
   
   /**
-   * Return whether cross-references outside the destination scope should be copied when
-   * elements are being copied.
+   * Return whether cross-references outside the given source scope must be copied when
+   * elements are being copied from the source scope to the given target scope.
+   * @param sourceScope_p a non-null scope
+   * @param targetScope_p a non-null scope
    */
-  boolean copyOutOfScopeCrossReferences();
+  boolean copyOutOfScopeCrossReferences(IFeaturedModelScope sourceScope_p,
+      IFeaturedModelScope targetScope_p);
   
   /**
    * Return the set of elements which are essential to the given one, i.e., adding the
@@ -116,5 +125,26 @@ public interface IMergePolicy {
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForDeletion(EReference reference_p);
+  
+  /**
+   * Set the intrinsic ID of the given target element, if possible and relevant.
+   * This operation is called after the target element has been added to the given target
+   * scope as a copy of the given source element from the given source scope.
+   * Calling this operation multiple times on the same elements must have the same effect as
+   * calling it once (idempotency).
+   * Examples of possible behaviors include: copying the intrinsic ID from the source element
+   * to the target element, or creating a new UUID for the target element.
+   * Note that if intrinsic IDs are not copied and the diff policy specifies that ID attributes
+   * are covered by the diff phase, then copying an element to the given target scope will result
+   * in new differences when the comparison is re-computed.
+   * @see EAttribute#isID()
+   * @see IDiffPolicy#coverFeature(EStructuralFeature)
+   * @param source_p a non-null element
+   * @param sourceScope_p a non-null scope
+   * @param target_p a non-null element
+   * @param targetScope_p a non-null scope
+   */
+  void setIntrinsicID(EObject source_p, IFeaturedModelScope sourceScope_p,
+      EObject target_p, IFeaturedModelScope targetScope_p);
   
 }

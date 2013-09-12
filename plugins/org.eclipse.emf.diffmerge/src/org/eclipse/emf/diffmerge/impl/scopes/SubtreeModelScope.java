@@ -82,6 +82,15 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   }
   
   /**
+   * @see IPersistentModelScope#getExtrinsicID(EObject)
+   */
+  @Override
+  public Object getExtrinsicID(EObject element_p) {
+    // Increases visibility
+    return super.getExtrinsicID(element_p);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#getHoldingResource()
    */
   public Resource getHoldingResource() {
@@ -128,6 +137,15 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
       result = true;
     }
     return result;
+  }
+  
+  /**
+   * @see IPersistentModelScope#setExtrinsicID(EObject, Object)
+   */
+  @Override
+  public boolean setExtrinsicID(EObject element_p, Object id_p) {
+    // Increases visibility
+    return super.setExtrinsicID(element_p, id_p);
   }
   
 }

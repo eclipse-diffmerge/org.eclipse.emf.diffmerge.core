@@ -36,23 +36,23 @@ import org.eclipse.emf.diffmerge.util.structures.FArrayList;
  */
 public class MergeOperation extends AbstractExpensiveOperation {
   
-  /** The non-null comparison whose mapping is being built */
-  private final IComparison _comparison;
+  /** The non-null comparison */
+  protected final IComparison _comparison;
   
   /** The optional merger, non-null iff isGlobal() */
-  private final IMergeSelector _merger;
+  protected final IMergeSelector _merger;
   
   /** The non-null set of differences to merge (relevant only if !isGlobal()) */
-  private final Collection<? extends IDifference> _toMerge;
+  protected final Collection<? extends IDifference> _toMerge;
   
   /** The optional destination role (TARGET or REFERENCE), null iff isGlobal() */
-  private final Role _destinationRole;
+  protected final Role _destinationRole;
   
   /** Whether references of the elements added must be set */
-  private final boolean _updateReferences;
+  protected final boolean _updateReferences;
   
   /** The non-null set of differences that have actually been merged (initially empty) */
-  private final Collection<IDifference> _actuallyMerged;
+  protected final Collection<IDifference> _actuallyMerged;
   
   
   /**
