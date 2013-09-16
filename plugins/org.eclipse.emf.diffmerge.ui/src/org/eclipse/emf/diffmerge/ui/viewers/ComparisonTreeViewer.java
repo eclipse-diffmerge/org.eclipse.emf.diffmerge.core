@@ -511,19 +511,8 @@ public class ComparisonTreeViewer extends TreeViewer {
     private String getPathText(TreePath path_p) {
       String result = null;
       IMatch last = (IMatch)path_p.getLastSegment();
-      if (last != null) {
+      if (last != null)
         result = getText(last);
-//        if (usesCustomLabels() && last.isAMove()) {
-//          String prefix;
-//          if (getInput().representAsMoveOrigin(path_p))
-//            prefix = "«"; //$NON-NLS-1$
-//          else
-//            prefix = "»"; //$NON-NLS-1$
-//          if (!getInput().representAsModification(last))
-//            prefix = prefix + " "; //$NON-NLS-1$
-//          result = prefix + result;
-//        }
-      }
       return result;
     }
     

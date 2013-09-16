@@ -61,11 +61,11 @@ public interface IMatchPolicy {
   Comparator<?> getMatchIDComparator();
   
   /**
-   * Return whether match ID information must be maintained for better traceability but
-   * at the price of a larger memory footprint
+   * Return whether match ID information must be maintained for better traceability
+   * but at the price of a larger memory footprint
    * @see IPureMatch#getMatchID() 
    */
-  boolean rememberMatchIDs();
+  boolean keepMatchIDs();
   
   
   /**

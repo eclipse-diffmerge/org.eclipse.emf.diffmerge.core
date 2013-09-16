@@ -19,8 +19,8 @@ import java.util.Comparator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
-import org.eclipse.emf.diffmerge.util.structures.ComparableSequence;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -45,6 +45,24 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
+   * Return the extrinsic ID of the given element from the given scope, or null if none
+   * @param element_p a non-null element
+   * @param a non-null scope that covers the element
+   * @return a potentially null object
+   */
+  protected Comparable<?> getExtrinsicID(EObject element_p, IModelScope scope_p) {
+    Comparable<?> result = null;
+    if (scope_p instanceof IPersistentModelScope) {
+      Object extrinsic = ((IPersistentModelScope)scope_p).getExtrinsicID(element_p);
+      if (extrinsic instanceof Comparable<?>)
+        result = (Comparable<?>)extrinsic;
+    }
+    if (result == null) // Try XML ID in a last resort
+      result = ModelImplUtil.getXMLID(element_p);
+    return result;
+  }
+  
+  /**
    * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
    * @see EcoreUtil#getID(EObject)
    * @param element_p a potentially null element
@@ -55,12 +73,12 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#getMatchId(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
   public Object getMatchID(EObject element_p, IModelScope scope_p) {
     Comparable<?> result = getIntrinsicID(element_p);
     if (result == null)
-      result = getXMLID(element_p);
+      result = getExtrinsicID(element_p, scope_p);
     if (result == null)
       result = getComparableURI(element_p);
     return result;
@@ -77,50 +95,9 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
-   * Return the name of the given element, if any
-   * @param element_p a non-null element
-   * @return a potentially null string
+   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#keepMatchIDs()
    */
-  protected String getName(EObject element_p) {
-    // Redefine to use qualified names
-    return null;
-  }
-  
-  /**
-   * Return the qualified name of the given element in the context of the given scope, if any.
-   * A qualified name requires all in-scope containers of the element and the element itself
-   * to have a name.
-   * @param element_p a non-null element
-   * @param scope_p a non-null scope to which the element belongs
-   * @return a potentially null string representing the qualified name
-   */
-  protected ComparableSequence<String> getQualifiedName(EObject element_p,
-      IModelScope scope_p) {
-    ComparableSequence<String> result = new ComparableSequence<String>();
-    EObject current = element_p;
-    while (current != null) {
-      String name = getName(current);
-      if (name == null)
-        return null;
-      result.prepend(name);
-      current = scope_p.getContainer(current);
-    }
-    return result;
-  }
-  
-  /**
-   * Return the extrinsic (XML) ID of the given element, or null if none
-   * @param element_p a potentially null element
-   * @return a potentially null String
-   */
-  protected String getXMLID(EObject element_p) {
-    return ModelImplUtil.getXMLID(element_p);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#rememberMatchIDs()
-   */
-  public boolean rememberMatchIDs() {
+  public boolean keepMatchIDs() {
     return true;
   }
   

@@ -104,7 +104,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
     else
       result = Collections.emptyMap();
     IModelScope scope = _comparison.getScope(role_p);
-    boolean rememberMatchIDs = getMatchPolicy().rememberMatchIDs();
+    boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       // Explore the scope, marking its elements as unmatched
       // and registering their match IDs
@@ -154,7 +154,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
     else
       result = Collections.emptyMap();
     IModelScope scope = _comparison.getScope(role_p);
-    boolean rememberMatchIDs = getMatchPolicy().rememberMatchIDs();
+    boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       Iterator<EObject> targetIt = scope.getAllContents();
       IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping();
