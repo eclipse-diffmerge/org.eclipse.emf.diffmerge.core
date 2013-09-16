@@ -33,10 +33,10 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 public class GMFScopeDefinitionFactory extends FileScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory#createScopeDefinitionFromUri(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory#createScopeDefinitionFromURI(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
    */
   @Override
-  protected IModelScopeDefinition createScopeDefinitionFromUri(URI uri_p, String label_p,
+  protected IModelScopeDefinition createScopeDefinitionFromURI(URI uri_p, String label_p,
       boolean editable_p) {
     return new FileScopeDefinition(uri_p, label_p, editable_p) {
       /**

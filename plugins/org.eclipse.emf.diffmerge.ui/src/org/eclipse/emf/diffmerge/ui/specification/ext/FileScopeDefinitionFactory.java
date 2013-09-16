@@ -43,12 +43,12 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
       IFile file = (IFile)entrypoint_p;
       if (label == null)
         label = getLabelForFile(file);
-      uri = toPlatformUri(file);
+      uri = toPlatformURI(file);
     } else if (entrypoint_p instanceof String) {
       uri = toFileUri(entrypoint_p.toString());
     }
     if (uri != null)
-      result = createScopeDefinitionFromUri(uri, label, editable_p);
+      result = createScopeDefinitionFromURI(uri, label, editable_p);
     return result;
   }
   
@@ -59,7 +59,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    * @param editable_p whether the scope can be edited
    * @return a non-null scope definition
    */
-  protected IModelScopeDefinition createScopeDefinitionFromUri(URI uri_p, String label_p,
+  protected IModelScopeDefinition createScopeDefinitionFromURI(URI uri_p, String label_p,
       boolean editable_p) {
     return new FileScopeDefinition(uri_p, label_p, editable_p);
   }
@@ -134,7 +134,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    * @param file_p a potentially null file
    * @return a potentially null URI
    */
-  protected URI toPlatformUri(IFile file_p) {
+  protected URI toPlatformURI(IFile file_p) {
     URI result = null;
     if (file_p != null) {
       result = URI.createPlatformResourceURI(file_p.getFullPath().toPortableString(), true);
