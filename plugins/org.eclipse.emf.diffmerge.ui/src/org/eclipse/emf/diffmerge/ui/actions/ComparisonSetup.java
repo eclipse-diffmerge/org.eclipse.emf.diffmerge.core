@@ -24,100 +24,101 @@ import java.util.Set;
 
 import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecificationFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
 
 /**
- * A simple structure that associates scope specifications with corresponding
- * compatible comparison factories and allows selecting one of the factories
- * for creating a comparison specification.
+ * A simple structure that associates scope definitions with corresponding
+ * compatible comparison method factories and allows selecting one of the factories
+ * for creating a comparison method.
  * @author Olivier Constant
  */
 public class ComparisonSetup implements IPropertyChangeNotifier {
   
-  /** An identifier for changes to the roles of the scope specifications */
+  /** An identifier for changes to the roles of the scope definitions */
   public static final String PROPERTY_ROLES = "ComparisonSetup.Property.Roles"; //$NON-NLS-1$
   
-  /** An identifier for changes to the roles of the scope specifications */
+  /** An identifier for changes to the roles of the scope definitions */
   public static final String PROPERTY_COMPARISON_METHOD =
     "ComparisonSetup.Property.ComparisonMethod"; //$NON-NLS-1$
   
-  /** The map from roles to the corresponding scope specifications */
-  private final Map<Role, IScopeSpecification> _roleToScopeSpec;
+  /** The map from roles to the corresponding scope definitions */
+  private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
-  /** The non-null, non-empty list of applicable comparison factories */ 
-  private final List<IComparisonSpecificationFactory> _compatibleFactories;
+  /** The non-null, non-empty list of applicable method factories */ 
+  private final List<IComparisonMethodFactory> _compatibleMethodFactories;
   
   /** The potentially null selected factory (among the compatible factories) */ 
-  private IComparisonSpecificationFactory _selectedFactory;
+  private IComparisonMethodFactory _selectedFactory;
   
-  /** The potentially null comparison specification */ 
-  private IComparisonSpecification _comparisonSpecification;
+  /** The potentially null comparison method */ 
+  private IComparisonMethod _comparisonMethod;
   
+  /** A non-null set of listeners on this object */
   private final Set<IPropertyChangeListener> _listeners;
   
   
   /**
    * Constructor
-   * @param scopeSpec1_p a non-null scope specification
-   * @param scopeSpec2_p a non-null scope specification
-   * @param scopeSpec3_p a potentially null scope specification
+   * @param scopeSpec1_p a non-null scope definition
+   * @param scopeSpec2_p a non-null scope definition
+   * @param scopeSpec3_p a potentially null scope definition
    * @param compatibleFactories_p a non-null, non-empty list
    */
-  public ComparisonSetup(IScopeSpecification scopeSpec1_p, IScopeSpecification scopeSpec2_p,
-      IScopeSpecification scopeSpec3_p, List<IComparisonSpecificationFactory> compatibleFactories_p) {
-    _roleToScopeSpec = new HashMap<Role, IScopeSpecification>();
-    _roleToScopeSpec.put(Role.TARGET, scopeSpec1_p);
-    _roleToScopeSpec.put(Role.REFERENCE, scopeSpec2_p);
-    _roleToScopeSpec.put(Role.ANCESTOR, scopeSpec3_p);
-    _comparisonSpecification = null;
-    _compatibleFactories = new ArrayList<IComparisonSpecificationFactory>(compatibleFactories_p);
+  public ComparisonSetup(IModelScopeDefinition scopeSpec1_p, IModelScopeDefinition scopeSpec2_p,
+      IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory> compatibleFactories_p) {
+    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
+    _roleToScopeDefinition.put(Role.TARGET, scopeSpec1_p);
+    _roleToScopeDefinition.put(Role.REFERENCE, scopeSpec2_p);
+    _roleToScopeDefinition.put(Role.ANCESTOR, scopeSpec3_p);
+    _comparisonMethod = null;
+    _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>(compatibleFactories_p);
     _listeners = new HashSet<IPropertyChangeListener>();
   }
   
   /**
-   * Return the comparison specification created by the selected factory, if any
+   * Return the comparison method created by the selected factory, if any
    * @return a potentially null object
    */
-  public IComparisonSpecification getComparisonSpecification() {
-    return _comparisonSpecification;
+  public IComparisonMethod getComparisonMethod() {
+    return _comparisonMethod;
   }
   
   /**
-   * Return the scope specification that plays the given role
+   * Return the scope definition that plays the given role
    * @param role_p a non-null role
-   * @return a scope specification which may only be null if role is ANCESTOR
+   * @return a scope definition which may only be null if role is ANCESTOR
    */
-  public IScopeSpecification getScopeSpecification(Role role_p) {
-    return _roleToScopeSpec.get(role_p);
+  public IModelScopeDefinition getScopeDefinition(Role role_p) {
+    return _roleToScopeDefinition.get(role_p);
   }
   
   /**
    * Return the selected factory among the compatible ones
    * @return a potentially null factory
    */
-  public IComparisonSpecificationFactory getSelectedFactory() {
+  public IComparisonMethodFactory getSelectedFactory() {
     return _selectedFactory;
   }
   
   /**
    * Return the list of comparison factories which are compatible with the
-   * scope specifications
+   * scope definitions
    * @return a non-null, non-empty list
    */
-  public List<IComparisonSpecificationFactory> getCompatibleFactories() {
-    return Collections.unmodifiableList(_compatibleFactories);
+  public List<IComparisonMethodFactory> getCompatibleFactories() {
+    return Collections.unmodifiableList(_compatibleMethodFactories);
   }
   
   /**
    * Return whether the comparison will be three-way
    */
   public boolean isThreeWay() {
-    return getScopeSpecification(Role.ANCESTOR) != null;
+    return getScopeDefinition(Role.ANCESTOR) != null;
   }
   
   /**
@@ -131,37 +132,37 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
-   * Set the selected factory and consequently update the comparison specification
+   * Set the selected method factory and consequently update the comparison method
    * @param selectedFactory_p a factory which is null or belongs to getCompatibleFactories()
    */
-  public void setSelectedFactory(IComparisonSpecificationFactory selectedFactory_p) {
+  public void setSelectedFactory(IComparisonMethodFactory selectedFactory_p) {
     _selectedFactory = selectedFactory_p;
     if (_selectedFactory != null) {
-      _comparisonSpecification = _selectedFactory.createComparisonSpecification(
-          getScopeSpecification(Role.TARGET), getScopeSpecification(Role.REFERENCE),
-          getScopeSpecification(Role.ANCESTOR));
+      _comparisonMethod = _selectedFactory.createComparisonMethod(
+          getScopeDefinition(Role.TARGET), getScopeDefinition(Role.REFERENCE),
+          getScopeDefinition(Role.ANCESTOR));
     } else {
-      _comparisonSpecification = null;
+      _comparisonMethod = null;
     }
     notify(new PropertyChangeEvent(this, PROPERTY_COMPARISON_METHOD, null, null));
   }
   
   /**
-   * Swap the scope specifications that play the given roles
+   * Swap the scope definitions that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
    * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
    */
-  public boolean swapScopeSpecifications(Role role1_p, Role role2_p) {
+  public boolean swapScopeDefinitions(Role role1_p, Role role2_p) {
     boolean result = true;
-    if (_comparisonSpecification != null)
-      result = _comparisonSpecification.swapScopeSpecifications(role1_p, role2_p);
+    if (_comparisonMethod != null)
+      result = _comparisonMethod.swapScopeDefinitions(role1_p, role2_p);
     if (result) {
-      IScopeSpecification scope1 = getScopeSpecification(role1_p);
-      IScopeSpecification scope2 = getScopeSpecification(role2_p);
+      IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
+      IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
       if (scope1 != null && scope2 != null) {
-        _roleToScopeSpec.put(role1_p, scope2);
-        _roleToScopeSpec.put(role2_p, scope1);
+        _roleToScopeDefinition.put(role1_p, scope2);
+        _roleToScopeDefinition.put(role2_p, scope1);
       }
       notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
     }

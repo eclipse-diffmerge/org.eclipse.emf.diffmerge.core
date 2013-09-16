@@ -27,15 +27,15 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.diffmerge.ui.actions.ComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.actions.EMFDiffMergeEditorInput;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecificationFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory;
-
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory;
 
 
 /**
- * A manager for model comparison contexts that are applicable via the GUI.
+ * A manager for model comparison contexts that are contributed through the dedicated
+ * extension point.
  * @author Olivier Constant
  */
 public class ComparisonContextManager {
@@ -45,16 +45,16 @@ public class ComparisonContextManager {
     "org.eclipse.emf.diffmerge.ui.modelComparisonContext"; //$NON-NLS-1$
   
   /** The ModelComparisonContext extension point property for configurations */
-  private static final String EXTENSION_POINT_PROPERTY_CONFIGURATION = "specificationFactory"; //$NON-NLS-1$
+  private static final String EXTENSION_POINT_PROPERTY_CONFIGURATION = "comparisonMethodFactory"; //$NON-NLS-1$
   
   /** The ModelComparisonContext extension point property for scopes */
-  private static final String EXTENSION_POINT_PROPERTY_SCOPE = "scopeFactory"; //$NON-NLS-1$
+  private static final String EXTENSION_POINT_PROPERTY_SCOPE = "scopeDefinitionFactory"; //$NON-NLS-1$
   
-  /** The registered comparison specification factories (initially null) */
-  private Map<Class<?>, IComparisonSpecificationFactory> _comparisonFactories;
+  /** The registered comparison method factories (initially null) */
+  private Map<Class<?>, IComparisonMethodFactory> _comparisonFactories;
   
   /** The registered scope factories (initially null) */
-  private Map<Class<?>, IScopeSpecificationFactory> _scopeFactories;
+  private Map<Class<?>, IScopeDefinitionFactory> _scopeFactories;
   
   
   /**
@@ -77,8 +77,8 @@ public class ComparisonContextManager {
     EMFDiffMergeEditorInput result = null;
     ComparisonSetup selection =
       createComparisonSetup(entrypoint1_p, entrypoint2_p, entrypoint3_p);
-    if (selection != null && selection.getComparisonSpecification() != null)
-      result = new EMFDiffMergeEditorInput(selection.getComparisonSpecification());
+    if (selection != null && selection.getComparisonMethod() != null)
+      result = new EMFDiffMergeEditorInput(selection.getComparisonMethod());
     return result;
   }
   
@@ -92,22 +92,22 @@ public class ComparisonContextManager {
   public ComparisonSetup createComparisonSetup(Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
     ComparisonSetup result = null;
-    List<IScopeSpecificationFactory> factories1 =
+    List<IScopeDefinitionFactory> factories1 =
       getApplicableScopeFactories(entrypoint1_p);
-    List<IScopeSpecificationFactory> factories2 =
+    List<IScopeDefinitionFactory> factories2 =
       getApplicableScopeFactories(entrypoint2_p);
-    List<IScopeSpecificationFactory> factories3 =
-      entrypoint3_p == null? Collections.<IScopeSpecificationFactory>emptyList():
+    List<IScopeDefinitionFactory> factories3 =
+      entrypoint3_p == null? Collections.<IScopeDefinitionFactory>emptyList():
         getApplicableScopeFactories(entrypoint3_p);
     if (!factories1.isEmpty() && !factories2.isEmpty()) {
-      IScopeSpecification scopeSpec1 =
-        factories1.get(0).createScopeSpecification(entrypoint1_p, null, true);
-      IScopeSpecification scopeSpec2 =
-        factories2.get(0).createScopeSpecification(entrypoint2_p, null, true);
-      IScopeSpecification scopeSpec3 = factories3.isEmpty()? null:
-        factories3.get(0).createScopeSpecification(entrypoint3_p, null, true);
-      List<IComparisonSpecificationFactory> cFactories =
-        getApplicableComparisonFactories(scopeSpec1, scopeSpec2, scopeSpec3);
+      IModelScopeDefinition scopeSpec1 =
+        factories1.get(0).createScopeDefinition(entrypoint1_p, null, true);
+      IModelScopeDefinition scopeSpec2 =
+        factories2.get(0).createScopeDefinition(entrypoint2_p, null, true);
+      IModelScopeDefinition scopeSpec3 = factories3.isEmpty()? null:
+        factories3.get(0).createScopeDefinition(entrypoint3_p, null, true);
+      List<IComparisonMethodFactory> cFactories =
+        getApplicableComparisonMethodFactories(scopeSpec1, scopeSpec2, scopeSpec3);
       if (!cFactories.isEmpty())
         result = new ComparisonSetup(scopeSpec1, scopeSpec2, scopeSpec3, cFactories);
     }
@@ -115,28 +115,28 @@ public class ComparisonContextManager {
   }
   
   /**
-   * Discover the specification factories which are registered through the dedicated
+   * Discover the comparison contexts which are registered through the dedicated
    * extension point, if any
    * Postcondition: _comparisonFactories != null && _scopeFactories != null
    */
   private void discoverRegisteredComparisonContexts() {
-    _comparisonFactories = new HashMap<Class<?>, IComparisonSpecificationFactory>();
-    _scopeFactories = new HashMap<Class<?>, IScopeSpecificationFactory>();
+    _comparisonFactories = new HashMap<Class<?>, IComparisonMethodFactory>();
+    _scopeFactories = new HashMap<Class<?>, IScopeDefinitionFactory>();
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IConfigurationElement[] config = registry.getConfigurationElementsFor(
         MODEL_COMPARISON_CONTEXT_EXTENSION_POINT);
     for (IConfigurationElement e : config) {
       try {
         Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_CONFIGURATION);
-        if (o instanceof IComparisonSpecificationFactory)
-          _comparisonFactories.put(o.getClass(), (IComparisonSpecificationFactory)o);
+        if (o instanceof IComparisonMethodFactory)
+          _comparisonFactories.put(o.getClass(), (IComparisonMethodFactory)o);
       } catch (CoreException ex) {
         // Proceed
       }
       try {
         Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_SCOPE);
-        if (o instanceof IScopeSpecificationFactory)
-          _scopeFactories.put(o.getClass(), (IScopeSpecificationFactory)o);
+        if (o instanceof IScopeDefinitionFactory)
+          _scopeFactories.put(o.getClass(), (IScopeDefinitionFactory)o);
       } catch (CoreException ex) {
         // Proceed
       }
@@ -144,18 +144,18 @@ public class ComparisonContextManager {
   }
   
   /**
-   * Return the set of comparison specification factories that are applicable to the given
+   * Return the set of comparison method factories that are applicable to the given
    * entry point
-   * @param leftScopeSpec_p a non-null scope specification
-   * @param rightScopeSpec_p a non-null scope specification
-   * @param ancestorScopeSpec_p an optional scope specification
+   * @param leftScopeSpec_p a non-null scope definition
+   * @param rightScopeSpec_p a non-null scope definition
+   * @param ancestorScopeSpec_p an optional scope definition
    * @return a non-null, potentially empty, unmodifiable list
    */
-  public List<IComparisonSpecificationFactory> getApplicableComparisonFactories(
-      IScopeSpecification leftScopeSpec_p, IScopeSpecification rightScopeSpec_p,
-      IScopeSpecification ancestorScopeSpec_p) {
-    List<IComparisonSpecificationFactory> result = new ArrayList<IComparisonSpecificationFactory>();
-    for (IComparisonSpecificationFactory factory : getRegisteredComparisonFactories()) {
+  public List<IComparisonMethodFactory> getApplicableComparisonMethodFactories(
+      IModelScopeDefinition leftScopeSpec_p, IModelScopeDefinition rightScopeSpec_p,
+      IModelScopeDefinition ancestorScopeSpec_p) {
+    List<IComparisonMethodFactory> result = new ArrayList<IComparisonMethodFactory>();
+    for (IComparisonMethodFactory factory : getRegisteredComparisonMethodFactories()) {
       if (factory.isApplicableTo(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p))
         result.add(factory);
     }
@@ -164,15 +164,15 @@ public class ComparisonContextManager {
   }
   
   /**
-   * Return the set of scope specification factories that are applicable to the given
+   * Return the set of scope definition factories that are applicable to the given
    * entry point
    * @param entrypoint_p a non-null object
    * @return a non-null, unmodifiable list which cannot be empty if isValidEntrypoint(entrypoint_p)
    */
-  public List<IScopeSpecificationFactory> getApplicableScopeFactories(
+  public List<IScopeDefinitionFactory> getApplicableScopeFactories(
       Object entrypoint_p) {
-    List<IScopeSpecificationFactory> result = new ArrayList<IScopeSpecificationFactory>();
-    for (IScopeSpecificationFactory factory : getRegisteredScopeFactories()) {
+    List<IScopeDefinitionFactory> result = new ArrayList<IScopeDefinitionFactory>();
+    for (IScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         result.add(factory);
     }
@@ -181,22 +181,22 @@ public class ComparisonContextManager {
   }
   
   /**
-   * Return the comparison specification factories which are registered through the dedicated
+   * Return the comparison method factories which are registered through the dedicated
    * extension point, if any
    * @return a non-null, potentially empty list
    */
-  protected final Collection<IComparisonSpecificationFactory> getRegisteredComparisonFactories() {
+  protected final Collection<IComparisonMethodFactory> getRegisteredComparisonMethodFactories() {
     if (_comparisonFactories == null)
       discoverRegisteredComparisonContexts();
     return _comparisonFactories.values();
   }
   
   /**
-   * Return the configuration factories which are registered through the dedicated
+   * Return the scope definition factories which are registered through the dedicated
    * extension point, if any
    * @return a non-null, potentially empty list
    */
-  protected final Collection<IScopeSpecificationFactory> getRegisteredScopeFactories() {
+  protected final Collection<IScopeDefinitionFactory> getRegisteredScopeDefinitionFactories() {
     if (_scopeFactories == null)
       discoverRegisteredComparisonContexts();
     return _scopeFactories.values();
@@ -208,7 +208,7 @@ public class ComparisonContextManager {
    * @param entrypoint_p a non-null object
    */
   public boolean isValidEntrypoint(Object entrypoint_p) {
-    for (IScopeSpecificationFactory factory : getRegisteredScopeFactories()) {
+    for (IScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         return true;
     }

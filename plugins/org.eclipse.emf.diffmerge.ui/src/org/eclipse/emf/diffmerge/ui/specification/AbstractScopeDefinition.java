@@ -19,7 +19,7 @@ package org.eclipse.emf.diffmerge.ui.specification;
  * A base implementation for IVisualScopeSpecification.
  * @author Olivier Constant
  */
-public abstract class AbstractScopeSpecification implements IScopeSpecification {
+public abstract class AbstractScopeDefinition implements IModelScopeDefinition {
   
   /** The non-null entry point object */
   private final Object _entrypoint;
@@ -37,28 +37,28 @@ public abstract class AbstractScopeSpecification implements IScopeSpecification 
    * @param label_p a non-null label
    * @param editable_p whether the scope can be edited
    */
-  protected AbstractScopeSpecification(Object entrypoint_p, String label_p, boolean editable_p) {
+  protected AbstractScopeDefinition(Object entrypoint_p, String label_p, boolean editable_p) {
     _entrypoint = entrypoint_p;
     _label = label_p;
     _editable = editable_p;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getLabel()
    */
   public String getLabel() {
     return _label;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#getEntrypoint()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getEntrypoint()
    */
   public Object getEntrypoint() {
     return _entrypoint;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#isEditable()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditable()
    */
   public boolean isEditable() {
     return _editable;

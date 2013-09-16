@@ -19,13 +19,13 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
- * A scope specification relates an object selected by the user to a scope for visual comparisons.
+ * A model scope definition relates an object selected by the user to a model scope.
  * @author Olivier Constant
  */
-public interface IScopeSpecification {
+public interface IModelScopeDefinition {
   
   /**
-   * Create and return a scope that corresponds to this specification
+   * Create and return a scope that corresponds to this definition
    * @param domain_p a non-null editing domain for the case where resource creation is needed
    * @return a non-null scope
    */
@@ -44,7 +44,7 @@ public interface IScopeSpecification {
   String getLabel();
   
   /**
-   * Return whether the scope can be edited
+   * Return whether the content of the scope can be modified by merge
    */
   boolean isEditable();
   

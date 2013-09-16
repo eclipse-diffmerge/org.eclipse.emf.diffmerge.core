@@ -40,8 +40,8 @@ import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImpl;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -80,8 +80,8 @@ import org.eclipse.ui.PlatformUI;
 public class EMFDiffMergeEditorInput extends CompareEditorInput
 implements IEditingDomainProvider {
   
-  /** The non-null specification of the comparison **/
-  protected IComparisonSpecification _specification;
+  /** The non-null comparison method **/
+  protected IComparisonMethod _comparisonMethod;
   
   /** The initially null resource that holds the comparison */
   protected Resource _comparisonResource;
@@ -104,11 +104,11 @@ implements IEditingDomainProvider {
   
   /**
    * Constructor
-   * @param specification_p a non-null specification of the comparison
+   * @param method_p a non-null comparison method
    */
-  public EMFDiffMergeEditorInput(IComparisonSpecification specification_p) {
+  public EMFDiffMergeEditorInput(IComparisonMethod method_p) {
     super(new CompareConfiguration());
-    _specification = specification_p;
+    _comparisonMethod = method_p;
     _leftScope = null;
     _rightScope = null;
     _ancestorScope = null;
@@ -259,7 +259,7 @@ implements IEditingDomainProvider {
    * @see IEditingDomainProvider#getEditingDomain()
    */
   public EditingDomain getEditingDomain() {
-    return _specification.getEditingDomain();
+    return _comparisonMethod.getEditingDomain();
   }
   
   /**
@@ -303,8 +303,8 @@ implements IEditingDomainProvider {
         if (getCompareResult() != null)
           getCompareResult().dispose();
         disposeResources();
-        _specification.dispose();
-        _specification = null;
+        _comparisonMethod.dispose();
+        _comparisonMethod = null;
         _ancestorScope = null;
         _leftScope = null;
         _rightScope = null;
@@ -367,13 +367,13 @@ implements IEditingDomainProvider {
    */
   protected void initializeCompareConfiguration() {
     CompareConfiguration cc = getCompareConfiguration();
-    cc.setLeftLabel(_specification.getScopeSpecification(Role.TARGET).getLabel());
-    cc.setRightLabel(_specification.getScopeSpecification(Role.REFERENCE).getLabel());
-    IScopeSpecification ancestorSpecification =
-      _specification.getScopeSpecification(Role.ANCESTOR);
-    cc.setAncestorLabel((ancestorSpecification == null) ? "" : ancestorSpecification.getLabel()); //$NON-NLS-1$
-    cc.setLeftEditable(_specification.getScopeSpecification(Role.TARGET).isEditable());
-    cc.setRightEditable(_specification.getScopeSpecification(Role.REFERENCE).isEditable());
+    cc.setLeftLabel(_comparisonMethod.getScopeDefinition(Role.TARGET).getLabel());
+    cc.setRightLabel(_comparisonMethod.getScopeDefinition(Role.REFERENCE).getLabel());
+    IModelScopeDefinition ancestorDefinition =
+      _comparisonMethod.getScopeDefinition(Role.ANCESTOR);
+    cc.setAncestorLabel((ancestorDefinition == null) ? "" : ancestorDefinition.getLabel()); //$NON-NLS-1$
+    cc.setLeftEditable(_comparisonMethod.getScopeDefinition(Role.TARGET).isEditable());
+    cc.setRightEditable(_comparisonMethod.getScopeDefinition(Role.REFERENCE).isEditable());
   }
   
   /**
@@ -410,14 +410,14 @@ implements IEditingDomainProvider {
   protected void loadScopes(IProgressMonitor monitor_p) {
     EditingDomain domain = getEditingDomain();
     _initialResources.addAll(domain.getResourceSet().getResources());
-    boolean threeWay = _specification.isThreeWay();
+    boolean threeWay = _comparisonMethod.isThreeWay();
     String mainTaskName = Messages.EMFDiffMergeEditorInput_Loading;
     SubMonitor loadingMonitor = SubMonitor.convert(
         monitor_p, mainTaskName, threeWay ? 4 : 3);
     loadingMonitor.worked(1);
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
-    _leftScope = _specification.getScopeSpecification(Role.TARGET).createScope(domain);
+    _leftScope = _comparisonMethod.getScopeDefinition(Role.TARGET).createScope(domain);
     if (_leftScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_leftScope).load();
@@ -430,7 +430,7 @@ implements IEditingDomainProvider {
       throw new OperationCanceledException();
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
-    _rightScope = _specification.getScopeSpecification(Role.REFERENCE).createScope(domain);
+    _rightScope = _comparisonMethod.getScopeDefinition(Role.REFERENCE).createScope(domain);
     if (_rightScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_rightScope).load();
@@ -444,7 +444,7 @@ implements IEditingDomainProvider {
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
-      _ancestorScope = _specification.getScopeSpecification(Role.ANCESTOR).createScope(domain);
+      _ancestorScope = _comparisonMethod.getScopeDefinition(Role.ANCESTOR).createScope(domain);
       if (_ancestorScope instanceof IPersistentModelScope) {
         try {
           ((IPersistentModelScope)_ancestorScope).load();
@@ -480,8 +480,8 @@ implements IEditingDomainProvider {
       if (!scopesReady)
         loadScopes(monitor.newChild(1));
       EComparison comparison = new EComparisonImpl(_leftScope, _rightScope, _ancestorScope);
-      comparison.compute(_specification.getMatchPolicy(), _specification.getDiffPolicy(),
-          _specification.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
+      comparison.compute(_comparisonMethod.getMatchPolicy(), _comparisonMethod.getDiffPolicy(),
+          _comparisonMethod.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
       if (!comparison.isConsistent())
         handleInconsistency(comparison);
       _foundDifferences = comparison.hasRemainingDifferences();

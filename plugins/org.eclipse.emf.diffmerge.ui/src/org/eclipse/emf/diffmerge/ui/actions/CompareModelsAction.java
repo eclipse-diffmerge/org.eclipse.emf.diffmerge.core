@@ -21,7 +21,7 @@ import org.eclipse.compare.CompareUI;
 import org.eclipse.emf.diffmerge.ui.ComparisonContextManager;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -110,9 +110,9 @@ public class CompareModelsAction implements IObjectActionDelegate {
         WizardDialog dialog = new WizardDialog(getShell(), wizard);
         dialog.setHelpAvailable(false);
         if (Window.OK == dialog.open()) {
-          IComparisonSpecification specification = setup.getComparisonSpecification();
-          if (specification != null) {
-            EMFDiffMergeEditorInput input = new EMFDiffMergeEditorInput(specification);
+          IComparisonMethod method = setup.getComparisonMethod();
+          if (method != null) {
+            EMFDiffMergeEditorInput input = new EMFDiffMergeEditorInput(method);
             CompareUI.openCompareEditor(input);
           }
         }

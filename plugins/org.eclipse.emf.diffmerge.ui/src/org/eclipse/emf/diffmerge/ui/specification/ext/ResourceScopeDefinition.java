@@ -16,17 +16,17 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
-import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
- * A scope specification based on a resource.
+ * A scope definition based on a resource.
  * @author Olivier Constant
  */
-public class ResourceScopeSpecification extends AbstractScopeSpecification {
+public class ResourceScopeDefinition extends AbstractScopeDefinition {
   
   /**
    * Constructor
@@ -34,13 +34,13 @@ public class ResourceScopeSpecification extends AbstractScopeSpecification {
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
    */
-  public ResourceScopeSpecification(Resource resource_p, String label_p, boolean editable_p) {
+  public ResourceScopeDefinition(Resource resource_p, String label_p, boolean editable_p) {
     super(resource_p,
         label_p != null? label_p: getLabelForResource(resource_p), editable_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#createScope(org.eclipse.emf.edit.domain.EditingDomain)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.edit.domain.EditingDomain)
    */
   public IEditableModelScope createScope(EditingDomain domain_p) {
     return new FragmentedModelScope(getEntrypoint());
@@ -61,7 +61,7 @@ public class ResourceScopeSpecification extends AbstractScopeSpecification {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification#getEntrypoint()
+   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition#getEntrypoint()
    */
   @Override
   public Resource getEntrypoint() {

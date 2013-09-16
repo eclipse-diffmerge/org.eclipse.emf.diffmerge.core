@@ -24,17 +24,17 @@
    </extension>
    <extension
          point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
-      <comparisonScope
-            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecificationFactory">
-      </comparisonScope>
-      <comparisonScope
-            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.ResourceScopeSpecificationFactory">
-      </comparisonScope>
-      <comparisonScope
-            scopeFactory="org.eclipse.emf.diffmerge.ui.specification.ext.EObjectScopeSpecificationFactory">
-      </comparisonScope>
-      <comparisonSpecification
-            specificationFactory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecificationFactory">
-      </comparisonSpecification>
+      <scopeDefinition
+            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory">
+      </scopeDefinition>
+      <scopeDefinition
+            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.specification.ext.ResourceScopeDefinitionFactory">
+      </scopeDefinition>
+      <scopeDefinition
+            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.specification.ext.EObjectScopeDefinitionFactory">
+      </scopeDefinition>
+      <comparisonMethod
+            comparisonMethodFactory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
+      </comparisonMethod>
    </extension>
 </plugin>

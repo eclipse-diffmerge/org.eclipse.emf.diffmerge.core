@@ -15,8 +15,8 @@
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecificationFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.ecore.resource.Resource;
 
 
@@ -24,28 +24,28 @@ import org.eclipse.emf.ecore.resource.Resource;
  * A factory for scopes based on a Resource.
  * @author Olivier Constant
  */
-public class ResourceScopeSpecificationFactory extends AbstractScopeSpecificationFactory {
+public class ResourceScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecificationFactory#createScopeSpecification(java.lang.Object, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
    */
-  public IScopeSpecification createScopeSpecification(Object entrypoint_p, String label_p,
+  public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
-    IScopeSpecification result = null;
+    IModelScopeDefinition result = null;
     if (entrypoint_p instanceof Resource)
-      result = new ResourceScopeSpecification((Resource)entrypoint_p, label_p, editable_p);
+      result = new ResourceScopeDefinition((Resource)entrypoint_p, label_p, editable_p);
     return result;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#getLabel()
    */
   public String getLabel() {
-    return Messages.ResourceScopeSpecificationFactory_Label;
+    return Messages.ResourceScopeDefinitionFactory_Label;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory#isApplicableTo(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#isApplicableTo(java.lang.Object)
    */
   public boolean isApplicableTo(Object entrypoint_p) {
     return entrypoint_p instanceof Resource;

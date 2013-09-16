@@ -16,15 +16,15 @@ package org.eclipse.emf.diffmerge.ui.gmf;
 
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 
 
 /**
  * A definition of GMF-specific comparisons.
  * @author Olivier Constant
  */
-public class GMFComparisonSpecification extends DefaultComparisonSpecification {
+public class GMFComparisonMethod extends DefaultComparisonMethod {
   
   /**
    * Constructor
@@ -32,13 +32,13 @@ public class GMFComparisonSpecification extends DefaultComparisonSpecification {
    * @param rightScopeSpec_p a non-null scope specification
    * @param ancestorScopeSpec_p an optional scope specification
    */
-  public GMFComparisonSpecification(IScopeSpecification leftScopeSpec_p,
-      IScopeSpecification rightScopeSpec_p, IScopeSpecification ancestorScopeSpec_p) {
+  public GMFComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
+      IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p) {
     super(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecification#createDiffPolicy()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createDiffPolicy()
    */
   @Override
   protected IDiffPolicy createDiffPolicy() {

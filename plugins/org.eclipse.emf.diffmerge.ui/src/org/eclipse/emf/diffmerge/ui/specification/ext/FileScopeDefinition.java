@@ -17,16 +17,16 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
-import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
- * A scope specification based on a file.
+ * A scope definition based on a file.
  * @author Olivier Constant
  */
-public class FileScopeSpecification extends AbstractScopeSpecification {
+public class FileScopeDefinition extends AbstractScopeDefinition {
   
   /**
    * Constructor
@@ -34,13 +34,13 @@ public class FileScopeSpecification extends AbstractScopeSpecification {
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
    */
-  public FileScopeSpecification(URI uri_p, String label_p, boolean editable_p) {
+  public FileScopeDefinition(URI uri_p, String label_p, boolean editable_p) {
     super(uri_p,
         label_p != null? label_p: uri_p.toString(), editable_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#createScope(org.eclipse.emf.edit.domain.EditingDomain)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.edit.domain.EditingDomain)
    */
   public IEditableModelScope createScope(EditingDomain domain_p) {
     Resource loadedResource = getEntrypointResource(domain_p);
@@ -48,7 +48,7 @@ public class FileScopeSpecification extends AbstractScopeSpecification {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification#getEntrypoint()
+   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition#getEntrypoint()
    */
   @Override
   public URI getEntrypoint() {

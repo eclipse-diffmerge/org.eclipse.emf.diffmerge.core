@@ -20,9 +20,9 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecificationFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -85,7 +85,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
     createRolesSection(composite);
     createComparisonMethodSection(composite);
     // Init
-    _setup.swapScopeSpecifications(Role.TARGET, Role.TARGET);
+    _setup.swapScopeDefinitions(Role.TARGET, Role.TARGET);
     Point size = composite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
     ((GridData)parent_p.getLayoutData()).heightHint = size.y + 5;
   }
@@ -130,9 +130,9 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        IComparisonSpecification specification = _setup.getComparisonSpecification();
-        if (specification != null)
-          specification.configure();
+        IComparisonMethod method = _setup.getComparisonMethod();
+        if (method != null)
+          method.configure();
       }
     });
     _setup.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -141,8 +141,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_COMPARISON_METHOD.equals(event_p.getProperty())) {
-          IComparisonSpecification specification = _setup.getComparisonSpecification();
-          result.setEnabled(specification != null && specification.isConfigurable());
+          IComparisonMethod method = _setup.getComparisonMethod();
+          result.setEnabled(method != null && method.isConfigurable());
         }
       }
     });
@@ -191,8 +191,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
       @Override
       public String getText(Object element_p) {
         String localResult;
-        if (element_p instanceof IComparisonSpecificationFactory) {
-          IComparisonSpecificationFactory factory = (IComparisonSpecificationFactory)element_p;
+        if (element_p instanceof IComparisonMethodFactory) {
+          IComparisonMethodFactory factory = (IComparisonMethodFactory)element_p;
           localResult = factory.getLabel();
         } else {
           localResult = super.getText(element_p);
@@ -209,8 +209,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
         ISelection selection = event_p.getSelection();
         if (selection instanceof IStructuredSelection) {
           Object selected = ((IStructuredSelection)selection).getFirstElement();
-          if (selected instanceof IComparisonSpecificationFactory)
-            _setup.setSelectedFactory((IComparisonSpecificationFactory)selected);
+          if (selected instanceof IComparisonMethodFactory)
+            _setup.setSelectedFactory((IComparisonMethodFactory)selected);
         }
       }
     });
@@ -254,7 +254,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IScopeSpecification scope = _setup.getScopeSpecification(Role.TARGET);
+          IModelScopeDefinition scope = _setup.getScopeDefinition(Role.TARGET);
           leftText.setText(scope.getLabel());
         }
       }
@@ -269,7 +269,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IScopeSpecification scope = _setup.getScopeSpecification(Role.REFERENCE);
+          IModelScopeDefinition scope = _setup.getScopeDefinition(Role.REFERENCE);
           rightText.setText(scope.getLabel());
         }
       }
@@ -286,7 +286,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         public void propertyChange(PropertyChangeEvent event_p) {
           if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-            IScopeSpecification scope = _setup.getScopeSpecification(Role.ANCESTOR);
+            IModelScopeDefinition scope = _setup.getScopeDefinition(Role.ANCESTOR);
             ancestorText.setText(scope.getLabel());
           }
         }
@@ -315,7 +315,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        _setup.swapScopeSpecifications(Role.TARGET, Role.REFERENCE);
+        _setup.swapScopeDefinitions(Role.TARGET, Role.REFERENCE);
       }
     });
     if (_setup.isThreeWay()) {
@@ -329,7 +329,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent event_p) {
-          _setup.swapScopeSpecifications(Role.REFERENCE, Role.ANCESTOR);
+          _setup.swapScopeDefinitions(Role.REFERENCE, Role.ANCESTOR);
         }
       });
     }

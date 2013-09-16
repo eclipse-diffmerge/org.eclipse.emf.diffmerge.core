@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.SubtreeModelScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -26,10 +26,10 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
- * A scope specification based on a model element.
+ * A scope definition based on a model element.
  * @author Olivier Constant
  */
-public class EObjectScopeSpecification extends AbstractScopeSpecification {
+public class EObjectScopeDefinition extends AbstractScopeDefinition {
   
   /**
    * Constructor
@@ -37,20 +37,20 @@ public class EObjectScopeSpecification extends AbstractScopeSpecification {
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
    */
-  public EObjectScopeSpecification(EObject element_p, String label_p, boolean editable_p) {
+  public EObjectScopeDefinition(EObject element_p, String label_p, boolean editable_p) {
     super(element_p,
         label_p != null? label_p: getLabelForElement(element_p), editable_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification#createScope(org.eclipse.emf.edit.domain.EditingDomain)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.edit.domain.EditingDomain)
    */
   public IEditableModelScope createScope(EditingDomain domain_p) {
     return new SubtreeModelScope(getEntrypoint());
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecification#getEntrypoint()
+   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition#getEntrypoint()
    */
   @Override
   public EObject getEntrypoint() {
@@ -73,7 +73,7 @@ public class EObjectScopeSpecification extends AbstractScopeSpecification {
         if (uri != null) {
           String resourceName = UIUtil.simplifyURI(uri);
           result = String.format(
-              Messages.EObjectScopeSpecification_LabelInResource, result, resourceName);
+              Messages.EObjectScopeDefinition_LabelInResource, result, resourceName);
         }
       }
     }

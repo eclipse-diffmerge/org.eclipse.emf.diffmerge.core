@@ -16,19 +16,19 @@ package org.eclipse.emf.diffmerge.ui.specification;
 
 
 /**
- * A factory for specifications of model comparison scopes.
+ * A factory for model scope definitions.
  * @author Olivier Constant
  */
-public interface IScopeSpecificationFactory extends IOverridableFactory {
+public interface IScopeDefinitionFactory extends IOverridableFactory {
   
   /**
-   * Create and return a scope specification from the given scope entry point, if applicable
+   * Create and return a scope definition from the given scope entry point, if applicable
    * @param entrypoint_p a potentially null object
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
-   * @return a scope specification which is not null if isApplicableTo(entrypoint_p)
+   * @return a scope definition which is not null if isApplicableTo(entrypoint_p)
    */
-  IScopeSpecification createScopeSpecification(Object entrypoint_p, String label_p,
+  IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p);
   
   /**

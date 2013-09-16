@@ -23,15 +23,15 @@ import org.eclipse.emf.edit.provider.IDisposable;
 
 
 /**
- * A specification of a visual comparison.
- * It extends IEditingDomainProvider because it provides the editing domain
- * in which comparison takes place.
+ * A comparison method, which defines what model elements to compare and how
+ * to compare them. It extends IEditingDomainProvider because it provides
+ * the editing domain in which the comparison takes place.
  * @author Olivier Constant
  */
-public interface IComparisonSpecification extends IEditingDomainProvider, IDisposable {
+public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
   
   /**
-   * Let the user configure this specification, if this feature is available
+   * Let the user configure this comparison method, if this capability is available
    */
   void configure();
   
@@ -54,14 +54,14 @@ public interface IComparisonSpecification extends IEditingDomainProvider, IDispo
   IMergePolicy getMergePolicy();
   
   /**
-   * Return the scope specification that plays the given role
+   * Return the scope definition that plays the given role
    * @param role_p a non-null role
-   * @return a scope specification which may only be null if role is ANCESTOR
+   * @return a scope definition which may only be null if role is ANCESTOR
    */
-  IScopeSpecification getScopeSpecification(Role role_p);
+  IModelScopeDefinition getScopeDefinition(Role role_p);
   
   /**
-   * Return whether this specification can be configured by the user
+   * Return whether this comparison method can be configured by the user
    */
   boolean isConfigurable();
   
@@ -71,11 +71,11 @@ public interface IComparisonSpecification extends IEditingDomainProvider, IDispo
   boolean isThreeWay();
   
   /**
-   * Swap the scope specifications that play the given roles
+   * Swap the scope definitions that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
    * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
    */
-  boolean swapScopeSpecifications(Role role1_p, Role role2_p);
+  boolean swapScopeDefinitions(Role role1_p, Role role2_p);
   
 }

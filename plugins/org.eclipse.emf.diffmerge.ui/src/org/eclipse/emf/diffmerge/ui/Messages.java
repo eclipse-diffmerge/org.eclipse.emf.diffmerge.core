@@ -96,11 +96,11 @@ public class Messages extends NLS {
   public static String EMFDiffMergeLabelProvider_ValueAddition;
   public static String EMFDiffMergeLabelProvider_ValueDeletion;
   public static String EMFDiffMergeUIPlugin_Label;
-  public static String DefaultComparisonSpecificationFactory_Label;
+  public static String DefaultComparisonMethodFactory_Label;
   public static String EnhancedComparisonTreeViewer_DefaultHeader;
-  public static String EObjectScopeSpecification_LabelInResource;
-  public static String EObjectScopeSpecificationFactory_Label;
-  public static String FileScopeSpecificationFactory_Label;
+  public static String EObjectScopeDefinition_LabelInResource;
+  public static String EObjectScopeDefinitionFactory_Label;
+  public static String FileScopeDefinitionFactory_Label;
   public static String IgnoreChoicesDialog_IncludeChildren;
   public static String IgnoreChoicesDialog_Question;
   public static String MergeChoicesDialog_IncludeChildren;
@@ -111,7 +111,7 @@ public class Messages extends NLS {
   public static String MergeImpactViewer_Implied;
   public static String MergeImpactViewer_Required;
   public static String MiscUtil_DefaultCommandName;
-  public static String ResourceScopeSpecificationFactory_Label;
+  public static String ResourceScopeDefinitionFactory_Label;
   public static String ValuesViewer_ContainerLabel;
   public static String ValuesViewer_FeatureLabel;
   public static String ValuesViewer_OrderLabel;

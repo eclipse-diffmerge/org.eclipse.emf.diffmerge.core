@@ -3,12 +3,12 @@
 <plugin>
    <extension
          point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
-      <comparisonScope
-            scopeFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFScopeFactory">
-      </comparisonScope>
-      <comparisonSpecification
-            specificationFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonFactory">
-      </comparisonSpecification>
+      <scopeDefinition
+            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFScopeDefinitionFactory">
+      </scopeDefinition>
+      <comparisonMethod
+            comparisonMethodFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory">
+      </comparisonMethod>
    </extension>
 
 </plugin>

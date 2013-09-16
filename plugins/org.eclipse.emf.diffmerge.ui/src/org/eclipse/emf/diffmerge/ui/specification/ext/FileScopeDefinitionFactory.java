@@ -19,22 +19,22 @@ import java.io.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeSpecificationFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 
 
 /**
  * A factory for file-based scopes.
  * @author Olivier Constant
  */
-public class FileScopeSpecificationFactory extends AbstractScopeSpecificationFactory {
+public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory#createScopeSpecification(java.lang.Object, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
    */
-  public IScopeSpecification createScopeSpecification(Object entrypoint_p, String label_p,
+  public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
-    IScopeSpecification result = null;
+    IModelScopeDefinition result = null;
     String label = label_p;
     URI uri = null;
     if (entrypoint_p instanceof URI) {
@@ -48,20 +48,20 @@ public class FileScopeSpecificationFactory extends AbstractScopeSpecificationFac
       uri = toFileUri(entrypoint_p.toString());
     }
     if (uri != null)
-      result = createScopeSpecificationFromUri(uri, label, editable_p);
+      result = createScopeDefinitionFromUri(uri, label, editable_p);
     return result;
   }
   
   /**
-   * Create and return a scope specification corresponding to the given URI
+   * Create and return a scope definition corresponding to the given URI
    * @param uri_p a non-null URI
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
-   * @return a non-null scope specification
+   * @return a non-null scope definition
    */
-  protected IScopeSpecification createScopeSpecificationFromUri(URI uri_p, String label_p,
+  protected IModelScopeDefinition createScopeDefinitionFromUri(URI uri_p, String label_p,
       boolean editable_p) {
-    return new FileScopeSpecification(uri_p, label_p, editable_p);
+    return new FileScopeDefinition(uri_p, label_p, editable_p);
   }
   
   /**
@@ -88,10 +88,10 @@ public class FileScopeSpecificationFactory extends AbstractScopeSpecificationFac
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#getLabel()
    */
   public String getLabel() {
-    return Messages.FileScopeSpecificationFactory_Label;
+    return Messages.FileScopeDefinitionFactory_Label;
   }
   
   /**
@@ -110,7 +110,7 @@ public class FileScopeSpecificationFactory extends AbstractScopeSpecificationFac
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeSpecificationFactory#isApplicableTo(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#isApplicableTo(java.lang.Object)
    */
   public boolean isApplicableTo(Object entrypoint_p) {
     return true;

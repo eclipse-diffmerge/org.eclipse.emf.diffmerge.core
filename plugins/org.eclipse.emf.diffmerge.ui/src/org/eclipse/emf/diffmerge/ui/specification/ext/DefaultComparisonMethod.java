@@ -23,8 +23,8 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -38,10 +38,10 @@ import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory
  * A default implementation of IComparisonSpecification aimed at being sub-classed.
  * @author Olivier Constant
  */
-public class DefaultComparisonSpecification implements IComparisonSpecification {
+public class DefaultComparisonMethod implements IComparisonMethod {
   
-  /** The map from roles to the corresponding scope specifications */
-  private final Map<Role, IScopeSpecification> _roleToScopeSpec;
+  /** The map from roles to the corresponding scope definitions */
+  private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
   /** The (potentially null) match policy */
   private IMatchPolicy _matchPolicy;
@@ -58,16 +58,16 @@ public class DefaultComparisonSpecification implements IComparisonSpecification 
   
   /**
    * Constructor
-   * @param leftScopeSpec_p a non-null scope specification
-   * @param rightScopeSpec_p a non-null scope specification
-   * @param ancestorScopeSpec_p an optional scope specification
+   * @param leftScopeSpec_p a non-null scope definition
+   * @param rightScopeSpec_p a non-null scope definition
+   * @param ancestorScopeSpec_p an optional scope definition
    */
-  public DefaultComparisonSpecification(IScopeSpecification leftScopeSpec_p,
-      IScopeSpecification rightScopeSpec_p, IScopeSpecification ancestorScopeSpec_p) {
-    _roleToScopeSpec = new HashMap<Role, IScopeSpecification>();
-    _roleToScopeSpec.put(Role.TARGET, leftScopeSpec_p);
-    _roleToScopeSpec.put(Role.REFERENCE, rightScopeSpec_p);
-    _roleToScopeSpec.put(Role.ANCESTOR, ancestorScopeSpec_p);
+  public DefaultComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
+      IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p) {
+    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
+    _roleToScopeDefinition.put(Role.TARGET, leftScopeSpec_p);
+    _roleToScopeDefinition.put(Role.REFERENCE, rightScopeSpec_p);
+    _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeSpec_p);
     _editingDomain = null;
     _matchPolicy = createMatchPolicy();
     _diffPolicy = createDiffPolicy();
@@ -75,7 +75,7 @@ public class DefaultComparisonSpecification implements IComparisonSpecification 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#configure()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#configure()
    */
   public void configure() {
     // Do nothing
@@ -134,14 +134,14 @@ public class DefaultComparisonSpecification implements IComparisonSpecification 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#getScopeSpecification(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getScopeDefinition(org.eclipse.emf.diffmerge.api.Role)
    */
-  public IScopeSpecification getScopeSpecification(Role role_p) {
-    return _roleToScopeSpec.get(role_p);
+  public IModelScopeDefinition getScopeDefinition(Role role_p) {
+    return _roleToScopeDefinition.get(role_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#getDiffPolicy()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getDiffPolicy()
    */
   public final IDiffPolicy getDiffPolicy() {
     return _diffPolicy;
@@ -157,43 +157,43 @@ public class DefaultComparisonSpecification implements IComparisonSpecification 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#getMatchPolicy()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMatchPolicy()
    */
   public final IMatchPolicy getMatchPolicy() {
     return _matchPolicy;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#getMergePolicy()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMergePolicy()
    */
   public final IMergePolicy getMergePolicy() {
     return _mergePolicy;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#isConfigurable()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isConfigurable()
    */
   public boolean isConfigurable() {
     return false;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#isThreeWay()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isThreeWay()
    */
   public final boolean isThreeWay() {
-    return getScopeSpecification(Role.ANCESTOR) != null;
+    return getScopeDefinition(Role.ANCESTOR) != null;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonSpecification#swapScopeSpecifications(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#swapScopeDefinitions(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
    */
-  public boolean swapScopeSpecifications(Role role1_p, Role role2_p) {
+  public boolean swapScopeDefinitions(Role role1_p, Role role2_p) {
     boolean result = false;
-    IScopeSpecification scope1 = getScopeSpecification(role1_p);
-    IScopeSpecification scope2 = getScopeSpecification(role2_p);
+    IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
+    IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
     if (scope1 != null && scope2 != null) {
-      _roleToScopeSpec.put(role1_p, scope2);
-      _roleToScopeSpec.put(role2_p, scope1);
+      _roleToScopeDefinition.put(role1_p, scope2);
+      _roleToScopeDefinition.put(role2_p, scope1);
       result = true;
     }
     return result;
