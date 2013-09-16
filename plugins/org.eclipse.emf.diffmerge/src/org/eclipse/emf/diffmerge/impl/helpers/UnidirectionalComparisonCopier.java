@@ -148,7 +148,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   public void copyReferences() {
     for (IMatch updatedMatch : getCompletedMatches())
       copyReferences(updatedMatch);
-    // Update of containments may have changed resources, which may impact on IDs
+    // Update of containments may have changed resources, which may have an impact on IDs
     if (_mergePolicy != null) {
       for (IMatch updatedMatch : getCompletedMatches()) {
         EObject source = updatedMatch.get(_sourceRole);

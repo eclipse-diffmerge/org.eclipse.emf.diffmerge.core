@@ -22,6 +22,7 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.FHashSet;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -130,6 +131,15 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
+   * Return a new intrinsic ID for the given element
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope to which the element is being added by copy
+   */
+  protected String getNewIntrinsicID(EObject element_p, IFeaturedModelScope scope_p) {
+    return null;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.IMergePolicy#isMandatoryForAddition(org.eclipse.emf.ecore.EReference)
    */
   public boolean isMandatoryForAddition(EReference reference_p) {
@@ -153,11 +163,26 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
+   * Return whether the given newly-added element must be given a new intrinsic ID.
+   * This method has an impact only if getNewIntrinsicID does not return null.
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope to which the element is being added by copy
+   */
+  protected boolean requiresNewIntrinsicID(EObject element_p, IFeaturedModelScope scope_p) {
+    // By default, intrinsic IDs are copied like other attributes
+    return false;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.IMergePolicy#setIntrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
    */
   public void setIntrinsicID(EObject source_p, IFeaturedModelScope sourceScope_p,
       EObject target_p, IFeaturedModelScope targetScope_p) {
-    // Nothing by default: intrinsic IDs are copied like other attributes
+    // By default (requiresNewIntrinsicID == false), intrinsic IDs are copied like other attributes
+    if (requiresNewIntrinsicID(target_p, targetScope_p)) {
+      String newID = getNewIntrinsicID(target_p, targetScope_p);
+      ModelImplUtil.setIntrinsicID(target_p, newID);
+    }
   }
   
 }
