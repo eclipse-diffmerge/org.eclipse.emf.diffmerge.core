@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.compare.structuremergeviewer.DiffNode;
@@ -39,10 +41,13 @@ import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.actions.EMFDiffMergeEditorInput.ScopeTypedElementWrapper;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
+import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
+import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
 import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
 import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
@@ -50,28 +55,23 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.services.IDisposable;
-
 
 
 /**
  * An ICompareInput that wraps a model comparison
  * @author Olivier Constant
  */
-public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
+public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider {
   
   /**
    * The kinds of user-level differences
    */
   public static enum UserDifferenceKind { PRESENCE_LEFT, PRESENCE_RIGHT, MOVE, PROPER }
-  
-  /** Whether to use custom icons for differences by default */
-  public static final boolean DEFAULT_USE_CUSTOM_ICONS = true;
-  
-  /** Whether to use custom labels for differences by default */
-  public static final boolean DEFAULT_USE_CUSTOM_LABELS = false;
-  
   
   /** The resource manager */
   private final ComparisonResourceManager _resourceManager;
@@ -79,11 +79,14 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
   /** The non-null comparison-related contents */
   private final UIComparison _contents;
   
-  /** The non-null editing domain */
+  /** The optional editing domain */
   private final EditingDomain _editingDomain;
   
   /** The role that drives the representation of the comparison */
   private Role _drivingRole;
+  
+  /** The non-null role on the left-hand side */
+  private Role _leftRole;
   
   /** The set of difference kinds which are counted */
   private final Set<UserDifferenceKind> _countedKinds;
@@ -97,28 +100,185 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
   /** Whether to use custom labels for differences */
   private boolean _useCustomLabels;
   
+  /** Whether the left model is editable */
+  private boolean _isTargetEditable;
+  
+  /** Whether the right model is editable */
+  private boolean _isReferenceEditable;
+  
+  /** Whether editing the target scope is possible at all */
+  private final boolean _isTargetEditionPossible;
+  
+  /** Whether editing the reference scope is possible at all */
+  private final boolean _isReferenceEditionPossible;
+  
+  /** Whether the left model has been modified */
+  private boolean _isTargetModified;
+  
+  /** Whether the right model has been modified */
+  private boolean _isReferenceModified;
+  
+  /** Whether an impact dialog must be shown at merge time */
+  private boolean _isShowMergeImpact;
+  
+  /** Whether to support undo/redo (cost in memory usage and response time) */
+  private boolean _isUndoRedoSupported;
+  
+  /** Whether events must be logged */
+  private boolean _isLogEvents;
+  
+  /** The default value for the "cover children" property as proposed to the user when merging */
+  private boolean _defaultCoverChildren;
+  
+  /** The default value for the "incremental mode" property as proposed to the user when merging */
+  private boolean _defaultIncrementalMode;
+  
+  /** The default value for "show merge impact" property as proposed to the user when merging */
+  private boolean _defaultShowMergeImpact;
+  
+  /** A map from color kind to SWT color code from the SWT class */
+  private final Map<DifferenceColorKind, Integer> _differenceColors;
+  
   
   /**
    * Constructor
-   * @param uiComparison_p a non-null UI comparison
-   * @param domain_p a non-null editing domain
+   * @param comparison_p a non-null comparison
    */
-  public ModelComparisonDiffNode(UIComparison uiComparison_p, EditingDomain domain_p) {
+  public ModelComparisonDiffNode(EComparison comparison_p) {
+    this(comparison_p, null);
+  }
+  
+  /**
+   * Constructor
+   * @param comparison_p a non-null comparison
+   * @param domain_p the optional editing domain for undo/redo
+   */
+  public ModelComparisonDiffNode(EComparison comparison_p, EditingDomain domain_p) {
+    this(comparison_p, domain_p, true, true);
+  }
+  
+  /**
+   * Constructor
+   * @param comparison_p a non-null comparison
+   * @param domain_p the optional editing domain for undo/redo
+   * @param isLeftEditionPossible_p whether edition on the left is possible at all
+   * @param isRightEditionPossible_p whether edition on the right is possible at all
+   */
+  public ModelComparisonDiffNode(EComparison comparison_p, EditingDomain domain_p,
+      boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
     super(
         Differencer.CHANGE,
-        uiComparison_p.getActualComparison().isThreeWay()? new ScopeTypedElementWrapper(
-            uiComparison_p.getActualComparison().getScope(Role.ANCESTOR)): null,
-        new ScopeTypedElementWrapper(uiComparison_p.getActualComparison().getScope(Role.TARGET)),
-        new ScopeTypedElementWrapper(uiComparison_p.getActualComparison().getScope(Role.REFERENCE)));
+        comparison_p.isThreeWay()? new ScopeTypedElementWrapper(
+            comparison_p.getScope(Role.ANCESTOR)): null,
+        new ScopeTypedElementWrapper(comparison_p.getScope(Role.TARGET)),
+        new ScopeTypedElementWrapper(comparison_p.getScope(Role.REFERENCE)));
     _resourceManager = new ComparisonResourceManager();
-    _contents = uiComparison_p;
+    _contents = new UIComparisonImpl(comparison_p);
     _editingDomain = domain_p;
-    _drivingRole = Role.TARGET;
-    _useCustomIcons = DEFAULT_USE_CUSTOM_ICONS;
-    _useCustomLabels = DEFAULT_USE_CUSTOM_LABELS;
+    _differenceColors = new HashMap<EMFDiffMergeUIPlugin.DifferenceColorKind, Integer>();
+    initializeDifferenceColors(_differenceColors);
+    _leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    _drivingRole = _leftRole;
     _matchToNb = new FHashMap<EMatch, Integer>(IEqualityTester.BY_EQUALS);
     _countedKinds = new HashSet<UserDifferenceKind>(
         Arrays.asList(UserDifferenceKind.values()));
+    _useCustomIcons = true;
+    _useCustomLabels = false;
+    _isTargetEditionPossible = isLeftEditionPossible_p;
+    _isReferenceEditionPossible = isRightEditionPossible_p;
+    _isTargetEditable = _isTargetEditionPossible;
+    _isReferenceEditable = _isReferenceEditionPossible;
+    _isTargetModified = false;
+    _isReferenceModified = false;
+    _isShowMergeImpact = true;
+    _isUndoRedoSupported = _editingDomain != null;
+    _isLogEvents = false;
+    _defaultShowMergeImpact = _isShowMergeImpact;
+    _defaultCoverChildren = true;
+    _defaultIncrementalMode = false;
+  }
+  
+  /**
+   * Initialize the given map from color kinds to SWT color codes
+   * @param differenceColorsMap_p a non-null, modifiable map
+   */
+  protected void initializeDifferenceColors(
+      Map<DifferenceColorKind, Integer> differenceColorsMap_p) {
+    differenceColorsMap_p.put(DifferenceColorKind.LEFT, Integer.valueOf(SWT.COLOR_DARK_RED));
+    differenceColorsMap_p.put(DifferenceColorKind.RIGHT, Integer.valueOf(SWT.COLOR_BLUE));
+    differenceColorsMap_p.put(DifferenceColorKind.BOTH, Integer.valueOf(SWT.COLOR_DARK_MAGENTA));
+    differenceColorsMap_p.put(DifferenceColorKind.NONE, Integer.valueOf(SWT.COLOR_GRAY));
+    differenceColorsMap_p.put(DifferenceColorKind.CONFLICT, Integer.valueOf(SWT.COLOR_RED));
+    differenceColorsMap_p.put(DifferenceColorKind.DEFAULT, Integer.valueOf(SWT.COLOR_BLACK));
+  }
+  
+  /**
+   * Return whether edition of the given side is enabled
+   * @param left_p whether the side is left or right
+   */
+  public boolean isEditable(boolean left_p) {
+    return getRoleForSide(left_p) == Role.TARGET? _isTargetEditable:
+      _isReferenceEditable;
+  }
+  
+  /**
+   * Return whether editing the scope of the given side is possible at all
+   * @param left_p whether the side is left or right
+   */
+  public boolean isEditionPossible(boolean left_p) {
+    return getRoleForSide(left_p) == Role.TARGET? _isTargetEditionPossible:
+      _isReferenceEditionPossible;
+  }
+  
+  /**
+   * Return whether the given side has been modified
+   * @param left_p whether the side is left or right
+   */
+  public boolean isModified(boolean left_p) {
+    return getRoleForSide(left_p) == Role.TARGET? _isTargetModified:
+      _isReferenceModified;
+  }
+  
+  /**
+   * Return whether an impact dialog must be shown at merge time
+   */
+  public boolean isShowMergeImpact() {
+    return _isShowMergeImpact;
+  }
+  
+  /**
+   * Return whether to support undo/redo (cost in memory usage and response time)
+   */
+  public boolean isUndoRedoSupported() {
+    return _isUndoRedoSupported;
+  }
+  
+  /**
+   * Return whether events must be logged
+   */
+  public boolean isLogEvents() {
+    return _isLogEvents;
+  }
+  
+  /**
+   * Return the default value for the "cover children" property as proposed to the user when merging 
+   */
+  public boolean isDefaultCoverChildren() {
+    return _defaultCoverChildren;
+  }
+  
+  /**
+   * Return the default value for the "incremental mode" property as proposed to the user when merging 
+   */
+  public boolean isDefaultIncrementalMode() {
+    return _defaultIncrementalMode;
+  }
+  
+  /**
+   * Return the default value for the "show merge impact" property as proposed to the user when merging 
+   */
+  public boolean isDefaultShowImpact() {
+    return _defaultShowMergeImpact;
   }
   
   /**
@@ -217,6 +377,19 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
       containerSide = getDrivingRole();
     EMatch result = (EMatch)getActualComparison().getContainerOf(match_p, containerSide);
     return result;
+  }
+  
+  /**
+   * Return the color that corresponds to the given color kind
+   * @param colorKind_p a non-null color kind
+   * @return a non-null color
+   */
+  public Color getDifferenceColor(DifferenceColorKind colorKind_p) {
+    int colorCode = SWT.COLOR_BLACK;
+    Integer colorCodeI = _differenceColors.get(colorKind_p);
+    if (colorCodeI != null)
+      colorCode = colorCodeI.intValue();
+    return UIUtil.getColor(colorCode);
   }
   
   /**
@@ -358,8 +531,8 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
   }
   
   /**
-   * Return the editing domain of this node
-   * @return a non-null editing domain
+   * Return the editing domain for merge operations, if any
+   * @return a potentially null editing domain
    */
   public EditingDomain getEditingDomain() {
     return _editingDomain;
@@ -441,6 +614,15 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
    */
   protected ComparisonResourceManager getResourceManager() {
     return _resourceManager;
+  }
+  
+  /**
+   * Return the role that corresponds to the given side
+   * @param left_p whether the side to consider is left or right
+   * @return a non-null role
+   */
+  public Role getRoleForSide(boolean left_p) {
+    return left_p? _leftRole: _leftRole.opposite();
   }
   
   /**
@@ -709,6 +891,84 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable {
       _countedKinds.add(kind_p);
     else
       _countedKinds.remove(kind_p);
+  }
+  
+  /**
+   * Set the default value for the "cover children" property as proposed to the user when merging 
+   */
+  public void setDefaultCoverChildren(boolean coverChildren_p) {
+    _defaultCoverChildren = coverChildren_p;
+  }
+  
+  /**
+   * Set the default value for the "incremental mode" property as proposed to the user when merging 
+   */
+  public void setDefaultIncrementalMode(boolean isIncrementalMode_p) {
+    _defaultIncrementalMode = isIncrementalMode_p;
+  }
+  
+  /**
+   * Set the default value for the "show merge impact" property as proposed to the user when merging 
+   */
+  public void setDefaultShowImpact(boolean showImpact_p) {
+    _defaultShowMergeImpact = showImpact_p;
+  }
+  
+  /**
+   * Set the color that corresponds to the given color kind
+   * @param colorKind_p a non-null color kind
+   * @param swtColor_p an identifier of an SWT color from class SWT
+   */
+  public void setDifferenceColor(DifferenceColorKind colorKind_p, int swtColor_p) {
+    _differenceColors.put(colorKind_p, new Integer(swtColor_p));
+  }
+  
+  /**
+   * Set whether the given side is editable
+   * @param isEditable_p whether it is editable
+   * @param left_p whether the side is left or right
+   */
+  public void setEditable(boolean isEditable_p, boolean left_p) {
+    if (isEditionPossible(left_p)) {
+      if (getRoleForSide(left_p) == Role.TARGET)
+        _isTargetEditable = isEditable_p;
+      else
+        _isReferenceEditable = isEditable_p;
+    }
+  }
+  
+  /**
+   * Set whether events must be logged
+   */
+  public void setLogEvents(boolean logEvents_p) {
+    _isLogEvents = logEvents_p;
+  }
+  
+  /**
+   * Set whether the given side has been modified
+   * @param isModified_p whether it has been modified
+   * @param left_p whether the side is left or right
+   */
+  public void setModified(boolean isModified_p, boolean left_p) {
+    if (getRoleForSide(left_p) == Role.TARGET)
+      _isTargetModified = isModified_p;
+    else
+      _isReferenceModified = isModified_p;
+  }
+  
+  /**
+   * Set whether an impact dialog must be shown at merge time
+   */
+  public void setShowMergeImpact(boolean showMergeImpact_p) {
+    _isShowMergeImpact = showMergeImpact_p;
+  }
+  
+  /**
+   * Set whether to support undo/redo (cost in memory usage and response time).
+   * Undo/redo may only be supported if the editing domain is known (see getEditingDomain()).
+   */
+  public void setUndoRedoSupported(boolean supportUndoRedo_p) {
+    _isUndoRedoSupported = getEditingDomain() != null && supportUndoRedo_p;
   }
   
   /**

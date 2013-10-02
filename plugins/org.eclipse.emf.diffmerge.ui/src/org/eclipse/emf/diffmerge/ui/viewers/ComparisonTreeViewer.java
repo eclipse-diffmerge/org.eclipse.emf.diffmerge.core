@@ -25,8 +25,8 @@ import org.eclipse.emf.diffmerge.api.IPureMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
@@ -46,7 +46,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-
 
 
 /**
@@ -453,7 +452,7 @@ public class ComparisonTreeViewer extends TreeViewer {
       DifferenceKind kind = getInput().getDifferenceKind(match);
       DifferenceColorKind colorKind =
         EMFDiffMergeUIPlugin.getDefault().getDifferenceColorKind(kind);
-      return EMFDiffMergeUIPlugin.getDefault().getDifferenceColor(colorKind);
+      return getInput().getDifferenceColor(colorKind);
     }
     
     /**
@@ -542,8 +541,9 @@ public class ComparisonTreeViewer extends TreeViewer {
       String result = null;
       if (element_p instanceof IPureMatch) {
         Object matchID = ((IPureMatch)element_p).getMatchID();
-        if (matchID != null)
-          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchID.toString();
+        String matchIDText = matchID != null? matchID.toString():
+          Messages.ComparisonTreeViewer_NoMatchID;
+        result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
       }
       return result;
     }

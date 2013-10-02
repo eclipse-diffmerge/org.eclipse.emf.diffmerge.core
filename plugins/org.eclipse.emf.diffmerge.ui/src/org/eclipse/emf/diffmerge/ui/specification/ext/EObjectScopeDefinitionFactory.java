@@ -38,14 +38,14 @@ public class EObjectScopeDefinitionFactory extends AbstractScopeDefinitionFactor
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#getLabel()
    */
   public String getLabel() {
     return Messages.EObjectScopeDefinitionFactory_Label;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#isApplicableTo(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#isApplicableTo(java.lang.Object)
    */
   public boolean isApplicableTo(Object entrypoint_p) {
     return entrypoint_p instanceof EObject;

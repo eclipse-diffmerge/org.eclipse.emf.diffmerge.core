@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 
-
 /**
  * A dialog for specifying a merge operation.
  * @author Olivier Constant
@@ -35,7 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 public class MergeChoicesDialog extends MessageDialog {
 	
   /** The non-null data that this dialog allows editing */
-  private final MergeChoiceData _data;
+  private final MergeChoiceDialogData _data;
   
   /** Whether the choice for children is enabled */
   private final boolean _askAboutChildren;
@@ -48,7 +47,7 @@ public class MergeChoicesDialog extends MessageDialog {
 	 * @param data_p the non-null data that this dialog allows editing
 	 * @param askAboutChildren_p whether the choice for children is enabled
 	 */
-	public MergeChoicesDialog(Shell parentShell_p, String title_p, MergeChoiceData data_p,
+	public MergeChoicesDialog(Shell parentShell_p, String title_p, MergeChoiceDialogData data_p,
 	    boolean askAboutChildren_p) {
 		super(parentShell_p, title_p, null,
 		    Messages.MergeChoicesDialog_Question, MessageDialog.QUESTION, 
@@ -112,15 +111,15 @@ public class MergeChoicesDialog extends MessageDialog {
 	 * Return the data that this dialog allows editing
 	 * @return a non-null object
 	 */
-	protected MergeChoiceData getData() {
+	protected MergeChoiceDialogData getData() {
 	  return _data;
 	}
 	
 	
   /**
-   * The data that this dialog allows editing
+   * The data that this dialog allows editing.
    */
-  public static class MergeChoiceData {
+  public static class MergeChoiceDialogData {
     
     /** Whether differences on children must be covered */
     private boolean _coverChildren;
@@ -135,7 +134,7 @@ public class MergeChoicesDialog extends MessageDialog {
     /**
      * Default constructor
      */
-    public MergeChoiceData() {
+    public MergeChoiceDialogData() {
       _coverChildren = false;
       _incrementalMode = false;
       _showImpact = false;
@@ -144,7 +143,7 @@ public class MergeChoicesDialog extends MessageDialog {
     /**
      * Full constructor
      */
-    public MergeChoiceData(boolean coverChildren_p, boolean incrementalMode_p, boolean showImpact_p) {
+    public MergeChoiceDialogData(boolean coverChildren_p, boolean incrementalMode_p, boolean showImpact_p) {
       _coverChildren = coverChildren_p;
       _incrementalMode = incrementalMode_p;
       _showImpact = showImpact_p;

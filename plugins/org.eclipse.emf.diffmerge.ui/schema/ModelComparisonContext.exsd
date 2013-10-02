@@ -73,7 +73,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -116,7 +116,7 @@
       <documentation>
          The value of the scopeDefinitionFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory&lt;/samp&gt;. This concrete class may extend class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.DefaultComparisonMethodFactory&lt;/samp&gt; or a subclass.
 &lt;p&gt;
-The value of the comparisonMethodFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory&lt;/samp&gt;. This concrete class may extend abstract class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory&lt;/samp&gt; or a subclass.
+The value of the comparisonMethodFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory&lt;/samp&gt;. This concrete class may extend abstract class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory&lt;/samp&gt; or a subclass.
       </documentation>
    </annotation>
 

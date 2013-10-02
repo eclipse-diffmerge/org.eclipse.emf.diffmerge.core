@@ -22,9 +22,9 @@ import java.util.Set;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.Logger;
+import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
-import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -32,7 +32,6 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
@@ -131,27 +130,11 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   }
   
   /**
-   * Return the color that corresponds to the given color kind
-   * @param colorKind_p a non-null color kind
-   * @return a non-null color
+   * Return the default role for the left-hand side in a comparison
+   * @return a non-null role which is TARGET or REFERENCE
    */
-  public Color getDifferenceColor(DifferenceColorKind colorKind_p) {
-    int colorCode;
-    switch (colorKind_p) {
-      case LEFT:
-        colorCode = SWT.COLOR_DARK_RED; break;
-      case RIGHT:
-        colorCode = SWT.COLOR_BLUE; break;
-      case BOTH:
-        colorCode = SWT.COLOR_DARK_MAGENTA; break;
-      case NONE:
-        colorCode = SWT.COLOR_GRAY; break;
-      case CONFLICT:
-        colorCode = SWT.COLOR_RED; break;
-      default:
-        colorCode = SWT.COLOR_BLACK; break;
-    }
-    return UIUtil.getColor(colorCode);
+  public Role getDefaultLeftRole() {
+    return Role.TARGET;
   }
   
   /**

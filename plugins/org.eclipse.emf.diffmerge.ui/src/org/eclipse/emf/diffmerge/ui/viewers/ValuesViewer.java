@@ -26,9 +26,9 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
@@ -119,11 +119,8 @@ public class ValuesViewer extends TableViewer {
   }
   
   
-  /** The non-null role to which the values to show belong */
-  protected final Role _role;
-  
-  /** The non-null role that drives the representation */
-  protected Role _drivingRole;
+  /** Whether the side of the viewer is left or right */
+  private final boolean _sideIsLeft;
   
   /** Whether all values must be shown, including those not related to a difference */
   private boolean _showAllValues;
@@ -132,25 +129,24 @@ public class ValuesViewer extends TableViewer {
   /**
    * Constructor
    * @param parent_p a non-null composite
-   * @param role_p a non-null role
+   * @param sideIsLeft_p whether the side is left or right
    */
-  public ValuesViewer(Composite parent_p, Role role_p) {
-    this(parent_p, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, role_p);
+  public ValuesViewer(Composite parent_p, boolean sideIsLeft_p) {
+    this(parent_p, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, sideIsLeft_p);
   }
   
   /**
    * Constructor
    * @param parent_p a non-null composite
    * @param style_p a style for the tree
-   * @param role_p a non-null role
+   * @param sideIsLeft_p whether the side is left or right
    */
-  public ValuesViewer(Composite parent_p, int style_p, Role role_p) {
+  public ValuesViewer(Composite parent_p, int style_p, boolean sideIsLeft_p) {
     super(parent_p, style_p);
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
-    _role = role_p;
+    _sideIsLeft = sideIsLeft_p;
     _showAllValues = false;
-    _drivingRole = Role.TARGET;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
   }
   
@@ -164,7 +160,7 @@ public class ValuesViewer extends TableViewer {
     if (viewerValueElement_p instanceof IReferenceValuePresence)
       result = (EObject)getValueToRepresent((IValuePresence)viewerValueElement_p);
     else if (viewerValueElement_p instanceof IMatch)
-      result = ((IMatch)viewerValueElement_p).get(getRole());
+      result = ((IMatch)viewerValueElement_p).get(getSideRole());
     else if (viewerValueElement_p instanceof EObject &&
         !(viewerValueElement_p instanceof IDifference))
       result = (EObject)viewerValueElement_p;
@@ -190,11 +186,12 @@ public class ValuesViewer extends TableViewer {
   }
   
   /**
-   * Return the role to which the values which are shown belong
-   * @return a non-null role
+   * Return the role that corresponds to the values being represented
+   * @return a role which is null if and only if the input is null
    */
-  public Role getRole() {
-    return _role;
+  protected Role getSideRole() {
+    return getInput() == null? null:
+      getInput().getContext().getRoleForSide(isLeftSide());
   }
   
   /**
@@ -236,6 +233,14 @@ public class ValuesViewer extends TableViewer {
   }
   
   /**
+   * Return whether the side of this viewer is left or right
+   * @return a non-null role
+   */
+  public boolean isLeftSide() {
+    return _sideIsLeft;
+  }
+  
+  /**
    * Return whether the given input object represents the virtual ownership feature
    * @param object_p a potentially null object
    */
@@ -253,14 +258,6 @@ public class ValuesViewer extends TableViewer {
    */
   public boolean mustShowAllValues() {
     return _showAllValues;
-  }
-  
-  /**
-   * Set the role that drives the representation
-   * @param role_p a non-null role
-   */
-  public void setDrivingRole(Role role_p) {
-    _drivingRole = role_p;
   }
   
   /**
@@ -298,13 +295,13 @@ public class ValuesViewer extends TableViewer {
       Collection<Object> result = new ArrayList<Object>();
       if (isOwnership(input)) {
         // Ownership
-        IReferenceValuePresence ownership = input.getMatch().getOwnershipDifference(getRole());
+        IReferenceValuePresence ownership = input.getMatch().getOwnershipDifference(getSideRole());
         if (ownership != null)
           result.add(ownership);
       } else {
         // Order
         IValuePresence orderDifference = input.getMatch().getOrderDifference(
-            input.getFeature(), getRole());
+            input.getFeature(), getSideRole());
         if (orderDifference != null)
           result.add(orderDifference);
         // Only show values if no containment
@@ -315,9 +312,9 @@ public class ValuesViewer extends TableViewer {
               EAttribute attribute = (EAttribute)input.getFeature();
               IComparison comparison = input.getMatch().getMapping().getComparison();
               IMatch match = input.getMatch();
-              EObject source = match.get(getRole());
+              EObject source = match.get(getSideRole());
               if (source != null) {
-                List<Object> values = comparison.getScope(getRole()).get(source, attribute);
+                List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
                 for (Object value : values) {
                   IAttributeValuePresence presence =
                     match.getAttributeValueDifference(attribute, value);
@@ -331,11 +328,11 @@ public class ValuesViewer extends TableViewer {
               EReference reference = (EReference)input.getFeature();
               IComparison comparison = input.getMatch().getMapping().getComparison();
               IMatch match = input.getMatch();
-              EObject source = match.get(getRole());
+              EObject source = match.get(getSideRole());
               if (source != null) {
-                List<EObject> values = comparison.getScope(getRole()).get(source, reference);
+                List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
                 for (EObject value : values) {
-                  IMatch valueMatch = comparison.getMapping().getMatchFor(value, getRole());
+                  IMatch valueMatch = comparison.getMapping().getMatchFor(value, getSideRole());
                   if (valueMatch != null) {
                     IReferenceValuePresence presence =
                       match.getReferenceValueDifference(reference, valueMatch);
@@ -355,10 +352,10 @@ public class ValuesViewer extends TableViewer {
             else
               bothSides = input.getMatch().getReferenceDifferences((EReference)input.getFeature());
             for (IValuePresence presence : bothSides) {
-              if (!presence.isOrder() && presence.getPresenceRole() == getRole() &&
-                  presence.getMergeDestination() != getRole() ||
-                  !presence.isOrder() && presence.getPresenceRole() == getRole().opposite() &&
-                  presence.getMergeDestination() == getRole())
+              if (!presence.isOrder() && presence.getPresenceRole() == getSideRole() &&
+                  presence.getMergeDestination() != getSideRole() ||
+                  !presence.isOrder() && presence.getPresenceRole() == getSideRole().opposite() &&
+                  presence.getMergeDestination() == getSideRole())
                 result.add(presence);
             }
           }
@@ -461,11 +458,12 @@ public class ValuesViewer extends TableViewer {
     public Color getForeground(Object element_p) {
       DifferenceColorKind result;
       if (showAsDifference(element_p)) {
-        result = (getRole() == _drivingRole)? DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT;
+        result = (getSideRole() == getInput().getContext().getDrivingRole())?
+            DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT;
       } else {
         result = DifferenceColorKind.NONE;
       }
-      return EMFDiffMergeUIPlugin.getDefault().getDifferenceColor(result);
+      return getInput().getContext().getDifferenceColor(result);
     }
     
     /**
@@ -492,7 +490,7 @@ public class ValuesViewer extends TableViewer {
           result = getResourceManager().adaptImage(result, kind);
         }
       } else if (element_p instanceof IMatch) {
-        result = _innerProvider.getImage(((IMatch)element_p).get(getRole()));
+        result = _innerProvider.getImage(((IMatch)element_p).get(getSideRole()));
       } else {
         result = _innerProvider.getImage(element_p);
       }
@@ -523,7 +521,7 @@ public class ValuesViewer extends TableViewer {
           result = prefix + result;
         }
       } else if (element_p instanceof IMatch) {
-        result = _innerProvider.getText(((IMatch)element_p).get(getRole()));
+        result = _innerProvider.getText(((IMatch)element_p).get(getSideRole()));
       } else {
         result = _innerProvider.getText(element_p);
       }

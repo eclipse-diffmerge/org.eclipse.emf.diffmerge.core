@@ -14,7 +14,6 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
@@ -60,11 +59,11 @@ public class EnhancedComparisonSideViewer extends Viewer {
   /**
    * Constructor
    * @param parent_p a non-null composite
-   * @param sideRole_p the non-null role of the scope being represented
+   * @param isLeftSide_p whether the side is left or right
    */
-  public EnhancedComparisonSideViewer(Composite parent_p, Role sideRole_p) {
+  public EnhancedComparisonSideViewer(Composite parent_p, boolean isLeftSide_p) {
     super();
-    createControls(parent_p, sideRole_p); 
+    createControls(parent_p, isLeftSide_p); 
   }
   
   /**
@@ -78,14 +77,14 @@ public class EnhancedComparisonSideViewer extends Viewer {
   /**
    * Create all controls
    * @param parent_p a non-null composite
-   * @param sideRole_p the non-null role of the scope being represented
+   * @param isLeftSide_p whether the side is left or right
    */
-  protected void createControls(Composite parent_p, Role sideRole_p) {
+  protected void createControls(Composite parent_p, boolean isLeftSide_p) {
     // Main controls
     _control = UIUtil.createComposite(parent_p);
     Composite header = new Composite(_control, SWT.NONE);
     header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    _comparisonSideViewer = new ComparisonSideViewer(_control, sideRole_p);
+    _comparisonSideViewer = new ComparisonSideViewer(_control, isLeftSide_p);
     // Header controls
     GridLayout layout = new GridLayout(2, false);
     layout.marginHeight = 0;
@@ -100,7 +99,6 @@ public class EnhancedComparisonSideViewer extends Viewer {
     _image = new Label(nameHeader, SWT.NONE);
     _image.setBackground(UIUtil.getColor(SWT.COLOR_WHITE));
     _text = new Label(nameHeader, SWT.NONE);
-    _text.setForeground(_comparisonSideViewer.getSideColor());
     Label space = new Label(nameHeader, SWT.WRAP);
     space.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
     _toolbar = UIUtil.createToolBar(header);
@@ -156,6 +154,7 @@ public class EnhancedComparisonSideViewer extends Viewer {
     String label = DiffMergeLabelProvider.getInstance().getText(scope);
     _text.setText(label);
     _text.setToolTipText(label);
+    _text.setForeground(_comparisonSideViewer.getSideColor());
     _image.setImage(DiffMergeLabelProvider.getInstance().getImage(scope));
   }
   

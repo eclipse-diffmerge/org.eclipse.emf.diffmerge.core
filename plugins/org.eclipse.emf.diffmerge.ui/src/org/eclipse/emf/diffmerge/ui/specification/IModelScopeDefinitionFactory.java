@@ -19,7 +19,7 @@ package org.eclipse.emf.diffmerge.ui.specification;
  * A factory for model scope definitions.
  * @author Olivier Constant
  */
-public interface IScopeDefinitionFactory extends IOverridableFactory {
+public interface IModelScopeDefinitionFactory extends IOverridableFactory {
   
   /**
    * Create and return a scope definition from the given scope entry point, if applicable

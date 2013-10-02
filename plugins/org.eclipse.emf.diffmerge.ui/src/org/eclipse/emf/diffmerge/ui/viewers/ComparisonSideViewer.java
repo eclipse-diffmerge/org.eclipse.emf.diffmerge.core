@@ -20,7 +20,6 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
@@ -36,7 +35,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 
-
 /**
  * A viewer which provides a representation of a model scope in a comparison.
  * Input: ModelComparisonDiffNode ; Elements: EMatch.
@@ -44,28 +42,28 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class ComparisonSideViewer extends TreeViewer {
   
-  /** The non-null role of the scope being represented */
-  protected Role _sideRole;
+  /** Whether the side of the viewer is left or right */
+  private final boolean _sideIsLeft;
   
   
   /**
    * Constructor
    * @param parent_p a non-null composite
-   * @param sideRole_p the non-null role of the scope being represented
+   * @param isLeftSide_p whether the side is left or right
    */
-  public ComparisonSideViewer(Composite parent_p, Role sideRole_p) {
-    this(parent_p, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, sideRole_p);
+  public ComparisonSideViewer(Composite parent_p, boolean isLeftSide_p) {
+    this(parent_p, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL, isLeftSide_p);
   }
   
   /**
    * Constructor
    * @param parent_p a non-null composite
    * @param style_p a style for the tree
-   * @param sideRole_p the non-null role of the scope being represented
+   * @param isLeftSide_p whether the side is left or right
    */
-  public ComparisonSideViewer(Composite parent_p, int style_p, Role sideRole_p) {
+  public ComparisonSideViewer(Composite parent_p, int style_p, boolean isLeftSide_p) {
     super(parent_p, style_p);
-    _sideRole = sideRole_p;
+    _sideIsLeft = isLeftSide_p;
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -100,8 +98,18 @@ public class ComparisonSideViewer extends TreeViewer {
    * @return a potentially null color
    */
   public Color getSideColor() {
-    return EMFDiffMergeUIPlugin.getDefault().getDifferenceColor(
-        _sideRole == Role.TARGET? DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT);
+    return getInput() == null? null:
+      getInput().getDifferenceColor(
+        isLeftSide()? DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT);
+  }
+  
+  /**
+   * Return the role that corresponds to the values being represented
+   * @return a role which is null if and only if the input is null
+   */
+  protected Role getSideRole() {
+    return getInput() == null? null:
+      getInput().getRoleForSide(isLeftSide());
   }
   
   /**
@@ -110,7 +118,16 @@ public class ComparisonSideViewer extends TreeViewer {
    */
   public IModelScope getSideScope() {
     return getInput() == null? null:
-      getInput().getActualComparison().getScope(_sideRole);
+      getInput().getActualComparison().getScope(
+          getInput().getRoleForSide(isLeftSide()));
+  }
+  
+  /**
+   * Return whether the side of this viewer is left or right
+   * @return a non-null role
+   */
+  public boolean isLeftSide() {
+    return _sideIsLeft;
   }
   
   
@@ -131,7 +148,8 @@ public class ComparisonSideViewer extends TreeViewer {
      */
     public Object[] getChildren(Object parentElement_p) {
       IMatch match = (IMatch)parentElement_p;
-      List<IMatch> result = getInput().getActualComparison().getContentsOf(match, _sideRole);
+      List<IMatch> result = getInput().getActualComparison().getContentsOf(
+          match, getSideRole());
       return result.toArray();
     }
     
@@ -140,7 +158,8 @@ public class ComparisonSideViewer extends TreeViewer {
      */
     public Object[] getElements(Object inputElement_p) {
       ModelComparisonDiffNode input = (ModelComparisonDiffNode)inputElement_p;
-      List<IMatch> result = input.getActualComparison().getContents(_sideRole);
+      List<IMatch> result = input.getActualComparison().getContents(
+          getSideRole());
       return result.toArray();
     }
     
@@ -149,7 +168,7 @@ public class ComparisonSideViewer extends TreeViewer {
      */
     public Object getParent(Object element_p) {
       IMatch match = (IMatch)element_p;
-      return getInput().getActualComparison().getContainerOf(match, _sideRole);
+      return getInput().getActualComparison().getContainerOf(match, getSideRole());
     }
     
     /**
@@ -187,10 +206,11 @@ public class ComparisonSideViewer extends TreeViewer {
      */
     private EObject getElementToRepresent(IMatch match_p) {
       EObject result;
-      if (match_p.getUncoveredRole() == _sideRole)
-        result = match_p.get(_sideRole.opposite());
+      Role sideRole = getSideRole();
+      if (match_p.getUncoveredRole() == sideRole)
+        result = match_p.get(sideRole.opposite());
       else
-        result = match_p.get(_sideRole);
+        result = match_p.get(sideRole);
       return result;
     }
     
@@ -204,7 +224,7 @@ public class ComparisonSideViewer extends TreeViewer {
       if (getInput().getDifferenceNumber(match) > 0)
         result = getSideColor();
       else
-        result = EMFDiffMergeUIPlugin.getDefault().getDifferenceColor(DifferenceColorKind.NONE);
+        result = getInput().getDifferenceColor(DifferenceColorKind.NONE);
       return result;
     }
     

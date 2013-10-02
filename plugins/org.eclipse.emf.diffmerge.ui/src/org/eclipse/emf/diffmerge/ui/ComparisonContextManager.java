@@ -30,7 +30,7 @@ import org.eclipse.emf.diffmerge.ui.actions.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory;
 
 
 /**
@@ -54,7 +54,7 @@ public class ComparisonContextManager {
   private Map<Class<?>, IComparisonMethodFactory> _comparisonFactories;
   
   /** The registered scope factories (initially null) */
-  private Map<Class<?>, IScopeDefinitionFactory> _scopeFactories;
+  private Map<Class<?>, IModelScopeDefinitionFactory> _scopeFactories;
   
   
   /**
@@ -92,12 +92,12 @@ public class ComparisonContextManager {
   public ComparisonSetup createComparisonSetup(Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
     ComparisonSetup result = null;
-    List<IScopeDefinitionFactory> factories1 =
+    List<IModelScopeDefinitionFactory> factories1 =
       getApplicableScopeFactories(entrypoint1_p);
-    List<IScopeDefinitionFactory> factories2 =
+    List<IModelScopeDefinitionFactory> factories2 =
       getApplicableScopeFactories(entrypoint2_p);
-    List<IScopeDefinitionFactory> factories3 =
-      entrypoint3_p == null? Collections.<IScopeDefinitionFactory>emptyList():
+    List<IModelScopeDefinitionFactory> factories3 =
+      entrypoint3_p == null? Collections.<IModelScopeDefinitionFactory>emptyList():
         getApplicableScopeFactories(entrypoint3_p);
     if (!factories1.isEmpty() && !factories2.isEmpty()) {
       IModelScopeDefinition scopeSpec1 =
@@ -121,7 +121,7 @@ public class ComparisonContextManager {
    */
   private void discoverRegisteredComparisonContexts() {
     _comparisonFactories = new HashMap<Class<?>, IComparisonMethodFactory>();
-    _scopeFactories = new HashMap<Class<?>, IScopeDefinitionFactory>();
+    _scopeFactories = new HashMap<Class<?>, IModelScopeDefinitionFactory>();
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IConfigurationElement[] config = registry.getConfigurationElementsFor(
         MODEL_COMPARISON_CONTEXT_EXTENSION_POINT);
@@ -135,8 +135,8 @@ public class ComparisonContextManager {
       }
       try {
         Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_SCOPE);
-        if (o instanceof IScopeDefinitionFactory)
-          _scopeFactories.put(o.getClass(), (IScopeDefinitionFactory)o);
+        if (o instanceof IModelScopeDefinitionFactory)
+          _scopeFactories.put(o.getClass(), (IModelScopeDefinitionFactory)o);
       } catch (CoreException ex) {
         // Proceed
       }
@@ -169,10 +169,10 @@ public class ComparisonContextManager {
    * @param entrypoint_p a non-null object
    * @return a non-null, unmodifiable list which cannot be empty if isValidEntrypoint(entrypoint_p)
    */
-  public List<IScopeDefinitionFactory> getApplicableScopeFactories(
+  public List<IModelScopeDefinitionFactory> getApplicableScopeFactories(
       Object entrypoint_p) {
-    List<IScopeDefinitionFactory> result = new ArrayList<IScopeDefinitionFactory>();
-    for (IScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
+    List<IModelScopeDefinitionFactory> result = new ArrayList<IModelScopeDefinitionFactory>();
+    for (IModelScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         result.add(factory);
     }
@@ -196,7 +196,7 @@ public class ComparisonContextManager {
    * extension point, if any
    * @return a non-null, potentially empty list
    */
-  protected final Collection<IScopeDefinitionFactory> getRegisteredScopeDefinitionFactories() {
+  protected final Collection<IModelScopeDefinitionFactory> getRegisteredScopeDefinitionFactories() {
     if (_scopeFactories == null)
       discoverRegisteredComparisonContexts();
     return _scopeFactories.values();
@@ -208,7 +208,7 @@ public class ComparisonContextManager {
    * @param entrypoint_p a non-null object
    */
   public boolean isValidEntrypoint(Object entrypoint_p) {
-    for (IScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
+    for (IModelScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         return true;
     }

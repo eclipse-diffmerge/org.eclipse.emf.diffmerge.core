@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  * A base implementation of IComparisonDefinitionFactory.
  * @author Olivier Constant
  */
-public abstract class AbstractScopeDefinitionFactory implements IScopeDefinitionFactory {
+public abstract class AbstractScopeDefinitionFactory implements IModelScopeDefinitionFactory {
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory#getOverridenClasses()

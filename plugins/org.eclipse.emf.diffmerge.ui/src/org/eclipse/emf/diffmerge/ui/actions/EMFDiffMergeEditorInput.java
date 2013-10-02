@@ -38,7 +38,6 @@ import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
-import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImpl;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -78,7 +77,7 @@ import org.eclipse.ui.PlatformUI;
  * @author Olivier Constant
  */
 public class EMFDiffMergeEditorInput extends CompareEditorInput
-implements IEditingDomainProvider {
+ {
   
   /** The non-null comparison method **/
   protected IComparisonMethod _comparisonMethod;
@@ -255,7 +254,7 @@ implements IEditingDomainProvider {
   
   /**
    * Return the editing domain in which comparison takes place
-   * @return a non-null editing domain
+   * @return a potentially null editing domain
    * @see IEditingDomainProvider#getEditingDomain()
    */
   public EditingDomain getEditingDomain() {
@@ -382,14 +381,15 @@ implements IEditingDomainProvider {
    * @return a non-null diff node
    */
   protected ModelComparisonDiffNode initializeDiffNode(EComparison comparison_p) {
-    UIComparison uiComparison = new UIComparisonImpl(comparison_p);
     EditingDomain domain = getEditingDomain();
     domain.getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().
       put(EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION, new UidiffdataResourceFactoryImpl());
     _comparisonResource = getEditingDomain().createResource(
         "platform:/resource/comparison/comparison." + //$NON-NLS-1$
         EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION);
-    ModelComparisonDiffNode result = new ModelComparisonDiffNode(uiComparison, domain);
+    CompareConfiguration cc = getCompareConfiguration();
+    ModelComparisonDiffNode result = new ModelComparisonDiffNode(
+        comparison_p, domain, cc.isLeftEditable(), cc.isRightEditable());
     result.updateDifferenceNumbers();
     return result;
   }

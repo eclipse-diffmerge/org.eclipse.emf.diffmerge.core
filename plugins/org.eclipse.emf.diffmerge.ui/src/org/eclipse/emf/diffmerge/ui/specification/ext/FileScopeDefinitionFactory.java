@@ -30,7 +30,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
    */
   public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
@@ -88,7 +88,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#getLabel()
    */
   public String getLabel() {
     return Messages.FileScopeDefinitionFactory_Label;
@@ -110,7 +110,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IScopeDefinitionFactory#isApplicableTo(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#isApplicableTo(java.lang.Object)
    */
   public boolean isApplicableTo(Object entrypoint_p) {
     return true;
