@@ -19,7 +19,8 @@ import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 
 /**
@@ -40,10 +41,10 @@ public class FileScopeDefinition extends AbstractScopeDefinition {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.edit.domain.EditingDomain)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.ecore.resource.ResourceSet)
    */
-  public IEditableModelScope createScope(EditingDomain domain_p) {
-    Resource loadedResource = getEntrypointResource(domain_p);
+  public IEditableModelScope createScope(ResourceSet resourceSet_p) {
+    Resource loadedResource = getEntrypointResource(resourceSet_p);
     return new FragmentedModelScope(loadedResource);
   }
   
@@ -56,14 +57,16 @@ public class FileScopeDefinition extends AbstractScopeDefinition {
   }
   
   /**
-   * Get or create the resource corresponding to the entrypoint in the given editing domain
-   * @param domain_p a non-null editing domain to which the resulting resource must belong
+   * Get or create the resource corresponding to the entrypoint in the given resource set
+   * @param resourceSet_p an optional resource set to which the resource must belong
    * @return a non-null resource
    */
-  protected Resource getEntrypointResource(EditingDomain domain_p) {
-    Resource result = domain_p.getResourceSet().getResource(getEntrypoint(), false);
+  protected Resource getEntrypointResource(ResourceSet resourceSet_p) {
+    ResourceSet nonNullRS = (resourceSet_p != null)? resourceSet_p:
+      new ResourceSetImpl();
+    Resource result = nonNullRS.getResource(getEntrypoint(), false);
     if (result == null)
-      result = domain_p.getResourceSet().createResource(getEntrypoint());
+      result = nonNullRS.createResource(getEntrypoint());
     return result;
   }
   

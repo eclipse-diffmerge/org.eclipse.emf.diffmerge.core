@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui;
+package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +25,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.diffmerge.ui.actions.ComparisonSetup;
-import org.eclipse.emf.diffmerge.ui.actions.EMFDiffMergeEditorInput;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -34,11 +33,11 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory;
 
 
 /**
- * A manager for model comparison contexts that are contributed through the dedicated
+ * A manager for model comparison setups that are contributed through the dedicated
  * extension point.
  * @author Olivier Constant
  */
-public class ComparisonContextManager {
+public class ComparisonSetupManager {
   
   /** The ModelComparisonContext extension point */
   private static final String MODEL_COMPARISON_CONTEXT_EXTENSION_POINT =
@@ -59,8 +58,10 @@ public class ComparisonContextManager {
   
   /**
    * Constructor
+   * This should normally not be used by clients: get {@link EMFDiffMergeUIPlugin#getDefault()}
+   * and use {@link EMFDiffMergeUIPlugin#getSetupManager()} instead.
    */
-  public ComparisonContextManager() {
+  public ComparisonSetupManager() {
     _comparisonFactories = null;
     _scopeFactories = null;
   }
@@ -93,12 +94,12 @@ public class ComparisonContextManager {
       Object entrypoint2_p, Object entrypoint3_p) {
     ComparisonSetup result = null;
     List<IModelScopeDefinitionFactory> factories1 =
-      getApplicableScopeFactories(entrypoint1_p);
+      getApplicableModelScopeFactories(entrypoint1_p);
     List<IModelScopeDefinitionFactory> factories2 =
-      getApplicableScopeFactories(entrypoint2_p);
+      getApplicableModelScopeFactories(entrypoint2_p);
     List<IModelScopeDefinitionFactory> factories3 =
       entrypoint3_p == null? Collections.<IModelScopeDefinitionFactory>emptyList():
-        getApplicableScopeFactories(entrypoint3_p);
+        getApplicableModelScopeFactories(entrypoint3_p);
     if (!factories1.isEmpty() && !factories2.isEmpty()) {
       IModelScopeDefinition scopeSpec1 =
         factories1.get(0).createScopeDefinition(entrypoint1_p, null, true);
@@ -169,10 +170,10 @@ public class ComparisonContextManager {
    * @param entrypoint_p a non-null object
    * @return a non-null, unmodifiable list which cannot be empty if isValidEntrypoint(entrypoint_p)
    */
-  public List<IModelScopeDefinitionFactory> getApplicableScopeFactories(
+  public List<IModelScopeDefinitionFactory> getApplicableModelScopeFactories(
       Object entrypoint_p) {
     List<IModelScopeDefinitionFactory> result = new ArrayList<IModelScopeDefinitionFactory>();
-    for (IModelScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
+    for (IModelScopeDefinitionFactory factory : getRegisteredModelScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         result.add(factory);
     }
@@ -196,7 +197,7 @@ public class ComparisonContextManager {
    * extension point, if any
    * @return a non-null, potentially empty list
    */
-  protected final Collection<IModelScopeDefinitionFactory> getRegisteredScopeDefinitionFactories() {
+  protected final Collection<IModelScopeDefinitionFactory> getRegisteredModelScopeDefinitionFactories() {
     if (_scopeFactories == null)
       discoverRegisteredComparisonContexts();
     return _scopeFactories.values();
@@ -208,7 +209,7 @@ public class ComparisonContextManager {
    * @param entrypoint_p a non-null object
    */
   public boolean isValidEntrypoint(Object entrypoint_p) {
-    for (IModelScopeDefinitionFactory factory : getRegisteredScopeDefinitionFactories()) {
+    for (IModelScopeDefinitionFactory factory : getRegisteredModelScopeDefinitionFactories()) {
       if (factory.isApplicableTo(entrypoint_p))
         return true;
     }

@@ -873,13 +873,13 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.IComparison#getNbProperElementDifferences()
+   * @see org.eclipse.emf.diffmerge.api.IComparison#getNbNoContainmentDifferences()
    * @generated NOT
    */
-  public int getNbProperElementDifferences() {
+  public int getNbNoContainmentDifferences() {
     int result = 0;
     for (IMatch match : getMapping().getContents())
-      result += match.getNbProperElementDifferences();
+      result += match.getNbNoContainmentDifferences();
     return result;
   }
 

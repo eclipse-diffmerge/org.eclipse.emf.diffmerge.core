@@ -23,7 +23,7 @@ import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 
 /**
@@ -40,11 +40,11 @@ public class GMFScopeDefinitionFactory extends FileScopeDefinitionFactory {
       boolean editable_p) {
     return new FileScopeDefinition(uri_p, label_p, editable_p) {
       /**
-       * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinition#createScope(org.eclipse.emf.edit.domain.EditingDomain)
+       * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinition#createScope(org.eclipse.emf.ecore.resource.ResourceSet)
        */
       @Override
-      public IEditableModelScope createScope(EditingDomain domain_p) {
-        return new GMFScope(getEntrypointResource(domain_p));
+      public IEditableModelScope createScope(ResourceSet resourceSet_p) {
+        return new GMFScope(getEntrypointResource(resourceSet_p));
       }
     };
   }

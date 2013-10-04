@@ -1016,15 +1016,15 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getNbProperElementDifferences()
+   * @see org.eclipse.emf.diffmerge.api.IMatch#getNbNoContainmentDifferences()
    * @generated NOT
    */
-  public int getNbProperElementDifferences() {
+  public int getNbNoContainmentDifferences() {
     int result = 0;
     if (!isPartial())
       for (IDifference difference : getRelatedDifferences())
         if (difference instanceof IElementRelativeDifference
-            && ((IElementRelativeDifference) difference).isProperToElement()
+            && ((IElementRelativeDifference) difference).isUnrelatedToContainmentTree()
             && !difference.isMerged())
           result++;
     return result;

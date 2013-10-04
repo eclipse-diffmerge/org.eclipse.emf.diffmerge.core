@@ -157,10 +157,10 @@ public interface IComparison {
   
   /**
    * Return the number of differences which are not related to the containment
-   * tree (on attributes and cross references)
-   * Class invariant: getNbProperElementDifferences() <= getNbDifferences()
+   * tree, i.e., those on attributes and cross references
+   * Class invariant: getNbNoContainmentDifferences() <= getNbDifferences()
    */
-  int getNbProperElementDifferences();
+  int getNbNoContainmentDifferences();
   
   /**
    * Return the set of differences which have not been merged.

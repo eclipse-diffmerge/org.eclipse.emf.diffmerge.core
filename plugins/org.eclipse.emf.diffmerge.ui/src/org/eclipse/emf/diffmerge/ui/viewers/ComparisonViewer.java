@@ -63,11 +63,11 @@ import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode.UserDifferenceKind;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.IgnoreChoicesDialog.IgnoreChoiceData;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeChoicesDialog.MergeChoiceDialogData;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
-import org.eclipse.emf.diffmerge.ui.viewers.ModelComparisonDiffNode.UserDifferenceKind;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -117,10 +117,9 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.progress.IProgressService;
 
 
-
 /**
  * A viewer for comparisons.
- * Input: ModelComparisonDiffNode ; Elements: IMatch | IDifference.
+ * Input: EMFDiffNode ; Elements: IMatch | IDifference.
  * @author Olivier Constant
  */
 public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier, IFlushable {
@@ -138,7 +137,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   protected IActionBars _actionBars;
   
   /** The current input (initially null) */
-  private ModelComparisonDiffNode _input;
+  private EMFDiffNode _input;
   
   /** The main control of the viewer */
   protected SashForm _control;
@@ -446,14 +445,12 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
        * @see java.lang.Runnable#run()
        */
       public void run() {
-        ModelComparisonDiffNode input = getInput();
+        EMFDiffNode input = getInput();
         EditingDomain domain = (input == null)? null: input.getEditingDomain();
         if (input != null && input.isUndoRedoSupported())
           MiscUtil.executeOnDomain(domain, null, runnable_p);
-        else if (domain != null)
-          MiscUtil.executeAndForget(domain, runnable_p);
         else
-          runnable_p.run();
+          MiscUtil.executeAndForget(domain, runnable_p);
       }
     });
   }
@@ -634,7 +631,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override
-  public ModelComparisonDiffNode getInput() {
+  public EMFDiffNode getInput() {
     return _input;
   }
   
@@ -931,7 +928,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    */
   protected void refreshTools() {
     ComparisonSelection selection = getSelection();
-    ModelComparisonDiffNode input = getInput();
+    EMFDiffNode input = getInput();
     // Merge
     boolean onLeft = false, onRight = false;
     boolean allowDeletion = false;
@@ -1012,8 +1009,8 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    */
   @Override
   public void setInput(Object input_p) {
-    if (input_p instanceof ModelComparisonDiffNode) {
-      _input = (ModelComparisonDiffNode)input_p;
+    if (input_p instanceof EMFDiffNode) {
+      _input = (EMFDiffNode)input_p;
       Object oldInput = getInput();
       inputChanged(_input, oldInput);
     }
@@ -1226,7 +1223,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          ModelComparisonDiffNode input = getInput();
+          EMFDiffNode input = getInput();
           if (input != null) {
             lockItem.setSelection(!input.isEditable(left_p));
             lockItem.setEnabled(input.isEditionPossible(left_p));
@@ -1476,16 +1473,16 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       }
     });
     // Show proper differences
-    final MenuItem showProperDiffs = new MenuItem(synthesisMenu, SWT.CHECK);
-    showProperDiffs.setText(Messages.ComparisonViewer_CountProperMenuItem);
-    showProperDiffs.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.MODIFIED_STAT));
-    showProperDiffs.addSelectionListener(new SelectionAdapter() {
+    final MenuItem showNoContainmentDiffs = new MenuItem(synthesisMenu, SWT.CHECK);
+    showNoContainmentDiffs.setText(Messages.ComparisonViewer_CountProperMenuItem);
+    showNoContainmentDiffs.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.MODIFIED_STAT));
+    showNoContainmentDiffs.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        changeCounting(UserDifferenceKind.PROPER, showProperDiffs.getSelection());
+        changeCounting(UserDifferenceKind.NO_CONTAINMENT, showNoContainmentDiffs.getSelection());
       }
     });
     // Use custom icons
@@ -1498,7 +1495,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        ModelComparisonDiffNode input = getInput();
+        EMFDiffNode input = getInput();
         if (input != null) {
           input.setUseCustomIcons(useCustomIconsItem.getSelection());
           _synthesisModelTreeViewer.refresh();
@@ -1518,7 +1515,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         boolean showImpact = showImpactItem.getSelection();
-        ModelComparisonDiffNode input = getInput();
+        EMFDiffNode input = getInput();
         if (input != null) {
           input.setShowMergeImpact(showImpact);
           input.setDefaultShowImpact(showImpact);
@@ -1534,7 +1531,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        ModelComparisonDiffNode input = getInput();
+        EMFDiffNode input = getInput();
         if (input != null)
           input.setUndoRedoSupported(supportUndoRedoItem.getSelection());
       }
@@ -1549,7 +1546,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         boolean logEvents = logEventsItem.getSelection();
-        ModelComparisonDiffNode input = getInput();
+        EMFDiffNode input = getInput();
         if (input != null) {
           input.setLogEvents(logEvents);
           if (logEvents)
@@ -1563,12 +1560,12 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          ModelComparisonDiffNode input = getInput();
+          EMFDiffNode input = getInput();
           if (input != null) {
             showAdditions.setSelection(input.counts(UserDifferenceKind.PRESENCE_LEFT));
             showDeletions.setSelection(input.counts(UserDifferenceKind.PRESENCE_RIGHT));
             showMoves.setSelection(input.counts(UserDifferenceKind.MOVE));
-            showProperDiffs.setSelection(input.counts(UserDifferenceKind.PROPER));
+            showNoContainmentDiffs.setSelection(input.counts(UserDifferenceKind.NO_CONTAINMENT));
             logEventsItem.setSelection(input.isLogEvents());
             showImpactItem.setSelection(input.isShowMergeImpact());
             supportUndoRedoItem.setSelection(input.isUndoRedoSupported());

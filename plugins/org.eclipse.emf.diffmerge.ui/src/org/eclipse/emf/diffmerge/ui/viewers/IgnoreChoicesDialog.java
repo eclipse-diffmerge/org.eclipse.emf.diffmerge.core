@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 
-
 /**
  * A dialog for specifying an ignore operation on differences.
  * @author Olivier Constant

@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A viewer which provides a representation of a model scope in a comparison.
- * Input: ModelComparisonDiffNode ; Elements: EMatch.
+ * Input: EMFDiffNode ; Elements: EMatch.
  * @author Olivier Constant
  */
 public class ComparisonSideViewer extends TreeViewer {
@@ -81,8 +81,8 @@ public class ComparisonSideViewer extends TreeViewer {
    * @see org.eclipse.jface.viewers.ContentViewer#getInput()
    */
   @Override
-  public ModelComparisonDiffNode getInput() {
-    return (ModelComparisonDiffNode)super.getInput();
+  public EMFDiffNode getInput() {
+    return (EMFDiffNode)super.getInput();
   }
   
   /**
@@ -157,7 +157,7 @@ public class ComparisonSideViewer extends TreeViewer {
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      ModelComparisonDiffNode input = (ModelComparisonDiffNode)inputElement_p;
+      EMFDiffNode input = (EMFDiffNode)inputElement_p;
       List<IMatch> result = input.getActualComparison().getContents(
           getSideRole());
       return result.toArray();

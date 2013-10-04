@@ -26,6 +26,7 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -42,6 +43,9 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
+  
+  /** The potentially null role to use as a reference in a two-way comparison */
+  private Role _twoWayReferenceRole;
   
   /** The (potentially null) match policy */
   private IMatchPolicy _matchPolicy;
@@ -68,6 +72,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
     _roleToScopeDefinition.put(Role.TARGET, leftScopeSpec_p);
     _roleToScopeDefinition.put(Role.REFERENCE, rightScopeSpec_p);
     _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeSpec_p);
+    _twoWayReferenceRole = null;
     _editingDomain = null;
     _matchPolicy = createMatchPolicy();
     _diffPolicy = createDiffPolicy();
@@ -122,7 +127,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   
   /**
    * Get the editing domain for this comparison (this method is only called once)
-   * @return a non-null editing domain
+   * @return a potentially null editing domain
    */
   protected EditingDomain doGetEditingDomain() {
     ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
@@ -134,9 +139,9 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getScopeDefinition(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getModelScopeDefinition(org.eclipse.emf.diffmerge.api.Role)
    */
-  public IModelScopeDefinition getScopeDefinition(Role role_p) {
+  public IModelScopeDefinition getModelScopeDefinition(Role role_p) {
     return _roleToScopeDefinition.get(role_p);
   }
   
@@ -171,6 +176,20 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getResourceSet()
+   */
+  public ResourceSet getResourceSet() {
+    return null;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getTwoWayReferenceRole()
+   */
+  public Role getTwoWayReferenceRole() {
+    return _twoWayReferenceRole;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isConfigurable()
    */
   public boolean isConfigurable() {
@@ -181,7 +200,15 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isThreeWay()
    */
   public final boolean isThreeWay() {
-    return getScopeDefinition(Role.ANCESTOR) != null;
+    return getModelScopeDefinition(Role.ANCESTOR) != null;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
+   */
+  public void setTwoWayReferenceRole(Role role_p) {
+    if (!isThreeWay() && Role.TARGET == role_p || Role.REFERENCE == role_p)
+      _twoWayReferenceRole = role_p;
   }
   
   /**
@@ -189,8 +216,8 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    */
   public boolean swapScopeDefinitions(Role role1_p, Role role2_p) {
     boolean result = false;
-    IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
-    IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
+    IModelScopeDefinition scope1 = getModelScopeDefinition(role1_p);
+    IModelScopeDefinition scope2 = getModelScopeDefinition(role2_p);
     if (scope1 != null && scope2 != null) {
       _roleToScopeDefinition.put(role1_p, scope2);
       _roleToScopeDefinition.put(role2_p, scope1);

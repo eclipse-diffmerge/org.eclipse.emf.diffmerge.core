@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui.actions;
+package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +49,9 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
+  /** The potentially null role to use as a reference in a two-way comparison */
+  private Role _twoWayReferenceRole;
+  
   /** The non-null, non-empty list of applicable method factories */ 
   private final List<IComparisonMethodFactory> _compatibleMethodFactories;
   
@@ -81,6 +84,15 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * Return the list of comparison factories which are compatible with the
+   * scope definitions
+   * @return a non-null, non-empty list
+   */
+  public List<IComparisonMethodFactory> getApplicableComparisonMethodFactories() {
+    return Collections.unmodifiableList(_compatibleMethodFactories);
+  }
+  
+  /**
    * Return the comparison method created by the selected factory, if any
    * @return a potentially null object
    */
@@ -106,12 +118,10 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
-   * Return the list of comparison factories which are compatible with the
-   * scope definitions
-   * @return a non-null, non-empty list
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getTwoWayReferenceRole()
    */
-  public List<IComparisonMethodFactory> getCompatibleFactories() {
-    return Collections.unmodifiableList(_compatibleMethodFactories);
+  public Role getTwoWayReferenceRole() {
+    return _twoWayReferenceRole;
   }
   
   /**
@@ -132,6 +142,14 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * Update the current comparison method with all available information
+   */
+  public void performFinish() {
+    if (!isThreeWay() && _comparisonMethod != null)
+      _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
+  }
+  
+  /**
    * Set the selected method factory and consequently update the comparison method
    * @param selectedFactory_p a factory which is null or belongs to getCompatibleFactories()
    */
@@ -145,6 +163,14 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
       _comparisonMethod = null;
     }
     notify(new PropertyChangeEvent(this, PROPERTY_COMPARISON_METHOD, null, null));
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
+   */
+  public void setTwoWayReferenceRole(Role role_p) {
+    if (!isThreeWay() && Role.TARGET == role_p || Role.REFERENCE == role_p)
+      _twoWayReferenceRole = role_p;
   }
   
   /**

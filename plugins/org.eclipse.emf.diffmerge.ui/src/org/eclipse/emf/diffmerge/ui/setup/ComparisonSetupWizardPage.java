@@ -12,9 +12,9 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui.actions;
+package org.eclipse.emf.diffmerge.ui.setup;
 
-import static org.eclipse.emf.diffmerge.ui.actions.ComparisonSetup.PROPERTY_COMPARISON_METHOD;
+import static org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup.PROPERTY_COMPARISON_METHOD;
 
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -112,7 +112,6 @@ public class ComparisonSetupWizardPage extends WizardPage {
     else
       viewerSelection = new StructuredSelection();
     methodViewer.setSelection(viewerSelection);
-//    methodViewer.getControl().setEnabled(_setup.getCompatibleFactories().size() > 1);
   }
   
   /**
@@ -179,7 +178,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
         if (inputElement_p instanceof ComparisonSetup) {
           ComparisonSetup selection =
             (ComparisonSetup)inputElement_p;
-          localResult = selection.getCompatibleFactories().toArray();
+          localResult = selection.getApplicableComparisonMethodFactories().toArray();
         }
         return localResult;
       }
@@ -218,6 +217,71 @@ public class ComparisonSetupWizardPage extends WizardPage {
   }
   
   /**
+   * Create the subsection for setting the reference role in a two-way comparison
+   * @param parent_p a non-null composite
+   */
+  protected void createReferenceRoleSubsection(Composite parent_p) {
+    if (!_setup.isThreeWay()) {
+      // Composite
+      Composite composite = new Composite(parent_p, SWT.NONE);
+      GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, true);
+      composite.setLayoutData(gridData);
+      GridLayout layout = new GridLayout(4, false);
+      layout.marginHeight = 0;
+      layout.marginWidth = 0;
+      layout.marginTop = 2;
+      composite.setLayout(layout);
+      // Label
+      Label label = new Label(composite, SWT.NONE);
+      label.setText(Messages.ComparisonSetupWizardPage_ReferenceRole);
+      label.setToolTipText(Messages.ComparisonSetupWizardPage_ReferenceRoleTooltip);
+      // None
+      final Button noneButton = new Button(composite, SWT.RADIO);
+      noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
+      noneButton.setSelection(_setup.getTwoWayReferenceRole() == null);
+      noneButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          _setup.setTwoWayReferenceRole(null);
+        }
+      });
+      // Left
+      final Button leftButton = new Button(composite, SWT.RADIO);
+      leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
+      leftButton.setSelection(
+          _setup.getTwoWayReferenceRole() == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+      leftButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          _setup.setTwoWayReferenceRole(
+              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+        }
+      });
+      // Right
+      final Button rightButton = new Button(composite, SWT.RADIO);
+      rightButton.setText(Messages.ComparisonSetupWizardPage_ReferenceRight);
+      rightButton.setSelection(
+          _setup.getTwoWayReferenceRole() == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+      rightButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          _setup.setTwoWayReferenceRole(
+              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+        }
+      });
+    }
+  }
+  
+  /**
    * Create the section for selecting the roles
    * @param parent_p a non-null composite
    */
@@ -228,15 +292,81 @@ public class ComparisonSetupWizardPage extends WizardPage {
     group.setLayout(new GridLayout(2, false));
     group.setText(Messages.ComparisonSetupWizardPage_GroupRoles);
     // Subsections
-    createCheckRolesSubsection(group);
+    createRolesSubsection(group);
     createSwapRolesSubsection(group);
+    createReferenceRoleSubsection(group);
   }
   
   /**
-   * Create the subsection for checking the roles
+   * Create the subsection for the given role
+   * @param parent_p a non-null composite
+   * @param role_p a non-null role
+   */
+  protected void createRoleSubsection(Composite parent_p, final Role role_p) {
+    final boolean isAncestor = role_p == Role.ANCESTOR;
+    // Label
+    String labelText = (role_p == Role.ANCESTOR)? Messages.ComparisonSetupWizardPage_RoleAncestor:
+      (role_p == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole())? 
+          Messages.ComparisonSetupWizardPage_RoleLeft:
+            Messages.ComparisonSetupWizardPage_RoleRight;
+    new Label(parent_p, SWT.NONE).setText(labelText);
+    // Row composite
+    Composite composite = new Composite(parent_p, SWT.BORDER);
+    composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    GridLayout layout = new GridLayout(2, false);
+    layout.marginWidth = 0;
+    layout.marginHeight = 0;
+    composite.setLayout(layout);
+    // Text
+    final Text roleText = new Text(composite, SWT.READ_ONLY | SWT.NONE);
+    roleText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+    _setup.addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
+          IModelScopeDefinition scope = _setup.getScopeDefinition(role_p);
+          roleText.setText(scope.getLabel());
+        }
+      }
+    });
+    // "Modifiable" button
+    final Button editableButton = new Button(composite, SWT.CHECK);
+    editableButton.setText(Messages.ComparisonSetupWizardPage_ModifiableScope);
+    editableButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+    final IModelScopeDefinition scopeDef = _setup.getScopeDefinition(role_p);
+    editableButton.setEnabled(!isAncestor && scopeDef.isEditableSettable());
+    editableButton.setSelection(scopeDef.isEditable());
+    editableButton.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(role_p);
+        currentScopeDef.setEditable(!currentScopeDef.isEditable());
+      }
+    });
+    _setup.addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
+          IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(role_p);
+          editableButton.setEnabled(!isAncestor && currentScopeDef.isEditableSettable());
+          editableButton.setSelection(currentScopeDef.isEditable());
+        }
+      }
+    });
+  }
+
+  /**
+   * Create the subsection for choosing roles
    * @param parent_p a non-null composite
    */
-  protected void createCheckRolesSubsection(Composite parent_p) {
+  protected void createRolesSubsection(Composite parent_p) {
     // Composite
     Composite subsection = new Composite(parent_p, SWT.NONE);
     subsection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
@@ -244,54 +374,11 @@ public class ComparisonSetupWizardPage extends WizardPage {
     rolesLayout.marginHeight = 0;
     rolesLayout.marginWidth = 0;
     subsection.setLayout(rolesLayout);
-    // Left
-    new Label(subsection, SWT.NONE).setText(Messages.ComparisonSetupWizardPage_RoleLeft);
-    final Text leftText = new Text(subsection, SWT.READ_ONLY | SWT.BORDER);
-    leftText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    _setup.addPropertyChangeListener(new IPropertyChangeListener() {
-      /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IModelScopeDefinition scope = _setup.getScopeDefinition(Role.TARGET);
-          leftText.setText(scope.getLabel());
-        }
-      }
-    });
-    // Right
-    new Label(subsection, SWT.NONE).setText(Messages.ComparisonSetupWizardPage_RoleRight);
-    final Text rightText = new Text(subsection, SWT.READ_ONLY | SWT.BORDER);
-    rightText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    _setup.addPropertyChangeListener(new IPropertyChangeListener() {
-      /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IModelScopeDefinition scope = _setup.getScopeDefinition(Role.REFERENCE);
-          rightText.setText(scope.getLabel());
-        }
-      }
-    });
-    if (_setup.isThreeWay()) {
-      // Ancestor
-      new Label(subsection, SWT.NONE).setText(
-          Messages.ComparisonSetupWizardPage_RoleAncestor);
-      final Text ancestorText = new Text(subsection, SWT.READ_ONLY | SWT.BORDER);
-      ancestorText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-      _setup.addPropertyChangeListener(new IPropertyChangeListener() {
-        /**
-         * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-         */
-        public void propertyChange(PropertyChangeEvent event_p) {
-          if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-            IModelScopeDefinition scope = _setup.getScopeDefinition(Role.ANCESTOR);
-            ancestorText.setText(scope.getLabel());
-          }
-        }
-      });
-    }
+    // Role rows
+    createRoleSubsection(subsection, EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+    createRoleSubsection(subsection, EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+    if (_setup.isThreeWay())
+      createRoleSubsection(subsection, Role.ANCESTOR);
   }
   
   /**
@@ -315,7 +402,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        _setup.swapScopeDefinitions(Role.TARGET, Role.REFERENCE);
+        _setup.swapScopeDefinitions(
+            EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole(), Role.REFERENCE);
       }
     });
     if (_setup.isThreeWay()) {
@@ -329,7 +417,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent event_p) {
-          _setup.swapScopeDefinitions(Role.REFERENCE, Role.ANCESTOR);
+          _setup.swapScopeDefinitions(
+              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite(), Role.ANCESTOR);
         }
       });
     }

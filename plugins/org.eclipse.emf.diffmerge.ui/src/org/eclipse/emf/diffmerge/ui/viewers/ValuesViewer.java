@@ -55,7 +55,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A viewer which provides a representation of the values of a feature on a match.
- * Input: ValuesViewer.Input ; Elements: [IValuePresence (if !showAllValues)] or
+ * Input: ValuesViewer.ValuesInput ; Elements: [IValuePresence (if !showAllValues)] or
  * [[Object (if feature instanceof EAttribute)] or
  * [IMatch (if feature instanceof EReference)] (if showAllValues)].
  * @author Olivier Constant
@@ -63,11 +63,11 @@ import org.eclipse.swt.widgets.Composite;
 public class ValuesViewer extends TableViewer {
   
   /**
-   * A simple structure for defining inputs
+   * A simple structure for defining inputs for this viewer.
    */
   public static class ValuesInput {
     /** The non-null comparison context */
-    private final ModelComparisonDiffNode _context;
+    private final EMFDiffNode _context;
     /** The non-null specific part */
     private final MatchAndFeature _matchAndFeature;
     /**
@@ -75,7 +75,7 @@ public class ValuesViewer extends TableViewer {
      * @param context_p a non-null object
      * @param matchAndFeature_p a non-null object
      */
-    public ValuesInput(ModelComparisonDiffNode context_p,
+    public ValuesInput(EMFDiffNode context_p,
         MatchAndFeature matchAndFeature_p) {
       _context = context_p;
       _matchAndFeature = matchAndFeature_p;
@@ -98,7 +98,7 @@ public class ValuesViewer extends TableViewer {
      * Return the comparison context
      * @return a non-null object
      */
-    public ModelComparisonDiffNode getContext() {
+    public EMFDiffNode getContext() {
       return _context;
     }
     /**
@@ -482,7 +482,8 @@ public class ValuesViewer extends TableViewer {
         }
         if (getInput().getContext().usesCustomIcons()) {
           DifferenceKind kind;
-          if (isOwnership(getInput().getMatchAndFeature()) && !getInput().getContext().isThreeWay()) {
+          if (isOwnership(getInput().getMatchAndFeature()) &&
+              getInput().getContext().getReferenceRole() == null) {
             kind = DifferenceKind.MODIFIED;
           } else {
             kind = getInput().getContext().getDifferenceKind(presence);

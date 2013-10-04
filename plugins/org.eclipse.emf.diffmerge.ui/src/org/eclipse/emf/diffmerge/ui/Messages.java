@@ -29,6 +29,12 @@ public class Messages extends NLS {
   public static String ComparisonSetupWizardPage_Description;
   public static String ComparisonSetupWizardPage_GroupMethod;
   public static String ComparisonSetupWizardPage_GroupRoles;
+  public static String ComparisonSetupWizardPage_ModifiableScope;
+  public static String ComparisonSetupWizardPage_ReferenceLeft;
+  public static String ComparisonSetupWizardPage_ReferenceNone;
+  public static String ComparisonSetupWizardPage_ReferenceRight;
+  public static String ComparisonSetupWizardPage_ReferenceRole;
+  public static String ComparisonSetupWizardPage_ReferenceRoleTooltip;
   public static String ComparisonSetupWizardPage_RoleAncestor;
   public static String ComparisonSetupWizardPage_RoleLeft;
   public static String ComparisonSetupWizardPage_RoleRight;

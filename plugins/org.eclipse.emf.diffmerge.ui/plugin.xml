@@ -14,7 +14,7 @@
             id="org.eclipse.emf.diffmerge.ui.compareWithEachOther"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="org.eclipse.emf.diffmerge.ui.actions.CompareModelsAction"
+               class="org.eclipse.emf.diffmerge.ui.setup.CompareModelsAction"
                enablesFor="2+"
                id="org.eclipse.emf.diffmerge.ui.compareFilesAction"
                label="Each Other as models"

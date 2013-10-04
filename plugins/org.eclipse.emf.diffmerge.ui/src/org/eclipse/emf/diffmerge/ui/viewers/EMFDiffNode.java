@@ -42,10 +42,10 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
-import org.eclipse.emf.diffmerge.ui.actions.EMFDiffMergeEditorInput.ScopeTypedElementWrapper;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
+import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput.ScopeTypedElementWrapper;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
@@ -63,15 +63,21 @@ import org.eclipse.ui.services.IDisposable;
 
 
 /**
- * An ICompareInput that wraps a model comparison
+ * An ICompareInput that wraps a model comparison.
  * @author Olivier Constant
  */
-public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider {
+public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider {
   
   /**
-   * The kinds of user-level differences
+   * The kinds of user-level differences.
    */
-  public static enum UserDifferenceKind { PRESENCE_LEFT, PRESENCE_RIGHT, MOVE, PROPER }
+  public static enum UserDifferenceKind {
+    PRESENCE_LEFT,  // The unmatched presence of an element on the left
+    PRESENCE_RIGHT, // The unmatched presence of an element on the right
+    MOVE,           // A move
+    NO_CONTAINMENT  // A difference which is unrelated to the containment tree
+  }
+  
   
   /** The resource manager */
   private final ComparisonResourceManager _resourceManager;
@@ -87,6 +93,9 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
   
   /** The non-null role on the left-hand side */
   private Role _leftRole;
+  
+  /** The potentially null role to use as a reference in a two-way comparison */
+  private Role _twoWayReferenceRole;
   
   /** The set of difference kinds which are counted */
   private final Set<UserDifferenceKind> _countedKinds;
@@ -144,7 +153,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * Constructor
    * @param comparison_p a non-null comparison
    */
-  public ModelComparisonDiffNode(EComparison comparison_p) {
+  public EMFDiffNode(EComparison comparison_p) {
     this(comparison_p, null);
   }
   
@@ -153,7 +162,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * @param comparison_p a non-null comparison
    * @param domain_p the optional editing domain for undo/redo
    */
-  public ModelComparisonDiffNode(EComparison comparison_p, EditingDomain domain_p) {
+  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p) {
     this(comparison_p, domain_p, true, true);
   }
   
@@ -164,7 +173,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * @param isLeftEditionPossible_p whether edition on the left is possible at all
    * @param isRightEditionPossible_p whether edition on the right is possible at all
    */
-  public ModelComparisonDiffNode(EComparison comparison_p, EditingDomain domain_p,
+  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
     super(
         Differencer.CHANGE,
@@ -175,10 +184,11 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
     _resourceManager = new ComparisonResourceManager();
     _contents = new UIComparisonImpl(comparison_p);
     _editingDomain = domain_p;
-    _differenceColors = new HashMap<EMFDiffMergeUIPlugin.DifferenceColorKind, Integer>();
-    initializeDifferenceColors(_differenceColors);
     _leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
     _drivingRole = _leftRole;
+    _twoWayReferenceRole = null;
+    _differenceColors = new HashMap<EMFDiffMergeUIPlugin.DifferenceColorKind, Integer>();
+    initializeDifferenceColors(_differenceColors);
     _matchToNb = new FHashMap<EMatch, Integer>(IEqualityTester.BY_EQUALS);
     _countedKinds = new HashSet<UserDifferenceKind>(
         Arrays.asList(UserDifferenceKind.values()));
@@ -288,14 +298,14 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    */
   protected int countDifferenceNumber(IMatch match_p) {
     int result = 0;
-    if (counts(UserDifferenceKind.PROPER))
+    if (counts(UserDifferenceKind.NO_CONTAINMENT))
      result += countProperDifferenceNumber(match_p);
     if (counts(UserDifferenceKind.MOVE) && isAMove(match_p, false, false))
       result++;
     IElementPresence presence = match_p.getElementPresenceDifference();
     if (presence != null && !shouldBeIgnored(presence)) {
-      boolean isAddition = presence.getPresenceRole() == getDrivingRole();
-      boolean countPresence = isAddition? counts(UserDifferenceKind.PRESENCE_LEFT):
+      boolean isLeftPresence = presence.getPresenceRole() == getRoleForSide(true);
+      boolean countPresence = isLeftPresence? counts(UserDifferenceKind.PRESENCE_LEFT):
         counts(UserDifferenceKind.PRESENCE_RIGHT);
       if (countPresence)
         result++;
@@ -315,7 +325,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
       for (IDifference difference : match_p.getRelatedDifferences()) {
         if (difference instanceof IElementRelativeDifference && !shouldBeIgnored(difference)) {
           IElementRelativeDifference eltDiff = (IElementRelativeDifference)difference;
-          if (eltDiff.isProperToElement()) {
+          if (eltDiff.isUnrelatedToContainmentTree()) {
             if (eltDiff instanceof IValuePresence) {
               EStructuralFeature feature = ((IValuePresence)eltDiff).getFeature();
               if (feature != null &&
@@ -400,12 +410,13 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
   public DifferenceKind getDifferenceKind(IMatch match_p) {
     DifferenceKind result = DifferenceKind.NONE;
     IElementPresence presence = match_p.getElementPresenceDifference();
+    boolean considerReference = getReferenceRole() != null;
     if (presence != null) {
       result = getDifferenceKind(presence);
     } else {
       result = getModificationKind(match_p);
-      result = result.with(getOwnershipDifferenceKind(match_p), isThreeWay());
-      result = result.keepOnlyDirection(isThreeWay());
+      result = result.with(getOwnershipDifferenceKind(match_p), considerReference);
+      result = result.keepOnlyDirection(considerReference);
     }
     if (result == DifferenceKind.NONE && getDifferenceNumber(match_p) > 0)
       result = DifferenceKind.COUNTED;
@@ -467,21 +478,21 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
       } else if (difference_p instanceof IPresenceDifference) {
         IPresenceDifference presence = (IPresenceDifference)difference_p;
         boolean isMany = isMany(presence);
-        if (presence.getPresenceRole() == getDrivingRole()) {
-          // Present on the driving side
-          if (isThreeWay() && presence.isAlignedWithAncestor())
+        if (presence.getPresenceRole() == getRoleForSide(true)) {
+          // Present on the left
+          if (isAlignedWithReference(presence))
             result = DifferenceKind.FROM_RIGHT_DEL;
           else
-            if (isMany || isThreeWay())
+            if (isMany || getReferenceRole() != null)
               result = DifferenceKind.FROM_LEFT_ADD;
             else
               result = DifferenceKind.MODIFIED;
         } else {
-          // Present on the non-driving side
-          if (isThreeWay() && presence.isAlignedWithAncestor())
+          // Present on the right
+          if (isAlignedWithReference(presence))
             result = DifferenceKind.FROM_LEFT_DEL;
           else
-            if (isMany || isThreeWay())
+            if (isMany || getReferenceRole() != null)
               result = DifferenceKind.FROM_RIGHT_ADD;
             else
               result = DifferenceKind.MODIFIED;
@@ -553,13 +564,14 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    */
   protected DifferenceKind getModificationKind(IMatch match_p) {
     DifferenceKind result = DifferenceKind.NONE;
-    if (counts(UserDifferenceKind.PROPER) &&
+    boolean considerReference = getReferenceRole() != null;
+    if (counts(UserDifferenceKind.NO_CONTAINMENT) &&
         match_p.getElementPresenceDifference() == null) {
       for (IDifference diff : match_p.getRelatedDifferences()) {
         if (diff instanceof IElementRelativeDifference &&
-            ((IElementRelativeDifference)diff).isProperToElement()) {
+            ((IElementRelativeDifference)diff).isUnrelatedToContainmentTree()) {
           DifferenceKind diffKind = getDifferenceKind(diff);
-          result = result.with(diffKind, isThreeWay());
+          result = result.with(diffKind, considerReference);
           if (result == DifferenceKind.CONFLICT)
             break;
         }
@@ -592,11 +604,11 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
     DifferenceKind result = DifferenceKind.NONE;
     if (representAsMove(match_p)) {
       result = DifferenceKind.MODIFIED;
-      if (isThreeWay()) {
-        IReferenceValuePresence onLeft = match_p.getOwnershipDifference(getDrivingRole());
-        boolean fromLeft = onLeft != null && !onLeft.isAlignedWithAncestor();
-        IReferenceValuePresence onRight = match_p.getOwnershipDifference(getDrivingRole().opposite());
-        boolean fromRight = onRight != null && !onRight.isAlignedWithAncestor();
+      if (getReferenceRole() != null) {
+        IReferenceValuePresence onLeft = match_p.getOwnershipDifference(getRoleForSide(true));
+        boolean fromLeft = onLeft != null && !isAlignedWithReference(onLeft);
+        IReferenceValuePresence onRight = match_p.getOwnershipDifference(getRoleForSide(false));
+        boolean fromRight = onRight != null && !isAlignedWithReference(onRight);
         if (fromLeft && fromRight)
           result = DifferenceKind.CONFLICT;
         else if (fromLeft)
@@ -606,6 +618,19 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
       }
     }
     return result;
+  }
+  
+  /**
+   * Return the role which is used as the reference role, if any.
+   * The reference role determines that all differences should be represented
+   * in a way which is relative to it. In a three-way comparison, it is always
+   * ANCESTOR. In a two-way comparison, it can naturally be REFERENCE but it
+   * does not have to. If null, then both sides in the two-way comparison
+   * are represented in a symmetric way.
+   * @return ANCESTOR, TARGET, REFERENCE, or null
+   */
+  public Role getReferenceRole() {
+    return isThreeWay()? Role.ANCESTOR: _twoWayReferenceRole;
   }
   
   /**
@@ -640,10 +665,11 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * @return a positive int or 0
    */
   public int getUIDifferenceNumber(EMatch match_p) {
+    Role leftRole = getRoleForSide(true);
     int result = getDifferenceNumber(match_p);
-    if (match_p.getUncoveredRole() == getDrivingRole() &&
-          counts(UserDifferenceKind.PRESENCE_RIGHT) ||
-        match_p.getUncoveredRole() == getDrivingRole().opposite()
+    if (match_p.getUncoveredRole() == leftRole
+          && counts(UserDifferenceKind.PRESENCE_RIGHT) ||
+        match_p.getUncoveredRole() == leftRole.opposite()
           && counts(UserDifferenceKind.PRESENCE_LEFT))
       result--;
     return result;
@@ -696,14 +722,26 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
     if (increment_p > 0) {
       incrementDifferenceNumbers(match_p, increment_p);
       EMatch current = getContainerOf(match_p);
-//      Role uncovered = match_p.getUncoveredRole();
-//      if (current != null && (uncovered == null || current.getUncoveredRole() != uncovered)) {
         while (current != null) {
           incrementDifferenceNumbers(current, increment_p);
           current = getContainerOf(current);
         }
-//      }
     }
+  }
+  
+  /**
+   * Return whether the given difference is aligned with the reference model if any.
+   * If there is no reference model, then false is returned.
+   * @see EMFDiffNode#getReferenceRole()
+   * @param presence_p a non-null difference
+   */
+  protected boolean isAlignedWithReference(IPresenceDifference presence_p) {
+    boolean result;
+    if (isThreeWay())
+      result = presence_p.isAlignedWithAncestor();
+    else
+      result = presence_p.getPresenceRole() == getReferenceRole();
+    return result;
   }
   
   /**
@@ -808,7 +846,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * @param match_p a non-null match
    */
   public boolean representAsModification(IMatch match_p) {
-    if (!counts(UserDifferenceKind.PROPER) || match_p.getElementPresenceDifference() != null)
+    if (!counts(UserDifferenceKind.NO_CONTAINMENT) || match_p.getElementPresenceDifference() != null)
       return false;
     for (IDifference diff : match_p.getRelatedDifferences()) {
       if (representAsModificationDifference(diff))
@@ -826,7 +864,7 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
     boolean result = false;
     if (diff_p instanceof IElementRelativePresence) {
       IElementRelativePresence presence = (IElementRelativePresence)diff_p;
-      return presence.isProperToElement() && !shouldBeIgnored(diff_p);
+      return presence.isUnrelatedToContainmentTree() && !shouldBeIgnored(diff_p);
     }
     return result;
   }
@@ -924,6 +962,15 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
   }
   
   /**
+   * Set the role that drives the representation of the model comparison
+   * @param drivingRole_p a non-null role which is TARGET or REFERENCE
+   */
+  public void setDrivingRole(Role drivingRole_p) {
+    if (Role.TARGET == drivingRole_p || Role.REFERENCE == drivingRole_p)
+      _drivingRole = drivingRole_p;
+  }
+  
+  /**
    * Set whether the given side is editable
    * @param isEditable_p whether it is editable
    * @param left_p whether the side is left or right
@@ -935,6 +982,15 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
       else
         _isReferenceEditable = isEditable_p;
     }
+  }
+  
+  /**
+   * Set the role on the left-hand side
+   * @param leftRole_p a non-null role which is TARGET or REFERENCE
+   */
+  public void setLeftRole(Role leftRole_p) {
+    if (Role.TARGET == leftRole_p || Role.REFERENCE == leftRole_p)
+      _leftRole = leftRole_p;
   }
   
   /**
@@ -954,6 +1010,17 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
       _isTargetModified = isModified_p;
     else
       _isReferenceModified = isModified_p;
+  }
+  
+  /**
+   * Set the role which is used as the reference role.
+   * In a three-way comparison, this operation has no effect.
+   * @see EMFDiffNode#getReferenceRole()
+   * @param role_p TARGET, REFERENCE, or null
+   */
+  public void setReferenceRole(Role role_p) {
+    if (!isThreeWay() && (Role.TARGET == role_p || Role.REFERENCE == role_p))
+      _twoWayReferenceRole = role_p;
   }
   
   /**
@@ -983,15 +1050,16 @@ public class ModelComparisonDiffNode extends DiffNode implements IDisposable, IE
    * @param difference_p a non-null difference
    */
   public boolean shouldBeIgnored(IDifference difference_p) {
+    Role leftRole = getRoleForSide(true);
     return
       difference_p.isMerged() ||
       getUIComparison().getDifferencesToIgnore().contains(difference_p) ||
       (difference_p instanceof IValuePresence &&
-        ((IValuePresence)difference_p).isProperToElement() && !counts(UserDifferenceKind.PROPER)) ||
+        ((IValuePresence)difference_p).isUnrelatedToContainmentTree() && !counts(UserDifferenceKind.NO_CONTAINMENT)) ||
       difference_p instanceof IElementPresence &&
-        (((IElementPresence)difference_p).getPresenceRole() == getDrivingRole() &&
+        (((IElementPresence)difference_p).getPresenceRole() == leftRole &&
             !counts(UserDifferenceKind.PRESENCE_LEFT) ||
-         ((IElementPresence)difference_p).getPresenceRole() == getDrivingRole().opposite() &&
+         ((IElementPresence)difference_p).getPresenceRole() == leftRole.opposite() &&
             !counts(UserDifferenceKind.PRESENCE_RIGHT));
   }
   

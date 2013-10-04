@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Tree;
 
 /**
  * A viewer which provides a representation of a comparison tree and additional controls.
- * Input: ModelComparisonDiffNode ; Elements: IMatch.
+ * Input: EMFDiffNode ; Elements: IMatch.
  * @author Olivier Constant
  */
 public class EnhancedComparisonTreeViewer extends Viewer {
@@ -125,7 +125,7 @@ public class EnhancedComparisonTreeViewer extends Viewer {
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override
-  public ModelComparisonDiffNode getInput() {
+  public EMFDiffNode getInput() {
     return _comparisonViewer.getInput();
   }
   

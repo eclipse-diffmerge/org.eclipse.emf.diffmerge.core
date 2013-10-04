@@ -25,15 +25,15 @@ public interface IElementRelativeDifference extends IDifference {
   
   /**
    * Return the match which defines the element, or the matching elements,
-   * to which this difference is relative.
+   * to which this difference is relative
    * @return a match which is non-null unless it represents the model root container
    */
   IMatch getElementMatch();
   
   /**
-   * Return whether this difference is disconnected from the container/contents
-   * relationship.
+   * Return whether this difference is unrelated to the container/contents
+   * relationship
    */
-  boolean isProperToElement();
+  boolean isUnrelatedToContainmentTree();
   
 }

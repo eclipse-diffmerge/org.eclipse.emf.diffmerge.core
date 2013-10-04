@@ -50,7 +50,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A viewer which provides a representation of the model tree of a given comparison.
- * Input: ModelComparisonDiffNode ; Elements: IMatch.
+ * Input: EMFDiffNode ; Elements: IMatch.
  * @author Olivier Constant
  */
 public class ComparisonTreeViewer extends TreeViewer {
@@ -96,8 +96,8 @@ public class ComparisonTreeViewer extends TreeViewer {
    * @see org.eclipse.jface.viewers.ContentViewer#getInput()
    */
   @Override
-  public ModelComparisonDiffNode getInput() {
-    return (ModelComparisonDiffNode)super.getInput();
+  public EMFDiffNode getInput() {
+    return (EMFDiffNode)super.getInput();
   }
   
   /**
@@ -375,7 +375,7 @@ public class ComparisonTreeViewer extends TreeViewer {
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      ModelComparisonDiffNode input = (ModelComparisonDiffNode)inputElement_p;
+      EMFDiffNode input = (EMFDiffNode)inputElement_p;
       List<IMatch> result = input.getActualComparison().getContents();
       return result.toArray();
     }

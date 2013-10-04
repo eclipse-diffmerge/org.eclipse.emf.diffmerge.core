@@ -157,10 +157,10 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isProperToElement()
+   * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isUnrelatedToContainmentTree()
    * @generated NOT
    */
-  public boolean isProperToElement() {
+  public boolean isUnrelatedToContainmentTree() {
     return false;
   }
 

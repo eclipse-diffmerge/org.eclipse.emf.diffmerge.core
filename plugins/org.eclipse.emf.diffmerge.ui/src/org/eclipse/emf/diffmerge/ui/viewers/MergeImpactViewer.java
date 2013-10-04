@@ -71,7 +71,7 @@ public class MergeImpactViewer extends Viewer {
     private final boolean _sideIsLeft;
     
     /** The non-null comparison context */
-    private final ModelComparisonDiffNode _context_p;
+    private final EMFDiffNode _context_p;
     
     /** The non-null, unmodifiable, potentially empty set of differences to merge */
     private final Collection<IDifference> _toMerge;
@@ -164,7 +164,7 @@ public class MergeImpactViewer extends Viewer {
      * @param context_p the non-null comparison context
      */
     public ImpactInput(Collection<? extends IDifference> toMerge_p, boolean toLeft_p,
-        ModelComparisonDiffNode context_p) {
+        EMFDiffNode context_p) {
       _toMerge = new FHashSet<IDifference>(toMerge_p, null);
       _sideIsLeft = toLeft_p;
       _context_p = context_p;
@@ -187,7 +187,7 @@ public class MergeImpactViewer extends Viewer {
      * Return the comparison context for this input
      * @return a non-null object
      */
-    public ModelComparisonDiffNode getContext() {
+    public EMFDiffNode getContext() {
       return _context_p;
     }
     

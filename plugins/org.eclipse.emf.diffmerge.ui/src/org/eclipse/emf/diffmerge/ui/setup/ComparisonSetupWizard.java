@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui.actions;
+package org.eclipse.emf.diffmerge.ui.setup;
 
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.jface.wizard.Wizard;
@@ -59,6 +59,7 @@ public class ComparisonSetupWizard extends Wizard {
    */
   @Override
   public boolean performFinish() {
+    _setup.performFinish();
     return true;
   }
   

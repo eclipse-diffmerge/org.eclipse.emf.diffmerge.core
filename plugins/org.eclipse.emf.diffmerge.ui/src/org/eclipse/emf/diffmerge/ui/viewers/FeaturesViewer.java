@@ -48,20 +48,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 
-
 /**
  * A viewer which provides a representation of the features of a match.
- * Input: FeatureViewer.Input ; Elements: EStructuralFeature.
+ * Input: FeatureViewer.FeaturesInput ; Elements: EStructuralFeature.
  * @author Olivier Constant
  */
 public class FeaturesViewer extends TableViewer {
   
   /**
-   * A simple structure for defining inputs
+   * A simple structure for defining inputs for this viewer.
    */
   public static class FeaturesInput {
     /** The non-null comparison context */
-    private final ModelComparisonDiffNode _context;
+    private final EMFDiffNode _context;
     /** The non-null specific part */
     private final IMatch _match;
     /**
@@ -69,8 +68,7 @@ public class FeaturesViewer extends TableViewer {
      * @param context_p a non-null object
      * @param match_p a non-null object
      */
-    public FeaturesInput(ModelComparisonDiffNode context_p,
-        IMatch match_p) {
+    public FeaturesInput(EMFDiffNode context_p, IMatch match_p) {
       _context = context_p;
       _match = match_p;
     }
@@ -91,7 +89,7 @@ public class FeaturesViewer extends TableViewer {
      * Return the comparison context
      * @return a non-null object
      */
-    public ModelComparisonDiffNode getContext() {
+    public EMFDiffNode getContext() {
       return _context;
     }
     /**

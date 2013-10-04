@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui.actions;
+package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -44,9 +45,10 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
-import org.eclipse.emf.diffmerge.ui.viewers.ModelComparisonDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.xmi.PackageNotFoundException;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -76,8 +78,7 @@ import org.eclipse.ui.PlatformUI;
  * @see CompareEditorInput
  * @author Olivier Constant
  */
-public class EMFDiffMergeEditorInput extends CompareEditorInput
- {
+public class EMFDiffMergeEditorInput extends CompareEditorInput {
   
   /** The non-null comparison method **/
   protected IComparisonMethod _comparisonMethod;
@@ -183,9 +184,12 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
    */
   protected void disposeResources() {
     final EditingDomain domain = getEditingDomain();
-    final Set<Resource> addedResources = new HashSet<Resource>(
-        domain.getResourceSet().getResources());
-    addedResources.removeAll(_initialResources);
+    final ResourceSet resourceSet = getResourceSet();
+    final Set<Resource> addedResources = new HashSet<Resource>();
+    if (resourceSet != null) {
+      addedResources.addAll(resourceSet.getResources());
+      addedResources.removeAll(_initialResources);
+    }
     MiscUtil.executeAndForget(domain, new Runnable() {
       /**
        * @see java.lang.Runnable#run()
@@ -208,10 +212,12 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
         for (Resource resource : addedResources) {
           resource.unload();
         }
-        domain.getResourceSet().getResources().removeAll(addedResources);
+        if (resourceSet != null)
+          resourceSet.getResources().removeAll(addedResources);
       }
     });
-    domain.getCommandStack().flush();
+    if (domain != null)
+      domain.getCommandStack().flush();
     if (domain instanceof TransactionalEditingDomain) {
       for (Resource resource : addedResources) {
         TransactionUtil.disconnectFromEditingDomain(resource);
@@ -248,17 +254,26 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
    * @see org.eclipse.compare.CompareEditorInput#getCompareResult()
    */
   @Override
-  public ModelComparisonDiffNode getCompareResult() {
-    return (ModelComparisonDiffNode)super.getCompareResult();
+  public EMFDiffNode getCompareResult() {
+    return (EMFDiffNode)super.getCompareResult();
   }
   
   /**
-   * Return the editing domain in which comparison takes place
+   * Return the editing domain in which comparison takes place, if any
    * @return a potentially null editing domain
    * @see IEditingDomainProvider#getEditingDomain()
    */
   public EditingDomain getEditingDomain() {
     return _comparisonMethod.getEditingDomain();
+  }
+  
+  /**
+   * Return the editing domain in which comparison takes place, if any
+   * @return a potentially null resource set
+   */
+  public ResourceSet getResourceSet() {
+    EditingDomain domain = getEditingDomain();
+    return domain == null? _comparisonMethod.getResourceSet(): domain.getResourceSet();
   }
   
   /**
@@ -366,13 +381,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
    */
   protected void initializeCompareConfiguration() {
     CompareConfiguration cc = getCompareConfiguration();
-    cc.setLeftLabel(_comparisonMethod.getScopeDefinition(Role.TARGET).getLabel());
-    cc.setRightLabel(_comparisonMethod.getScopeDefinition(Role.REFERENCE).getLabel());
+    cc.setLeftLabel(_comparisonMethod.getModelScopeDefinition(Role.TARGET).getLabel());
+    cc.setRightLabel(_comparisonMethod.getModelScopeDefinition(Role.REFERENCE).getLabel());
     IModelScopeDefinition ancestorDefinition =
-      _comparisonMethod.getScopeDefinition(Role.ANCESTOR);
+      _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR);
     cc.setAncestorLabel((ancestorDefinition == null) ? "" : ancestorDefinition.getLabel()); //$NON-NLS-1$
-    cc.setLeftEditable(_comparisonMethod.getScopeDefinition(Role.TARGET).isEditable());
-    cc.setRightEditable(_comparisonMethod.getScopeDefinition(Role.REFERENCE).isEditable());
+    cc.setLeftEditable(_comparisonMethod.getModelScopeDefinition(Role.TARGET).isEditable());
+    cc.setRightEditable(_comparisonMethod.getModelScopeDefinition(Role.REFERENCE).isEditable());
   }
   
   /**
@@ -380,16 +395,19 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
    * @param comparison_p a non-null comparison
    * @return a non-null diff node
    */
-  protected ModelComparisonDiffNode initializeDiffNode(EComparison comparison_p) {
-    EditingDomain domain = getEditingDomain();
-    domain.getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().
-      put(EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION, new UidiffdataResourceFactoryImpl());
-    _comparisonResource = getEditingDomain().createResource(
-        "platform:/resource/comparison/comparison." + //$NON-NLS-1$
-        EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION);
+  protected EMFDiffNode initializeDiffNode(EComparison comparison_p) {
+    ResourceSet resourceSet = getResourceSet();
+    if (resourceSet != null) {
+      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
+          EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION, new UidiffdataResourceFactoryImpl());
+      String resourceURI = "platform:/resource/comparison/comparison." + //$NON-NLS-1$
+          EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION;
+      _comparisonResource = resourceSet.createResource(URI.createURI(resourceURI));
+    }
     CompareConfiguration cc = getCompareConfiguration();
-    ModelComparisonDiffNode result = new ModelComparisonDiffNode(
-        comparison_p, domain, cc.isLeftEditable(), cc.isRightEditable());
+    EMFDiffNode result = new EMFDiffNode(
+        comparison_p, getEditingDomain(), cc.isLeftEditable(), cc.isRightEditable());
+    result.setReferenceRole(_comparisonMethod.getTwoWayReferenceRole());
     result.updateDifferenceNumbers();
     return result;
   }
@@ -408,8 +426,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
    * @param monitor_p a non-null monitor for reporting progress
    */
   protected void loadScopes(IProgressMonitor monitor_p) {
-    EditingDomain domain = getEditingDomain();
-    _initialResources.addAll(domain.getResourceSet().getResources());
+    ResourceSet resourceSet = getResourceSet();
+    if (resourceSet != null)
+      _initialResources.addAll(resourceSet.getResources());
     boolean threeWay = _comparisonMethod.isThreeWay();
     String mainTaskName = Messages.EMFDiffMergeEditorInput_Loading;
     SubMonitor loadingMonitor = SubMonitor.convert(
@@ -417,7 +436,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
     loadingMonitor.worked(1);
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
-    _leftScope = _comparisonMethod.getScopeDefinition(Role.TARGET).createScope(domain);
+    _leftScope = _comparisonMethod.getModelScopeDefinition(Role.TARGET).createScope(resourceSet);
     if (_leftScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_leftScope).load();
@@ -430,7 +449,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
       throw new OperationCanceledException();
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
-    _rightScope = _comparisonMethod.getScopeDefinition(Role.REFERENCE).createScope(domain);
+    _rightScope = _comparisonMethod.getModelScopeDefinition(Role.REFERENCE).createScope(resourceSet);
     if (_rightScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_rightScope).load();
@@ -444,7 +463,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
-      _ancestorScope = _comparisonMethod.getScopeDefinition(Role.ANCESTOR).createScope(domain);
+      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(resourceSet);
       if (_ancestorScope instanceof IPersistentModelScope) {
         try {
           ((IPersistentModelScope)_ancestorScope).load();
@@ -475,7 +494,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
       return null;
     boolean scopesReady = _leftScope != null;
     SubMonitor monitor = SubMonitor.convert(monitor_p, EMFDiffMergeUIPlugin.LABEL, 2);
-    ModelComparisonDiffNode result = null;
+    EMFDiffNode result = null;
     try {
       if (!scopesReady)
         loadScopes(monitor.newChild(1));
@@ -548,7 +567,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
       if (foundDifferences()) {
         // This is done here because the compare result must have been assigned:
         // directly referencing the UIComparison would result in a memory leak
-        MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
+        EditingDomain domain = getEditingDomain();
+        MiscUtil.executeAndForget(domain, new Runnable() {
           /**
            * @see java.lang.Runnable#run()
            */
@@ -556,7 +576,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
             _comparisonResource.getContents().add(getCompareResult().getUIComparison());
           }
         });
-        getEditingDomain().getCommandStack().flush();
+        if (domain != null)
+          domain.getCommandStack().flush();
       }
     }
   }

@@ -77,7 +77,7 @@ public interface IMatch extends IPureMatch {
    * Return the number of differences which are not related to the containment
    * tree (on attributes and cross references)
    */
-  int getNbProperElementDifferences();
+  int getNbNoContainmentDifferences();
   
   /**
    * Return the difference concerned with the ownership of the elements

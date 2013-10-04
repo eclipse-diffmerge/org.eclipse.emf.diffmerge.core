@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -72,7 +73,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	private static EMFDiffMergeUIPlugin plugin;
 	
 	/** The manager for comparison contexts */
-	private final ComparisonContextManager _comparisonContextManager;
+	private final ComparisonSetupManager _comparisonSetupManager;
 	
 	/** The logger for diff/merge events */
 	private final DiffMergeLogger _diffMergeLogger;
@@ -92,7 +93,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	 */
 	public EMFDiffMergeUIPlugin() {
 	  _diffMergeLogger = new DiffMergeLogger();
-	  _comparisonContextManager = new ComparisonContextManager();
+	  _comparisonSetupManager = new ComparisonSetupManager();
 	  _ownershipFeature = EcoreFactory.eINSTANCE.createEReference();
 	  _ownershipFeature.setName("container"); //$NON-NLS-1$
 	  _ownershipFeature.setEType(EcorePackage.eINSTANCE.getEObject());
@@ -111,14 +112,6 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	    _composedAdapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
 	        new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
 	  return _composedAdapterFactoryLabelProvider;
-	}
-	
-	/**
-	 * Return the comparison context manager
-	 * @return a non-null ComparisonContextManager
-	 */
-	public ComparisonContextManager getContextManager() {
-	  return _comparisonContextManager;
 	}
 	
   /**
@@ -326,6 +319,14 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    */
   public String getPluginId() {
     return getBundle().getSymbolicName();
+  }
+  
+  /**
+   * Return the comparison setup manager
+   * @return a non-null object
+   */
+  public ComparisonSetupManager getSetupManager() {
+    return _comparisonSetupManager;
   }
   
   /**

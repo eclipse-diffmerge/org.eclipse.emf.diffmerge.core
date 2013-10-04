@@ -15,7 +15,7 @@
 package org.eclipse.emf.diffmerge.ui.specification;
 
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 
 /**
@@ -25,11 +25,11 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 public interface IModelScopeDefinition {
   
   /**
-   * Create and return a scope that corresponds to this definition
-   * @param domain_p a non-null editing domain for the case where resource creation is needed
+   * Create and return a scope that corresponds to this scope definition
+   * @param context_p an optional resource set for the case where resource creation is needed
    * @return a non-null scope
    */
-  IEditableModelScope createScope(EditingDomain domain_p);
+  IEditableModelScope createScope(ResourceSet context_p);
   
   /**
    * Return the object that specifies the scope (model element, file, resource...)
@@ -44,8 +44,18 @@ public interface IModelScopeDefinition {
   String getLabel();
   
   /**
-   * Return whether the content of the scope can be modified by merge
+   * Return whether the content of the scope can be modified
    */
   boolean isEditable();
+  
+  /**
+   * Return whether the editable property can be changed
+   */
+  boolean isEditableSettable();
+  
+  /**
+   * Set whether the content of the scope is allowed to be modified
+   */
+  void setEditable(boolean editable_p);
   
 }

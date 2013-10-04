@@ -18,20 +18,22 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
 
 
 /**
- * A comparison method, which defines what model elements to compare and how
- * to compare them. It extends IEditingDomainProvider because it provides
- * the editing domain in which the comparison takes place.
+ * A comparison method defines what and how to compare.
  * @author Olivier Constant
  */
 public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
   
   /**
    * Let the user configure this comparison method, if this capability is available
+   * @see IComparisonMethod#isConfigurable()
    */
   void configure();
   
@@ -40,6 +42,14 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
    * @return a potentially null diff policy (null is for default)
    */
   IDiffPolicy getDiffPolicy();
+  
+  /**
+   * Return the editing domain in which comparison must take place, if any.
+   * If null is returned, then undo/redo operations will not be available.
+   * @return a potentially null editing domain
+   * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
+   */
+  EditingDomain getEditingDomain();
   
   /**
    * Return the match policy for the comparison
@@ -58,10 +68,26 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
    * @param role_p a non-null role
    * @return a scope definition which may only be null if role is ANCESTOR
    */
-  IModelScopeDefinition getScopeDefinition(Role role_p);
+  IModelScopeDefinition getModelScopeDefinition(Role role_p);
+  
+  /**
+   * Return the resource set in which comparison must take place, if any.
+   * This is only useful if getEditingDomain() returns null.
+   * @return a potentially null resource set
+   */
+  ResourceSet getResourceSet();
+  
+  /**
+   * Return the reference role in a two-way comparison if any, or null
+   * in a three-way comparison
+   * @see EMFDiffNode#getReferenceRole()
+   * @return TARGET, REFERENCE, or null
+   */
+  Role getTwoWayReferenceRole();
   
   /**
    * Return whether this comparison method can be configured by the user
+   * @see IComparisonMethod#configure()
    */
   boolean isConfigurable();
   
@@ -71,10 +97,18 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
   boolean isThreeWay();
   
   /**
+   * Set the reference role in a two-way comparison.
+   * This operation has no effect in a three-way comparison.
+   * @see EMFDiffNode#getReferenceRole()
+   * @param role_p TARGET, REFERENCE, or null
+   */
+  void setTwoWayReferenceRole(Role role_p);
+  
+  /**
    * Swap the scope definitions that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
-   * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
+   * @return whether the operation succeeded (it may fail only to prevent inconsistencies)
    */
   boolean swapScopeDefinitions(Role role1_p, Role role2_p);
   

@@ -12,13 +12,12 @@
  * 
  * </copyright>
  */
-package org.eclipse.emf.diffmerge.ui.actions;
+package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.compare.CompareUI;
-import org.eclipse.emf.diffmerge.ui.ComparisonContextManager;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
@@ -34,13 +33,13 @@ import org.eclipse.ui.IWorkbenchPart;
 
 
 /**
- * The action for calling the EMF Diff/Merge UI.
+ * The default action for calling the EMF Diff/Merge UI.
  * @author Olivier Constant
  */
 public class CompareModelsAction implements IObjectActionDelegate {
-  // Eclipse Compare used to terminate a comparison process immediately if the selected resources
-  // were identical, even though they were only similar entry points for fragmented models
-  // containing differences in other resources.
+  // In 3.6, Eclipse Compare terminates a comparison process immediately if the selected resources
+  // are identical, even though they are only similar root entry points for fragmented models
+  // containing differences in non-root resources.
   
   /** The user selection (initially null) */
   private IStructuredSelection _selection;
@@ -87,7 +86,7 @@ public class CompareModelsAction implements IObjectActionDelegate {
     int size = allSelected.size();
     if (size != 2 && size != 3)
       return false;
-    ComparisonContextManager manager = EMFDiffMergeUIPlugin.getDefault().getContextManager();
+    ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
     for (Object selected : allSelected) {
       if (!manager.isValidEntrypoint(selected))
         return false;
@@ -102,7 +101,7 @@ public class CompareModelsAction implements IObjectActionDelegate {
     List<Object> allSelected = getSelection();
     int size = allSelected.size();
     if (size == 2 || size == 3) {
-      ComparisonContextManager manager = EMFDiffMergeUIPlugin.getDefault().getContextManager();
+      ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       ComparisonSetup setup = manager.createComparisonSetup(
           allSelected.get(0), allSelected.get(1), size == 3? allSelected.get(2): null);
       if (setup != null) {

@@ -126,21 +126,26 @@ public final class MiscUtil {
    * Execute the given runnable that affects models in the given editing domain,
    * not supporting undo/redo and forgetting all changes. Must be used with caution,
    * in contexts where it makes sense, because no rollback is possible.
-   * @param domain_p a non-null editing domain
+   * If the editing domain is missing, then the runnable is executed as-is.
+   * @param domain_p an optional editing domain
    * @param runnable_p a non-null runnable
    */
   public static void executeAndForget(EditingDomain domain_p, Runnable runnable_p) {
-    AbstractCommand cmd = new ForgettingCommand(runnable_p);
-    CommandStack cStack = domain_p.getCommandStack();
-    if (cStack instanceof TransactionalCommandStack) {
-      try {
-        ((TransactionalCommandStack)cStack).execute(cmd,
-            Collections.singletonMap(Transaction.OPTION_NO_UNDO, Boolean.TRUE));
-      } catch (Exception e) {
-        // No rollback is possible
+    if (domain_p != null) {
+      AbstractCommand cmd = new ForgettingCommand(runnable_p);
+      CommandStack cStack = domain_p.getCommandStack();
+      if (cStack instanceof TransactionalCommandStack) {
+        try {
+          ((TransactionalCommandStack)cStack).execute(cmd,
+              Collections.singletonMap(Transaction.OPTION_NO_UNDO, Boolean.TRUE));
+        } catch (Exception e) {
+          // No rollback is possible
+        }
+      } else {
+        cStack.execute(cmd);
       }
     } else {
-      cStack.execute(cmd);
+      runnable_p.run();
     }
   }
   

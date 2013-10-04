@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.ui.specification;
 
 
 /**
- * A base implementation for IVisualScopeSpecification.
+ * A simple base implementation for IModelScopeDefinition.
  * @author Olivier Constant
  */
 public abstract class AbstractScopeDefinition implements IModelScopeDefinition {
@@ -28,7 +28,7 @@ public abstract class AbstractScopeDefinition implements IModelScopeDefinition {
   private final String _label;
   
   /** Whether the scope can be edited */
-  private final boolean _editable;
+  private boolean _editable;
   
   
   /**
@@ -62,6 +62,20 @@ public abstract class AbstractScopeDefinition implements IModelScopeDefinition {
    */
   public boolean isEditable() {
     return _editable;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditableSettable()
+   */
+  public boolean isEditableSettable() {
+    return true;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#setEditable(boolean)
+   */
+  public void setEditable(boolean editable_p) {
+    _editable = editable_p;
   }
   
 }
