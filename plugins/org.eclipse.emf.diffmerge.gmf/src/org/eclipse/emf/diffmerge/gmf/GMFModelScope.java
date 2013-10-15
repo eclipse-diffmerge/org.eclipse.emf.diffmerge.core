@@ -21,11 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.gmf.runtime.emf.core.resources.GMFResource;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.View;
@@ -35,7 +38,7 @@ import org.eclipse.gmf.runtime.notation.View;
  * A scope for fragmented GMF models which covers the semantic elements of GMF Views.
  * @author Olivier Constant
  */
-public class GMFScope extends FragmentedModelScope {
+public class GMFModelScope extends FragmentedModelScope {
   
   /** A representation of the NULL value for the 'element' reference of Views (null vs. UNSET) */
   protected static final EObject NULL_ELEMENT = EcoreFactory.eINSTANCE.createEObject();
@@ -43,10 +46,22 @@ public class GMFScope extends FragmentedModelScope {
   
   /**
    * Constructor
-   * @param resource_p a non-null resource
+   * @param uri_p a non-null URI of the resource to load as root
+   * @param editingDomain_p a non-null editing domain that encompasses the scope
+   * @param readOnly_p whether the scope should be read-only, if supported
    */
-  public GMFScope(Resource resource_p) {
-    super(resource_p);
+  public GMFModelScope(URI uri_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+    super(uri_p, editingDomain_p, readOnly_p);
+  }
+  
+  /**
+   * Constructor
+   * @param uri_p a non-null resource URI
+   * @param resourceSet_p a non-null resource set
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  public GMFModelScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+    super(uri_p, resourceSet_p, readOnly_p);
   }
   
   /**

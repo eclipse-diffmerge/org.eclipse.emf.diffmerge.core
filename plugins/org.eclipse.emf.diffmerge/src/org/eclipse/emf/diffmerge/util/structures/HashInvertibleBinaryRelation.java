@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.util.structures;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class HashInvertibleBinaryRelation<T, U> extends HashBinaryRelation<T, U>
 implements IInvertibleBinaryRelation<T, U> {
   
   /** The non-null inverse relation */
-  protected final IModifiableBinaryRelation<U, T> _inverse;
+  protected final IRangedBinaryRelation.Editable<U, T> _inverse;
   
   
   /**
@@ -51,9 +52,11 @@ implements IInvertibleBinaryRelation<T, U> {
    * @see org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation#add(Object, Object)
    */
   @Override
-  public void add(T source_p, U target_p) {
-    super.add(source_p, target_p);
-    _inverse.add(target_p, source_p);
+  public boolean add(T source_p, U target_p) {
+    boolean result = super.add(source_p, target_p);
+    if (result)
+      _inverse.add(target_p, source_p);
+    return result;
   }
   
   /**
@@ -73,12 +76,48 @@ implements IInvertibleBinaryRelation<T, U> {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation#getTargets()
+   */
+  @Override
+  public Collection<U> getTargets() {
+    return _inverse.getSources();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation#remove(Object, Object)
    */
   @Override
-  public void remove(T source_p, U target_p) {
-    super.remove(source_p, target_p);
-    _inverse.remove(target_p, source_p);
+  public boolean remove(T source_p, U target_p) {
+    boolean result = super.remove(source_p, target_p);
+    if (result)
+      _inverse.remove(target_p, source_p);
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation#removeSource(java.lang.Object)
+   */
+  @Override
+  public boolean removeSource(T source_p) {
+    Collection<U> targets = new FArrayList<U>(get(source_p), getEqualityTester());
+    boolean result = super.removeSource(source_p);
+    for (U target : targets) {
+      _inverse.remove(target, source_p);
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation#removeTarget(java.lang.Object)
+   */
+  @Override
+  public boolean removeTarget(U target_p) {
+    Collection<T> sources = new FArrayList<T>(getInverse(target_p), getEqualityTester());
+    boolean result = _inverse.removeSource(target_p);
+    for (T source : sources) {
+      remove(source, target_p);
+    }
+    return result;
   }
   
 }

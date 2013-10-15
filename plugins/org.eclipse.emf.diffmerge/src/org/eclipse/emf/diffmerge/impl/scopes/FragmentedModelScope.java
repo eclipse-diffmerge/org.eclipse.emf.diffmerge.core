@@ -18,21 +18,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
 import org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation;
-import org.eclipse.emf.diffmerge.util.structures.IModifiableBinaryRelation;
+import org.eclipse.emf.diffmerge.util.structures.IBinaryRelation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 
 
 /**
@@ -45,10 +53,23 @@ import org.eclipse.emf.ecore.resource.Resource;
  * the first time the scope is being explored using getAllContents().
  * A fix point is guaranteed to be found and the exploration of the scope is guaranteed
  * to be complete every time.
- * EMF undo/redo is supported because the local state does not change after full exploration.
+ * This implementation assumes an initialization phase that consists in a full exploration
+ * of the scope. No other action on the scope or modification of the resource set is
+ * expected to happen during this initialization phase.
+ * EMF undo/redo is supported because the local state does not change after full exploration,
+ * unless unload() has been called.
  * @author Olivier Constant
  */
 public class FragmentedModelScope extends AbstractModelScope implements IFragmentedModelScope {
+  
+  /** Whether the resources should be opened in read-only mode */
+  private final boolean _isReadOnly;
+  
+  /** The optional editing domain that encompasses the scope */
+  protected EditingDomain _editingDomain;
+  
+  /** The non-null resource set that encompasses the scope */
+  protected final ResourceSet _resourceSet;
   
   /** The non-null, non-empty ordered set of resources defining the scope */
   protected final List<Resource> _resources;
@@ -56,28 +77,88 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   /** The non-null, non-empty ordered subset of the resources which are roots */
   protected final List<Resource> _rootResources;
   
+  /** The non-null, potentially empty set of resources initially present
+   * in the resource set before the scope was loaded (content is temporary) */
+  protected final Set<Resource> _initiallyPresentResources;
+  
+  /** The non-null, initially empty set of resources that have been loaded due
+   *  to the exploration of the scope */
+  protected final Set<Resource> _loadedResources;
+  
   /** The resource inclusion relationship */
-  protected final IModifiableBinaryRelation<Resource, Resource> _includedResources;
+  protected final IBinaryRelation.Editable<Resource, Resource> _includedResources;
   
   /** The resource referencing relationship */
-  protected final IModifiableBinaryRelation<Resource, Resource> _referencedResources;
+  protected final IBinaryRelation.Editable<Resource, Resource> _referencedResources;
   
-  /** Whether the scope has been fully explored at least once */
-  protected boolean _hasBeenFullyExplored;
+  /** The possible states of the scope, in order */
+  protected enum ScopeState {
+    INITIALIZED, // The scope has just been created
+    LOADED, // The scope has been loaded but not fully explored
+    FULLY_EXPLORED, // The scope has been loaded and fully explored
+    UNLOADED // The scope has been unloaded
+  }
+  
+  /** The current state of the scope */
+  protected ScopeState _state;
   
   
   /**
    * Constructor
-   * @param resource_p a non-null resource
+   * @param resource_p a non-null resource that belongs to a non-null resource set
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   * Precondition: resource_p != null && resource_p.getResourceSet() != null
    */
-  public FragmentedModelScope(Resource resource_p) {
-    _resources = new ArrayList<Resource>();
-    addNewResource(resource_p);
-    _rootResources = new ArrayList<Resource>();
+  public FragmentedModelScope(Resource resource_p, boolean readOnly_p) {
+    this(resource_p.getURI(), resource_p.getResourceSet(), readOnly_p);
     _rootResources.add(resource_p);
+    addNewResource(resource_p);
+  }
+  
+  /**
+   * Constructor
+   * @param uri_p a non-null URI of the resource to load as root
+   * @param editingDomain_p a non-null editing domain that encompasses the scope
+   * @param readOnly_p whether the scope should be read-only, if supported
+   */
+  public FragmentedModelScope(URI uri_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+    this(uri_p, editingDomain_p.getResourceSet(), readOnly_p);
+    _editingDomain = editingDomain_p;
+  }
+  
+  /**
+   * Constructor
+   * @param uri_p a non-null resource URI
+   * @param resourceSet_p a non-null resource set
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  public FragmentedModelScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+    this(resourceSet_p, readOnly_p);
+    Resource rootResource = _resourceSet.getResource(uri_p, false);
+    if (rootResource == null)
+      rootResource = _resourceSet.createResource(uri_p);
+    _rootResources.add(rootResource);
+    addNewResource(rootResource);
+  }
+  
+  /**
+   * Common constructor
+   * @param resourceSet_p the non-null resource set that encompasses the scope
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  protected FragmentedModelScope(ResourceSet resourceSet_p, boolean readOnly_p) {
+    _state = ScopeState.INITIALIZED;
+    _isReadOnly = readOnly_p;
+    _resourceSet = resourceSet_p;
+    _resources = new ArrayList<Resource>();
+    _rootResources = new ArrayList<Resource>();
     _includedResources = new HashBinaryRelation<Resource, Resource>();
     _referencedResources = new HashBinaryRelation<Resource, Resource>();
-    _hasBeenFullyExplored = false;
+    _initiallyPresentResources = new HashSet<Resource>();
+    _initiallyPresentResources.addAll(_resourceSet.getResources());
+    _loadedResources = new HashSet<Resource>();
+    if (_resourceSet instanceof IEditingDomainProvider)
+      _editingDomain = ((IEditingDomainProvider)_resourceSet).getEditingDomain();
   }
   
   /**
@@ -133,6 +214,26 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
         return true;
     }
     return false;
+  }
+  
+  /**
+   * Called as soon as full scope exploration has been done
+   */
+  protected void explorationFinished() {
+    _state = ScopeState.FULLY_EXPLORED;
+    _loadedResources.addAll(_resourceSet.getResources());
+    _loadedResources.removeAll(_initiallyPresentResources);
+    _initiallyPresentResources.clear();
+    // Handling read-only on loaded resources
+    if (isReadOnly() && _editingDomain instanceof AdapterFactoryEditingDomain) {
+      AdapterFactoryEditingDomain afEditingDomain = (AdapterFactoryEditingDomain)_editingDomain;
+      Map<Resource, Boolean> readOnlyMap = afEditingDomain.getResourceToReadOnlyMap();
+      if (readOnlyMap != null) {
+        for (Resource loadedResource : _loadedResources) {
+          readOnlyMap.put(loadedResource, Boolean.TRUE);
+        }
+      }
+    }
   }
   
   /**
@@ -264,10 +365,24 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   
   /**
    * Return whether this scope has been fully explored, that is, at least one complete iteration
-   * based on getAllContents has been performed
+   * based on getAllContents has been performed and the contents are still available
    */
   public boolean hasBeenExplored() {
-    return _hasBeenFullyExplored;
+    return _state == ScopeState.FULLY_EXPLORED;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#isLoaded()
+   */
+  public boolean isLoaded() {
+    return _state != ScopeState.INITIALIZED && _state != ScopeState.UNLOADED;
+  }
+  
+  /**
+   * Return whether this scope is in read-only mode, if supported
+   */
+  public boolean isReadOnly() {
+    return _isReadOnly;
   }
   
   /**
@@ -284,10 +399,15 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
   public boolean load() throws Exception {
-    for (Resource rootResource : _rootResources) {
-      rootResource.load(null);
+    boolean result = false;
+    if (_state == ScopeState.INITIALIZED || _state == ScopeState.LOADED) {
+      for (Resource rootResource : _rootResources) {
+        rootResource.load(null);
+      }
+      _state = ScopeState.LOADED;
+      result = true;
     }
-    return true;
+    return result;
   }
   
   /**
@@ -346,6 +466,28 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
     return super.setExtrinsicID(element_p, id_p);
   }
   
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#unload()
+   */
+  public List<Resource> unload() {
+    for (Resource loadedResource : _loadedResources) {
+      for (Adapter adapter : new ArrayList<Adapter>(loadedResource.eAdapters())) {
+        if (adapter instanceof ECrossReferenceAdapter)
+          loadedResource.eAdapters().remove(adapter);
+      }
+    }
+    for (Resource loadedResource : _loadedResources) {
+      if (loadedResource.isLoaded())
+        loadedResource.unload();
+    }
+    _resourceSet.getResources().removeAll(_loadedResources);
+    List<Resource> result = new ArrayList<Resource>(_loadedResources);
+    _loadedResources.clear();
+    if (!result.isEmpty())
+      _state = ScopeState.UNLOADED;
+    return result;
+  }
+  
   
   /**
    * An iterator over the dynamic list of resources
@@ -363,7 +505,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
     @Override
     public EObject next() {
       EObject result = super.next();
-      if (!_hasBeenFullyExplored) {
+      if (_state != ScopeState.FULLY_EXPLORED) {
         // It is the first time the scope is being explored:
         // find and remember additional relevant resources
         Resource resource = result.eResource();
@@ -372,7 +514,7 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
         for (Resource additionalResource : getRelevantReferencedResources(result))
           notifyReference(resource, additionalResource);
         if (!hasNext())
-          _hasBeenFullyExplored = true;
+          explorationFinished();
       }
       return result;
     }

@@ -14,6 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.api.scopes;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 
@@ -42,10 +44,15 @@ public interface IPersistentModelScope extends IModelScope {
   /**
    * Initialize the scope by loading at least the elements that are required
    * for exploring the scope
-   * @return whether the operation could performed
+   * @return whether the operation could be performed
    * @throws Exception an exception indicating that the operation failed in an unexpected way
    */
   boolean load() throws Exception;
+  
+  /**
+   * Return whether the scope is loaded
+   */
+  boolean isLoaded();
   
   /**
    * Save the scope
@@ -63,5 +70,14 @@ public interface IPersistentModelScope extends IModelScope {
    * @return whether the ID was actually set
    */
   boolean setExtrinsicID(EObject element_p, Object id_p);
+  
+  /**
+   * Unload from memory the elements and resources that have been loaded as a result
+   * of calling load(). Elements and resources that were already loaded when load()
+   * was called are not unloaded.
+   * A scope which has been unloaded may not be able to be loaded.
+   * @return the non-null, potentially empty set of impacted resources
+   */
+  List<Resource> unload();
   
 }

@@ -15,8 +15,8 @@
 package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.diffmerge.api.IComparison;
@@ -49,10 +49,12 @@ import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.xmi.PackageNotFoundException;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.emf.workspace.ResourceUndoContext;
@@ -60,6 +62,11 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -71,6 +78,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 
 
 /**
@@ -80,14 +89,11 @@ import org.eclipse.ui.PlatformUI;
  */
 public class EMFDiffMergeEditorInput extends CompareEditorInput {
   
-  /** The non-null comparison method **/
+  /** The non-null (unless disposed) comparison method **/
   protected IComparisonMethod _comparisonMethod;
   
   /** The initially null resource that holds the comparison */
   protected Resource _comparisonResource;
-  
-  /** The non-null, potentially empty set of resources initially present */
-  protected final Collection<Resource> _initialResources;
   
   /** The comparison scopes (initially null iff URIs are not null) **/
   protected IEditableModelScope _leftScope, _rightScope, _ancestorScope;
@@ -101,6 +107,15 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /** Whether the editor is dirty (required for compatibility with Indigo) */ //OCO
   private boolean _isDirty;
   
+  /** The (initially null) property sheet page to show in the Properties view */
+  protected PropertySheetPage _propertySheetPage;
+  
+  /** The (initially null) command stack listener on the editing domain, if any */
+  protected CommandStackListener _commandStackListener;
+  
+  /** The non-null (unless dieposed) selection bridge between the viewer and the workbench site */
+  protected SelectionBridge _selectionBridge;
+  
   
   /**
    * Constructor
@@ -113,9 +128,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     _rightScope = null;
     _ancestorScope = null;
     _comparisonResource = null;
-    _initialResources = new ArrayList<Resource>();
     _foundDifferences = true;
     _isDirty = false;
+    _selectionBridge = new SelectionBridge();
     initializeCompareConfiguration();
   }
   
@@ -125,6 +140,15 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   @Override
   public boolean canRunAsJob() {
     return true;
+  }
+  
+  /**
+   * Ensure that the selection provider of the workbench site is the intended one
+   */
+  protected void checkSelectionProvider() {
+    IWorkbenchSite site = getSite();
+    if (site != null && site.getSelectionProvider() != _selectionBridge)
+      site.setSelectionProvider(_selectionBridge);
   }
   
   /**
@@ -157,6 +181,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   public Control createContents(Composite parent_p) {
     // Create viewer
     _viewer = new ComparisonViewer(parent_p, getActionBars());
+    if (_selectionBridge != null)
+      _viewer.addSelectionChangedListener(_selectionBridge);
     _viewer.addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -169,10 +195,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
         }
       }
     });
-    // Register viewer as selection provider of the site
-    IWorkbenchSite site = getSite();
-    if (site != null)
-      site.setSelectionProvider(_viewer);
     // Create viewer contents
     _viewer.setInput(getCompareResult());
     contentsCreated();
@@ -180,16 +202,23 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * Generate a title for the editor
+   * @return a potentially null string
+   */
+  protected String createTitle() {
+    Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    String leftDesc = _comparisonMethod.getModelScopeDefinition(leftRole).getShortLabel();
+    String rightDesc = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).getShortLabel();
+    String result = String.format(Messages.EMFDiffMergeEditorInput_Title, leftDesc, rightDesc);
+    return result;
+  }
+  
+  /**
    * Dispose the resources which have been added during the comparison process
    */
   protected void disposeResources() {
-    final EditingDomain domain = getEditingDomain();
-    final ResourceSet resourceSet = getResourceSet();
-    final Set<Resource> addedResources = new HashSet<Resource>();
-    if (resourceSet != null) {
-      addedResources.addAll(resourceSet.getResources());
-      addedResources.removeAll(_initialResources);
-    }
+    EditingDomain domain = getEditingDomain();
+    final Set<Resource> unloaded = new HashSet<Resource>();
     MiscUtil.executeAndForget(domain, new Runnable() {
       /**
        * @see java.lang.Runnable#run()
@@ -203,23 +232,18 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
             }
           }
         }
-        for (Resource resource : addedResources) {
-          for (Adapter adapter : new ArrayList<Adapter>(resource.eAdapters())) {
-            if (adapter instanceof ECrossReferenceAdapter)
-              resource.eAdapters().remove(adapter);
-          }
-        }
-        for (Resource resource : addedResources) {
-          resource.unload();
-        }
-        if (resourceSet != null)
-          resourceSet.getResources().removeAll(addedResources);
+        if (_leftScope instanceof IPersistentModelScope)
+          unloaded.addAll(((IPersistentModelScope)_leftScope).unload());
+        if (_rightScope instanceof IPersistentModelScope)
+          unloaded.addAll(((IPersistentModelScope)_rightScope).unload());
+        if (_ancestorScope instanceof IPersistentModelScope)
+          unloaded.addAll(((IPersistentModelScope)_ancestorScope).unload());
       }
     });
     if (domain != null)
       domain.getCommandStack().flush();
     if (domain instanceof TransactionalEditingDomain) {
-      for (Resource resource : addedResources) {
+      for (Resource resource : unloaded) {
         TransactionUtil.disconnectFromEditingDomain(resource);
         // Cleaning up Eclipse operation history
         try {
@@ -264,7 +288,40 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @see IEditingDomainProvider#getEditingDomain()
    */
   public EditingDomain getEditingDomain() {
-    return _comparisonMethod.getEditingDomain();
+    return _comparisonMethod != null? _comparisonMethod.getEditingDomain(): null;
+  }
+  
+  /**
+   * Return a property sheet page for the Properties view if possible
+   * @return a potentially null object
+   */
+  public IPropertySheetPage getPropertySheetPage() {
+    if (_propertySheetPage == null) {
+      EditingDomain domain = getEditingDomain();
+      if (domain instanceof AdapterFactoryEditingDomain) {
+        // Property sheet page
+        AdapterFactoryEditingDomain afDomain = (AdapterFactoryEditingDomain)domain;
+        _propertySheetPage = new ExtendedPropertySheetPage(afDomain);
+        _propertySheetPage.setPropertySourceProvider(
+            new AdapterFactoryContentProvider(afDomain.getAdapterFactory()));
+        // Command stack listener for property sheet page update
+        _commandStackListener = new CommandStackListener() {
+          public void commandStackChanged(final EventObject event_p) {
+            Shell shell = getShell();
+            if (shell != null) {
+              shell.getDisplay().asyncExec(new Runnable() {
+                public void run() {
+                  if (_propertySheetPage != null && !_propertySheetPage.getControl().isDisposed())
+                    _propertySheetPage.refresh();
+                }
+              });
+            }
+          }
+        };
+        afDomain.getCommandStack().addCommandStackListener(_commandStackListener);
+      }
+    }
+    return _propertySheetPage;
   }
   
   /**
@@ -272,8 +329,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @return a potentially null resource set
    */
   public ResourceSet getResourceSet() {
+    ResourceSet result = null;
     EditingDomain domain = getEditingDomain();
-    return domain == null? _comparisonMethod.getResourceSet(): domain.getResourceSet();
+    if (domain != null)
+      result = domain.getResourceSet();
+    else if (_comparisonMethod != null)
+      result = _comparisonMethod.getResourceSet();
+    return result;
   }
   
   /**
@@ -305,9 +367,12 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   protected void handleDispose() {
-    IWorkbenchSite site = getSite();
-    if (site != null)
-      site.setSelectionProvider(null);
+    if (_propertySheetPage != null)
+      _propertySheetPage.dispose();
+    if (_commandStackListener != null && getEditingDomain() != null)
+      getEditingDomain().getCommandStack().removeCommandStackListener(_commandStackListener);
+    if (_viewer != null && _selectionBridge != null)
+      _viewer.removeSelectionChangedListener(_selectionBridge);
     super.handleDispose();
     Runnable disposeBehavior = new Runnable() {
       /**
@@ -317,14 +382,15 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
         if (getCompareResult() != null)
           getCompareResult().dispose();
         disposeResources();
-        _comparisonMethod.dispose();
+        if (_comparisonMethod != null)
+          _comparisonMethod.dispose();
         _comparisonMethod = null;
         _ancestorScope = null;
         _leftScope = null;
         _rightScope = null;
         _viewer = null;
+        _selectionBridge = null;
         _comparisonResource = null;
-        _initialResources.clear();
       }
     };
     Display display = Display.getDefault();
@@ -417,7 +483,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   public boolean isSaveNeeded() {
-    // Redefined for compatibility with Indigo
+    // Redefined for compatibility with Indigo and synchronization with workbench views
+    checkSelectionProvider(); // This is a hack
     return _isDirty;
   }
   
@@ -426,17 +493,18 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @param monitor_p a non-null monitor for reporting progress
    */
   protected void loadScopes(IProgressMonitor monitor_p) {
-    ResourceSet resourceSet = getResourceSet();
-    if (resourceSet != null)
-      _initialResources.addAll(resourceSet.getResources());
+    Object scopeContext = (getEditingDomain() != null)? getEditingDomain(): getResourceSet();
     boolean threeWay = _comparisonMethod.isThreeWay();
+    Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
     String mainTaskName = Messages.EMFDiffMergeEditorInput_Loading;
     SubMonitor loadingMonitor = SubMonitor.convert(
         monitor_p, mainTaskName, threeWay ? 4 : 3);
     loadingMonitor.worked(1);
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
-    _leftScope = _comparisonMethod.getModelScopeDefinition(Role.TARGET).createScope(resourceSet);
+    _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(scopeContext);
+    if (_leftScope == null)
+      throw new RuntimeException(Messages.EMFDiffMergeEditorInput_LeftScopeNull);
     if (_leftScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_leftScope).load();
@@ -449,7 +517,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       throw new OperationCanceledException();
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
-    _rightScope = _comparisonMethod.getModelScopeDefinition(Role.REFERENCE).createScope(resourceSet);
+    _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(scopeContext);
+    if (_rightScope == null)
+      throw new RuntimeException(Messages.EMFDiffMergeEditorInput_RightScopeNull);
     if (_rightScope instanceof IPersistentModelScope) {
       try {
         ((IPersistentModelScope)_rightScope).load();
@@ -463,7 +533,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
-      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(resourceSet);
+      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(scopeContext);
+      if (_ancestorScope == null)
+        throw new RuntimeException(Messages.EMFDiffMergeEditorInput_AncestorScopeNull);
       if (_ancestorScope instanceof IPersistentModelScope) {
         try {
           ((IPersistentModelScope)_ancestorScope).load();
@@ -492,6 +564,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       InvocationTargetException, InterruptedException {
     if (monitor_p == null) // True when called from handleDispose()
       return null;
+    String title = createTitle();
+    setTitle(title);
     boolean scopesReady = _leftScope != null;
     SubMonitor monitor = SubMonitor.convert(monitor_p, EMFDiffMergeUIPlugin.LABEL, 2);
     EMFDiffNode result = null;
@@ -597,9 +671,20 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     }
   }
   
+  /**
+   * @see org.eclipse.compare.CompareEditorInput#setFocus2()
+   */
+  @Override
+  public boolean setFocus2() {
+    boolean result = false;
+    if (_viewer != null)
+      result = _viewer.getControl().setFocus();
+    return result;
+  }
+  
   
   /**
-   * A wrapper for model scopes that implements ITypedElement for ICompareInputs
+   * A wrapper for model scopes that implements ITypedElement for ICompareInputs.
    */
   public static class ScopeTypedElementWrapper implements ITypedElement {
     /** The non-null scope being wrapped */
@@ -643,4 +728,61 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     }
   }
   
+  
+  /**
+   * A selection provider and listener which can be used as a bridge between the comparison viewer
+   * and the selection service of the workbench site. Its usefulness comes from the fact that it
+   * can be instantiated earlier than the comparison viewer, so it can be registered as a selection
+   * provider for the workbench site when the compare editor is activated. Listeners from other
+   * workbench parts that react to part activation, such as the PropertySheet, are thus able to
+   * register this selection provider.
+   */
+  protected static class SelectionBridge implements ISelectionChangedListener, ISelectionProvider {
+    /** The current, potentially null selection */
+    private  ISelection _selection;
+    /** The non-null, potentially empty set of listeners */
+    private final Set<ISelectionChangedListener> _selectionListeners;
+    
+    /**
+     * Constructor
+     */
+    public SelectionBridge() {
+      _selection = StructuredSelection.EMPTY;
+      _selectionListeners = new HashSet<ISelectionChangedListener>();
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+     */
+    public void addSelectionChangedListener(ISelectionChangedListener listener_p) {
+      _selectionListeners.add(listener_p);
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
+     */
+    public ISelection getSelection() {
+      return _selection;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+     */
+    public void removeSelectionChangedListener(ISelectionChangedListener listener_p) {
+      _selectionListeners.remove(listener_p);
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
+     */
+    public void setSelection(ISelection selection_p) {
+      _selection = selection_p;
+      SelectionChangedEvent event = new SelectionChangedEvent(this, _selection);
+      for (ISelectionChangedListener listener : _selectionListeners) {
+        listener.selectionChanged(event);
+      }
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+     */
+    public void selectionChanged(SelectionChangedEvent event_p) {
+      setSelection(event_p.getSelection());
+    }
+  }
 }

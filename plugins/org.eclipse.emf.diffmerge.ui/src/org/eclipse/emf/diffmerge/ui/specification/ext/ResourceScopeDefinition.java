@@ -19,18 +19,17 @@ import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 
 /**
- * A scope definition based on a resource.
+ * A scope definition based on a resource within a resource set.
  * @author Olivier Constant
  */
 public class ResourceScopeDefinition extends AbstractScopeDefinition {
   
   /**
    * Constructor
-   * @param resource_p a non-null resource
+   * @param resource_p a non-null resource which belongs to a non-null resource set
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
    */
@@ -40,10 +39,18 @@ public class ResourceScopeDefinition extends AbstractScopeDefinition {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.ecore.resource.ResourceSet)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(ResourceSet resourceSet_p) {
-    return new FragmentedModelScope(getEntrypoint());
+  public IEditableModelScope createScope(Object context_p) {
+    return new FragmentedModelScope(getEntrypoint(), !isEditable());
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition#getEntrypoint()
+   */
+  @Override
+  public Resource getEntrypoint() {
+    return (Resource)super.getEntrypoint();
   }
   
   /**
@@ -58,14 +65,6 @@ public class ResourceScopeDefinition extends AbstractScopeDefinition {
     else
       result = resource_p.toString();
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition#getEntrypoint()
-   */
-  @Override
-  public Resource getEntrypoint() {
-    return (Resource)super.getEntrypoint();
   }
   
 }

@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 
-
 /**
  * A partial implementation of IFeaturedModelScope based on unbounded EMF containment.
  * @author Olivier Constant

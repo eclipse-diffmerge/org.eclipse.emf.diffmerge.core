@@ -26,7 +26,7 @@ import java.util.Collection;
 public interface IInvertibleBinaryRelation<T, U> extends IBinaryRelation<T, U> {
   
   /**
-   * Return the elements which map to the given one.
+   * Return the elements which map to the given one
    * @param element_p a non-null element
    * @return a non-null, potentially empty unmodifiable set which is not guaranteed
    *         to be kept in sync with the relation

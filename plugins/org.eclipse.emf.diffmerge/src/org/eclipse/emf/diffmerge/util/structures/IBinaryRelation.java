@@ -15,6 +15,7 @@
 package org.eclipse.emf.diffmerge.util.structures;
 
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -40,5 +41,42 @@ public interface IBinaryRelation<T, U> extends IEqualityBasedStructure {
    * @param target_p a non-null element which is allowed to be source_p
    */
   boolean maps(T source_p, U target_p);
+  
+  
+  /**
+   * A modifiable finitary binary relation.
+   * The order in which couples are introduced is assumed to be preserved (add/get consistency).
+   * @param T the type of the domain elements
+   * @param U the type of the codomain elements
+   */
+  interface Editable<T, U> extends IBinaryRelation<T, U> {
+    /**
+     * Clear the set of couples of this relation
+     */
+    void clear();
+    
+    /**
+     * Add the given couple to the relation
+     * @param source_p a non-null element
+     * @param target_p a non-null element which may or not differ from source_p
+     * @return whether the couple was not present already so the operation has an actual effect
+     */
+    boolean add(T source_p, U target_p);
+    
+    /**
+     * A refinement of get(T) with an ordering of the result
+     * It is the order in which couples were introduced (add/get consistency).
+     * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#get(Object)
+     */
+    List<U> get(T element_p);
+    
+    /**
+     * Remove the given couple from the relation if present
+     * @param source_p a non-null element
+     * @param target_p a non-null element which may or not differ from source_p
+     * @return whether the couple was present so the operation had an actual effect
+     */
+    boolean remove(T source_p, U target_p);
+  }
   
 }

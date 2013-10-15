@@ -27,8 +27,9 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
- * A single-resource model scope covering the full EMF containment subtree of a given element.
- * The root cannot be removed from the scope.
+ * A single-resource model scope covering the full EMF containment subtree of a given
+ * element.
+ * The root cannot be removed from the scope and the load/unload life-cycle is not handled.
  * EMF undo/redo is supported because the local state never changes.
  * Complete deletion of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant
@@ -41,8 +42,7 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   
   /**
    * Constructor
-   * @param roots_p a non-null list of elements whose containment trees are disjoint,
-   *        that is, no element is the ancestor of another one
+   * @param root_p the root element
    */
   public SubtreeModelScope(EObject root_p) {
     _root = root_p;
@@ -106,10 +106,17 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#isLoaded()
+   */
+  public boolean isLoaded() {
+    return !_root.eIsProxy();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
   public boolean load() throws Exception {
-    return true; // Resource is already loaded since we already have an EObject
+    return isLoaded(); // Load/unload life-cycle not handled
   }
   
   /**
@@ -146,6 +153,13 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
   public boolean setExtrinsicID(EObject element_p, Object id_p) {
     // Increases visibility
     return super.setExtrinsicID(element_p, id_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#unload()
+   */
+  public List<Resource> unload() {
+    return Collections.emptyList();  // Load/unload life-cycle not handled
   }
   
 }

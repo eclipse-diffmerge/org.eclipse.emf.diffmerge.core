@@ -14,8 +14,10 @@
  */
 package org.eclipse.emf.diffmerge.util.structures;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -27,7 +29,7 @@ import java.util.List;
  * @author Olivier Constant
  */
 public class HashBinaryRelation<T, U> extends AbstractBinaryRelation<T, U>
-implements IModifiableBinaryRelation<T, U> {
+implements IRangedBinaryRelation.Editable<T, U> {
   
   /** The non-null internal encoding of the relation */
   protected final FHashMap<T, List<U>> _contents;
@@ -50,21 +52,23 @@ implements IModifiableBinaryRelation<T, U> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.structures.IModifiableBinaryRelation#add(Object, Object)
+   * @see org.eclipse.emf.diffmerge.util.structures.IEditableBinaryRelation#add(Object, Object)
    */
-  public void add(T source_p, U target_p) {
+  public boolean add(T source_p, U target_p) {
     assert source_p != null && target_p != null;
+    boolean result = false;
     List<U> values = _contents.get(source_p);
     if (values == null) {
       values = new FArrayList<U>(getEqualityTester());
       _contents.put(source_p, values);
     }
     if (!values.contains(target_p))
-      values.add(target_p);
+      result = values.add(target_p);
+    return result;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.structures.IModifiableBinaryRelation#clear()
+   * @see org.eclipse.emf.diffmerge.util.structures.IEditableBinaryRelation#clear()
    */
   public void clear() {
     _contents.clear();
@@ -85,16 +89,65 @@ implements IModifiableBinaryRelation<T, U> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.structures.IModifiableBinaryRelation#remove(Object, Object)
+   * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#isEmpty()
    */
-  public void remove(T source_p, U target_p) {
+  public boolean isEmpty() {
+    return _contents.isEmpty();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.IEditableBinaryRelation#remove(Object, Object)
+   */
+  public boolean remove(T source_p, U target_p) {
     assert source_p != null && target_p != null;
+    boolean result = false;
     List<U> values = _contents.get(source_p);
     if (values != null) {
-      values.remove(target_p);
+      result = values.remove(target_p);
       if (values.isEmpty())
         _contents.removeKey(source_p);
     }
+    return result;
   }
-
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#getSources()
+   */
+  public Collection<T> getSources() {
+    return Collections.unmodifiableSet(_contents.keySet());
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#getTargets()
+   */
+  public Collection<U> getTargets() {
+    Set<U> result = new FHashSet<U>(getEqualityTester());
+    for (List<U> valueList : _contents.values()) {
+      result.addAll(valueList);
+    }
+    return Collections.unmodifiableSet(result);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.IEditableBinaryRelation#removeSource(java.lang.Object)
+   */
+  public boolean removeSource(T source_p) {
+    assert source_p != null;
+    List<U> values = _contents.removeKey(source_p);
+    boolean result = values != null;
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.util.structures.IEditableBinaryRelation#removeTarget(java.lang.Object)
+   */
+  public boolean removeTarget(U target_p) {
+    boolean result = false;
+    Collection<T> sources = new FArrayList<T>(getSources(), getEqualityTester());
+    for (T source : sources) {
+      result = result || remove(source, target_p);
+    }
+    return result;
+  }
+  
 }

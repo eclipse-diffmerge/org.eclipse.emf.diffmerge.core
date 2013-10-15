@@ -754,7 +754,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _redoAction.update();
     if (_actionBars != null)
       _actionBars.updateActionBars();
-    if (getInput().isLogEvents())
+    if (getInput() != null && getInput().isLogEvents())
       getLogger().log(new CompareLogEvent(getEditingDomain(), getComparison()));
     firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
   }
@@ -766,8 +766,9 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   protected void merge(final boolean toLeft_p) {
     final ComparisonSelection selection = getSelection();
     if (selection == null) return;
-    boolean showMergeImpact = getInput().isShowMergeImpact();
-    boolean coverChildren = getInput().isDefaultCoverChildren();
+    final EMFDiffNode input = getInput();
+    boolean showMergeImpact = input.isShowMergeImpact();
+    boolean coverChildren = input.isDefaultCoverChildren();
     boolean incrementalMode = false;
     List<EMatch> selectedMatches = selection.getSelectedMatches();
     if (selectedMatches.isEmpty()) {
@@ -779,8 +780,8 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     boolean requiresChoices = basedOnMatches;
     if (requiresChoices && selectedMatches.size() == 1) {
       EMatch selectedMatch = selectedMatches.get(0);
-      if (!getInput().hasChildrenForMerge(selectedMatch)) {
-        DifferenceKind kind = getInput().getDifferenceKind(selectedMatch);
+      if (!input.hasChildrenForMerge(selectedMatch)) {
+        DifferenceKind kind = input.getDifferenceKind(selectedMatch);
         requiresChoices = !(kind.isAddition() || kind.isDeletion());
       }
     }
@@ -788,16 +789,16 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       // Group of differences
       boolean askAboutChildren = false;
       for (EMatch selectedMatch : selectedMatches) {
-        if (getInput().getDifferenceKind(selectedMatch) == DifferenceKind.COUNTED) {
+        if (input.getDifferenceKind(selectedMatch) == DifferenceKind.COUNTED) {
           coverChildren = true;
           break;
-        } else if (getInput().hasChildrenForMerge(selectedMatch)) {
+        } else if (input.hasChildrenForMerge(selectedMatch)) {
           askAboutChildren = true;
           break;
         }
       }
       MergeChoiceDialogData choice = new MergeChoiceDialogData(coverChildren,
-          getInput().isDefaultIncrementalMode(), getInput().isDefaultShowImpact());
+          input.isDefaultIncrementalMode(), input.isDefaultShowImpact());
       MergeChoicesDialog choicesDialog =
         new MergeChoicesDialog(getShell(), Messages.ComparisonViewer_MergeHeader,
             choice, askAboutChildren);
@@ -807,18 +808,18 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       coverChildren = choice.getCoverChildren();
       incrementalMode = choice.getIncrementalMode();
       if (askAboutChildren)
-        getInput().setDefaultCoverChildren(choice.getCoverChildren());
-      getInput().setDefaultIncrementalMode(choice.getIncrementalMode());
-      getInput().setDefaultShowImpact(choice.getShowImpact());
+        input.setDefaultCoverChildren(choice.getCoverChildren());
+      input.setDefaultIncrementalMode(choice.getIncrementalMode());
+      input.setDefaultShowImpact(choice.getShowImpact());
     }
-    final Role destination = getInput().getRoleForSide(toLeft_p);
+    final Role destination = input.getRoleForSide(toLeft_p);
     final Collection<IDifference> toMerge = basedOnMatches?
         getDifferencesToMerge(selectedMatches, destination, coverChildren, incrementalMode):
-          getInput().getNonIgnoredDifferences(selection.asDifferencesToMerge());
+          input.getNonIgnoredDifferences(selection.asDifferencesToMerge());
     final Collection<IDifference> merged = new ArrayList<IDifference>();
     boolean done = false;
     if (!toMerge.isEmpty()) {
-      final ImpactInput mergeInput = new ImpactInput(toMerge, toLeft_p, getInput());
+      final ImpactInput mergeInput = new ImpactInput(toMerge, toLeft_p, input);
       boolean proceed = true;
       IProgressService progress = PlatformUI.getWorkbench().getProgressService();
       if (showMergeImpact) {
@@ -853,7 +854,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
                   getUIComparison().setLastActionSelection(selection);
                 }
               };
-              if (getInput().isUndoRedoSupported())
+              if (input.isUndoRedoSupported())
                 MiscUtil.executeOnDomain(getEditingDomain(), null, mergeRunnable);
               else
                 MiscUtil.executeAndForget(getEditingDomain(), mergeRunnable);
@@ -869,10 +870,10 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
           Messages.ComparisonViewer_NoDiffsToMerge);
     }
     if (!merged.isEmpty() && done) {
-      getInput().setModified(true, toLeft_p);
+      input.setModified(true, toLeft_p);
       firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
       firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
-      if (getInput().isLogEvents())
+      if (input.isLogEvents())
         getLogger().log(
             new MergeLogEvent(getEditingDomain(), getComparison(), merged, toLeft_p));
     }
@@ -1009,9 +1010,9 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    */
   @Override
   public void setInput(Object input_p) {
-    if (input_p instanceof EMFDiffNode) {
-      _input = (EMFDiffNode)input_p;
+    if (input_p == null || input_p instanceof EMFDiffNode) {
       Object oldInput = getInput();
+      _input = (EMFDiffNode)input_p;
       inputChanged(_input, oldInput);
     }
   }

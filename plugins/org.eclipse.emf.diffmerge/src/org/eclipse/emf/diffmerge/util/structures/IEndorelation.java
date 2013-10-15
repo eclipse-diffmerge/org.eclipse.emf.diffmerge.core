@@ -27,7 +27,7 @@ public interface IEndorelation<T> extends IBinaryRelation<T, T> {
   
   /**
    * Compute the transitive closure of this relation starting on the given element,
-   * encompassing cycles if there are any.
+   * encompassing cycles if there are any
    * @param element_p a non-null element
    * @return a non-null, unmodifiable set of elements excluding element_p
    *         whose order is that of a breadth-first exploration of the relation graph
@@ -36,7 +36,7 @@ public interface IEndorelation<T> extends IBinaryRelation<T, T> {
   
   /**
    * Compute the transitive closure of this relation starting on the given elements,
-   * encompassing cycles if there are any.
+   * encompassing cycles if there are any
    * @param elements_p a non-null, potentially empty collection
    * @return a non-null, unmodifiable set of elements excluding elements_p
    *         whose order is that of a breadth-first exploration of the relation graph

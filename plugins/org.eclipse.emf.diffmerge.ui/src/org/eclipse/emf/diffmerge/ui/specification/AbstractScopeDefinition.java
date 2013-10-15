@@ -51,6 +51,14 @@ public abstract class AbstractScopeDefinition implements IModelScopeDefinition {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getShortLabel()
+   */
+  public String getShortLabel() {
+    // Redefine when applicable
+    return getLabel();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getEntrypoint()
    */
   public Object getEntrypoint() {

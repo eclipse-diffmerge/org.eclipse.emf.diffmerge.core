@@ -15,7 +15,6 @@
 package org.eclipse.emf.diffmerge.ui.specification;
 
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 
 /**
@@ -26,10 +25,10 @@ public interface IModelScopeDefinition {
   
   /**
    * Create and return a scope that corresponds to this scope definition
-   * @param context_p an optional resource set for the case where resource creation is needed
-   * @return a non-null scope
+   * @param context_p an optional resource set or editing domain for the case where resource creation is needed
+   * @return a scope which is null if operation failed
    */
-  IEditableModelScope createScope(ResourceSet context_p);
+  IEditableModelScope createScope(Object context_p);
   
   /**
    * Return the object that specifies the scope (model element, file, resource...)
@@ -42,6 +41,12 @@ public interface IModelScopeDefinition {
    * @return a non-null label
    */
   String getLabel();
+  
+  /**
+   * Return a short label that identifies the scope
+   * @return a non-null label
+   */
+  String getShortLabel();
   
   /**
    * Return whether the content of the scope can be modified

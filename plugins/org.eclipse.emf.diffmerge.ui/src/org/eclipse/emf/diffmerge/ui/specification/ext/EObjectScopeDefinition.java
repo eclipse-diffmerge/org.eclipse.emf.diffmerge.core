@@ -22,7 +22,6 @@ import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 
 /**
@@ -43,9 +42,9 @@ public class EObjectScopeDefinition extends AbstractScopeDefinition {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(org.eclipse.emf.ecore.resource.ResourceSet)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(ResourceSet resourceSet_p) {
+  public IEditableModelScope createScope(Object context_p) {
     return new SubtreeModelScope(getEntrypoint());
   }
   

@@ -18,7 +18,7 @@ import java.util.Collection;
 
 
 /**
- * A base implementation for binary relations providing a few services.
+ * A base implementation for binary relations which provides a few services.
  * @param T the type of the domain elements
  * @param U the type of the codomain elements
  * @author Olivier Constant

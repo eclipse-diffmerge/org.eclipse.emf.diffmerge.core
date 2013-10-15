@@ -198,23 +198,23 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     String result;
     switch (originKind_p) {
       case FROM_LEFT:
-        result = "±› "; break; //$NON-NLS-1$
+        result = "|> "; break; //$NON-NLS-1$
       case FROM_LEFT_ADD:
-        result = "+› "; break; //$NON-NLS-1$
+        result = "+> "; break; //$NON-NLS-1$
       case FROM_LEFT_DEL:
-        result = "-› "; break; //$NON-NLS-1$
+        result = "-> "; break; //$NON-NLS-1$
       case FROM_RIGHT:
-        result = "‹± "; break; //$NON-NLS-1$
+        result = "<| "; break; //$NON-NLS-1$
       case FROM_RIGHT_ADD:
-        result = "‹+ "; break; //$NON-NLS-1$
+        result = "<+ "; break; //$NON-NLS-1$
       case FROM_RIGHT_DEL:
-        result = "‹- "; break; //$NON-NLS-1$
+        result = "<- "; break; //$NON-NLS-1$
       case CONFLICT:
         result = "! "; break; //$NON-NLS-1$
       case FROM_BOTH:
-        result = "‹› "; break; //$NON-NLS-1$
+        result = "<> "; break; //$NON-NLS-1$
       case MODIFIED:
-        result = "›‹ "; break; //$NON-NLS-1$
+        result = ">< "; break; //$NON-NLS-1$
       default:
         result = ""; break; //$NON-NLS-1$
     }

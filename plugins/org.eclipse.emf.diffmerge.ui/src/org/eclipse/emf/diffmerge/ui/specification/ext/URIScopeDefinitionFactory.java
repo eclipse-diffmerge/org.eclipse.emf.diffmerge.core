@@ -24,10 +24,36 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 
 
 /**
- * A factory for file-based scopes.
+ * A factory for files and other URI-based scopes.
  * @author Olivier Constant
  */
-public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
+public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
+  
+  /**
+   * Return whether the given object can be converted to a URI.
+   * Result must be consistent with convertToURI(Object).
+   * @param entrypoint_p a non-null object
+   */
+  protected boolean canConvertToURI(Object entrypoint_p) {
+    return entrypoint_p instanceof IFile || entrypoint_p instanceof String;
+  }
+  
+  /**
+   * Convert the given object to a URI which can be used to define a model scope
+   * @param entrypoint_p a non-null object
+   * @return a potentially null URI
+   */
+  protected URI convertToURI(Object entrypoint_p) {
+    URI result = null;
+    if (entrypoint_p instanceof URI) {
+      result = (URI)entrypoint_p;
+    } else if (entrypoint_p instanceof IFile) {
+      result = toPlatformURI((IFile)entrypoint_p);
+    } else if (entrypoint_p instanceof String) {
+      result = toFileUri(entrypoint_p.toString());
+    }
+    return result;
+  }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
@@ -35,18 +61,8 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
     IModelScopeDefinition result = null;
-    String label = label_p;
-    URI uri = null;
-    if (entrypoint_p instanceof URI) {
-      uri = (URI)entrypoint_p;
-    } else if (entrypoint_p instanceof IFile) {
-      IFile file = (IFile)entrypoint_p;
-      if (label == null)
-        label = getLabelForFile(file);
-      uri = toPlatformURI(file);
-    } else if (entrypoint_p instanceof String) {
-      uri = toFileUri(entrypoint_p.toString());
-    }
+    URI uri = convertToURI(entrypoint_p);
+    String label = (label_p != null)? label_p: getLabelFor(entrypoint_p);
     if (uri != null)
       result = createScopeDefinitionFromURI(uri, label, editable_p);
     return result;
@@ -61,7 +77,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected IModelScopeDefinition createScopeDefinitionFromURI(URI uri_p, String label_p,
       boolean editable_p) {
-    return new FileScopeDefinition(uri_p, label_p, editable_p);
+    return new URIScopeDefinition(uri_p, label_p, editable_p);
   }
   
   /**
@@ -95,6 +111,18 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   }
   
   /**
+   * Return a user-friendly label for the given entrypoint object, if applicable
+   * @param entrypoint_p a non-null object
+   * @return a potentially null label
+   */
+  protected String getLabelFor(Object entrypoint_p) {
+    String result = null;
+    if (entrypoint_p instanceof IFile)
+      result = getLabelForFile((IFile)entrypoint_p);
+    return result;
+  }
+  
+  /**
    * Return a label for the given file to display in the compare editor
    * @param file_p a potentially null file
    * @return a potentially null string
@@ -113,7 +141,7 @@ public class FileScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#isApplicableTo(java.lang.Object)
    */
   public boolean isApplicableTo(Object entrypoint_p) {
-    return true;
+    return entrypoint_p instanceof URI || canConvertToURI(entrypoint_p);
   }
   
   /**

@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 
 /**
- * A featured model scope which can be modified.
+ * A featured model scope which has the ability to be modified.
  * @author Olivier Constant
  */
 public interface IEditableModelScope extends IFeaturedModelScope {

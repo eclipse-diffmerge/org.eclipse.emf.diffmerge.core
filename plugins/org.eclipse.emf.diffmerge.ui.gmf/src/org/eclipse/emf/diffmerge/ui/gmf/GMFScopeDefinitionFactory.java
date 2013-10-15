@@ -19,32 +19,40 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.gmf.GMFScope;
+import org.eclipse.emf.diffmerge.gmf.GMFModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
  * A factory for model scopes within GMF models.
  * @author Olivier Constant
  */
-public class GMFScopeDefinitionFactory extends FileScopeDefinitionFactory {
+public class GMFScopeDefinitionFactory extends URIScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinitionFactory#createScopeDefinitionFromURI(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#createScopeDefinitionFromURI(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
    */
   @Override
   protected IModelScopeDefinition createScopeDefinitionFromURI(URI uri_p, String label_p,
       boolean editable_p) {
-    return new FileScopeDefinition(uri_p, label_p, editable_p) {
+    return new URIScopeDefinition(uri_p, label_p, editable_p) {
       /**
-       * @see org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeDefinition#createScope(org.eclipse.emf.ecore.resource.ResourceSet)
+       * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnEditingDomain(org.eclipse.emf.edit.domain.EditingDomain)
        */
       @Override
-      public IEditableModelScope createScope(ResourceSet resourceSet_p) {
-        return new GMFScope(getEntrypointResource(resourceSet_p));
+      protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain_p) {
+        return new GMFModelScope(getEntrypoint(), editingDomain_p, !isEditable());
+      }
+      /**
+       * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnResourceSet(org.eclipse.emf.ecore.resource.ResourceSet)
+       */
+      @Override
+      protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
+        return new GMFModelScope(getEntrypoint(), resourceSet_p, !isEditable());
       }
     };
   }
@@ -54,7 +62,7 @@ public class GMFScopeDefinitionFactory extends FileScopeDefinitionFactory {
    */
   @Override
   public Collection<? extends Class<?>> getOverridenClasses() {
-    return Collections.<Class<?>>singleton(FileScopeDefinitionFactory.class);
+    return Collections.<Class<?>>singleton(URIScopeDefinitionFactory.class);
   }
   
 }
