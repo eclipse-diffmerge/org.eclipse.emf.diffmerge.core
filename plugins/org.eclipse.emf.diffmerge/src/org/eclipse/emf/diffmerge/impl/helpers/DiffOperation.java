@@ -406,14 +406,14 @@ public class DiffOperation extends AbstractExpensiveOperation {
   
   /**
    * Create and return the element presence difference corresponding to
-   * the given partial match. If it already exists, just return it
+   * the given partial match, if allowed. If it already exists, just return it.
    * @param match_p a non-null, partial match
-   * @return a non-null element presence difference
+   * @return a potentially null element presence
    */
   protected IElementPresence getOrCreateElementPresence(IMatch match_p) {
     assert match_p != null && match_p.isPartial();
     IElementPresence result = match_p.getElementPresenceDifference();
-    if (result == null) {
+    if (result == null && getDiffPolicy().coverMatch(match_p)) {
       Role presenceRole = match_p.getUncoveredRole().opposite();
       IMatch ownerMatch = getComparison().getContainerOf(match_p, presenceRole);
       result = getComparison().newElementPresence(match_p, ownerMatch);
@@ -452,12 +452,14 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (getMergePolicy().bindPresenceToOwnership(_comparison.getScope(presenceRole.opposite())) &&
           ownerMatch != null && ownerMatch.isPartial()) {
         IElementPresence ownerPresence = getOrCreateElementPresence(ownerMatch);
-        // Child addition requires container addition
-        ((IMergeableDifference.Editable)presence_p).markRequires(
-            ownerPresence, presenceRole.opposite());
-        // Container deletion requires child deletion
-        ((IMergeableDifference.Editable)ownerPresence).markRequires(
-            presence_p, presenceRole);
+        if (ownerPresence != null) {
+          // Child addition requires container addition
+          ((IMergeableDifference.Editable)presence_p).markRequires(
+              ownerPresence, presenceRole.opposite());
+          // Container deletion requires child deletion
+          ((IMergeableDifference.Editable)ownerPresence).markRequires(
+              presence_p, presenceRole);
+        }
       }
     }
     // Grouped addition according to policy
@@ -467,12 +469,14 @@ public class DiffOperation extends AbstractExpensiveOperation {
       IMatch peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
-        // Element addition requires group member addition
-        ((IMergeableDifference.Editable)presence_p).markRequires(
-            peerPresence, presenceRole.opposite());
-        // Group member deletion requires element deletion
-        ((IMergeableDifference.Editable)peerPresence).markRequires(
-                presence_p, presenceRole);
+        if (peerPresence != null) {
+          // Element addition requires group member addition
+          ((IMergeableDifference.Editable)presence_p).markRequires(
+              peerPresence, presenceRole.opposite());
+          // Group member deletion requires element deletion
+          ((IMergeableDifference.Editable)peerPresence).markRequires(
+              presence_p, presenceRole);
+        }
       }
     }
     // Grouped deletion according to policy
@@ -482,9 +486,11 @@ public class DiffOperation extends AbstractExpensiveOperation {
       IMatch peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
-        // Element deletion requires group member deletion
-        ((IMergeableDifference.Editable)presence_p).markRequires(
-            peerPresence, presenceRole);
+        if (peerPresence != null) {
+          // Element deletion requires group member deletion
+          ((IMergeableDifference.Editable)presence_p).markRequires(
+              peerPresence, presenceRole);
+        }
       }
     }
   }
@@ -528,32 +534,34 @@ public class DiffOperation extends AbstractExpensiveOperation {
     assert referenceDiff_p.getValue().isPartial();
     IElementPresence presence = getOrCreateElementPresence(
         referenceDiff_p.getValue());
-    Role presenceRole = referenceDiff_p.getPresenceRole();
-    IMergeableDifference.Editable referenceDiff =
-      (IMergeableDifference.Editable)referenceDiff_p;
-    // Ref requires value presence, value absence requires no ref
-    referenceDiff.markRequires(presence, presenceRole.opposite());
-    ((IMergeableDifference.Editable)presence).markRequires(
-        referenceDiff_p, presenceRole);
-    if (referenceDiff_p.getFeature() != null) {
-      // If containment and presence requires ownership, value presence implies ref
-      // and no ref implies value absence
-      if (referenceDiff_p.getFeature().isContainment() &&
-          getMergePolicy().bindPresenceToOwnership(
-              _comparison.getScope(presenceRole.opposite()))) {
-        ((IMergeableDifference.Editable)presence).markImplies(
-            referenceDiff_p, presenceRole.opposite());
-        referenceDiff.markImplies(presence, presenceRole);
-      } else {
-        // Not a containment or no ownership/presence coupling
-        EReference opposite = referenceDiff_p.getFeature().getEOpposite();
-        // If reference has an eOpposite which is mandatory for addition, then ...
-        if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
-          // ... value presence requires ref
-          ((IMergeableDifference.Editable)presence).markRequires(
+    if (presence != null) {
+      Role presenceRole = referenceDiff_p.getPresenceRole();
+      IMergeableDifference.Editable referenceDiff =
+          (IMergeableDifference.Editable)referenceDiff_p;
+      // Ref requires value presence, value absence requires no ref
+      referenceDiff.markRequires(presence, presenceRole.opposite());
+      ((IMergeableDifference.Editable)presence).markRequires(
+          referenceDiff_p, presenceRole);
+      if (referenceDiff_p.getFeature() != null) {
+        // If containment and presence requires ownership, value presence implies ref
+        // and no ref implies value absence
+        if (referenceDiff_p.getFeature().isContainment() &&
+            getMergePolicy().bindPresenceToOwnership(
+                _comparison.getScope(presenceRole.opposite()))) {
+          ((IMergeableDifference.Editable)presence).markImplies(
               referenceDiff_p, presenceRole.opposite());
-          // ... and no ref requires value absence
-          referenceDiff.markRequires(presence, presenceRole);
+          referenceDiff.markImplies(presence, presenceRole);
+        } else {
+          // Not a containment or no ownership/presence coupling
+          EReference opposite = referenceDiff_p.getFeature().getEOpposite();
+          // If reference has an eOpposite which is mandatory for addition, then ...
+          if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
+            // ... value presence requires ref
+            ((IMergeableDifference.Editable)presence).markRequires(
+                referenceDiff_p, presenceRole.opposite());
+            // ... and no ref requires value absence
+            referenceDiff.markRequires(presence, presenceRole);
+          }
         }
       }
     }
@@ -568,12 +576,14 @@ public class DiffOperation extends AbstractExpensiveOperation {
     assert referenceDiff_p.getElementMatch().isPartial();
     IElementPresence presence = getOrCreateElementPresence(
         referenceDiff_p.getElementMatch());
-    Role presenceRole = referenceDiff_p.getPresenceRole();
-    // Ref requires element presence, element absence requires no ref
-    ((IMergeableDifference.Editable)referenceDiff_p).markRequires(
-        presence, presenceRole.opposite());
-    ((IMergeableDifference.Editable)presence).markRequires(
-        referenceDiff_p, presenceRole);
+    if (presence != null) {
+      Role presenceRole = referenceDiff_p.getPresenceRole();
+      // Ref requires element presence, element absence requires no ref
+      ((IMergeableDifference.Editable)referenceDiff_p).markRequires(
+          presence, presenceRole.opposite());
+      ((IMergeableDifference.Editable)presence).markRequires(
+          referenceDiff_p, presenceRole);
+    }
   }
   
   /**
