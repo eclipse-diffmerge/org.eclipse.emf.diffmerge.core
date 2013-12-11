@@ -69,6 +69,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.IgnoreChoicesDialog.IgnoreChoiceData
 import org.eclipse.emf.diffmerge.ui.viewers.MergeChoicesDialog.MergeChoiceDialogData;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -477,13 +478,13 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       try {
         if (getInput().isModified(true)) {
           IModelScope leftScope = comparison.getScope(getInput().getRoleForSide(true));
-          if (leftScope instanceof IPersistentModelScope)
-            ((IPersistentModelScope)leftScope).save();
+          if (leftScope instanceof IPersistentModelScope.Editable)
+            ((IPersistentModelScope.Editable)leftScope).save();
         }
         if (getInput().isModified(false)) {
           IModelScope rightScope = comparison.getScope(getInput().getRoleForSide(false));
-          if (rightScope instanceof IPersistentModelScope)
-            ((IPersistentModelScope)rightScope).save();
+          if (rightScope instanceof IPersistentModelScope.Editable)
+            ((IPersistentModelScope.Editable)rightScope).save();
         }
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
         if (getEditingDomain() != null)
@@ -628,6 +629,14 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
+   * Return the inner viewer for the features of elements with differences
+   * @return a viewer which is non-null if this viewer has been properly initialized
+   */
+  public FeaturesViewer getFeaturesViewer() {
+    return _featuresViewer;
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override
@@ -651,6 +660,17 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   protected String getModelName(boolean onLeft_p) {
     IModelScope scope = getComparison().getScope(getInput().getRoleForSide(onLeft_p));
     return DiffMergeLabelProvider.getInstance().getText(scope);
+  }
+  
+  /**
+   * Return the inner viewer for the model from the given side
+   * @param left_p whether the side is left or right
+   * @return a viewer which is non-null if this viewer has been properly initialized
+   */
+  public EnhancedComparisonSideViewer getModelScopeViewer(boolean left_p) {
+    EnhancedComparisonSideViewer result = left_p? _leftModelTreeViewer:
+      _rightModelTreeViewer;
+    return result;
   }
   
   /**
@@ -678,11 +698,29 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
+   * Return the inner viewer for the comparison tree
+   * @return a viewer which is non-null if this viewer has been properly initialized
+   */
+  public EnhancedComparisonTreeViewer getSynthesisViewer() {
+    return _synthesisModelTreeViewer;
+  }
+  
+  /**
    * Return the UI comparison for this viewer
    * @return a UI comparison which is assumed non-null after setInput(Object) has been invoked
    */
   protected UIComparison getUIComparison() {
     return getInput() == null? null: getInput().getUIComparison();
+  }
+  
+  /**
+   * Return the inner viewer for differences on values for the given side
+   * @param left_p whether the side is left or right
+   * @return a viewer which is non-null if this viewer has been properly initialized
+   */
+  public ValuesViewer getValuesViewer(boolean left_p) {
+    ValuesViewer result = left_p? _leftValuesViewer: _rightValuesViewer;
+    return result;
   }
   
   /**
@@ -1417,22 +1455,22 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
       }
     });
     // Show moved elements on one side only
-    final MenuItem showMovedOnce = new MenuItem(synthesisMenu, SWT.CHECK);
-    showMovedOnce.setText(Messages.ComparisonViewer_ShowMovesMenuItem);
-    showMovedOnce.setSelection(false);
-    _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
-    showMovedOnce.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        if (showMovedOnce.getSelection())
-          _synthesisModelTreeViewer.getComparisonTreeViewer().removeFilter(_moveOriginsFilter);
-        else
-          _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
-      }
-    });
+//    final MenuItem showMovedOnce = new MenuItem(synthesisMenu, SWT.CHECK);
+//    showMovedOnce.setText(Messages.ComparisonViewer_ShowMovesMenuItem);
+//    showMovedOnce.setSelection(false);
+//    _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
+//    showMovedOnce.addSelectionListener(new SelectionAdapter() {
+//      /**
+//       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+//       */
+//      @Override
+//      public void widgetSelected(SelectionEvent e_p) {
+//        if (showMovedOnce.getSelection())
+//          _synthesisModelTreeViewer.getComparisonTreeViewer().removeFilter(_moveOriginsFilter);
+//        else
+//          _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
+//      }
+//    });
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     // Show additions
     final MenuItem showAdditions = new MenuItem(synthesisMenu, SWT.CHECK);
@@ -1804,9 +1842,12 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     public void widgetSelected(SelectionEvent event_p) {
       ValuesViewer valuesViewer = _sideIsLeft? _leftValuesViewer: _rightValuesViewer;
       IStructuredSelection selection = valuesViewer.getSelection();
-      if (!selection.isEmpty())
-        ComparisonViewer.this.setSelection(new ComparisonSelectionImpl(
-            selection.toList(), getInput().getRoleForSide(_sideIsLeft)), true);
+      if (!selection.isEmpty()) {
+        if (selection.getFirstElement() instanceof EObject) // Skip attribute values
+          ComparisonViewer.this.setSelection(
+              new ComparisonSelectionImpl(
+                  selection.toList(), getInput().getRoleForSide(_sideIsLeft)), true);
+      }
     }
   }
   

@@ -367,8 +367,16 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   protected void handleDispose() {
+    Display display = Display.getDefault();
     if (_propertySheetPage != null)
-      _propertySheetPage.dispose();
+      display.asyncExec(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          _propertySheetPage.dispose();
+        }
+      });
     if (_commandStackListener != null && getEditingDomain() != null)
       getEditingDomain().getCommandStack().removeCommandStackListener(_commandStackListener);
     if (_viewer != null && _selectionBridge != null)
@@ -393,7 +401,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
         _comparisonResource = null;
       }
     };
-    Display display = Display.getDefault();
     boolean inUIThread = display.getThread() == Thread.currentThread();
     if (inUIThread)
       BusyIndicator.showWhile(display, disposeBehavior);
@@ -474,6 +481,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     EMFDiffNode result = new EMFDiffNode(
         comparison_p, getEditingDomain(), cc.isLeftEditable(), cc.isRightEditable());
     result.setReferenceRole(_comparisonMethod.getTwoWayReferenceRole());
+    result.setCustomLabelProvider(_comparisonMethod.getCustomLabelProvider());
     result.updateDifferenceNumbers();
     return result;
   }
@@ -587,6 +595,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       handleDispose();
     } catch (Throwable t) {
       // Cannot load models
+      setMessage(Messages.EMFDiffMergeEditorInput_CannotLoad); 
       handleExecutionProblem(t);
       handleDispose();
     }

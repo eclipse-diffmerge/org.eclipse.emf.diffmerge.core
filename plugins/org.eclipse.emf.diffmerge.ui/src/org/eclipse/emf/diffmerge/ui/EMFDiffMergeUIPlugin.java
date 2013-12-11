@@ -58,7 +58,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT, PLUS, PREV_CHANGE_NAV,
     PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, UNDO, UP, VIEW_MENU }
   
-  /** Identifiers for the side to which a difference presence is relative */
+  /** Identifiers for colors according to the side to which a difference presence is relative */
   public static enum DifferenceColorKind {
     LEFT, RIGHT, BOTH, NONE, CONFLICT, DEFAULT
   }
@@ -70,7 +70,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   public static final String LABEL = Messages.EMFDiffMergeUIPlugin_Label;
   
 	/** The shared instance */
-	private static EMFDiffMergeUIPlugin plugin;
+	private static EMFDiffMergeUIPlugin __plugin;
 	
 	/** The manager for comparison contexts */
 	private final ComparisonSetupManager _comparisonSetupManager;
@@ -107,7 +107,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	 * Return a label provider based on the registered .edit plugins
 	 * @return a non-null object
 	 */
-	public AdapterFactoryLabelProvider getComposedAdapterFactoryLabelProvider() {
+	public AdapterFactoryLabelProvider getAdapterFactoryLabelProvider() {
 	  if (_composedAdapterFactoryLabelProvider == null)
 	    _composedAdapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
 	        new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
@@ -119,7 +119,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @return a non-null object
    */
   public static EMFDiffMergeUIPlugin getDefault() {
-    return plugin;
+    return __plugin;
   }
   
   /**
@@ -145,11 +145,11 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
           result = DifferenceColorKind.NONE; break;
         case CONFLICT:
           result = DifferenceColorKind.CONFLICT; break;
-        case MODIFIED: case FROM_BOTH:
+        case MODIFIED: case FROM_LEFT: case FROM_RIGHT: case FROM_BOTH:
           result = DifferenceColorKind.BOTH; break;
-        case FROM_LEFT: case FROM_LEFT_ADD: case FROM_RIGHT_DEL:
+        case FROM_LEFT_ADD: case FROM_RIGHT_DEL:
           result = DifferenceColorKind.LEFT; break;
-        case FROM_RIGHT: case FROM_RIGHT_ADD: case FROM_LEFT_DEL:
+        case FROM_RIGHT_ADD: case FROM_LEFT_DEL:
           result = DifferenceColorKind.RIGHT; break;
         default:
           result = DifferenceColorKind.DEFAULT; break;
@@ -314,7 +314,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   }
   
   /**
-   * Get the plug-in ID according to MANIFEST.MF definition.
+   * Get the plug-in ID according to MANIFEST.MF
    * @return a non-null String
    */
   public String getPluginId() {
@@ -380,23 +380,23 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
+	public void start(BundleContext context_p) throws Exception {
+		super.start(context_p);
+		__plugin = this;
 	}
 	
 	/**
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context_p) throws Exception {
 	  _diffMergeLogger.close();
 	  if (_veryDarkGray != null)
 	    _veryDarkGray.dispose();
 	  if (_composedAdapterFactoryLabelProvider != null)
 	    _composedAdapterFactoryLabelProvider.dispose();
-		plugin = null;
-		super.stop(context);
+		__plugin = null;
+		super.stop(context_p);
 	}
 	
 }

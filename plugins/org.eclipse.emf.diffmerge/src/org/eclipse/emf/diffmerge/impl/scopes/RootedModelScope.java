@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * Removal of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant
  */
-public class RootedModelScope extends AbstractModelScope {
+public class RootedModelScope extends AbstractEditableModelScope {
   
   /** The roots of this scope */
   protected final List<EObject> _roots;

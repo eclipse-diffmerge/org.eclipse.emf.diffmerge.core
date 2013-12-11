@@ -56,6 +56,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -144,6 +145,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /** The default value for "show merge impact" property as proposed to the user when merging */
   private boolean _defaultShowMergeImpact;
+  
+  /** An optional custom label provider */
+  private ILabelProvider _customLabelProvider;
   
   /** A map from color kind to SWT color code from the SWT class */
   private final Map<DifferenceColorKind, Integer> _differenceColors;
@@ -387,6 +391,16 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
       containerSide = getDrivingRole();
     EMatch result = (EMatch)getActualComparison().getContainerOf(match_p, containerSide);
     return result;
+  }
+  
+  /**
+   * Return an optional label provider for customizing the way model elements
+   * are represented in comparison widgets. The client is responsible for disposing
+   * the label provider when appropriate.
+   * @return a label provider, or null for the default label provider
+   */
+  public ILabelProvider getCustomLabelProvider() {
+    return _customLabelProvider;
   }
   
   /**
@@ -804,7 +818,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /**
    * Return whether the given path corresponds to a moved element on the side of
-   * the source of the move
+   * the source of the move, where source corresponds to the opposite of the driving role
    * @param path_p a non-null path
    */
   public boolean isMoveOrigin(TreePath path_p) {
@@ -815,7 +829,8 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
       IMatch father =
         parentPath == null? null: (IMatch)parentPath.getLastSegment();
       IComparison comparison = end.getMapping().getComparison();
-      result = comparison.getContainerOf(end, getDrivingRole().opposite()) == father;
+      result = comparison.getContainerOf(end, getDrivingRole().opposite()) == father &&
+          comparison.getContainerOf(end, getDrivingRole()) != father;
     }
     return result;
   }
@@ -929,6 +944,18 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
       _countedKinds.add(kind_p);
     else
       _countedKinds.remove(kind_p);
+  }
+  
+  /**
+   * Set the optional label provider for customizing the way model elements
+   * are represented in comparison widgets. The client is responsible for disposing
+   * the label provider when appropriate.
+   * This operation has no immediate effect if this object has already been set as input
+   * to viewers.
+   * @param labelProvider_p a label provider, or null for default labels
+   */
+  public void setCustomLabelProvider(ILabelProvider labelProvider_p) {
+    _customLabelProvider = labelProvider_p;
   }
   
   /**

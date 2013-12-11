@@ -22,8 +22,9 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -123,6 +124,18 @@ public class ComparisonSideViewer extends TreeViewer {
   }
   
   /**
+   * @see org.eclipse.jface.viewers.AbstractTreeViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (input_p instanceof EMFDiffNode && getLabelProvider() instanceof DelegatingLabelProvider) {
+      ILabelProvider customLP = ((EMFDiffNode)input_p).getCustomLabelProvider();
+      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
+    }
+    super.inputChanged(input_p, oldInput_p);
+  }
+  
+  /**
    * Return whether the side of this viewer is left or right
    * @return a non-null role
    */
@@ -132,7 +145,7 @@ public class ComparisonSideViewer extends TreeViewer {
   
   
   /**
-   * The content provider for this viewer
+   * The content provider for this viewer.
    */
   protected class ContentProvider implements ITreeContentProvider {
     
@@ -188,16 +201,9 @@ public class ComparisonSideViewer extends TreeViewer {
   
   
   /**
-   * The label provider for this viewer
+   * The label provider for this viewer.
    */
   protected class LabelProvider extends DelegatingLabelProvider {
-    
-    /**
-     * Constructor
-     */
-    public LabelProvider() {
-      super(DiffMergeLabelProvider.getInstance());
-    }
     
     /**
      * Return the element to represent for the given match
@@ -220,8 +226,9 @@ public class ComparisonSideViewer extends TreeViewer {
     @Override
     public Color getForeground(Object element_p) {
       EMatch match = (EMatch)element_p;
+      DifferenceKind kind = getInput().getDifferenceKind(match);
       Color result;
-      if (getInput().getDifferenceNumber(match) > 0)
+      if (!kind.isNeutral())
         result = getSideColor();
       else
         result = getInput().getDifferenceColor(DifferenceColorKind.NONE);

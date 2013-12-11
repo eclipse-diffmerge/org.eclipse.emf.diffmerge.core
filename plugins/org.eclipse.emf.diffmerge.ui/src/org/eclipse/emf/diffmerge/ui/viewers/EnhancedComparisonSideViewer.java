@@ -113,6 +113,15 @@ public class EnhancedComparisonSideViewer extends Viewer {
   }
   
   /**
+   * Return the inner viewer which is solely dedicated to the representation
+   * of the model scope
+   * @return a viewer which is not null if this viewer has been properly initialized
+   */
+  public ComparisonSideViewer getInnerViewer() {
+    return _comparisonSideViewer;
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override

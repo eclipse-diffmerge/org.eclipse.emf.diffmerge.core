@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
+import org.eclipse.jface.viewers.ILabelProvider;
 
 
 /**
@@ -50,6 +51,14 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
    * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
    */
   EditingDomain getEditingDomain();
+  
+  /**
+   * Return an optional label provider for customizing the way model elements
+   * are represented in comparison widgets. The client is responsible for disposing
+   * the label provider when appropriate.
+   * @return a label provider, or null for the default label provider
+   */
+  ILabelProvider getCustomLabelProvider();
   
   /**
    * Return the match policy for the comparison

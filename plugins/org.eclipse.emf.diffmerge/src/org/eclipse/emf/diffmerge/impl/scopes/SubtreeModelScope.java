@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  * Complete deletion of elements which are cross-referenced outside the scope is not supported.
  * @author Olivier Constant
  */
-public class SubtreeModelScope extends AbstractModelScope implements IPersistentModelScope {
+public class SubtreeModelScope extends AbstractEditableModelScope implements IPersistentModelScope {
   
   /** The root of this scope */
   private final EObject _root;
@@ -95,6 +95,14 @@ public class SubtreeModelScope extends AbstractModelScope implements IPersistent
    */
   public Resource getHoldingResource() {
     return getRoot().eResource();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getOriginator()
+   */
+  @Override
+  public Object getOriginator() {
+    return _root;
   }
   
   /**

@@ -131,9 +131,10 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * Return a new intrinsic ID for the given element
+   * Return a new intrinsic ID for the given element, if applicable
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which the element is being added by copy
+   * @return a potentially null string
    */
   protected String getNewIntrinsicID(EObject element_p, IFeaturedModelScope scope_p) {
     return null;

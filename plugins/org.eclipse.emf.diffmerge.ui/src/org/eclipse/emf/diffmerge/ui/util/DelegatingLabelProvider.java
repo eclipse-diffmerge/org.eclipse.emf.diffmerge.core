@@ -33,15 +33,22 @@ import org.eclipse.swt.graphics.Image;
 public class DelegatingLabelProvider extends ColumnLabelProvider {
   
   /** The non-null label provider to which behavior is delegated */
-  private final ILabelProvider _delegate;
+  private ILabelProvider _delegate;
   
   
   /**
+   * Default constructor
+   */
+  public DelegatingLabelProvider() {
+    this(null);
+  }
+  
+  /**
    * Constructor
-   * @param delegate_p the non-null label provider to which behavior is delegated
+   * @param delegate_p the optional label provider to which behavior is delegated
    */
   public DelegatingLabelProvider(ILabelProvider delegate_p) {
-    _delegate = delegate_p;
+    setDelegate(delegate_p);
   }
   
   /**
@@ -67,10 +74,18 @@ public class DelegatingLabelProvider extends ColumnLabelProvider {
   }
   
   /**
+   * Return the default delegate
+   * @return a non-null label provider
+   */
+  protected ILabelProvider getDefaultDelegate() {
+    return DiffMergeLabelProvider.getInstance();
+  }
+  
+  /**
    * Return the label provider to which behavior is delegated
    * @return a non-null label provider
    */
-  protected ILabelProvider getDelegate() {
+  public ILabelProvider getDelegate() {
     return _delegate;
   }
   
@@ -99,6 +114,16 @@ public class DelegatingLabelProvider extends ColumnLabelProvider {
   @Override
   public String getText(Object element_p) {
     return _delegate.getText(element_p);
+  }
+  
+  /**
+   * Set the delegate of this label provider (null for default)
+   * @param delegate_p a potentially null label provider
+   */
+  public void setDelegate(ILabelProvider delegate_p) {
+    _delegate = delegate_p;
+    if (_delegate == null)
+      _delegate = getDefaultDelegate();
   }
   
 }

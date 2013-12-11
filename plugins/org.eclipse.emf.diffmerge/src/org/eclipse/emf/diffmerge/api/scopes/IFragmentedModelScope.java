@@ -64,4 +64,19 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
    */
   List<Resource> getRootResources();
   
+  /**
+   * Return whether the scope has been fully explored. While true, the result of the methods
+   * related to resources remains identical.
+   * Invariant: isFullyExplored() implies isLoaded()
+   */
+  boolean isFullyExplored();
+  
+  
+  /**
+   * An IFragmentedModelScope which can be modified.
+   */
+  public static interface Editable extends IPersistentModelScope.Editable {
+    // Nothing more
+  }
+  
 }

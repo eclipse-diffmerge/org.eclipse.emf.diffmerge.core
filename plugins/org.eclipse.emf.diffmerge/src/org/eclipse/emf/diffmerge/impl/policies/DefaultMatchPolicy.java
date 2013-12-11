@@ -98,7 +98,7 @@ public class DefaultMatchPolicy implements IMatchPolicy {
    * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#keepMatchIDs()
    */
   public boolean keepMatchIDs() {
-    return true;
+    return false;
   }
   
 }

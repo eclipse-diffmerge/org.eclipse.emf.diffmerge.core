@@ -64,6 +64,11 @@ public interface IEditableModelScope extends IFeaturedModelScope {
   boolean add(EObject source_p, EReference reference_p, EObject value_p);
   
   /**
+   * Return whether this scope is read-only, which means that modification operations have no effect
+   */
+  boolean isReadOnly();
+  
+  /**
    * Move the value held by the given element via the given feature at the given
    * position to the given new position.
    * @param source_p a non-null element

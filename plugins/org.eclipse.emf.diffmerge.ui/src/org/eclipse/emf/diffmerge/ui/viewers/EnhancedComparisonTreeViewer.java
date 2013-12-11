@@ -122,6 +122,15 @@ public class EnhancedComparisonTreeViewer extends Viewer {
   }
   
   /**
+   * Return the inner viewer which is solely dedicated to the representation
+   * of the comparison tree
+   * @return a viewer which is not null if this viewer has been properly initialized
+   */
+  public ComparisonTreeViewer getInnerViewer() {
+    return _comparisonViewer;
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override

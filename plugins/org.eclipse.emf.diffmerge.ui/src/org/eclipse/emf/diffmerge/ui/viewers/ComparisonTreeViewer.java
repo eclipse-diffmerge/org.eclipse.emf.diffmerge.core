@@ -28,11 +28,11 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreePathContentProvider;
 import org.eclipse.jface.viewers.ITreePathLabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -343,9 +343,21 @@ public class ComparisonTreeViewer extends TreeViewer {
     return super.getSortedChildren(parentElementOrTreePath_p);
   }
   
+  /**
+   * @see org.eclipse.jface.viewers.AbstractTreeViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (input_p instanceof EMFDiffNode && getLabelProvider() instanceof DelegatingLabelProvider) {
+      ILabelProvider customLP = ((EMFDiffNode)input_p).getCustomLabelProvider();
+      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
+    }
+    super.inputChanged(input_p, oldInput_p);
+  }
+  
   
   /**
-   * The content provider for this viewer
+   * The content provider for this viewer.
    */
   protected class ContentProvider implements ITreePathContentProvider {
     
@@ -405,16 +417,9 @@ public class ComparisonTreeViewer extends TreeViewer {
   
   
   /**
-   * The label provider for this viewer
+   * The label provider for this viewer.
    */
   protected class LabelProvider extends DelegatingLabelProvider implements ITreePathLabelProvider {
-    
-    /**
-     * Constructor
-     */
-    public LabelProvider() {
-      super(DiffMergeLabelProvider.getInstance());
-    }
     
     /**
      * Return the element to represent for the given match
@@ -541,9 +546,10 @@ public class ComparisonTreeViewer extends TreeViewer {
       String result = null;
       if (element_p instanceof IPureMatch) {
         Object matchID = ((IPureMatch)element_p).getMatchID();
-        String matchIDText = matchID != null? matchID.toString():
-          Messages.ComparisonTreeViewer_NoMatchID;
-        result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
+        if (matchID != null) {
+          String matchIDText = matchID.toString();
+          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
+        }
       }
       return result;
     }

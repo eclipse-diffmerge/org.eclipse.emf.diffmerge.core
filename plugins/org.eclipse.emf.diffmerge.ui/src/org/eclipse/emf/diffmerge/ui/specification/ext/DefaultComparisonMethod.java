@@ -33,6 +33,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.jface.viewers.ILabelProvider;
 
 
 /**
@@ -159,6 +160,13 @@ public class DefaultComparisonMethod implements IComparisonMethod {
     if (_editingDomain == null)
       _editingDomain = doGetEditingDomain();
     return _editingDomain;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getCustomLabelProvider()
+   */
+  public ILabelProvider getCustomLabelProvider() {
+    return null;
   }
   
   /**

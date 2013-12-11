@@ -38,6 +38,7 @@ import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
 import org.eclipse.emf.diffmerge.util.structures.FHashSet;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -327,6 +328,10 @@ public class MergeImpactViewer extends Viewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (input_p instanceof ImpactInput) {
+      ILabelProvider customLP = ((ImpactInput)input_p).getContext().getCustomLabelProvider();
+      ((DelegatingLabelProvider)_upperViewer.getLabelProvider()).setDelegate(customLP); // Same on both viewers
+    }
     _upperViewer.setInput(input_p);
     _lowerViewer.setInput(input_p);
     _upperViewer.expandAll();
@@ -544,7 +549,7 @@ public class MergeImpactViewer extends Viewer {
      * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getDelegate()
      */
     @Override
-    protected DiffMergeLabelProvider getDelegate() {
+    public DiffMergeLabelProvider getDelegate() {
       return (DiffMergeLabelProvider)super.getDelegate();
     }
     

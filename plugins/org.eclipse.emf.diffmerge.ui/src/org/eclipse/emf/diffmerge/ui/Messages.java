@@ -81,6 +81,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
   public static String EMFDiffMergeEditorInput_AncestorScope;
   public static String EMFDiffMergeEditorInput_AncestorScopeNull;
+  public static String EMFDiffMergeEditorInput_CannotLoad;
   public static String EMFDiffMergeEditorInput_DuplicateIDs;
   public static String EMFDiffMergeEditorInput_Failure;
   public static String EMFDiffMergeEditorInput_LeftScopeNull;

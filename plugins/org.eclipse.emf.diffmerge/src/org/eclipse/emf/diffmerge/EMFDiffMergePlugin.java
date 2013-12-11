@@ -51,6 +51,7 @@ public class EMFDiffMergePlugin extends Plugin {
   
   /**
    * Return the ID of this plug-in according to MANIFEST.MF
+   * @return a non-null string
    */
   public String getPluginId() {
     return getBundle().getSymbolicName();
@@ -75,8 +76,8 @@ public class EMFDiffMergePlugin extends Plugin {
    * @see org.eclipse.core.runtime.Plugin#start(org.osgi.framework.BundleContext)
    */
   @Override
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
+	public void start(BundleContext context_p) throws Exception {
+		super.start(context_p);
 		__plugin = this;
 	}
   
@@ -84,9 +85,9 @@ public class EMFDiffMergePlugin extends Plugin {
 	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
 	 */
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context_p) throws Exception {
 		__plugin = null;
-		super.stop(context);
+		super.stop(context_p);
 	}
 	
   /**

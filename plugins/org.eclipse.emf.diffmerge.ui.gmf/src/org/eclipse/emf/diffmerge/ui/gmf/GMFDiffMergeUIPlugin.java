@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 public class GMFDiffMergeUIPlugin extends AbstractUIPlugin {
   
   /** The shared instance */
-  private static GMFDiffMergeUIPlugin plugin;
+  private static GMFDiffMergeUIPlugin __plugin;
   
   
   /**
@@ -40,11 +40,12 @@ public class GMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @return a non-null instance of this class
    */
   public static GMFDiffMergeUIPlugin getDefault() {
-    return plugin;
+    return __plugin;
   }
   
   /**
    * Return the ID of this plug-in according to MANIFEST.MF
+   * @return a non-null string
    */
   public String getPluginId() {
     return getBundle().getSymbolicName();
@@ -54,18 +55,18 @@ public class GMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
    */
   @Override
-  public void start(BundleContext context) throws Exception {
-    super.start(context);
-    plugin = this;
+  public void start(BundleContext context_p) throws Exception {
+    super.start(context_p);
+    __plugin = this;
   }
   
   /**
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
    */
   @Override
-  public void stop(BundleContext context) throws Exception {
-    plugin = null;
-    super.stop(context);
+  public void stop(BundleContext context_p) throws Exception {
+    __plugin = null;
+    super.stop(context_p);
   }
   
 }

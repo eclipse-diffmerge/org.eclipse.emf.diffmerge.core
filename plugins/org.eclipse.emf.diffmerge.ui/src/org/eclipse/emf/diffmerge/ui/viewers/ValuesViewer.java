@@ -30,15 +30,13 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -50,7 +48,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-
 
 
 /**
@@ -220,6 +217,18 @@ public class ValuesViewer extends TableViewer {
   }
   
   /**
+   * @see org.eclipse.jface.viewers.AbstractTableViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (input_p instanceof ValuesInput && getLabelProvider() instanceof DelegatingLabelProvider) {
+      ILabelProvider customLP = ((ValuesInput)input_p).getContext().getCustomLabelProvider();
+      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
+    }
+    super.inputChanged(input_p, oldInput_p);
+  }
+  
+  /**
    * Return whether the given input object represents a containment
    * @param object_p a potentially null object
    */
@@ -246,8 +255,11 @@ public class ValuesViewer extends TableViewer {
    */
   protected boolean isOwnership(Object object_p) {
     boolean result = false;
-    if (object_p instanceof MatchAndFeature) {
-      EStructuralFeature feature = ((MatchAndFeature)object_p).getFeature();
+    Object object = object_p;
+    if (object instanceof ValuesInput)
+      object = ((ValuesInput)object).getMatchAndFeature();
+    if (object instanceof MatchAndFeature) {
+      EStructuralFeature feature = ((MatchAndFeature)object).getFeature();
       result = EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature().equals(feature);
     }
     return result;
@@ -283,7 +295,7 @@ public class ValuesViewer extends TableViewer {
   
   
   /**
-   * The content provider for this viewer
+   * The content provider for this viewer.
    */
   protected class ContentProvider implements IStructuredContentProvider {
     
@@ -381,21 +393,9 @@ public class ValuesViewer extends TableViewer {
   
   
   /**
-   * The label provider for this viewer
+   * The label provider for this viewer.
    */
-  protected class LabelProvider extends org.eclipse.jface.viewers.LabelProvider
-  implements IFontProvider, IColorProvider {
-    
-    /** The non-null label provider for matched elements */
-    private final ILabelProvider _innerProvider;
-    
-    /**
-     * Constructor
-     */
-    public LabelProvider() {
-      super();
-      _innerProvider = DiffMergeLabelProvider.getInstance();
-    }
+  protected class LabelProvider extends DelegatingLabelProvider {
     
     /**
      * Adapt the given label that describes the cross-reference of the given value
@@ -409,13 +409,14 @@ public class ValuesViewer extends TableViewer {
         builder.append(initialLabel_p);
       EObject container = value_p.eContainer();
       String containerLabel = container == null? null:
-        _innerProvider.getText(container);
+        getDelegate().getText(container);
       if (containerLabel != null) {
         builder.append(' ');
         builder.append(String.format(Messages.ValuesViewer_ContainerLabel, containerLabel));
       }
       return builder.toString();
     }
+    
     /**
      * Adapt the given label of the owner of the given reference value presence so that it conveniently
      * describes a containment
@@ -436,15 +437,9 @@ public class ValuesViewer extends TableViewer {
     }
     
     /**
-     * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getFont(java.lang.Object)
      */
-    public Color getBackground(Object element_p) {
-      return getControl().getBackground();
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
-     */
+    @Override
     public Font getFont(Object element_p) {
       Font result = getControl().getFont();
       if (showAsDifference(element_p))
@@ -453,21 +448,22 @@ public class ValuesViewer extends TableViewer {
     }
     
     /**
-     * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getForeground(java.lang.Object)
      */
+    @Override
     public Color getForeground(Object element_p) {
       DifferenceColorKind result;
       if (showAsDifference(element_p)) {
         result = (getSideRole() == getInput().getContext().getDrivingRole())?
             DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT;
       } else {
-        result = DifferenceColorKind.NONE;
+        result = DifferenceColorKind.DEFAULT;
       }
       return getInput().getContext().getDifferenceColor(result);
     }
     
     /**
-     * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getImage(java.lang.Object)
      */
     @Override
     public Image getImage(Object element_p) {
@@ -478,7 +474,7 @@ public class ValuesViewer extends TableViewer {
           result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SORT);
         } else {
           Object toRepresent = getValueToRepresent(presence);
-          result = _innerProvider.getImage(toRepresent);
+          result = getDelegate().getImage(toRepresent);
         }
         if (getInput().getContext().usesCustomIcons()) {
           DifferenceKind kind;
@@ -491,15 +487,15 @@ public class ValuesViewer extends TableViewer {
           result = getResourceManager().adaptImage(result, kind);
         }
       } else if (element_p instanceof IMatch) {
-        result = _innerProvider.getImage(((IMatch)element_p).get(getSideRole()));
+        result = getDelegate().getImage(((IMatch)element_p).get(getSideRole()));
       } else {
-        result = _innerProvider.getImage(element_p);
+        result = getDelegate().getImage(element_p);
       }
       return result;
     }
     
     /**
-     * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getText(java.lang.Object)
      */
     @Override
     public String getText(Object element_p) {
@@ -510,7 +506,7 @@ public class ValuesViewer extends TableViewer {
           result = Messages.ValuesViewer_OrderLabel;
         } else {
           Object toRepresent = getValueToRepresent(presence);
-          result = _innerProvider.getText(toRepresent);
+          result = getDelegate().getText(toRepresent);
           if (isOwnership(getInput()))
             result = formatOwnershipValue(result, (IReferenceValuePresence)presence);
           else if (toRepresent instanceof EObject)
@@ -522,9 +518,9 @@ public class ValuesViewer extends TableViewer {
           result = prefix + result;
         }
       } else if (element_p instanceof IMatch) {
-        result = _innerProvider.getText(((IMatch)element_p).get(getSideRole()));
+        result = getDelegate().getText(((IMatch)element_p).get(getSideRole()));
       } else {
-        result = _innerProvider.getText(element_p);
+        result = getDelegate().getText(element_p);
       }
       return result;
     }

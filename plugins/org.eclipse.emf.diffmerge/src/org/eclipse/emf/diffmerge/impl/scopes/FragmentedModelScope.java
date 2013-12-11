@@ -60,7 +60,8 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
  * unless unload() has been called.
  * @author Olivier Constant
  */
-public class FragmentedModelScope extends AbstractModelScope implements IFragmentedModelScope {
+public class FragmentedModelScope extends AbstractEditableModelScope
+implements IFragmentedModelScope.Editable {
   
   /** Whether the resources should be opened in read-only mode */
   private final boolean _isReadOnly;
@@ -303,6 +304,14 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getOriginator()
+   */
+  @Override
+  public Object getOriginator() {
+    return getHoldingResource();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#getReferencedResources(org.eclipse.emf.ecore.resource.Resource)
    * Result is guaranteed to be accurate only if hasBeenExplored().
    */
@@ -372,6 +381,13 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#isFullyExplored()
+   */
+  public boolean isFullyExplored() {
+    return _state == ScopeState.FULLY_EXPLORED;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#isLoaded()
    */
   public boolean isLoaded() {
@@ -379,8 +395,9 @@ public class FragmentedModelScope extends AbstractModelScope implements IFragmen
   }
   
   /**
-   * Return whether this scope is in read-only mode, if supported
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#isReadOnly()
    */
+  @Override
   public boolean isReadOnly() {
     return _isReadOnly;
   }

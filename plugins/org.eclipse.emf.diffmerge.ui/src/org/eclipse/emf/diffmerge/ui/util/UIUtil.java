@@ -147,24 +147,24 @@ public final class UIUtil {
    * @return a potentially null image
    */
   public static Image getEMFImage(Object element_p) {
-    Image result = null;
-    // Try editing domain
-    EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
-    if (rawEditingDomain == null)
-      rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
-    if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
-      AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
-      IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
-          element_p, IItemLabelProvider.class);
-      if (provider != null) {
-        Object rawImage = provider.getImage(element_p);
-        if (rawImage != null)
-          result = ExtendedImageRegistry.getInstance().getImage(rawImage);
+    Image result =
+        EMFDiffMergeUIPlugin.getDefault().getAdapterFactoryLabelProvider().getImage(element_p);
+    if (result == null) {
+      // Try editing domain
+      EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
+      if (rawEditingDomain == null)
+        rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
+      if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
+        AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
+        IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
+            element_p, IItemLabelProvider.class);
+        if (provider != null) {
+          Object rawImage = provider.getImage(element_p);
+          if (rawImage != null)
+            result = ExtendedImageRegistry.getInstance().getImage(rawImage);
+        }
       }
     }
-    // Try .edit plugins
-    if (result == null)
-      result = EMFDiffMergeUIPlugin.getDefault().getComposedAdapterFactoryLabelProvider().getImage(element_p);
     return result;
   }
   
@@ -174,19 +174,21 @@ public final class UIUtil {
    * @return a potentially null string
    */
   public static String getEMFText(Object element_p) {
-    String result = null;
-    EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
-    if (rawEditingDomain == null)
-      rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
-    if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
-      AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
-      IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
-          element_p, IItemLabelProvider.class);
-      if (provider != null)
-        result = provider.getText(element_p);
+    String result =
+        EMFDiffMergeUIPlugin.getDefault().getAdapterFactoryLabelProvider().getText(element_p);
+    if (result == null) {
+      // Try editing domain
+      EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
+      if (rawEditingDomain == null)
+        rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
+      if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
+        AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
+        IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
+            element_p, IItemLabelProvider.class);
+        if (provider != null)
+          result = provider.getText(element_p);
+      }
     }
-    if (result == null)
-      result = EMFDiffMergeUIPlugin.getDefault().getComposedAdapterFactoryLabelProvider().getText(element_p);
     return result;
   }
   

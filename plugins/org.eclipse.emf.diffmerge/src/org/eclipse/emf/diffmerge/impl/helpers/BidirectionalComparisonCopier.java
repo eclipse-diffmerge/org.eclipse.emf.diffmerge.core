@@ -91,9 +91,9 @@ public class BidirectionalComparisonCopier {
       EObject target_p, IFeaturedModelScope targetScope_p, IMergePolicy mergePolicy_p) {
     if (mergePolicy_p.copyExtrinsicIDs(sourceScope_p, targetScope_p) &&
         sourceScope_p instanceof IPersistentModelScope &&
-        targetScope_p instanceof IPersistentModelScope) {
+        targetScope_p instanceof IPersistentModelScope.Editable) {
       Object extrinsicID = ((IPersistentModelScope)sourceScope_p).getExtrinsicID(source_p);
-      ((IPersistentModelScope)targetScope_p).setExtrinsicID(target_p, extrinsicID);
+      ((IPersistentModelScope.Editable)targetScope_p).setExtrinsicID(target_p, extrinsicID);
     }
     mergePolicy_p.setIntrinsicID(source_p, sourceScope_p, target_p, targetScope_p);
   }
