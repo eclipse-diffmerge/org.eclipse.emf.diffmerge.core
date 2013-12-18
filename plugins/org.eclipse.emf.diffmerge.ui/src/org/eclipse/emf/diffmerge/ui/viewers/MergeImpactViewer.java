@@ -328,10 +328,6 @@ public class MergeImpactViewer extends Viewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (input_p instanceof ImpactInput) {
-      ILabelProvider customLP = ((ImpactInput)input_p).getContext().getCustomLabelProvider();
-      ((DelegatingLabelProvider)_upperViewer.getLabelProvider()).setDelegate(customLP); // Same on both viewers
-    }
     _upperViewer.setInput(input_p);
     _lowerViewer.setInput(input_p);
     _upperViewer.expandAll();
@@ -382,6 +378,14 @@ public class MergeImpactViewer extends Viewer {
   public void refresh() {
     _upperViewer.refresh();
     _lowerViewer.refresh();
+  }
+  
+  /**
+   * Set the "base" label provider for representing model elements
+   * @param labelProvider_p a potentially null label provider, where null stands for default
+   */
+  public void setDelegateLabelProvider(ILabelProvider labelProvider_p) {
+    ((DelegatingLabelProvider)_upperViewer.getLabelProvider()).setDelegate(labelProvider_p); // Same on both viewers
   }
   
   /**

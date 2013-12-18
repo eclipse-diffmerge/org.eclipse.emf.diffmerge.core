@@ -25,13 +25,13 @@
    <extension
          point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory">
       </scopeDefinition>
       <scopeDefinition
-            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.specification.ext.ResourceScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.ui.specification.ext.ResourceScopeDefinitionFactory">
       </scopeDefinition>
       <comparisonMethod
-            comparisonMethodFactory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
+            factory="org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory">
       </comparisonMethod>
    </extension>
    <extension

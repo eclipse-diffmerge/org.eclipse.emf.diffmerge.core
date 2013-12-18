@@ -22,29 +22,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.compare.CompareEditorInput;
-import org.eclipse.compare.IPropertyChangeNotifier;
-import org.eclipse.compare.contentmergeviewer.IFlushable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.util.Logger;
-import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
@@ -54,12 +44,11 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
-import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
@@ -72,15 +61,14 @@ import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.ui.action.RedoAction;
-import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ContentViewer;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -96,8 +84,6 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -114,34 +100,23 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.progress.IProgressService;
 
 
 /**
- * A viewer for comparisons.
+ * A Viewer for comparisons which is composed of six sub-viewers that show the scopes being
+ * compared, a synthesis of the differences, features of the selected element, and the contents
+ * of the selected feature in each scope.
  * Input: EMFDiffNode ; Elements: IMatch | IDifference.
  * @author Olivier Constant
  */
-public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier, IFlushable {
+public class ComparisonViewer extends AbstractComparisonViewer {
   
   /** The name of the "filtering state" property */
   protected static final String PROPERTY_FILTERING = "PROPERTY_FILTERING"; //$NON-NLS-1$
   
   /** The name of the "difference numbers" property */
   protected static final String PROPERTY_DIFFERENCE_NUMBERS = "PROPERTY_DIFFERENCE_NUMBERS"; //$NON-NLS-1$
-  
-  /** The name of the "current input" property */
-  protected static final String PROPERTY_CURRENT_INPUT = "PROPERTY_CURRENT_INPUT"; //$NON-NLS-1$
-  
-  /** The optional action bars */
-  protected IActionBars _actionBars;
-  
-  /** The current input (initially null) */
-  private EMFDiffNode _input;
-  
-  /** The main control of the viewer */
-  protected SashForm _control;
   
   /** The synthesis model tree viewer */
   protected EnhancedComparisonTreeViewer _synthesisModelTreeViewer;
@@ -186,20 +161,8 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   /** A sorter for the synthesis view */
   protected ViewerSorter _synthesisSorter;
   
-  /** The non-null set of property change listeners */
-  private final Set<IPropertyChangeListener> _changeListeners;
-  
   /** Whether the left and right trees are synchronized with the synthesis tree */
   protected boolean _isLeftRightSynced;
-  
-  /** The last command that was executed before the last save */
-  protected Command _lastCommandBeforeSave;
-  
-  /** The (initially null) undo action */
-  protected UndoAction _undoAction;
-  
-  /** The (initially null) redo action */
-  protected RedoAction _redoAction;
   
   
   /**
@@ -216,16 +179,9 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    * @param actionBars_p optional action bars
    */
   public ComparisonViewer(Composite parent_p, IActionBars actionBars_p) {
-    super();
-    _actionBars = actionBars_p;
-    _input = null;
+    super(parent_p, actionBars_p);
     _isLeftRightSynced = true;
     _lastUserSelection = null;
-    _changeListeners = new HashSet<IPropertyChangeListener>(1);
-    _lastCommandBeforeSave = null;
-    _undoAction = null;
-    _redoAction = null;
-    createControls(parent_p);
   }
   
   /**
@@ -263,13 +219,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     for (IMatch child : getInput().getChildrenForMerge(match_p)) {
       addDifferencesToMergeRec(toMerge_p, child, destination_p, incrementalMode_p);
     }
-  }
-  
-  /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
-   */
-  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
-    _changeListeners.add(listener_p);
   }
   
   /**
@@ -321,10 +270,10 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Create the controls for this viewer and return the main control
-   * @param parent_p a non-null composite
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#createControls(org.eclipse.swt.widgets.Composite)
    */
-  protected void createControls(Composite parent_p) {
+  @Override
+  protected Composite createControls(Composite parent_p) {
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -336,9 +285,9 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
         }
       }
     });
-    _control = new SashForm(parent_p, SWT.VERTICAL);
+    SashForm result = new SashForm(parent_p, SWT.VERTICAL);
     // Upper part
-    SashForm upperPart = new SashForm(_control, SWT.HORIZONTAL);
+    SashForm upperPart = new SashForm(result, SWT.HORIZONTAL);
     _synthesisModelTreeViewer = new EnhancedComparisonTreeViewer(upperPart);
     _synthesisSorter = new ViewerSorter();
     _unchangedElementsFilter = new ViewerFilter() {
@@ -386,7 +335,7 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _leftModelTreeViewer = new EnhancedComparisonSideViewer(upperPart, true);
     _rightModelTreeViewer = new EnhancedComparisonSideViewer(upperPart, false);
     // Lower part
-    SashForm lowerPart = new SashForm(_control, SWT.HORIZONTAL);
+    SashForm lowerPart = new SashForm(result, SWT.HORIZONTAL);
     // Features section
     Composite featuresWrapper = createComposite(lowerPart);
     Composite featuresHeader = new Composite(featuresWrapper, SWT.NONE);
@@ -405,9 +354,10 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _leftValuesViewer = createValuesSection(lowerPart, true);
     _rightValuesViewer = createValuesSection(lowerPart, false);
     setupSashes(upperPart, lowerPart);
+    result.setWeights(new int[] {5, 2});
     setupSynchronizationListeners();
     setupToolbars();
-    hookControl(getControl());
+    return result;
   }
   
   /**
@@ -434,66 +384,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     ToolBar toolbar = createToolBar(header);
     if (left_p) _leftValuesToolbar = toolbar; else _rightValuesToolbar = toolbar;
     return result;
-  }
-  
-  /**
-   * Execute the given runnable which may modify any part of the whole model
-   * @param runnable_p a non-null runnable
-   */
-  protected void executeOnModel(final Runnable runnable_p) {
-    BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-      /**
-       * @see java.lang.Runnable#run()
-       */
-      public void run() {
-        EMFDiffNode input = getInput();
-        EditingDomain domain = (input == null)? null: input.getEditingDomain();
-        if (input != null && input.isUndoRedoSupported())
-          MiscUtil.executeOnDomain(domain, null, runnable_p);
-        else
-          MiscUtil.executeAndForget(domain, runnable_p);
-      }
-    });
-  }
-  
-  /**
-   * Notify listeners of a property change event
-   * @param propertyName_p the non-null name of the property
-   * @param newValue_p the potentially null, new value of the property
-   */
-  protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p) {
-    PropertyChangeEvent event = new PropertyChangeEvent(
-        this, propertyName_p, null, newValue_p);
-    for (IPropertyChangeListener listener : _changeListeners) {
-      listener.propertyChange(event);
-    }
-  }
-  
-  /**
-   * @see org.eclipse.compare.contentmergeviewer.IFlushable#flush(org.eclipse.core.runtime.IProgressMonitor)
-   */
-  public void flush(IProgressMonitor monitor_p) {
-    IComparison comparison = getComparison();
-    if (comparison != null) {
-      try {
-        if (getInput().isModified(true)) {
-          IModelScope leftScope = comparison.getScope(getInput().getRoleForSide(true));
-          if (leftScope instanceof IPersistentModelScope.Editable)
-            ((IPersistentModelScope.Editable)leftScope).save();
-        }
-        if (getInput().isModified(false)) {
-          IModelScope rightScope = comparison.getScope(getInput().getRoleForSide(false));
-          if (rightScope instanceof IPersistentModelScope.Editable)
-            ((IPersistentModelScope.Editable)rightScope).save();
-        }
-        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
-        if (getEditingDomain() != null)
-          _lastCommandBeforeSave = getEditingDomain().getCommandStack().getUndoCommand();
-      } catch (Exception e) {
-        MessageDialog.openError(
-            getShell(), EMFDiffMergeUIPlugin.LABEL, Messages.ComparisonViewer_SaveFailed + e);
-      }
-    }
   }
   
   /**
@@ -563,23 +453,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Return the comparison for this viewer
-   * @return a comparison which is assumed non-null after setInput(Object) has been invoked
-   */
-  protected EComparison getComparison() {
-    UIComparison uiComparison = getUIComparison();
-    return uiComparison == null? null: uiComparison.getActualComparison();
-  }
-  
-  /**
-   * @see org.eclipse.jface.viewers.Viewer#getControl()
-   */
-  @Override
-  public Control getControl() {
-    return _control;
-  }
-  
-  /**
    * Return the differences to merge from a given list of selected matches and the given
    * criteria
    * @param selectedMatches_p a non-null list
@@ -621,14 +494,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Return the editing domain for this viewer
-   * @return an editing domain which is assumed non-null after setInput(Object) has been invoked
-   */
-  protected EditingDomain getEditingDomain() {
-    return getInput() == null? null: getInput().getEditingDomain();
-  }
-  
-  /**
    * Return the inner viewer for the features of elements with differences
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
@@ -637,29 +502,11 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * @see org.eclipse.jface.viewers.Viewer#getInput()
-   */
-  @Override
-  public EMFDiffNode getInput() {
-    return _input;
-  }
-  
-  /**
    * Return the logger for diff/merge events
    * @return a non-null logger
    */
   protected Logger getLogger() {
     return EMFDiffMergeUIPlugin.getDefault().getDiffMergeLogger();
-  }
-  
-  /**
-   * Return a name for the scope on the given side
-   * @param onLeft_p whether the scope is the one on the left-hand side
-   * @return a potentially null string
-   */
-  protected String getModelName(boolean onLeft_p) {
-    IModelScope scope = getComparison().getScope(getInput().getRoleForSide(onLeft_p));
-    return DiffMergeLabelProvider.getInstance().getText(scope);
   }
   
   /**
@@ -674,14 +521,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Return the resource manager for this viewer
-   * @return a resource manager which is non-null iff input is not null
-   */
-  protected ComparisonResourceManager getResourceManager() {
-    return getInput() == null? null: getInput().getResourceManager();
-  }
-  
-  /**
    * @see org.eclipse.jface.viewers.Viewer#getSelection()
    */
   @Override
@@ -690,27 +529,11 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Return the shell of this viewer
-   * @return a non-null shell
-   */
-  protected Shell getShell() {
-    return getControl().getShell();
-  }
-  
-  /**
    * Return the inner viewer for the comparison tree
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
   public EnhancedComparisonTreeViewer getSynthesisViewer() {
     return _synthesisModelTreeViewer;
-  }
-  
-  /**
-   * Return the UI comparison for this viewer
-   * @return a UI comparison which is assumed non-null after setInput(Object) has been invoked
-   */
-  protected UIComparison getUIComparison() {
-    return getInput() == null? null: getInput().getUIComparison();
   }
   
   /**
@@ -724,13 +547,11 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
   }
   
   /**
-   * Dispose this viewer as a reaction to the disposal of its control
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#handleDispose()
    */
+  @Override
   protected void handleDispose() {
-    _control = null;
-    _changeListeners.clear();
-    _input = null;
-    _lastCommandBeforeSave = null;
+    super.handleDispose();
     _lastUserSelection = null;
     _leftModelTreeViewer = null;
     _rightModelTreeViewer = null;
@@ -752,31 +573,19 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _previousItem = null;
     _unchangedElementsFilter = null;
     _moveOriginsFilter = null;
-    if (_actionBars != null)
-      _actionBars.clearGlobalActionHandlers();
-    _actionBars = null;
-    _undoAction = null;
-    _redoAction = null;
   }
   
   /**
-   * Ensure that the viewer is disposed when its control is disposed
-   * @param control_p the non-null control of the viewer
-   * @see ContentViewer#hookControl(Control)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#undoRedoPerformed(boolean)
    */
-  protected void hookControl(Control control_p) {
-      control_p.addDisposeListener(new DisposeListener() {
-        /**
-         * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-         */
-        public void widgetDisposed(DisposeEvent event) {
-          handleDispose();
-        }
-      });
+  @Override
+  protected void undoRedoPerformed(final boolean undo_p) {
+    super.undoRedoPerformed(undo_p);
+    firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
   }
   
   /**
-   * @see org.eclipse.jface.viewers.Viewer#inputChanged(java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#inputChanged(java.lang.Object, java.lang.Object)
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
@@ -786,15 +595,9 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _synthesisModelTreeViewer.setInput(input_p);
     _leftModelTreeViewer.setInput(input_p);
     _rightModelTreeViewer.setInput(input_p);
-    _undoAction.setEditingDomain(getEditingDomain());
-    _redoAction.setEditingDomain(getEditingDomain());
-    _undoAction.update();
-    _redoAction.update();
-    if (_actionBars != null)
-      _actionBars.updateActionBars();
+    super.inputChanged(input_p, oldInput_p);
     if (getInput() != null && getInput().isLogEvents())
       getLogger().log(new CompareLogEvent(getEditingDomain(), getComparison()));
-    firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
   }
   
   /**
@@ -958,13 +761,14 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     _rightValuesViewer.refresh();
     _featuresViewer.refresh();
     _synthesisModelTreeViewer.refresh();
-    refreshTools();
+    super.refresh();
   }
   
   /**
    * Refresh the tools of the viewer. This behavior is centralized instead of being
    * delegated to each tool via listeners in order to increase performance.
    */
+  @Override
   protected void refreshTools() {
     ComparisonSelection selection = getSelection();
     EMFDiffNode input = getInput();
@@ -1030,28 +834,25 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     }
     _ignoreLeftItem.setEnabled(onLeft && allowFreezing);
     _ignoreRightItem.setEnabled(onRight && allowFreezing);
-    _undoAction.update();
-    _redoAction.update();
-    if (_actionBars != null)
-      _actionBars.updateActionBars();
+    super.refreshTools();
   }
   
   /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   * Set the "base" label provider for representing model elements
+   * @param labelProvider_p a potentially null label provider, where null stands for default
    */
-  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
-    _changeListeners.remove(listener_p);
-  }
-  
-  /**
-   * @see org.eclipse.jface.viewers.Viewer#setInput(java.lang.Object)
-   */
-  @Override
-  public void setInput(Object input_p) {
-    if (input_p == null || input_p instanceof EMFDiffNode) {
-      Object oldInput = getInput();
-      _input = (EMFDiffNode)input_p;
-      inputChanged(_input, oldInput);
+  public void setDelegateLabelProvider(ILabelProvider labelProvider_p) {
+    List<ContentViewer> viewers = Arrays.<ContentViewer>asList(
+        _synthesisModelTreeViewer.getInnerViewer(),
+        _leftModelTreeViewer.getInnerViewer(),
+        _rightModelTreeViewer.getInnerViewer(),
+        _featuresViewer, _leftValuesViewer, _rightValuesViewer);
+    for (ContentViewer viewer : viewers) {
+      IBaseLabelProvider rawLP = viewer.getLabelProvider();
+      if (rawLP instanceof DelegatingLabelProvider) {
+        DelegatingLabelProvider delegatingLP = (DelegatingLabelProvider)rawLP;
+        delegatingLP.setDelegate(labelProvider_p);
+      }
     }
   }
   
@@ -1146,7 +947,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    * @param lowerPart_p the sash form on the down side
    */
   protected void setupSashes(final SashForm upperPart_p, final SashForm lowerPart_p) {
-    _control.setWeights(new int[] {5, 2});
     final int[] horizontalWeights = new int[] {3, 2, 2};
     upperPart_p.setWeights(horizontalWeights);
     lowerPart_p.setWeights(horizontalWeights);
@@ -1620,8 +1420,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
    * Set up the different tool bars
    */
   protected void setupToolbars() {
-    // Undo/redo
-    setupUndoRedoTools();
     // Synthesis view representation
     setupSynthesisTools();
     // Navigation
@@ -1743,84 +1541,6 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     new ToolItem(synthesisToolbar, SWT.SEPARATOR);
   }
   
-  /**
-   * Set up the undo/redo tools
-   */
-  protected void setupUndoRedoTools() {
-    // Undo
-    _undoAction = new UndoAction(null) {
-      /**
-       * @see org.eclipse.emf.edit.ui.action.UndoAction#run()
-       */
-      @Override
-      public void run() {
-        undoRedo(true);
-      }
-      /**
-       * @see org.eclipse.emf.edit.ui.action.UndoAction#update()
-       */
-      @Override
-      public void update() {
-        if (getEditingDomain() != null)
-          super.update();
-      }
-    };
-    _undoAction.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(
-        EMFDiffMergeUIPlugin.ImageID.UNDO));
-    // Redo
-    _redoAction = new RedoAction() {
-      /**
-       * @see org.eclipse.emf.edit.ui.action.RedoAction#run()
-       */
-      @Override
-      public void run() {
-        undoRedo(false);
-      }
-      /**
-       * @see org.eclipse.emf.edit.ui.action.RedoAction#update()
-       */
-      @Override
-      public void update() {
-        if (getEditingDomain() != null)
-          super.update();
-      }
-    };
-    _redoAction.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(
-        EMFDiffMergeUIPlugin.ImageID.REDO));
-    if (_actionBars != null) {
-      _actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), _undoAction);
-      _actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), _redoAction);
-    }
-  }
-  
-  /**
-   * Apply the undo/redo mechanism
-   * @param undo_p whether the action is undo or redo
-   */
-  protected void undoRedo(final boolean undo_p) {
-    final EditingDomain editingDomain = getEditingDomain();
-    if (editingDomain != null) {
-      BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-        /**
-         * @see java.lang.Runnable#run()
-         */
-        public void run() {
-          final CommandStack stack = editingDomain.getCommandStack();
-          final ComparisonSelection lastActionSelection = getUIComparison().getLastActionSelection();
-          if (undo_p && stack.canUndo())
-            stack.undo();
-          else if (!undo_p && stack.canRedo())
-            stack.redo();
-          boolean dirty = stack.getUndoCommand() != _lastCommandBeforeSave;
-          firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(dirty));
-          firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
-          if (lastActionSelection != null)
-            setSelection(lastActionSelection, true);
-        }
-      });
-    }
-  }
-  
   
   /**
    * A selection listener for Values[user] -> Global synchronization
@@ -1909,6 +1629,10 @@ public class ComparisonViewer extends Viewer implements IPropertyChangeNotifier,
     @Override
     protected Control createCustomArea(Composite parent_p) {
       MergeImpactViewer viewer = new MergeImpactViewer(parent_p, getResourceManager());
+      // Reuse label provider from synthesis viewer
+      IBaseLabelProvider lProvider = _synthesisModelTreeViewer.getInnerViewer().getLabelProvider();
+      if (lProvider instanceof DelegatingLabelProvider)
+        viewer.setDelegateLabelProvider(((DelegatingLabelProvider)lProvider).getDelegate());
       viewer.setInput(_dialogInput);
       return viewer.getControl();
     }

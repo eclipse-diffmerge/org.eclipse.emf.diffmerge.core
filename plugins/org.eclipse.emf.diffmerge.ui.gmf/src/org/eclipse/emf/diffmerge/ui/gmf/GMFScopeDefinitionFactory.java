@@ -19,7 +19,7 @@ import java.util.Collections;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.gmf.GMFModelScope;
+import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
@@ -45,14 +45,14 @@ public class GMFScopeDefinitionFactory extends URIScopeDefinitionFactory {
        */
       @Override
       protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain_p) {
-        return new GMFModelScope(getEntrypoint(), editingDomain_p, !isEditable());
+        return new GMFScope(getEntrypoint(), editingDomain_p, !isEditable());
       }
       /**
        * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnResourceSet(org.eclipse.emf.ecore.resource.ResourceSet)
        */
       @Override
       protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
-        return new GMFModelScope(getEntrypoint(), resourceSet_p, !isEditable());
+        return new GMFScope(getEntrypoint(), resourceSet_p, !isEditable());
       }
     };
   }

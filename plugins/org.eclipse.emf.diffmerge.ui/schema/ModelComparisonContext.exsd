@@ -6,7 +6,7 @@
          <meta.schema plugin="org.eclipse.emf.diffmerge.ui" id="modelComparisonContext" name="Model Comparison Context for EMF Diff/Merge GUI"/>
       </appinfo>
       <documentation>
-         The purpose of this extension point is to register comparison contexts in the platform. A comparison context encompasses scope definition factories and/or comparison method factories. A scope definition determines how a given object can be converted into or interpreted as a model scope, i.e., a set of models elements that can be compared. A comparison method defines match, diff and merge policies which are applicable to certain model scopes.
+         The purpose of this extension point is to register comparison contexts in the platform. A comparison context encompasses factories for scope definitions and/or for comparison methods. A scope definition determines how a given object can be converted into or interpreted as a model scope, i.e., a set of models elements that can be compared. A comparison method defines match, diff and merge policies which are applicable to certain model scopes.
       </documentation>
    </annotation>
 
@@ -52,7 +52,7 @@
 
    <element name="comparisonMethod">
       <complexType>
-         <attribute name="comparisonMethodFactory" type="string">
+         <attribute name="factory" type="string">
             <annotation>
                <documentation>
                   
@@ -67,7 +67,7 @@
 
    <element name="scopeDefinition">
       <complexType>
-         <attribute name="scopeDefinitionFactory" type="string">
+         <attribute name="factory" type="string">
             <annotation>
                <documentation>
                   
@@ -114,9 +114,9 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         The value of the scopeDefinitionFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory&lt;/samp&gt;. This concrete class may extend class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.DefaultComparisonMethodFactory&lt;/samp&gt; or a subclass.
+         The value of the factory attribute of the scopeDefinition node must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory&lt;/samp&gt;. This concrete class may extend class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.DefaultComparisonMethodFactory&lt;/samp&gt; or a subclass.
 &lt;p&gt;
-The value of the comparisonMethodFactory attribute must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory&lt;/samp&gt;. This concrete class may extend abstract class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory&lt;/samp&gt; or a subclass.
+The value of the factory attribute of the comparisonMethod node must refer to a concrete class which implements &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory&lt;/samp&gt;. This concrete class may extend abstract class &lt;samp&gt;org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory&lt;/samp&gt; or a subclass.
       </documentation>
    </annotation>
 
@@ -125,7 +125,7 @@ The value of the comparisonMethodFactory attribute must refer to a concrete clas
          <meta.section type="implementation"/>
       </appinfo>
       <documentation>
-         This plug-in extends this extension point to register the following three scope definition factories: &lt;samp&gt;FileScopeDefinitionFactory&lt;/samp&gt;, &lt;samp&gt;ResourceScopeDefinitionFactory&lt;/samp&gt; and &lt;samp&gt;EObjectScopeDefinitionFactory&lt;/samp&gt;.
+         This plug-in extends this extension point to register the following three scope definition factories: &lt;samp&gt;URIScopeDefinitionFactory&lt;/samp&gt;, &lt;samp&gt;ResourceScopeDefinitionFactory&lt;/samp&gt; and &lt;samp&gt;EObjectScopeDefinitionFactory&lt;/samp&gt;.
 In addition, this plug-in extends this extension point to register the following comparison method factory: 
 &lt;samp&gt;DefaultComparisonMethodFactory&lt;/samp&gt;.
       </documentation>

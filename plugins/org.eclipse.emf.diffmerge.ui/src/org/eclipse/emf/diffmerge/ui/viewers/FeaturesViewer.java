@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -150,18 +149,6 @@ public class FeaturesViewer extends TableViewer {
    */
   protected ComparisonResourceManager getResourceManager() {
     return getInput() == null? null: getInput().getContext().getResourceManager();
-  }
-  
-  /**
-   * @see org.eclipse.jface.viewers.AbstractTableViewer#inputChanged(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (input_p instanceof FeaturesInput && getLabelProvider() instanceof DelegatingLabelProvider) {
-      ILabelProvider customLP = ((FeaturesInput)input_p).getContext().getCustomLabelProvider();
-      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
-    }
-    super.inputChanged(input_p, oldInput_p);
   }
   
   /**

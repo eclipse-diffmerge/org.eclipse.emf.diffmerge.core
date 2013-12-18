@@ -44,7 +44,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
-import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
+import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -99,7 +99,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   protected IEditableModelScope _leftScope, _rightScope, _ancestorScope;
   
   /** The initially null viewer */
-  protected ComparisonViewer _viewer;
+  protected AbstractComparisonViewer _viewer;
   
   /** Whether the comparison originally contained differences (initially true) */
   private boolean _foundDifferences;
@@ -156,6 +156,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   protected void contentsCreated() {
+    super.contentsCreated();
     _viewer.getControl().addDisposeListener(new DisposeListener() {
       /**
        * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
@@ -180,7 +181,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   @Override
   public Control createContents(Composite parent_p) {
     // Create viewer
-    _viewer = new ComparisonViewer(parent_p, getActionBars());
+    _viewer = _comparisonMethod.createComparisonViewer(parent_p, getActionBars());
     if (_selectionBridge != null)
       _viewer.addSelectionChangedListener(_selectionBridge);
     _viewer.addPropertyChangeListener(new IPropertyChangeListener() {
@@ -481,7 +482,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     EMFDiffNode result = new EMFDiffNode(
         comparison_p, getEditingDomain(), cc.isLeftEditable(), cc.isRightEditable());
     result.setReferenceRole(_comparisonMethod.getTwoWayReferenceRole());
-    result.setCustomLabelProvider(_comparisonMethod.getCustomLabelProvider());
     result.updateDifferenceNumbers();
     return result;
   }

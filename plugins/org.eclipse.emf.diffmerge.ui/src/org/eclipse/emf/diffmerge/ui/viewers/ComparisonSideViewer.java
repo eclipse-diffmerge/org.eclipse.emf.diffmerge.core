@@ -24,7 +24,6 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -121,18 +120,6 @@ public class ComparisonSideViewer extends TreeViewer {
     return getInput() == null? null:
       getInput().getActualComparison().getScope(
           getInput().getRoleForSide(isLeftSide()));
-  }
-  
-  /**
-   * @see org.eclipse.jface.viewers.AbstractTreeViewer#inputChanged(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (input_p instanceof EMFDiffNode && getLabelProvider() instanceof DelegatingLabelProvider) {
-      ILabelProvider customLP = ((EMFDiffNode)input_p).getCustomLabelProvider();
-      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
-    }
-    super.inputChanged(input_p, oldInput_p);
   }
   
   /**

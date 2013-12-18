@@ -15,16 +15,19 @@
 package org.eclipse.emf.diffmerge.ui.gmf;
 
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
+import org.eclipse.emf.diffmerge.gmf.GMFMergePolicy;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod;
+import org.eclipse.jface.viewers.ILabelProvider;
 
 
 /**
  * A definition of GMF-specific comparisons.
  * @author Olivier Constant
  */
-public class GMFComparisonMethod extends DefaultComparisonMethod {
+public class GMFComparisonMethod extends ConfigurableComparisonMethod {
   
   /**
    * Constructor
@@ -43,6 +46,22 @@ public class GMFComparisonMethod extends DefaultComparisonMethod {
   @Override
   protected IDiffPolicy createDiffPolicy() {
     return new GMFDiffPolicy();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createMergePolicy()
+   */
+  @Override
+  protected IMergePolicy createMergePolicy() {
+    return new GMFMergePolicy();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#getCustomLabelProvider()
+   */
+  @Override
+  protected ILabelProvider getCustomLabelProvider() {
+    return GMFDiffMergeLabelProvider.getInstance();
   }
   
 }

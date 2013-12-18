@@ -25,6 +25,8 @@ import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
+import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -34,6 +36,8 @@ import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 
 
 /**
@@ -84,7 +88,18 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#configure()
    */
   public void configure() {
-    // Do nothing
+    // Override for configurable comparison methods
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#createComparisonViewer(org.eclipse.swt.widgets.Composite, org.eclipse.ui.IActionBars)
+   */
+  public AbstractComparisonViewer createComparisonViewer(Composite parent_p, IActionBars actionBars_p) {
+    ComparisonViewer result = new ComparisonViewer(parent_p, actionBars_p);
+    ILabelProvider customLP = getCustomLabelProvider();
+    if (customLP != null)
+      result.setDelegateLabelProvider(customLP);
+    return result;
   }
   
   /**
@@ -163,9 +178,12 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getCustomLabelProvider()
+   * Return an optional label provider for customizing the way model elements
+   * are represented in comparison widgets. The client is responsible for disposing
+   * the label provider when appropriate.
+   * @return a label provider, or null for the default label provider
    */
-  public ILabelProvider getCustomLabelProvider() {
+  protected ILabelProvider getCustomLabelProvider() {
     return null;
   }
   

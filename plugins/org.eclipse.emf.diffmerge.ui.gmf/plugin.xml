@@ -4,10 +4,10 @@
    <extension
          point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            scopeDefinitionFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.ui.gmf.GMFScopeDefinitionFactory">
       </scopeDefinition>
       <comparisonMethod
-            comparisonMethodFactory="org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory">
+            factory="org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory">
       </comparisonMethod>
    </extension>
 

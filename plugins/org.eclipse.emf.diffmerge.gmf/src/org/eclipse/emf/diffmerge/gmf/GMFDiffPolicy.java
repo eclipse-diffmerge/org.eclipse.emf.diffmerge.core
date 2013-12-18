@@ -17,7 +17,7 @@ package org.eclipse.emf.diffmerge.gmf;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Color;
  * A diff policy for GMF models.
  * @author Olivier Constant
  */
-public class GMFDiffPolicy extends DefaultDiffPolicy {
+public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   
   /**
    * @see com.thalesgroup.mde.shared.compare.policies.DefaultDiffPolicy#considerEqual(Object, Object, EAttribute)

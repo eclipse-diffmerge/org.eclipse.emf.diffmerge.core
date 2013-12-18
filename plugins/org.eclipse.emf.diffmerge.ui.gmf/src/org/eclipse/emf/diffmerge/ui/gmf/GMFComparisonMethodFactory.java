@@ -19,17 +19,17 @@ import java.util.Collections;
 
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory;
+import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory;
 
 
 /**
  * A ComparisonConfigurationFactory with GMF-specific features.
  * @author Olivier Constant
  */
-public class GMFComparisonMethodFactory extends DefaultComparisonMethodFactory {
+public class GMFComparisonMethodFactory extends ConfigurableComparisonMethodFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#getLabel()
    */
   @Override
   public String getLabel() {
@@ -37,15 +37,15 @@ public class GMFComparisonMethodFactory extends DefaultComparisonMethodFactory {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory#getOverridenClasses()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#getOverridenClasses()
    */
   @Override
   public Collection<Class<?>> getOverridenClasses() {
-    return Collections.<Class<?>>singleton(DefaultComparisonMethodFactory.class);
+    return Collections.<Class<?>>singleton(ConfigurableComparisonMethodFactory.class);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
    */
   @Override
   public IComparisonMethod createComparisonMethod(

@@ -43,11 +43,17 @@ public class ComparisonSetupManager {
   private static final String MODEL_COMPARISON_CONTEXT_EXTENSION_POINT =
     "org.eclipse.emf.diffmerge.ui.modelComparisonContext"; //$NON-NLS-1$
   
+  /** The ModelComparisonContext extension point node for configurations */
+  private static final String EXTENSION_POINT_METHOD = "comparisonMethod"; //$NON-NLS-1$
+  
   /** The ModelComparisonContext extension point property for configurations */
-  private static final String EXTENSION_POINT_PROPERTY_CONFIGURATION = "comparisonMethodFactory"; //$NON-NLS-1$
+  private static final String EXTENSION_POINT_PROPERTY_METHOD = "factory"; //$NON-NLS-1$
+  
+  /** The ModelComparisonContext extension point node for scopes */
+  private static final String EXTENSION_POINT_SCOPE = "scopeDefinition"; //$NON-NLS-1$
   
   /** The ModelComparisonContext extension point property for scopes */
-  private static final String EXTENSION_POINT_PROPERTY_SCOPE = "scopeDefinitionFactory"; //$NON-NLS-1$
+  private static final String EXTENSION_POINT_PROPERTY_SCOPE = "factory"; //$NON-NLS-1$
   
   /** The registered comparison method factories (initially null) */
   private Map<Class<?>, IComparisonMethodFactory> _comparisonFactories;
@@ -127,19 +133,23 @@ public class ComparisonSetupManager {
     IConfigurationElement[] config = registry.getConfigurationElementsFor(
         MODEL_COMPARISON_CONTEXT_EXTENSION_POINT);
     for (IConfigurationElement e : config) {
-      try {
-        Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_CONFIGURATION);
-        if (o instanceof IComparisonMethodFactory)
-          _comparisonFactories.put(o.getClass(), (IComparisonMethodFactory)o);
-      } catch (CoreException ex) {
-        // Proceed
-      }
-      try {
-        Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_SCOPE);
-        if (o instanceof IModelScopeDefinitionFactory)
-          _scopeFactories.put(o.getClass(), (IModelScopeDefinitionFactory)o);
-      } catch (CoreException ex) {
-        // Proceed
+      String name = e.getName();
+      if (EXTENSION_POINT_METHOD.equals(name)) {
+        try {
+          Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_METHOD);
+          if (o instanceof IComparisonMethodFactory)
+            _comparisonFactories.put(o.getClass(), (IComparisonMethodFactory)o);
+        } catch (CoreException ex) {
+          // Proceed
+        }
+      } else if (EXTENSION_POINT_SCOPE.equals(name)) {
+        try {
+          Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_SCOPE);
+          if (o instanceof IModelScopeDefinitionFactory)
+            _scopeFactories.put(o.getClass(), (IModelScopeDefinitionFactory)o);
+        } catch (CoreException ex) {
+          // Proceed
+        }
       }
     }
   }

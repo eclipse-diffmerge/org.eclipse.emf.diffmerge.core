@@ -37,7 +37,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -214,18 +213,6 @@ public class ValuesViewer extends TableViewer {
       else
         result = ((IReferenceValuePresence)presence_p).getValue().get(presence_p.getPresenceRole());
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.jface.viewers.AbstractTableViewer#inputChanged(java.lang.Object, java.lang.Object)
-   */
-  @Override
-  protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (input_p instanceof ValuesInput && getLabelProvider() instanceof DelegatingLabelProvider) {
-      ILabelProvider customLP = ((ValuesInput)input_p).getContext().getCustomLabelProvider();
-      ((DelegatingLabelProvider)getLabelProvider()).setDelegate(customLP);
-    }
-    super.inputChanged(input_p, oldInput_p);
   }
   
   /**

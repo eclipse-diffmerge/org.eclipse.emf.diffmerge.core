@@ -18,16 +18,21 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
+import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
-import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 
 
 /**
  * A comparison method defines what and how to compare.
+ * @see DefaultComparisonMethod
  * @author Olivier Constant
  */
 public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
@@ -37,6 +42,17 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
    * @see IComparisonMethod#isConfigurable()
    */
   void configure();
+  
+  /**
+   * Create and return the viewer for the comparison.
+   * Although a default viewer is available, it can be customized or replaced by a different
+   * one in this operation.
+   * @see ComparisonViewer
+   * @param parent_p a non-null composite
+   * @param actionBars_p an optional IActionBars, typically for contributing global actions
+   *          such as undo/redo
+   */
+  AbstractComparisonViewer createComparisonViewer(Composite parent_p, IActionBars actionBars_p);
   
   /**
    * Return the diff policy for the comparison
@@ -51,14 +67,6 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
    * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
    */
   EditingDomain getEditingDomain();
-  
-  /**
-   * Return an optional label provider for customizing the way model elements
-   * are represented in comparison widgets. The client is responsible for disposing
-   * the label provider when appropriate.
-   * @return a label provider, or null for the default label provider
-   */
-  ILabelProvider getCustomLabelProvider();
   
   /**
    * Return the match policy for the comparison

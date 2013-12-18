@@ -38,7 +38,7 @@ import org.eclipse.gmf.runtime.notation.View;
  * A scope for fragmented GMF models which covers the semantic elements of GMF Views.
  * @author Olivier Constant
  */
-public class GMFModelScope extends FragmentedModelScope {
+public class GMFScope extends FragmentedModelScope {
   
   /** A representation of the NULL value for the 'element' reference of Views (null vs. UNSET) */
   protected static final EObject NULL_ELEMENT = EcoreFactory.eINSTANCE.createEObject();
@@ -50,7 +50,7 @@ public class GMFModelScope extends FragmentedModelScope {
    * @param editingDomain_p a non-null editing domain that encompasses the scope
    * @param readOnly_p whether the scope should be read-only, if supported
    */
-  public GMFModelScope(URI uri_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+  public GMFScope(URI uri_p, EditingDomain editingDomain_p, boolean readOnly_p) {
     super(uri_p, editingDomain_p, readOnly_p);
   }
   
@@ -60,7 +60,7 @@ public class GMFModelScope extends FragmentedModelScope {
    * @param resourceSet_p a non-null resource set
    * @param readOnly_p whether the scope is in read-only mode, if applicable
    */
-  public GMFModelScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+  public GMFScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
     super(uri_p, resourceSet_p, readOnly_p);
   }
   
