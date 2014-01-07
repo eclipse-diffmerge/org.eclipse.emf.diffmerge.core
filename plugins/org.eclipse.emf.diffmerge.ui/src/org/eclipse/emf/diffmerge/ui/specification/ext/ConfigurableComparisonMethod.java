@@ -92,8 +92,6 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
     return new ConfigurableMatchPolicy();
   }
   
-  
-  
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecification#isConfigurable()
    */
