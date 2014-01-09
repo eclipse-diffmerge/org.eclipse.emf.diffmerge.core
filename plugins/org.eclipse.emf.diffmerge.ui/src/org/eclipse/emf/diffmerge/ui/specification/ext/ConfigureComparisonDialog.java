@@ -19,6 +19,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -34,9 +37,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
-import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
-import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
 
 
 /**
@@ -186,7 +186,6 @@ public class ConfigureComparisonDialog extends MessageDialog {
     group.setText(Messages.ConfigureComparisonDialog_Matching);
     createAbsoluteMatchingArea(group);
     createRelativeMatchingArea(group);
-    createOtherMatchingCriteriaArea(group);
     createLabelWithNote(group, Messages.ConfigureComparisonDialog_MatchingTooltip);
     createKeepMatchIDsArea(group);
   }
@@ -239,31 +238,14 @@ public class ConfigureComparisonDialog extends MessageDialog {
   }
   
   /**
-   * Create the area dedicated to other matching criteria, if applicable
-   * @param parent_p a non-null composite
-   */
-  protected void createOtherMatchingCriteriaArea(Composite parent_p) {
-    Collection<MatchCriterionKind> applicableCiteria = _data.getApplicableCriteria();
-    if (applicableCiteria.contains(MatchCriterionKind.SEMANTICS)) {
-      Group group = new Group(parent_p, SWT.NONE);
-      group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-      group.setLayout(new GridLayout(1, false));
-      group.setText(Messages.ConfigureComparisonDialog_OtherMatchingCriteria);
-      group.setToolTipText(Messages.ConfigureComparisonDialog_OtherMatchingCriteriaTooltip);
-      createMatchingCriterionArea(group, MatchCriterionKind.SEMANTICS,
-          Messages.ConfigureComparisonDialog_SemanticCriteria,
-          Messages.ConfigureComparisonDialog_SemanticCriteriaTooltip);
-    }
-  }
-  
-  /**
    * Create the area dedicated to the criteria for relative matching, if applicable
    * @param parent_p a non-null composite
    */
   protected void createRelativeMatchingArea(Composite parent_p) {
     Collection<MatchCriterionKind> applicableCiteria = _data.getApplicableCriteria();
     if (applicableCiteria.contains(MatchCriterionKind.NAME) ||
-        applicableCiteria.contains(MatchCriterionKind.STRUCTURE)) {
+        applicableCiteria.contains(MatchCriterionKind.STRUCTURE) ||
+        applicableCiteria.contains(MatchCriterionKind.SEMANTICS)) {
       Group group = new Group(parent_p, SWT.NONE);
       group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
       group.setLayout(new GridLayout(1, false));
@@ -275,6 +257,9 @@ public class ConfigureComparisonDialog extends MessageDialog {
       createMatchingCriterionArea(group, MatchCriterionKind.STRUCTURE,
           Messages.ConfigureComparisonDialog_StructureCriterion,
           Messages.ConfigureComparisonDialog_StructureCriterionTooltip);
+      createMatchingCriterionArea(group, MatchCriterionKind.SEMANTICS,
+          Messages.ConfigureComparisonDialog_SemanticCriteria,
+          Messages.ConfigureComparisonDialog_SemanticCriteriaTooltip);
     }
   }
   
