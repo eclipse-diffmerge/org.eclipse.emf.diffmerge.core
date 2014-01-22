@@ -37,7 +37,7 @@ import org.eclipse.emf.transaction.TransactionalCommandStack;
 
 
 /**
- * Utility class for miscellaneous concerns.
+ * Utility class for miscellaneous technical concerns.
  * @author Olivier Constant
  */
 public final class MiscUtil {
