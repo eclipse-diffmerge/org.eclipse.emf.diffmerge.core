@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
+
 
 /**
  * A structure which is Comparable based on its contents.
@@ -42,7 +44,7 @@ extends Comparable<IComparableStructure<?>> {
   /**
    * A List which is an IComparableStructure.
    */
-  public interface IComparableList<E extends Comparable<?>> extends List<E>,
+  interface IComparableList<E extends Comparable<?>> extends List<E>,
   IComparableStructure<E> {
     // Nothing to add
   }
@@ -50,7 +52,7 @@ extends Comparable<IComparableStructure<?>> {
   /**
    * A Set which is an IComparableStructure.
    */
-  public interface IComparableSet<E extends Comparable<?>> extends Set<E>,
+  interface IComparableSet<E extends Comparable<?>> extends Set<E>,
   IComparableStructure<E> {
     // Nothing to add
   }
@@ -68,7 +70,7 @@ extends Comparable<IComparableStructure<?>> {
   /**
    * A Map which is an IComparableStructure.
    */
-  public interface IComparableMap<K extends Comparable<?>, V extends Comparable<?>>
+  interface IComparableMap<K extends Comparable<?>, V extends Comparable<?>>
   extends Map<K, V>, IComparableStructure<IComparableMapEntry<K, V>> {
     // Nothing to add
   }
@@ -138,11 +140,23 @@ extends Comparable<IComparableStructure<?>> {
       _wrappedEntry = entry_p;
     }
     /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(IComparableStructure<?> o_p) {
+      return STRUCTURE_COMPARATOR.compare(this, o_p);
+    }
+    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object o_p) {
       return _wrappedEntry.equals(o_p);
+    }
+    /**
+     * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+     */
+    public Iterator<Comparable<?>> getCompareIterator() {
+      return Arrays.asList(getKey(), getValue()).iterator();
     }
     /**
      * @see java.util.Map.Entry#getKey()
@@ -170,16 +184,11 @@ extends Comparable<IComparableStructure<?>> {
       return _wrappedEntry.setValue(value_p);
     }
     /**
-     * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+     * @see java.lang.Object#toString()
      */
-    public Iterator<Comparable<?>> getCompareIterator() {
-      return Arrays.asList(getKey(), getValue()).iterator();
-    }
-    /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(IComparableStructure<?> o_p) {
-      return STRUCTURE_COMPARATOR.compare(this, o_p);
+    @Override
+    public String toString() {
+      return StructuresUtil.toMapEntryString(this);
     }
   }
   

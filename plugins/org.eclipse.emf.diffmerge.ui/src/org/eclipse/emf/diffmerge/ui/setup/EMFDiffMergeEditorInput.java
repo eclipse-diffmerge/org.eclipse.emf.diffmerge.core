@@ -15,7 +15,6 @@
 package org.eclipse.emf.diffmerge.ui.setup;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +42,7 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImp
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -610,29 +610,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   protected void handleInconsistency(final IComparison comparison_p) {
     final Shell shell = getShell();
     if (shell != null) {
-      final StringBuilder builder = new StringBuilder();
-      builder.append(Messages.EMFDiffMergeEditorInput_DuplicateIDs);
-      for (Role role : Role.values()) {
-        Collection<Object> duplicates = comparison_p.getDuplicateMatchIDs(role);
-        if (!duplicates.isEmpty()) {
-          builder.append('\n');
-          String scopeName = (role == Role.ANCESTOR)?
-              Messages.EMFDiffMergeEditorInput_AncestorScope: (role == Role.REFERENCE)?
-                  Messages.EMFDiffMergeEditorInput_ReferenceScope: Messages.EMFDiffMergeEditorInput_TargetScope;
-          builder.append(scopeName);
-          builder.append('\n');
-          for (Object duplicate: duplicates) {
-            builder.append(duplicate);
-            builder.append('\n');
-          }
-        }
-      }
       shell.getDisplay().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
         public void run() {
-          MessageDialog.openWarning(shell, EMFDiffMergeUIPlugin.LABEL, builder.toString());
+          InconsistencyDialog dialog = new InconsistencyDialog(shell, comparison_p);
+          dialog.open();
         }
       });
     }

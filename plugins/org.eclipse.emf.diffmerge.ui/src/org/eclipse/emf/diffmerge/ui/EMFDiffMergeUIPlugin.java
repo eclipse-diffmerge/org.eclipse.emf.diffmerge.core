@@ -56,7 +56,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, CONFLICT_STAT, CONTAINER, DELETE, DONE, DOWN,
     EMPTY, EXPANDALL, INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, MODIFIED_STAT,
     NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT, PLUS, PREV_CHANGE_NAV,
-    PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, UNDO, UP, VIEW_MENU }
+    PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, UNDO, UP, VIEW_MENU, WARNING }
   
   /** Identifiers for colors according to the side to which a difference presence is relative */
   public static enum DifferenceColorKind {
@@ -261,6 +261,10 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
         result = PlatformUI.getWorkbench().getSharedImages().getImage(
             ISharedImages.IMG_TOOL_UNDO);
         break;
+      case WARNING:
+        result = PlatformUI.getWorkbench().getSharedImages().getImage(
+            ISharedImages.IMG_OBJS_WARN_TSK);
+        break;
       default:
         result = getImageRegistry().get(id_p.name());
     }
@@ -298,6 +302,10 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
       case UNDO:
         result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
             ISharedImages.IMG_TOOL_UNDO);
+        break;
+      case WARNING:
+        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
+            ISharedImages.IMG_OBJS_WARN_TSK);
         break;
       default:
         result = getImageRegistry().getDescriptor(id_p.name());
@@ -351,7 +359,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
         Arrays.asList(ImageID.values()));
     toRegister.removeAll(Arrays.asList(new ImageID[] {
         ImageID.DELETE, ImageID.LEFT, ImageID.REDO, ImageID.RIGHT, ImageID.SHOW,
-        ImageID.UNDO, ImageID.DOWN, ImageID.UP}));
+        ImageID.UNDO, ImageID.DOWN, ImageID.UP, ImageID.WARNING}));
     for (ImageID imageId : toRegister)
       registerLocalIcon(imageId, reg_p);
   }

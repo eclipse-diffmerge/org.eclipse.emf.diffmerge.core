@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure.IComparableMapEntry;
 
 
@@ -131,6 +132,14 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
   }
   
   /**
+   * @see org.eclipse.emf.common.util.AbstractEList#toString()
+   */
+  @Override
+  public String toString() {
+    return StructuresUtil.toCollectionString(this);
+  }
+  
+  /**
    * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForKey()
    */
   @Override
@@ -171,6 +180,13 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
      */
     public Iterator<Comparable<?>> getCompareIterator() {
       return Arrays.asList(getKey(), getValue()).iterator();
+    }
+    /**
+     * @see org.eclipse.emf.common.util.BasicEMap.EntryImpl#toString()
+     */
+    @Override
+    public String toString() {
+      return StructuresUtil.toMapEntryString(this);
     }
   }
   

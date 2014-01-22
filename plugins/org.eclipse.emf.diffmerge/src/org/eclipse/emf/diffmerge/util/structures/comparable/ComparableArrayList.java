@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure.IComparableList;
 
 
@@ -89,6 +90,14 @@ implements IComparableList<E> {
    */
   public Iterator<E> getCompareIterator() {
     return iterator();
+  }
+  
+  /**
+   * @see org.eclipse.emf.common.util.AbstractEList#toString()
+   */
+  @Override
+  public String toString() {
+    return StructuresUtil.toCollectionString(this);
   }
   
   /**

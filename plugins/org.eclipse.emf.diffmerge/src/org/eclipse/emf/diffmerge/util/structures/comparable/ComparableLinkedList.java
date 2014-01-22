@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure.IComparableList;
 
 
@@ -103,13 +104,6 @@ implements IComparableList<E> {
   }
   
   /**
-   * Return whether equals rather than == must be used to compare members
-   */
-  protected boolean useEquals() {
-    return _useEquals;
-  }
-  
-  /**
    * @see java.util.LinkedList#indexOf(Object)
    */
   @Override
@@ -149,6 +143,21 @@ implements IComparableList<E> {
     if (result)
       remove(i);
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.common.util.AbstractEList#toString()
+   */
+  @Override
+  public String toString() {
+    return StructuresUtil.toCollectionString(this);
+  }
+  
+  /**
+   * Return whether equals rather than == must be used to compare members
+   */
+  protected boolean useEquals() {
+    return _useEquals;
   }
   
 }

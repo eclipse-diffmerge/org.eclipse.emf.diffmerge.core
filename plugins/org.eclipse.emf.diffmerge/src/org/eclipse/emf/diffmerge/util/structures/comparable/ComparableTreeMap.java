@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure.IComparableMap;
 
 
@@ -95,6 +96,14 @@ extends TreeMap<K, V> implements IComparableMap<K, V> {
         throw new UnsupportedOperationException();
       }
     };
+  }
+  
+  /**
+   * @see org.eclipse.emf.common.util.AbstractEList#toString()
+   */
+  @Override
+  public String toString() {
+    return StructuresUtil.toMapString(this);
   }
   
 }

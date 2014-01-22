@@ -29,12 +29,14 @@ import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.Logger;
+import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
@@ -50,6 +52,7 @@ import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
+import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode.UserDifferenceKind;
@@ -358,6 +361,161 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     setupSynchronizationListeners();
     setupToolbars();
     return result;
+  }
+  
+  /**
+   * Create the "collapse all" tool in the given tool bar
+   * @param toolbar_p a non-null tool bar
+   */
+  protected void createCollapseTool(ToolBar toolbar_p) {
+    ToolItem collapseTool = new ToolItem(toolbar_p, SWT.PUSH);
+    collapseTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.COLLAPSEALL));
+    collapseTool.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
+    collapseTool.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+          /**
+           * @see java.lang.Runnable#run()
+           */
+          public void run() {
+            _synthesisModelTreeViewer.getComparisonTreeViewer().collapseAll();
+          }
+        });
+      }
+    });
+  }
+  
+  /**
+   * Create the "expand all" tool in the given tool bar
+   * @param toolbar_p a non-null tool bar
+   */
+  protected void createExpandTool(ToolBar toolbar_p) {
+    ToolItem expandTool = new ToolItem(toolbar_p, SWT.PUSH);
+    expandTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.EXPANDALL));
+    expandTool.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
+    expandTool.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+          /**
+           * @see java.lang.Runnable#run()
+           */
+          public void run() {
+            _synthesisModelTreeViewer.getComparisonTreeViewer().expandAll();
+          }
+        });
+      }
+    });
+  }
+  
+  /**
+   * Create the "inconsistency" tool in the given tool bar, if relevant
+   * @param toolbar_p a non-null tool bar
+   */
+  protected void createInconsistencyTool(ToolBar toolbar_p) {
+    final ToolItem expandTool = new ToolItem(toolbar_p, SWT.PUSH);
+    expandTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.WARNING));
+    expandTool.setToolTipText(Messages.ComparisonViewer_InconsistencyTooltip);
+    expandTool.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        final Shell shell = getShell();
+        final EComparison comparison = getComparison();
+        if (shell != null && comparison != null) {
+          shell.getDisplay().syncExec(new Runnable() {
+            /**
+             * @see java.lang.Runnable#run()
+             */
+            public void run() {
+              InconsistencyDialog dialog = new InconsistencyDialog(shell, comparison);
+              dialog.open();
+            }
+          });
+        }
+      }
+    });
+    expandTool.setEnabled(false);
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          IComparison comparison = getComparison();
+          expandTool.setEnabled(comparison != null && !comparison.isConsistent());
+        }
+      }
+    });
+  }
+  
+  /**
+   * Create the "sort" tool in the given tool bar
+   * @param toolbar_p a non-null tool bar
+   */
+  protected void createSortTool(ToolBar toolbar_p) {
+    final ToolItem sortItem = new ToolItem(toolbar_p, SWT.CHECK);
+    sortItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.SORT));
+    sortItem.setToolTipText(Messages.ComparisonViewer_SortTooltip);
+    sortItem.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        if (sortItem.getSelection())
+          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(_synthesisSorter);
+        else
+          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(null);
+      }
+    });
+  }
+  
+  /**
+   * Create the "sync" tool in the given tool bar
+   * @param toolbar_p a non-null tool bar
+   */
+  protected void createSyncTool(ToolBar toolbar_p) {
+    final ToolItem syncTool = new ToolItem(toolbar_p, SWT.CHECK);
+    syncTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.SYNCED));
+    syncTool.setToolTipText(Messages.ComparisonViewer_LinkViewsTooltip);
+    syncTool.setSelection(_isLeftRightSynced);
+    syncTool.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        boolean synced = syncTool.getSelection();
+        _isLeftRightSynced = synced;
+        if (synced) {
+          BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+            /**
+             * @see java.lang.Runnable#run()
+             */
+            public void run() {
+              ISelection selection = _synthesisModelTreeViewer.getSelection();
+              _leftModelTreeViewer.setSelection(selection, true);
+              _rightModelTreeViewer.setSelection(selection, true);
+            }
+          });
+        }
+      }
+    });
   }
   
   /**
@@ -1450,94 +1608,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   @SuppressWarnings("unused")
   protected void setupSynthesisTools() {
     ToolBar synthesisToolbar = _synthesisModelTreeViewer.getToolbar();
-    // Expand all
     new ToolItem(synthesisToolbar, SWT.SEPARATOR);
-    ToolItem expandTool = new ToolItem(synthesisToolbar, SWT.PUSH);
-    expandTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.EXPANDALL));
-    expandTool.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
-    expandTool.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-          /**
-           * @see java.lang.Runnable#run()
-           */
-          public void run() {
-            _synthesisModelTreeViewer.getComparisonTreeViewer().expandAll();
-          }
-        });
-      }
-    });
-    // Collapse all
-    ToolItem collapseTool = new ToolItem(synthesisToolbar, SWT.PUSH);
-    collapseTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.COLLAPSEALL));
-    collapseTool.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
-    collapseTool.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-          /**
-           * @see java.lang.Runnable#run()
-           */
-          public void run() {
-            _synthesisModelTreeViewer.getComparisonTreeViewer().collapseAll();
-          }
-        });
-      }
-    });
-    // Sort
-    final ToolItem sortItem = new ToolItem(synthesisToolbar, SWT.CHECK);
-    sortItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SORT));
-    sortItem.setToolTipText(Messages.ComparisonViewer_SortTooltip);
-    sortItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        if (sortItem.getSelection())
-          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(_synthesisSorter);
-        else
-          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(null);
-      }
-    });
-    // Sync
-    final ToolItem syncTool = new ToolItem(synthesisToolbar, SWT.CHECK);
-    syncTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SYNCED));
-    syncTool.setToolTipText(Messages.ComparisonViewer_LinkViewsTooltip);
-    syncTool.setSelection(_isLeftRightSynced);
-    syncTool.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        boolean synced = syncTool.getSelection();
-        _isLeftRightSynced = synced;
-        if (synced) {
-          BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-            /**
-             * @see java.lang.Runnable#run()
-             */
-            public void run() {
-              ISelection selection = _synthesisModelTreeViewer.getSelection();
-              _leftModelTreeViewer.setSelection(selection, true);
-              _rightModelTreeViewer.setSelection(selection, true);
-            }
-          });
-        }
-      }
-    });
+    createInconsistencyTool(synthesisToolbar);
+    createExpandTool(synthesisToolbar);
+    createCollapseTool(synthesisToolbar);
+    createSortTool(synthesisToolbar);
+    createSyncTool(synthesisToolbar);
     new ToolItem(synthesisToolbar, SWT.SEPARATOR);
   }
   

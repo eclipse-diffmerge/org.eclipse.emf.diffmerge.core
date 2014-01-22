@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.Shell;
 public class ConfigureComparisonDialog extends MessageDialog {
   
   /** The non-null configuration data */
-  protected final ConfigureComparisonDialog.ComparisonMethodConfigurationData _data;
+  protected final ComparisonMethodConfigurationData _data;
   
   /**
    * Constructor

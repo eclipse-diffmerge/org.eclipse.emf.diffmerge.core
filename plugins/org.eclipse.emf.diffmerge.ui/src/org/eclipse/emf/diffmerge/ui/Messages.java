@@ -59,6 +59,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_IgnoreRightTooltip;
   public static String ComparisonViewer_ImpactDescription;
   public static String ComparisonViewer_ImpactMenuItem;
+  public static String ComparisonViewer_InconsistencyTooltip;
   public static String ComparisonViewer_LabelsMenuItem;
   public static String ComparisonViewer_Left;
   public static String ComparisonViewer_LinkViewsTooltip;
@@ -106,10 +107,11 @@ public class Messages extends NLS {
   public static String ConfigureComparisonDialog_StructureCriterion;
   public static String ConfigureComparisonDialog_StructureCriterionTooltip;
   public static String ConfigureComparisonDialog_Title;
-  public static String EMFDiffMergeEditorInput_AncestorScope;
+  public static String InconsistencyDialog_AncestorScope;
+  public static String InconsistencyDialog_CopyID;
   public static String EMFDiffMergeEditorInput_AncestorScopeNull;
   public static String EMFDiffMergeEditorInput_CannotLoad;
-  public static String EMFDiffMergeEditorInput_DuplicateIDs;
+  public static String InconsistencyDialog_DuplicateIDs;
   public static String EMFDiffMergeEditorInput_Failure;
   public static String EMFDiffMergeEditorInput_LeftScopeNull;
   public static String EMFDiffMergeEditorInput_Loading;
@@ -117,9 +119,9 @@ public class Messages extends NLS {
   public static String EMFDiffMergeEditorInput_LoadingLeft;
   public static String EMFDiffMergeEditorInput_LoadingRight;
   public static String EMFDiffMergeEditorInput_MigrationNeeded;
-  public static String EMFDiffMergeEditorInput_ReferenceScope;
+  public static String InconsistencyDialog_ReferenceScope;
   public static String EMFDiffMergeEditorInput_RightScopeNull;
-  public static String EMFDiffMergeEditorInput_TargetScope;
+  public static String InconsistencyDialog_TargetScope;
   public static String EMFDiffMergeEditorInput_Title;
   public static String EMFDiffMergeEditorInput_WrongMetamodel;
   public static String EMFDiffMergeLabelProvider_Addition;

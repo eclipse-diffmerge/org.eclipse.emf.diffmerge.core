@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.eclipse.emf.diffmerge.util.structures.StructuresUtil;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure.IComparableSet;
 
 
@@ -72,6 +73,14 @@ extends TreeSet<E> implements IComparableSet<E> {
    */
   public Iterator<E> getCompareIterator() {
     return iterator(); // In ascending order
+  }
+  
+  /**
+   * @see org.eclipse.emf.common.util.AbstractEList#toString()
+   */
+  @Override
+  public String toString() {
+    return StructuresUtil.toCollectionString(this);
   }
   
 }
