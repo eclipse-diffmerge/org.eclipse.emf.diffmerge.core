@@ -44,7 +44,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-@SuppressWarnings("hiding")
 public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
     implements
     BasicEMap.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> {

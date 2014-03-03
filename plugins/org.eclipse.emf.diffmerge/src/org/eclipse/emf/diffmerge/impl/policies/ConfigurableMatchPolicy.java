@@ -16,6 +16,7 @@ package org.eclipse.emf.diffmerge.impl.policies;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -23,6 +24,7 @@ import java.util.Set;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.util.structures.comparable.ComparableLinkedList;
+import org.eclipse.emf.diffmerge.util.structures.comparable.ComparableTreeMap;
 import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -84,14 +86,14 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    * @param criterion_p a match criterion which is NAME or STRUCTURE
    * @return a potentially null object
    */
-  protected ComparableLinkedList<String> getContainerRelativeID(EObject element_p,IModelScope scope_p,
+  protected IComparableStructure<?> getContainerRelativeID(EObject element_p,IModelScope scope_p,
       boolean inScopeOnly_p, MatchCriterionKind criterion_p) {
     String lastIDPart;
     if (criterion_p == MatchCriterionKind.STRUCTURE)
       lastIDPart = getStructureMatchIDPart(element_p, scope_p, inScopeOnly_p);
     else
       lastIDPart = getUniqueName(element_p, scope_p, inScopeOnly_p);
-    ComparableLinkedList<String> result =
+    IComparableStructure<?> result =
       getContainerRelativeID(element_p, scope_p, inScopeOnly_p, lastIDPart);
     return result;
   }
@@ -106,25 +108,31 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    * @return a potentially null object
    */
   @SuppressWarnings("unchecked")
-  protected ComparableLinkedList<String> getContainerRelativeID(EObject element_p,IModelScope scope_p,
-      boolean inScopeOnly_p, String idSuffix_p) {
-    ComparableLinkedList<String> result = null;
+  protected IComparableStructure<?> getContainerRelativeID(EObject element_p,
+      IModelScope scope_p, boolean inScopeOnly_p, String idSuffix_p) {
+    IComparableStructure<?> result = null;
     if (idSuffix_p != null) {
       EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
       if (container != null) {
-        Object containerID = getMatchID(container, scope_p);
+        IComparableStructure<?> containerID = getMatchID(container, scope_p);
         if (containerID instanceof ComparableLinkedList<?>) {
-          result = (ComparableLinkedList<String>)containerID;
-          result.add(idSuffix_p);
-        } else if (containerID instanceof String) {
-          result = new ComparableLinkedList<String>();
-          result.add((String)containerID);
-          result.add(idSuffix_p);
+          result = containerID;
+          ((ComparableLinkedList<String>)result).add(idSuffix_p);
+        } else if (containerID != null) {
+          IComparableStructure<String> typeID = getEncapsulateOrNull(
+              element_p.getClass().getName());
+          IComparableStructure.IComparableMap<String, IComparableStructure<?>> id =
+              new ComparableTreeMap<String, IComparableStructure<?>>();
+          id.put("CONTAINER_RELATIVE_ID_TYPE", typeID); //$NON-NLS-1$
+          id.put("CONTAINER_ID", containerID); //$NON-NLS-1$
+          id.put("ELEMENT_ID", getEncapsulateOrNull(idSuffix_p)); //$NON-NLS-1$
+          result = id;
         }
       } else {
         // Root
-        result = new ComparableLinkedList<String>();
-        result.add(idSuffix_p);
+        ComparableLinkedList<String> id = new ComparableLinkedList<String>();
+        id.add(idSuffix_p);
+        result = id;
       }
     }
     return result;
@@ -273,10 +281,34 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
   }
   
   /**
+   * Return the siblings of the given element from the given scope, including the element itself
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope to which the element belongs
+   * @param inScopeOnly_p whether only the scope may be considered, or the underlying EMF model
+   */
+  protected Collection<EObject> getSiblings(EObject element_p, IModelScope scope_p,
+      boolean inScopeOnly_p) {
+    Collection<EObject> result;
+    EReference containment = getContainment(element_p, scope_p, inScopeOnly_p);
+    if (containment == null) {
+      Resource resource = element_p.eResource();
+      if (inScopeOnly_p || resource == null)
+        result = scope_p.getContents();
+      else
+        result = resource.getContents();
+    } else if (scope_p instanceof IFeaturedModelScope) {
+      EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
+      result = ((IFeaturedModelScope)scope_p).get(container, containment);
+    } else {
+      result = Collections.emptySet();
+    }
+    return Collections.unmodifiableCollection(result);
+  }
+  
+  /**
    * Return a match ID suffix for the given element which is relative to the match ID
    * of the container and made specific thanks to the structurally unique position of the
    * element in its container
-   * Precondition: isStructurallyUniqueInContainer(element_p, scope_p, in)
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which the element belongs
    * @param inScopeOnly_p whether only the scope should be considered or the underlying EMF model
@@ -285,42 +317,45 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
       boolean inScopeOnly_p) {
     String result = null;
     EReference containment = getContainment(element_p, scope_p, inScopeOnly_p);
-    if (containment != null && isDiscriminatingContainment(element_p, containment)) {
-      result = getStructureReferenceIDPart(element_p, containment);
-    } else if (isUniqueRootOfItsType(element_p, scope_p, inScopeOnly_p)) {
-      result = getStructureRootIDPart(element_p);
+    if (isDiscriminatingContainment(element_p, containment)) {
+      boolean validated = containment != null && !containment.isMany();
+      if (!validated) {
+        Collection<EObject> siblings = getSiblings(element_p, scope_p, inScopeOnly_p);
+        validated = isUniqueOfItsTypeAmong(element_p, siblings);
+      }
+      if (validated)
+        result = getValidatedStructureMatchIDPart(element_p, scope_p, containment);
     }
     return result;
   }
   
   /**
    * Return a structural match ID suffix for the given element which is relative to
-   * the given reference to the element
+   * the given reference to the element, or in an absolute way if the element is a root
    * @param element_p a non-null element
-   * @param containment_p a non-null reference
+   * @param scope_p a non-null scope to which the element belongs
+   * @param containment_p a potentially null reference (null if and only if root)
    */
-  protected String getStructureReferenceIDPart(EObject element_p, EReference containment_p) {
-    String result = "::" + containment_p.getName(); //$NON-NLS-1$
-    return result;
-  }
-  
-  /**
-   * Return a structural match ID suffix for the given element as a root
-   * @param element_p a non-null element
-   */
-  protected String getStructureRootIDPart(EObject element_p) {
-    String result = "root::" + element_p.eClass().getName(); //$NON-NLS-1$
-    return result;
+  protected String getValidatedStructureMatchIDPart(EObject element_p, IModelScope scope_p,
+      EReference containment_p) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("::"); //$NON-NLS-1$
+    if (containment_p != null && containment_p.getName() != null)
+      builder.append(containment_p.getName());
+    builder.append('[');
+    builder.append(element_p.eClass().getName());
+    builder.append(']');
+    return builder.toString();
   }
   
   /**
    * Return whether the given containment reference is discriminating enough to uniquely
    * identify the given element as a child
    * @param element_p a non-null element
-   * @param containment_p a non-null containment reference
+   * @param containment_p a potentially null containment reference, where null stands for root
    */
   protected boolean isDiscriminatingContainment(EObject element_p, EReference containment_p) {
-    return !containment_p.isMany();
+    return containment_p == null || !containment_p.isMany();
   }
   
   /**
@@ -351,28 +386,6 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
       }
     }
     boolean result = isPresent && !sameType;
-    return result;
-  }
-  
-  /**
-   * Return whether the given element from the given scope is the only root of its type
-   * @param element_p a non-null element
-   * @param scope_p a non-null scope to which the element belongs
-   * @param inScopeOnly_p whether only the scope may be considered, or the underlying EMF model
-   */
-  protected boolean isUniqueRootOfItsType(EObject element_p, IModelScope scope_p,
-      boolean inScopeOnly_p) {
-    boolean result = false;
-    EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
-    if (container == null) {
-      Resource resource = element_p.eResource();
-      Collection<? extends EObject> collection;
-      if (inScopeOnly_p || resource == null)
-        collection = scope_p.getContents();
-      else
-        collection = resource.getContents();
-      result = isUniqueOfItsTypeAmong(element_p, collection);
-    }
     return result;
   }
   

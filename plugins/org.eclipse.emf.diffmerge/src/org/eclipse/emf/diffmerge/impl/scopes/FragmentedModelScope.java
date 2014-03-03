@@ -276,7 +276,7 @@ implements IFragmentedModelScope.Editable {
    */
   protected Collection<EReference> getCrossReferencesInScope(EObject element_p) {
     // Override if needed
-    return Collections.emptyList();
+    return new ArrayList<EReference>();
   }
   
   /**

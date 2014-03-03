@@ -246,7 +246,7 @@ public class FeaturesViewer extends TableViewer {
     private boolean qualifies(EReference reference_p) {
       return isOwnershipFeature(reference_p) ||
         !reference_p.isContainment() && !reference_p.isContainer() &&
-        reference_p.isChangeable() && !reference_p.isDerived() && !reference_p.isTransient();
+        reference_p.isChangeable() && !reference_p.isDerived();
     }
   }
   

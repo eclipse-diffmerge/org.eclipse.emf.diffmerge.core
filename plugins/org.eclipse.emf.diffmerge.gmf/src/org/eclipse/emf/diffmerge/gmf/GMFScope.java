@@ -14,7 +14,6 @@
  */
 package org.eclipse.emf.diffmerge.gmf;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -113,7 +112,7 @@ public class GMFScope extends FragmentedModelScope {
    */
   @Override
   protected Collection<EReference> getCrossReferencesInScope(EObject element_p) {
-    List<EReference> result = new ArrayList<EReference>();
+    Collection<EReference> result = super.getCrossReferencesInScope(element_p);
     if (element_p instanceof View)
       result.add(NotationPackage.eINSTANCE.getView_Element());
     return result;

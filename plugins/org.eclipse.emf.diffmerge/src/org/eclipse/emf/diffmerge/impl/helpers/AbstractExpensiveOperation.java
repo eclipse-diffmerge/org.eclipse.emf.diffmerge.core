@@ -28,10 +28,6 @@ import org.eclipse.emf.diffmerge.util.IExpensiveOperation;
  */
 public abstract class AbstractExpensiveOperation implements IExpensiveOperation {
 
-  /** Common String constants for building messages */
-  protected static final String SPACE = " "; //$NON-NLS-1$
-  protected static final String COLON = ":"; //$NON-NLS-1$
-  
   /** The non-null progress monitor for this operation */
   private SubMonitor _monitor;
   

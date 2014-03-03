@@ -41,7 +41,7 @@ import org.eclipse.ui.IActionBars;
 
 
 /**
- * A default implementation of IComparisonSpecification aimed at being sub-classed.
+ * A default implementation of IComparisonMethod aimed at being sub-classed.
  * @author Olivier Constant
  */
 public class DefaultComparisonMethod implements IComparisonMethod {

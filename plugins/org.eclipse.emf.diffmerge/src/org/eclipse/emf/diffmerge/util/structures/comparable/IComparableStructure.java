@@ -64,7 +64,7 @@ extends Comparable<IComparableStructure<?>> {
    */
   interface IComparableMapEntry<K extends Comparable<?>, V extends Comparable<?>>
   extends Map.Entry<K, V>, IComparableStructure<Comparable<?>> {
-    // Nothing needed
+    // Nothing to add
   }
   
   /**

@@ -1,14 +1,16 @@
 package org.eclipse.emf.diffmerge.ui.gmf;
 
+import java.util.Collection;
+
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.gmf.runtime.notation.Bendpoints;
+import org.eclipse.gmf.runtime.notation.Anchor;
 import org.eclipse.gmf.runtime.notation.Diagram;
-import org.eclipse.gmf.runtime.notation.LayoutConstraint;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.Style;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint;
 
 
 /**
@@ -70,25 +72,67 @@ public class GMFDiffMergeLabelProvider extends DiffMergeLabelProvider {
    */
   protected String getContainmentText(EObject element_p) {
     String result = null;
-    EReference containment = ((EObject)element_p).eContainmentFeature();
-    if (containment != null && isSignificant(containment.getName())) {
+    EReference containment = element_p.eContainmentFeature();
+    if (containment != null && isSignificant(containment.getName()))
       result = formatTechnicalName(containment.getName());
-    }
     return result;
+  }
+  
+  /**
+   * Return a label for the given object which is further characterized by the given object
+   * as its "type".
+   * Warning: This operation calls the getText operation on both elements.
+   * @param element_p a potentially null element
+   * @param type_p a non-null element
+   * @return a non-null string
+   */
+  protected String getExplicitlyTypedElementText(Object element_p, Object type_p) {
+    StringBuilder builder = new StringBuilder();
+    boolean elementLabelOK = false;
+    if (element_p != null) {
+      String innerLabel = getText(element_p);
+      if (isSignificant(innerLabel)) {
+        builder.append(innerLabel);
+        elementLabelOK = true;
+      }
+    }
+    if (!elementLabelOK) {
+      builder.append('<');
+      builder.append(Messages.GMFDiffMergeLabelProvider_Unnamed);
+      builder.append('>');
+    }
+    builder.append("  "); //$NON-NLS-1$
+    builder.append('[');
+    builder.append(formatTechnicalName(getText(type_p)));
+    builder.append(']');
+    return builder.toString();
+  }
+  
+  /**
+   * Return a label for the given element that represents a layout
+   * @param element_p a non-null element
+   * @return a non-null string
+   */
+  protected String getLayoutText(EObject element_p) {
+    return Messages.GMFDiffMergeLabelProvider_Layout;
   }
   
   /**
    * Return a label for the given element which is further characterized by the given
    * qualifying elements
-   * @param element_p a non-null element
+   * @param element_p a potentially null element
    * @param qualifiers_p a potentially empty set of qualifying elements
    * @return a non-null string
    */
   protected String getManyQualifiedElementText(EObject element_p, Object... qualifiers_p) {
     StringBuilder builder = new StringBuilder();
-    builder.append(formatTechnicalName(element_p.eClass().getName()));
+    if (element_p != null) {
+      builder.append(formatTechnicalName(element_p.eClass().getName()));
+      if (qualifiers_p.length > 0)
+        builder.append(' ');
+    }
     if (qualifiers_p.length > 0) {
-      builder.append(" ["); //$NON-NLS-1$
+      builder.append('[');
       boolean firstIteration = true;
       for (Object qualifier : qualifiers_p) {
         if (firstIteration)
@@ -115,6 +159,38 @@ public class GMFDiffMergeLabelProvider extends DiffMergeLabelProvider {
   }
   
   /**
+   * Return a label for the given relative bendpoint
+   * @param bendpoint_p a non-null relative bendpoint
+   * @return a non-null string
+   */
+  protected String getRelativeBendpointText(RelativeBendpoint bendpoint_p) {
+    StringBuilder builder = new StringBuilder();
+    builder.append('(');
+    builder.append(bendpoint_p.getSourceX());
+    builder.append(',');
+    builder.append(' ');
+    builder.append(bendpoint_p.getSourceY());
+    builder.append(')');
+    builder.append("->"); //$NON-NLS-1$
+    builder.append('(');
+    builder.append(bendpoint_p.getTargetX());
+    builder.append(',');
+    builder.append(' ');
+    builder.append(bendpoint_p.getTargetY());
+    builder.append(')');
+    return builder.toString();
+  }
+  
+  /**
+   * Return a label for the given element that represents a graphical style
+   * @param element_p a non-null element
+   * @return a non-null string
+   */
+  protected String getStyleText(EObject element_p) {
+    return formatTechnicalName(element_p.eClass().getName());
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider#getText(java.lang.Object)
    */
   @Override
@@ -130,9 +206,17 @@ public class GMFDiffMergeLabelProvider extends DiffMergeLabelProvider {
         result = getViewText(diagram);
     } else if (element_p instanceof View) {
       result = getViewText((View)element_p);
-    } else if (element_p instanceof LayoutConstraint || element_p instanceof Style ||
-        element_p instanceof Bendpoints) {
-      result = getManyQualifiedElementText((EObject)element_p);
+    } else if (isLayout(element_p)) {
+      result = getLayoutText((EObject)element_p);
+    } else if (element_p instanceof Style) {
+      result = getStyleText((EObject)element_p);
+    } else if (element_p instanceof Anchor) {
+      result = NotationPackage.eINSTANCE.getAnchor().getName();
+    } else if (element_p instanceof RelativeBendpoint) {
+      result = getRelativeBendpointText((RelativeBendpoint)element_p);
+    } else if (element_p instanceof Collection<?> && !((Collection<?>)element_p).isEmpty() &&
+        ((Collection<?>)element_p).iterator().next() instanceof RelativeBendpoint) {
+      result = getManyQualifiedElementText(null, ((Collection<?>)element_p).toArray());
     } else if (element_p instanceof String) {
       result = (String)element_p;
     } else {
@@ -148,10 +232,25 @@ public class GMFDiffMergeLabelProvider extends DiffMergeLabelProvider {
    */
   protected String getViewText(View view_p) {
     String result;
-    Object[] viewElements = new EObject[0];
+    EObject represented = null;
     if (view_p.eIsSet(NotationPackage.eINSTANCE.getView_Element()))
-      viewElements = new Object[] {view_p.getElement()};
-    result = getManyQualifiedElementText(view_p, viewElements);
+      represented = view_p.getElement();
+    result = getExplicitlyTypedElementText(represented, view_p.eClass().getName());
+    return result;
+  }
+  
+  /**
+   * Return whether the given element represents a layout
+   * @param element_p a non-null object
+   */
+  protected boolean isLayout(Object element_p) {
+    boolean result = false;
+    if (element_p instanceof EObject) {
+    EReference containment = ((EObject)element_p).eContainmentFeature();
+    result =
+        containment == NotationPackage.eINSTANCE.getNode_LayoutConstraint() ||
+        containment == NotationPackage.eINSTANCE.getEdge_Bendpoints();
+    }
     return result;
   }
   

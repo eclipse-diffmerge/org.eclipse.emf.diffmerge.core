@@ -276,7 +276,7 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
   public boolean isSymmetricalTo(IValuePresence peer_p) {
     return getAbsenceRole() == peer_p.getPresenceRole()
         && getFeature() == peer_p.getFeature()
-        && getFeature().getUpperBound() == 1
+        && (getFeature().getUpperBound() == 1 || isOrder() && peer_p.isOrder())
         && getElementMatch() == peer_p.getElementMatch();
   }
 

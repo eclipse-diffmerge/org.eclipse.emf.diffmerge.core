@@ -24,6 +24,8 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.gmf.messages"; //$NON-NLS-1$
   public static String GmfComparisonFactory_Label;
+  public static String GMFDiffMergeLabelProvider_Layout;
+  public static String GMFDiffMergeLabelProvider_Unnamed;
   static {
     // initialize resource bundle
     NLS.initializeMessages(BUNDLE_NAME, Messages.class);

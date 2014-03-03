@@ -39,7 +39,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-@SuppressWarnings("hiding")
 public class ValueToDifferenceEntryImpl extends EObjectImpl implements
     BasicEMap.Entry<Object, IAttributeValuePresence> {
   /**

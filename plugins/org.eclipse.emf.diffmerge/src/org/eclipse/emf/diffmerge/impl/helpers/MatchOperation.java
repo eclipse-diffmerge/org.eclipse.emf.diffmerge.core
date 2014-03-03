@@ -113,7 +113,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
       while (it.hasNext()) {
         checkProgress();
         EObject current = it.next();
-        IMatch.Editable match = (IMatch.Editable)mapping.map(current, role_p);
+        IMatch.Editable match = mapping.map(current, role_p);
         if (rememberMatchIDs || fillIDMap_p) {
           Object matchID = getMatchPolicy().getMatchID(current, scope);
           if (matchID != null) {
@@ -157,7 +157,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
     boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       Iterator<EObject> targetIt = scope.getAllContents();
-      IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping();
+      IMapping.Editable mapping = _comparison.getMapping();
       while (targetIt.hasNext()) {
         checkProgress();
         EObject current = targetIt.next();
@@ -260,7 +260,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
   public IStatus run() {
     getMonitor().worked(1);
     match();
-    IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping();
+    IMapping.Editable mapping = _comparison.getMapping();
     mapping.crossReference(Role.TARGET);
     getMonitor().worked(1);
     mapping.crossReference(Role.REFERENCE);

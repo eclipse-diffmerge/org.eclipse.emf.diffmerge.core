@@ -67,6 +67,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -361,6 +362,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     if (part != null)
       result = part.getSite();
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.common.ui.viewer.IViewerProvider#getViewer()
+   */
+  public Viewer getViewer() {
+    return _viewer; // Non-null after createContents(Composite) has returned
   }
   
   /**

@@ -45,7 +45,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-@SuppressWarnings("hiding")
 public class ReferenceToMatchToDifferenceEntryImpl extends EObjectImpl
     implements
     BasicEMap.Entry<EReference, EMap<IMatch, IReferenceValuePresence>> {

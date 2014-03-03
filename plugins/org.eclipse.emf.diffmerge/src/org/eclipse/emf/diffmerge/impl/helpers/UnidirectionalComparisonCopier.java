@@ -261,7 +261,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
    * @param comparison_p a non-null comparison
    */
   protected void setComparison(IComparison.Editable comparison_p) {
-    _mapping = (IMapping.Editable)comparison_p.getMapping();
+    _mapping = comparison_p.getMapping();
     _sourceScope = comparison_p.getScope(_sourceRole);
     _destinationScope = comparison_p.getScope(_sourceRole.opposite());
     _mergePolicy = comparison_p.getLastMergePolicy();

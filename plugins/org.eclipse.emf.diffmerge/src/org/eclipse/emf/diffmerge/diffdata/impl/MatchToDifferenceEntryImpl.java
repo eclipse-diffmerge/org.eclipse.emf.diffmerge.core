@@ -40,7 +40,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-@SuppressWarnings("hiding")
 public class MatchToDifferenceEntryImpl extends EObjectImpl implements
     BasicEMap.Entry<IMatch, IReferenceValuePresence> {
   /**
