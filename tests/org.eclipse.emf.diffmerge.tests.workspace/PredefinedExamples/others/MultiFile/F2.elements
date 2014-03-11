@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_wI7iwKOOEeOu79LtJq_NIg" name="">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Element" id="_2y8jsKOOEeOu79LtJq_NIg" name="RE2">
+    <singleRef href="F0.elements#_qXGHAKOOEeOu79LtJq_NIg"/>
+  </content>
+</org.eclipse.emf.diffmerge.tests.elements:Root>

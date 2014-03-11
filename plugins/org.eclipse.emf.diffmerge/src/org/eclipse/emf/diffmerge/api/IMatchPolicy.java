@@ -51,10 +51,10 @@ public interface IMatchPolicy {
   
   /**
    * Optionally return a comparator which is applicable to all objects that getMatchID
-   * may return. Its behavior on other objects has no consequences.
-   * If present, it is used to alter the performance of the matching phase by using
-   * TreeMaps instead of HashMaps (log(n) time cost for the main operations but no
-   * issue related to HashMap's capacity or load factor).
+   * may return. Its behavior on other objects has no consequence.
+   * If present, this comparator is used to alter the performance of the matching phase
+   * by using TreeMaps instead of HashMaps (log(n) time cost for the main operations
+   * but no issue related to HashMap's capacity or load factor).
    * @return a comparator or null
    * @see java.util.TreeMap
    */
@@ -62,7 +62,8 @@ public interface IMatchPolicy {
   
   /**
    * Return whether match ID information must be maintained for better traceability
-   * but at the price of a larger memory footprint
+   * but at the price of a larger memory footprint. Such information can typically
+   * be used in a GUI to allow users to understand how elements have been matched.
    * @see IPureMatch#getMatchID() 
    */
   boolean keepMatchIDs();
@@ -73,8 +74,8 @@ public interface IMatchPolicy {
    * that implement Comparable, such as Strings.
    * It never throws ClassCastException; instead, its compare method returns 0
    * when objects cannot be compared, either because they are not Comparable or
-   * because they are Comparable which are not mutually comparable.
-   * In this situation, this comparator is thus inconsistent with equals.
+   * because they are Comparables which are not mutually comparable.
+   * Note that this comparator is thus inconsistent with equals in this situation.
    * @see Comparable, Comparator
    */
   Comparator<Object> NATURAL_ORDER_COMPARATOR = new Comparator<Object>() {
