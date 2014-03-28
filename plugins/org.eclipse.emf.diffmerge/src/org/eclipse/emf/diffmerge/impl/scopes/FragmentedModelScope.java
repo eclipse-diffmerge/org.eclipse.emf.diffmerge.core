@@ -72,7 +72,8 @@ implements IFragmentedModelScope.Editable {
   /** The non-null resource set that encompasses the scope */
   protected final ResourceSet _resourceSet;
   
-  /** The non-null, non-empty ordered set of resources defining the scope */
+  /** The non-null, non-empty ordered set of resources defining the scope.
+   *  It includes _rootResources, _includedResources and _referencedResources. */
   protected final List<Resource> _resources;
   
   /** The non-null, non-empty ordered subset of the resources which are roots */
@@ -112,8 +113,6 @@ implements IFragmentedModelScope.Editable {
    */
   public FragmentedModelScope(Resource resource_p, boolean readOnly_p) {
     this(resource_p.getURI(), resource_p.getResourceSet(), readOnly_p);
-    _rootResources.add(resource_p);
-    addNewResource(resource_p);
   }
   
   /**

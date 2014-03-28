@@ -52,7 +52,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#get(EObject, EReference)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#get(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
    */
   public List<EObject> get(EObject source_p, EReference reference_p) {
     return get(source_p, reference_p, resolveProxies());
@@ -92,7 +92,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#get(EObject, EAttribute)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#get(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute)
    */
   @SuppressWarnings("unchecked")
   public List<Object> get(EObject source_p, EAttribute attribute_p) {
@@ -116,7 +116,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getAllContents()
+   * @see org.eclipse.emf.diffmerge.api.scopes.ICoreModelScope#getAllContents()
    */
   public TreeIterator<EObject> getAllContents() {
     // Return an iterator which is derived from getAllContents(EObject)
@@ -124,7 +124,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getAllContents(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getAllContents(org.eclipse.emf.ecore.EObject)
    */
   @SuppressWarnings("serial")
   public TreeIterator<EObject> getAllContents(EObject root_p) {
@@ -159,14 +159,14 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getContainment(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(org.eclipse.emf.ecore.EObject)
    */
   public EReference getContainment(EObject element_p) {
     return element_p.eContainmentFeature();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#getContents(EObject)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContents(org.eclipse.emf.ecore.EObject)
    */
   public List<EObject> getContents(EObject element_p) {
     return element_p.eContents();
