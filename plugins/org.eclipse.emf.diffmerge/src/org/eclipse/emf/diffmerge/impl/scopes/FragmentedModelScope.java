@@ -493,10 +493,11 @@ implements IFragmentedModelScope.Editable {
       }
     }
     for (Resource loadedResource : _loadedResources) {
-      if (loadedResource.isLoaded())
+      if (loadedResource.isLoaded()) { // Actually loaded, not just assumed as such
         loadedResource.unload();
+      }
+      _resourceSet.getResources().remove(loadedResource);
     }
-    _resourceSet.getResources().removeAll(_loadedResources);
     List<Resource> result = new ArrayList<Resource>(_loadedResources);
     _loadedResources.clear();
     if (!result.isEmpty())
