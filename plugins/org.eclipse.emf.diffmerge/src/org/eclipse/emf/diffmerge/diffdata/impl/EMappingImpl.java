@@ -117,7 +117,7 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    * A non-null cross reference adapter on this mapping for retrieving matches from model elements
    * @generated NOT
    */
-  private final MatchCrossReferenceAdapter _matchAdapter;
+  private MatchCrossReferenceAdapter _matchAdapter;
 
   /**
    * <!-- begin-user-doc -->
@@ -288,6 +288,9 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     getReferenceCompletedMatches().clear();
     _targetCrossReferencer.clear();
     _referenceCrossReferencer.clear();
+    eAdapters().remove(_matchAdapter);
+    _matchAdapter = new MatchCrossReferenceAdapter();
+    eAdapters().add(_matchAdapter);
   }
 
   /**
