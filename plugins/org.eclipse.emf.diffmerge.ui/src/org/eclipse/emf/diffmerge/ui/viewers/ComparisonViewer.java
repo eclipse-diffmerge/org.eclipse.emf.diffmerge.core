@@ -1394,7 +1394,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Setup the menus of the synthesis viewer
    */
   @SuppressWarnings("unused")
-  protected void setupSynthesisMenus() {
+  protected Menu setupSynthesisMenus() {
     ToolBar synthesisToolBar = _synthesisModelTreeViewer.getToolbar();
     Menu synthesisMenu = UIUtil.createMenuTool(synthesisToolBar);
     // Show uncounted elements
@@ -1559,19 +1559,29 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null) {
-            showAdditions.setSelection(input.counts(UserDifferenceKind.PRESENCE_LEFT));
-            showDeletions.setSelection(input.counts(UserDifferenceKind.PRESENCE_RIGHT));
-            showMoves.setSelection(input.counts(UserDifferenceKind.MOVE));
-            showNoContainmentDiffs.setSelection(input.counts(UserDifferenceKind.NO_CONTAINMENT));
-            logEventsItem.setSelection(input.isLogEvents());
-            showImpactItem.setSelection(input.isShowMergeImpact());
-            supportUndoRedoItem.setSelection(input.isUndoRedoSupported());
-            supportUndoRedoItem.setEnabled(input.getEditingDomain() != null);
-            useCustomIconsItem.setSelection(input.usesCustomIcons());
+            if (!showAdditions.isDisposed())
+              showAdditions.setSelection(input.counts(UserDifferenceKind.PRESENCE_LEFT));
+            if (!showDeletions.isDisposed())
+              showDeletions.setSelection(input.counts(UserDifferenceKind.PRESENCE_RIGHT));
+            if (!showMoves.isDisposed())
+              showMoves.setSelection(input.counts(UserDifferenceKind.MOVE));
+            if (!showNoContainmentDiffs.isDisposed())
+              showNoContainmentDiffs.setSelection(input.counts(UserDifferenceKind.NO_CONTAINMENT));
+            if (!logEventsItem.isDisposed())
+              logEventsItem.setSelection(input.isLogEvents());
+            if (!showImpactItem.isDisposed())
+              showImpactItem.setSelection(input.isShowMergeImpact());
+            if (!supportUndoRedoItem.isDisposed()){
+              supportUndoRedoItem.setSelection(input.isUndoRedoSupported());
+              supportUndoRedoItem.setEnabled(input.getEditingDomain() != null);
+            }
+            if (!useCustomIconsItem.isDisposed())
+              useCustomIconsItem.setSelection(input.usesCustomIcons());
           }
         }
       }
     });
+    return synthesisMenu;
   }
   
   /**
