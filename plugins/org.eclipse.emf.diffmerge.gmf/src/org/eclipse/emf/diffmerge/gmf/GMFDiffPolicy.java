@@ -33,7 +33,7 @@ import org.eclipse.swt.graphics.Color;
 public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   
   /**
-   * @see com.thalesgroup.mde.shared.compare.policies.DefaultDiffPolicy#considerEqual(Object, Object, EAttribute)
+   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#considerEqual(Object, Object, EAttribute)
    */
   @Override
   public boolean considerEqual(Object value1_p, Object value2_p, EAttribute attribute_p) {
@@ -51,7 +51,7 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.api.IMatch)
+   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.api.IMatch)
    */
   @Override
   public boolean coverMatch(IMatch match_p) {

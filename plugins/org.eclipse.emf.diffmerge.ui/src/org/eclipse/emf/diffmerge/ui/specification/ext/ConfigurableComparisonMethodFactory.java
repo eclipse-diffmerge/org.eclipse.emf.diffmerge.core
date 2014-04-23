@@ -29,7 +29,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethodFactory {
   
   /**
-   * @see com.thalesgroup.mde.melody.compare.MelodyComparisonFactory#createComparisonSpecification(org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonSpecification(org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification)
    */
   @Override
   public IComparisonMethod createComparisonMethod(
@@ -40,7 +40,7 @@ public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethod
   }
   
   /**
-   * @see com.thalesgroup.mde.melody.compare.MelodyComparisonFactory#getLabel()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#getLabel()
    */
   @Override
   public String getLabel() {
@@ -48,7 +48,7 @@ public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethod
   }
   
   /**
-   * @see com.thalesgroup.mde.melody.compare.MelodyComparisonFactory#getOverridenClasses()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#getOverridenClasses()
    */
   @Override
   public Collection<Class<?>> getOverridenClasses() {

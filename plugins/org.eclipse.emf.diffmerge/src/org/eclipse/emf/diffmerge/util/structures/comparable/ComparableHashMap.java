@@ -96,7 +96,7 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
   }
   
   /**
-   * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+   * @see org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure#getCompareIterator()
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Iterator<IComparableMapEntry<K, V>> getCompareIterator() {
@@ -176,7 +176,7 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
       return STRUCTURE_COMPARATOR.compare(this, o_p);
     }
     /**
-     * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+     * @see org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure#getCompareIterator()
      */
     public Iterator<Comparable<?>> getCompareIterator() {
       return Arrays.asList(getKey(), getValue()).iterator();

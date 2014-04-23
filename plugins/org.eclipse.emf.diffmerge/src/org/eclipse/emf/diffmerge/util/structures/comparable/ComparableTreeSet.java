@@ -69,7 +69,7 @@ extends TreeSet<E> implements IComparableSet<E> {
   }
   
   /**
-   * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+   * @see org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure#getCompareIterator()
    */
   public Iterator<E> getCompareIterator() {
     return iterator(); // In ascending order

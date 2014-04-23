@@ -153,7 +153,7 @@ extends Comparable<IComparableStructure<?>> {
       return _wrappedEntry.equals(o_p);
     }
     /**
-     * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+     * @see org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure#getCompareIterator()
      */
     public Iterator<Comparable<?>> getCompareIterator() {
       return Arrays.asList(getKey(), getValue()).iterator();

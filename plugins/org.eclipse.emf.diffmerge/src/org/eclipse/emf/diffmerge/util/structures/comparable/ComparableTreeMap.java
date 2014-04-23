@@ -70,7 +70,7 @@ extends TreeMap<K, V> implements IComparableMap<K, V> {
   }
   
   /**
-   * @see com.thalesgroup.mde.modelingaids.diffmerge.structures.IComparableStructure#getCompareIterator()
+   * @see org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure#getCompareIterator()
    */
   public Iterator<IComparableMapEntry<K, V>> getCompareIterator() {
     final Iterator<Map.Entry<K, V>> ascendingEntryIterator =

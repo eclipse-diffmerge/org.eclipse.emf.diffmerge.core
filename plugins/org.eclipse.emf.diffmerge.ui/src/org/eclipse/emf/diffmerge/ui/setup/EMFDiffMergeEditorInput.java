@@ -114,7 +114,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /** The (initially null) command stack listener on the editing domain, if any */
   protected CommandStackListener _commandStackListener;
   
-  /** The non-null (unless dieposed) selection bridge between the viewer and the workbench site */
+  /** The non-null (unless disposed) selection bridge between the viewer and the workbench site */
   protected SelectionBridge _selectionBridge;
   
   
