@@ -16,7 +16,6 @@ package org.eclipse.emf.diffmerge.gmf;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,25 +76,6 @@ public class GMFScope extends FragmentedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#load()
-   */
-  @Override
-  public boolean load() throws Exception {
-    boolean result = false;
-    Map<String, Object> options = new HashMap<String, Object>();
-    options.put(GMFResource.OPTION_ABORT_ON_ERROR, Boolean.TRUE);
-    for (Resource rootResource : _rootResources) {
-      rootResource.load(options);
-      if (!result && !rootResource.getContents().isEmpty())
-        result = true;
-    }
-    if (!result)
-      throw new RuntimeException(Messages.GMFScope_CannotLoad +
-          _rootResources.get(0).getURI());
-    return result;
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#get(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
    */
   @Override
@@ -115,6 +95,16 @@ public class GMFScope extends FragmentedModelScope {
     Collection<EReference> result = super.getCrossReferencesInScope(element_p);
     if (element_p instanceof View)
       result.add(NotationPackage.eINSTANCE.getView_Element());
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#getLoadOptions(org.eclipse.emf.ecore.resource.Resource)
+   */
+  @Override
+  protected Map<Object, Object> getLoadOptions(Resource resource_p) {
+    Map<Object, Object> result = super.getLoadOptions(resource_p);
+    result.put(GMFResource.OPTION_ABORT_ON_ERROR, Boolean.TRUE);
     return result;
   }
   

@@ -303,6 +303,16 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
+   * Return load options for loading the given resource
+   * @param resource_p a non-null resource
+   * @return a non-null, potentially empty, modifiable option map
+   */
+  protected Map<Object, Object> getLoadOptions(Resource resource_p) {
+    // Override if needed
+    return new HashMap<Object, Object>();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getOriginator()
    */
   @Override
@@ -418,7 +428,8 @@ implements IFragmentedModelScope.Editable {
     boolean result = false;
     if (_state == ScopeState.INITIALIZED || _state == ScopeState.LOADED) {
       for (Resource rootResource : _rootResources) {
-        rootResource.load(null);
+        Map<?,?> options = getLoadOptions(rootResource);
+        rootResource.load(options);
       }
       _state = ScopeState.LOADED;
       result = true;
