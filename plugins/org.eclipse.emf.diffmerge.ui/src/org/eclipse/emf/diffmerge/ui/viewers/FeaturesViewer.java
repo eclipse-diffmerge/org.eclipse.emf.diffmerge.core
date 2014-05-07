@@ -53,7 +53,7 @@ import org.eclipse.swt.widgets.Composite;
  * Input: FeatureViewer.FeaturesInput ; Elements: EStructuralFeature.
  * @author Olivier Constant
  */
-public class FeaturesViewer extends TableViewer {
+public class FeaturesViewer extends TableViewer implements IDifferenceRelatedViewer {
   
   /**
    * A simple structure for defining inputs for this viewer.
@@ -152,6 +152,13 @@ public class FeaturesViewer extends TableViewer {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#isDifferenceAgnostic()
+   */
+  public boolean isDifferenceAgnostic() {
+    return _showAllFeatures;
+  }
+  
+  /**
    * Return whether the given object represents the virtual ownership feature
    * @param object_p a potentially null object
    */
@@ -160,19 +167,11 @@ public class FeaturesViewer extends TableViewer {
   }
   
   /**
-   * Return whether all features must be shown, including those which hold no difference
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#setDifferenceAgnostic(boolean)
    */
-  public boolean mustShowAllFeatures() {
-    return _showAllFeatures;
-  }
-  
-  /**
-   * Set whether all features must be shown, including those which hold no difference
-   * @param show_p whether all features must be shown
-   */
-  public void setShowAllFeatures(boolean show_p) {
-    if (show_p != mustShowAllFeatures()) {
-      _showAllFeatures = show_p;
+  public void setDifferenceAgnostic(boolean agnostic_p) {
+    if (agnostic_p != isDifferenceAgnostic()) {
+      _showAllFeatures = agnostic_p;
       refresh(false);
     }
   }
@@ -211,7 +210,7 @@ public class FeaturesViewer extends TableViewer {
       Role drivingRole = getInput().getContext().getDrivingRole();
       IMatch match = ((FeaturesInput)inputElement_p).getMatch();
       List<EStructuralFeature> result;
-      if (mustShowAllFeatures())
+      if (isDifferenceAgnostic())
         result = getAllFeatures(match);
       else {
         result = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());

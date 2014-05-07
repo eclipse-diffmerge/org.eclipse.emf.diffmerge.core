@@ -16,24 +16,24 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
-import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 
 /**
- * A ComparisonTreeViewer with a header.
- * Input, Elements: see ComparisonTreeViewer.
- * @see ComparisonTreeViewer
+ * A Features Viewer with a header.
+ * Input, Elements: see FeaturesViewer.
+ * @see FeaturesViewer
  * @author Olivier Constant
  */
-public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeViewer> {
+public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
   
   /**
    * Constructor
    * @param parent_p a non-null composite
    */
-  public EnhancedComparisonTreeViewer(Composite parent_p) {
+  public EnhancedFeaturesViewer(Composite parent_p) {
     super();
     createControls(parent_p); 
   }
@@ -50,8 +50,8 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createInnerViewer(org.eclipse.swt.widgets.Composite)
    */
   @Override
-  protected ComparisonTreeViewer createInnerViewer(Composite parent_p) {
-    return new ComparisonTreeViewer(parent_p);
+  protected FeaturesViewer createInnerViewer(Composite parent_p) {
+    return new FeaturesViewer(parent_p);
   }
   
   /**
@@ -61,32 +61,16 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
   protected Label createTextLabel(Composite parent_p) {
     Label result = super.createTextLabel(parent_p);
     result.setFont(UIUtil.getBold(result.getFont()));
-    result.setText(getDefaultHeaderText());
+    result.setText(Messages.ComparisonViewer_Details);
     return result;
-  }
-  
-  /**
-   * Return the default text for the header
-   * @return a non-null string
-   */
-  public String getDefaultHeaderText() {
-    return Messages.EnhancedComparisonTreeViewer_DefaultHeader;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getInput()
    */
   @Override
-  public EMFDiffNode getInput() {
-    return (EMFDiffNode)super.getInput();
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getSelection()
-   */
-  @Override
-  public ITreeSelection getSelection() {
-    return (ITreeSelection)super.getSelection();
+  public FeaturesInput getInput() {
+    return (FeaturesInput)super.getInput();
   }
   
 }

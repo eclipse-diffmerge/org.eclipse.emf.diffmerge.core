@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Composite;
  * Input: EMFDiffNode ; Elements: EMatch.
  * @author Olivier Constant
  */
-public class ComparisonSideViewer extends TreeViewer {
+public class ComparisonSideViewer extends TreeViewer implements IComparisonSideViewer {
   
   /** Whether the side of the viewer is left or right */
   private final boolean _sideIsLeft;
@@ -123,8 +123,7 @@ public class ComparisonSideViewer extends TreeViewer {
   }
   
   /**
-   * Return whether the side of this viewer is left or right
-   * @return a non-null role
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer#isLeftSide()
    */
   public boolean isLeftSide() {
     return _sideIsLeft;

@@ -14,9 +14,6 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.createComposite;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.createToolBar;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,13 +86,9 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -121,6 +114,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /** The name of the "difference numbers" property */
   protected static final String PROPERTY_DIFFERENCE_NUMBERS = "PROPERTY_DIFFERENCE_NUMBERS"; //$NON-NLS-1$
   
+  /** The name of the "delete left activation" property */
+  protected static final String PROPERTY_ACTIVATION_DELETE_LEFT = "PROPERTY_ACTIVATION_DELETE_LEFT"; //$NON-NLS-1$
+  
+  /** The name of the "delete right activation" property */
+  protected static final String PROPERTY_ACTIVATION_DELETE_RIGHT = "PROPERTY_ACTIVATION_DELETE_RIGHT"; //$NON-NLS-1$
+  
+  /** The name of the "merge to left activation" property */
+  protected static final String PROPERTY_ACTIVATION_MERGE_TO_LEFT = "PROPERTY_ACTIVATION_MERGE_TO_LEFT"; //$NON-NLS-1$
+  
+  /** The name of the "merge to right activation" property */
+  protected static final String PROPERTY_ACTIVATION_MERGE_TO_RIGHT = "PROPERTY_ACTIVATION_MERGE_TO_RIGHT"; //$NON-NLS-1$
+  
+  /** The name of the "ignore left activation" property */
+  protected static final String PROPERTY_ACTIVATION_IGNORE_LEFT = "PROPERTY_ACTIVATION_IGNORE_LEFT"; //$NON-NLS-1$
+  
+  /** The name of the "ignore right activation" property */
+  protected static final String PROPERTY_ACTIVATION_IGNORE_RIGHT = "PROPERTY_ACTIVATION_IGNORE_RIGHT"; //$NON-NLS-1$
+  
+  
   /** The synthesis model tree viewer */
   protected EnhancedComparisonTreeViewer _synthesisModelTreeViewer;
   
@@ -131,26 +143,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected EnhancedComparisonSideViewer _rightModelTreeViewer;
 
   /** The features viewer */
-  protected FeaturesViewer _featuresViewer;
+  protected EnhancedFeaturesViewer _featuresViewer;
 
   /** The left values viewer */
-  protected ValuesViewer _leftValuesViewer;
+  protected EnhancedValuesViewer _leftValuesViewer;
   
   /** The right values viewer */
-  protected ValuesViewer _rightValuesViewer;
-  
-  /** The tool bar above the features viewer */
-  protected ToolBar _featuresToolbar;
-  
-  /** The tool bar above the left values viewer */
-  protected ToolBar _leftValuesToolbar;
-  
-  /** The tool bar above the right values viewer */
-  protected ToolBar _rightValuesToolbar;
-  
-  /** The tool items */
-  protected ToolItem _nextItem, _previousItem, _toLeftItem, _toRightItem,
-    _deleteLeftItem, _deleteRightItem, _ignoreLeftItem, _ignoreRightItem;
+  protected EnhancedValuesViewer _rightValuesViewer;
   
   /** The last selection directly made by the user */
   private ComparisonSelection _lastUserSelection;
@@ -183,8 +182,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   public ComparisonViewer(Composite parent_p, IActionBars actionBars_p) {
     super(parent_p, actionBars_p);
-    _isLeftRightSynced = true;
-    _lastUserSelection = null;
   }
   
   /**
@@ -277,6 +274,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @Override
   protected Composite createControls(Composite parent_p) {
+    // Non-graphical instance variables
+    initialize();
+    // Refresh viewer when number of differences changes
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -288,36 +288,62 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
+    // Main control
     SashForm result = new SashForm(parent_p, SWT.VERTICAL);
-    // Upper part
-    SashForm upperPart = new SashForm(result, SWT.HORIZONTAL);
-    _synthesisModelTreeViewer = new EnhancedComparisonTreeViewer(upperPart);
-    _synthesisSorter = new ViewerSorter();
-    _unchangedElementsFilter = new ViewerFilter() {
-      /**
-       * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-       */
-      @Override
-      public boolean select(Viewer viewer_p, Object parentElement_p, Object element_p) {
-        EMatch match = (EMatch)element_p;
-        return getInput().getDifferenceNumber(match) > 0;
-      }
-    };
-    _moveOriginsFilter = new ViewerFilter() {
-      /**
-       * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-       */
-      @Override
-      public boolean select(Viewer viewer_p, Object parentElement_p, Object element_p) {
-        TreePath path;
-        if (parentElement_p instanceof TreePath)
-          path = ((TreePath)parentElement_p).createChildPath(element_p);
-        else
-          path = new TreePath(new Object[] {element_p});
-        return !getInput().isMoveOrigin(path);
-      }
-    };
-    _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_unchangedElementsFilter);
+    // Upper and lower parts
+    SashForm upperPart = createUpperPart(result);
+    SashForm lowerPart = createLowerPart(result);
+    setupSashes(upperPart, lowerPart);
+    result.setWeights(getDefaultRowWeights());
+    // Overall synchronization
+    setupSynchronizationListeners();
+    setupToolbars();
+    return result;
+  }
+  
+  /**
+   * Create and return a features viewer
+   * @param parent_p a non-null composite
+   * @return a non-null viewer
+   */
+  protected EnhancedFeaturesViewer createFeaturesViewer(Composite parent_p) {
+    EnhancedFeaturesViewer result = new EnhancedFeaturesViewer(parent_p);
+    return result;
+  }
+  
+  /**
+   * Create and return the lower row of the GUI
+   * @param parent_p a non-null composite
+   * @return a non-null widget
+   */
+  protected SashForm createLowerPart(Composite parent_p) {
+    SashForm result = new SashForm(parent_p, SWT.HORIZONTAL);
+    // Features section
+    _featuresViewer = createFeaturesViewer(result);
+    // Values section
+    _leftValuesViewer = createValuesViewer(result, true);
+    _rightValuesViewer = createValuesViewer(result, false);
+    return result;
+  }
+  
+  /**
+   * Create and return the model scope viewer for the given side
+   * @param parent_p a non-null composite
+   * @param isLeftSide_p whether the side is left
+   * @return a non-null viewer
+   */
+  protected EnhancedComparisonSideViewer createModelScopeViewer(Composite parent_p, boolean isLeftSide_p) {
+    return new EnhancedComparisonSideViewer(parent_p, isLeftSide_p);
+  }
+  
+  /**
+   * Create and return the synthesis viewer
+   * @param parent_p a non-null composite
+   * @return a non-null viewer
+   */
+  protected EnhancedComparisonTreeViewer createSynthesisViewer(Composite parent_p) {
+    final EnhancedComparisonTreeViewer result = new EnhancedComparisonTreeViewer(parent_p);
+    result.getInnerViewer().addFilter(_unchangedElementsFilter);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -330,49 +356,49 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             builder.append(_synthesisModelTreeViewer.getDefaultHeaderText());
             if (filtered.booleanValue())
               builder.append(Messages.ComparisonViewer_Filtered);
-            _synthesisModelTreeViewer.getHeader().setText(builder.toString());
+            result.getTextLabel().setText(builder.toString());
           }
         }
       }
     });
-    _leftModelTreeViewer = new EnhancedComparisonSideViewer(upperPart, true);
-    _rightModelTreeViewer = new EnhancedComparisonSideViewer(upperPart, false);
-    // Lower part
-    SashForm lowerPart = new SashForm(result, SWT.HORIZONTAL);
-    // Features section
-    Composite featuresWrapper = createComposite(lowerPart);
-    Composite featuresHeader = new Composite(featuresWrapper, SWT.NONE);
-    _featuresViewer = new FeaturesViewer(featuresWrapper);
-    // Features header
-    featuresHeader.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    GridLayout layout = new GridLayout(2, false);
-    layout.marginHeight = 0;
-    featuresHeader.setLayout(layout);
-    Label label = new Label(featuresHeader, SWT.NONE);
-    label.setFont(UIUtil.getBold(label.getFont()));
-    label.setText(Messages.ComparisonViewer_Details);
-    label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-    _featuresToolbar = createToolBar(featuresHeader);
-    // Values section
-    _leftValuesViewer = createValuesSection(lowerPart, true);
-    _rightValuesViewer = createValuesSection(lowerPart, false);
-    setupSashes(upperPart, lowerPart);
-    result.setWeights(new int[] {5, 2});
-    setupSynchronizationListeners();
-    setupToolbars();
     return result;
   }
   
   /**
-   * Create the "collapse all" tool in the given tool bar
-   * @param toolbar_p a non-null tool bar
+   * Create and return the upper row of the GUI
+   * @param parent_p a non-null composite
+   * @return a non-null widget
    */
-  protected void createCollapseTool(ToolBar toolbar_p) {
-    ToolItem collapseTool = new ToolItem(toolbar_p, SWT.PUSH);
-    collapseTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+  protected SashForm createUpperPart(Composite parent_p) {
+    SashForm result = new SashForm(parent_p, SWT.HORIZONTAL);
+    _synthesisModelTreeViewer = createSynthesisViewer(result);
+    _leftModelTreeViewer = createModelScopeViewer(result, true);
+    _rightModelTreeViewer = createModelScopeViewer(result, false);
+    return result;
+  }
+  
+  /**
+   * Create and return the values viewer for the given side
+   * @param parent_p a non-null composite
+   * @param left_p whether the side is left or right
+   * @return a non-null viewer
+   */
+  protected EnhancedValuesViewer createValuesViewer(Composite parent_p, boolean left_p) {
+    EnhancedValuesViewer result = new EnhancedValuesViewer(parent_p, left_p);
+    return result;
+  }
+  
+  /**
+   * Create the "collapse all" tool in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
+   */
+  protected ToolItem createCollapseTool(ToolBar toolbar_p) {
+    ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.COLLAPSEALL));
-    collapseTool.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
-    collapseTool.addSelectionListener(new SelectionAdapter() {
+    result.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
@@ -383,23 +409,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
            * @see java.lang.Runnable#run()
            */
           public void run() {
-            _synthesisModelTreeViewer.getComparisonTreeViewer().collapseAll();
+            _synthesisModelTreeViewer.getInnerViewer().collapseAll();
           }
         });
       }
     });
+    return result;
   }
   
   /**
-   * Create the "expand all" tool in the given tool bar
+   * Create the "expand all" tool in the given tool bar and return it
    * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
    */
-  protected void createExpandTool(ToolBar toolbar_p) {
-    ToolItem expandTool = new ToolItem(toolbar_p, SWT.PUSH);
-    expandTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+  protected ToolItem createExpandTool(ToolBar toolbar_p) {
+    ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.EXPANDALL));
-    expandTool.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
-    expandTool.addSelectionListener(new SelectionAdapter() {
+    result.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
@@ -410,23 +438,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
            * @see java.lang.Runnable#run()
            */
           public void run() {
-            _synthesisModelTreeViewer.getComparisonTreeViewer().expandAll();
+            _synthesisModelTreeViewer.getInnerViewer().expandAll();
           }
         });
       }
     });
+    return result;
   }
   
   /**
-   * Create the "inconsistency" tool in the given tool bar, if relevant
+   * Create the "inconsistency" tool in the given tool bar and return it
    * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
    */
-  protected void createInconsistencyTool(ToolBar toolbar_p) {
-    final ToolItem expandTool = new ToolItem(toolbar_p, SWT.PUSH);
-    expandTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+  protected ToolItem createInconsistencyTool(ToolBar toolbar_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.WARNING));
-    expandTool.setToolTipText(Messages.ComparisonViewer_InconsistencyTooltip);
-    expandTool.addSelectionListener(new SelectionAdapter() {
+    result.setToolTipText(Messages.ComparisonViewer_InconsistencyTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
@@ -447,7 +477,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
-    expandTool.setEnabled(false);
+    result.setEnabled(false);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -455,54 +485,102 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           IComparison comparison = getComparison();
-          expandTool.setEnabled(comparison != null && !comparison.isConsistent());
+          result.setEnabled(comparison != null && !comparison.isConsistent());
         }
       }
     });
+    return result;
   }
   
   /**
-   * Create the "sort" tool in the given tool bar
+   * Create the "next" navigation tool in the given tool bar and return it
    * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
    */
-  protected void createSortTool(ToolBar toolbar_p) {
-    final ToolItem sortItem = new ToolItem(toolbar_p, SWT.CHECK);
-    sortItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SORT));
-    sortItem.setToolTipText(Messages.ComparisonViewer_SortTooltip);
-    sortItem.addSelectionListener(new SelectionAdapter() {
+  protected ToolItem createNextNavigationTool(ToolBar toolbar_p) {
+    ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.NEXT_DIFF_NAV));
+    result.setToolTipText(Messages.ComparisonViewer_NextTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        if (sortItem.getSelection())
-          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(_synthesisSorter);
-        else
-          _synthesisModelTreeViewer.getComparisonTreeViewer().setSorter(null);
+        navigate(true);
       }
     });
+    return result;
   }
   
   /**
-   * Create the "sync" tool in the given tool bar
+   * Create the "previous" navigation tool in the given tool bar and return it
    * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
    */
-  protected void createSyncTool(ToolBar toolbar_p) {
-    final ToolItem syncTool = new ToolItem(toolbar_p, SWT.CHECK);
-    syncTool.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SYNCED));
-    syncTool.setToolTipText(Messages.ComparisonViewer_LinkViewsTooltip);
-    syncTool.setSelection(_isLeftRightSynced);
-    syncTool.addSelectionListener(new SelectionAdapter() {
+  protected ToolItem createPreviousNavigationTool(ToolBar toolbar_p) {
+    ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.PREV_DIFF_NAV));
+    result.setToolTipText(Messages.ComparisonViewer_PreviousTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        boolean synced = syncTool.getSelection();
+        navigate(false);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "sort" tool in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
+   */
+  protected ToolItem createSortTool(ToolBar toolbar_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.CHECK);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.SORT));
+    result.setToolTipText(Messages.ComparisonViewer_SortTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        if (result.getSelection())
+          _synthesisModelTreeViewer.getInnerViewer().setSorter(_synthesisSorter);
+        else
+          _synthesisModelTreeViewer.getInnerViewer().setSorter(null);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "sync" tool in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @return a potentially null tool item
+   */
+  protected ToolItem createSyncTool(ToolBar toolbar_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.CHECK);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.SYNCED));
+    result.setToolTipText(Messages.ComparisonViewer_LinkViewsTooltip);
+    result.setSelection(_isLeftRightSynced);
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        boolean synced = result.getSelection();
         _isLeftRightSynced = synced;
-        if (synced) {
+        if (_isLeftRightSynced) {
           BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
             /**
              * @see java.lang.Runnable#run()
@@ -516,31 +594,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
-  }
-  
-  /**
-   * Create and return the values section on the given side
-   * @param parent_p a non-null composite
-   * @param left_p whether the side is left or right
-   * @return a non-null viewer
-   */
-  protected ValuesViewer createValuesSection(Composite parent_p, boolean left_p) {
-    // Main controls
-    Composite sectionWrapper = createComposite(parent_p);
-    Composite header = new Composite(sectionWrapper, SWT.NONE);
-    header.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    ValuesViewer result = new ValuesViewer(sectionWrapper, left_p);
-    // Header controls
-    GridLayout layout = new GridLayout(2, false);
-    layout.marginHeight = 0;
-    header.setLayout(layout);
-    if (left_p) {
-      // Send tool bar to the right
-      Label space = new Label(header, SWT.NONE);
-      space.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-    }
-    ToolBar toolbar = createToolBar(header);
-    if (left_p) _leftValuesToolbar = toolbar; else _rightValuesToolbar = toolbar;
     return result;
   }
   
@@ -611,6 +664,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return the default respective weights of the columns (sashes) of the GUI
+   * @return an int array whose size is equal to the number of columns
+   */
+  protected int[] getDefaultColumnWeights() {
+    return new int[] {3, 2, 2};
+  }
+  
+  /**
+   * Return the default respective weights of the rows (sashes) of the GUI
+   * @return an int array whose size is equal to the number of rows
+   */
+  protected int[] getDefaultRowWeights() {
+    return new int[] {5, 2};
+  }
+  
+  /**
    * Return the differences to merge from a given list of selected matches and the given
    * criteria
    * @param selectedMatches_p a non-null list
@@ -655,7 +724,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Return the inner viewer for the features of elements with differences
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
-  public FeaturesViewer getFeaturesViewer() {
+  public HeaderViewer<?> getFeaturesViewer() {
     return _featuresViewer;
   }
   
@@ -699,8 +768,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param left_p whether the side is left or right
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
-  public ValuesViewer getValuesViewer(boolean left_p) {
-    ValuesViewer result = left_p? _leftValuesViewer: _rightValuesViewer;
+  public EnhancedValuesViewer getValuesViewer(boolean left_p) {
+    EnhancedValuesViewer result = left_p? _leftValuesViewer: _rightValuesViewer;
     return result;
   }
   
@@ -713,22 +782,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _lastUserSelection = null;
     _leftModelTreeViewer = null;
     _rightModelTreeViewer = null;
-    _leftValuesToolbar = null;
-    _rightValuesToolbar = null;
     _leftValuesViewer = null;
     _rightValuesViewer = null;
     _synthesisModelTreeViewer = null;
     _featuresViewer = null;
-    _featuresToolbar = null;
     _synthesisSorter = null;
-    _toLeftItem = null;
-    _toRightItem = null;
-    _ignoreLeftItem = null;
-    _ignoreRightItem = null;
-    _deleteLeftItem = null;
-    _deleteRightItem = null;
-    _nextItem = null;
-    _previousItem = null;
     _unchangedElementsFilter = null;
     _moveOriginsFilter = null;
   }
@@ -740,6 +798,39 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void undoRedoPerformed(final boolean undo_p) {
     super.undoRedoPerformed(undo_p);
     firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
+  }
+  
+  /**
+   * Initialize the non-graphical instance variables
+   */
+  protected void initialize() {
+    _isLeftRightSynced = true;
+    _lastUserSelection = null;
+    _synthesisSorter = new ViewerSorter();
+    _unchangedElementsFilter = new ViewerFilter() {
+      /**
+       * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+       */
+      @Override
+      public boolean select(Viewer viewer_p, Object parentElement_p, Object element_p) {
+        EMatch match = (EMatch)element_p;
+        return getInput().getDifferenceNumber(match) > 0;
+      }
+    };
+    _moveOriginsFilter = new ViewerFilter() {
+      /**
+       * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+       */
+      @Override
+      public boolean select(Viewer viewer_p, Object parentElement_p, Object element_p) {
+        TreePath path;
+        if (parentElement_p instanceof TreePath)
+          path = ((TreePath)parentElement_p).createChildPath(element_p);
+        else
+          path = new TreePath(new Object[] {element_p});
+        return !getInput().isMoveOrigin(path);
+      }
+    };
   }
   
   /**
@@ -886,7 +977,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     ITreeSelection selection = _synthesisModelTreeViewer.getSelection();
     TreePath current = (selection == null || selection.isEmpty())? TreePath.EMPTY:
       selection.getPaths()[0];
-    ComparisonTreeViewer treeViewer = _synthesisModelTreeViewer.getComparisonTreeViewer();
+    ComparisonTreeViewer treeViewer = _synthesisModelTreeViewer.getInnerViewer();
     TreePath newPath = next_p? treeViewer.getNextUserDifference(current):
       treeViewer.getPreviousUserDifference(current);
     if (newPath != null)
@@ -924,7 +1015,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   /**
    * Refresh the tools of the viewer. This behavior is centralized instead of being
-   * delegated to each tool via listeners in order to increase performance.
+   * delegated to each tool via listeners in order to improve performance.
    */
   @Override
   protected void refreshTools() {
@@ -933,9 +1024,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     // Merge
     boolean onLeft = false, onRight = false;
     boolean allowDeletion = false;
-    boolean allowFreezing = false;
+    boolean allowIgnoring = false;
     if (selection != null && input != null) {
-      allowFreezing = true;
+      allowIgnoring = true;
       IValuePresence presence = selection.asValuePresence();
       if (presence != null && !presence.isMerged()) {
         // Value presence
@@ -985,13 +1076,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     }
     if (input != null) {
-      _toRightItem.setEnabled(input.isEditable(false) && onLeft);
-      _deleteLeftItem.setEnabled(input.isEditable(true) && onLeft && allowDeletion);
-      _toLeftItem.setEnabled(input.isEditable(true) && onRight);
-      _deleteRightItem.setEnabled(input.isEditable(false) && onRight && allowDeletion);
+      firePropertyChangeEvent(
+          PROPERTY_ACTIVATION_MERGE_TO_RIGHT, new Boolean(input.isEditable(false) && onLeft));
+      firePropertyChangeEvent(
+          PROPERTY_ACTIVATION_DELETE_LEFT, new Boolean(input.isEditable(true) && onLeft && allowDeletion));
+      firePropertyChangeEvent(
+          PROPERTY_ACTIVATION_MERGE_TO_LEFT, new Boolean(input.isEditable(true) && onRight));
+      firePropertyChangeEvent(
+          PROPERTY_ACTIVATION_DELETE_RIGHT, new Boolean(input.isEditable(false) && onRight && allowDeletion));
     }
-    _ignoreLeftItem.setEnabled(onLeft && allowFreezing);
-    _ignoreRightItem.setEnabled(onRight && allowFreezing);
+    firePropertyChangeEvent(
+        PROPERTY_ACTIVATION_IGNORE_LEFT, new Boolean(onLeft && allowIgnoring));
+    firePropertyChangeEvent(
+        PROPERTY_ACTIVATION_IGNORE_RIGHT, new Boolean(onRight && allowIgnoring));
     super.refreshTools();
   }
   
@@ -1000,16 +1097,18 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param labelProvider_p a potentially null label provider, where null stands for default
    */
   public void setDelegateLabelProvider(ILabelProvider labelProvider_p) {
-    List<ContentViewer> viewers = Arrays.<ContentViewer>asList(
+    List<Viewer> viewers = Arrays.<Viewer>asList(
         _synthesisModelTreeViewer.getInnerViewer(),
         _leftModelTreeViewer.getInnerViewer(),
         _rightModelTreeViewer.getInnerViewer(),
         _featuresViewer, _leftValuesViewer, _rightValuesViewer);
-    for (ContentViewer viewer : viewers) {
-      IBaseLabelProvider rawLP = viewer.getLabelProvider();
-      if (rawLP instanceof DelegatingLabelProvider) {
-        DelegatingLabelProvider delegatingLP = (DelegatingLabelProvider)rawLP;
-        delegatingLP.setDelegate(labelProvider_p);
+    for (Viewer viewer : viewers) {
+      if (viewer instanceof ContentViewer) {
+        IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
+        if (rawLP instanceof DelegatingLabelProvider) {
+          DelegatingLabelProvider delegatingLP = (DelegatingLabelProvider)rawLP;
+          delegatingLP.setDelegate(labelProvider_p);
+        }
       }
     }
   }
@@ -1055,7 +1154,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature();
       if (feature == null && matches.size() == 1)
         // If a single match is selected and no feature, select the first relevant feature
-        feature = (EStructuralFeature)_featuresViewer.getElementAt(0);
+        feature = (EStructuralFeature)_featuresViewer.getInnerViewer().getElementAt(0);
       // Values: input
       ValuesInput valuesInput = feature == null? null:
         new ValuesInput(getInput(), new MatchAndFeatureImpl(match, feature));
@@ -1100,15 +1199,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Configure the sashes of the UI
+   * Configure the sashes (columns) of the UI
    * @param upperPart_p the sash form on the up side
    * @param lowerPart_p the sash form on the down side
    */
   protected void setupSashes(final SashForm upperPart_p, final SashForm lowerPart_p) {
-    final int[] horizontalWeights = new int[] {3, 2, 2};
+    final int[] horizontalWeights = getDefaultColumnWeights();
     upperPart_p.setWeights(horizontalWeights);
     lowerPart_p.setWeights(horizontalWeights);
-    _leftModelTreeViewer.getControl().addControlListener(new ControlListener() {
+    // Synchronize lower part on upper part when the latter is resized
+    Control upperMiddleControl = upperPart_p.getChildren()[1];
+    upperMiddleControl.addControlListener(new ControlListener() {
       /**
        * @see org.eclipse.swt.events.ControlListener#controlResized(org.eclipse.swt.events.ControlEvent)
        */
@@ -1123,7 +1224,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         // Nothing
       }
     });
-    _leftValuesViewer.getControl().addControlListener(new ControlListener() {
+    // Synchronize upper part on lower part when the latter is resized
+    Control lowerMiddleControl = lowerPart_p.getChildren()[1];
+    lowerMiddleControl.addControlListener(new ControlListener() {
       /**
        * @see org.eclipse.swt.events.ControlListener#controlResized(org.eclipse.swt.events.ControlEvent)
        */
@@ -1145,8 +1248,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @SuppressWarnings("unused")
   protected void setupFeatureMenus() {
-    new ToolItem(_featuresToolbar, SWT.SEPARATOR);
-    Menu featureMenu = UIUtil.createMenuTool(_featuresToolbar);
+    new ToolItem(_featuresViewer.getToolbar(), SWT.SEPARATOR);
+    Menu featureMenu = UIUtil.createMenuTool(_featuresViewer.getToolbar());
     // Only differences
     final MenuItem onlyDiffs = new MenuItem(featureMenu, SWT.RADIO);
     onlyDiffs.setText(Messages.ComparisonViewer_ShowValueDiffs);
@@ -1157,9 +1260,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.setShowAllFeatures(false);
-        _leftValuesViewer.setShowAllValues(false);
-        _rightValuesViewer.setShowAllValues(false);
+        _featuresViewer.getInnerViewer().setDifferenceAgnostic(false);
+        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(false);
+        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(false);
       }
     });
     // All values
@@ -1171,9 +1274,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.setShowAllFeatures(false);
-        _leftValuesViewer.setShowAllValues(true);
-        _rightValuesViewer.setShowAllValues(true);
+        _featuresViewer.getInnerViewer().setDifferenceAgnostic(false);
+        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
+        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
       }
     });
     // All values and features
@@ -1185,9 +1288,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.setShowAllFeatures(true);
-        _leftValuesViewer.setShowAllValues(true);
-        _rightValuesViewer.setShowAllValues(true);
+        _featuresViewer.getInnerViewer().setDifferenceAgnostic(true);
+        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
+        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
       }
     });
   }
@@ -1234,117 +1337,152 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the merge tools
    */
   protected void setupMergeTools() {
-    // To right
-    _toRightItem = new ToolItem(_leftValuesToolbar, SWT.PUSH);
-    _toRightItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.CHECKIN_ACTION));
-    _toRightItem.setToolTipText(Messages.ComparisonViewer_MergeRightTooltip);
-    _toRightItem.setEnabled(false);
-    // Ignore left
-    _ignoreLeftItem = new ToolItem(_leftValuesToolbar, SWT.PUSH);
-    _ignoreLeftItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.DONE));
-    _ignoreLeftItem.setToolTipText(Messages.ComparisonViewer_IgnoreLeftTooltip);
-    _ignoreLeftItem.setEnabled(false);
-    // Delete left
-    _deleteLeftItem = new ToolItem(_leftValuesToolbar, SWT.PUSH);
-    _deleteLeftItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.DELETE));
-    _deleteLeftItem.setToolTipText(Messages.ComparisonViewer_DeleteLeftTooltip);
-    _deleteLeftItem.setEnabled(false);
-    // To left
-    _toLeftItem = new ToolItem(_rightValuesToolbar, SWT.PUSH);
-    _toLeftItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.CHECKOUT_ACTION));
-    _toLeftItem.setToolTipText(Messages.ComparisonViewer_MergeLeftTooltip);
-    _toLeftItem.setEnabled(false);
-    // Ignore right
-    _ignoreRightItem = new ToolItem(_rightValuesToolbar, SWT.PUSH);
-    _ignoreRightItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.DONE));
-    _ignoreRightItem.setToolTipText(Messages.ComparisonViewer_IgnoreRightTooltip);
-    _ignoreRightItem.setEnabled(false);
-    // Delete right
-    _deleteRightItem = new ToolItem(_rightValuesToolbar, SWT.PUSH);
-    _deleteRightItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.DELETE));
-    _deleteRightItem.setToolTipText(Messages.ComparisonViewer_DeleteRightTooltip);
-    _deleteRightItem.setEnabled(false);
-    // Merge behavior
-    SelectionListener mergeToLeft = new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        merge(true);
-      }
-    };
-    SelectionListener mergeToRight = new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        merge(false);
-      }
-    };
-    _toLeftItem.addSelectionListener(mergeToLeft);
-    _deleteLeftItem.addSelectionListener(mergeToLeft);
-    _toRightItem.addSelectionListener(mergeToRight);
-    _deleteRightItem.addSelectionListener(mergeToRight);
-    _ignoreLeftItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        ignore(true);
-      }
-    });
-    _ignoreRightItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        ignore(false);
-      }
-    });
+    // Tool bar of left-hand side value viewer
+    createMergeTool(_leftValuesViewer.getToolbar(), false);
+    createIgnoreTool(_leftValuesViewer.getToolbar(), true);
+    createDeleteTool(_leftValuesViewer.getToolbar(), true);
+    // Tool bar of right-hand side value viewer
+    createMergeTool(_rightValuesViewer.getToolbar(), true);
+    createIgnoreTool(_rightValuesViewer.getToolbar(), false);
+    createDeleteTool(_rightValuesViewer.getToolbar(), false);
   }
   
   /**
-   * Set up the navigation tools
+   * Create the "delete" tool for the given side in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @param onLeft_p whether the side is left
+   * @return a potentially null tool item
    */
-  protected void setupNavigationTools() {
+  protected ToolItem createDeleteTool(ToolBar toolbar_p, final boolean onLeft_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    // Image
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.DELETE));
+    // Tool tip
+    result.setToolTipText(onLeft_p? Messages.ComparisonViewer_DeleteLeftTooltip:
+      Messages.ComparisonViewer_DeleteRightTooltip);
+    result.setEnabled(false);
+    // Activation
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (onLeft_p && PROPERTY_ACTIVATION_DELETE_LEFT.equals(event_p.getProperty()) ||
+            !onLeft_p && PROPERTY_ACTIVATION_DELETE_RIGHT.equals(event_p.getProperty())) {
+          Object newValue = event_p.getNewValue();
+          if (newValue instanceof Boolean)
+            result.setEnabled(((Boolean)newValue).booleanValue());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        merge(onLeft_p);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "ignore" tool for the given side in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @param onLeft_p whether the side is left
+   * @return a potentially null tool item
+   */
+  protected ToolItem createIgnoreTool(ToolBar toolbar_p, final boolean onLeft_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    // Image
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
+        EMFDiffMergeUIPlugin.ImageID.DONE));
+    // Tool tip
+    result.setToolTipText(onLeft_p? Messages.ComparisonViewer_IgnoreLeftTooltip:
+      Messages.ComparisonViewer_IgnoreRightTooltip);
+    result.setEnabled(false);
+    // Activation
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (onLeft_p && PROPERTY_ACTIVATION_IGNORE_LEFT.equals(event_p.getProperty()) ||
+            !onLeft_p && PROPERTY_ACTIVATION_IGNORE_RIGHT.equals(event_p.getProperty())) {
+          Object newValue = event_p.getNewValue();
+          if (newValue instanceof Boolean)
+            result.setEnabled(((Boolean)newValue).booleanValue());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        ignore(onLeft_p);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "merge" tool for the given side in the given tool bar and return it
+   * @param toolbar_p a non-null tool bar
+   * @param onLeft_p whether the side is left
+   * @return a potentially null tool item
+   */
+  protected ToolItem createMergeTool(ToolBar toolbar_p, final boolean onLeft_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    // Image
+    EMFDiffMergeUIPlugin.ImageID imageID = onLeft_p?
+        EMFDiffMergeUIPlugin.ImageID.CHECKOUT_ACTION:
+          EMFDiffMergeUIPlugin.ImageID.CHECKIN_ACTION;
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(imageID));
+    // Tool tip
+    result.setToolTipText(onLeft_p? Messages.ComparisonViewer_MergeLeftTooltip:
+      Messages.ComparisonViewer_MergeRightTooltip);
+    result.setEnabled(false);
+    // Activation
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (onLeft_p && PROPERTY_ACTIVATION_MERGE_TO_LEFT.equals(event_p.getProperty()) ||
+            !onLeft_p && PROPERTY_ACTIVATION_MERGE_TO_RIGHT.equals(event_p.getProperty())) {
+          Object newValue = event_p.getNewValue();
+          if (newValue instanceof Boolean)
+            result.setEnabled(((Boolean)newValue).booleanValue());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        merge(onLeft_p);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Set up the navigation tools in the given tool bar
+   */
+  protected void setupNavigationTools(ToolBar toolbar_p) {
     // Next
-    _nextItem = new ToolItem(_featuresToolbar, SWT.PUSH);
-    _nextItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.NEXT_DIFF_NAV));
-    _nextItem.setToolTipText(Messages.ComparisonViewer_NextTooltip);
-    _nextItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        navigate(true);
-      }
-    });
+    createNextNavigationTool(toolbar_p);
     // Previous
-    _previousItem = new ToolItem(_featuresToolbar, SWT.PUSH);
-    _previousItem.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.PREV_DIFF_NAV));
-    _previousItem.setToolTipText(Messages.ComparisonViewer_PreviousTooltip);
-    _previousItem.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        navigate(false);
-      }
-    });
+    createPreviousNavigationTool(toolbar_p);
   }
   
   /**
@@ -1352,7 +1490,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void setupSynchronizationListeners() {
     // Selection synchronization: Synthesis[user] -> Global
-    _synthesisModelTreeViewer.getTree().addSelectionListener(new SelectionAdapter() {
+    _synthesisModelTreeViewer.addSWTSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent event_p) {
         IStructuredSelection selection = _synthesisModelTreeViewer.getSelection();
@@ -1362,21 +1500,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     });
     // Selection synchronization: Models[user] -> Global
-    _leftModelTreeViewer.getTree().addSelectionListener(
-        new ComparisonSideSelectionListener(true));
-    _rightModelTreeViewer.getTree().addSelectionListener(
-        new ComparisonSideSelectionListener(false));
+    _leftModelTreeViewer.addSWTSelectionListener(new ComparisonSideSelectionListener(true));
+    _rightModelTreeViewer.addSWTSelectionListener(new ComparisonSideSelectionListener(false));
     // Selection synchronization: Values[user] -> Model
-    _leftValuesViewer.getTable().addSelectionListener(new ValuesSelectionListener(true));
-    _rightValuesViewer.getTable().addSelectionListener(new ValuesSelectionListener(false));
+    _leftValuesViewer.addSWTSelectionListener(new ValuesSelectionListener(true));
+    _rightValuesViewer.addSWTSelectionListener(new ValuesSelectionListener(false));
     // Selection synchronization: Features[user] -> Values
-    _featuresViewer.getTable().addSelectionListener(new SelectionAdapter() {
+    _featuresViewer.addSWTSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        IStructuredSelection selection = (IStructuredSelection)_featuresViewer.getSelection();
+        IStructuredSelection selection = _featuresViewer.getSelection();
         if (selection.size() == 1) {
           IMatch match = _featuresViewer.getInput() == null? null:
             _featuresViewer.getInput().getMatch();
@@ -1391,7 +1527,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Setup the menus of the synthesis viewer
+   * Create and return the menu of the synthesis viewer
    */
   @SuppressWarnings("unused")
   protected Menu setupSynthesisMenus() {
@@ -1407,28 +1543,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         if (showUnchanged.getSelection())
-          _synthesisModelTreeViewer.getComparisonTreeViewer().removeFilter(_unchangedElementsFilter);
+          _synthesisModelTreeViewer.getInnerViewer().removeFilter(_unchangedElementsFilter);
         else
-          _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_unchangedElementsFilter);
+          _synthesisModelTreeViewer.getInnerViewer().addFilter(_unchangedElementsFilter);
       }
     });
-    // Show moved elements on one side only
-//    final MenuItem showMovedOnce = new MenuItem(synthesisMenu, SWT.CHECK);
-//    showMovedOnce.setText(Messages.ComparisonViewer_ShowMovesMenuItem);
-//    showMovedOnce.setSelection(false);
-//    _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
-//    showMovedOnce.addSelectionListener(new SelectionAdapter() {
-//      /**
-//       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-//       */
-//      @Override
-//      public void widgetSelected(SelectionEvent e_p) {
-//        if (showMovedOnce.getSelection())
-//          _synthesisModelTreeViewer.getComparisonTreeViewer().removeFilter(_moveOriginsFilter);
-//        else
-//          _synthesisModelTreeViewer.getComparisonTreeViewer().addFilter(_moveOriginsFilter);
-//      }
-//    });
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     // Show additions
     final MenuItem showAdditions = new MenuItem(synthesisMenu, SWT.CHECK);
@@ -1591,7 +1710,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     // Synthesis view representation
     setupSynthesisTools();
     // Navigation
-    setupNavigationTools();
+    setupNavigationTools(_featuresViewer.getToolbar());
     // Model locking
     setupLockTool(_leftModelTreeViewer, true);
     setupLockTool(_rightModelTreeViewer, false);
@@ -1646,7 +1765,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
      */
     @Override
     public void widgetSelected(SelectionEvent event_p) {
-      ValuesViewer valuesViewer = _sideIsLeft? _leftValuesViewer: _rightValuesViewer;
+      HeaderViewer<?> valuesViewer = _sideIsLeft? _leftValuesViewer: _rightValuesViewer;
       IStructuredSelection selection = valuesViewer.getSelection();
       if (!selection.isEmpty()) {
         if (selection.getFirstElement() instanceof EObject) // Skip attribute values

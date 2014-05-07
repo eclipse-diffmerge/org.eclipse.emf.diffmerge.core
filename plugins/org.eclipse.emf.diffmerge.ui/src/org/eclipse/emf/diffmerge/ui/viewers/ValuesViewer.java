@@ -56,7 +56,7 @@ import org.eclipse.swt.widgets.Composite;
  * [IMatch (if feature instanceof EReference)] (if showAllValues)].
  * @author Olivier Constant
  */
-public class ValuesViewer extends TableViewer {
+public class ValuesViewer extends TableViewer implements IComparisonSideViewer, IDifferenceRelatedViewer {
   
   /**
    * A simple structure for defining inputs for this viewer.
@@ -229,8 +229,14 @@ public class ValuesViewer extends TableViewer {
   }
   
   /**
-   * Return whether the side of this viewer is left or right
-   * @return a non-null role
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer#isDifferenceAgnostic()
+   */
+  public boolean isDifferenceAgnostic() {
+    return _showAllValues;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer#isLeftSide()
    */
   public boolean isLeftSide() {
     return _sideIsLeft;
@@ -253,19 +259,11 @@ public class ValuesViewer extends TableViewer {
   }
   
   /**
-   * Return whether all values must be shown, including those unrelated to differences
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer.Configurable#setDifferenceAgnostic(boolean)
    */
-  public boolean mustShowAllValues() {
-    return _showAllValues;
-  }
-  
-  /**
-   * Set whether all values must be shown, including those unrelated to differences
-   * @param show_p whether all values must be shown
-   */
-  public void setShowAllValues(boolean show_p) {
-    if (show_p != mustShowAllValues()) {
-      _showAllValues = show_p;
+  public void setDifferenceAgnostic(boolean agnostic_p) {
+    if (agnostic_p != isDifferenceAgnostic()) {
+      _showAllValues = agnostic_p;
       refresh(false);
     }
   }
@@ -305,7 +303,7 @@ public class ValuesViewer extends TableViewer {
           result.add(orderDifference);
         // Only show values if no containment
         if (!isContainment(input)) {
-          if (mustShowAllValues()) {
+          if (isDifferenceAgnostic()) {
             // All values
             if (input.getFeature() instanceof EAttribute) {
               EAttribute attribute = (EAttribute)input.getFeature();

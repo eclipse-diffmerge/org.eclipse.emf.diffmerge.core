@@ -303,7 +303,7 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   }
   
   /**
-   * Refresh tools of the viewer
+   * Refresh the tools of the viewer
    */
   protected void refreshTools() {
     _undoAction.update();

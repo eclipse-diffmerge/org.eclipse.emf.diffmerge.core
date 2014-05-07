@@ -14,27 +14,31 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.util.UIUtil;
-import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 
 /**
- * A ComparisonTreeViewer with a header.
- * Input, Elements: see ComparisonTreeViewer.
- * @see ComparisonTreeViewer
+ * A Values Viewer with a header.
+ * Input, Elements: see ValuesViewer.
+ * @see ValuesViewer
  * @author Olivier Constant
  */
-public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeViewer> {
+public class EnhancedValuesViewer extends HeaderViewer<ValuesViewer> {
+  
+  /** Whether the viewer represents information on the left-hand side of a comparison */
+  protected final boolean _isLeftSide;
+  
   
   /**
    * Constructor
    * @param parent_p a non-null composite
+   * @param isLeftSide_p whether the side is left or right
    */
-  public EnhancedComparisonTreeViewer(Composite parent_p) {
+  public EnhancedValuesViewer(Composite parent_p, boolean isLeftSide_p) {
     super();
+    _isLeftSide = isLeftSide_p;
     createControls(parent_p); 
   }
   
@@ -50,8 +54,8 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createInnerViewer(org.eclipse.swt.widgets.Composite)
    */
   @Override
-  protected ComparisonTreeViewer createInnerViewer(Composite parent_p) {
-    return new ComparisonTreeViewer(parent_p);
+  protected ValuesViewer createInnerViewer(Composite parent_p) {
+    return new ValuesViewer(parent_p, _isLeftSide);
   }
   
   /**
@@ -59,34 +63,23 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
    */
   @Override
   protected Label createTextLabel(Composite parent_p) {
-    Label result = super.createTextLabel(parent_p);
-    result.setFont(UIUtil.getBold(result.getFont()));
-    result.setText(getDefaultHeaderText());
-    return result;
-  }
-  
-  /**
-   * Return the default text for the header
-   * @return a non-null string
-   */
-  public String getDefaultHeaderText() {
-    return Messages.EnhancedComparisonTreeViewer_DefaultHeader;
+    return null;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getInput()
    */
   @Override
-  public EMFDiffNode getInput() {
-    return (EMFDiffNode)super.getInput();
+  public ValuesInput getInput() {
+    return (ValuesInput)super.getInput();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getSelection()
+   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#isToolBarOnTheRight()
    */
   @Override
-  public ITreeSelection getSelection() {
-    return (ITreeSelection)super.getSelection();
+  protected boolean isToolBarOnTheRight() {
+    return _isLeftSide;
   }
   
 }
