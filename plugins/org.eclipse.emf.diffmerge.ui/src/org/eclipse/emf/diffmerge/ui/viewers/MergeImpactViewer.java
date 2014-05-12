@@ -243,7 +243,7 @@ public class MergeImpactViewer extends Viewer {
   /** The current input (initially null) */
   private ImpactInput _input;
   
-  /** The resource manager for SWT resources in this viewer */
+  /** The non-null resource manager for SWT resources in this viewer */
   protected final ComparisonResourceManager _resourceManager;
   
   /** The main control of the viewer */

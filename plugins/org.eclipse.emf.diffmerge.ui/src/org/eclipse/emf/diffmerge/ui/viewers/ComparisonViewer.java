@@ -54,14 +54,11 @@ import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode.UserDifferenceKind;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
-import org.eclipse.emf.diffmerge.ui.viewers.IgnoreChoicesDialog.IgnoreChoiceData;
-import org.eclipse.emf.diffmerge.ui.viewers.MergeChoicesDialog.MergeChoiceDialogData;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -1158,38 +1155,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void ignore(boolean onLeft_p) {
     final ComparisonSelection selection = getSelection();
-    if (selection == null) return;
-    boolean coverChildren = getInput().isDefaultCoverChildren();
-    boolean sideExclusive = false;
-    List<EMatch> selectedMatches = selection.getSelectedMatches();
-    if (selectedMatches.isEmpty()) {
-      List<EMatch> treePath = selection.getSelectedTreePath();
-      if (!treePath.isEmpty())
-        selectedMatches = Collections.singletonList(treePath.get(treePath.size()-1));
-    }
-    boolean basedOnMatches = !selectedMatches.isEmpty();
-    boolean requiresChoices = false;
-    if (basedOnMatches) {
-      for (EMatch selectedMatch : selectedMatches) {
-        if (getInput().hasChildrenForMerge(selectedMatch)) {
-          requiresChoices = true;
-          break;
-        }
-      }
-    }
-    if (requiresChoices) {
-      // Group of differences
-      IgnoreChoiceData choice = new IgnoreChoiceData(coverChildren, false);
-      IgnoreChoicesDialog choicesDialog =
-        new IgnoreChoicesDialog(getShell(), Messages.ComparisonViewer_IgnoreCommandName, choice);
-      int answer = choicesDialog.open();
-      if (0 != answer) return;
-      coverChildren = choice.getCoverChildren();
-      getInput().setDefaultCoverChildren(choice.getCoverChildren());
-      sideExclusive = choice.getSideExclusive();
-    }
-    final Collection<IDifference> toIgnore = basedOnMatches?
-        getDifferencesToMerge(selectedMatches, getInput().getRoleForSide(onLeft_p), coverChildren, sideExclusive):
+    if (selection == null) return; // Should not happen according to ignore tool activation
+    EMFDiffNode input = getInput();
+    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
+      // Make choices
+    IgnoreChoiceData choices = new IgnoreChoiceData(
+        input.isDefaultCoverChildren(), false);
+    makeIgnoreChoices(choices, input, selectedMatches);
+    if (!choices.isProceed()) return;
+    // Ignore operation is set to proceed and choices have been made
+    final Collection<IDifference> toIgnore = !selectedMatches.isEmpty()? getDifferencesToMerge(
+        selectedMatches, input.getRoleForSide(onLeft_p), choices.isCoverChildren(), choices.isSideExclusive()):
           getInput().getNonIgnoredDifferences(selection.asDifferencesToMerge());
     if (!toIgnore.isEmpty()) {
       executeOnModel(new Runnable() {
@@ -1303,6 +1279,23 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return the set of selected matches from the given selection in the
+   * purpose of performing actions on differences
+   * @param selection_p a non-null selection
+   * @return a non-null, potentially empty list
+   */
+  protected List<EMatch> getSelectedMatchesForInteractions(
+      final ComparisonSelection selection_p) {
+    List<EMatch> selectedMatches = selection_p.getSelectedMatches();
+    if (selectedMatches.isEmpty()) {
+      List<EMatch> treePath = selection_p.getSelectedTreePath();
+      if (!treePath.isEmpty())
+        selectedMatches = Collections.singletonList(treePath.get(treePath.size()-1));
+    }
+    return selectedMatches;
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getSelection()
    */
   @Override
@@ -1380,6 +1373,47 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return whether user interactions must occur to determine how to execute
+   * the ignore operation on the given list of matches in the context of the
+   * given input and the given specification of choices
+   * @param choices_p the non-null specification of the ignore choices
+   * @param input_p a non-null input
+   * @param selectedMatches a non-null, potentially empty list
+   */
+  protected boolean interactionsRequiredForIgnore(IgnoreChoiceData choices_p,
+      EMFDiffNode input_p, List<EMatch> selectedMatches) {
+    boolean result = false;
+    for (EMatch selectedMatch : selectedMatches) {
+      if (input_p.hasChildrenForMerge(selectedMatch)) {
+        result = true;
+        break;
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether user interactions must occur to determine how to execute
+   * the merge operation on the given list of matches in the context of the
+   * given input and the given specification of choices
+   * @param choices_p the non-null specification of the merge choices
+   * @param input_p a non-null input
+   * @param selectedMatches a non-null, potentially empty list
+   */
+  protected boolean interactionsRequiredForMerge(MergeChoiceData choices_p,
+      EMFDiffNode input_p, List<EMatch> selectedMatches) {
+    boolean result = !selectedMatches.isEmpty();
+    if (result && selectedMatches.size() == 1) {
+      EMatch selectedMatch = selectedMatches.get(0);
+      if (!input_p.hasChildrenForMerge(selectedMatch)) {
+        DifferenceKind kind = input_p.getDifferenceKind(selectedMatch);
+        result = !(kind.isAddition() || kind.isDeletion());
+      }
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#inputChanged(java.lang.Object, java.lang.Object)
    */
   @Override
@@ -1396,91 +1430,101 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Set the given specification of ignore choices according to the given
+   * input and set of selected matches
+   * @param choices_p the non-null specification of the ignore choices
+   * @param input_p a non-null diff node input
+   * @param selectedMatches_p the non-null, potentially empty set of matches that have
+   *          been selected for merge
+   */
+  protected void makeIgnoreChoices(IgnoreChoiceData choices_p,
+      EMFDiffNode input_p, List<EMatch> selectedMatches_p) {
+    boolean requiresInteractions = interactionsRequiredForIgnore(choices_p, input_p, selectedMatches_p);
+    if (requiresInteractions) {
+      IgnoreChoicesDialog choicesDialog =
+          new IgnoreChoicesDialog(getShell(), Messages.ComparisonViewer_IgnoreCommandName, choices_p);
+      choicesDialog.open();
+      if (choices_p.isProceed())
+        getInput().setDefaultCoverChildren(choices_p.isCoverChildren());
+    }
+  }
+  
+  /**
+   * Set the given specification of merge choices according to the given
+   * input and set of selected matches
+   * @param choices_p the non-null specification of the merge choices
+   * @param input_p a non-null diff node input
+   * @param selectedMatches_p the non-null, potentially empty set of matches that have
+   *          been selected for merge
+   */
+  protected void makeMergeChoices(MergeChoiceData choices_p,
+      EMFDiffNode input_p, List<EMatch> selectedMatches_p) {
+    boolean requiresInteractions = interactionsRequiredForMerge(choices_p, input_p, selectedMatches_p);
+    if (requiresInteractions) {
+      // Group of differences
+      boolean mayAskAboutChildren = false;
+      for (EMatch selectedMatch : selectedMatches_p) {
+        if (input_p.getDifferenceKind(selectedMatch) == DifferenceKind.COUNTED) {
+          choices_p.setCoverChildren(true);
+          break;
+        } else if (input_p.hasChildrenForMerge(selectedMatch)) {
+          mayAskAboutChildren = true;
+          break;
+        }
+      }
+      // Choice dialog
+      MergeChoicesDialog choicesDialog =
+          new MergeChoicesDialog(getShell(), Messages.ComparisonViewer_MergeHeader,
+              choices_p, mayAskAboutChildren);
+      choicesDialog.open();
+      if (choices_p.isProceed()) {
+        if (mayAskAboutChildren)
+          input_p.setDefaultCoverChildren(choices_p.isCoverChildren());
+        input_p.setDefaultIncrementalMode(choices_p.isIncrementalMode());
+        input_p.setDefaultShowImpact(choices_p.isShowImpact());
+      }
+    }
+  }
+  
+  /**
    * Merge the current selection to the given side
    * @param toLeft_p whether destination is left or right
    */
   protected void merge(final boolean toLeft_p) {
     final ComparisonSelection selection = getSelection();
-    if (selection == null) return;
+    if (selection == null) return; // Should not happen according to merge tool activation
     final EMFDiffNode input = getInput();
-    boolean showMergeImpact = input.isShowMergeImpact();
-    boolean coverChildren = input.isDefaultCoverChildren();
-    boolean incrementalMode = false;
-    List<EMatch> selectedMatches = selection.getSelectedMatches();
-    if (selectedMatches.isEmpty()) {
-      List<EMatch> treePath = selection.getSelectedTreePath();
-      if (!treePath.isEmpty())
-        selectedMatches = Collections.singletonList(treePath.get(treePath.size()-1));
-    }
-    boolean basedOnMatches = !selectedMatches.isEmpty();
-    boolean requiresChoices = basedOnMatches;
-    if (requiresChoices && selectedMatches.size() == 1) {
-      EMatch selectedMatch = selectedMatches.get(0);
-      if (!input.hasChildrenForMerge(selectedMatch)) {
-        DifferenceKind kind = input.getDifferenceKind(selectedMatch);
-        requiresChoices = !(kind.isAddition() || kind.isDeletion());
-      }
-    }
-    if (requiresChoices) {
-      // Group of differences
-      boolean askAboutChildren = false;
-      for (EMatch selectedMatch : selectedMatches) {
-        if (input.getDifferenceKind(selectedMatch) == DifferenceKind.COUNTED) {
-          coverChildren = true;
-          break;
-        } else if (input.hasChildrenForMerge(selectedMatch)) {
-          askAboutChildren = true;
-          break;
-        }
-      }
-      MergeChoiceDialogData choice = new MergeChoiceDialogData(coverChildren,
-          input.isDefaultIncrementalMode(), input.isDefaultShowImpact());
-      MergeChoicesDialog choicesDialog =
-        new MergeChoicesDialog(getShell(), Messages.ComparisonViewer_MergeHeader,
-            choice, askAboutChildren);
-      int answer = choicesDialog.open();
-      if (0 != answer) return;
-      showMergeImpact = choice.getShowImpact();
-      coverChildren = choice.getCoverChildren();
-      incrementalMode = choice.getIncrementalMode();
-      if (askAboutChildren)
-        input.setDefaultCoverChildren(choice.getCoverChildren());
-      input.setDefaultIncrementalMode(choice.getIncrementalMode());
-      input.setDefaultShowImpact(choice.getShowImpact());
-    }
+    // Define the set of selected matches
+    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
+    // Make choices
+    MergeChoiceData choices = new MergeChoiceData(input.isDefaultCoverChildren(),
+        input.isDefaultIncrementalMode(), input.isDefaultShowImpact());
+    makeMergeChoices(choices, input, selectedMatches);
+    if (!choices.isProceed()) return;
+    // Merge is set to proceed and choices have been made
     final Role destination = input.getRoleForSide(toLeft_p);
-    final Collection<IDifference> toMerge = basedOnMatches?
-        getDifferencesToMerge(selectedMatches, destination, coverChildren, incrementalMode):
+    final Collection<IDifference> toMerge = !selectedMatches.isEmpty()? getDifferencesToMerge(
+            selectedMatches, destination, choices.isCoverChildren(), choices.isIncrementalMode()):
           input.getNonIgnoredDifferences(selection.asDifferencesToMerge());
     final Collection<IDifference> merged = new ArrayList<IDifference>();
     boolean done = false;
     if (!toMerge.isEmpty()) {
-      final ImpactInput mergeInput = new ImpactInput(toMerge, toLeft_p, input);
+      // Merge is possible
       boolean proceed = true;
-      IProgressService progress = PlatformUI.getWorkbench().getProgressService();
-      if (showMergeImpact) {
-        try {
-          progress.busyCursorWhile(new IRunnableWithProgress() {
-            /**
-             * @see org.eclipse.jface.operation.IRunnableWithProgress#run(IProgressMonitor)
-             */
-            public void run(final IProgressMonitor monitor_p) throws InvocationTargetException, InterruptedException {
-              mergeInput.compute(monitor_p);
-            }
-          });
-          MergeImpactMessageDialog dialog = new MergeImpactMessageDialog(getShell(), mergeInput);
-          proceed = dialog.openAndConfirm();
-        } catch (Exception exception_p) {
-          // Proceed
-        }
+      if (choices.isShowImpact()) {
+        // Show merge impact
+        proceed = showMergeImpact(toMerge, toLeft_p, input);
       }
       if (proceed) {
+        // Merge is confirmed
         try {
+          IProgressService progress = PlatformUI.getWorkbench().getProgressService();
           progress.busyCursorWhile(new IRunnableWithProgress() {
             /**
              * @see org.eclipse.jface.operation.IRunnableWithProgress#run(IProgressMonitor)
              */
             public void run(final IProgressMonitor monitor_p) throws InvocationTargetException, InterruptedException {
+              // Merge runnable
               Runnable mergeRunnable = new Runnable() {
                 /**
                  * @see java.lang.Runnable#run()
@@ -1490,6 +1534,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                   getUIComparison().setLastActionSelection(selection);
                 }
               };
+              // Execution with or without undo support
               if (input.isUndoRedoSupported())
                 MiscUtil.executeOnDomain(getEditingDomain(), null, mergeRunnable);
               else
@@ -1502,10 +1547,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     } else {
+      // Nothing to merge
       MessageDialog.openInformation(getShell(), Messages.ComparisonViewer_MergeHeader,
           Messages.ComparisonViewer_NoDiffsToMerge);
     }
     if (!merged.isEmpty() && done) {
+      // React to merge
       input.setModified(true, toLeft_p);
       firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
       firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
@@ -1884,8 +1931,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     setupToolsSynthesisSide(_rightModelTreeViewer.getToolbar(), false);
     // Tools: lower row
     setupToolsDetails(_featuresViewer.getToolbar());
-    setupToolsDetailSide(_leftValuesViewer.getToolbar(), true);
-    setupToolsDetailSide(_rightValuesViewer.getToolbar(), false);
+    setupToolsDetailsSide(_leftValuesViewer.getToolbar(), true);
+    setupToolsDetailsSide(_rightValuesViewer.getToolbar(), false);
     // Menus
     setupMenuSynthesis(_synthesisModelTreeViewer.getToolbar());
     setupMenuDetails(_featuresViewer.getToolbar());
@@ -1916,7 +1963,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @param onLeft_p whether the side is left or right
    */
-  protected void setupToolsDetailSide(ToolBar toolbar_p, boolean onLeft_p) {
+  protected void setupToolsDetailsSide(ToolBar toolbar_p, boolean onLeft_p) {
     createToolMerge(toolbar_p, !onLeft_p);
     createToolIgnore(toolbar_p, onLeft_p);
     createToolDelete(toolbar_p, onLeft_p);
@@ -1945,6 +1992,37 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void setupToolsSynthesisSide(ToolBar toolbar_p, boolean onLeft_p) {
     createToolLock(toolbar_p, onLeft_p);
+  }
+  
+  /**
+   * Show a UI representing the merge impact and return whether merge is confirmed
+   * @param toMerge_p the non-null collection of differences to merge
+   * @param toLeft_p whether the destination is the left-hand side
+   * @param input_p a non-null object
+   * @return whether to proceed with merge
+   */
+  protected boolean showMergeImpact(final Collection<IDifference> toMerge_p,
+      final boolean toLeft_p, final EMFDiffNode input_p) {
+    boolean result = true;
+    final ImpactInput mergeInput = new ImpactInput(toMerge_p, toLeft_p, input_p);
+    IProgressService progress = PlatformUI.getWorkbench().getProgressService();
+    try {
+      progress.busyCursorWhile(new IRunnableWithProgress() {
+        /**
+         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(IProgressMonitor)
+         */
+        public void run(final IProgressMonitor monitor_p) throws InvocationTargetException, InterruptedException {
+          mergeInput.compute(monitor_p);
+        }
+      });
+      MergeImpactMessageDialog dialog = new MergeImpactMessageDialog(
+          getShell(), mergeInput, getResourceManager(),
+          _synthesisModelTreeViewer.getInnerViewer().getLabelProvider());
+      result = dialog.openAndConfirm();
+    } catch (Exception exception_p) {
+      // Proceed
+    }
+    return result;
   }
   
   /**
@@ -2013,50 +2091,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           ComparisonViewer.this.setSelection(new ComparisonSelectionImpl(
               selection.toList(), getInput().getRoleForSide(_sideIsLeft)), true);
       }
-    }
-  }
-  
-  /**
-   * A message dialog which uses MergeImpactViewer.
-   */
-  protected class MergeImpactMessageDialog extends MessageDialog {
-    /** The non-null input */
-    private final ImpactInput _dialogInput;
-    
-    /**
-     * Constructor
-     * @param parentShell_p a non-null shell
-     */
-    public MergeImpactMessageDialog(Shell parentShell_p, ImpactInput input_p) {
-      super(parentShell_p, Messages.ComparisonViewer_MergeHeader, null,
-          String.format(
-              Messages.ComparisonViewer_ImpactDescription, input_p.isOnTheLeft()?
-                  Messages.ComparisonViewer_Left: Messages.ComparisonViewer_Right),
-          MessageDialog.INFORMATION,
-          new String[] { IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
-      _dialogInput = input_p;
-      setShellStyle(getShellStyle() | SWT.RESIZE);
-    }
-    
-    /**
-     * @see MessageDialog#createCustomArea(Composite)
-     */
-    @Override
-    protected Control createCustomArea(Composite parent_p) {
-      MergeImpactViewer viewer = new MergeImpactViewer(parent_p, getResourceManager());
-      // Reuse label provider from synthesis viewer
-      IBaseLabelProvider lProvider = _synthesisModelTreeViewer.getInnerViewer().getLabelProvider();
-      if (lProvider instanceof DelegatingLabelProvider)
-        viewer.setDelegateLabelProvider(((DelegatingLabelProvider)lProvider).getDelegate());
-      viewer.setInput(_dialogInput);
-      return viewer.getControl();
-    }
-    
-    /**
-     * Open the dialog and return whether the user pressed OK
-     */
-    public boolean openAndConfirm() {
-      return open() == 0;
     }
   }
   

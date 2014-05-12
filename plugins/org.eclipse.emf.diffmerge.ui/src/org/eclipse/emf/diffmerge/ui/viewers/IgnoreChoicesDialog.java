@@ -62,14 +62,14 @@ public class IgnoreChoicesDialog extends MessageDialog {
     // Cover children
     Button coverChildrenButton = new Button(result, SWT.CHECK);
     coverChildrenButton.setText(Messages.IgnoreChoicesDialog_IncludeChildren);
-    coverChildrenButton.setSelection(getData().getCoverChildren());
+    coverChildrenButton.setSelection(getData().isCoverChildren());
     coverChildrenButton.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        getData().setCoverChildren(!getData().getCoverChildren());
+        getData().setCoverChildren(!getData().isCoverChildren());
       }
     });
     return result;
@@ -82,63 +82,15 @@ public class IgnoreChoicesDialog extends MessageDialog {
 	protected IgnoreChoiceData getData() {
 	  return _data;
 	}
-	
-	
-  /**
-   * The data that this dialog allows editing
-   */
-  public static class IgnoreChoiceData {
-    
-    /** Whether differences on children must be covered */
-    private boolean _coverChildren;
-    
-    /** Whether only differences on one side are concerned */
-    private boolean _sideExclusive;
-    
-    /**
-     * Default constructor
-     */
-    public IgnoreChoiceData() {
-      _coverChildren = false;
-      _sideExclusive = false;
-    }
-    
-    /**
-     * Full constructor
-     */
-    public IgnoreChoiceData(boolean coverChildren_p, boolean sideExclusive_p) {
-      _coverChildren = coverChildren_p;
-      _sideExclusive = sideExclusive_p;
-    }
-    
-    /**
-     * Return whether differences on children must be covered
-     */
-    public boolean getCoverChildren() {
-      return _coverChildren;
-    }
-    
-    /**
-     * Set whether differences on children must be covered
-     */
-    public void setCoverChildren(boolean newValue_p) {
-      _coverChildren = newValue_p;
-    }
-    
-    /**
-     * Return whether differences on children must be covered
-     */
-    public boolean getSideExclusive() {
-      return _sideExclusive;
-    }
-    
-    /**
-     * Set whether differences on children must be covered
-     */
-    public void setSideExclusive(boolean newValue_p) {
-      _sideExclusive = newValue_p;
-    }
-    
-  }
   
+	/**
+	 * @see org.eclipse.jface.dialogs.MessageDialog#open()
+	 */
+	@Override
+	public int open() {
+	  int result = super.open();
+	  _data.setProceed(result == 0);
+	  return result;
+	}
+	
 }

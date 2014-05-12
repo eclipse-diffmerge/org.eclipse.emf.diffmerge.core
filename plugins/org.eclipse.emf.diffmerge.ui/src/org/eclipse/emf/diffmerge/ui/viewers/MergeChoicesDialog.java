@@ -34,7 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 public class MergeChoicesDialog extends MessageDialog {
 	
   /** The non-null data that this dialog allows editing */
-  private final MergeChoiceDialogData _data;
+  private final MergeChoiceData _data;
   
   /** Whether the choice for children is enabled */
   private final boolean _askAboutChildren;
@@ -47,7 +47,7 @@ public class MergeChoicesDialog extends MessageDialog {
 	 * @param data_p the non-null data that this dialog allows editing
 	 * @param askAboutChildren_p whether the choice for children is enabled
 	 */
-	public MergeChoicesDialog(Shell parentShell_p, String title_p, MergeChoiceDialogData data_p,
+	public MergeChoicesDialog(Shell parentShell_p, String title_p, MergeChoiceData data_p,
 	    boolean askAboutChildren_p) {
 		super(parentShell_p, title_p, null,
 		    Messages.MergeChoicesDialog_Question, MessageDialog.QUESTION, 
@@ -67,7 +67,7 @@ public class MergeChoicesDialog extends MessageDialog {
     // Cover children
     Button coverChildrenButton = new Button(result, SWT.CHECK);
     coverChildrenButton.setText(Messages.MergeChoicesDialog_IncludeChildren);
-    coverChildrenButton.setSelection(getData().getCoverChildren());
+    coverChildrenButton.setSelection(getData().isCoverChildren());
     coverChildrenButton.setEnabled(_askAboutChildren);
     coverChildrenButton.addSelectionListener(new SelectionAdapter() {
       /**
@@ -75,33 +75,33 @@ public class MergeChoicesDialog extends MessageDialog {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        getData().setCoverChildren(!getData().getCoverChildren());
+        getData().setCoverChildren(!getData().isCoverChildren());
       }
     });
     // Incremental mode
     Button incrementalModeButton = new Button(result, SWT.CHECK);
     incrementalModeButton.setText(Messages.MergeChoicesDialog_IncrementalMode);
-    incrementalModeButton.setSelection(getData().getIncrementalMode());
+    incrementalModeButton.setSelection(getData().isIncrementalMode());
     incrementalModeButton.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        getData().setIncrementalMode(!getData().getIncrementalMode());
+        getData().setIncrementalMode(!getData().isIncrementalMode());
       }
     });
     // Show impact
     Button showImpactButton = new Button(result, SWT.CHECK);
     showImpactButton.setText(Messages.MergeChoicesDialog_ShowImpact);
-    showImpactButton.setSelection(getData().getShowImpact());
+    showImpactButton.setSelection(getData().isShowImpact());
     showImpactButton.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        getData().setShowImpact(!getData().getShowImpact());
+        getData().setShowImpact(!getData().isShowImpact());
       }
     });
     return result;
@@ -111,85 +111,18 @@ public class MergeChoicesDialog extends MessageDialog {
 	 * Return the data that this dialog allows editing
 	 * @return a non-null object
 	 */
-	protected MergeChoiceDialogData getData() {
+	protected MergeChoiceData getData() {
 	  return _data;
 	}
 	
-	
-  /**
-   * The data that this dialog allows editing.
-   */
-  public static class MergeChoiceDialogData {
-    
-    /** Whether differences on children must be covered */
-    private boolean _coverChildren;
-    
-    /** Whether incremental mode is selected */
-    private boolean _incrementalMode;
-    
-    /** Whether merge impact must be shown */
-    private boolean _showImpact;
-    
-    
-    /**
-     * Default constructor
-     */
-    public MergeChoiceDialogData() {
-      _coverChildren = false;
-      _incrementalMode = false;
-      _showImpact = false;
-    }
-    
-    /**
-     * Full constructor
-     */
-    public MergeChoiceDialogData(boolean coverChildren_p, boolean incrementalMode_p, boolean showImpact_p) {
-      _coverChildren = coverChildren_p;
-      _incrementalMode = incrementalMode_p;
-      _showImpact = showImpact_p;
-    }
-    
-    /**
-     * Return whether differences on children must be covered
-     */
-    public boolean getCoverChildren() {
-      return _coverChildren;
-    }
-    
-    /**
-     * Return whether incremental mode is selected
-     */
-    public boolean getIncrementalMode() {
-      return _incrementalMode;
-    }
-    
-    /**
-     * Return whether merge impact must be shown
-     */
-    public boolean getShowImpact() {
-      return _showImpact;
-    }
-    
-    /**
-     * Set whether differences on children must be covered
-     */
-    public void setCoverChildren(boolean newValue_p) {
-      _coverChildren = newValue_p;
-    }
-    
-    /**
-     * Set whether incremental mode is selected
-     */
-    public void setIncrementalMode(boolean newValue_p) {
-      _incrementalMode = newValue_p;
-    }
-    
-    /**
-     * Set whether merge impact must be shown
-     */
-    public void setShowImpact(boolean newValue_p) {
-      _showImpact = newValue_p;
-    }
+	/**
+	 * @see org.eclipse.jface.dialogs.MessageDialog#open()
+	 */
+	@Override
+  public int open() {
+    int result = super.open();
+    _data.setProceed(result == 0);
+    return result;
   }
   
 }
