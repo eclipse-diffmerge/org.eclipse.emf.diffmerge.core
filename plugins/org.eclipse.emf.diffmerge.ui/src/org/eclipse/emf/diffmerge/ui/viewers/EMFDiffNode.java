@@ -299,7 +299,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   protected int countDifferenceNumber(IMatch match_p) {
     int result = 0;
     if (counts(UserDifferenceKind.NO_CONTAINMENT))
-     result += countProperDifferenceNumber(match_p);
+     result += countNonContainmentDifferenceNumber(match_p);
     if (counts(UserDifferenceKind.MOVE) && isAMove(match_p, false, false))
       result++;
     IElementPresence presence = match_p.getElementPresenceDifference();
@@ -314,11 +314,11 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Return the number of proper differences at a user level on the given match
+   * Return the number of non-containment differences at a user level on the given match
    * @param match_p a non-null match
    * @return a positive int or 0
    */
-  protected int countProperDifferenceNumber(IMatch match_p) {
+  protected int countNonContainmentDifferenceNumber(IMatch match_p) {
     int result = 0;
     if (!match_p.isPartial()) {
       Set<EStructuralFeature> uniFeatures = new HashSet<EStructuralFeature>();
@@ -697,6 +697,23 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
         continue; // Move origin
       if (getDifferenceNumber(candidate) > 0)
         return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Return whether the given match has visible non-containment differences for merge
+   * @param match_p a non-null match
+   */
+  public boolean hasNonContainmentDifferencesForMerge(IMatch match_p) {
+    if (!match_p.isPartial()) {
+      for (IDifference difference : match_p.getRelatedDifferences()) {
+        if (difference instanceof IElementRelativeDifference && !shouldBeIgnored(difference)) {
+          IElementRelativeDifference eltDiff = (IElementRelativeDifference)difference;
+          if (eltDiff.isUnrelatedToContainmentTree())
+            return true;
+        }
+      }
     }
     return false;
   }

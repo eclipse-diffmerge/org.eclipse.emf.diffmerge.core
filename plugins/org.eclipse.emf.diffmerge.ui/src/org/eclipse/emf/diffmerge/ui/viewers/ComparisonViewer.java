@@ -1382,14 +1382,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected boolean interactionsRequiredForIgnore(IgnoreChoiceData choices_p,
       EMFDiffNode input_p, List<EMatch> selectedMatches) {
-    boolean result = false;
+    boolean childrenForMerge = false;
+    boolean ownDifferences = false;
+    // Determining whether selected matches have proper differences
+    // and differences in children
     for (EMatch selectedMatch : selectedMatches) {
-      if (input_p.hasChildrenForMerge(selectedMatch)) {
-        result = true;
+      ownDifferences = ownDifferences ||
+          !input_p.getDifferenceKind(selectedMatch).isNeutral();
+      if (childrenForMerge && ownDifferences)
         break;
-      }
+      childrenForMerge = childrenForMerge || input_p.hasChildrenForMerge(selectedMatch);
+      if (childrenForMerge && ownDifferences)
+        break;
     }
-    return result;
+    if (!ownDifferences && childrenForMerge)
+      // No own difference but differences in children: operation only
+      // makes sense if children are covered
+      choices_p.setCoverChildren(true);
+    return ownDifferences && childrenForMerge;
   }
   
   /**
