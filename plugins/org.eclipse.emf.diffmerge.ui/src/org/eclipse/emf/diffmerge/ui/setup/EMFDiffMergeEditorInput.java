@@ -46,6 +46,7 @@ import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -62,11 +63,6 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
@@ -183,8 +179,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   public Control createContents(Composite parent_p) {
     // Create viewer
     _viewer = _comparisonMethod.createComparisonViewer(parent_p, getActionBars());
+    // Plug it to the selection provider
     if (_selectionBridge != null)
-      _viewer.addSelectionChangedListener(_selectionBridge);
+      _viewer.getMultiViewerSelectionProvider().addSelectionChangedListener(_selectionBridge);
     _viewer.addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -729,61 +726,4 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     }
   }
   
-  
-  /**
-   * A selection provider and listener which can be used as a bridge between the comparison viewer
-   * and the selection service of the workbench site. Its usefulness comes from the fact that it
-   * can be instantiated earlier than the comparison viewer, so it can be registered as a selection
-   * provider for the workbench site when the compare editor is activated. Listeners from other
-   * workbench parts that react to part activation, such as the PropertySheet, are thus able to
-   * register this selection provider.
-   */
-  protected static class SelectionBridge implements ISelectionChangedListener, ISelectionProvider {
-    /** The current, potentially null selection */
-    private  ISelection _selection;
-    /** The non-null, potentially empty set of listeners */
-    private final Set<ISelectionChangedListener> _selectionListeners;
-    
-    /**
-     * Constructor
-     */
-    public SelectionBridge() {
-      _selection = StructuredSelection.EMPTY;
-      _selectionListeners = new HashSet<ISelectionChangedListener>();
-    }
-    /**
-     * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-     */
-    public void addSelectionChangedListener(ISelectionChangedListener listener_p) {
-      _selectionListeners.add(listener_p);
-    }
-    /**
-     * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
-     */
-    public ISelection getSelection() {
-      return _selection;
-    }
-    /**
-     * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
-     */
-    public void removeSelectionChangedListener(ISelectionChangedListener listener_p) {
-      _selectionListeners.remove(listener_p);
-    }
-    /**
-     * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
-     */
-    public void setSelection(ISelection selection_p) {
-      _selection = selection_p;
-      SelectionChangedEvent event = new SelectionChangedEvent(this, _selection);
-      for (ISelectionChangedListener listener : _selectionListeners) {
-        listener.selectionChanged(event);
-      }
-    }
-    /**
-     * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-     */
-    public void selectionChanged(SelectionChangedEvent event_p) {
-      setSelection(event_p.getSelection());
-    }
-  }
 }

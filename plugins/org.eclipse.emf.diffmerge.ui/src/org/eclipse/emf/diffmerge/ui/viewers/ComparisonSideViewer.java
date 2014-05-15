@@ -14,12 +14,9 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import java.util.List;
-
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
@@ -30,14 +27,13 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 
 /**
  * A viewer which provides a representation of a model scope in a comparison.
- * Input: EMFDiffNode ; Elements: EMatch.
+ * Input: EMFDiffNode ; Elements: EObject.
  * @author Olivier Constant
  */
 public class ComparisonSideViewer extends TreeViewer implements IComparisonSideViewer {
@@ -119,7 +115,7 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
   public IModelScope getSideScope() {
     return getInput() == null? null:
       getInput().getActualComparison().getScope(
-          getInput().getRoleForSide(isLeftSide()));
+          getSideRole());
   }
   
   /**
@@ -146,28 +142,41 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
      */
     public Object[] getChildren(Object parentElement_p) {
-      IMatch match = (IMatch)parentElement_p;
-      List<IMatch> result = getInput().getActualComparison().getContentsOf(
-          match, getSideRole());
-      return result.toArray();
+      EObject container = (EObject)parentElement_p;
+      Object[] result;
+      IModelScope scope = getSideScope();
+      if (scope != null) {
+        result = scope.getContents(container).toArray();
+      } else {
+        result = new Object[0];
+      }
+      return result;
     }
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      EMFDiffNode input = (EMFDiffNode)inputElement_p;
-      List<IMatch> result = input.getActualComparison().getContents(
-          getSideRole());
-      return result.toArray();
+      Object[] result;
+      IModelScope scope = getSideScope();
+      if (scope != null) {
+        result = scope.getContents().toArray();
+      } else {
+        result = new Object[0];
+      }
+      return result;
     }
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
      */
     public Object getParent(Object element_p) {
-      IMatch match = (IMatch)element_p;
-      return getInput().getActualComparison().getContainerOf(match, getSideRole());
+      Object result = null;
+      IModelScope scope = getSideScope();
+      if (scope != null) {
+        result = scope.getContainer((EObject)element_p);
+      }
+      return result;
     }
     
     /**
@@ -192,54 +201,26 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
   protected class LabelProvider extends DelegatingLabelProvider {
     
     /**
-     * Return the element to represent for the given match
-     * @param match_p a non-null match
-     * @return a non-null element
-     */
-    private EObject getElementToRepresent(IMatch match_p) {
-      EObject result;
-      Role sideRole = getSideRole();
-      if (match_p.getUncoveredRole() == sideRole)
-        result = match_p.get(sideRole.opposite());
-      else
-        result = match_p.get(sideRole);
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getForeground(java.lang.Object)
      */
     @Override
     public Color getForeground(Object element_p) {
-      EMatch match = (EMatch)element_p;
-      DifferenceKind kind = getInput().getDifferenceKind(match);
+      EObject element = (EObject)element_p;
+      IMatch match = getInput().getActualComparison().getMapping().getMatchFor(
+          element, getSideRole());
       Color result;
-      if (!kind.isNeutral())
-        result = getSideColor();
-      else
-        result = getInput().getDifferenceColor(DifferenceColorKind.NONE);
+      if (match != null) {
+        DifferenceKind kind = getInput().getDifferenceKind(match);
+        if (!kind.isNeutral())
+          result = getSideColor();
+        else
+          result = getInput().getDifferenceColor(DifferenceColorKind.NONE);
+      } else {
+        result = super.getForeground(element_p);
+      }
       return result;
     }
     
-    /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getImage(java.lang.Object)
-     */
-    @Override
-    public Image getImage(Object element_p) {
-      IMatch match = (IMatch)element_p;
-      Image result = getDelegate().getImage(getElementToRepresent(match));
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getText(java.lang.Object)
-     */
-    @Override
-    public String getText(Object element_p) {
-      IMatch match = (IMatch)element_p;
-      String result = getDelegate().getText(getElementToRepresent(match));
-      return result;
-    }
   }
   
 }

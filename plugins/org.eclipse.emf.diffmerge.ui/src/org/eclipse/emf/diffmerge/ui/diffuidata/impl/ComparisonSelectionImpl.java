@@ -26,10 +26,13 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementRelativePresence;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
@@ -318,8 +321,14 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
     EStructuralFeature result = null;
     if (getSelectedMatchAndFeature() != null) {
       result = getSelectedMatchAndFeature().getFeature();
-    } else if (!getSelectedValuePresences().isEmpty()) {
-      result = getSelectedValuePresences().get(0).getFeature();
+    } else {
+      EValuePresence presence = asValuePresence();
+      if (presence != null) {
+        if (representAsOwnership(presence))
+          result = EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature();
+        else
+          result = presence.getFeature();
+      }
     }
     return result;
 	}
@@ -334,10 +343,14 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
       result = getSelectedMatches().get(0);
     } else if (!getSelectedTreePath().isEmpty()) {
       result = getSelectedTreePath().get(getSelectedTreePath().size()-1);
-    } else if (!getSelectedValuePresences().isEmpty()) {
-      result = getSelectedValuePresences().get(0).getElementMatch();
     } else if (getSelectedMatchAndFeature() != null) {
       result = getSelectedMatchAndFeature().getMatch();
+    } else if (!getSelectedValuePresences().isEmpty()) {
+      EValuePresence presence = asValuePresence();
+      if (representAsOwnership(presence))
+        result = (EMatch)presence.getValue();
+      else
+        result = presence.getElementMatch();
     }
     return result;
 	}
@@ -513,6 +526,22 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
    */
   public Iterator<EObject> iterator() {
     return toList().iterator();
+  }
+  
+  /**
+   * Return whether the given difference is represented as a virtual "ownership"
+   * (an opposite to a containment value presence)
+   * @param difference_p a potentially null difference
+   * @generated NOT
+   */
+  private boolean representAsOwnership(IDifference difference_p) {
+    boolean result = false;
+    if (difference_p instanceof IReferenceValuePresence) {
+      IReferenceValuePresence presence = (IReferenceValuePresence)difference_p;
+      EReference ref = presence.getFeature();
+      result = !presence.isOrder() && ref != null && ref.isContainment();
+    }
+    return result;
   }
   
   /**

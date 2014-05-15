@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2012 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2014 Thales Global Services S.A.S.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,7 +31,6 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
@@ -56,9 +55,10 @@ import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode.UserDifferenceKind;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
+import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -68,6 +68,7 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -81,6 +82,8 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -92,6 +95,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -131,37 +138,40 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   
   /** The synthesis model tree viewer */
-  protected EnhancedComparisonTreeViewer _synthesisModelTreeViewer;
+  protected EnhancedComparisonTreeViewer _viewerSynthesisMain;
   
   /** The left model tree viewer */
-  protected EnhancedComparisonSideViewer _leftModelTreeViewer;
+  protected EnhancedComparisonSideViewer _viewerSynthesisLeft;
   
   /** The right model tree viewer */
-  protected EnhancedComparisonSideViewer _rightModelTreeViewer;
+  protected EnhancedComparisonSideViewer _viewerSynthesisRight;
 
   /** The features viewer */
-  protected EnhancedFeaturesViewer _featuresViewer;
+  protected EnhancedFeaturesViewer _viewerFeatures;
 
   /** The left values viewer */
-  protected EnhancedValuesViewer _leftValuesViewer;
+  protected EnhancedValuesViewer _viewerValuesLeft;
   
   /** The right values viewer */
-  protected EnhancedValuesViewer _rightValuesViewer;
-  
-  /** The last selection directly made by the user */
-  private ComparisonSelection _lastUserSelection;
-  
-  /** A filter for unchanged elements */
-  protected ViewerFilter _unchangedElementsFilter;
+  protected EnhancedValuesViewer _viewerValuesRight;
   
   /** A filter for move origins */
-  protected ViewerFilter _moveOriginsFilter;
+  protected ViewerFilter _filterMoveOrigins;
   
-  /** A sorter for the synthesis view */
-  protected ViewerSorter _synthesisSorter;
+  /** A filter for unchanged elements */
+  protected ViewerFilter _filterUnchangedElements;
+  
+  /** An alphanumeric sorter */
+  protected ViewerSorter _sorterSynthesis;
   
   /** Whether the left and right trees are synchronized with the synthesis tree */
   protected boolean _isLeftRightSynced;
+  
+  /** The potentially null last selection */
+  private ComparisonSelection _lastUserSelection;
+  
+  /** The non-null selection provider covering certain sub-viewers */
+  protected SelectionBridge _multiViewerSelectionProvider;
   
   
   /**
@@ -292,8 +302,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     SashForm lowerPart = createRowLower(result);
     setupColumns(upperPart, lowerPart);
     result.setWeights(getDefaultRowWeights());
-    // Overall synchronization
-    setupSynchronizationListeners();
+    // Tools: buttons and menus
     setupToolBars();
     return result;
   }
@@ -387,9 +396,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.getInnerViewer().setDifferenceAgnostic(true);
-        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
-        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
+        _viewerFeatures.getInnerViewer().setDifferenceAgnostic(true);
+        _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(true);
+        _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(true);
       }
     });
     return result;
@@ -409,9 +418,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.getInnerViewer().setDifferenceAgnostic(false);
-        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
-        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(true);
+        _viewerFeatures.getInnerViewer().setDifferenceAgnostic(false);
+        _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(true);
+        _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(true);
       }
     });
     return result;
@@ -467,9 +476,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _featuresViewer.getInnerViewer().setDifferenceAgnostic(false);
-        _leftValuesViewer.getInnerViewer().setDifferenceAgnostic(false);
-        _rightValuesViewer.getInnerViewer().setDifferenceAgnostic(false);
+        _viewerFeatures.getInnerViewer().setDifferenceAgnostic(false);
+        _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(false);
+        _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(false);
       }
     });
     return result;
@@ -599,9 +608,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         if (result.getSelection())
-          _synthesisModelTreeViewer.getInnerViewer().removeFilter(_unchangedElementsFilter);
+          _viewerSynthesisMain.getInnerViewer().removeFilter(_filterUnchangedElements);
         else
-          _synthesisModelTreeViewer.getInnerViewer().addFilter(_unchangedElementsFilter);
+          _viewerSynthesisMain.getInnerViewer().addFilter(_filterUnchangedElements);
       }
     });
     return result;
@@ -676,10 +685,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         EMFDiffNode input = getInput();
         if (input != null) {
           input.setUseCustomIcons(result.getSelection());
-          _synthesisModelTreeViewer.refresh();
-          _featuresViewer.refresh();
-          _leftValuesViewer.refresh();
-          _rightValuesViewer.refresh();
+          _viewerSynthesisMain.refresh();
+          _viewerFeatures.refresh();
+          _viewerValuesLeft.refresh();
+          _viewerValuesRight.refresh();
         }
       }
     });
@@ -694,10 +703,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected SashForm createRowLower(Composite parent_p) {
     SashForm result = new SashForm(parent_p, SWT.HORIZONTAL);
     // Features section
-    _featuresViewer = createViewerFeatures(result);
+    _viewerFeatures = createViewerFeatures(result);
     // Values section
-    _leftValuesViewer = createViewerValues(result, true);
-    _rightValuesViewer = createViewerValues(result, false);
+    _viewerValuesLeft = createViewerValues(result, true);
+    _viewerValuesRight = createViewerValues(result, false);
     return result;
   }
   
@@ -708,9 +717,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected SashForm createRowUpper(Composite parent_p) {
     SashForm result = new SashForm(parent_p, SWT.HORIZONTAL);
-    _synthesisModelTreeViewer = createViewerSynthesis(result);
-    _leftModelTreeViewer = createViewerSynthesisSide(result, true);
-    _rightModelTreeViewer = createViewerSynthesisSide(result, false);
+    _viewerSynthesisMain = createViewerSynthesis(result);
+    _viewerSynthesisLeft = createViewerSynthesisSide(result, true);
+    _viewerSynthesisRight = createViewerSynthesisSide(result, false);
     return result;
   }
   
@@ -720,7 +729,64 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a non-null viewer
    */
   protected EnhancedFeaturesViewer createViewerFeatures(Composite parent_p) {
-    EnhancedFeaturesViewer result = new EnhancedFeaturesViewer(parent_p);
+    final EnhancedFeaturesViewer result = new EnhancedFeaturesViewer(parent_p);
+    // User selection: send to global viewer
+    result.addSWTSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        IStructuredSelection selection = result.getSelection();
+        if (selection.size() == 1) {
+          IMatch match = result.getInput() == null? null:
+            result.getInput().getMatch();
+          if (match instanceof EMatch) {
+            EStructuralFeature feature = (EStructuralFeature)selection.getFirstElement();
+            MatchAndFeature newInputDetails = new MatchAndFeatureImpl((EMatch)match, feature);
+            setSelection(new ComparisonSelectionImpl(
+                newInputDetails, getDrivingRole()), true, result);
+          }
+        }
+      }
+    });
+    // Global selection change: update local selection
+    addSelectionChangedListener(new ISelectionChangedListener() {
+      /**
+       * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+       */
+      public void selectionChanged(SelectionChangedEvent event_p) {
+        ISelection rawSelection = event_p.getSelection();
+        Object source = event_p.getSource();
+        if (rawSelection instanceof ComparisonSelection && source != result) {
+          ComparisonSelection selection = (ComparisonSelection)rawSelection;
+          if (selection.getSelectedMatches().size() <= 1) {
+            // No more than one match
+            EMatch match = selection.asMatch();
+            if (match != null) {
+              // One match: new input
+              FeaturesInput newInput = new FeaturesInput(getInput(), match);
+              if (!newInput.equals(result.getInput()))
+                result.setInput(newInput);
+              // New selection
+              IStructuredSelection newSelection = StructuredSelection.EMPTY;
+              EStructuralFeature feature = selection.asFeature();
+              if (feature != null) {
+                MatchAndFeature mnf = new MatchAndFeatureImpl(match, feature);
+                newSelection = new StructuredSelection(mnf);
+              }
+              result.setSelection(newSelection, true);
+            } else {
+              // No match: no input
+              result.setInput(null);
+            }
+          } else {
+            // More than one match: no input
+            result.setInput(null);
+          }
+        }
+      }
+    });
     return result;
   }
   
@@ -731,7 +797,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected EnhancedComparisonTreeViewer createViewerSynthesis(Composite parent_p) {
     final EnhancedComparisonTreeViewer result = new EnhancedComparisonTreeViewer(parent_p);
-    result.getInnerViewer().addFilter(_unchangedElementsFilter);
+    result.getInnerViewer().addFilter(_filterUnchangedElements);
+    result.getInnerViewer().addFilter(_filterMoveOrigins);
+    // Update header when filtering is activated
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -741,11 +809,48 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           Boolean filtered = (Boolean)event_p.getNewValue();
           if (filtered != null) {
             StringBuilder builder = new StringBuilder();
-            builder.append(_synthesisModelTreeViewer.getDefaultHeaderText());
+            builder.append(result.getDefaultHeaderText());
             if (filtered.booleanValue())
               builder.append(Messages.ComparisonViewer_Filtered);
             result.getTextLabel().setText(builder.toString());
           }
+        }
+      }
+    });
+    // User selection: send to global viewer
+    result.addSWTSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        IStructuredSelection selection = result.getSelection();
+        if (!selection.isEmpty())
+          setSelection(new ComparisonSelectionImpl(
+              selection.toList(), getDrivingRole()), true, result);
+      }
+    });
+    // Global selection change: update local selection
+    addSelectionChangedListener(new ISelectionChangedListener() {
+      /**
+       * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+       */
+      public void selectionChanged(SelectionChangedEvent event_p) {
+        ISelection rawSelection = event_p.getSelection();
+        Object source = event_p.getSource();
+        if (rawSelection instanceof ComparisonSelection && source != result) {
+          ComparisonSelection selection = (ComparisonSelection)rawSelection;
+          // New selection
+          IStructuredSelection newSelection = StructuredSelection.EMPTY;
+          int matchesSize = selection.getSelectedMatches().size();
+          if (matchesSize > 1) {
+            newSelection = new StructuredSelection(selection.getSelectedMatches());
+          } else {
+            IMatch match = selection.asMatch();
+            if (match != null)
+              newSelection = new StructuredSelection(match);
+          }
+          result.setSelection(newSelection, true);
         }
       }
     });
@@ -755,21 +860,141 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create and return the viewer in the synthesis row for the given side
    * @param parent_p a non-null composite
-   * @param isLeftSide_p whether the side is left
+   * @param isLeftSide_p whether the side is left or right
    * @return a non-null viewer
    */
-  protected EnhancedComparisonSideViewer createViewerSynthesisSide(Composite parent_p, boolean isLeftSide_p) {
-    return new EnhancedComparisonSideViewer(parent_p, isLeftSide_p);
+  protected EnhancedComparisonSideViewer createViewerSynthesisSide(Composite parent_p,
+      final boolean isLeftSide_p) {
+    final EnhancedComparisonSideViewer result = new EnhancedComparisonSideViewer(parent_p, isLeftSide_p);
+    // User selection: send to global viewer
+    result.addSWTSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        if (_isLeftRightSynced) {
+          IStructuredSelection selection = result.getSelection();
+          Role sideRole = getInput().getRoleForSide(isLeftSide_p);
+          IStructuredSelection synthesisSelection = getSelectionAsSynthesis(selection, isLeftSide_p);
+          if (!synthesisSelection.isEmpty())
+            setSelection(new ComparisonSelectionImpl(
+                synthesisSelection.toList(), sideRole), true, result);
+        }
+      }
+    });
+    // Global selection change: update local selection
+    addSelectionChangedListener(new ISelectionChangedListener() {
+      /**
+       * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+       */
+      public void selectionChanged(SelectionChangedEvent event_p) {
+        ISelection rawSelection = event_p.getSelection();
+        Object source = event_p.getSource();
+        if (rawSelection instanceof ComparisonSelection && source != result &&
+            (source != _viewerSynthesisMain || _isLeftRightSynced)) {
+          ComparisonSelection selection = (ComparisonSelection)rawSelection;
+          // New selection
+          IStructuredSelection newSelection = StructuredSelection.EMPTY;
+          int matchesSize = selection.getSelectedMatches().size();
+          if (matchesSize > 1) {
+            newSelection = new StructuredSelection(selection.getSelectedMatches());
+          } else {
+            IMatch match = selection.asMatch();
+            if (match != null)
+              newSelection = new StructuredSelection(match);
+          }
+          result.setSelection(getSelectionAsSide(newSelection, isLeftSide_p), true);
+        }
+      }
+    });
+    // Register as selection provider ...
+    result.getInnerViewer().getControl().addFocusListener(new FocusListener() {
+      /**
+       * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
+       */
+      public void focusLost(FocusEvent e_p) {
+        result.removeSelectionChangedListener(_multiViewerSelectionProvider);
+        ComparisonViewer.this.addSelectionChangedListener(_multiViewerSelectionProvider);
+      }
+      /**
+       * @see org.eclipse.swt.events.FocusListener#focusGained(org.eclipse.swt.events.FocusEvent)
+       */
+      public void focusGained(FocusEvent e_p) {
+        ComparisonViewer.this.removeSelectionChangedListener(_multiViewerSelectionProvider);
+        result.addSelectionChangedListener(_multiViewerSelectionProvider);
+      }
+    });
+    // ... and enable contextual menus
+    try {
+      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+      IWorkbenchSite site = window.getActivePage().getActiveEditor().getSite();
+      if (site instanceof IWorkbenchPartSite) {
+        MenuManager menuManager = new MenuManager();
+        Control control = result.getInnerViewer().getControl();
+        Menu contextMenu = menuManager.createContextMenu(control);
+        control.setMenu(contextMenu);
+        ((IWorkbenchPartSite)site).registerContextMenu(
+            IWorkbenchActionConstants.MB_ADDITIONS, menuManager, getMultiViewerSelectionProvider());
+      }
+    } catch (Exception e) {
+      // Failed to set up context menu: proceed
+    }
+    return result;
   }
   
   /**
    * Create and return the values viewer for the given side
    * @param parent_p a non-null composite
-   * @param left_p whether the side is left or right
+   * @param isLeftSide_p whether the side is left or right
    * @return a non-null viewer
    */
-  protected EnhancedValuesViewer createViewerValues(Composite parent_p, boolean left_p) {
-    EnhancedValuesViewer result = new EnhancedValuesViewer(parent_p, left_p);
+  protected EnhancedValuesViewer createViewerValues(Composite parent_p,
+      final boolean isLeftSide_p) {
+    final EnhancedValuesViewer result = new EnhancedValuesViewer(parent_p, isLeftSide_p);
+    // User selection: send to global viewer
+    result.addSWTSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        IStructuredSelection selection = result.getSelection();
+        if (!selection.isEmpty()) {
+          if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
+            setSelection(new ComparisonSelectionImpl(
+                selection.toList(), getInput().getRoleForSide(isLeftSide_p)), true, result);
+          }
+        }
+      }
+    });
+    // Global selection change: update local selection
+    addSelectionChangedListener(new ISelectionChangedListener() {
+      /**
+       * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+       */
+      public void selectionChanged(SelectionChangedEvent event_p) {
+        ISelection rawSelection = event_p.getSelection();
+        Object source = event_p.getSource();
+        if (rawSelection instanceof ComparisonSelection && source != result) {
+          ComparisonSelection selection = (ComparisonSelection)rawSelection;
+          EStructuralFeature feature = selection.asFeature();
+          if (feature != null) {
+            // New input
+            MatchAndFeature mnf = new MatchAndFeatureImpl(selection.asMatch(), feature);
+            ValuesInput newInput = new ValuesInput(getInput(), mnf);
+            if (!newInput.equals(result.getInput()))
+              result.setInput(newInput);
+            // New selection
+            List<EValuePresence> values = selection.getSelectedValuePresences();
+            result.setSelection(new StructuredSelection(values), true);
+          } else {
+            // No feature in selection: no input
+            result.setInput(null);
+          }
+        }
+      }
+    });
     return result;
   }
   
@@ -794,7 +1019,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
            * @see java.lang.Runnable#run()
            */
           public void run() {
-            _synthesisModelTreeViewer.getInnerViewer().collapseAll();
+            _viewerSynthesisMain.getInnerViewer().collapseAll();
           }
         });
       }
@@ -865,7 +1090,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
            * @see java.lang.Runnable#run()
            */
           public void run() {
-            _synthesisModelTreeViewer.getInnerViewer().expandAll();
+            _viewerSynthesisMain.getInnerViewer().expandAll();
           }
         });
       }
@@ -1105,9 +1330,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent event_p) {
         if (result.getSelection())
-          _synthesisModelTreeViewer.getInnerViewer().setSorter(_synthesisSorter);
+          _viewerSynthesisMain.getInnerViewer().setSorter(_sorterSynthesis);
         else
-          _synthesisModelTreeViewer.getInnerViewer().setSorter(null);
+          _viewerSynthesisMain.getInnerViewer().setSorter(null);
       }
     });
     return result;
@@ -1138,9 +1363,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
              * @see java.lang.Runnable#run()
              */
             public void run() {
-              ISelection selection = _synthesisModelTreeViewer.getSelection();
-              _leftModelTreeViewer.setSelection(selection, true);
-              _rightModelTreeViewer.setSelection(selection, true);
+              IStructuredSelection selection = _viewerSynthesisMain.getSelection();
+              _viewerSynthesisLeft.setSelection(getSelectionAsSide(selection, true), true);
+              _viewerSynthesisRight.setSelection(getSelectionAsSide(selection, false), true);
             }
           });
         }
@@ -1256,7 +1481,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
   public HeaderViewer<?> getFeaturesViewer() {
-    return _featuresViewer;
+    return _viewerFeatures;
   }
   
   /**
@@ -1273,9 +1498,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
   public EnhancedComparisonSideViewer getModelScopeViewer(boolean left_p) {
-    EnhancedComparisonSideViewer result = left_p? _leftModelTreeViewer:
-      _rightModelTreeViewer;
+    EnhancedComparisonSideViewer result = left_p? _viewerSynthesisLeft:
+      _viewerSynthesisRight;
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#getMultiViewerSelectionProvider()
+   */
+  @Override
+  public ISelectionProvider getMultiViewerSelectionProvider() {
+    return _multiViewerSelectionProvider;
   }
   
   /**
@@ -1304,11 +1537,61 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return a variant of the given match-based selection for the given side.
+   * Matches are converted to their elements on the given side.
+   * Elements other than matches are ignored.
+   * @param selection_p a non-null selection
+   * @param onLeft_p whether the desired side is left or right
+   * @return a non-null, potentially empty selection
+   */
+  protected IStructuredSelection getSelectionAsSide(
+      IStructuredSelection selection_p, boolean onLeft_p) {
+    List<EObject> result = new FArrayList<EObject>();
+    if (getInput() != null) {
+      Role role = getInput().getRoleForSide(onLeft_p);
+      for (Object selected : selection_p.toArray()) {
+        if (selected instanceof IMatch) {
+          EObject element = ((IMatch)selected).get(role);
+          if (element != null)
+            result.add(element);
+        }
+      }
+    }
+    return new StructuredSelection(result);
+  }
+  
+  /**
+   * Return a variant of the given element-based selection as a
+   * match-based selection. Elements from the given side are converted to
+   * their corresponding matches. Other elements are ignored.
+   * @param selection_p a non-null selection
+   * @param onLeft_p whether the original side is left or right
+   * @return a non-null, potentially empty selection
+   */
+  protected IStructuredSelection getSelectionAsSynthesis(
+      IStructuredSelection selection_p, boolean onLeft_p) {
+    List<IMatch> result = new FArrayList<IMatch>();
+    EMFDiffNode input = getInput();
+    if (input != null) {
+      Role role = input.getRoleForSide(onLeft_p);
+      for (Object selected : selection_p.toArray()) {
+        if (selected instanceof EObject) {
+          IMatch match = input.getActualComparison().getMapping().getMatchFor(
+              (EObject)selected, role);
+          if (match != null)
+            result.add(match);
+        }
+      }
+    }
+    return new StructuredSelection(result);
+  }
+  
+  /**
    * Return the inner viewer for the comparison tree
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
   public EnhancedComparisonTreeViewer getSynthesisViewer() {
-    return _synthesisModelTreeViewer;
+    return _viewerSynthesisMain;
   }
   
   /**
@@ -1317,7 +1600,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
   public EnhancedValuesViewer getValuesViewer(boolean left_p) {
-    EnhancedValuesViewer result = left_p? _leftValuesViewer: _rightValuesViewer;
+    EnhancedValuesViewer result = left_p? _viewerValuesLeft: _viewerValuesRight;
     return result;
   }
   
@@ -1328,15 +1611,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void handleDispose() {
     super.handleDispose();
     _lastUserSelection = null;
-    _leftModelTreeViewer = null;
-    _rightModelTreeViewer = null;
-    _leftValuesViewer = null;
-    _rightValuesViewer = null;
-    _synthesisModelTreeViewer = null;
-    _featuresViewer = null;
-    _synthesisSorter = null;
-    _unchangedElementsFilter = null;
-    _moveOriginsFilter = null;
+    _viewerSynthesisLeft = null;
+    _viewerSynthesisRight = null;
+    _viewerValuesLeft = null;
+    _viewerValuesRight = null;
+    _viewerSynthesisMain = null;
+    _viewerFeatures = null;
+    _sorterSynthesis = null;
+    _filterUnchangedElements = null;
+    _filterMoveOrigins = null;
   }
   
   /**
@@ -1345,8 +1628,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void initialize() {
     _isLeftRightSynced = true;
     _lastUserSelection = null;
-    _synthesisSorter = new ViewerSorter();
-    _unchangedElementsFilter = new ViewerFilter() {
+    _multiViewerSelectionProvider = new SelectionBridge();
+    addSelectionChangedListener(_multiViewerSelectionProvider);
+    _sorterSynthesis = new ViewerSorter();
+    _filterUnchangedElements = new ViewerFilter() {
       /**
        * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
        */
@@ -1356,7 +1641,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         return getInput().getDifferenceNumber(match) > 0;
       }
     };
-    _moveOriginsFilter = new ViewerFilter() {
+    _filterMoveOrigins = new ViewerFilter() {
       /**
        * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
        */
@@ -1428,12 +1713,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    _featuresViewer.setInput(null);
-    _leftValuesViewer.setInput(null);
-    _rightValuesViewer.setInput(null);
-    _synthesisModelTreeViewer.setInput(input_p);
-    _leftModelTreeViewer.setInput(input_p);
-    _rightModelTreeViewer.setInput(input_p);
+    _viewerFeatures.setInput(null);
+    _viewerValuesLeft.setInput(null);
+    _viewerValuesRight.setInput(null);
+    _viewerSynthesisMain.setInput(input_p);
+    _viewerSynthesisLeft.setInput(input_p);
+    _viewerSynthesisRight.setInput(input_p);
     super.inputChanged(input_p, oldInput_p);
     if (getInput() != null && getInput().isLogEvents())
       getLogger().log(new CompareLogEvent(getEditingDomain(), getComparison()));
@@ -1577,10 +1862,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param next_p whether navigation must be forward or back
    */
   protected void navigate(boolean next_p) {
-    ITreeSelection selection = _synthesisModelTreeViewer.getSelection();
+    ITreeSelection selection = _viewerSynthesisMain.getSelection();
     TreePath current = (selection == null || selection.isEmpty())? TreePath.EMPTY:
       selection.getPaths()[0];
-    ComparisonTreeViewer treeViewer = _synthesisModelTreeViewer.getInnerViewer();
+    ComparisonTreeViewer treeViewer = _viewerSynthesisMain.getInnerViewer();
     TreePath newPath = next_p? treeViewer.getNextUserDifference(current):
       treeViewer.getPreviousUserDifference(current);
     if (newPath != null)
@@ -1588,31 +1873,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Return whether the given difference is represented as a virtual "ownership"
-   * (an opposite to a containment value presence)
-   * @param difference_p a potentially null difference
-   */
-  protected boolean representAsOwnership(IDifference difference_p) {
-    boolean result = false;
-    if (difference_p instanceof IReferenceValuePresence) {
-      IReferenceValuePresence presence = (IReferenceValuePresence)difference_p;
-      EReference ref = presence.getFeature();
-      result = !presence.isOrder() && ref != null && ref.isContainment();
-    }
-    return result;
-  }
-  
-  /**
    * @see org.eclipse.jface.viewers.Viewer#refresh()
    */
   @Override
   public void refresh() {
-    _leftModelTreeViewer.refresh();
-    _rightModelTreeViewer.refresh();
-    _leftValuesViewer.refresh();
-    _rightValuesViewer.refresh();
-    _featuresViewer.refresh();
-    _synthesisModelTreeViewer.refresh();
+    _viewerSynthesisLeft.refresh();
+    _viewerSynthesisRight.refresh();
+    _viewerValuesLeft.refresh();
+    _viewerValuesRight.refresh();
+    _viewerFeatures.refresh();
+    _viewerSynthesisMain.refresh();
     super.refresh();
   }
   
@@ -1701,10 +1971,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   public void setDelegateLabelProvider(ILabelProvider labelProvider_p) {
     List<Viewer> viewers = Arrays.<Viewer>asList(
-        _synthesisModelTreeViewer.getInnerViewer(),
-        _leftModelTreeViewer.getInnerViewer(),
-        _rightModelTreeViewer.getInnerViewer(),
-        _featuresViewer, _leftValuesViewer, _rightValuesViewer);
+        _viewerSynthesisMain.getInnerViewer(),
+        _viewerSynthesisLeft.getInnerViewer(),
+        _viewerSynthesisRight.getInnerViewer(),
+        _viewerFeatures.getInnerViewer(),
+        _viewerValuesLeft.getInnerViewer(),
+        _viewerValuesRight.getInnerViewer());
     for (Viewer viewer : viewers) {
       if (viewer instanceof ContentViewer) {
         IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
@@ -1721,84 +1993,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @Override
   public void setSelection(ISelection selection_p, boolean reveal_p) {
-    final IStructuredSelection emptySelection = new StructuredSelection();
-    IStructuredSelection synthesisSelection = emptySelection;
-    IStructuredSelection leftModelSelection = emptySelection;
-    IStructuredSelection rightModelSelection = emptySelection;
-    IStructuredSelection featureSelection = emptySelection;
-    IStructuredSelection leftValueSelection = emptySelection;
-    IStructuredSelection rightValueSelection = emptySelection;
-    if (selection_p instanceof ComparisonSelection) {
-      ComparisonSelection selection = (ComparisonSelection)selection_p;
-      boolean representAsOwnership = representAsOwnership(selection.asValuePresence());
-      // Synthesis
-      List<EMatch> matches = selection.asMatches();
-      if (!matches.isEmpty()) {
-        if (representAsOwnership && matches.size() == 1)
-          synthesisSelection = new StructuredSelection(selection.asValuePresence().getValue());
-        else
-          synthesisSelection = new StructuredSelection(matches);
-        leftModelSelection = synthesisSelection;
-        rightModelSelection = synthesisSelection;
-      }
-      // Features: input
-      EMatch match = matches.size() == 1? matches.get(0): null;
-      if (match != null) {
-        if (representAsOwnership(selection.asValuePresence()))
-          match = (EMatch)selection.asValuePresence().getValue();
-        if (_featuresViewer.getInput() == null ||
-            _featuresViewer.getInput().getMatch() != match)
-          _featuresViewer.setInput(new FeaturesInput(getInput(), match));
-      } else if (!matches.isEmpty()) {
-        _featuresViewer.setInput(null);
-      }
-      // Features: selection
-      EStructuralFeature feature = !representAsOwnership? selection.asFeature():
-        EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature();
-      if (feature == null && matches.size() == 1)
-        // If a single match is selected and no feature, select the first relevant feature
-        feature = (EStructuralFeature)_featuresViewer.getInnerViewer().getElementAt(0);
-      // Values: input
-      ValuesInput valuesInput = feature == null? null:
-        new ValuesInput(getInput(), new MatchAndFeatureImpl(match, feature));
-      if (valuesInput == null || !valuesInput.equals(_leftValuesViewer.getInput()))
-        _leftValuesViewer.setInput(valuesInput);
-      if (valuesInput == null || !valuesInput.equals(_rightValuesViewer.getInput()))
-        _rightValuesViewer.setInput(valuesInput);
-      if (feature != null) {
-        featureSelection = new StructuredSelection(feature);
-        // Values
-        List<EValuePresence> presences = selection.asValuePresences();
-        leftValueSelection = new StructuredSelection(presences);
-        rightValueSelection = leftValueSelection;
-        if (presences.size() == 1) {
-          // If a single value presence is selected, select the referenced element
-          // in the corresponding model viewer
-          IValuePresence presence = presences.get(0);
-          if (presence instanceof IReferenceValuePresence) {
-            IReferenceValuePresence rvp = (IReferenceValuePresence)presence;
-            IMatch value = representAsOwnership(rvp)? rvp.getElementMatch(): rvp.getValue();
-            IStructuredSelection rvpSelection = new StructuredSelection(value);
-            if (rvp.getPresenceRole() == getInput().getRoleForSide(true))
-              leftModelSelection = rvpSelection;
-            else
-              rightModelSelection = rvpSelection;
-          }
-        }
-      }
-    }
-    _synthesisModelTreeViewer.setSelection(synthesisSelection, reveal_p);
-    if (_isLeftRightSynced) {
-      _leftModelTreeViewer.setSelection(leftModelSelection, reveal_p);
-      _rightModelTreeViewer.setSelection(rightModelSelection, reveal_p);
-    }
-    _featuresViewer.setSelection(featureSelection, reveal_p);
-    _leftValuesViewer.setSelection(leftValueSelection, reveal_p);
-    _rightValuesViewer.setSelection(rightValueSelection, reveal_p);
-    _lastUserSelection =
-      selection_p instanceof ComparisonSelection? (ComparisonSelection)selection_p:
-        new ComparisonSelectionImpl(null, null);
-    fireSelectionChanged(new SelectionChangedEvent(this, getSelection()));
+    setSelection(selection_p, reveal_p, this);
+  }
+  
+  /**
+   * Set the selection of this viewer, indicating the source of this setting
+   * @see Viewer#setSelection(ISelection, boolean)
+   * @param selection_p a potentially null selection
+   * @param reveal_p whether the selected elements must be revealed
+   * @param source_p the potentially null source of the setting
+   */
+  protected void setSelection(ISelection selection_p, boolean reveal_p, Viewer source_p) {
+    ComparisonSelection newSelection;
+    if (selection_p instanceof ComparisonSelection)
+      newSelection = (ComparisonSelection)selection_p;
+    else
+      newSelection = new ComparisonSelectionImpl(null, null);
+    _lastUserSelection = newSelection;
+    fireSelectionChanged(new SelectionChangedEvent(source_p, getSelection()));
   }
   
   /**
@@ -1855,7 +2067,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   @SuppressWarnings("unused")
   protected Menu setupMenuDetails(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
-    Menu result = UIUtil.createMenuTool(_featuresViewer.getToolbar());
+    Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
     // Only differences
     createMenuShowDiffValues(result);
     // All values
@@ -1891,61 +2103,20 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Add listeners for synchronizing the viewers
-   */
-  protected void setupSynchronizationListeners() {
-    // Selection synchronization: Synthesis[user] -> Global
-    _synthesisModelTreeViewer.addSWTSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        IStructuredSelection selection = _synthesisModelTreeViewer.getSelection();
-        if (!selection.isEmpty())
-          ComparisonViewer.this.setSelection(new ComparisonSelectionImpl(
-              selection.toList(), getDrivingRole()), true);
-      }
-    });
-    // Selection synchronization: Models[user] -> Global
-    _leftModelTreeViewer.addSWTSelectionListener(new ComparisonSideSelectionListener(true));
-    _rightModelTreeViewer.addSWTSelectionListener(new ComparisonSideSelectionListener(false));
-    // Selection synchronization: Values[user] -> Model
-    _leftValuesViewer.addSWTSelectionListener(new ValuesSelectionListener(true));
-    _rightValuesViewer.addSWTSelectionListener(new ValuesSelectionListener(false));
-    // Selection synchronization: Features[user] -> Values
-    _featuresViewer.addSWTSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        IStructuredSelection selection = _featuresViewer.getSelection();
-        if (selection.size() == 1) {
-          IMatch match = _featuresViewer.getInput() == null? null:
-            _featuresViewer.getInput().getMatch();
-          if (match instanceof EMatch) {
-            EStructuralFeature feature = (EStructuralFeature)selection.getFirstElement();
-            MatchAndFeature newInputDetails = new MatchAndFeatureImpl((EMatch)match, feature);
-            setSelection(new ComparisonSelectionImpl(newInputDetails, getDrivingRole()), true);
-          }
-        }
-      }
-    });
-  }
-  
-  /**
    * Set up the different tool bars
    */
   protected void setupToolBars() {
     // Tools: upper row
-    setupToolsSynthesis(_synthesisModelTreeViewer.getToolbar());
-    setupToolsSynthesisSide(_leftModelTreeViewer.getToolbar(), true);
-    setupToolsSynthesisSide(_rightModelTreeViewer.getToolbar(), false);
+    setupToolsSynthesis(_viewerSynthesisMain.getToolbar());
+    setupToolsSynthesisSide(_viewerSynthesisLeft.getToolbar(), true);
+    setupToolsSynthesisSide(_viewerSynthesisRight.getToolbar(), false);
     // Tools: lower row
-    setupToolsDetails(_featuresViewer.getToolbar());
-    setupToolsDetailsSide(_leftValuesViewer.getToolbar(), true);
-    setupToolsDetailsSide(_rightValuesViewer.getToolbar(), false);
+    setupToolsDetails(_viewerFeatures.getToolbar());
+    setupToolsDetailsSide(_viewerValuesLeft.getToolbar(), true);
+    setupToolsDetailsSide(_viewerValuesRight.getToolbar(), false);
     // Menus
-    setupMenuSynthesis(_synthesisModelTreeViewer.getToolbar());
-    setupMenuDetails(_featuresViewer.getToolbar());
+    setupMenuSynthesis(_viewerSynthesisMain.getToolbar());
+    setupMenuDetails(_viewerFeatures.getToolbar());
     // Tool refresh on selection change
     addSelectionChangedListener(new ISelectionChangedListener() {
       /**
@@ -2027,7 +2198,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       });
       MergeImpactMessageDialog dialog = new MergeImpactMessageDialog(
           getShell(), mergeInput, getResourceManager(),
-          _synthesisModelTreeViewer.getInnerViewer().getLabelProvider());
+          _viewerSynthesisMain.getInnerViewer().getLabelProvider());
       result = dialog.openAndConfirm();
     } catch (Exception exception_p) {
       // Proceed
@@ -2042,66 +2213,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void undoRedoPerformed(final boolean undo_p) {
     super.undoRedoPerformed(undo_p);
     firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
-  }
-  
-  
-  /**
-   * A selection listener for Values[user] -> Global synchronization
-   */
-  protected class ValuesSelectionListener extends SelectionAdapter {
-    /** Whether the viewer that is being tracked is on the left-hand side  */
-    private final boolean _sideIsLeft;
-    /**
-     * Constructor
-     * @param sideIsLeft_p whether the viewer that is being tracked is on the left-hand side
-     */
-    public ValuesSelectionListener(boolean sideIsLeft_p) {
-      _sideIsLeft = sideIsLeft_p;
-    }
-    /**
-     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-     */
-    @Override
-    public void widgetSelected(SelectionEvent event_p) {
-      HeaderViewer<?> valuesViewer = _sideIsLeft? _leftValuesViewer: _rightValuesViewer;
-      IStructuredSelection selection = valuesViewer.getSelection();
-      if (!selection.isEmpty()) {
-        if (selection.getFirstElement() instanceof EObject) // Skip attribute values
-          ComparisonViewer.this.setSelection(
-              new ComparisonSelectionImpl(
-                  selection.toList(), getInput().getRoleForSide(_sideIsLeft)), true);
-      }
-    }
-  }
-  
-  
-  /**
-   * A selection listener for Model[user] -> Global synchronization
-   */
-  protected class ComparisonSideSelectionListener extends SelectionAdapter {
-    /** Whether the viewer that is being tracked is on the left-hand side  */
-    private final boolean _sideIsLeft;
-    /**
-     * Constructor
-     * @param sideIsLeft_p whether the viewer that is being tracked is on the left-hand side
-     */
-    public ComparisonSideSelectionListener(boolean sideIsLeft_p) {
-      _sideIsLeft = sideIsLeft_p;
-    }
-    /**
-     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-     */
-    @Override
-    public void widgetSelected(SelectionEvent event_p) {
-      if (_isLeftRightSynced) {
-        EnhancedComparisonSideViewer modelViewer = _sideIsLeft? _leftModelTreeViewer:
-          _rightModelTreeViewer;
-        IStructuredSelection selection = modelViewer.getSelection();
-        if (!selection.isEmpty())
-          ComparisonViewer.this.setSelection(new ComparisonSelectionImpl(
-              selection.toList(), getInput().getRoleForSide(_sideIsLeft)), true);
-      }
-    }
   }
   
 }

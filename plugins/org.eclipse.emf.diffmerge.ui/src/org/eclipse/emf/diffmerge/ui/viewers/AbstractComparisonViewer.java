@@ -40,6 +40,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ContentViewer;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
@@ -214,6 +215,14 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   protected String getModelName(boolean onLeft_p) {
     IModelScope scope = getComparison().getScope(getInput().getRoleForSide(onLeft_p));
     return DiffMergeLabelProvider.getInstance().getText(scope);
+  }
+  
+  /**
+   * Return a selection provider that covers the selection of sub-viewers if any
+   * @return a non-null selection provider
+   */
+  public ISelectionProvider getMultiViewerSelectionProvider() {
+    return this;
   }
   
   /**
