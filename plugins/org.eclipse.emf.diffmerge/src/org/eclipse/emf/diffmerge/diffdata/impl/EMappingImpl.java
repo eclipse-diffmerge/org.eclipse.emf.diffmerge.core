@@ -366,24 +366,26 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    */
   public IMatch getMatchFor(EObject element_p, Role role_p) {
     IMatch result = null;
-    EReference matchReference;
-    switch (role_p) {
-    case ANCESTOR:
-      matchReference = DiffdataPackage.eINSTANCE.getEMatch_Ancestor();
-      break;
-    case REFERENCE:
-      matchReference = DiffdataPackage.eINSTANCE.getEMatch_Reference();
-      break;
-    default:
-      matchReference = DiffdataPackage.eINSTANCE.getEMatch_Target();
-    }
-    if (element_p != null && role_p != null) {
-      Collection<Setting> settings = _matchAdapter
-          .getNonNavigableInverseReferences(element_p);
-      for (Setting setting : settings) {
-        if (setting.getEStructuralFeature() == matchReference) {
-          result = (EMatch) setting.getEObject();
-          break;
+    if (role_p != null) {
+      EReference matchReference;
+      switch (role_p) {
+      case ANCESTOR:
+        matchReference = DiffdataPackage.eINSTANCE.getEMatch_Ancestor();
+        break;
+      case REFERENCE:
+        matchReference = DiffdataPackage.eINSTANCE.getEMatch_Reference();
+        break;
+      default:
+        matchReference = DiffdataPackage.eINSTANCE.getEMatch_Target();
+      }
+      if (element_p != null) {
+        Collection<Setting> settings = _matchAdapter
+            .getNonNavigableInverseReferences(element_p);
+        for (Setting setting : settings) {
+          if (setting.getEStructuralFeature() == matchReference) {
+            result = (EMatch) setting.getEObject();
+            break;
+          }
         }
       }
     }
