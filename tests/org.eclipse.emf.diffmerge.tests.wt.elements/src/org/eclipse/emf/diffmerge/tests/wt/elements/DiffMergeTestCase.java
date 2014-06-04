@@ -39,7 +39,7 @@ public abstract class DiffMergeTestCase extends UITestCaseSWT {
   private static IProject __predefinedProject, __currentProject;
   private static final String MODEL1 = "Ex1.elements";
   private static final String MODEL2 = "Ex2.elements";
-  private static final String EDITOR_TITLE = "Compare [Ex1 - Ex2]";
+  private static final String EDITOR_TITLE = "Compare ('Ex1' - 'Ex2')";
   private static final char SEP = '/';
   
   
