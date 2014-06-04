@@ -45,7 +45,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -163,8 +163,7 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    */
   public EList<IMatch> getReferenceCompletedMatches() {
     if (referenceCompletedMatches == null) {
-      referenceCompletedMatches = new EObjectResolvingEList<IMatch>(
-          IMatch.class, this,
+      referenceCompletedMatches = new EObjectEList<IMatch>(IMatch.class, this,
           DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES);
     }
     return referenceCompletedMatches;
@@ -177,8 +176,8 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    */
   public EList<IMatch> getTargetCompletedMatches() {
     if (targetCompletedMatches == null) {
-      targetCompletedMatches = new EObjectResolvingEList<IMatch>(IMatch.class,
-          this, DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
+      targetCompletedMatches = new EObjectEList<IMatch>(IMatch.class, this,
+          DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
     }
     return targetCompletedMatches;
   }
@@ -400,26 +399,6 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     return Role.TARGET == destinationRole_p ? getTargetCompletedMatches()
         : getReferenceCompletedMatches();
   }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMapping.Editable#getModifiableMatchMap(org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  //  public EMap<EObject, IMatch> getModifiableMatchMap(Role role_p) {
-  //    assert role_p != null;
-  //    EMap<EObject, IMatch> result;
-  //    switch (role_p) {
-  //    case TARGET:
-  //      result = getTargetMatches();
-  //      break;
-  //    case REFERENCE:
-  //      result = getReferenceMatches();
-  //      break;
-  //    default:
-  //      result = getAncestorMatches();
-  //    }
-  //    return result;
-  //  }
 
   /**
    * @see org.eclipse.emf.diffmerge.api.IMapping#getNbFullMatches()

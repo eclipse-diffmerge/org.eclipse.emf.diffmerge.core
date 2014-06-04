@@ -23,9 +23,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         eType="#//EMatch" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceCompletedMatches"
-        upperBound="-1" eType="#//IMatch"/>
+        upperBound="-1" eType="#//IMatch" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetCompletedMatches"
-        upperBound="-1" eType="#//IMatch"/>
+        upperBound="-1" eType="#//IMatch" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMatch" eSuperTypes="#//IEditableMatch">
     <eOperations name="getMapping" eType="#//EMapping"/>

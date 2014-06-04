@@ -1293,12 +1293,12 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         getEMapping_ReferenceCompletedMatches(),
         this.getIMatch(),
         null,
-        "referenceCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        "referenceCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
     initEReference(
         getEMapping_TargetCompletedMatches(),
         this.getIMatch(),
         null,
-        "targetCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+        "targetCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
     addEOperation(eMappingEClass, this.getEComparison(),
         "getComparison", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

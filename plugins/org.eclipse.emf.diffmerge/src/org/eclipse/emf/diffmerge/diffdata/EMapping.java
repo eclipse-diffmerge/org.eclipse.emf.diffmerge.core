@@ -65,7 +65,7 @@ public interface EMapping extends EObject, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Completed Matches</em>' reference list.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping_ReferenceCompletedMatches()
-   * @model type="org.eclipse.emf.diffmerge.diffdata.IMatch"
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMatch" resolveProxies="false"
    * @generated
    */
   EList<IMatch> getReferenceCompletedMatches();
@@ -81,7 +81,7 @@ public interface EMapping extends EObject, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Completed Matches</em>' reference list.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping_TargetCompletedMatches()
-   * @model type="org.eclipse.emf.diffmerge.diffdata.IMatch"
+   * @model type="org.eclipse.emf.diffmerge.diffdata.IMatch" resolveProxies="false"
    * @generated
    */
   EList<IMatch> getTargetCompletedMatches();
