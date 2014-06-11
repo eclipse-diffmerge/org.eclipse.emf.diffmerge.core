@@ -1260,15 +1260,6 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
     set(TARGET, target_p);
     set(REFERENCE, reference_p);
     set(ANCESTOR, ancestor_p);
-    if (getModifiableRelatedDifferences(false) != null)
-      getModifiableRelatedDifferences(false).clear();
-    if (getModifiableAttributeMap(false) != null)
-      getModifiableAttributeMap(false).clear();
-    if (getModifiableReferenceMap(false) != null)
-      getModifiableReferenceMap(false).clear();
-    setElementPresenceDifference(null);
-    setTargetOwnershipDifference(null);
-    setReferenceOwnershipDifference(null);
   }
 
   /**
