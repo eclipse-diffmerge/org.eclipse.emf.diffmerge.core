@@ -97,4 +97,45 @@ public class SelectionBridge implements ISelectionChangedListener, ISelectionPro
     setSelection(event_p.getSelection());
   }
   
+  
+  /**
+   * A selection bridge which is able to manage a single selection provider as source.
+   * It can still be used as a classical SelectionBridge.
+   */
+  public static class SingleSource extends SelectionBridge {
+    
+    /** The potentially null selection provider source */
+    private ISelectionProvider _source;
+    
+    /**
+     * Constructor
+     */
+    public SingleSource() {
+      _source = null;
+    }
+    
+    /**
+     * Return the source selection provider
+     * @return a potentially null object
+     */
+    public ISelectionProvider getSource() {
+      return _source;
+    }
+    
+    /**
+     * Set the source selection provider
+     * @param source_p a potentially null object
+     */
+    public void setSource(ISelectionProvider source_p) {
+      if (_source != source_p) {
+        if (_source != null)
+          _source.removeSelectionChangedListener(this);
+        _source = source_p;
+        if (source_p != null)
+          source_p.addSelectionChangedListener(this);
+      }
+    }
+    
+  }
+  
 }

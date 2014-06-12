@@ -386,7 +386,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     if (_commandStackListener != null && getEditingDomain() != null)
       getEditingDomain().getCommandStack().removeCommandStackListener(_commandStackListener);
     if (_viewer != null && _selectionBridge != null)
-      _viewer.removeSelectionChangedListener(_selectionBridge);
+      _viewer.getMultiViewerSelectionProvider().removeSelectionChangedListener(_selectionBridge);
     super.handleDispose();
     Runnable disposeBehavior = new Runnable() {
       /**

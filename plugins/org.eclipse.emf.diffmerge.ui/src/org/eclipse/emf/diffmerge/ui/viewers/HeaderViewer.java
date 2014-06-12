@@ -243,6 +243,14 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
   }
   
   /**
+   * @see org.eclipse.jface.viewers.Viewer#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+   */
+  @Override
+  public void removeSelectionChangedListener(ISelectionChangedListener listener_p) {
+    getInnerViewer().removeSelectionChangedListener(listener_p);
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#setInput(java.lang.Object)
    */
   @Override

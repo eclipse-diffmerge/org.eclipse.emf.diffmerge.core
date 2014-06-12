@@ -171,7 +171,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   private ComparisonSelection _lastUserSelection;
   
   /** The non-null selection provider covering certain sub-viewers */
-  protected SelectionBridge _multiViewerSelectionProvider;
+  protected SelectionBridge.SingleSource _multiViewerSelectionProvider;
   
   
   /**
@@ -911,18 +911,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     // Register as selection provider ...
     result.getInnerViewer().getControl().addFocusListener(new FocusListener() {
       /**
-       * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
-       */
-      public void focusLost(FocusEvent e_p) {
-        result.removeSelectionChangedListener(_multiViewerSelectionProvider);
-        ComparisonViewer.this.addSelectionChangedListener(_multiViewerSelectionProvider);
-      }
-      /**
        * @see org.eclipse.swt.events.FocusListener#focusGained(org.eclipse.swt.events.FocusEvent)
        */
       public void focusGained(FocusEvent e_p) {
-        ComparisonViewer.this.removeSelectionChangedListener(_multiViewerSelectionProvider);
-        result.addSelectionChangedListener(_multiViewerSelectionProvider);
+        _multiViewerSelectionProvider.setSource(result);
+      }
+      /**
+       * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
+       */
+      public void focusLost(FocusEvent e_p) {
+        _multiViewerSelectionProvider.setSource(ComparisonViewer.this);
       }
     });
     // ... and enable contextual menus
@@ -1628,8 +1626,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void initialize() {
     _isLeftRightSynced = true;
     _lastUserSelection = null;
-    _multiViewerSelectionProvider = new SelectionBridge();
-    addSelectionChangedListener(_multiViewerSelectionProvider);
+    _multiViewerSelectionProvider = new SelectionBridge.SingleSource();
+    _multiViewerSelectionProvider.setSource(this);
     _sorterSynthesis = new ViewerSorter();
     _filterUnchangedElements = new ViewerFilter() {
       /**
@@ -2064,7 +2062,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
-  @SuppressWarnings("unused")
   protected Menu setupMenuDetails(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
@@ -2082,7 +2079,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
-  @SuppressWarnings("unused")
   protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show uncounted elements
@@ -2154,7 +2150,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the "synthesis" tools in the given tool bar
    * @param toolbar_p a non-null tool bar
    */
-  @SuppressWarnings("unused")
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolInconsistency(toolbar_p);
