@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +71,8 @@ public class SelectionBridge implements ISelectionChangedListener, ISelectionPro
    */
   protected void notifyListeners() {
     SelectionChangedEvent event = new SelectionChangedEvent(this, _selection);
-    for (ISelectionChangedListener listener : _selectionListeners) {
+    for (ISelectionChangedListener listener :
+        new ArrayList<ISelectionChangedListener>(_selectionListeners)) {
       listener.selectionChanged(event);
     }
   }
@@ -131,8 +133,12 @@ public class SelectionBridge implements ISelectionChangedListener, ISelectionPro
         if (_source != null)
           _source.removeSelectionChangedListener(this);
         _source = source_p;
-        if (source_p != null)
+        if (source_p != null) {
           source_p.addSelectionChangedListener(this);
+          ISelection newSelection = source_p.getSelection();
+          if (newSelection != null)
+            setSelection(newSelection);
+        }
       }
     }
     

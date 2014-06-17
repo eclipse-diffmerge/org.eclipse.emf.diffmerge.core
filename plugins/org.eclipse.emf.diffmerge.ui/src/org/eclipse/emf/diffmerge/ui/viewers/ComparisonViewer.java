@@ -229,6 +229,30 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Convert the given structured selection to a comparison selection
+   * @param selection_p a non-null selection
+   * @return a non-null comparison selection
+   */
+  protected ComparisonSelection asComparisonSelection(IStructuredSelection selection_p) {
+    Collection<IMatch> matches = new ArrayList<IMatch>();
+    EComparison comparison = getComparison();
+    if (comparison != null) {
+      for (Object selected : selection_p.toArray()) {
+        if (selected instanceof EObject) {
+          EObject selectedElement = (EObject)selected;
+          IMatch match = comparison.getMapping().getMatchFor(selectedElement, Role.TARGET);
+          if (match == null)
+            match = comparison.getMapping().getMatchFor(selectedElement, Role.REFERENCE);
+          if (match != null)
+            matches.add(match);
+        }
+      }
+    }
+    ComparisonSelection result = new ComparisonSelectionImpl(matches, null);
+    return result;
+  }
+  
+  /**
    * Return whether the given situation allows adding to the left
    * @param originKind_p a non-null kind
    */
@@ -745,7 +769,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             EStructuralFeature feature = (EStructuralFeature)selection.getFirstElement();
             MatchAndFeature newInputDetails = new MatchAndFeatureImpl((EMatch)match, feature);
             setSelection(new ComparisonSelectionImpl(
-                newInputDetails, getDrivingRole()), true, result);
+                newInputDetails, getDrivingRole()), true, result.getInnerViewer());
           }
         }
       }
@@ -758,7 +782,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void selectionChanged(SelectionChangedEvent event_p) {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
-        if (rawSelection instanceof ComparisonSelection && source != result) {
+        if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer()) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           if (selection.getSelectedMatches().size() <= 1) {
             // No more than one match
@@ -827,7 +851,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         IStructuredSelection selection = result.getSelection();
         if (!selection.isEmpty())
           setSelection(new ComparisonSelectionImpl(
-              selection.toList(), getDrivingRole()), true, result);
+              selection.toList(), getDrivingRole()), true, result.getInnerViewer());
       }
     });
     // Global selection change: update local selection
@@ -838,7 +862,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void selectionChanged(SelectionChangedEvent event_p) {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
-        if (rawSelection instanceof ComparisonSelection && source != result) {
+        if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer()) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           // New selection
           IStructuredSelection newSelection = StructuredSelection.EMPTY;
@@ -879,7 +903,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           IStructuredSelection synthesisSelection = getSelectionAsSynthesis(selection, isLeftSide_p);
           if (!synthesisSelection.isEmpty())
             setSelection(new ComparisonSelectionImpl(
-                synthesisSelection.toList(), sideRole), true, result);
+                synthesisSelection.toList(), sideRole), true, result.getInnerViewer());
         }
       }
     });
@@ -891,7 +915,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void selectionChanged(SelectionChangedEvent event_p) {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
-        if (rawSelection instanceof ComparisonSelection && source != result &&
+        if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer() &&
             (source != _viewerSynthesisMain || _isLeftRightSynced)) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           // New selection
@@ -914,7 +938,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.swt.events.FocusListener#focusGained(org.eclipse.swt.events.FocusEvent)
        */
       public void focusGained(FocusEvent e_p) {
-        _multiViewerSelectionProvider.setSource(result);
+        _multiViewerSelectionProvider.setSource(result.getInnerViewer());
       }
       /**
        * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
@@ -961,7 +985,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (!selection.isEmpty()) {
           if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
             setSelection(new ComparisonSelectionImpl(
-                selection.toList(), getInput().getRoleForSide(isLeftSide_p)), true, result);
+                selection.toList(), getInput().getRoleForSide(isLeftSide_p)), true, result.getInnerViewer());
           }
         }
       }
@@ -974,7 +998,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void selectionChanged(SelectionChangedEvent event_p) {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
-        if (rawSelection instanceof ComparisonSelection && source != result) {
+        if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer()) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           EStructuralFeature feature = selection.asFeature();
           if (feature != null) {
@@ -1483,6 +1507,20 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return the set of inner viewers of this viewer
+   * @return a non-null collection
+   */
+  protected Collection<Viewer> getInnerViewers() {
+    return Arrays.<Viewer>asList(
+        _viewerSynthesisMain.getInnerViewer(),
+        _viewerSynthesisLeft.getInnerViewer(),
+        _viewerSynthesisRight.getInnerViewer(),
+        _viewerFeatures.getInnerViewer(),
+        _viewerValuesLeft.getInnerViewer(),
+        _viewerValuesRight.getInnerViewer());
+  }
+  
+  /**
    * Return the logger for diff/merge events
    * @return a non-null logger
    */
@@ -1968,14 +2006,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param labelProvider_p a potentially null label provider, where null stands for default
    */
   public void setDelegateLabelProvider(ILabelProvider labelProvider_p) {
-    List<Viewer> viewers = Arrays.<Viewer>asList(
-        _viewerSynthesisMain.getInnerViewer(),
-        _viewerSynthesisLeft.getInnerViewer(),
-        _viewerSynthesisRight.getInnerViewer(),
-        _viewerFeatures.getInnerViewer(),
-        _viewerValuesLeft.getInnerViewer(),
-        _viewerValuesRight.getInnerViewer());
-    for (Viewer viewer : viewers) {
+    for (Viewer viewer : getInnerViewers()) {
       if (viewer instanceof ContentViewer) {
         IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
         if (rawLP instanceof DelegatingLabelProvider) {
@@ -2003,10 +2034,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void setSelection(ISelection selection_p, boolean reveal_p, Viewer source_p) {
     ComparisonSelection newSelection;
-    if (selection_p instanceof ComparisonSelection)
-      newSelection = (ComparisonSelection)selection_p;
+    if (selection_p instanceof ComparisonSelection &&
+        (source_p == this || getInnerViewers().contains(source_p)))
+      newSelection = (ComparisonSelection)selection_p; // Local selection
+    else if (selection_p instanceof IStructuredSelection)
+      newSelection = asComparisonSelection((IStructuredSelection)selection_p); // External selection
     else
-      newSelection = new ComparisonSelectionImpl(null, null);
+      newSelection = new ComparisonSelectionImpl(null, null); // Invalid selection
     _lastUserSelection = newSelection;
     fireSelectionChanged(new SelectionChangedEvent(source_p, getSelection()));
   }
@@ -2062,6 +2096,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
+  @SuppressWarnings("unused")
   protected Menu setupMenuDetails(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
@@ -2079,11 +2114,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
+  @SuppressWarnings("unused")
   protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show uncounted elements
     createMenuShowUncounted(synthesisMenu);
-    // Show...
+    // Filters
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     createMenuShowAdditions(synthesisMenu);
     createMenuShowDeletions(synthesisMenu);
@@ -2150,6 +2186,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the "synthesis" tools in the given tool bar
    * @param toolbar_p a non-null tool bar
    */
+  @SuppressWarnings("unused")
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolInconsistency(toolbar_p);
