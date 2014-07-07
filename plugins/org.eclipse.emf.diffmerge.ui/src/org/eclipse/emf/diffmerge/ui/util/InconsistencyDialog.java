@@ -28,9 +28,9 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -138,7 +138,7 @@ public class InconsistencyDialog extends MessageDialog {
    * @param viewer_p a non-null viewer
    * @return a non-null menu item
    */
-  protected MenuItem createCopyMenuItem(final TableViewer viewer_p) {
+  protected MenuItem createCopyMenuItem(final StructuredViewer viewer_p) {
     Menu menu = new Menu(viewer_p.getControl());
     final MenuItem result = new MenuItem(menu, SWT.PUSH);
     result.setText(Messages.InconsistencyDialog_CopyID);
@@ -184,7 +184,7 @@ public class InconsistencyDialog extends MessageDialog {
         Messages.InconsistencyDialog_AncestorScope: (role_p == Role.REFERENCE)?
             Messages.InconsistencyDialog_ReferenceScope: Messages.InconsistencyDialog_TargetScope;
     group.setText(scopeName);
-    TableViewer viewer = new TableViewer(
+    StructuredViewer viewer = new ListViewer(
         group, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER | SWT.MULTI);
     viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     viewer.setContentProvider(new ArrayContentProvider());
