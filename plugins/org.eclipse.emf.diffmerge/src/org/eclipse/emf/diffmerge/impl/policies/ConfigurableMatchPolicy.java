@@ -88,13 +88,14 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    */
   protected IComparableStructure<?> getContainerRelativeID(EObject element_p,IModelScope scope_p,
       boolean inScopeOnly_p, MatchCriterionKind criterion_p) {
+    IComparableStructure<?> result = null;
     String lastIDPart;
     if (criterion_p == MatchCriterionKind.STRUCTURE)
       lastIDPart = getStructureMatchIDPart(element_p, scope_p, inScopeOnly_p);
     else
       lastIDPart = getUniqueName(element_p, scope_p, inScopeOnly_p);
-    IComparableStructure<?> result =
-      getContainerRelativeID(element_p, scope_p, inScopeOnly_p, lastIDPart);
+    if (lastIDPart != null && lastIDPart.length() > 0)
+      result = getContainerRelativeID(element_p, scope_p, inScopeOnly_p, lastIDPart);
     return result;
   }
   
@@ -104,36 +105,34 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers the element
    * @param inScopeOnly_p whether only the scope may be considered, or the underlying EMF model
-   * @param idSuffix_p a potentially null suffix for the ID that identifies the element within its container
+   * @param idSuffix_p a non-null suffix for the ID that identifies the element within its container
    * @return a potentially null object
    */
   @SuppressWarnings("unchecked")
   protected IComparableStructure<?> getContainerRelativeID(EObject element_p,
       IModelScope scope_p, boolean inScopeOnly_p, String idSuffix_p) {
     IComparableStructure<?> result = null;
-    if (idSuffix_p != null) {
-      EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
-      if (container != null) {
-        IComparableStructure<?> containerID = getMatchID(container, scope_p);
-        if (containerID instanceof ComparableLinkedList<?>) {
-          result = containerID;
-          ((ComparableLinkedList<String>)result).add(idSuffix_p);
-        } else if (containerID != null) {
-          IComparableStructure<String> typeID = getEncapsulateOrNull(
-              element_p.getClass().getName());
-          IComparableStructure.IComparableMap<String, IComparableStructure<?>> id =
-              new ComparableTreeMap<String, IComparableStructure<?>>();
-          id.put("CONTAINER_RELATIVE_ID_TYPE", typeID); //$NON-NLS-1$
-          id.put("CONTAINER_ID", containerID); //$NON-NLS-1$
-          id.put("ELEMENT_ID", getEncapsulateOrNull(idSuffix_p)); //$NON-NLS-1$
-          result = id;
-        }
-      } else {
-        // Root
-        ComparableLinkedList<String> id = new ComparableLinkedList<String>();
-        id.add(idSuffix_p);
+    EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
+    if (container != null) {
+      IComparableStructure<?> containerID = getMatchID(container, scope_p);
+      if (containerID instanceof ComparableLinkedList<?>) {
+        result = containerID;
+        ((ComparableLinkedList<String>)result).add(idSuffix_p);
+      } else if (containerID != null) {
+        IComparableStructure<String> typeID = getEncapsulateOrNull(
+            element_p.getClass().getName());
+        IComparableStructure.IComparableMap<String, IComparableStructure<?>> id =
+            new ComparableTreeMap<String, IComparableStructure<?>>();
+        id.put("CONTAINER_RELATIVE_ID_TYPE", typeID); //$NON-NLS-1$
+        id.put("CONTAINER_ID", containerID); //$NON-NLS-1$
+        id.put("ELEMENT_ID", getEncapsulateOrNull(idSuffix_p)); //$NON-NLS-1$
         result = id;
       }
+    } else {
+      // Root
+      ComparableLinkedList<String> id = new ComparableLinkedList<String>();
+      id.add(idSuffix_p);
+      result = id;
     }
     return result;
   }
