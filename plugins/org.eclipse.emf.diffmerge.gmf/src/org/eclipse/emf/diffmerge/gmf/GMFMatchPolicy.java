@@ -3,6 +3,8 @@
  */
 package org.eclipse.emf.diffmerge.gmf;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
@@ -22,6 +24,11 @@ import org.eclipse.gmf.runtime.notation.View;
  * @author Olivier Constant
  */
 public class GMFMatchPolicy extends ConfigurableMatchPolicy {
+  
+  /** The set of GMF ViewTypes for which no semantic ID is supported */
+  protected static final Collection<String> __NO_SEMANTIC_VIEWTYPES = Arrays.asList(
+      "Note", "NoteAttachment"); //$NON-NLS-1$ //$NON-NLS-2$
+  
   
   /**
    * Constructor
@@ -76,9 +83,9 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
       IFeaturedModelScope scope = (IFeaturedModelScope)scope_p;
       Diagram diagram = view_p.getDiagram();
       String viewType = view_p.getType();
-      if (diagram != null && viewType != null) {
+      if (diagram != null && viewType != null && !__NO_SEMANTIC_VIEWTYPES.contains(viewType)) {
         List<EObject> values = scope.get(view_p, NotationPackage.eINSTANCE.getView_Element());
-        IComparableStructure<String> typeID = getEncapsulateOrNull(view_p.getClass().getName());
+        IComparableStructure<String> typeID = getEncapsulateOrNull(view_p.eClass().getName());
         if (values.size() == 1) {
           // Represented element is present
           EObject represented = values.get(0);

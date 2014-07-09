@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
@@ -285,9 +286,9 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    * @param scope_p a non-null scope to which the element belongs
    * @param inScopeOnly_p whether only the scope may be considered, or the underlying EMF model
    */
-  protected Collection<EObject> getSiblings(EObject element_p, IModelScope scope_p,
+  protected List<EObject> getSiblings(EObject element_p, IModelScope scope_p,
       boolean inScopeOnly_p) {
-    Collection<EObject> result;
+    List<EObject> result;
     EReference containment = getContainment(element_p, scope_p, inScopeOnly_p);
     if (containment == null) {
       Resource resource = element_p.eResource();
@@ -299,9 +300,9 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
       EObject container = getContainer(element_p, scope_p, inScopeOnly_p);
       result = ((IFeaturedModelScope)scope_p).get(container, containment);
     } else {
-      result = Collections.emptySet();
+      result = Collections.emptyList();
     }
-    return Collections.unmodifiableCollection(result);
+    return Collections.unmodifiableList(result);
   }
   
   /**
@@ -355,6 +356,42 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
    */
   protected boolean isDiscriminatingContainment(EObject element_p, EReference containment_p) {
     return containment_p == null || !containment_p.isMany();
+  }
+  
+  /**
+   * Return whether the given element is the first one of its type among those in the given collection
+   * @param element_p a non-null element
+   * @param collection_p a non-null, potentially empty collection
+   */
+  protected boolean isFirstOfItsTypeAmong(EObject element_p,
+      Collection<? extends EObject> collection_p) {
+    Iterator<? extends EObject> it = collection_p.iterator();
+    EClass type = element_p.eClass();
+    while (it.hasNext()) {
+      EObject root = it.next();
+      if (root == element_p) {
+        return true;
+      } else {
+        if (root.eClass() == type)
+          return false;
+      }
+    }
+    return false;
+  }
+  
+  /**
+   * Return whether the given element is an instance of one of the given types
+   * @param element_p a non-null element
+   * @param types_p a non-null, potentially empty collection
+   */
+  protected boolean isInstanceOf(EObject element_p, Collection<? extends EClass> types_p) {
+    Iterator<? extends EClass> typesIterator = types_p.iterator();
+    while (typesIterator.hasNext()) {
+      EClass type = typesIterator.next();
+      if (type.isInstance(element_p))
+        return true;
+    }
+    return false;
   }
   
   /**
