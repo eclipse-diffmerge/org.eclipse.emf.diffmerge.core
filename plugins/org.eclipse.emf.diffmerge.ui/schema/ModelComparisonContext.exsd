@@ -99,10 +99,10 @@
    &lt;extension
          point=&quot;org.eclipse.emf.diffmerge.ui.modelComparisonContext&quot;&gt;
       &lt;scopeDefinition
-            scopeDefinitionFactory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.FileScopeSpecificationFactory&quot;&gt;
+            factory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeSpecificationFactory&quot;&gt;
       &lt;/scopeDefinition&gt;
       &lt;comparisonMethod
-            comparisonMethodFactory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecificationFactory&quot;&gt;
+            factory=&quot;org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecificationFactory&quot;&gt;
       &lt;/comparisonMethod&gt;
    &lt;/extension&gt;
 &lt;/pre&gt;
