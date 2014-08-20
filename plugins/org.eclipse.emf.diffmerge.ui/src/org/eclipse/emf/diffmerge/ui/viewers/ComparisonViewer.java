@@ -31,6 +31,7 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
@@ -990,6 +991,23 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
             setSelection(new ComparisonSelectionImpl(
                 selection.toList(), getInput().getRoleForSide(isLeftSide_p)), true, result.getInnerViewer());
+            // One element selected: show it in scope viewer
+            if (selection.size() == 1) {
+              EObject selectedElement = (EObject)selection.getFirstElement();
+              IMatch match;
+              if (selectedElement instanceof IMatch) {
+                match = (IMatch)selectedElement;
+              } else if (selectedElement instanceof IReferenceValuePresence) {
+                IReferenceValuePresence rvp = (IReferenceValuePresence)selectedElement;
+                boolean containment = rvp.getFeature() != null && rvp.getFeature().isContainment();
+                match = containment? rvp.getElementMatch(): rvp.getValue();
+              } else {
+                match = null;
+              }
+              if (match != null)
+                getModelScopeViewer(isLeftSide_p).setSelection(
+                    new StructuredSelection(match.get(getInput().getRoleForSide(isLeftSide_p))));
+            }
           }
         }
       }
