@@ -51,9 +51,11 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A viewer which provides a representation of the values of a feature on a match.
- * Input: ValuesViewer.ValuesInput ; Elements: [IValuePresence (if !showAllValues)] or
- * [[Object (if feature instanceof EAttribute)] or
- * [IMatch (if feature instanceof EReference)] (if showAllValues)].
+ * Input: ValuesViewer.ValuesInput ;
+ * Elements:
+ *  if !showAllValues: [IValuePresence]
+ *  if showAllValues: if feature instanceof EAttribute: [Object]
+ *                    if feature instanceof EReference: [IMatch].
  * @author Olivier Constant
  */
 public class ValuesViewer extends TableViewer implements IComparisonSideViewer, IDifferenceRelatedViewer {
