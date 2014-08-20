@@ -136,6 +136,24 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   }
   
   /**
+   * Return the first feature to show for the given input, if any
+   * @param input_p a potentially null input object
+   * @return the first feature to show, or null if none
+   */
+  public EStructuralFeature getFirstIn(FeaturesInput input_p) {
+    EStructuralFeature result = null;
+    if (input_p != null) {
+      Object[] elements = getSortedChildren(input_p);
+      if (elements != null && elements.length > 0) {
+        Object firstElement = elements[0];
+        if (firstElement instanceof EStructuralFeature)
+          result = (EStructuralFeature)firstElement;
+      }
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.ContentViewer#getInput()
    */
   @Override

@@ -203,18 +203,6 @@ public final class UIUtil {
     return result;
   }
   
-	/**
-	 * Return a UI variant of the representation of the given URI
-	 * @param uri_p a potentially null URI
-	 * @return a string which is null iff uri_p is null
-	 */
-	public static String simplifyURI(URI uri_p) {
-	  String result = null;
-	  if (uri_p != null)
-	    result = simplifyURI(uri_p.path());
-	  return result;
-	}
-	
   /**
    * Return a UI variant of the given representation of an URI
    * @param uri_p a potentially null string
@@ -229,6 +217,18 @@ public final class UIUtil {
     return result;
   }
   
+	/**
+	 * Return a UI variant of the representation of the given URI
+	 * @param uri_p a potentially null URI
+	 * @return a string which is null iff uri_p is null
+	 */
+	public static String simplifyURI(URI uri_p) {
+	  String result = null;
+	  if (uri_p != null)
+	    result = simplifyURI(uri_p.path());
+	  return result;
+	}
+	
   /**
    * Convert the given list of elements to a TreePath
    * @param path_p a non-null, potentially empty list

@@ -790,16 +790,20 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             if (match != null) {
               // One match: new input
               FeaturesInput newInput = new FeaturesInput(getInput(), match);
-              if (!newInput.equals(result.getInput()))
+              boolean changeInput = !newInput.equals(result.getInput());
+              if (changeInput)
                 result.setInput(newInput);
               // New selection
-              IStructuredSelection newSelection = StructuredSelection.EMPTY;
               EStructuralFeature feature = selection.asFeature();
               if (feature != null) {
-                MatchAndFeature mnf = new MatchAndFeatureImpl(match, feature);
-                newSelection = new StructuredSelection(mnf);
+                IStructuredSelection newSelection = new StructuredSelection(feature);
+                result.setSelection(newSelection, true);
+              } else if (changeInput) {
+                // New input and no feature selected: select first feature if any
+                EStructuralFeature firstFeature = result.getInnerViewer().getFirstIn(newInput);
+                if (firstFeature != null)
+                  result.setSelection(new StructuredSelection(firstFeature));
               }
-              result.setSelection(newSelection, true);
             } else {
               // No match: no input
               result.setInput(null);
@@ -1011,8 +1015,37 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             List<EValuePresence> values = selection.getSelectedValuePresences();
             result.setSelection(new StructuredSelection(values), true);
           } else {
-            // No feature in selection: no input
-            result.setInput(null);
+            // No feature in selection
+            // Determine whether there is a change of match, triggering a new input and selection
+            ValuesInput newInput = null;
+            if (selection.getSelectedMatches().size() <= 1 && getInput() != null) {
+              // No more than one match
+              EMatch newMatch = selection.asMatch();
+              if (newMatch != null) {
+                // One match
+                EMatch currentMatch = null;
+                ValuesInput currentInput = result.getInput();
+                if (currentInput != null && currentInput.getMatchAndFeature() != null)
+                  currentMatch = currentInput.getMatchAndFeature().getMatch();
+                if (newMatch != currentMatch) {
+                  // New match is different from current match
+                  HeaderViewer<?> rawFeaturesViewer = getFeaturesViewer();
+                  if (rawFeaturesViewer instanceof EnhancedFeaturesViewer) {
+                    EnhancedFeaturesViewer featuresViewer = (EnhancedFeaturesViewer)rawFeaturesViewer;
+                    FeaturesInput featuresInput = new FeaturesInput(getInput(), newMatch);
+                    EStructuralFeature firstFeature = featuresViewer.getInnerViewer().getFirstIn(featuresInput);
+                    if (firstFeature != null) {
+                      // First feature must be selected
+                      newInput = new ValuesInput(getInput(), new MatchAndFeatureImpl(newMatch, firstFeature));
+                    }
+                  }
+                } else {
+                  // Same match and no feature
+                  newInput = currentInput;
+                }
+              }
+            }
+            result.setInput(newInput);
           }
         }
       }
