@@ -60,7 +60,8 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
       shell = null;
     }
     if (shell != null) {
-      ConfigureComparisonDialog.ComparisonMethodConfigurationData data = new ConfigureComparisonDialog.ComparisonMethodConfigurationData(this);
+      ConfigureComparisonDialog.ComparisonMethodConfigurationData data =
+          new ConfigureComparisonDialog.ComparisonMethodConfigurationData(this);
       int confirmed = new ConfigureComparisonDialog(shell, data).open();
       if (Window.OK == confirmed)
         configurationConfirmed(data);

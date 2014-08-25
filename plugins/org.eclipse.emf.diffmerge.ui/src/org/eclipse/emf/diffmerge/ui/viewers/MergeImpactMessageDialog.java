@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -81,7 +82,7 @@ public class MergeImpactMessageDialog extends MessageDialog {
    * Open the dialog and return whether the user pressed OK
    */
   public boolean openAndConfirm() {
-    return open() == 0;
+    return open() == Window.OK;
   }
   
 }

@@ -17,6 +17,7 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -121,7 +122,7 @@ public class MergeChoicesDialog extends MessageDialog {
 	@Override
   public int open() {
     int result = super.open();
-    _data.setProceed(result == 0);
+    _data.setProceed(result == Window.OK);
     return result;
   }
   

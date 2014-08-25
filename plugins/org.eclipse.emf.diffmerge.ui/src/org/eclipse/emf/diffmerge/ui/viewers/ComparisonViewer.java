@@ -98,8 +98,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -680,6 +678,28 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Fill the menu of the synthesis viewer with filtering features
+   * @param synthesisMenu_p a non-null menu
+   */
+  protected void createMenuSynthesisFilters(Menu synthesisMenu_p) {
+    createMenuShowAdditions(synthesisMenu_p);
+    createMenuShowDeletions(synthesisMenu_p);
+    createMenuShowMoves(synthesisMenu_p);
+    createMenuShowNonContainmentDifferences(synthesisMenu_p);
+  }
+  
+  /**
+   * Fill the menu of the synthesis viewer with miscellaneous features
+   * @param synthesisMenu_p a non-null menu
+   */
+  protected void createMenuSynthesisMisc(Menu synthesisMenu_p) {
+    createMenuUseCustomIcons(synthesisMenu_p);
+    createMenuShowImpact(synthesisMenu_p);
+    createMenuSupportUndoRedo(synthesisMenu_p);
+    createMenuLogEvents(synthesisMenu_p);
+  }
+  
+  /**
    * Create the "use custom icons" menu item in the given menu and return it
    * @param menu_p a non-null menu
    * @return result a potentially null menu item
@@ -883,6 +903,27 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
+    // ... and enable context menus
+    createViewerSynthesisContextMenus(result);
+    return result;
+  }
+  
+  /**
+   * Create context menus for the synthesis viewer
+   * @param viewer_p the non-null synthesis viewer
+   * @return a potentially null menu manager for the context menus
+   */
+  protected MenuManager createViewerSynthesisContextMenus(EnhancedComparisonTreeViewer viewer_p) {
+    MenuManager result = null;
+    IWorkbenchPartSite site = getSite();
+    if (site != null) {
+      result = new MenuManager();
+      Control control = viewer_p.getInnerViewer().getControl();
+      Menu contextMenu = result.createContextMenu(control);
+      control.setMenu(contextMenu);
+      site.registerContextMenu(
+          IWorkbenchActionConstants.MB_ADDITIONS, result, viewer_p.getInnerViewer());
+    }
     return result;
   }
   
@@ -952,20 +993,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         _multiViewerSelectionProvider.setSource(ComparisonViewer.this);
       }
     });
-    // ... and enable contextual menus
-    try {
-      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      IWorkbenchSite site = window.getActivePage().getActiveEditor().getSite();
-      if (site instanceof IWorkbenchPartSite) {
-        MenuManager menuManager = new MenuManager();
-        Control control = result.getInnerViewer().getControl();
-        Menu contextMenu = menuManager.createContextMenu(control);
-        control.setMenu(contextMenu);
-        ((IWorkbenchPartSite)site).registerContextMenu(
-            IWorkbenchActionConstants.MB_ADDITIONS, menuManager, getMultiViewerSelectionProvider());
-      }
-    } catch (Exception e) {
-      // Failed to set up context menu: proceed
+    // ... and enable context menus
+    IWorkbenchPartSite site = getSite();
+    if (site != null) {
+      MenuManager menuManager = new MenuManager();
+      Control control = result.getInnerViewer().getControl();
+      Menu contextMenu = menuManager.createContextMenu(control);
+      control.setMenu(contextMenu);
+      site.registerContextMenu(
+          IWorkbenchActionConstants.MB_ADDITIONS, menuManager, getMultiViewerSelectionProvider());
     }
     return result;
   }
@@ -2172,16 +2208,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createMenuShowUncounted(synthesisMenu);
     // Filters
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
-    createMenuShowAdditions(synthesisMenu);
-    createMenuShowDeletions(synthesisMenu);
-    createMenuShowMoves(synthesisMenu);
-    createMenuShowNonContainmentDifferences(synthesisMenu);
+    createMenuSynthesisFilters(synthesisMenu);
     // UI options
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
-    createMenuUseCustomIcons(synthesisMenu);
-    createMenuShowImpact(synthesisMenu);
-    createMenuSupportUndoRedo(synthesisMenu);
-    createMenuLogEvents(synthesisMenu);
+    createMenuSynthesisMisc(synthesisMenu);
     return synthesisMenu;
   }
   

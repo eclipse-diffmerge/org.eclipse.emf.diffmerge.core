@@ -637,7 +637,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * Return the resource manager for this node
    * @return a non-null resource manager
    */
-  protected ComparisonResourceManager getResourceManager() {
+  public ComparisonResourceManager getResourceManager() {
     return _resourceManager;
   }
   

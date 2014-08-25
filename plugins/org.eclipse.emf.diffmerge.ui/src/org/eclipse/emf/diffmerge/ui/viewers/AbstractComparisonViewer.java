@@ -49,6 +49,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
 
@@ -239,6 +243,23 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
    */
   protected Shell getShell() {
     return getControl().getShell();
+  }
+  
+  /**
+   * Return the workbench part site of this viewer, if any
+   * @return a potentially null site
+   */
+  protected IWorkbenchPartSite getSite() {
+    IWorkbenchPartSite result = null;
+    try {
+      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+      IWorkbenchSite site = window.getActivePage().getActiveEditor().getSite();
+      if (site instanceof IWorkbenchPartSite)
+        result = (IWorkbenchPartSite)site;
+    } catch (Exception e) {
+      // Just proceed
+    }
+    return result;
   }
   
   /**
