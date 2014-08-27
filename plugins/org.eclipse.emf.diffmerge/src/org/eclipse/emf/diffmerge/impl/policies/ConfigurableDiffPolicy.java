@@ -34,7 +34,7 @@ public class ConfigurableDiffPolicy extends DefaultDiffPolicy {
   public ConfigurableDiffPolicy() {
     _ignoreOrders = true;
   }
-    
+  
   /**
    * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrdered(org.eclipse.emf.ecore.EStructuralFeature)
    */

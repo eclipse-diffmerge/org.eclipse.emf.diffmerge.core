@@ -470,6 +470,15 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * Create and return the comparison
+   * @return a non-null comparison
+   */
+  protected EComparison initializeComparison() {
+    EComparison result = new EComparisonImpl(_leftScope, _rightScope, _ancestorScope);
+    return result;
+  }
+  
+  /**
    * Create and return the diff node for the given comparison
    * @param comparison_p a non-null comparison
    * @return a non-null diff node
@@ -585,7 +594,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     try {
       if (!scopesReady)
         loadScopes(monitor.newChild(1));
-      EComparison comparison = new EComparisonImpl(_leftScope, _rightScope, _ancestorScope);
+      EComparison comparison = initializeComparison();
       comparison.compute(_comparisonMethod.getMatchPolicy(), _comparisonMethod.getDiffPolicy(),
           _comparisonMethod.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
       if (!comparison.isConsistent())
