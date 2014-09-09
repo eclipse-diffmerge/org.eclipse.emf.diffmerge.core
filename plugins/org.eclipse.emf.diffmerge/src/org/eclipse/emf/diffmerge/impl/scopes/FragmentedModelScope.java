@@ -384,12 +384,6 @@ implements IFragmentedModelScope.Editable {
   /**
    * Return whether this scope has been fully explored, that is, at least one complete iteration
    * based on getAllContents has been performed and the contents are still available
-   */
-  public boolean hasBeenExplored() {
-    return _state == ScopeState.FULLY_EXPLORED;
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#isFullyExplored()
    */
   public boolean isFullyExplored() {
