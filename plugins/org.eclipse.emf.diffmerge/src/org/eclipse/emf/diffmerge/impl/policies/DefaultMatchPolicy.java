@@ -31,6 +31,17 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  */
 public class DefaultMatchPolicy implements IMatchPolicy {
   
+  /** Whether match IDs must be maintained for better traceability */
+  private boolean _keepMatchIDs;
+  
+  
+  /**
+   * Default constructor
+   */
+  public DefaultMatchPolicy() {
+    _keepMatchIDs = false;
+  }
+  
   /**
    * Return the URI of the given element as a Comparable (String).
    * @param element_p a non-null element
@@ -98,7 +109,16 @@ public class DefaultMatchPolicy implements IMatchPolicy {
    * @see org.eclipse.emf.diffmerge.api.IMatchPolicy#keepMatchIDs()
    */
   public boolean keepMatchIDs() {
-    return false;
+    return _keepMatchIDs;
+  }
+  
+  /**
+   * Set whether match ID information must be maintained for better traceability
+   * but at the price of a larger memory footprint
+   * @param keep_p whether to maintain match ID information
+   */
+  public void setKeepMatchIDs(boolean keep_p) {
+    _keepMatchIDs = keep_p;
   }
   
 }

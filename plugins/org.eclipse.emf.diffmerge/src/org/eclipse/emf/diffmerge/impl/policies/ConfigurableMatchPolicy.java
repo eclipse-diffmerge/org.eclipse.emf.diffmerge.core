@@ -49,9 +49,6 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
   }
   
   
-  /** Whether match IDs must be maintained for better traceability */
-  private boolean _keepMatchIDs;
-  
   /** The set of match criteria to use */
   private final Set<MatchCriterionKind> _selectedCriteria;
   
@@ -63,7 +60,6 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
     _selectedCriteria = new HashSet<MatchCriterionKind>(
         MatchCriterionKind.values().length);
     _selectedCriteria.addAll(getDefaultCriteria());
-    _keepMatchIDs = false;
   }
   
   /**
@@ -423,23 +419,6 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
     }
     boolean result = isPresent && !sameType;
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#rememberMatchIDs()
-   */
-  @Override
-  public boolean keepMatchIDs() {
-    return _keepMatchIDs;
-  }
-  
-  /**
-   * Set whether match ID information must be maintained for better traceability
-   * but at the price of a larger memory footprint
-   * @param keep_p whether to maintain match ID information
-   */
-  public void setKeepMatchIDs(boolean keep_p) {
-    _keepMatchIDs = keep_p;
   }
   
   /**

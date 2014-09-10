@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
@@ -186,7 +187,8 @@ public class ConfigureComparisonDialog extends MessageDialog {
     group.setText(Messages.ConfigureComparisonDialog_Matching);
     createAbsoluteMatchingArea(group);
     createRelativeMatchingArea(group);
-    createLabelWithNote(group, Messages.ConfigureComparisonDialog_MatchingTooltip);
+    if (_data.getApplicableCriteria().size() > 1)
+      createLabelWithNote(group, Messages.ConfigureComparisonDialog_MatchingTooltip);
     createKeepMatchIDsArea(group);
   }
   
@@ -284,16 +286,23 @@ public class ConfigureComparisonDialog extends MessageDialog {
     public ComparisonMethodConfigurationData(
         ConfigurableComparisonMethod comparisonMethod_p) {
       // Match policy
-      ConfigurableMatchPolicy matchPolicy =
-        (ConfigurableMatchPolicy)comparisonMethod_p.getMatchPolicy();
-      _keepMatchIDs = matchPolicy.keepMatchIDs();
-      _applicableCriteria = Collections.unmodifiableSet(
-          new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>(
-              matchPolicy.getApplicableCriteria()));
-      _selectedCriteria = new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>();
-      for (MatchCriterionKind criterion : _applicableCriteria) {
-        if (matchPolicy.useMatchCriterion(criterion))
-          _selectedCriteria.add(criterion);
+      IMatchPolicy matchPolicy = comparisonMethod_p.getMatchPolicy();
+      if (matchPolicy instanceof ConfigurableMatchPolicy) {
+        // Match policy is configurable
+        _keepMatchIDs = matchPolicy.keepMatchIDs();
+        _applicableCriteria = Collections.unmodifiableSet(
+            new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>(
+                ((ConfigurableMatchPolicy)matchPolicy).getApplicableCriteria()));
+        _selectedCriteria = new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>();
+        for (MatchCriterionKind criterion : _applicableCriteria) {
+          if (((ConfigurableMatchPolicy)matchPolicy).useMatchCriterion(criterion))
+            _selectedCriteria.add(criterion);
+        }
+      } else {
+        // Match policy is not configurable
+        _keepMatchIDs = false;
+        _applicableCriteria = Collections.emptySet();
+        _selectedCriteria = _applicableCriteria;
       }
       // Diff policy
       ConfigurableDiffPolicy diffPolicy =

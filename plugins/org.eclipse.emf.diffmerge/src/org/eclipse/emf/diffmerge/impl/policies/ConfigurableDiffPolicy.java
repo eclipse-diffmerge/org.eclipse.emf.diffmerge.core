@@ -32,7 +32,7 @@ public class ConfigurableDiffPolicy extends DefaultDiffPolicy {
    * Constructor
    */
   public ConfigurableDiffPolicy() {
-    _ignoreOrders = true;
+    _ignoreOrders = false;
   }
   
   /**

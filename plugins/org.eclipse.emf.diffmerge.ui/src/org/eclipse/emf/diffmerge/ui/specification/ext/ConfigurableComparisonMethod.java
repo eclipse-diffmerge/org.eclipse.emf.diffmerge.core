@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
+import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
@@ -108,15 +109,22 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   protected void update(ConfigureComparisonDialog.ComparisonMethodConfigurationData data_p) {
     if (data_p == null) return;
     // Match policy
-    ConfigurableMatchPolicy matchPolicy = (ConfigurableMatchPolicy)getMatchPolicy();
-    matchPolicy.setKeepMatchIDs(data_p.isKeepMatchIDs());
-    for (MatchCriterionKind criterion : matchPolicy.getApplicableCriteria()) {
-      matchPolicy.setUseMatchCriterion(
-          criterion, data_p.useMatchCriterion(criterion));
+    IMatchPolicy matchPolicy = getMatchPolicy();
+    if (matchPolicy instanceof DefaultMatchPolicy)
+      ((DefaultMatchPolicy)matchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
+    if (matchPolicy instanceof ConfigurableMatchPolicy) {
+      ConfigurableMatchPolicy cMatchPolicy = (ConfigurableMatchPolicy)matchPolicy;
+      for (MatchCriterionKind criterion : cMatchPolicy.getApplicableCriteria()) {
+        cMatchPolicy.setUseMatchCriterion(
+            criterion, data_p.useMatchCriterion(criterion));
+      }
     }
     // Diff Policy
-    ConfigurableDiffPolicy diffPolicy = (ConfigurableDiffPolicy)getDiffPolicy();
-    diffPolicy.setIgnoreOrders(data_p.isIgnoreOrders());
+    IDiffPolicy diffPolicy = getDiffPolicy();
+    if (diffPolicy instanceof ConfigurableDiffPolicy) {
+      ConfigurableDiffPolicy cDiffPolicy = (ConfigurableDiffPolicy)diffPolicy;
+      cDiffPolicy.setIgnoreOrders(data_p.isIgnoreOrders());
+    }
   }
   
 }
