@@ -97,7 +97,7 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
   }
   
   /**
-   * Return a match ID for the given element form the given scope
+   * Return a match ID for the given element from the given scope
    * based on the ID of its container and the given ID suffix
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers the element

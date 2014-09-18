@@ -2183,7 +2183,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
-  @SuppressWarnings("unused")
   protected Menu setupMenuDetails(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
@@ -2201,7 +2200,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
-  @SuppressWarnings("unused")
   protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show uncounted elements
@@ -2267,7 +2265,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the "synthesis" tools in the given tool bar
    * @param toolbar_p a non-null tool bar
    */
-  @SuppressWarnings("unused")
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolInconsistency(toolbar_p);

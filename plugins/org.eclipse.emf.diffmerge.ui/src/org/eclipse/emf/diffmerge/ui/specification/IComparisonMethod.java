@@ -88,11 +88,14 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
   IModelScopeDefinition getModelScopeDefinition(Role role_p);
   
   /**
-   * Return the resource set in which comparison must take place, if any.
+   * Return the resource set for the model of the given role, if any.
+   * The returned resource set is expected to be the location for loading
+   * the necessary model resources if needed. The same resource set can be
+   * returned for different roles.
    * This is only useful if getEditingDomain() returns null.
    * @return a potentially null resource set
    */
-  ResourceSet getResourceSet();
+  ResourceSet getResourceSet(Role role_p);
   
   /**
    * Return the reference role in a two-way comparison if any, or null

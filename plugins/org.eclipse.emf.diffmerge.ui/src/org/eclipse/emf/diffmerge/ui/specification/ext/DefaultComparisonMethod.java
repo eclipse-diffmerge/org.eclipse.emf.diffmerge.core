@@ -46,6 +46,9 @@ import org.eclipse.ui.IActionBars;
  */
 public class DefaultComparisonMethod implements IComparisonMethod {
   
+  /** Whether the comparison method has been fully initialized */
+  private boolean _initialized;
+  
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
@@ -82,6 +85,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
     _matchPolicy = createMatchPolicy();
     _diffPolicy = createDiffPolicy();
     _mergePolicy = createMergePolicy();
+    _initialized = false;
   }
   
   /**
@@ -131,27 +135,14 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    */
   public void dispose() {
     EditingDomain domain = getEditingDomain();
-    if (domain.getResourceSet().getResources().isEmpty() &&
-        domain instanceof AdapterFactoryEditingDomain) {
+    if (domain instanceof AdapterFactoryEditingDomain &&
+        domain.getResourceSet().getResources().isEmpty()) {
       // Resource set is empty: dispose adapter factories if relevant
       AdapterFactoryEditingDomain afed = (AdapterFactoryEditingDomain)domain;
       AdapterFactory af = afed.getAdapterFactory();
       if (af instanceof IDisposable)
         ((IDisposable)af).dispose();
     }
-  }
-  
-  /**
-   * Get the editing domain for this comparison (this method is only called once)
-   * @return a potentially null editing domain
-   */
-  protected EditingDomain doGetEditingDomain() {
-    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
-        ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-    adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-    return new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
   }
   
   /**
@@ -172,9 +163,24 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
    */
   public final EditingDomain getEditingDomain() {
-    if (_editingDomain == null)
+    if (!_initialized) {
       _editingDomain = doGetEditingDomain();
+      _initialized = true;
+    }
     return _editingDomain;
+  }
+  
+  /**
+   * Get the editing domain for this comparison (this method is only called once)
+   * @return a potentially null editing domain
+   */
+  protected EditingDomain doGetEditingDomain() {
+    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
+        ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+    return new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
   }
   
   /**
@@ -202,9 +208,9 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getResourceSet()
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.api.Role)
    */
-  public ResourceSet getResourceSet() {
+  public ResourceSet getResourceSet(Role role_p) {
     return null;
   }
   

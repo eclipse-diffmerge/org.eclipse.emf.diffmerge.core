@@ -324,20 +324,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
-   * Return the editing domain in which comparison takes place, if any
-   * @return a potentially null resource set
-   */
-  public ResourceSet getResourceSet() {
-    ResourceSet result = null;
-    EditingDomain domain = getEditingDomain();
-    if (domain != null)
-      result = domain.getResourceSet();
-    else if (_comparisonMethod != null)
-      result = _comparisonMethod.getResourceSet();
-    return result;
-  }
-  
-  /**
    * Return the current shell, if available
    * @return a potentially null shell
    */
@@ -484,7 +470,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @return a non-null diff node
    */
   protected EMFDiffNode initializeDiffNode(EComparison comparison_p) {
-    ResourceSet resourceSet = getResourceSet();
+    ResourceSet resourceSet = (getEditingDomain() != null)? getEditingDomain().getResourceSet(): null;
     if (resourceSet != null) {
       resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
           EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION, new UidiffdataResourceFactoryImpl());
@@ -515,7 +501,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @param monitor_p a non-null monitor for reporting progress
    */
   protected void loadScopes(IProgressMonitor monitor_p) {
-    Object scopeContext = (getEditingDomain() != null)? getEditingDomain(): getResourceSet();
+    EditingDomain domain = getEditingDomain();
     boolean threeWay = _comparisonMethod.isThreeWay();
     Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
     String mainTaskName = Messages.EMFDiffMergeEditorInput_Loading;
@@ -524,7 +510,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     loadingMonitor.worked(1);
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
-    _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(scopeContext);
+    Object leftLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole);
+    _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(leftLoadingContext);
     if (_leftScope == null)
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_LeftScopeNull);
     if (_leftScope instanceof IPersistentModelScope) {
@@ -539,7 +526,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       throw new OperationCanceledException();
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
-    _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(scopeContext);
+    Object rightLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole.opposite());
+    _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(rightLoadingContext);
     if (_rightScope == null)
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_RightScopeNull);
     if (_rightScope instanceof IPersistentModelScope) {
@@ -555,7 +543,8 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
-      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(scopeContext);
+      Object ancestorLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(Role.ANCESTOR);
+      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(ancestorLoadingContext);
       if (_ancestorScope == null)
         throw new RuntimeException(Messages.EMFDiffMergeEditorInput_AncestorScopeNull);
       if (_ancestorScope instanceof IPersistentModelScope) {
@@ -648,17 +637,21 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       if (foundDifferences()) {
         // This is done here because the compare result must have been assigned:
         // directly referencing the UIComparison would result in a memory leak
-        EditingDomain domain = getEditingDomain();
-        MiscUtil.executeAndForget(domain, new Runnable() {
-          /**
-           * @see java.lang.Runnable#run()
-           */
-          public void run() {
-            _comparisonResource.getContents().add(getCompareResult().getUIComparison());
+        if (_comparisonResource != null) {
+          EditingDomain domain = getEditingDomain();
+          if (domain != null) {
+            MiscUtil.executeAndForget(domain, new Runnable() {
+              /**
+               * @see java.lang.Runnable#run()
+               */
+              public void run() {
+                _comparisonResource.getContents().add(getCompareResult().getUIComparison());
+              }
+            });
+            if (domain != null)
+              domain.getCommandStack().flush();
           }
-        });
-        if (domain != null)
-          domain.getCommandStack().flush();
+        }
       }
     }
   }
