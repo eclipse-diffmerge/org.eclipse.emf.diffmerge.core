@@ -115,6 +115,19 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * Create an editing domain that is dedicated to the comparison
+   * @return a non-null editing domain
+   */
+  protected EditingDomain createEditingDomain() {
+    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
+        ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+    return new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+  }
+  
+  /**
    * Create and return the match policy
    * @return a potentially null match policy
    */
@@ -146,6 +159,14 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * Get the editing domain for this comparison (this method is only called once)
+   * @return a potentially null editing domain
+   */
+  protected EditingDomain doGetEditingDomain() {
+    return createEditingDomain();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getModelScopeDefinition(org.eclipse.emf.diffmerge.api.Role)
    */
   public IModelScopeDefinition getModelScopeDefinition(Role role_p) {
@@ -168,19 +189,6 @@ public class DefaultComparisonMethod implements IComparisonMethod {
       _initialized = true;
     }
     return _editingDomain;
-  }
-  
-  /**
-   * Get the editing domain for this comparison (this method is only called once)
-   * @return a potentially null editing domain
-   */
-  protected EditingDomain doGetEditingDomain() {
-    ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(
-        ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-    adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new EcoreItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-    return new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
   }
   
   /**

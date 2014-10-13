@@ -54,12 +54,7 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
    */
   @Override
   public void configure() {
-    Shell shell;
-    try {
-      shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-    } catch (Exception e) {
-      shell = null;
-    }
+    Shell shell = getShell();
     if (shell != null) {
       ConfigureComparisonDialog.ComparisonMethodConfigurationData data =
           new ConfigureComparisonDialog.ComparisonMethodConfigurationData(this);
@@ -92,6 +87,20 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   @Override
   protected IMatchPolicy createMatchPolicy() {
     return new ConfigurableMatchPolicy();
+  }
+  
+  /**
+   * Return a shell if available
+   * @return a potentially null shell (always null if current thread is not the UI thread)
+   */
+  public Shell getShell() {
+    Shell result;
+    try {
+      result = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+    } catch (Exception e) {
+      result = null;
+    }
+    return result;
   }
   
   /**

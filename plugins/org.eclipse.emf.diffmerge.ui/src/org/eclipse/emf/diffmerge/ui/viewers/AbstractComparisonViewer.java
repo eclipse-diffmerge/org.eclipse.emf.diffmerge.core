@@ -33,9 +33,11 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -121,21 +123,38 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   /**
    * Execute the given runnable which may modify any part of the whole model
    * @param runnable_p a non-null runnable
+   * @param onLeft_p whether the impacted scope is the one on the left-hand side
+   * @param busyIndicator_p whether a busy indicator must be shown
    */
-  protected void executeOnModel(final Runnable runnable_p) {
-    BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+  protected void executeOnModel(final Runnable runnable_p, final boolean onLeft_p,
+      boolean busyIndicator_p) {
+    Runnable finalRunnable = new Runnable() {
       /**
        * @see java.lang.Runnable#run()
        */
       public void run() {
         EMFDiffNode input = getInput();
         EditingDomain domain = (input == null)? null: input.getEditingDomain();
+        if (domain == null && input != null) {
+          // Look for possible transactional editing domain
+          IModelScope impactedScope = input.getActualComparison().getScope(
+              input.getRoleForSide(onLeft_p));
+          if (impactedScope instanceof IPersistentModelScope) {
+            Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
+            if (resource != null)
+              domain = TransactionUtil.getEditingDomain(resource);
+          }
+        }
         if (input != null && input.isUndoRedoSupported())
           MiscUtil.executeOnDomain(domain, null, runnable_p);
         else
           MiscUtil.executeAndForget(domain, runnable_p);
       }
-    });
+    };
+    if (busyIndicator_p)
+      BusyIndicator.showWhile(getShell().getDisplay(), finalRunnable);
+    else
+      finalRunnable.run();
   }
   
   /**

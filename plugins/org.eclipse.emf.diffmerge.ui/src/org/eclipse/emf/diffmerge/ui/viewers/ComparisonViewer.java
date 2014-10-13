@@ -50,7 +50,6 @@ import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
-import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode.UserDifferenceKind;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
@@ -1522,7 +1521,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           }
           getUIComparison().setLastActionSelection(selection);
         }
-      });
+      }, onLeft_p, true);
       firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
       firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
     }
@@ -1943,7 +1942,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
              */
             public void run(final IProgressMonitor monitor_p) throws InvocationTargetException, InterruptedException {
               // Merge runnable
-              Runnable mergeRunnable = new Runnable() {
+              executeOnModel(new Runnable() {
                 /**
                  * @see java.lang.Runnable#run()
                  */
@@ -1951,12 +1950,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                   merged.addAll(getComparison().merge(toMerge, destination, true, monitor_p));
                   getUIComparison().setLastActionSelection(selection);
                 }
-              };
-              // Execution with or without undo support
-              if (input.isUndoRedoSupported())
-                MiscUtil.executeOnDomain(getEditingDomain(), null, mergeRunnable);
-              else
-                MiscUtil.executeAndForget(getEditingDomain(), mergeRunnable);
+              }, toLeft_p, false);
             }
           });
           done = true;
