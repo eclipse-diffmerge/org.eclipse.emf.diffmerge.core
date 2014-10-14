@@ -17,6 +17,7 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -53,6 +54,14 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   }
   
   /**
+   * Return a label provider for header information
+   * @return a non-null label provider
+   */
+  protected LabelProvider getHeaderLabelProvider() {
+    return DiffMergeLabelProvider.getInstance();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getInput()
    */
   @Override
@@ -75,12 +84,12 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   protected void inputChanged(Object input_p, Object oldInput_p) {
     super.inputChanged(input_p, oldInput_p);
     IModelScope scope = getInnerViewer().getSideScope();
-    String label = DiffMergeLabelProvider.getInstance().getText(scope);
+    String label = getHeaderLabelProvider().getText(scope);
     Label textLabel = getTextLabel();
     textLabel.setText(label);
     textLabel.setToolTipText(label);
     textLabel.setForeground(getInnerViewer().getSideColor());
-    getImageLabel().setImage(DiffMergeLabelProvider.getInstance().getImage(scope));
+    getImageLabel().setImage(getHeaderLabelProvider().getImage(scope));
   }
   
 }
