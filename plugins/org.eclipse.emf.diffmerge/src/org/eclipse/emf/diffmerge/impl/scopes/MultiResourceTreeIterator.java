@@ -85,7 +85,8 @@ public class MultiResourceTreeIterator implements TreeIterator<EObject> {
   private void update() {
     while ((_contentIterator == null || !_contentIterator.hasNext()) &&
         _resourceIterator.hasNext()) {
-      _contentIterator = _resourceIterator.next().getAllContents();
+      Resource nextResource = _resourceIterator.next();
+      _contentIterator = nextResource.getAllContents();
     }
   }
   

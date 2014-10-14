@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
@@ -74,7 +76,7 @@ implements IFragmentedModelScope.Editable {
   
   /** The non-null, non-empty ordered set of resources defining the scope.
    *  It includes _rootResources, _includedResources and _referencedResources. */
-  protected final List<Resource> _resources;
+  protected final EList<Resource> _resources;
   
   /** The non-null, non-empty ordered subset of the resources which are roots */
   protected final List<Resource> _rootResources;
@@ -122,23 +124,45 @@ implements IFragmentedModelScope.Editable {
    * @param readOnly_p whether the scope should be read-only, if supported
    */
   public FragmentedModelScope(URI uri_p, EditingDomain editingDomain_p, boolean readOnly_p) {
-    this(uri_p, editingDomain_p.getResourceSet(), readOnly_p);
-    _editingDomain = editingDomain_p;
+    this(Collections.singleton(uri_p), editingDomain_p, readOnly_p);
   }
   
   /**
    * Constructor
    * @param uri_p a non-null resource URI
-   * @param resourceSet_p a non-null resource set
+   * @param resourceSet_p a non-null resource set where the resources must be loaded
    * @param readOnly_p whether the scope is in read-only mode, if applicable
    */
   public FragmentedModelScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+    this(Collections.singleton(uri_p), resourceSet_p, readOnly_p);
+  }
+  
+  /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param editingDomain_p a non-null editing domain that encompasses the scope
+   * @param readOnly_p whether the scope should be read-only, if supported
+   */
+  public FragmentedModelScope(Collection<URI> uris_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+    this(uris_p, editingDomain_p.getResourceSet(), readOnly_p);
+    _editingDomain = editingDomain_p;
+  }
+  
+  /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param resourceSet_p a non-null resource set where the resources must be loaded
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  public FragmentedModelScope(Collection<URI> uris_p, ResourceSet resourceSet_p, boolean readOnly_p) {
     this(resourceSet_p, readOnly_p);
-    Resource rootResource = _resourceSet.getResource(uri_p, false);
-    if (rootResource == null)
-      rootResource = _resourceSet.createResource(uri_p);
-    _rootResources.add(rootResource);
-    addNewResource(rootResource);
+    for (URI uri : uris_p) {
+      Resource rootResource = _resourceSet.getResource(uri, false);
+      if (rootResource == null)
+        rootResource = _resourceSet.createResource(uri);
+      _rootResources.add(rootResource);
+      addNewResource(rootResource);
+    }
   }
   
   /**
@@ -150,7 +174,7 @@ implements IFragmentedModelScope.Editable {
     _state = ScopeState.INITIALIZED;
     _isReadOnly = readOnly_p;
     _resourceSet = resourceSet_p;
-    _resources = new ArrayList<Resource>();
+    _resources = new BasicEList<Resource>();
     _rootResources = new ArrayList<Resource>();
     _includedResources = new HashBinaryRelation<Resource, Resource>();
     _referencedResources = new HashBinaryRelation<Resource, Resource>();
@@ -448,6 +472,10 @@ implements IFragmentedModelScope.Editable {
         // Remove from roots and referencing relation
         _rootResources.remove(resource_p);
         _referencedResources.remove(containerResource, resource_p);
+        // Move to beginning of resource list to prevent from exploring a second time
+        _resources.move(0, resource_p);
+        // We assume that all roots of the included resource are reachable through their containers.
+        // We also assume that root/referenced resources are not explored before their inclusion is detected.
       }
     }
   }
@@ -531,10 +559,11 @@ implements IFragmentedModelScope.Editable {
         // It is the first time the scope is being explored:
         // find and remember additional relevant resources
         Resource resource = result.eResource();
-        if (resource != null)
+        if (resource != null) {
           notifyInclusion(resource, result);
-        for (Resource additionalResource : getRelevantReferencedResources(result))
-          notifyReference(resource, additionalResource);
+          for (Resource additionalResource : getRelevantReferencedResources(result))
+            notifyReference(resource, additionalResource);
+        }
         if (!hasNext())
           explorationFinished();
       }
