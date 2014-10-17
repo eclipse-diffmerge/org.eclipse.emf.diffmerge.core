@@ -648,8 +648,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
                 _comparisonResource.getContents().add(getCompareResult().getUIComparison());
               }
             });
-            if (domain != null)
-              domain.getCommandStack().flush();
+            domain.getCommandStack().flush();
           }
         }
       }

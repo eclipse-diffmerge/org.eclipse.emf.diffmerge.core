@@ -18,6 +18,8 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
@@ -47,18 +49,40 @@ public class DefaultDiffPolicy implements IDiffPolicy {
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   public boolean coverFeature(EStructuralFeature feature_p) {
-    boolean result = !feature_p.isDerived() && !feature_p.isTransient() &&
-      !FeatureMapUtil.isFeatureMap(feature_p);
-    if (result && feature_p instanceof EAttribute)
+    boolean result = !feature_p.isDerived() && !FeatureMapUtil.isFeatureMap(feature_p) &&
+        (coverTransientFeatures() || !feature_p.isTransient());
+    if (result && feature_p instanceof EAttribute && !coverIDAttributes())
       result = !((EAttribute)feature_p).isID();
     return result;
+  }
+  
+  /**
+   * Return whether ID attributes must be covered
+   */
+  protected boolean coverIDAttributes() {
+    return false;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverMatch(IMatch)
    */
   public boolean coverMatch(IMatch match_p) {
-    return match_p.coversRole(Role.TARGET) || match_p.coversRole(Role.REFERENCE);
+    boolean result = match_p.coversRole(Role.TARGET) || match_p.coversRole(Role.REFERENCE);
+    if (result && !coverTransientFeatures() && match_p.isPartial()) {
+      // Ignore elements owned by a transient containment
+      EObject element = match_p.get(match_p.getUncoveredRole().opposite());
+      EReference containment = element.eContainmentFeature();
+      if (containment != null)
+        result = !containment.isTransient();
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether transient (non-serialized) features must be covered
+   */
+  protected boolean coverTransientFeatures() {
+    return true;
   }
   
   /**

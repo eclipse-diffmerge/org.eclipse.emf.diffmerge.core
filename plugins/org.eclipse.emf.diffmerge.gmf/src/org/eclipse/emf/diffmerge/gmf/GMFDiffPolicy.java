@@ -16,11 +16,8 @@ package org.eclipse.emf.diffmerge.gmf;
 
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint;
 import org.eclipse.swt.graphics.Color;
@@ -46,22 +43,6 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
             (RelativeBendpoint)value1_p, (RelativeBendpoint)value2_p);
       else if (value1_p instanceof Color && value2_p instanceof Color)
         result = equalColor((Color)value1_p, (Color)value2_p);
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.api.IMatch)
-   */
-  @Override
-  public boolean coverMatch(IMatch match_p) {
-    boolean result = super.coverMatch(match_p);
-    if (result && match_p.isPartial()) {
-      // Ignore elements owned by a transient containment
-      EObject element = match_p.get(match_p.getUncoveredRole().opposite());
-      EReference containment = element.eContainmentFeature();
-      if (containment != null)
-        result = !containment.isTransient();
     }
     return result;
   }
