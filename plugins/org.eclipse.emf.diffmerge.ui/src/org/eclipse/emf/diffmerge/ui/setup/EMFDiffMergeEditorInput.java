@@ -63,6 +63,7 @@ import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
@@ -369,10 +370,23 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
           _propertySheetPage.dispose();
         }
       });
+    if (_viewer != null) {
+      display.asyncExec(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          _viewer.setSelection(StructuredSelection.EMPTY, false);
+          if (_selectionBridge != null) {
+            _viewer.getMultiViewerSelectionProvider().removeSelectionChangedListener(_selectionBridge);
+            _selectionBridge = null;
+          }
+          _viewer = null;
+        }
+      });
+    }
     if (_commandStackListener != null && getEditingDomain() != null)
       getEditingDomain().getCommandStack().removeCommandStackListener(_commandStackListener);
-    if (_viewer != null && _selectionBridge != null)
-      _viewer.getMultiViewerSelectionProvider().removeSelectionChangedListener(_selectionBridge);
     super.handleDispose();
     Runnable disposeBehavior = new Runnable() {
       /**
@@ -388,8 +402,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
         _ancestorScope = null;
         _leftScope = null;
         _rightScope = null;
-        _viewer = null;
-        _selectionBridge = null;
         _comparisonResource = null;
       }
     };

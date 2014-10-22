@@ -355,8 +355,10 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
    * Refresh the tools of the viewer
    */
   protected void refreshTools() {
-    _undoAction.update();
-    _redoAction.update();
+    if (_undoAction != null)
+      _undoAction.update();
+    if (_redoAction != null)
+      _redoAction.update();
     if (_actionBars != null)
       _actionBars.updateActionBars();
   }
