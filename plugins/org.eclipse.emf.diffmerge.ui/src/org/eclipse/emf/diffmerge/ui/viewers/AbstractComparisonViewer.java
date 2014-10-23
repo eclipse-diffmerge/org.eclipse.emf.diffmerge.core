@@ -333,10 +333,14 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    _undoAction.setEditingDomain(getEditingDomain());
-    _redoAction.setEditingDomain(getEditingDomain());
-    _undoAction.update();
-    _redoAction.update();
+    if (_undoAction != null) {
+      _undoAction.setEditingDomain(getEditingDomain());
+      _undoAction.update();
+    }
+    if (_redoAction != null) {
+      _redoAction.setEditingDomain(getEditingDomain());
+      _redoAction.update();
+    }
     if (_actionBars != null)
       _actionBars.updateActionBars();
     firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
