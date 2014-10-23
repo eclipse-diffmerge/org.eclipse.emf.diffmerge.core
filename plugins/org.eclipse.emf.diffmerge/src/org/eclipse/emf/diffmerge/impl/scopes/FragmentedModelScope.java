@@ -526,16 +526,27 @@ implements IFragmentedModelScope.Editable {
       }
     }
     for (Resource loadedResource : _loadedResources) {
-      if (loadedResource.isLoaded()) { // Actually loaded, not just assumed as such
-        loadedResource.unload();
-      }
-      _resourceSet.getResources().remove(loadedResource);
+      unloadResource(loadedResource);
     }
     List<Resource> result = new ArrayList<Resource>(_loadedResources);
     _loadedResources.clear();
     if (!result.isEmpty())
       _state = ScopeState.UNLOADED;
     return result;
+  }
+  
+  /**
+   * Unload the given resource
+   * @param resource_p a non-null resource
+   */
+  protected void unloadResource(Resource resource_p) {
+    try {
+      if (resource_p.isLoaded()) // Actually loaded, not just assumed as such
+        resource_p.unload();
+      _resourceSet.getResources().remove(resource_p);
+    } catch (Exception e) {
+      // Proceed
+    }
   }
   
   
