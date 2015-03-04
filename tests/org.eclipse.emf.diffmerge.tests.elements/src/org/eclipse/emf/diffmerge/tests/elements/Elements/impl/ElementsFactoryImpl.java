@@ -20,131 +20,131 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  */
 public class ElementsFactoryImpl extends EFactoryImpl implements ElementsFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
+   * Creates the default factory implementation.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public static ElementsFactory init() {
-		try {
-			ElementsFactory theElementsFactory = (ElementsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0"); 
-			if (theElementsFactory != null) {
-				return theElementsFactory;
-			}
-		}
-		catch (Exception exception) {
-			EcorePlugin.INSTANCE.log(exception);
-		}
-		return new ElementsFactoryImpl();
-	}
+    try {
+      ElementsFactory theElementsFactory = (ElementsFactory)EPackage.Registry.INSTANCE.getEFactory(ElementsPackage.eNS_URI);
+      if (theElementsFactory != null) {
+        return theElementsFactory;
+      }
+    }
+    catch (Exception exception) {
+      EcorePlugin.INSTANCE.log(exception);
+    }
+    return new ElementsFactoryImpl();
+  }
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
+   * Creates an instance of the factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public ElementsFactoryImpl() {
-		super();
-	}
+    super();
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case ElementsPackage.ROOT: return createRoot();
-			case ElementsPackage.ELEMENT: return createElement();
-			case ElementsPackage.STRICT_ELEMENT: return createStrictElement();
-			case ElementsPackage.NODE: return createNode();
-			case ElementsPackage.EDGE: return createEdge();
-			case ElementsPackage.REFERENCING_NODE: return createReferencingNode();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-		}
-	}
+    switch (eClass.getClassifierID()) {
+      case ElementsPackage.ROOT: return createRoot();
+      case ElementsPackage.ELEMENT: return createElement();
+      case ElementsPackage.STRICT_ELEMENT: return createStrictElement();
+      case ElementsPackage.NODE: return createNode();
+      case ElementsPackage.EDGE: return createEdge();
+      case ElementsPackage.REFERENCING_NODE: return createReferencingNode();
+      default:
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public Root createRoot() {
-		RootImpl root = new RootImpl();
-		return root;
-	}
+    RootImpl root = new RootImpl();
+    return root;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public Element createElement() {
-		ElementImpl element = new ElementImpl();
-		return element;
-	}
+    ElementImpl element = new ElementImpl();
+    return element;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public StrictElement createStrictElement() {
-		StrictElementImpl strictElement = new StrictElementImpl();
-		return strictElement;
-	}
+    StrictElementImpl strictElement = new StrictElementImpl();
+    return strictElement;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public Node createNode() {
-		NodeImpl node = new NodeImpl();
-		return node;
-	}
+    NodeImpl node = new NodeImpl();
+    return node;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public Edge createEdge() {
-		EdgeImpl edge = new EdgeImpl();
-		return edge;
-	}
+    EdgeImpl edge = new EdgeImpl();
+    return edge;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public ReferencingNode createReferencingNode() {
-		ReferencingNodeImpl referencingNode = new ReferencingNodeImpl();
-		return referencingNode;
-	}
+    ReferencingNodeImpl referencingNode = new ReferencingNodeImpl();
+    return referencingNode;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public ElementsPackage getElementsPackage() {
-		return (ElementsPackage)getEPackage();
-	}
+    return (ElementsPackage)getEPackage();
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @deprecated
-	 * @generated
-	 */
+   * @deprecated
+   * @generated
+   */
 	@Deprecated
 	public static ElementsPackage getPackage() {
-		return ElementsPackage.eINSTANCE;
-	}
+    return ElementsPackage.eINSTANCE;
+  }
 
 } //ElementsFactoryImpl

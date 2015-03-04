@@ -29,6 +29,7 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.util.structures.AbstractEndorelation;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
+import org.eclipse.emf.diffmerge.util.structures.FHashSet;
 import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -667,7 +668,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.data.IMergeableDifferenceData#getExplicitDependenciesForReference(boolean)
+   * Return all the explicit dependencies on the reference side
+   * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
   public EList<IMergeableDifference> getExplicitDependenciesForReference(
@@ -677,7 +679,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.data.IMergeableDifferenceData#getImplicitDependenciesForReference(boolean)
+   * Return all the implicit dependencies on the reference side
+   * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
   public EList<IMergeableDifference> getImplicitDependenciesForReference(
@@ -687,7 +690,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.data.IMergeableDifferenceData#getExplicitDependenciesForTarget(boolean)
+   * Return all the explicit dependencies on the target side
+   * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
   public EList<IMergeableDifference> getExplicitDependenciesForTarget(
@@ -697,7 +701,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.data.IMergeableDifferenceData#getImplicitDependenciesForTarget(boolean)
+   * Return all the implicit dependencies on the target side
+   * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
   public EList<IMergeableDifference> getImplicitDependenciesForTarget(
@@ -736,17 +741,14 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
    */
   public final Collection<IMergeableDifference> getRequiresDependencies(
       Role role_p) {
-    Collection<IMergeableDifference> result;
-    if (role_p == Role.TARGET) {
-      if (_allExplicitDependenciesTarget == null)
-        _allExplicitDependenciesTarget = new DifferenceDependencyRelation(
-            role_p, true).getTransitiveClosure(this);
-      result = _allExplicitDependenciesTarget;
-    } else {
-      if (_allExplicitDependenciesReference == null)
-        _allExplicitDependenciesReference = new DifferenceDependencyRelation(
-            role_p, true).getTransitiveClosure(this);
-      result = _allExplicitDependenciesReference;
+    Collection<IMergeableDifference> result = (role_p == Role.TARGET) ? _allExplicitDependenciesTarget
+        : _allExplicitDependenciesReference;
+    if (result == null) {
+      result = new DifferenceDependencyRelation(role_p, true).getTransitiveClosure(this);
+      if (role_p == Role.TARGET)
+        _allExplicitDependenciesTarget = result;
+      else
+        _allExplicitDependenciesReference = result;
     }
     return result;
   }
@@ -887,8 +889,17 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
      * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#get(Object)
      */
     public Collection<IMergeableDifference> get(IMergeableDifference element_p) {
-      return _isExplicit ? element_p.getDirectRequiresDependencies(_role)
-          : element_p.getDirectImpliesDependencies(_role);
+      Collection<IMergeableDifference> result;
+      if (_isExplicit) {
+        result = new FHashSet<IMergeableDifference>(
+            element_p.getDirectRequiresDependencies(_role), IEqualityTester.BY_REFERENCE);
+        for (IMergeableDifference implicit : element_p.getDirectImpliesDependencies(_role)) {
+          result.addAll(implicit.getDirectRequiresDependencies(_role));
+        }
+      } else {
+        result = element_p.getDirectImpliesDependencies(_role);
+      }
+      return result;
     }
   }
 

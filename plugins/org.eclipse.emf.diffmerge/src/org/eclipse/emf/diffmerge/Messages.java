@@ -18,7 +18,7 @@ import org.eclipse.osgi.util.NLS;
 
 
 /**
- * Utility class for the externalization mechanism
+ * Utility class for the externalization mechanism.
  * @author Olivier Constant
  */
 public class Messages extends NLS {
