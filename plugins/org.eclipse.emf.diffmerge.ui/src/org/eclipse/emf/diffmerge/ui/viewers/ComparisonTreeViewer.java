@@ -196,7 +196,8 @@ public class ComparisonTreeViewer extends TreeViewer {
   }
   
   /**
-   * Return a list of lists representing the possible paths to the given match
+   * Return a list of lists representing the possible paths to the given match.
+   * The current input is assumed to be non-null.
    * @param match_p a potentially null match
    * @param parentsOnly_p whether the given match must be excluded from the paths
    * @return a non-null list
@@ -206,7 +207,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     if (match_p == null) {
       result = new ArrayList<List<IMatch>>();
     } else {
-      IComparison comparison = match_p.getMapping().getComparison();
+      IComparison comparison = getInput().getActualComparison();
       Role drivingRole = getDrivingRole();
       boolean isRoot = comparison.getContents(drivingRole).contains(match_p) ||
         match_p.getUncoveredRole() == drivingRole &&
