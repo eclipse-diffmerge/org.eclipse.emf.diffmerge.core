@@ -30,10 +30,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 public class MultiResourceTreeIterator implements TreeIterator<EObject> {
   
   /** A non-null iterator over the resources */
-  private final Iterator<? extends Resource> _resourceIterator;
+  protected final Iterator<? extends Resource> _resourceIterator;
   
   /** The current, potentially null, iterator over the contents of a resource */
-  private TreeIterator<EObject> _contentIterator;
+  protected TreeIterator<EObject> _contentIterator;
   
   
   /**
@@ -82,7 +82,7 @@ public class MultiResourceTreeIterator implements TreeIterator<EObject> {
   /**
    * Update the state of this iterator if needed
    */
-  private void update() {
+  protected void update() {
     while ((_contentIterator == null || !_contentIterator.hasNext()) &&
         _resourceIterator.hasNext()) {
       Resource nextResource = _resourceIterator.next();

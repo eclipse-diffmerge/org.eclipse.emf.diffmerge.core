@@ -19,13 +19,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.util.BasicEList;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
@@ -76,7 +76,7 @@ implements IFragmentedModelScope.Editable {
   
   /** The non-null, non-empty ordered set of resources defining the scope.
    *  It includes _rootResources, _includedResources and _referencedResources. */
-  protected final EList<Resource> _resources;
+  protected final List<Resource> _resources;
   
   /** The non-null, non-empty ordered subset of the resources which are roots */
   protected final List<Resource> _rootResources;
@@ -174,7 +174,7 @@ implements IFragmentedModelScope.Editable {
     _state = ScopeState.INITIALIZED;
     _isReadOnly = readOnly_p;
     _resourceSet = resourceSet_p;
-    _resources = new BasicEList<Resource>();
+    _resources = new ArrayList<Resource>();
     _rootResources = new ArrayList<Resource>();
     _includedResources = new HashBinaryRelation<Resource, Resource>();
     _referencedResources = new HashBinaryRelation<Resource, Resource>();
@@ -456,28 +456,22 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
-   * Get notified that the given resource is in this scope by inclusion
-   * @param resource_p a non-null resource
-   * @param element_p a non-null element via which the resource was retrieved
+   * Get notified that the given resource is included via the containment tree
+   * into the other given resource. We assume that all roots of the included resource
+   * are reachable from the including resource as is normally the case with
+   * the fragmentation mechanism.
+   * @param including_p a non-null resource
+   * @param included_p a non-null resource
    */
-  protected final void notifyInclusion(Resource resource_p, EObject element_p) {
-    if (!_resources.contains(resource_p))
-      addNewResource(resource_p);
-    EObject container = getContainer(element_p);
-    if (container != null) {
-      Resource containerResource = container.eResource();
-      if (containerResource != null && containerResource != resource_p) {
-        // New inclusion
-        _includedResources.add(containerResource, resource_p);
-        // Remove from roots and referencing relation
-        _rootResources.remove(resource_p);
-        _referencedResources.remove(containerResource, resource_p);
-        // Move to beginning of resource list to prevent from exploring a second time
-        _resources.move(0, resource_p);
-        // We assume that all roots of the included resource are reachable through their containers.
-        // We also assume that root/referenced resources are not explored before their inclusion is detected.
-      }
-    }
+  protected final void notifyInclusion(Resource including_p, Resource included_p) {
+    if (!_resources.contains(included_p))
+      addNewResource(included_p);
+    // New inclusion
+    _includedResources.add(including_p, included_p);
+    // Remove from roots and referencing relation
+    _rootResources.remove(included_p);
+    // Inclusion takes precedence over referencing
+    _referencedResources.remove(including_p, included_p);
   }
   
   /**
@@ -546,6 +540,7 @@ implements IFragmentedModelScope.Editable {
       _resourceSet.getResources().remove(resource_p);
     } catch (Exception e) {
       // Proceed
+      e.printStackTrace();
     }
   }
   
@@ -553,32 +548,105 @@ implements IFragmentedModelScope.Editable {
   /**
    * An iterator over the dynamic list of resources
    */
-  class ExpandingMultiResourceTreeIterator extends MultiResourceTreeIterator {
+  protected class ExpandingMultiResourceTreeIterator extends MultiResourceTreeIterator {
+    /** The non-null, non-empty ordered set of resources whose exploration has started */
+    protected final Set<Resource> _exploredResources;
+    /** The potentially null next element */
+    protected EObject _next;
+    /** The potentially null actual resource of the preceding element, if any */
+    protected Resource _currentResource;
+    /** Whether iteration has finished */
+    protected boolean _finished;
     /**
      * Constructor
      */
     public ExpandingMultiResourceTreeIterator() {
       super(new DynamicUniqueListIterator<Resource>(_resources));
+      _exploredResources = new LinkedHashSet<Resource>();
+      _next = null;
+      _currentResource = null;
+      _finished = false;
+    }
+    /**
+     * Update to the next resource if relevant, and return whether it was
+     */
+    protected boolean checkNextResource() {
+      boolean result = false;
+      while ((_contentIterator == null || !_contentIterator.hasNext()) &&
+          _resourceIterator.hasNext()) {
+        result = true;
+        Resource nextResource = _resourceIterator.next();
+        if (!_exploredResources.contains(nextResource))
+          _contentIterator = nextResource.getAllContents();
+      }
+      return result;
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.impl.scopes.MultiResourceTreeIterator#hasNext()
+     */
+    @Override
+    public boolean hasNext() {
+      update();
+      return _next != null;
     }
     /**
      * @see org.eclipse.emf.diffmerge.impl.scopes.MultiResourceTreeIterator#next()
      */
     @Override
     public EObject next() {
-      EObject result = super.next();
-      if (_state != ScopeState.FULLY_EXPLORED) {
-        // It is the first time the scope is being explored:
-        // find and remember additional relevant resources
-        Resource resource = result.eResource();
-        if (resource != null) {
-          notifyInclusion(resource, result);
-          for (Resource additionalResource : getRelevantReferencedResources(result))
-            notifyReference(resource, additionalResource);
-        }
-        if (!hasNext())
-          explorationFinished();
+      if (hasNext()) {
+        EObject result = _next;
+        _currentResource = _next.eResource();
+        _next = null;
+        return result;
       }
-      return result;
+      throw new NoSuchElementException();
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.impl.scopes.MultiResourceTreeIterator#update()
+     */
+    @Override
+    protected void update() {
+      while (_next == null && !_finished) {
+        boolean resourceChangedInList = checkNextResource();
+        boolean firstExploration = _state != ScopeState.FULLY_EXPLORED;
+        if (_contentIterator == null || !_contentIterator.hasNext()) {
+          // Iteration finished
+          _finished = true;
+          _exploredResources.clear();
+          _currentResource = null;
+          if (firstExploration)
+            // First exploration finished
+            explorationFinished();
+        } else {
+          // Elements remaining
+          EObject candidate = _contentIterator.next();
+          boolean candidateOK = true;
+          Resource candidateResource = candidate.eResource();
+          if (candidateResource != null) {
+            boolean resourceAlreadyExplored = !_exploredResources.add(candidateResource);
+            // Since the element is in a resource, we know the resource will be explored
+            // because we assume all resource roots are reachable in the case of resource inclusion
+            boolean resourceChangedByInclusion = false;
+            resourceChangedByInclusion = !resourceChangedInList &&
+                _currentResource != null && _currentResource != candidateResource;
+            if (resourceChangedByInclusion && firstExploration)
+              notifyInclusion(_currentResource, candidateResource);
+            if (resourceAlreadyExplored && resourceChangedByInclusion) {
+              // Resource reached via inclusion but already visited: Skip element and its subtree
+              _contentIterator.prune();
+              candidateOK = false;
+            }
+          }
+          if (candidateOK) {
+            _next = candidate;
+            if (firstExploration && candidateResource != null) {
+              for (Resource additionalResource : getRelevantReferencedResources(_next))
+                notifyReference(candidateResource, additionalResource);
+            }
+          }
+        }
+      }
     }
   }
   
