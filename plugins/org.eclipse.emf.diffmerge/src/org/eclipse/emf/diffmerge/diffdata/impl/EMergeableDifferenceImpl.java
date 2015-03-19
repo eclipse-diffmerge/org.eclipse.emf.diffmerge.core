@@ -29,6 +29,7 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.util.structures.AbstractEndorelation;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
+import org.eclipse.emf.diffmerge.util.structures.FHashSet;
 import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -895,8 +896,17 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
 		 */
 		public Collection<IMergeableDifference> get(
 				IMergeableDifference element_p) {
-			return _isExplicit ? element_p.getDirectRequiresDependencies(_role)
-					: element_p.getDirectImpliesDependencies(_role);
+      Collection<IMergeableDifference> result;
+      if (_isExplicit) {
+        result = new FHashSet<IMergeableDifference>(
+            element_p.getDirectRequiresDependencies(_role), IEqualityTester.BY_REFERENCE);
+        for (IMergeableDifference implicit : element_p.getDirectImpliesDependencies(_role)) {
+          result.addAll(implicit.getDirectRequiresDependencies(_role));
+        }
+      } else {
+        result = element_p.getDirectImpliesDependencies(_role);
+      }
+      return result;
 		}
 	}
 
