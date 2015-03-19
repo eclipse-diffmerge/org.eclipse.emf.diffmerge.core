@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.emf.diffmerge.sdk.feature"
       label="EMF Diff/Merge SDK Feature (Incubation)"
-      version="0.1.0.qualifier"
+      version="0.1.1.qualifier"
       provider-name="Thales Global Services S.A.S.">
 
    <description>
@@ -21,10 +21,9 @@ http://www.eclipse.org/legal/epl-v10.html
       %license
    </license>
 
-    <includes
-        id="org.eclipse.emf.diffmerge.sdk.source.feature"
-        version="0.0.0"
-    />     
+   <includes
+         id="org.eclipse.emf.diffmerge.sdk.source.feature"
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.emf.diffmerge"
