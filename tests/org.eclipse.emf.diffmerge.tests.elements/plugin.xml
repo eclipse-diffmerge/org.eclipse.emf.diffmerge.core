@@ -12,5 +12,15 @@
             class="org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage"
             genModel="model/Elements.genmodel"/>
    </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.emf.ecore.xmi"
+            file-extensions="elements"
+            id="org.eclipse.emf.diffmerge.tests.elements.content-type"
+            name="elements"
+            priority="normal">
+      </content-type>
+   </extension>
 
 </plugin>
