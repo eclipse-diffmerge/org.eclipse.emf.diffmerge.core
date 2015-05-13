@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2014 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2014 Thales Global Services S.A.S and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  * 
  * </copyright>
  */
@@ -80,6 +81,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_ShowValueDiffs;
   public static String ComparisonViewer_SortTooltip;
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
+  public static String ComparisonViewer_HideDifferenceNumbersMenuItem;
   public static String ConfigurableComparisonMethodFactory_Label;
   public static String ConfigureComparisonDialog_AbsoluteCriteria;
   public static String ConfigureComparisonDialog_AbsoluteCriteriaTooltip;
