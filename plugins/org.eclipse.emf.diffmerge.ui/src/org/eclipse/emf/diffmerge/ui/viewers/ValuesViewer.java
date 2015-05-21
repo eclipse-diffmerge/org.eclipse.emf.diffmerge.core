@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2014 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2014 Thales Global Services S.A.S and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Stephane Bouchet (Intel Corporation) - [439901] support multi-line in table item.
  * 
  * </copyright>
  */
@@ -45,8 +46,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -146,6 +152,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
     _sideIsLeft = sideIsLeft_p;
     _showAllValues = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    setMultilineSupport(getControl());
   }
   
   /**
@@ -280,6 +287,46 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       !getInput().getContext().shouldBeIgnored((IDifference)element_p);
   }
   
+  /**
+   * For very long strings in values viewer, support multi-line in the table item.
+   * @see http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
+   * @param control the table to add multi-line support.
+   */
+  protected void setMultilineSupport(Control control) {
+	control.addListener(SWT.MeasureItem, new Listener() {
+		public void handleEvent(Event event) {
+			if (event.item == null)
+				return;
+			TableItem item=(TableItem)event.item;
+			String text=item.getText(event.index);
+			Point size=event.gc.textExtent(text);
+			event.width=size.x + item.getImageBounds(0).width + 4;
+			event.height=size.y;
+		}
+	});
+	control.addListener(SWT.EraseItem, new Listener() {
+		public void handleEvent(Event event) {
+			event.detail&=~SWT.FOREGROUND;
+		}
+	});
+	control.addListener(SWT.PaintItem, new Listener() {
+		public void handleEvent(Event event) {
+			if (event.item == null)
+				return;
+			TableItem item=(TableItem)event.item;
+			String text=item.getText(event.index);
+			Point size=event.gc.textExtent(text);
+			event.width=size.x + 8;
+			event.height=Math.max(event.height, size.y);
+			// offset before the image
+			int offset=event.x;
+			//draw image
+			event.gc.drawImage(item.getImage(), offset, event.y);
+			//draw text 
+			event.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event.y, true);
+		}
+	});
+  }
   
   /**
    * The content provider for this viewer.
