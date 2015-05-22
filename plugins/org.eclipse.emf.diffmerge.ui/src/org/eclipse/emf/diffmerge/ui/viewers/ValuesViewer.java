@@ -278,6 +278,54 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
   }
   
   /**
+   * Add multi-line support for long strings to the table of this viewer
+   * @see http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
+   * @param control_p the non-null control (presumably a table) to which multi-line support must be added
+   */
+  protected void setMultilineSupport(Control control_p) {
+    control_p.addListener(SWT.MeasureItem, new Listener() {
+      /**
+       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
+       */
+      public void handleEvent(Event event_p) {
+        TableItem item = (TableItem)event_p.item;
+        if (item != null) {
+          String text = item.getText(event_p.index);
+          Point size = event_p.gc.textExtent(text);
+          event_p.width = size.x + item.getImageBounds(0).width + 4;
+          event_p.height = size.y;
+        }
+      }
+    });
+    control_p.addListener(SWT.EraseItem, new Listener() {
+      /**
+       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
+       */
+      public void handleEvent(Event event_p) {
+        event_p.detail &= ~SWT.FOREGROUND;
+      }
+    });
+    control_p.addListener(SWT.PaintItem, new Listener() {
+      /**
+       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
+       */
+      public void handleEvent(Event event_p) {
+        TableItem item = (TableItem)event_p.item;
+        if (item != null) {
+          String text = item.getText(event_p.index);
+          Point size = event_p.gc.textExtent(text);
+          event_p.width = size.x + 8;
+          event_p.height = Math.max(event_p.height, size.y);
+          // Based on the offset before the image, draw image and text
+          int offset = event_p.x;
+          event_p.gc.drawImage(item.getImage(), offset, event_p.y);
+          event_p.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event_p.y, true);
+        }
+      }
+    });
+  }
+  
+  /**
    * Return whether the given object must be represented as a difference
    * @param element_p a potentially null object
    */
@@ -285,47 +333,6 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
     return element_p instanceof IValuePresence &&
       !((IValuePresence)element_p).isMerged() &&
       !getInput().getContext().shouldBeIgnored((IDifference)element_p);
-  }
-  
-  /**
-   * For very long strings in values viewer, support multi-line in the table item.
-   * @see http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
-   * @param control the table to add multi-line support.
-   */
-  protected void setMultilineSupport(Control control) {
-	control.addListener(SWT.MeasureItem, new Listener() {
-		public void handleEvent(Event event) {
-			if (event.item == null)
-				return;
-			TableItem item=(TableItem)event.item;
-			String text=item.getText(event.index);
-			Point size=event.gc.textExtent(text);
-			event.width=size.x + item.getImageBounds(0).width + 4;
-			event.height=size.y;
-		}
-	});
-	control.addListener(SWT.EraseItem, new Listener() {
-		public void handleEvent(Event event) {
-			event.detail&=~SWT.FOREGROUND;
-		}
-	});
-	control.addListener(SWT.PaintItem, new Listener() {
-		public void handleEvent(Event event) {
-			if (event.item == null)
-				return;
-			TableItem item=(TableItem)event.item;
-			String text=item.getText(event.index);
-			Point size=event.gc.textExtent(text);
-			event.width=size.x + 8;
-			event.height=Math.max(event.height, size.y);
-			// offset before the image
-			int offset=event.x;
-			//draw image
-			event.gc.drawImage(item.getImage(), offset, event.y);
-			//draw text 
-			event.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event.y, true);
-		}
-	});
   }
   
   /**
