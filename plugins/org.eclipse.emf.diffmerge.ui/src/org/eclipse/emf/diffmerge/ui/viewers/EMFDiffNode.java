@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2014 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2014 Thales Global Services S.A.S and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  * 
  * </copyright>
  */
@@ -148,6 +149,8 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** A map from color kind to SWT color code from the SWT class */
   private final Map<DifferenceColorKind, Integer> _differenceColors;
   
+  /** Whether to hide differences number */
+  private boolean _hideDifferenceNumbers;
   
   /**
    * Constructor
@@ -665,6 +668,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * @return a positive int or 0
    */
   public int getUIDifferenceNumber(EMatch match_p) {
+    if (isHideDifferenceNumbers()) return 0;
     Role leftRole = getRoleForSide(true);
     int result = getDifferenceNumber(match_p);
     if (match_p.getUncoveredRole() == leftRole
@@ -1113,4 +1117,17 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     return _useCustomLabels;
   }
   
+  /**
+   * Return whether this viewer displays difference numbers
+   */
+  public boolean isHideDifferenceNumbers() {
+    return _hideDifferenceNumbers;
+  }
+  
+  /**
+   * Set whether this viewer should display differences numbers
+   */
+  public void setHideDifferenceNumbers(boolean hideDifferenceNumbers_p) {
+    _hideDifferenceNumbers = hideDifferenceNumbers_p;
+  }
 }

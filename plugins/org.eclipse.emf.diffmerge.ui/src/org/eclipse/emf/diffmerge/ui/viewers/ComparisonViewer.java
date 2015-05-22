@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2014 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2014 Thales Global Services S.A.S and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  * 
  * </copyright>
  */
@@ -696,6 +697,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createMenuShowImpact(synthesisMenu_p);
     createMenuSupportUndoRedo(synthesisMenu_p);
     createMenuLogEvents(synthesisMenu_p);
+    createMenuShowDifferenceNumbers(synthesisMenu_p);
   }
   
   /**
@@ -733,6 +735,44 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           _viewerFeatures.refresh();
           _viewerValuesLeft.refresh();
           _viewerValuesRight.refresh();
+        }
+      }
+    });
+    return result;
+  }
+  /**
+   * Create the "show difference numbers per match" menu item in the given menu and return it
+   * @param menu_p a non-null menu
+   * @return result a potentially null menu item
+   */
+  protected MenuItem createMenuShowDifferenceNumbers(Menu menu_p) {
+    final MenuItem result = new MenuItem(menu_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_HideDifferenceNumbersMenuItem);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          EMFDiffNode input = getInput();
+          if (input != null && !result.isDisposed())
+            result.setSelection(input.isHideDifferenceNumbers());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        boolean showDiffNumbers = result.getSelection();
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setHideDifferenceNumbers(showDiffNumbers);
+          refresh();
         }
       }
     });
