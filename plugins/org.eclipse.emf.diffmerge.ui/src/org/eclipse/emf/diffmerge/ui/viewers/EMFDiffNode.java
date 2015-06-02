@@ -128,6 +128,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** Whether the right model has been modified */
   private boolean _isReferenceModified;
   
+  /** Whether differences number must be hidden */
+  private boolean _isHideDifferenceNumbers;
+  
   /** Whether an impact dialog must be shown at merge time */
   private boolean _isShowMergeImpact;
   
@@ -149,8 +152,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** A map from color kind to SWT color code from the SWT class */
   private final Map<DifferenceColorKind, Integer> _differenceColors;
   
-  /** Whether to hide differences number */
-  private boolean _hideDifferenceNumbers;
   
   /**
    * Constructor
@@ -203,6 +204,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _isReferenceEditable = _isReferenceEditionPossible;
     _isTargetModified = false;
     _isReferenceModified = false;
+    _isHideDifferenceNumbers = false;
     _isShowMergeImpact = true;
     _isUndoRedoSupported = _editingDomain != null;
     _isLogEvents = false;
@@ -809,6 +811,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Return whether this viewer displays difference numbers
+   */
+  public boolean isHideDifferenceNumbers() {
+    return _isHideDifferenceNumbers;
+  }
+  
+  /**
    * Return whether the given difference must be considered as a presence with no
    * multiplicity constraint
    * @param presence_p a non-null difference
@@ -1007,6 +1016,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Set whether this viewer should display differences numbers
+   */
+  public void setHideDifferenceNumbers(boolean hideDifferenceNumbers_p) {
+    _isHideDifferenceNumbers = hideDifferenceNumbers_p;
+  }
+  
+  /**
    * Set the role on the left-hand side
    * @param leftRole_p a non-null role which is TARGET or REFERENCE
    */
@@ -1068,6 +1084,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Set whether this viewer should use custom labels to represent differences
+   */
+  public void setUseCustomLabels(boolean useCustom_p) {
+    _useCustomLabels = useCustom_p;
+  }
+  
+  /**
    * Return whether the given difference should be ignored
    * @param difference_p a non-null difference
    */
@@ -1097,13 +1120,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Set whether this viewer should use custom labels to represent differences
-   */
-  public void setUseCustomLabels(boolean useCustom_p) {
-    _useCustomLabels = useCustom_p;
-  }
-  
-  /**
    * Return whether this viewer uses custom icons to represent differences
    */
   public boolean usesCustomIcons() {
@@ -1117,17 +1133,4 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     return _useCustomLabels;
   }
   
-  /**
-   * Return whether this viewer displays difference numbers
-   */
-  public boolean isHideDifferenceNumbers() {
-    return _hideDifferenceNumbers;
-  }
-  
-  /**
-   * Set whether this viewer should display differences numbers
-   */
-  public void setHideDifferenceNumbers(boolean hideDifferenceNumbers_p) {
-    _hideDifferenceNumbers = hideDifferenceNumbers_p;
-  }
 }

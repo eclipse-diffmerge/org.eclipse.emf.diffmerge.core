@@ -81,7 +81,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_ShowValueDiffs;
   public static String ComparisonViewer_SortTooltip;
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
-  public static String ComparisonViewer_HideDifferenceNumbersMenuItem;
+  public static String ComparisonViewer_ShowDifferenceNumbersMenuItem;
   public static String ConfigurableComparisonMethodFactory_Label;
   public static String ConfigureComparisonDialog_AbsoluteCriteria;
   public static String ConfigureComparisonDialog_AbsoluteCriteriaTooltip;

@@ -692,12 +692,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Fill the menu of the synthesis viewer with miscellaneous features
    * @param synthesisMenu_p a non-null menu
    */
+  @SuppressWarnings("unused")
   protected void createMenuSynthesisMisc(Menu synthesisMenu_p) {
     createMenuUseCustomIcons(synthesisMenu_p);
+    createMenuShowDifferenceNumbers(synthesisMenu_p);
     createMenuShowImpact(synthesisMenu_p);
+    new MenuItem(synthesisMenu_p, SWT.SEPARATOR);
     createMenuSupportUndoRedo(synthesisMenu_p);
     createMenuLogEvents(synthesisMenu_p);
-    createMenuShowDifferenceNumbers(synthesisMenu_p);
   }
   
   /**
@@ -740,6 +742,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     });
     return result;
   }
+  
   /**
    * Create the "show difference numbers per match" menu item in the given menu and return it
    * @param menu_p a non-null menu
@@ -747,7 +750,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected MenuItem createMenuShowDifferenceNumbers(Menu menu_p) {
     final MenuItem result = new MenuItem(menu_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_HideDifferenceNumbersMenuItem);
+    result.setText(Messages.ComparisonViewer_ShowDifferenceNumbersMenuItem);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -757,7 +760,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null && !result.isDisposed())
-            result.setSelection(input.isHideDifferenceNumbers());
+            result.setSelection(!input.isHideDifferenceNumbers());
         }
       }
     });
@@ -771,7 +774,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         boolean showDiffNumbers = result.getSelection();
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setHideDifferenceNumbers(showDiffNumbers);
+          input.setHideDifferenceNumbers(!showDiffNumbers);
           refresh();
         }
       }
@@ -2217,6 +2220,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
+  @SuppressWarnings("unused")
   protected Menu setupMenuDetails(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
@@ -2234,6 +2238,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    * @return a potentially null menu
    */
+  @SuppressWarnings("unused")
   protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show uncounted elements
@@ -2299,6 +2304,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the "synthesis" tools in the given tool bar
    * @param toolbar_p a non-null tool bar
    */
+  @SuppressWarnings("unused")
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolInconsistency(toolbar_p);
