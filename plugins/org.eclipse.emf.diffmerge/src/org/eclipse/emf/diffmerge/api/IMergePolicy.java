@@ -111,7 +111,7 @@ public interface IMergePolicy {
    * Operation is a special case of IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
    * when the values are not present, and must be consistent with that operation.
    * If bindPresenceToOwnership(), operation is only called on cross-references.
-   * @see IMergePolicy#bindPresenceToOwnership()
+   * @see IMergePolicy#bindPresenceToOwnership(IFeaturedModelScope)
    * @param reference_p a non-null, non-derived, non-container reference
    */
   boolean isMandatoryForAddition(EReference reference_p);

@@ -76,7 +76,8 @@ public interface IMatchPolicy {
    * when objects cannot be compared, either because they are not Comparable or
    * because they are Comparables which are not mutually comparable.
    * Note that this comparator is thus inconsistent with equals in this situation.
-   * @see Comparable, Comparator
+   * @see Comparable
+   * @see Comparator
    */
   Comparator<Object> NATURAL_ORDER_COMPARATOR = new Comparator<Object>() {
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -47,7 +47,6 @@ public class ModelScopeIterator implements TreeIterator<EObject> {
   /**
    * Constructor
    * @param scope_p a non-null model scope
-   * @param rootIterator_p a non-null iterator over the root elements which are assumed to belong to the scope
    */
   public ModelScopeIterator(IModelScope scope_p) {
     assert scope_p != null;

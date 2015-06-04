@@ -50,7 +50,7 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecification#configure()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#configure()
    */
   @Override
   public void configure() {
@@ -74,7 +74,7 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod#createDiffPolicy()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createDiffPolicy()
    */
   @Override
   protected IDiffPolicy createDiffPolicy() {
@@ -104,7 +104,7 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonSpecification#isConfigurable()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#isConfigurable()
    */
   @Override
   public boolean isConfigurable() {

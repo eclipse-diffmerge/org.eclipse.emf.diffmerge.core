@@ -66,7 +66,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#add(EObject, EReference, EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#add(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
    */
   @Override
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
@@ -108,7 +108,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#remove(EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#remove(org.eclipse.emf.ecore.EObject)
    */
   @Override
   public boolean remove(EObject element_p) {

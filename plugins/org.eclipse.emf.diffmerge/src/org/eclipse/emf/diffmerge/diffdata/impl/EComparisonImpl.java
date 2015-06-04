@@ -993,9 +993,9 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
     operation.run(monitor_p);
     return operation.getOutput();
   }
-
+  
   /**
-   * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newAttributeValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EAttribute, java.lang.Object, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newAttributeValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EAttribute, java.lang.Object, org.eclipse.emf.diffmerge.api.Role, boolean)
    * @generated NOT
    */
   public IAttributeValuePresence newAttributeValuePresence(
@@ -1026,9 +1026,9 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
     return new EMatchImpl(targetElement_p, referenceElement_p,
         ancestorElement_p);
   }
-
+  
   /**
-   * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newReferenceValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newReferenceValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.diffmerge.api.Role, boolean)
    * @generated NOT
    */
   public IReferenceValuePresence newReferenceValuePresence(

@@ -20,7 +20,9 @@ import org.eclipse.emf.diffmerge.api.Role;
 
 /**
  * A difference between models or model scopes.
- * @see IElementPresence, IAttributeValuePresence, IReferenceValuePresence
+ * @see IElementPresence
+ * @see IAttributeValuePresence
+ * @see IReferenceValuePresence
  * @author Olivier Constant
  */
 public interface IDifference {

@@ -41,11 +41,31 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
   
+  
   /**
    * A predefined set of criteria for matching.
    */
   public static enum MatchCriterionKind {
-    SEMANTICS, STRUCTURE, NAME, INTRINSIC_ID, EXTRINSIC_ID
+    /**
+     * The 'semantics' criterion kind: support for semantical criteria.
+     */
+    SEMANTICS,
+    /**
+     * The 'structure' criterion kind: support for structure-based criteria.
+     */
+    STRUCTURE,
+    /**
+     * The 'name' criterion kind: support for qualified names.
+     */
+    NAME,
+    /**
+     * The 'intrinsic ID' criterion kind: support for Ecore unique IDs.
+     */
+    INTRINSIC_ID,
+    /**
+     * The 'extrinsic ID' criterion kind: support for persistence-related IDs such as XMI IDs.
+     */
+    EXTRINSIC_ID
   }
   
   

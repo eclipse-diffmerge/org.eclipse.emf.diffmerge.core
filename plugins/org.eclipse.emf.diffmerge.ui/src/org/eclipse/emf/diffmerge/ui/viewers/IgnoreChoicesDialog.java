@@ -42,7 +42,6 @@ public class IgnoreChoicesDialog extends MessageDialog {
 	 * @param parentShell_p the non-null shell for this dialog
 	 * @param title_p a non-null string
 	 * @param data_p the non-null data that this dialog allows editing
-	 * @param askAboutChildren_p whether the choice for children is enabled
 	 */
 	public IgnoreChoicesDialog(Shell parentShell_p, String title_p, IgnoreChoiceData data_p) {
 		super(parentShell_p, title_p, null,

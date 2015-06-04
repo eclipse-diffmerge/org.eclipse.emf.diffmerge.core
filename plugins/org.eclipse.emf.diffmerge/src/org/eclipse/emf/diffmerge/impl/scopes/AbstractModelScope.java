@@ -116,7 +116,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.ICoreModelScope#getAllContents()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getAllContents()
    */
   public TreeIterator<EObject> getAllContents() {
     // Return an iterator which is derived from getAllContents(EObject)

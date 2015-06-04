@@ -20,8 +20,8 @@ import java.util.List;
 
 /**
  * A binary relation from type T to type U.
- * @param T the type of the domain elements
- * @param U the type of the codomain elements
+ * @param <T> the type of the domain elements
+ * @param <U> the type of the codomain elements
  * @author Olivier Constant
  */
 public interface IBinaryRelation<T, U> extends IEqualityBasedStructure {
@@ -46,8 +46,8 @@ public interface IBinaryRelation<T, U> extends IEqualityBasedStructure {
   /**
    * A modifiable finitary binary relation.
    * The order in which couples are introduced is assumed to be preserved (add/get consistency).
-   * @param T the type of the domain elements
-   * @param U the type of the codomain elements
+   * @param <T> the type of the domain elements
+   * @param <U> the type of the codomain elements
    */
   interface Editable<T, U> extends IBinaryRelation<T, U> {
     /**

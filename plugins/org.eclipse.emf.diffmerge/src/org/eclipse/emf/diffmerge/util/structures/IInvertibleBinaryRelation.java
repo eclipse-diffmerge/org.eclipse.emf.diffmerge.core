@@ -19,8 +19,8 @@ import java.util.Collection;
 
 /**
  * A binary relation in types (T, U) which supports inverse navigation.
- * @param T the type of the domain elements
- * @param U the type of the codomain elements
+ * @param <T> the type of the domain elements
+ * @param <U> the type of the codomain elements
  * @author Olivier Constant
  */
 public interface IInvertibleBinaryRelation<T, U> extends IBinaryRelation<T, U> {

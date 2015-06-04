@@ -73,10 +73,14 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * The kinds of user-level differences.
    */
   public static enum UserDifferenceKind {
-    PRESENCE_LEFT,  // The unmatched presence of an element on the left
-    PRESENCE_RIGHT, // The unmatched presence of an element on the right
-    MOVE,           // A move
-    NO_CONTAINMENT  // A difference which is unrelated to the containment tree
+    /** The unmatched presence of an element on the left */
+    PRESENCE_LEFT,
+    /** The unmatched presence of an element on the right */
+    PRESENCE_RIGHT,
+    /** A move */
+    MOVE,
+    /** A difference which is unrelated to the containment tree */
+    NO_CONTAINMENT
   }
   
   

@@ -17,12 +17,15 @@ package org.eclipse.emf.diffmerge.util.structures;
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.emf.common.util.AbstractEList;
+
 
 /**
  * An array list which supports user-defined equality functions and ensures
  * the absence of duplicates at the cost of O(n) on add(E).
  * The "F" prefix stands for "Flexible".
- * @see FArrayList, AbstractEList#isUnique().
+ * @see FArrayList
+ * @see AbstractEList#isUnique()
  * @author Olivier Constant
  */
 public class FOrderedSet<E> extends FArrayList<E> implements Set<E> {

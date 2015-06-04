@@ -21,6 +21,7 @@ import org.eclipse.osgi.util.NLS;
  * Utility class for the externalization mechanism.
  * @author Olivier Constant
  */
+@SuppressWarnings("javadoc")
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.messages"; //$NON-NLS-1$
   public static String AbstractDifference_UnableToMerge;

@@ -57,8 +57,8 @@ extends TreeSet<E> implements IComparableSet<E> {
    * @see TreeSet#TreeSet(SortedSet)
    * @param c_p a non-null sorted set
    */
-  public ComparableTreeSet(SortedSet<E> s_p) {
-    super(s_p);
+  public ComparableTreeSet(SortedSet<E> c_p) {
+    super(c_p);
   }
   
   /**

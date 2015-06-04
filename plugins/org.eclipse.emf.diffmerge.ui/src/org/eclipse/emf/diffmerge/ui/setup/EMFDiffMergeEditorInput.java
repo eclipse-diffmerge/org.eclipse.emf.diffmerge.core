@@ -93,8 +93,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /** The initially null resource that holds the comparison */
   protected Resource _comparisonResource;
   
-  /** The comparison scopes (initially null iff URIs are not null) **/
-  protected IEditableModelScope _leftScope, _rightScope, _ancestorScope;
+  /** The left comparison scope (initially null) **/
+  protected IEditableModelScope _leftScope;
+  
+  /** The right comparison scope (initially null) **/
+  protected IEditableModelScope _rightScope;
+  
+  /** The ancestor comparison scope (initially null) **/
+  protected IEditableModelScope _ancestorScope;
   
   /** The initially null viewer */
   protected AbstractComparisonViewer _viewer;

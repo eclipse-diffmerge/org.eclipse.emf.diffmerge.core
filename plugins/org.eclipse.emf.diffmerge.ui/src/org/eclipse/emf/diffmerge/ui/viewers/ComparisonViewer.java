@@ -197,7 +197,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param match_p a non-null match
    * @param destination_p a non-null role which is TARGET or REFEREBCE
    * @param incrementalMode_p whether optional deletions must be skipped
-   * @return a non-null, potentially empty, unmodifiable list
    */
   protected void addDifferencesToMerge(List<IDifference> toMerge_p, IMatch match_p,
       Role destination_p, boolean incrementalMode_p) {
@@ -217,7 +216,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param match_p a non-null match
    * @param destination_p a non-null role which is TARGET or REFEREBCE
    * @param incrementalMode_p whether optional deletions must be skipped
-   * @return a non-null, potentially empty, unmodifiable list
    */
   protected void addDifferencesToMergeRec(List<IDifference> toMerge_p, IMatch match_p,
       Role destination_p, boolean incrementalMode_p) {

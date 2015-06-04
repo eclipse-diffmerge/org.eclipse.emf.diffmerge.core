@@ -795,7 +795,6 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
 
   /**
    * Register the given attribute value presence for fast retrieval
-   * @param data_p a non-null object
    * @param presence_p a non-null difference representing a value presence
    *        which is such that presence_p.getElementMatch() == this
    * @generated NOT

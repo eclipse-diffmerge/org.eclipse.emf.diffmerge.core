@@ -21,9 +21,29 @@ package org.eclipse.emf.diffmerge.ui.util;
  */
 public enum DifferenceKind {
   
-  FROM_LEFT, FROM_LEFT_ADD, FROM_LEFT_DEL,
-  FROM_RIGHT, FROM_RIGHT_ADD, FROM_RIGHT_DEL,
-  FROM_BOTH, MODIFIED, CONFLICT, COUNTED, NONE;
+  /** Modification from the left */
+  FROM_LEFT,
+  /** Addition from the left */
+  FROM_LEFT_ADD,
+  /** Deletion from the left */
+  FROM_LEFT_DEL,
+  /** Modification from the right */
+  FROM_RIGHT,
+  /** Addition from the right */
+  FROM_RIGHT_ADD,
+  /** Deletion from the right */
+  FROM_RIGHT_DEL,
+  /** Modification from both sides */
+  FROM_BOTH,
+  /** Non-directed modification */
+  MODIFIED,
+  /** Conflict */
+  CONFLICT,
+  /** No direct difference but differences in contents */
+  COUNTED,
+  /** No difference */
+  NONE;
+  
   
   /**
    * Return whether the receiver is a pure addition

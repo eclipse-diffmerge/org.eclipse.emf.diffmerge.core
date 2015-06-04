@@ -129,7 +129,7 @@ implements IPersistentModelScope.Editable {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#remove(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#remove(org.eclipse.emf.ecore.EObject)
    */
   @Override
   public boolean remove(EObject element_p) {
@@ -140,7 +140,7 @@ implements IPersistentModelScope.Editable {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#save()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#save()
    */
   public boolean save() throws IOException {
     boolean result = false;
@@ -156,7 +156,7 @@ implements IPersistentModelScope.Editable {
   }
   
   /**
-   * @see IPersistentModelScope#setExtrinsicID(EObject, Object)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#setExtrinsicID(org.eclipse.emf.ecore.EObject, java.lang.Object)
    */
   @Override
   public boolean setExtrinsicID(EObject element_p, Object id_p) {

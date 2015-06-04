@@ -161,25 +161,27 @@ public final class MiscUtil {
   public static IFile getFileFor(Resource resource_p, boolean allowExternal_p) {
     IFile result = null;
     URI uri = resource_p.getURI();
-    IWorkspace wk = ResourcesPlugin.getWorkspace();
-    if (wk != null && wk.getRoot() != null) {
-      if (uri != null && uri.isPlatformResource()) {
-        // Resource in workspace
-        String platformResourcePath = uri.toPlatformString(true);
-        result = wk.getRoot().getFile(new Path(platformResourcePath));
-      } else if (allowExternal_p) {
-        // Resource from external file
-        IProject project = wk.getRoot().getProject("ExternalFiles"); //$NON-NLS-1$
-        try {
-          if (!project.exists())
-            project.create(null);
-          if (!project.isOpen())
-            project.open(null);
-          IPath path = new Path(uri.toFileString());
-          result = project.getFile(path.lastSegment());
-          result.createLink(path, IResource.NONE, null);
-        } catch (CoreException e) {
-          // Just proceed
+    if (uri != null) {
+      IWorkspace wk = ResourcesPlugin.getWorkspace();
+      if (wk != null && wk.getRoot() != null) {
+        if (uri.isPlatformResource()) {
+          // Resource in workspace
+          String platformResourcePath = uri.toPlatformString(true);
+          result = wk.getRoot().getFile(new Path(platformResourcePath));
+        } else if (allowExternal_p) {
+          // Resource from external file
+          IProject project = wk.getRoot().getProject("ExternalFiles"); //$NON-NLS-1$
+          try {
+            if (!project.exists())
+              project.create(null);
+            if (!project.isOpen())
+              project.open(null);
+            IPath path = new Path(uri.toFileString());
+            result = project.getFile(path.lastSegment());
+            result.createLink(path, IResource.NONE, null);
+          } catch (CoreException e) {
+            // Just proceed
+          }
         }
       }
     }

@@ -19,8 +19,8 @@ import java.util.Collection;
 
 /**
  * A binary relation whose field (actual domain and range) is directly available.
- * @param T the type of the domain elements
- * @param U the type of the codomain elements
+ * @param <T> the type of the domain elements
+ * @param <U> the type of the codomain elements
  * @author Olivier Constant
  */
 public interface IRangedBinaryRelation<T, U> extends IBinaryRelation<T, U> {
@@ -47,8 +47,8 @@ public interface IRangedBinaryRelation<T, U> extends IBinaryRelation<T, U> {
   
   /**
    * A binary relation whose field can be directly modified.
-   * @param T the type of the domain elements
-   * @param U the type of the codomain elements
+   * @param <T> the type of the domain elements
+   * @param <U> the type of the codomain elements
    */
   interface Editable<T, U> extends IRangedBinaryRelation<T, U>,
   IBinaryRelation.Editable<T, U>{

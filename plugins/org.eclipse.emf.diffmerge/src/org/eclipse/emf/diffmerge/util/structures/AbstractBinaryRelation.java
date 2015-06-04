@@ -19,8 +19,8 @@ import java.util.Collection;
 
 /**
  * A base implementation for binary relations which provides a few services.
- * @param T the type of the domain elements
- * @param U the type of the codomain elements
+ * @param <T> the type of the domain elements
+ * @param <U> the type of the codomain elements
  * @author Olivier Constant
  */
 public abstract class AbstractBinaryRelation<T, U> implements IBinaryRelation<T, U> {

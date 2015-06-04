@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * A base implementation for endorelations providing a few services.
- * @param T the type of the elements
+ * @param <T> the type of the elements
  * @author Olivier Constant
  */
 public abstract class AbstractEndorelation<T> extends AbstractBinaryRelation<T, T>

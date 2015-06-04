@@ -58,7 +58,6 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   
   /**
    * Constructor
-   * @param mapping_p the non-null mapping this copier is relative to
    * @param sourceRole_p the non-null role being the source role of this copier
    *        w.r.t. the comparison
    */
@@ -222,7 +221,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   }
   
   /**
-   * @see EcoreUtil.Copier#get(java.lang.Object)
+   * @see java.util.LinkedHashMap#get(java.lang.Object)
    */
   @Override
   public EObject get(Object key_p) {

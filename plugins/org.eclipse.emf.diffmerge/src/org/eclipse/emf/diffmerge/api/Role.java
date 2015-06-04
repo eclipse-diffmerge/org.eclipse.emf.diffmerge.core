@@ -25,7 +25,25 @@ import java.util.List;
  */
 public enum Role {
   
-  TARGET, REFERENCE, ANCESTOR;
+  /**
+   * The TARGET role in a comparison, which is symmetrical to and arbitrarily distinguished
+   * from the REFERENCE role.
+   */
+  TARGET,
+  
+  /**
+   * The REFERENCE role in a comparison, which is symmetrical to and arbitrarily distinguished
+   * from the TARGET role.
+   */
+  REFERENCE,
+  
+  /**
+   * The optional ANCESTOR role in a comparison, which usually corresponds to a common ancestor
+   * in a version tree. This role makes it possible to distinguish the role from which a given
+   * difference originates.
+   */
+  ANCESTOR;
+  
   
   /**
    * Return the role which is opposite to this. TARGET and REFERENCE are opposite,

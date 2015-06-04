@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * An endorelation over type T.
- * @param T the type of the elements
+ * @param <T> the type of the elements
  * @author Olivier Constant
  */
 public interface IEndorelation<T> extends IBinaryRelation<T, T> {

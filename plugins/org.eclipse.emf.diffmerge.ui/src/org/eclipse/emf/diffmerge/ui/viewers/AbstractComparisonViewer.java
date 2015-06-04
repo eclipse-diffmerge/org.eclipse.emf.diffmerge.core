@@ -41,7 +41,6 @@ import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
-import org.eclipse.jface.viewers.ContentViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -313,19 +312,19 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   }
   
   /**
-   * Ensure that the viewer is disposed when its control is disposed
+   * Ensure that the viewer is disposed when its control is disposed.
+   * See ContentViewer#hookControl(Control).
    * @param control_p the non-null control of the viewer
-   * @see ContentViewer#hookControl(Control)
    */
   private void hookControl(Control control_p) {
-      control_p.addDisposeListener(new DisposeListener() {
-        /**
-         * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-         */
-        public void widgetDisposed(DisposeEvent event) {
-          handleDispose();
-        }
-      });
+    control_p.addDisposeListener(new DisposeListener() {
+      /**
+       * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+       */
+      public void widgetDisposed(DisposeEvent event) {
+        handleDispose();
+      }
+    });
   }
   
   /**

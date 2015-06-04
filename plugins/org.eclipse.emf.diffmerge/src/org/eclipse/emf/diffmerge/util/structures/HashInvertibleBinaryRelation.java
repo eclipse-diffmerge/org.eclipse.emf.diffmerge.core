@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * An extension of HashBinaryRelation which is invertible thanks to an
  * aggregated inverse HashBinaryRelation.
- * @param T the type of the domain elements
- * @param U the type of the codomain elements
+ * @param <T> the type of the domain elements
+ * @param <U> the type of the codomain elements
  * @author Olivier Constant
  */
 public class HashInvertibleBinaryRelation<T, U> extends HashBinaryRelation<T, U>

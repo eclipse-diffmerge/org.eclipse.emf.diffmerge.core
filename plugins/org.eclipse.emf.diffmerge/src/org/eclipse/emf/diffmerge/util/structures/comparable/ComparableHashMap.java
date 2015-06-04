@@ -55,7 +55,7 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
   /**
    * Constructor for empty map
    * @param useEqualsForKeys_p whether equals rather than == must be used to compare keys
-   * @param useEqualsForKeys_p whether equals rather than == must be used to compare values
+   * @param useEqualsForValues_p whether equals rather than == must be used to compare values
    */
   public ComparableHashMap(boolean useEqualsForKeys_p, boolean useEqualsForValues_p) {
     super();
@@ -65,8 +65,9 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
   
   /**
    * Constructor for empty map with the given initial capacity
+   * @param initialCapacity_p a positive int
    * @param useEqualsForKeys_p whether equals rather than == must be used to compare keys
-   * @param useEqualsForKeys_p whether equals rather than == must be used to compare values
+   * @param useEqualsForValues_p whether equals rather than == must be used to compare values
    */
   public ComparableHashMap(int initialCapacity_p, boolean useEqualsForKeys_p,
       boolean useEqualsForValues_p) {
@@ -79,7 +80,7 @@ extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V
    * Constructor for a map filled with the content of the given map
    * @param map_p a non-null, potentially empty map
    * @param useEqualsForKeys_p whether equals rather than == must be used to compare keys
-   * @param useEqualsForKeys_p whether equals rather than == must be used to compare values
+   * @param useEqualsForValues_p whether equals rather than == must be used to compare values
    */
   public ComparableHashMap(Map<? extends K, ? extends V> map_p,
       boolean useEqualsForKeys_p, boolean useEqualsForValues_p)  {

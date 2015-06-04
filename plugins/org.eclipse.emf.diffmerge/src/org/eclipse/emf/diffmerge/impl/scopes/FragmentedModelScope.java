@@ -95,12 +95,24 @@ implements IFragmentedModelScope.Editable {
   /** The resource referencing relationship */
   protected final IBinaryRelation.Editable<Resource, Resource> _referencedResources;
   
-  /** The possible states of the scope, in order */
+  /** The possible states of the scope, ordered */
   protected enum ScopeState {
-    INITIALIZED, // The scope has just been created
-    LOADED, // The scope has been loaded but not fully explored
-    FULLY_EXPLORED, // The scope has been loaded and fully explored
-    UNLOADED // The scope has been unloaded
+    /**
+     * The scope has just been created.
+     */
+    INITIALIZED,
+    /**
+     * The scope has been loaded but not fully explored.
+     */
+    LOADED,
+    /**
+     * The scope has been loaded and fully explored.
+     */
+    FULLY_EXPLORED,
+    /**
+     * The scope has been unloaded.
+     */
+    UNLOADED
   }
   
   /** The current state of the scope */
@@ -199,7 +211,7 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#add(EObject, EReference, EObject)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#add(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
    */
   @Override
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
@@ -488,7 +500,7 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#save()
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#save()
    */
   public boolean save() throws Exception {
     Map<Object, Object> options = new HashMap<Object, Object>();
@@ -501,7 +513,7 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
-   * @see IPersistentModelScope#setExtrinsicID(EObject, Object)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#setExtrinsicID(EObject, Object)
    */
   @Override
   public boolean setExtrinsicID(EObject element_p, Object id_p) {

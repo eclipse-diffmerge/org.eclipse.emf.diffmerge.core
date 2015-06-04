@@ -199,6 +199,7 @@ public interface EMatch extends EObject, Editable {
    * @model mapType="org.eclipse.emf.diffmerge.diffdata.AttributeToValueToDifferenceEntry<org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry>"
    * @generated
    */
+  @SuppressWarnings("javadoc")
   EMap<EAttribute, EMap<Object, IAttributeValuePresence>> getModifiableAttributeMap();
 
   /**
@@ -216,6 +217,7 @@ public interface EMatch extends EObject, Editable {
    * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToMatchToDifferenceEntry<org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.MatchToDifferenceEntry>"
    * @generated
    */
+  @SuppressWarnings("javadoc")
   EMap<EReference, EMap<IMatch, IReferenceValuePresence>> getModifiableReferenceMap();
 
   /**

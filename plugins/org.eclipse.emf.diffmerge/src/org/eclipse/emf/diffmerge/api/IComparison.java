@@ -119,7 +119,6 @@ public interface IComparison {
    * Return the set of duplicate match IDs for the given role, if any.
    * If the result is not empty, then it means that the match policy that
    * was used is not applicable to the scope of the given role.
-   * @see 
    * @param role_p a non-null role
    * @return a non-null, possibly empty collection
    */

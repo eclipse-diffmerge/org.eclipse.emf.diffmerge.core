@@ -157,7 +157,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
   
   /**
    * Return the model element that corresponds to the given viewer value, if applicable
-   * @param viewerElement_p a potentially null object
+   * @param viewerValueElement_p a potentially null object
    * @return a potentially null element
    */
   public EObject getElementForValue(Object viewerValueElement_p) {
@@ -238,7 +238,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer#isDifferenceAgnostic()
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#isDifferenceAgnostic()
    */
   public boolean isDifferenceAgnostic() {
     return _showAllValues;
@@ -268,7 +268,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IComparisonSideViewer.Configurable#setDifferenceAgnostic(boolean)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#setDifferenceAgnostic(boolean)
    */
   public void setDifferenceAgnostic(boolean agnostic_p) {
     if (agnostic_p != isDifferenceAgnostic()) {
@@ -278,8 +278,8 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
   }
   
   /**
-   * Add multi-line support for long strings to the table of this viewer
-   * @see http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
+   * Add multi-line support for long strings to the table of this viewer.
+   * See http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
    * @param control_p the non-null control (presumably a table) to which multi-line support must be added
    */
   protected void setMultilineSupport(Control control_p) {

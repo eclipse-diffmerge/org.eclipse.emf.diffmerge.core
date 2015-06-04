@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 public class ResourceScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
    */
   public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {

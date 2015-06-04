@@ -116,9 +116,9 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     }
     return value;
   }
-
+  
   /**
-   * @see org.eclipse.emf.diffmerge.impl.base.AbstractValuePresence#getFeature()
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature()
    * @generated NOT
    */
   @Override

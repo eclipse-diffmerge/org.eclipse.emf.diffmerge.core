@@ -63,7 +63,7 @@ public class MergeLogEvent extends AbstractLogEvent {
    * Constructor
    * @param domain_p an optional editing domain in which the merge event occurs
    * @param comparison_p the non-null comparison in which the merge event occurs
-   * @param diff_p the non-null difference being merged
+   * @param diffs_p the non-null differences being merged
    * @param mergeToLeft_p whether the direction of the merge event is left
    */
   public MergeLogEvent(EditingDomain domain_p, IComparison comparison_p,

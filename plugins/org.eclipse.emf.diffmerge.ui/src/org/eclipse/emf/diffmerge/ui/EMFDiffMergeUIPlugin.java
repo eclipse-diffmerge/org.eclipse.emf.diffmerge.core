@@ -53,6 +53,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   public static final String UI_DIFF_DATA_FILE_EXTENSION = DiffuidataPackage.eNAME;
   
   /** Identifiers for UI images */
+  @SuppressWarnings("javadoc")
   public static enum ImageID {
     CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, CONFLICT_STAT, CONTAINER, DELETE, DONE, DOWN,
     EMPTY, EXPANDALL, INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, MODIFIED_STAT,
@@ -60,8 +61,10 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, UNDO, UP, VIEW_MENU, WARNING }
   
   /** Identifiers for colors according to the side to which a difference presence is relative */
+  @SuppressWarnings("javadoc")
   public static enum DifferenceColorKind {
-    LEFT, RIGHT, BOTH, NONE, CONFLICT, DEFAULT
+    LEFT, RIGHT, BOTH, NONE,
+    CONFLICT, DEFAULT
   }
   
   /** The local path to icons */

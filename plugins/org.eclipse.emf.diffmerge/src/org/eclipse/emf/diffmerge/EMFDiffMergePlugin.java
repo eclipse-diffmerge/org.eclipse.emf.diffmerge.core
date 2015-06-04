@@ -67,6 +67,7 @@ public class EMFDiffMergePlugin extends Plugin {
   
   /**
    * Set whether this plug-in must be verbose
+   * @param verbose_p whether it must be verbose
    */
   public void setVerbose(boolean verbose_p) {
     _verbose = verbose_p;

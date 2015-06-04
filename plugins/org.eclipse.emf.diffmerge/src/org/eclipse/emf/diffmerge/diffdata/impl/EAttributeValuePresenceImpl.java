@@ -154,9 +154,9 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
     result.append(')');
     return result.toString();
   }
-
+  
   /**
-   * @see org.eclipse.emf.diffmerge.impl.base.AbstractValuePresence#getFeature()
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature()
    * @generated NOT
    */
   @Override

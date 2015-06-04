@@ -37,7 +37,6 @@ public abstract class AbstractLogEvent {
   
   /**
    * Constructor
-   * @param domain_p an optional editing domain
    * @param comparison_p a non-null comparison
    */
   protected AbstractLogEvent(IComparison comparison_p) {

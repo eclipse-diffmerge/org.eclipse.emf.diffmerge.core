@@ -29,7 +29,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethodFactory {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonSpecification(org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification, org.eclipse.emf.diffmerge.ui.specification.IScopeSpecification)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
    */
   @Override
   public IComparisonMethod createComparisonMethod(

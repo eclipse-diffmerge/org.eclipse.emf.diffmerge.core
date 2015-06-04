@@ -31,7 +31,7 @@ public class MapBasedMatchPolicy extends DefaultMatchPolicy {
   
   /**
    * Constructor
-   * @param a non-null mapping of matching elements (modifying it will alter this policy)
+   * @param mapping_p a non-null mapping of matching elements (modifying it will alter this policy)
    */
   public MapBasedMatchPolicy(Map<? extends EObject, ? extends EObject> mapping_p) {
     _mapping = mapping_p;

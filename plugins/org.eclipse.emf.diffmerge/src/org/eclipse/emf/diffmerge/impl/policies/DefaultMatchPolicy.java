@@ -58,7 +58,7 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   /**
    * Return the extrinsic ID of the given element from the given scope, or null if none
    * @param element_p a non-null element
-   * @param a non-null scope that covers the element
+   * @param scope_p a non-null scope that covers the element
    * @return a potentially null object
    */
   protected Comparable<?> getExtrinsicID(EObject element_p, IModelScope scope_p) {
