@@ -628,12 +628,22 @@ implements IFragmentedModelScope.Editable {
             // Since the element is in a resource, we know the resource will be explored
             // because we assume all resource roots are reachable in the case of resource inclusion
             boolean resourceChangedByInclusion = false;
-            resourceChangedByInclusion = !resourceChangedInList &&
-                _currentResource != null && _currentResource != candidateResource;
-            if (resourceChangedByInclusion && firstExploration)
-              notifyInclusion(_currentResource, candidateResource);
-            if (resourceAlreadyExplored && resourceChangedByInclusion) {
-              // Resource reached via inclusion but already visited: Skip element and its subtree
+            Resource candidateContainerResource = null;
+            // Determine whether the current element leads to a new resource by inclusion
+            if (!resourceChangedInList && _currentResource != null && _currentResource != candidateResource) {
+              EObject candidateContainer = candidate.eContainer();
+              if (candidateContainer != null) {
+                candidateContainerResource = candidateContainer.eResource();
+                resourceChangedByInclusion =
+                    candidateContainerResource != null && candidateContainerResource != candidateResource;
+              }
+            }
+            if (resourceChangedByInclusion && firstExploration) {
+              // Resource reached by inclusion: Notify (candidateContainerResource cannot be null)
+              notifyInclusion(candidateContainerResource, candidateResource);
+            }
+            if (resourceChangedByInclusion && resourceAlreadyExplored) {
+              // Resource reached by inclusion but already visited: Skip element and its subtree
               _contentIterator.prune();
               candidateOK = false;
             }
