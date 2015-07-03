@@ -38,6 +38,7 @@ import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure
 public class ComparableLinkedList<E extends Comparable<?>> extends LinkedList<E>
 implements IComparableList<E> {
   
+  /** The serial version ID */
   private static final long serialVersionUID = 1L;
   
   /** Whether equals rather than == must be used to compare members */

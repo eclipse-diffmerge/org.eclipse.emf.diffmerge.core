@@ -32,8 +32,8 @@ import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure
 public class ComparableTreeSet<E extends Comparable<?>>
 extends TreeSet<E> implements IComparableSet<E> {
   
+  /** The serial version ID */
   private static final long serialVersionUID = 1L;
-  
   
   /**
    * Constructor

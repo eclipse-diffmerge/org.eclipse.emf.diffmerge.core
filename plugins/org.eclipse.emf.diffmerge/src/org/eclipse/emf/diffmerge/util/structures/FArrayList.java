@@ -32,7 +32,8 @@ import org.eclipse.emf.common.util.ECollections;
  */
 public class FArrayList<E> extends BasicEList<E> implements IEqualityBasedStructure {
   
-  private static final long serialVersionUID = -8125124237694239450L;
+  /** The serial version ID */
+  private static final long serialVersionUID = 1L;
   
   /** The non-null equality function */
   private IEqualityTester _equalityTester;

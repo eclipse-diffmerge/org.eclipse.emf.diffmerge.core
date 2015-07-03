@@ -627,7 +627,9 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    * @generated NOT
    */
   protected class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
+    /** The serial version */
     private static final long serialVersionUID = 1L;
+    
     /** The non-null role played by the scope to cross-reference */
     protected final Role _role;
 

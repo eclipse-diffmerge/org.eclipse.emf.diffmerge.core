@@ -32,6 +32,7 @@ import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure
 public class ComparableArrayList<E extends Comparable<?>> extends BasicEList<E>
 implements IComparableList<E> {
   
+  /** The serial version ID */
   private static final long serialVersionUID = 1L;
   
   /** Whether equals rather than == must be used to compare members */

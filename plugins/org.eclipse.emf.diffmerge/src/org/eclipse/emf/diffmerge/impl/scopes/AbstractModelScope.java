@@ -126,10 +126,11 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getAllContents(org.eclipse.emf.ecore.EObject)
    */
-  @SuppressWarnings("serial")
   public TreeIterator<EObject> getAllContents(EObject root_p) {
     // Return an iterator which is derived from getContents(EObject)
     return new AbstractTreeIterator<EObject>(root_p, false) {
+      /** The serial version ID */
+      private static final long serialVersionUID = 1L;
       /**
        * @see org.eclipse.emf.common.util.AbstractTreeIterator#getChildren(java.lang.Object)
        */

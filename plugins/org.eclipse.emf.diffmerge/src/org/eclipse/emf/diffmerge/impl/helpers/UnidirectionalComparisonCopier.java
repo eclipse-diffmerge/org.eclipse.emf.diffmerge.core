@@ -38,7 +38,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  */
 public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   
-  private static final long serialVersionUID = 5334350558149241676L;
+  /** The serial version ID */
+  private static final long serialVersionUID = 1L;
   
   /** The non-null role of the source for this copier */
   protected final Role _sourceRole;

@@ -30,7 +30,8 @@ import java.util.ListIterator;
  */
 public class FLinkedList<E> extends LinkedList<E> implements IEqualityBasedStructure {
   
-  private static final long serialVersionUID = 3998981541223302581L;
+  /** The serial version ID */
+  private static final long serialVersionUID = 1L;
   
   /** The non-null equality function */
   private IEqualityTester _equalityTester;

@@ -33,8 +33,8 @@ import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure
 public class ComparableTreeMap<K extends Comparable<?>, V extends Comparable<?>>
 extends TreeMap<K, V> implements IComparableMap<K, V> {
   
+  /** The serial version ID */
   private static final long serialVersionUID = 1L;
-  
   
   /**
    * Constructor

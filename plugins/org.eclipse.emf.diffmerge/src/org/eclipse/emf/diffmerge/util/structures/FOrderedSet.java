@@ -30,7 +30,8 @@ import org.eclipse.emf.common.util.AbstractEList;
  */
 public class FOrderedSet<E> extends FArrayList<E> implements Set<E> {
   
-  private static final long serialVersionUID = 6710473554492863316L;
+  /** The serial version ID */
+  private static final long serialVersionUID = 1L;
   
   /**
    * Constructor for empty set with default equality tester

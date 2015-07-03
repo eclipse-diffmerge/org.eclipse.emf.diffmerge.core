@@ -36,8 +36,9 @@ import org.eclipse.emf.diffmerge.util.structures.comparable.IComparableStructure
 public class ComparableHashMap<K extends Comparable<?>, V extends Comparable<?>>
 extends BasicEMap<K, V> implements IComparableStructure<IComparableMapEntry<K, V>> {
   
+  /** The serial version ID */
   private static final long serialVersionUID = 1L;
-
+  
   /** Whether equals rather than == must be used to compare keys */
   private final boolean _useEqualsForKeys;
   

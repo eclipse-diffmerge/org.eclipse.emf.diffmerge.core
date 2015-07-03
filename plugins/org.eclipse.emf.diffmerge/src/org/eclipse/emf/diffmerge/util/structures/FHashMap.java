@@ -33,7 +33,8 @@ import org.eclipse.emf.common.util.BasicEMap;
 public class FHashMap<K, V> extends BasicEMap<K,V>
 implements IEqualityBasedStructure {
   
-  private static final long serialVersionUID = 1427744332710049890L;
+  /** The serial version ID */
+  private static final long serialVersionUID = 1L;
   
   /** The non-null equality function */
   private final IEqualityTester _equalityTester;
