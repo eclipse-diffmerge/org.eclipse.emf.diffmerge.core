@@ -34,6 +34,6 @@
   </steps>
   <steps xsi:type="buildstep:TestStep" xmi:id="__bTBQO0lEeGUh5cCyocRdQ" name="Launch Tests" description="" enabled="false" launchConfigurationPath="org.eclipse.emf.diffmerge.tests.wt.elements/EDM-WT-Tests.launch"/>
   <scms xsi:type="buildscm:GIT" xmi:id="_8IWCQd1MEeGLW89eUbtzmA">
-    <locations xmi:id="_8hrIQN1MEeGLW89eUbtzmA" url="git.eclipse.org/gitroot/diffmerge/org.eclipse.emf.diffmerge.core.git"/>
+    <locations xmi:id="_8hrIQN1MEeGLW89eUbtzmA" url="git.eclipse.org/gitroot/diffmerge/org.eclipse.emf.diffmerge.core.git" localPath=""/>
   </scms>
 </buildcore:Job>
