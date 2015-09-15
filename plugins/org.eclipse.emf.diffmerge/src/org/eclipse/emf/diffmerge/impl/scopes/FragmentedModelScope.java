@@ -235,6 +235,8 @@ implements IFragmentedModelScope.Editable {
    */
   protected void addNewResource(Resource resource_p) {
     _resources.add(resource_p);
+    if (!_initiallyPresentResources.contains(resource_p))
+      _loadedResources.add(resource_p);
   }
   
   /**
@@ -257,6 +259,11 @@ implements IFragmentedModelScope.Editable {
    */
   protected void explorationFinished() {
     _state = ScopeState.FULLY_EXPLORED;
+    // Completion of _loadedResources: additional resources may be involved because
+    // of automatic proxy resolving. A consequence of this update of _loadedResources
+    // is that the loaded resources of a scope S1 may wrongly include those of another
+    // scope S2 on the same resource set (S2 loaded after S1 and explored after S1),
+    // which is OK as long as both scopes are unloaded together.
     _loadedResources.addAll(_resourceSet.getResources());
     _loadedResources.removeAll(_initiallyPresentResources);
     _initiallyPresentResources.clear();

@@ -223,7 +223,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * Dispose the resources which have been added during the comparison process
    */
   protected void disposeResources() {
-    EditingDomain domain = getEditingDomain();
+    final EditingDomain domain = getEditingDomain();
     final Set<Resource> unloaded = new HashSet<Resource>();
     MiscUtil.executeAndForget(domain, new Runnable() {
       /**
@@ -237,6 +237,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
               uiComparison.dispose();
             }
           }
+          _comparisonResource.unload();
+          domain.getResourceSet().getResources().remove(_comparisonResource);
+          unloaded.add(_comparisonResource);
         }
         if (_leftScope instanceof IPersistentModelScope)
           unloaded.addAll(((IPersistentModelScope)_leftScope).unload());

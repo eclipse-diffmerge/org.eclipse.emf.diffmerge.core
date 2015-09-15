@@ -23,11 +23,13 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -115,7 +117,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
-   * Create an editing domain that is dedicated to the comparison
+   * Create and return an editing domain that is dedicated to the comparison
    * @return a non-null editing domain
    */
   protected EditingDomain createEditingDomain() {
@@ -147,14 +149,25 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    * @see org.eclipse.emf.edit.provider.IDisposable#dispose()
    */
   public void dispose() {
-    EditingDomain domain = getEditingDomain();
+    final EditingDomain domain = getEditingDomain();
+    // If resource set is empty, dispose adapter factories
     if (domain instanceof AdapterFactoryEditingDomain &&
         domain.getResourceSet().getResources().isEmpty()) {
-      // Resource set is empty: dispose adapter factories if relevant
       AdapterFactoryEditingDomain afed = (AdapterFactoryEditingDomain)domain;
       AdapterFactory af = afed.getAdapterFactory();
       if (af instanceof IDisposable)
         ((IDisposable)af).dispose();
+    }
+    // Also clean shared adapter factory: icons associated to resources
+    AdapterFactory af =
+        EMFDiffMergeUIPlugin.getDefault().getAdapterFactoryLabelProvider().getAdapterFactory();
+    if (af instanceof ComposedAdapterFactory) {
+      ComposedAdapterFactory composed = (ComposedAdapterFactory)af;
+      AdapterFactory afForType = composed.getFactoryForType(Resource.class.getPackage());
+      if (afForType instanceof ResourceItemProviderAdapterFactory) {
+        ResourceItemProviderAdapterFactory ripaf = (ResourceItemProviderAdapterFactory)afForType;
+        ripaf.dispose();
+      }
     }
   }
   
