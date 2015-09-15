@@ -14,10 +14,13 @@
  */
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
@@ -26,11 +29,13 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -69,6 +74,10 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   /** The (initially null) editing domain */
   private EditingDomain _editingDomain;
   
+  /** Whether the editing domain in which the comparison takes place, if any,
+  is entirely dedicated to the comparison */
+  protected boolean _isDedicatedEditingDomain;
+  
   
   /**
    * Constructor
@@ -84,10 +93,35 @@ public class DefaultComparisonMethod implements IComparisonMethod {
     _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeSpec_p);
     _twoWayReferenceRole = null;
     _editingDomain = null;
+    _isDedicatedEditingDomain = false;
     _matchPolicy = createMatchPolicy();
     _diffPolicy = createDiffPolicy();
     _mergePolicy = createMergePolicy();
     _initialized = false;
+  }
+  
+  /**
+   * Clear the given resource set
+   * @param resourceSet_p a non-null object
+   */
+  protected void clearResourceSet(ResourceSet resourceSet_p) {
+    List<Resource> resources =
+        new ArrayList<Resource>(resourceSet_p.getResources());
+    for (Resource resource : resources) {
+      for (Adapter adapter : new ArrayList<Adapter>(resource.eAdapters())) {
+        if (adapter instanceof ECrossReferenceAdapter)
+          resource.eAdapters().remove(adapter);
+      }
+    }
+    for (Resource resource : resources) {
+      try {
+        if (resource.isLoaded())
+          resource.unload();
+        resourceSet_p.getResources().remove(resource);
+      } catch (Exception e) {
+        // Proceed
+      }
+    }
   }
   
   /**
@@ -146,11 +180,25 @@ public class DefaultComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * Dispose this comparison method.
+   * This excludes scopes, comparison and Eclipse operation history.
    * @see org.eclipse.emf.edit.provider.IDisposable#dispose()
    */
   public void dispose() {
     final EditingDomain domain = getEditingDomain();
-    // If resource set is empty, dispose adapter factories
+    if (domain != null && _isDedicatedEditingDomain) {
+      // Dedicated editing domain: clear it entirely (useful if comparison computation was cancelled)
+      MiscUtil.executeAndForget(domain, new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          clearResourceSet(domain.getResourceSet());
+        }
+      });
+      domain.getCommandStack().flush();
+    }
+    // If domain is empty, dispose adapter factories
     if (domain instanceof AdapterFactoryEditingDomain &&
         domain.getResourceSet().getResources().isEmpty()) {
       AdapterFactoryEditingDomain afed = (AdapterFactoryEditingDomain)domain;
@@ -176,6 +224,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
    * @return a potentially null editing domain
    */
   protected EditingDomain doGetEditingDomain() {
+    _isDedicatedEditingDomain = true;
     return createEditingDomain();
   }
   
