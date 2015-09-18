@@ -42,6 +42,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
@@ -198,7 +199,7 @@ public class DefaultComparisonMethod implements IComparisonMethod {
       });
       domain.getCommandStack().flush();
     }
-    // If domain is empty, dispose adapter factories
+    // Domain is empty: dispose adapter factories
     if (domain instanceof AdapterFactoryEditingDomain &&
         domain.getResourceSet().getResources().isEmpty()) {
       AdapterFactoryEditingDomain afed = (AdapterFactoryEditingDomain)domain;
@@ -206,6 +207,9 @@ public class DefaultComparisonMethod implements IComparisonMethod {
       if (af instanceof IDisposable)
         ((IDisposable)af).dispose();
     }
+    // Dedicated transactional editing domain: dispose it
+    if (domain instanceof TransactionalEditingDomain && _isDedicatedEditingDomain)
+      ((TransactionalEditingDomain)domain).dispose();
     // Also clean shared adapter factory: icons associated to resources
     AdapterFactory af =
         EMFDiffMergeUIPlugin.getDefault().getAdapterFactoryLabelProvider().getAdapterFactory();
