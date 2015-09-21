@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -1561,7 +1560,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           }
           getUIComparison().setLastActionSelection(selection);
         }
-      }, onLeft_p, true);
+      }, onLeft_p);
       firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
       firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
     }
@@ -1974,29 +1973,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
       if (proceed) {
         // Merge is confirmed
-        try {
-          IProgressService progress = PlatformUI.getWorkbench().getProgressService();
-          progress.busyCursorWhile(new IRunnableWithProgress() {
-            /**
-             * @see org.eclipse.jface.operation.IRunnableWithProgress#run(IProgressMonitor)
-             */
-            public void run(final IProgressMonitor monitor_p) throws InvocationTargetException, InterruptedException {
-              // Merge runnable
-              executeOnModel(new Runnable() {
-                /**
-                 * @see java.lang.Runnable#run()
-                 */
-                public void run() {
-                  merged.addAll(getComparison().merge(toMerge, destination, true, monitor_p));
-                  getUIComparison().setLastActionSelection(selection);
-                }
-              }, toLeft_p, false);
-            }
-          });
-          done = true;
-        } catch (Exception e) {
-          throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
-        }
+        executeOnModel(new IRunnableWithProgress() {
+          /**
+           * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+           */
+          public void run(IProgressMonitor monitor_p) throws InvocationTargetException,
+          InterruptedException {
+            merged.addAll(getComparison().merge(toMerge, destination, true, monitor_p));
+            getUIComparison().setLastActionSelection(selection);
+          }
+        }, toLeft_p);
+        done = true;
       }
     } else {
       // Nothing to merge

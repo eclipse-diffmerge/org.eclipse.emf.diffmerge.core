@@ -21,6 +21,7 @@ import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.contentmergeviewer.IFlushable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.diffmerge.api.IComparison;
@@ -39,6 +40,7 @@ import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -120,40 +122,37 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   protected abstract Composite createControls(Composite parent_p);
   
   /**
-   * Execute the given runnable which may modify any part of the whole model
-   * @param runnable_p a non-null runnable
+   * Execute the given runnable that may modify the model on the given side
+   * and ignores transactional aspects
+   * @param runnable_p a non-null object
    * @param onLeft_p whether the impacted scope is the one on the left-hand side
-   * @param busyIndicator_p whether a busy indicator must be shown
    */
-  protected void executeOnModel(final Runnable runnable_p, final boolean onLeft_p,
-      boolean busyIndicator_p) {
-    Runnable finalRunnable = new Runnable() {
-      /**
-       * @see java.lang.Runnable#run()
-       */
-      public void run() {
-        EMFDiffNode input = getInput();
-        EditingDomain domain = (input == null)? null: input.getEditingDomain();
-        if (domain == null && input != null) {
-          // Look for possible transactional editing domain
-          IModelScope impactedScope = input.getActualComparison().getScope(
-              input.getRoleForSide(onLeft_p));
-          if (impactedScope instanceof IPersistentModelScope) {
-            Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
-            if (resource != null)
-              domain = TransactionUtil.getEditingDomain(resource);
-          }
-        }
-        if (input != null && input.isUndoRedoSupported())
-          MiscUtil.executeOnDomain(domain, null, runnable_p);
-        else
-          MiscUtil.executeAndForget(domain, runnable_p);
-      }
-    };
-    if (busyIndicator_p)
-      BusyIndicator.showWhile(getShell().getDisplay(), finalRunnable);
-    else
-      finalRunnable.run();
+  protected void executeOnModel(final Runnable runnable_p, boolean onLeft_p) {
+    EMFDiffNode input = getInput();
+    final boolean recordChanges = input != null && input.isUndoRedoSupported();
+    final EditingDomain domain = getEditingDomain(onLeft_p);
+    try {
+      MiscUtil.executeWithBusyCursor(domain, null, runnable_p, recordChanges, getShell().getDisplay());
+    } catch (Exception e) {
+      throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
+    }
+  }
+  
+  /**
+   * Execute the given runnable with progress that may modify the model on the given side
+   * and ignores transactional aspects
+   * @param behavior_p a non-null runnable with progress
+   * @param onLeft_p whether the impacted scope is the one on the left-hand side
+   */
+  protected void executeOnModel(final IRunnableWithProgress behavior_p, boolean onLeft_p) {
+    EMFDiffNode input = getInput();
+    final boolean recordChanges = input != null && input.isUndoRedoSupported();
+    final EditingDomain domain = getEditingDomain(onLeft_p);
+    try {
+      MiscUtil.executeWithProgress(domain, null, behavior_p, recordChanges);
+    } catch (Exception e) {
+      throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
+    }
   }
   
   /**
@@ -215,10 +214,33 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   
   /**
    * Return the editing domain for this viewer
-   * @return an editing domain which is assumed non-null after setInput(Object) has been invoked
+   * @return an editing domain which may be non-null after setInput(Object) has been invoked
    */
   protected EditingDomain getEditingDomain() {
     return getInput() == null? null: getInput().getEditingDomain();
+  }
+  
+  /**
+   * Return the editing domain for the model on the given side, if any
+   * @param onLeft_p whether the side is the left-hand side
+   * @return a potentially null editing domain
+   */
+  protected EditingDomain getEditingDomain(boolean onLeft_p) {
+    EditingDomain result = getEditingDomain();
+    if (result == null) {
+      EMFDiffNode input = getInput();
+      if (input != null) {
+        // Look for possible transactional editing domain
+        IModelScope impactedScope = input.getActualComparison().getScope(
+            input.getRoleForSide(onLeft_p));
+        if (impactedScope instanceof IPersistentModelScope) {
+          Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
+          if (resource != null)
+            result = TransactionUtil.getEditingDomain(resource);
+        }
+      }
+    }
+    return result;
   }
   
   /**

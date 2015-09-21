@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
 import org.eclipse.core.resources.IFile;
@@ -23,6 +24,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.command.AbstractCommand.NonDirtying;
@@ -34,6 +36,14 @@ import org.eclipse.emf.edit.command.ChangeCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.transaction.Transaction;
 import org.eclipse.emf.transaction.TransactionalCommandStack;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.impl.InternalTransactionalEditingDomain;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.operation.IThreadListener;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 
 
 /**
@@ -87,6 +97,83 @@ public final class MiscUtil {
   
   
   /**
+   * An IRunnableWithProgress to be used by an IProgressService, that is capable to modify
+   * models in a given editing domain regardless of the nature of the editing domain (transactional/
+   * non-transactional/null) or the execution context (within or outside a transaction).
+   * The principle is to wrap the behavior in a privileged runnable while executing in the calling
+   * thread, if relevant, then provide a progress monitor at the time of the execution of the
+   * behavior by the thread provided by the IProgressService.
+   */
+  protected static class RunnableWithProgressOnModel implements IRunnableWithProgress, IThreadListener {
+    /** The optional editing domain in which the behavior operates */
+    protected final EditingDomain _domain;
+    /** Whether changes done by the behavior must be recorded if possible */
+    protected final boolean _recordChanges;
+    /** An non-null runnable that wraps the delegate behavior for the sake of transactional concerns */
+    protected Runnable _wrappingRunnable;
+    /** An initially null monitor for the execution of the delegate behavior */
+    protected IProgressMonitor _monitor;
+    /**
+     * Constructor
+     * @param behavior_p a non-null behavior that ignores transactional aspects
+     * @param label_p an optional user-friendly name for the behavior
+     * @param domain_p an optional editing domain in which the behavior operates
+     * @param recordChanges_p whether changes done by the behavior must be recorded if possible
+     */
+    public RunnableWithProgressOnModel(final IRunnableWithProgress behavior_p,
+        final String label_p, EditingDomain domain_p, boolean recordChanges_p) {
+      _domain = domain_p;
+      _recordChanges = recordChanges_p;
+      _wrappingRunnable = new Runnable() {
+        /**
+         * To execute the behavior in a transaction if necessary
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          // Start a transaction if necessary
+          MiscUtil.execute(_domain, label_p, new Runnable() {
+            /**
+             * The adaptation from IRunnableWithProgress to Runnable
+             * @see java.lang.Runnable#run()
+             */
+            public void run() {
+              try {
+                behavior_p.run(_monitor); // Instance variable must be set at that time
+              } catch (InvocationTargetException e) {
+                throw new RuntimeException(e); // No choice
+              } catch (InterruptedException e) {
+                throw new RuntimeException(e); // No choice
+              }
+            }
+          }, _recordChanges); 
+        }
+      };
+      _monitor = null;
+    }
+    /**
+     * @see org.eclipse.jface.operation.IThreadListener#threadChange(java.lang.Thread)
+     */
+    public void threadChange(Thread thread_p) {
+      // We are still in the calling thread
+      if (MiscUtil.isRunningInActiveTransaction(_domain)) {
+        // Create a privileged runnable that can be executed by the thread provided by
+        // the IProgressService
+        TransactionalEditingDomain ted = (TransactionalEditingDomain)_domain;
+        _wrappingRunnable = ted.createPrivilegedRunnable(_wrappingRunnable);
+      }
+    }
+    /**
+     * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+     */
+    public void run(IProgressMonitor monitor_p) throws InvocationTargetException,
+        InterruptedException {
+      _monitor = monitor_p; // Becomes accessible by the wrapping runnable
+      _wrappingRunnable.run();
+    }
+  }
+  
+  
+  /**
    * Return the concatenation of the String representation of the given objects
    */
   public static String buildString(Object... objects_p) {
@@ -99,27 +186,19 @@ public final class MiscUtil {
   }
   
   /**
-   * Execute the given runnable that affects models in the given editing domain
-   * @param domain_p a non-null editing domain
-   * @param label_p an optional label to appear in the undo/redo menu items
+   * Execute the given behavior (Runnable) that affects models in the given editing domain
+   * and ignores transactional aspects
+   * @param domain_p an optional editing domain
+   * @param label_p an optional user-friendly name for the behavior
    * @param runnable_p a non-null runnable
+   * @param recordChanges_p whether changes must be recorded if possible
    */
-  public static void executeOnDomain(EditingDomain domain_p, String label_p,
-      final Runnable runnable_p) {
-    final String commandLabel = label_p != null? label_p: Messages.MiscUtil_DefaultCommandName;
-    ChangeCommand cmd = new ChangeCommand(domain_p.getResourceSet()) {
-      {
-        label = commandLabel;
-      }
-      /**
-       * @see org.eclipse.emf.edit.command.ChangeCommand#doExecute()
-       */
-      @Override
-      protected void doExecute() {
-        runnable_p.run();
-      }
-    };
-    domain_p.getCommandStack().execute(cmd);
+  public static void execute(EditingDomain domain_p, String label_p,
+      final Runnable runnable_p, boolean recordChanges_p) {
+    if (recordChanges_p)
+      executeOnDomain(domain_p, label_p, runnable_p);
+    else
+      executeAndForget(domain_p, runnable_p);
   }
   
   /**
@@ -131,7 +210,7 @@ public final class MiscUtil {
    * @param runnable_p a non-null runnable
    */
   public static void executeAndForget(EditingDomain domain_p, Runnable runnable_p) {
-    if (domain_p != null) {
+    if (domain_p != null && !isRunningInActiveTransaction(domain_p)) {
       AbstractCommand cmd = new ForgettingCommand(runnable_p);
       CommandStack cStack = domain_p.getCommandStack();
       if (cStack instanceof TransactionalCommandStack) {
@@ -147,6 +226,78 @@ public final class MiscUtil {
     } else {
       runnable_p.run();
     }
+  }
+  
+  /**
+   * Execute the given runnable that affects models in the given editing domain
+   * and ignores transactional aspects
+   * @param domain_p a non-null editing domain
+   * @param label_p an optional user-friendly label to appear in the undo/redo menu items
+   * @param runnable_p a non-null runnable
+   */
+  public static void executeOnDomain(EditingDomain domain_p, String label_p,
+      final Runnable runnable_p) {
+    if (isRunningInActiveTransaction(domain_p)) {
+      // Already in the active transaction
+      runnable_p.run();
+    } else {
+      final String commandLabel = label_p != null? label_p: Messages.MiscUtil_DefaultCommandName;
+      ChangeCommand cmd = new ChangeCommand(domain_p.getResourceSet()) {
+        {
+          label = commandLabel;
+        }
+        /**
+         * @see org.eclipse.emf.edit.command.ChangeCommand#doExecute()
+         */
+        @Override
+        protected void doExecute() {
+          runnable_p.run();
+        }
+      };
+      domain_p.getCommandStack().execute(cmd);
+    }
+  }
+  
+  /**
+   * Execute the given behavior (Runnable), that affects models in the given
+   * editing domain and ignores transactional aspects, with a busy cursor.
+   * @param domain_p an optional editing domain
+   * @param label_p an optional user-friendly name for the behavior
+   * @param runnable_p a non-null runnable
+   * @param recordChanges_p whether changes must be recorded if possible
+   * @param display_p a non-null display for the busy cursor
+   */
+  public static void executeWithBusyCursor(final EditingDomain domain_p,
+      final String label_p, final Runnable runnable_p, final boolean recordChanges_p,
+      Display display_p) {
+    Runnable actualOperation = new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      public void run() {
+        MiscUtil.execute(domain_p, label_p, runnable_p, recordChanges_p);
+      }
+    };
+    if (MiscUtil.isRunningInActiveTransaction(domain_p))
+      actualOperation = ((TransactionalEditingDomain)domain_p).createPrivilegedRunnable(actualOperation);
+    BusyIndicator.showWhile(display_p, actualOperation);
+  }
+  
+  /**
+   * Execute the given behavior (IRunnableWithProgress), that affects models in the given
+   * editing domain and ignores transactional aspects, in a progress dialog.
+   * @param domain_p an optional editing domain
+   * @param label_p an optional user-friendly name for the behavior
+   * @param behavior_p a non-null runnable with progress
+   * @param recordChanges_p whether changes must be recorded if possible
+   */
+  public static void executeWithProgress(EditingDomain domain_p, String label_p,
+      IRunnableWithProgress behavior_p, boolean recordChanges_p)
+          throws InvocationTargetException, InterruptedException {
+    IRunnableWithProgress operation = new RunnableWithProgressOnModel(
+        behavior_p, label_p, domain_p, recordChanges_p);
+    IProgressService progress = PlatformUI.getWorkbench().getProgressService();
+    progress.busyCursorWhile(operation);
   }
   
   /**
@@ -184,6 +335,22 @@ public final class MiscUtil {
           }
         }
       }
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether the current code executes in the context of the currently
+   * active transaction on the given editing domain
+   * @param domain_p a potentially null object
+   */
+  public static boolean isRunningInActiveTransaction(EditingDomain domain_p) {
+    boolean result = false;
+    if (domain_p instanceof InternalTransactionalEditingDomain) {
+      Transaction activeTransaction =
+          ((InternalTransactionalEditingDomain)domain_p).getActiveTransaction();
+      if (activeTransaction != null)
+        result = Thread.currentThread() == activeTransaction.getOwner();
     }
     return result;
   }
