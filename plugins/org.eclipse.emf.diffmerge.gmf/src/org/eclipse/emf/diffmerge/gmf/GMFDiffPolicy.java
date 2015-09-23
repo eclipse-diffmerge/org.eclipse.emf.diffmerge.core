@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint;
 import org.eclipse.swt.graphics.Color;
@@ -28,6 +29,10 @@ import org.eclipse.swt.graphics.Color;
  * @author Olivier Constant
  */
 public class GMFDiffPolicy extends ConfigurableDiffPolicy {
+
+  /** The very special View::children reference (could theoretically be null) */
+  private static final EStructuralFeature VIEW_CHILDREN =
+      NotationPackage.eINSTANCE.getView().getEStructuralFeature("children"); //$NON-NLS-1$
   
   /**
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#considerEqual(Object, Object, EAttribute)
@@ -45,6 +50,14 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
         result = equalColor((Color)value1_p, (Color)value2_p);
     }
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy#doConsiderOrdered(org.eclipse.emf.ecore.EStructuralFeature)
+   */
+  @Override
+  protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
+    return super.doConsiderOrdered(feature_p) && feature_p != VIEW_CHILDREN;
   }
   
   /**

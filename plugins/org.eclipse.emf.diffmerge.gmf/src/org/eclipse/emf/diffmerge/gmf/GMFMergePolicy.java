@@ -82,13 +82,24 @@ public class GMFMergePolicy extends DefaultMergePolicy {
     if (element_p instanceof Edge)
       group_p.addAll(element_p.eContents());
     // Semantic element -> Views
-    if (isGraphicalFromSemantic()) {
-      ECrossReferenceAdapter crAdapter = ECrossReferenceAdapter.getCrossReferenceAdapter(element_p);
-      if (crAdapter != null) {
-        for (EStructuralFeature.Setting setting : crAdapter.getNonNavigableInverseReferences(element_p, false)) {
-          if (setting.getEStructuralFeature() == NotationPackage.eINSTANCE.getView_Element())
-            group_p.add(setting.getEObject());
-        }
+    if (isGraphicalFromSemantic())
+      extendGMFAdditionGroupSemanticTarget(group_p, element_p, scope_p);
+  }
+  
+  /**
+   * Extend the given addition group for the given element within the given scope
+   * so that GMF elements are bound to their semantic elements
+   * @param group_p a non-null, modifiable collection
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope
+   */
+  protected void extendGMFAdditionGroupSemanticTarget(Set<EObject> group_p, EObject element_p,
+      IFeaturedModelScope scope_p) {
+    ECrossReferenceAdapter crAdapter = ECrossReferenceAdapter.getCrossReferenceAdapter(element_p);
+    if (crAdapter != null) {
+      for (EStructuralFeature.Setting setting : crAdapter.getNonNavigableInverseReferences(element_p, false)) {
+        if (setting.getEStructuralFeature() == NotationPackage.eINSTANCE.getView_Element())
+          group_p.add(setting.getEObject());
       }
     }
   }
