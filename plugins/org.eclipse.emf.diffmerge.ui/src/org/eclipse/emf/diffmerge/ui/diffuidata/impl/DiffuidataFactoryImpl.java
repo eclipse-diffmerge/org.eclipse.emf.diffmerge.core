@@ -17,18 +17,13 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 import java.util.Map;
 
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
-
 import org.eclipse.emf.diffmerge.ui.diffuidata.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
 import org.eclipse.jface.viewers.TreePath;
 
 /**
@@ -187,7 +182,8 @@ public class DiffuidataFactoryImpl extends EFactoryImpl implements DiffuidataFac
 	 * @deprecated
 	 * @generated
 	 */
-	@Deprecated
+	@SuppressWarnings("javadoc")
+  @Deprecated
 	public static DiffuidataPackage getPackage() {
 		return DiffuidataPackage.eINSTANCE;
 	}

@@ -385,12 +385,10 @@ public class ConfigurableMatchPolicy extends DefaultMatchPolicy {
     EClass type = element_p.eClass();
     while (it.hasNext()) {
       EObject root = it.next();
-      if (root == element_p) {
+      if (root == element_p)
         return true;
-      } else {
-        if (root.eClass() == type)
-          return false;
-      }
+      if (root.eClass() == type)
+        return false;
     }
     return false;
   }

@@ -174,7 +174,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
           counterpart2 = idRegistry2_p != null? idRegistry2_p.get(matchID): null;
         }
         if (counterpart1 == null && counterpart2 == null) {
-          IMatch.Editable match = (IMatch.Editable)mapping.map(current, role_p);
+          IMatch.Editable match = mapping.map(current, role_p);
           if (rememberMatchIDs)
             match.setMatchID(matchID);
         } else {

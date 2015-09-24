@@ -214,6 +214,7 @@ implements IFragmentedModelScope.Editable {
    * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#add(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
    */
   @Override
+  @SuppressWarnings("null") // To avoid irrelevant warning
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     Resource oldResource = value_p.eResource();
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);

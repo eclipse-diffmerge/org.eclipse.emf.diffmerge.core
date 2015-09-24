@@ -375,6 +375,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
    * @deprecated
    * @generated
    */
+  @SuppressWarnings("javadoc")
   @Deprecated
   public static DiffdataPackage getPackage() {
     return DiffdataPackage.eINSTANCE;

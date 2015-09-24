@@ -187,7 +187,8 @@ public class UidiffdataFactoryImpl extends EFactoryImpl implements UidiffdataFac
 	 * @deprecated
 	 * @generated
 	 */
-	@Deprecated
+	@SuppressWarnings("javadoc")
+  @Deprecated
 	public static UidiffdataPackage getPackage() {
 		return UidiffdataPackage.eINSTANCE;
 	}
