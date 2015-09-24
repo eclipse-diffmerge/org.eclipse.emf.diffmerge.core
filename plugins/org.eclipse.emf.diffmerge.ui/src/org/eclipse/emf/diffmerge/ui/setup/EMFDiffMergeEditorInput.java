@@ -60,6 +60,7 @@ import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -634,15 +635,31 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   protected void handleInconsistency(final IComparison comparison_p) {
     final Shell shell = getShell();
     if (shell != null) {
+      final int[] pressed = new int[1];
       shell.getDisplay().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
         public void run() {
-          InconsistencyDialog dialog = new InconsistencyDialog(shell, comparison_p);
-          dialog.open();
+          MessageDialog dialog = new MessageDialog(
+              shell, EMFDiffMergeUIPlugin.LABEL, null,
+              Messages.InconsistencyDialog_DuplicateIDs,
+              MessageDialog.WARNING,
+              new String[] { IDialogConstants.OK_LABEL, IDialogConstants.SHOW_DETAILS_LABEL },
+              0);
+          pressed[0] = dialog.open();
         }
       });
+      if (0 != pressed[0])
+        shell.getDisplay().syncExec(new Runnable() {
+          /**
+           * @see java.lang.Runnable#run()
+           */
+          public void run() {
+            InconsistencyDialog dialog = new InconsistencyDialog(shell, comparison_p);
+            dialog.open();
+          }
+        });
     }
   }
   
