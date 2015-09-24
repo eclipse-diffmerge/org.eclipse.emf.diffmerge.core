@@ -17,16 +17,10 @@ package org.eclipse.emf.diffmerge.ui.setup;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.compare.CompareUI;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -102,23 +96,8 @@ public class CompareModelsAction implements IObjectActionDelegate {
     int size = allSelected.size();
     if (size == 2 || size == 3) {
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-      ComparisonSetup setup = manager.createComparisonSetup(
-          allSelected.get(0), allSelected.get(1), size == 3? allSelected.get(2): null);
-      if (setup != null) {
-        ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);
-        WizardDialog dialog = new WizardDialog(getShell(), wizard);
-        dialog.setHelpAvailable(false);
-        if (Window.OK == dialog.open()) {
-          IComparisonMethod method = setup.getComparisonMethod();
-          if (method != null) {
-            EMFDiffMergeEditorInput input = new EMFDiffMergeEditorInput(method);
-            CompareUI.openCompareEditor(input);
-          }
-        }
-      } else {
-        MessageDialog.openError(getShell(), EMFDiffMergeUIPlugin.LABEL,
-            Messages.CompareModelsAction_ModelsOnly);
-      }
+      manager.openComparisonSetupDialog(getShell(), allSelected.get(0), allSelected.get(1),
+          size == 3? allSelected.get(2): null);
     }
   }
   
