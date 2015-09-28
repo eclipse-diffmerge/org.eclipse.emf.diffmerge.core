@@ -17,6 +17,7 @@ package org.eclipse.emf.diffmerge.ui.setup;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.compare.CompareUI;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -96,8 +97,11 @@ public class CompareModelsAction implements IObjectActionDelegate {
     int size = allSelected.size();
     if (size == 2 || size == 3) {
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-      manager.openComparisonSetupDialog(getShell(), allSelected.get(0), allSelected.get(1),
-          size == 3? allSelected.get(2): null);
+      EMFDiffMergeEditorInput editorInput =
+          manager.createEditorInputWithUI(getShell(),
+              allSelected.get(0), allSelected.get(1), size == 3? allSelected.get(2): null);
+      if (editorInput != null)
+        CompareUI.openCompareEditor(editorInput);
     }
   }
   

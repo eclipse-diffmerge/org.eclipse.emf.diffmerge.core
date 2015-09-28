@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.compare.CompareUI;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -30,9 +29,9 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
-import org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IOverridableFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -80,7 +79,7 @@ public class ComparisonSetupManager {
   }
   
   /**
-   * Return a default editor input for the given entry points
+   * Return a default compare editor input for the given entry points
    * @param entrypoint1_p a non-null object
    * @param entrypoint2_p a non-null object
    * @param entrypoint3_p an optional object
@@ -93,6 +92,36 @@ public class ComparisonSetupManager {
       createComparisonSetup(entrypoint1_p, entrypoint2_p, entrypoint3_p);
     if (selection != null && selection.getComparisonMethod() != null)
       result = new EMFDiffMergeEditorInput(selection.getComparisonMethod());
+    return result;
+  }
+  
+  /**
+   * Create and return a compare editor input as a result of user interactions
+   * for the given entry points
+   * @param shell_p a non-null shell
+   * @param entrypoint1_p a non-null object
+   * @param entrypoint2_p a non-null object
+   * @param entrypoint3_p an optional object
+   */
+  public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, Object entrypoint1_p,
+      Object entrypoint2_p, Object entrypoint3_p) {
+    EMFDiffMergeEditorInput result = null;
+    ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
+    ComparisonSetup setup = manager.createComparisonSetup(
+        entrypoint1_p, entrypoint2_p, entrypoint3_p);
+    if (setup != null) {
+      ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);
+      WizardDialog dialog = new WizardDialog(shell_p, wizard);
+      dialog.setHelpAvailable(false);
+      if (Window.OK == dialog.open()) {
+        IComparisonMethod method = setup.getComparisonMethod();
+        if (method != null)
+          result = new EMFDiffMergeEditorInput(method);
+      }
+    } else {
+      MessageDialog.openError(shell_p, EMFDiffMergeUIPlugin.LABEL,
+          Messages.CompareModelsAction_ModelsOnly);
+    }
     return result;
   }
   
@@ -231,35 +260,6 @@ public class ComparisonSetupManager {
         return true;
     }
     return false;
-  }
-  
-  /**
-   * Open a comparison setup dialog for the given entry points
-   * @param shell_p a non-null shell
-   * @param entrypoint1_p a non-null object
-   * @param entrypoint2_p a non-null object
-   * @param entrypoint3_p an optional object
-   */
-  public void openComparisonSetupDialog(Shell shell_p, Object entrypoint1_p,
-      Object entrypoint2_p, Object entrypoint3_p) {
-    ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-    ComparisonSetup setup = manager.createComparisonSetup(
-        entrypoint1_p, entrypoint2_p, entrypoint3_p);
-    if (setup != null) {
-      ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);
-      WizardDialog dialog = new WizardDialog(shell_p, wizard);
-      dialog.setHelpAvailable(false);
-      if (Window.OK == dialog.open()) {
-        IComparisonMethod method = setup.getComparisonMethod();
-        if (method != null) {
-          EMFDiffMergeEditorInput input = new EMFDiffMergeEditorInput(method);
-          CompareUI.openCompareEditor(input);
-        }
-      }
-    } else {
-      MessageDialog.openError(shell_p, EMFDiffMergeUIPlugin.LABEL,
-          Messages.CompareModelsAction_ModelsOnly);
-    }
   }
   
   /**
