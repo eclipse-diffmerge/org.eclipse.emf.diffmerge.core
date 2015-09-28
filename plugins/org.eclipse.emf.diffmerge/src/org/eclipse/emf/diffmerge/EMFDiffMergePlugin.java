@@ -15,7 +15,6 @@
 package org.eclipse.emf.diffmerge;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
@@ -58,11 +57,13 @@ public class EMFDiffMergePlugin extends Plugin {
   }
   
   /**
-   * Log the given status message in the platform
-   * @param status_p a non-null status message
+   * Log the given message if this plug-in is in verbose mode
+   * @param severity_p a severity as defined in IStatus
+   * @param message_p a non-null warning message
    */
-  private void log(IStatus status_p) {
-    Platform.getLog(getBundle()).log(status_p);
+  public void log(int severity_p, String message_p) {
+    if (_verbose)
+      getLog().log(new Status(severity_p, getPluginId(), message_p));
   }
   
   /**
@@ -92,12 +93,11 @@ public class EMFDiffMergePlugin extends Plugin {
 	}
 	
   /**
-   * Log the given warning message
+   * Log the given warning message if this plug-in is in verbose mode
    * @param message_p a non-null warning message
    */
   public void warn(String message_p) {
-    if (_verbose)
-      log(new Status(IStatus.WARNING, getPluginId(), message_p));
+    log(IStatus.WARNING, message_p);
   }
   
 }
