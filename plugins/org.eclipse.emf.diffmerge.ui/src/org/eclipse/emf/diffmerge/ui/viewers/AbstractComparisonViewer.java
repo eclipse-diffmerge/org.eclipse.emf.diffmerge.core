@@ -68,7 +68,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public abstract class AbstractComparisonViewer extends Viewer implements IFlushable, IPropertyChangeNotifier  {
   
   /** The name of the "current input" property */
-  protected static final String PROPERTY_CURRENT_INPUT = "PROPERTY_CURRENT_INPUT"; //$NON-NLS-1$
+  public static final String PROPERTY_CURRENT_INPUT = "PROPERTY_CURRENT_INPUT"; //$NON-NLS-1$
   
   /** The optional action bars */
   private IActionBars _actionBars;
