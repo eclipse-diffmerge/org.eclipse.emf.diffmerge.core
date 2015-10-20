@@ -313,13 +313,16 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
         TableItem item = (TableItem)event_p.item;
         if (item != null) {
           String text = item.getText(event_p.index);
-          Point size = event_p.gc.textExtent(text);
+          Point size = (text != null)? event_p.gc.textExtent(text): new Point(0,0);
           event_p.width = size.x + 8;
           event_p.height = Math.max(event_p.height, size.y);
           // Based on the offset before the image, draw image and text
           int offset = event_p.x;
-          event_p.gc.drawImage(item.getImage(), offset, event_p.y);
-          event_p.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event_p.y, true);
+          Image image = item.getImage();
+          if (image != null)
+            event_p.gc.drawImage(image, offset, event_p.y);
+          if (text != null)
+            event_p.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event_p.y, true);
         }
       }
     });

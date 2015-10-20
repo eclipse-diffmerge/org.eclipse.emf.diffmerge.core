@@ -101,7 +101,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   public EObject completeMatch(IMatch partialMatch_p, IComparison.Editable comparison_p) {
     setComparison(comparison_p);
     assert partialMatch_p.getUncoveredRole() == _sourceRole.opposite() &&
-        getCompletedMatches().contains(partialMatch_p);
+        !getCompletedMatches().contains(partialMatch_p);
     EObject element = partialMatch_p.get(_sourceRole);
     EObject result = copy(element);
     assert result != null;
