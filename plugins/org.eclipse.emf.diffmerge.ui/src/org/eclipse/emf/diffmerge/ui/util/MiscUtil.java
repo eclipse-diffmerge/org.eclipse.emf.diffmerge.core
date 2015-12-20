@@ -195,7 +195,7 @@ public final class MiscUtil {
    */
   public static void execute(EditingDomain domain_p, String label_p,
       final Runnable runnable_p, boolean recordChanges_p) {
-    if (recordChanges_p)
+    if (recordChanges_p && domain_p != null)
       executeOnDomain(domain_p, label_p, runnable_p);
     else
       executeAndForget(domain_p, runnable_p);
