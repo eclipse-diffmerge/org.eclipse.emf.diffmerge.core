@@ -35,6 +35,7 @@ import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
 import org.eclipse.emf.ecore.EAttribute;
@@ -74,24 +75,32 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * Create the differences related to the attributes for the given match
+   * Detect the differences related to the attributes for the given match
    * @param match_p a non-null, non-partial match
+   * @param createDiff whether the attribute order difference will be created
+   * @return whether the difference reference has been found
    */
-  protected void createAllAttributeDifferences(IMatch match_p) {
+  protected boolean detectAllAttributeDifferences(IMatch match_p, boolean createDiff) {
     assert match_p != null && !match_p.isPartial();
     EClass eClass = match_p.get(Role.TARGET).eClass();
+    boolean toReturn = false;
     for (EAttribute attribute : eClass.getEAllAttributes()) {
       if (getDiffPolicy().coverFeature(attribute))
-        createAttributeDifferences(match_p, attribute);
+      {
+    	  toReturn = toReturn || detectAttributeDifferences(match_p, attribute, createDiff);
+      }
     }
+    return toReturn;
   }
   
   /**
-   * Create the differences related to the given attribute for the given match
+   * Detect the differences related to the given attribute for the given match
    * @param match_p a non-null, non-partial match
    * @param attribute_p a non-null attribute
+   * @param createDiff whether the attribute order difference will be created
+   * @return whether the difference reference has been found
    */
-  protected void createAttributeDifferences(IMatch match_p, EAttribute attribute_p) {
+  protected boolean detectAttributeDifferences(IMatch match_p, EAttribute attribute_p, boolean createDiff) {
     assert match_p != null && !match_p.isPartial() && attribute_p != null;
     IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
     IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
@@ -109,9 +118,14 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (matchingReferenceValue.getObject() != null) {
         if (checkOrder) {
           if (matchingReferenceValue.getIndex() < maxIndex) {
-            // Ordering difference
-            createAttributeOrderDifference(
-                match_p, attribute_p, targetValue, matchingReferenceValue.getObject());
+        	if(createDiff){
+        	  // Ordering difference
+        		createAttributeOrderDifference(
+        				match_p, attribute_p, targetValue, matchingReferenceValue.getObject());
+            }
+        	else{
+        		return true;
+        	}
             checkOrder = false;
           } else {
             maxIndex = matchingReferenceValue.getIndex();
@@ -122,15 +136,29 @@ public class DiffOperation extends AbstractExpensiveOperation {
       }
     }
     for (Object remainingTargetValue : remainingTargetValues) {
-      if (getDiffPolicy().coverValue(remainingTargetValue, attribute_p))
-        createAttributeValueDifference(match_p, attribute_p, remainingTargetValue,
-            Role.TARGET, false);
+      if (getDiffPolicy().coverValue(remainingTargetValue, attribute_p)){
+    	  if(createDiff){
+    		  createAttributeValueDifference(match_p, attribute_p, remainingTargetValue,
+    				  Role.TARGET, false);
+    	  }
+    	  else{
+    		  return true;
+    	  }
+      }
     }
     for (Object remainingReferenceValue : remainingReferenceValues) {
-      if (getDiffPolicy().coverValue(remainingReferenceValue, attribute_p))
-        createAttributeValueDifference(match_p, attribute_p, remainingReferenceValue,
-            Role.REFERENCE, false);
+      if (getDiffPolicy().coverValue(remainingReferenceValue, attribute_p)){
+    	  if(createDiff){
+    		  createAttributeValueDifference(match_p, attribute_p, remainingReferenceValue,
+    				  Role.REFERENCE, false);
+    	  }
+    	  else{
+    		  return true;
+    	  }
+      }
     }
+    return false;
+    		
   }
   
   /**
@@ -172,10 +200,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * Create the differences related to ownership if needed
+   * Detect the differences related to ownership if needed
    * @param match_p a non-null, non-partial match
+   * @param createDiff whether the attribute order difference will be created
+   * @return whether the difference reference has been found
    */
-  protected void createOwnershipDifferences(IMatch match_p) {
+  protected boolean detectOwnershipDifferences(IMatch match_p, boolean createDiff) {
     assert match_p != null && !match_p.isPartial();
     for (Role role : Arrays.asList(Role.TARGET, Role.REFERENCE)) {
       IMatch parentMatch = getComparison().getContainerOf(match_p, role);
@@ -184,31 +214,43 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (parentMatch != null && parentMatch.isPartial()) {
         EObject element = match_p.get(role);
         EReference containment = getComparison().getScope(role).getContainment(element);
-        createReferenceValueDifference(parentMatch, containment, match_p, role, false);
+        if(createDiff){
+        	createReferenceValueDifference(parentMatch, containment, match_p, role, false);
+        }
+        else{
+        	return true;
+        }
       }
     }
+    return false;
   }
   
   /**
-   * Create the differences related to the non-container references for the
+   * Detect the differences related to the non-container references for the
    * given match
    * @param match_p a non-null, non-partial match
+   * @param createDiff whether the attribute order difference will be created
+   * @return whether the difference reference has been found
    */
-  protected void createAllReferenceDifferences(IMatch match_p) {
+  protected boolean detectAllReferenceDifferences(IMatch match_p, boolean createDiff) {
     assert match_p != null && !match_p.isPartial();
     EClass eClass = match_p.get(Role.TARGET).eClass();
+    boolean toReturn = false;
     for (EReference reference : eClass.getEAllReferences()) {
       if (!reference.isContainer() && getDiffPolicy().coverFeature(reference))
-        createReferenceDifferences(match_p, reference);
+    	  toReturn= toReturn || detectReferenceDifferences(match_p, reference, createDiff);
     }
+    return toReturn;
   }
   
   /**
-   * Create the differences related to the given reference for the given match
+   * Detect the differences related to the given reference for the given match
    * @param match_p a non-null, non-partial match
    * @param reference_p a non-null, non-container reference
+   * @param createDiff whether the attribute order difference will be created
+   * @return whether the difference reference has been found
    */
-  protected void createReferenceDifferences(IMatch match_p, EReference reference_p) {
+  protected boolean detectReferenceDifferences(IMatch match_p, EReference reference_p, boolean createDiff) {
     assert match_p != null && !match_p.isPartial() && reference_p != null;
     assert !reference_p.isContainer();
     // Get reference values in different roles
@@ -238,7 +280,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
           if (checkOrder && !isIsolated) {
             if (index < maxIndex) {
               // Ordering difference
-              createReferenceOrderDifference(match_p, reference_p, targetValueMatch);
+              if(createDiff){
+            	  createReferenceOrderDifference(match_p, reference_p, targetValueMatch);
+              }
+              else{
+            	  return true;
+              }
               checkOrder = false;
             } else {
               maxIndex = index;
@@ -263,15 +310,28 @@ public class DiffOperation extends AbstractExpensiveOperation {
     }
     // Create differences for isolated values
     for (IMatch isolatedTargetMatch : isolatedTargetMatches) {
-      if (getDiffPolicy().coverMatch(isolatedTargetMatch))
-        createReferenceValueDifference(match_p, reference_p, isolatedTargetMatch,
-          Role.TARGET, false);
+      if (getDiffPolicy().coverMatch(isolatedTargetMatch)){
+    	  if(createDiff){
+    		  createReferenceValueDifference(match_p, reference_p, isolatedTargetMatch,
+    				  Role.TARGET, false);
+    	  }
+    	  else{
+    		  return true;
+    	  }
+      }
     }
     for (IMatch isolatedReferenceMatch : isolatedReferenceMatches) {
-      if (getDiffPolicy().coverMatch(isolatedReferenceMatch))
-        createReferenceValueDifference(match_p, reference_p, isolatedReferenceMatch,
-            Role.REFERENCE, false);
+      if (getDiffPolicy().coverMatch(isolatedReferenceMatch)){
+    	  if(createDiff){
+	        createReferenceValueDifference(match_p, reference_p, isolatedReferenceMatch,
+	            Role.REFERENCE, false);
+    	  }
+    	  else{
+    		  return true;
+    	  }
+      }
     }
+      return false;
   }
   
   /**
@@ -323,15 +383,15 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * Create the technical differences corresponding to the given non-partial
+   * Detect the technical differences corresponding to the given non-partial
    * match, focusing on the content of the elements matched
    * @param match_p a non-null, non-partial match
    */
-  protected void createContentDifferences(IMatch match_p) {
+  protected void detectContentDifferences(IMatch match_p) {
     assert match_p != null && !match_p.isPartial();
-    createAllAttributeDifferences(match_p);
-    createAllReferenceDifferences(match_p);
-    createOwnershipDifferences(match_p);
+    detectAllAttributeDifferences(match_p, true);
+    detectAllReferenceDifferences(match_p, true);
+    detectOwnershipDifferences(match_p, true);
   }
   
   /**
@@ -343,7 +403,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (match_p.isPartial()) {
       getOrCreateElementPresence(match_p);
     } else {
-      createContentDifferences(match_p);
+      detectContentDifferences(match_p);
     }
   }
   
@@ -420,6 +480,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (getComparison().isThreeWay() && !match_p.coversRole(Role.ANCESTOR))
         ((IDifference.Editable)result).markAsDifferentFromAncestor();
       setElementPresenceDependencies(result);
+      if (getComparison().isThreeWay())
+    	  setThreeWayProperties(result);
     }
     return result;
   }
@@ -772,6 +834,32 @@ public class DiffOperation extends AbstractExpensiveOperation {
         // No symmetrical or symmetrical aligned: just mark diff as not aligned
         ((IDifference.Editable)presence_p).markAsDifferentFromAncestor();
       }
+    }
+  }
+
+  /**
+   * Set the properties which are specific to three-way comparisons to the given difference
+   * @param presence_p a non-null reference value presence
+   */
+  protected void setThreeWayProperties(IElementPresence presence_p) {
+    EObject ancestorHolder = presence_p.getElementMatch().get(Role.ANCESTOR);
+    EObject targetHolder = presence_p.getElementMatch().get(Role.TARGET);
+    EObject referenceorHolder = presence_p.getElementMatch().get(Role.REFERENCE);
+    EMatchImpl tempMach = null;
+    if(targetHolder != null && ancestorHolder != null){
+    	tempMach = new EMatchImpl(ancestorHolder, targetHolder, null);
+    }
+    else if(referenceorHolder != null && ancestorHolder != null){
+    	tempMach = new EMatchImpl(ancestorHolder, referenceorHolder, null);
+    }
+    if (tempMach !=null){
+    	boolean isDiff = detectAllAttributeDifferences(tempMach, false);
+    	isDiff = isDiff || detectAllReferenceDifferences(tempMach, false);
+    	isDiff = isDiff || detectOwnershipDifferences(tempMach, false);
+    	if (isDiff) {
+    		tempMach.reset(ancestorHolder,null, null);
+    		((IDifference.Editable)presence_p).markAsConflicting();
+    	}
     }
   }
   
