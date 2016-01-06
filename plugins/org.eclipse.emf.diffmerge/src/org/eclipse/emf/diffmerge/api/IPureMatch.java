@@ -52,6 +52,7 @@ public interface IPureMatch {
   /**
    * Return the match ID that corresponds to this match, if available
    * @return a potentially null object
+   * @see IMatchPolicy#keepMatchIDs()
    */
   Object getMatchID();
   

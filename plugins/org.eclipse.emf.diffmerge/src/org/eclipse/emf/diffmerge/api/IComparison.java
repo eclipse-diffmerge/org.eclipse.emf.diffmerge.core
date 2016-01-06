@@ -37,6 +37,14 @@ import org.eclipse.emf.ecore.EReference;
  * After computation, it provides a mapping between the contents of the scopes,
  * a set of differences based on this mapping and the ability to merge a subset of
  * those differences according to the merge policy.
+ * If the match policy provided was not suitable to the scopes, then the computed
+ * comparison is not consistent and merge is discouraged.
+ * @see IFeaturedModelScope
+ * @see IMatchPolicy
+ * @see IDiffPolicy
+ * @see IMergePolicy
+ * @see IDifference
+ * @see IComparison#isConsistent()
  * @author Olivier Constant
  */
 public interface IComparison {
@@ -119,6 +127,7 @@ public interface IComparison {
    * Return the set of duplicate match IDs for the given role, if any.
    * If the result is not empty, then it means that the match policy that
    * was used is not applicable to the scope of the given role.
+   * @see IComparison#isConsistent()
    * @param role_p a non-null role
    * @return a non-null, possibly empty collection
    */
@@ -186,6 +195,7 @@ public interface IComparison {
    * Return whether this comparison was consistently computed, i.e., no duplicate
    * match ID was encountered during computation.
    * If false, then consistency of merge operations is not guaranteed.
+   * @see IComparison#getDuplicateMatchIDs(Role)
    */
   boolean isConsistent();
   

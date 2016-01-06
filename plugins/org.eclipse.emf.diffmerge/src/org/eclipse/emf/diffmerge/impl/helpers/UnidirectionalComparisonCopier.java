@@ -44,7 +44,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   /** The non-null role of the source for this copier */
   protected final Role _sourceRole;
   
-  /** The initially null null mapping this copier relies upon */
+  /** The initially null mapping this copier relies upon */
   protected IMapping.Editable _mapping;
   
   /** The initially null source scope for this copier */
