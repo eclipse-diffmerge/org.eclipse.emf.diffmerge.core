@@ -2,23 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.connector.perforce;singleton:=true
-Bundle-Version: 0.5.0.qualifier
+Bundle-Version: 0.6.0.qualifier
 Bundle-Localization: plugin
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.emf.diffmerge.connector.EMFDiffMergePerforceConnectorPlugin
-Require-Bundle: org.eclipse.team.ui;bundle-version="3.6.201",
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
  org.eclipse.team.core,
- org.eclipse.core.filesystem;bundle-version="1.3.200",
- org.eclipse.osgi,
- org.eclipse.ui;bundle-version="3.8.2",
- org.eclipse.core.runtime;bundle-version="3.8.0",
- org.eclipse.core.resources;bundle-version="3.8.1",
- org.eclipse.emf.common;bundle-version="2.9.0",
- org.eclipse.emf.ecore;bundle-version="2.9.1",
- org.eclipse.emf.diffmerge.ui.gmf;bundle-version="0.3.0",
+ org.eclipse.team.ui,
+ org.eclipse.emf.diffmerge.ui.gmf,
+ org.eclipse.emf.diffmerge.connector.core,
  com.perforce.team.core;bundle-version="2013.1.788968",
- com.perforce.team.ui;bundle-version="2013.1.788968",
- org.eclipse.emf.transaction;bundle-version="1.4.0",
- org.eclipse.emf.diffmerge.connector.core;bundle-version="0.5.0"
+ com.perforce.team.ui;bundle-version="2013.1.788968"

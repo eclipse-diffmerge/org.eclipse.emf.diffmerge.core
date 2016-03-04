@@ -63,7 +63,7 @@ public class GitEditableRevisionScopeDefinitionFactory extends FileRevisionScope
 				return new GitEditableRevisionScopeDefinition(entrypoint, gitLabel, uri, storage.getContents(), uriConverter, conflicting ? true : editable);
 			}
 		}
-		catch (CoreException | NoWorkTreeException | IOException e) {
+		catch (Exception e) {
 			EMFDiffMergeGitConnectorPlugin.getInstance().getLog().log(new Status(IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.PLUGIN_ID, e.getMessage(), e));
 		}
 		return super.createScopeDefinition(entrypoint, label, editable);

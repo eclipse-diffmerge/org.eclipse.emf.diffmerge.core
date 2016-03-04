@@ -16,7 +16,7 @@
 		<viewer
         class="org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCompareViewerCreator"
         id="org.eclipse.emf.diffmerge.compareviewer"
-        label="EMF Diff/Merge Viewer">
+        label="%viewerLabel">
 		</viewer>
 		<contentTypeBinding
 			contentTypeId="org.eclipse.emf.ecore.xmi" contentMergeViewerId="org.eclipse.emf.diffmerge.compareviewer">
