@@ -10,6 +10,7 @@
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
  *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
+ *    Stephane Bouchet (Intel Corporation) - Bug #466706 : support local history 
  * 
  * </copyright>
  */
@@ -24,7 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.compare.CompareEditorInput;
+import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -47,6 +52,11 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupWizard;
+import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
@@ -77,6 +87,8 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.SashForm;
@@ -95,8 +107,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -2346,4 +2360,86 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
   }
   
+	@Override
+	public void setInput(Object input_p) {
+		// the initial input is a compareInput from platform.
+		// use it to create a diffmerge input and set it back to the viewer.
+		if (input_p instanceof ICompareInput) {
+			Object left = ((ICompareInput) input_p).getLeft();
+			Object right = ((ICompareInput) input_p).getRight();
+			Object ancestor = ((ICompareInput) input_p).getAncestor();
+			CompareEditorInput edmInput = createCompareInput(left, right, ancestor);
+			if (edmInput == null) {
+				super.setInput(input_p);
+				return;
+			}
+			try {
+				// this will trigger the diffmerge compare process
+				edmInput.run(new NullProgressMonitor());
+			} catch (InvocationTargetException e) {
+				EMFDiffMergeUIPlugin
+						.getDefault()
+						.getLog()
+						.log(new Status(IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getBundle().getSymbolicName(), e
+								.getMessage()));
+			} catch (InterruptedException e) {
+				EMFDiffMergeUIPlugin
+				.getDefault()
+				.getLog()
+				.log(new Status(IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getBundle().getSymbolicName(), e
+						.getMessage()));
+			}
+			// set the result to the viewer
+			if (edmInput.getCompareResult() != null) {
+				super.setInput(edmInput.getCompareResult());
+			} else {
+				// no diff, close the viewer and open a dialog
+				String message = edmInput.getMessage();
+				handleDispose();
+				IWorkbenchWindow activeWorkbenchWindow = EMFDiffMergeUIPlugin
+						.getDefault().getWorkbench()
+						.getActiveWorkbenchWindow();
+				IEditorPart editor = activeWorkbenchWindow.getActivePage()
+						.getActiveEditor();
+				activeWorkbenchWindow.getActivePage()
+						.closeEditor(editor, false);
+				if (message == null || message.equals("")) {
+					MessageDialog
+							.openInformation(activeWorkbenchWindow.getShell(),
+									"Compare",
+									"There are no differences between the selected inputs.");
+				} else {
+					MessageDialog.openError(activeWorkbenchWindow.getShell(),
+							"Compare", message);
+				}
+			}
+			// break here. this will prevent to fallback to super.setInput in
+			// other cases.
+			return;
+		}
+		super.setInput(input_p);
+	}
+
+	protected CompareEditorInput createCompareInput(Object left, Object right,
+			Object ancestor) {
+		ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault()
+				.getSetupManager();
+		ComparisonSetup setup = manager.createComparisonSetup(left, right,
+				ancestor);
+		if (setup != null) {
+			ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);
+			WizardDialog dialog = new WizardDialog(getShell(), wizard);
+			dialog.setHelpAvailable(false);
+			if (Window.OK == dialog.open()) {
+				IComparisonMethod method = setup.getComparisonMethod();
+				if (method != null) {
+					return new EMFDiffMergeEditorInput(method);
+				}
+			}
+		} else {
+			MessageDialog.openError(getShell(), EMFDiffMergeUIPlugin.LABEL,
+					Messages.CompareModelsAction_ModelsOnly);
+		}
+		return null;
+	}
 }
