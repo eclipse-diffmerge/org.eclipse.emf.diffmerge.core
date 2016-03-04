@@ -49,8 +49,14 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
+  /** Whether scope definitions can be swapped by the end user */
+  private boolean _canSwapScopeDefinitions;
+  
   /** The potentially null role to use as a reference in a two-way comparison */
   private Role _twoWayReferenceRole;
+  
+  /** Whether the two-way reference role can be changed by the end user */
+  private boolean _canChangeTwoWayReferenceRole;
   
   /** The non-null, non-empty list of applicable method factories */ 
   private final List<IComparisonMethodFactory> _compatibleMethodFactories;
@@ -78,9 +84,26 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
     _roleToScopeDefinition.put(Role.TARGET, scopeSpec1_p);
     _roleToScopeDefinition.put(Role.REFERENCE, scopeSpec2_p);
     _roleToScopeDefinition.put(Role.ANCESTOR, scopeSpec3_p);
+    _canSwapScopeDefinitions = true;
+    _twoWayReferenceRole = null;
+    _canChangeTwoWayReferenceRole = true;
     _comparisonMethod = null;
     _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>(compatibleFactories_p);
     _listeners = new HashSet<IPropertyChangeListener>();
+  }
+  
+  /**
+   * Return whether the two-way reference role can be changed by the end user
+   */
+  public boolean canChangeTwoWayReferenceRole() {
+    return _canChangeTwoWayReferenceRole;
+  }
+  
+  /**
+   * Return whether scope definitions can be swapped by the end user
+   */
+  public boolean canSwapScopeDefinitions() {
+    return _canSwapScopeDefinitions;
   }
   
   /**
@@ -147,6 +170,22 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   public void performFinish() {
     if (!isThreeWay() && _comparisonMethod != null)
       _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
+  }
+  
+  /**
+   * Set whether the two-way reference role can be changed by the end user
+   * @param canChange_p whether it can be changed
+   */
+  public void setCanChangeTwoWayReferenceRole(boolean canChange_p) {
+    _canChangeTwoWayReferenceRole = canChange_p;
+  }
+  
+  /**
+   * Set whether scope definitions can be swapped by the end user
+   * @param canSwap_p whether they can be swapped
+   */
+  public void setCanSwapScopeDefinitions(boolean canSwap_p) {
+    _canSwapScopeDefinitions = canSwap_p;
   }
   
   /**

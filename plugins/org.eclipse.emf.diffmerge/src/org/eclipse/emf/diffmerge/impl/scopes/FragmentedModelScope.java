@@ -323,6 +323,14 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getDefaultOriginator()
+   */
+  @Override
+  protected Object getDefaultOriginator() {
+    return getHoldingResource();
+  }
+  
+  /**
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   @Override
@@ -354,14 +362,6 @@ implements IFragmentedModelScope.Editable {
   protected Map<Object, Object> getLoadOptions(Resource resource_p) {
     // Override if needed
     return new HashMap<Object, Object>();
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getOriginator()
-   */
-  @Override
-  public Object getOriginator() {
-    return getHoldingResource();
   }
   
   /**
@@ -465,14 +465,25 @@ implements IFragmentedModelScope.Editable {
   public boolean load() throws Exception {
     boolean result = false;
     if (_state == ScopeState.INITIALIZED || _state == ScopeState.LOADED) {
+      result = true;
       for (Resource rootResource : _rootResources) {
-        Map<?,?> options = getLoadOptions(rootResource);
-        rootResource.load(options);
+        result = result && loadResource(rootResource);
       }
       _state = ScopeState.LOADED;
-      result = true;
     }
     return result;
+  }
+  
+  /**
+   * Load the given root resource
+   * @param resource_p a non-null resource
+   * @return whether the operation could be performed
+   * @throws Exception an exception indicating that the operation failed in an unexpected way
+   */
+  protected boolean loadResource(Resource resource_p) throws Exception {
+    Map<?,?> options = getLoadOptions(resource_p);
+    resource_p.load(options);
+    return true;
   }
   
   /**

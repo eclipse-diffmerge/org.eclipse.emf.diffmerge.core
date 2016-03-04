@@ -9,6 +9,7 @@
 
   Contributors:
     Stephane Bouchet (Intel Corporation) - initial API and implementation
+    Olivier Constant (Thales Global Services) - tight integration
 -->
 <plugin>
 	<!-- add a content viewer for diffmerge to be usable with compare editor -->

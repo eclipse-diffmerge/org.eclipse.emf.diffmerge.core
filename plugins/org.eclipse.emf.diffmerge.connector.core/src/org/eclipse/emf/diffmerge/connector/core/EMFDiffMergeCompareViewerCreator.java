@@ -1,4 +1,6 @@
-/*******************************************************************************
+/**
+ * <copyright>
+ * 
  * Copyright (c) 2015 Intel Corporation.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,23 +9,28 @@
  *
  * Contributors:
  *    Stephane Bouchet (Intel Corporation) - initial API and implementation
- *******************************************************************************/
+ *    Olivier Constant (Thales Global Services) - tight integration
+ * 
+ * </copyright>
+ */
 package org.eclipse.emf.diffmerge.connector.core;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.IViewerCreator;
-import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 
+
 /**
- * Used by compare extension point.
+ * A factory for model comparison viewers used by the Team mechanism through an extension point.
  */
 public class EMFDiffMergeCompareViewerCreator implements IViewerCreator {
-
-	@Override
+  
+  /**
+   * @see org.eclipse.compare.IViewerCreator#createViewer(org.eclipse.swt.widgets.Composite, org.eclipse.compare.CompareConfiguration)
+   */
 	public Viewer createViewer(Composite parent, CompareConfiguration config) {
-		return new ComparisonViewer(parent);
+		return new TeamComparisonViewer(parent);
 	}
-
+	
 }

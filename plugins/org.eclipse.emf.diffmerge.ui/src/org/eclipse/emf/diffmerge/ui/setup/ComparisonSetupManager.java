@@ -97,7 +97,7 @@ public class ComparisonSetupManager {
   
   /**
    * Create and return a compare editor input as a result of user interactions
-   * for the given entry points
+   * for the given entry points, if possible
    * @param shell_p a non-null shell
    * @param entrypoint1_p a non-null object
    * @param entrypoint2_p a non-null object
@@ -105,16 +105,26 @@ public class ComparisonSetupManager {
    */
   public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
-    EMFDiffMergeEditorInput result = null;
     ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
     ComparisonSetup setup = manager.createComparisonSetup(
         entrypoint1_p, entrypoint2_p, entrypoint3_p);
-    if (setup != null) {
-      ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup);
+    return createEditorInputWithUI(shell_p, setup);
+  }
+  
+  /**
+   * Create and return a compare editor input as a result of user interactions
+   * for the given comparison setup, if possible
+   * @param shell_p a non-null shell
+   * @param setup_p a comparison setup or null if none could be computed
+   */
+  public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, ComparisonSetup setup_p) {
+    EMFDiffMergeEditorInput result = null;
+    if (setup_p != null) {
+      ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup_p);
       WizardDialog dialog = new WizardDialog(shell_p, wizard);
       dialog.setHelpAvailable(false);
       if (Window.OK == dialog.open()) {
-        IComparisonMethod method = setup.getComparisonMethod();
+        IComparisonMethod method = setup_p.getComparisonMethod();
         if (method != null)
           result = new EMFDiffMergeEditorInput(method);
       }

@@ -16,7 +16,9 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import java.io.File;
 
+import org.eclipse.compare.IResourceProvider;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinitionFactory;
@@ -35,7 +37,8 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    * @param entrypoint_p a non-null object
    */
   protected boolean canConvertToURI(Object entrypoint_p) {
-    return entrypoint_p instanceof IFile || entrypoint_p instanceof String;
+    return entrypoint_p instanceof IFile || entrypoint_p instanceof IResourceProvider ||
+        entrypoint_p instanceof String;
   }
   
   /**
@@ -47,10 +50,14 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
     URI result = null;
     if (entrypoint_p instanceof URI) {
       result = (URI)entrypoint_p;
+    } else if (entrypoint_p instanceof IResourceProvider) {
+      IResource wkResource = ((IResourceProvider)entrypoint_p).getResource();
+      if (wkResource instanceof IFile)
+        result = toPlatformURI((IFile)wkResource);
     } else if (entrypoint_p instanceof IFile) {
       result = toPlatformURI((IFile)entrypoint_p);
     } else if (entrypoint_p instanceof String) {
-      result = toFileUri(entrypoint_p.toString());
+      result = toFileURI(entrypoint_p.toString());
     }
     return result;
   }
@@ -149,7 +156,7 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    * @param file_p a potentially null string
    * @return a potentially null URI
    */
-  protected URI toFileUri(String file_p) {
+  protected URI toFileURI(String file_p) {
     URI result = null;
     if (file_p != null) {
       result = URI.createFileURI(file_p);

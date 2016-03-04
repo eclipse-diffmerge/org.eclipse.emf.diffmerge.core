@@ -63,7 +63,7 @@ public class FileRevisionScopeDefinitionFactory extends GMFScopeDefinitionFactor
 				return new StreamScopeDefinition(entrypoint, (label != null) ? label : getLabelFor(entrypoint), uri, storage.getContents(), getURIConverter(revision));
 			}
 			catch (CoreException e) {
-				EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.PLUGIN_ID, e.getMessage(),e));
+				EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.getDefault().getPluginId(), e.getMessage(),e));
 			}
 		}
 		return super.createScopeDefinition(entrypoint, label, editable);
@@ -96,7 +96,7 @@ public class FileRevisionScopeDefinitionFactory extends GMFScopeDefinitionFactor
 			if (res.exists() && res instanceof IFile)
 				return toPlatformURI((IFile)res);
 		}
-		return toFileUri(storage.getFullPath().toString());
+		return toFileURI(storage.getFullPath().toString());
 	}
 
 	protected IStorage getStorage(IFileRevision revision) throws CoreException {

@@ -88,7 +88,7 @@ public class PerforceStreamScopeDefinitionFactory extends GMFScopeDefinitionFact
 	}
 
 	protected URI getUri(P4CompareNode node) {
-		return toFileUri(node.getName());
+		return toFileURI(node.getName());
 	}
 
 	protected URIConverter getURIConverter(P4CompareNode node)

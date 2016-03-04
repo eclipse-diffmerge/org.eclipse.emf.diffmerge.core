@@ -25,7 +25,8 @@ public interface IModelScopeDefinition {
   
   /**
    * Create and return a scope that corresponds to this scope definition
-   * @param context_p an optional resource set or editing domain for the case where resource creation is needed
+   * @param context_p an optional context for the scope, for example a resource set or editing domain
+   *          for the case where resource creation is needed
    * @return a scope which is null if operation failed
    */
   IEditableModelScope createScope(Object context_p);

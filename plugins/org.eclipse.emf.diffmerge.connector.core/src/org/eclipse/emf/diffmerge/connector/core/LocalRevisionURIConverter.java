@@ -61,7 +61,7 @@ public final class LocalRevisionURIConverter extends ExtensibleURIConverterImpl 
 				}
 			}
 			catch (CoreException e) {
-				EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.PLUGIN_ID, e.getMessage(),e));
+				EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.getDefault().getPluginId(), e.getMessage(),e));
 			}
 		}
 		return super.createInputStream(uri, options);

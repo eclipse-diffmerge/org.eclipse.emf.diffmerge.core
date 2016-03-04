@@ -21,7 +21,8 @@ import java.util.Set;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
-import org.eclipse.compare.ITypedElement;
+import org.eclipse.compare.ICompareNavigator;
+import org.eclipse.compare.INavigatable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
@@ -31,7 +32,6 @@ import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
@@ -41,7 +41,6 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImpl;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
@@ -65,11 +64,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -121,6 +118,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /** The non-null (unless disposed) selection bridge between the viewer and the workbench site */
   protected SelectionBridge _selectionBridge;
   
+  /** The (initially null) compare navigator for the workbench navigation buttons */
+  private ICompareNavigator _navigator;
+  
   
   /**
    * Constructor
@@ -135,6 +135,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     _comparisonResource = null;
     _foundDifferences = true;
     _isDirty = false;
+    _navigator = createNavigator();
     _selectionBridge = new SelectionBridge();
     initializeCompareConfiguration();
   }
@@ -206,6 +207,26 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     _viewer.setInput(getCompareResult());
     contentsCreated();
     return _viewer.getControl();
+  }
+  
+  /**
+   * Create and return a navigator
+   * @see EMFDiffMergeEditorInput#getNavigator()
+   * @return a non-null object
+   */
+  protected ICompareNavigator createNavigator() {
+    return new ICompareNavigator() {
+      /**
+       * @see org.eclipse.compare.ICompareNavigator#selectChange(boolean)
+       */
+      public boolean selectChange(boolean next_p) {
+        boolean result = false;
+        int change = next_p? INavigatable.NEXT_CHANGE: INavigatable.PREVIOUS_CHANGE;
+        if (_viewer != null)
+          result = _viewer.getNavigatable().selectChange(change);
+        return result;
+      }
+    };
   }
   
   /**
@@ -302,6 +323,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * @see org.eclipse.compare.CompareEditorInput#getNavigator()
+   */
+  @Override
+  public synchronized ICompareNavigator getNavigator() {
+    return _navigator;
+  }
+  
+  /**
    * Return a property sheet page for the Properties view if possible
    * @return a potentially null object
    */
@@ -361,7 +390,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /**
    * @see org.eclipse.emf.common.ui.viewer.IViewerProvider#getViewer()
    */
-  public Viewer getViewer() {
+  public AbstractComparisonViewer getViewer() {
     return _viewer; // Non-null after createContents(Composite) has returned
   }
   
@@ -370,6 +399,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   protected void handleDispose() {
+    _navigator = null;
     Display display = Display.getDefault();
     if (_propertySheetPage != null)
       display.asyncExec(new Runnable() {
@@ -717,52 +747,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     if (_viewer != null)
       result = _viewer.getControl().setFocus();
     return result;
-  }
-  
-  
-  /**
-   * A wrapper for model scopes that implements ITypedElement for ICompareInputs.
-   */
-  public static class ScopeTypedElementWrapper implements ITypedElement {
-    /** The non-null scope being wrapped */
-    private final IModelScope _scope;
-    /**
-     * Constructor
-     * @param scope_p a non-null model scope
-     */
-    public ScopeTypedElementWrapper(IEditableModelScope scope_p) {
-      _scope = scope_p;
-    }
-    /**
-     * @see org.eclipse.compare.ITypedElement#getImage()
-     */
-    public Image getImage() {
-      Image result = null;
-      if (!_scope.getContents().isEmpty()) {
-        EObject root = _scope.getContents().get(0);
-        if (root.eResource() != null)
-          result = DiffMergeLabelProvider.getInstance().getImage(root.eResource());
-      }
-      return result;
-    }
-    /**
-     * @see org.eclipse.compare.ITypedElement#getName()
-     */
-    public String getName() {
-      String result = null;
-      if (!_scope.getContents().isEmpty()) {
-        EObject root = _scope.getContents().get(0);
-        if (root.eResource() != null)
-          result = DiffMergeLabelProvider.getInstance().getText(root.eResource());
-      }
-      return result;
-    }
-    /**
-     * @see org.eclipse.compare.ITypedElement#getType()
-     */
-    public String getType() {
-      return ITypedElement.UNKNOWN_TYPE;
-    }
   }
   
 }

@@ -18,10 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.compare.CompareEditorInput;
+import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.contentmergeviewer.IFlushable;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.diffmerge.api.IComparison;
@@ -65,7 +68,8 @@ import org.eclipse.ui.actions.ActionFactory;
  * Input: EMFDiffNode.
  * @author Olivier Constant
  */
-public abstract class AbstractComparisonViewer extends Viewer implements IFlushable, IPropertyChangeNotifier  {
+public abstract class AbstractComparisonViewer extends Viewer
+implements IFlushable, IPropertyChangeNotifier, IAdaptable {
   
   /** The name of the "current input" property */
   public static final String PROPERTY_CURRENT_INPUT = "PROPERTY_CURRENT_INPUT"; //$NON-NLS-1$
@@ -91,6 +95,9 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   /** The (initially null) redo action */
   private RedoAction _redoAction;
   
+  /** The optional navigatable for navigation from the workbench menu bar buttons */
+  private INavigatable _navigatable;
+  
   
   /**
    * Constructor
@@ -105,6 +112,7 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
     setupUndoRedo();
     _control = createControls(parent_p);
     hookControl(_control);
+    registerNavigatable(_control, createNavigatable());
   }
   
   /**
@@ -120,6 +128,14 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
    * @return a non-null composite
    */
   protected abstract Composite createControls(Composite parent_p);
+  
+  /**
+   * Create and return the navigatable for this viewer, if relevant
+   * @return a potentially null object
+   */
+  protected INavigatable createNavigatable() {
+    return null;
+  }
   
   /**
    * Execute the given runnable that may modify the model on the given side
@@ -193,6 +209,19 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
             getShell(), EMFDiffMergeUIPlugin.LABEL, Messages.ComparisonViewer_SaveFailed + e);
       }
     }
+  }
+  
+  /**
+   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T  getAdapter(Class<T> adapter_p) {
+    T result = null;
+    if (INavigatable.class.equals(adapter_p))
+      result = (T)getNavigatable();
+    if (result == null)
+      result = Platform.getAdapterManager().getAdapter(this, adapter_p);
+    return result;
   }
   
   /**
@@ -270,6 +299,14 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
   }
   
   /**
+   * Return the navigatable for this viewer, if any
+   * @return a potentially null object
+   */
+  public INavigatable getNavigatable() {
+    return _navigatable;
+  }
+  
+  /**
    * Return the resource manager for this viewer
    * @return a resource manager which is non-null iff input is not null
    */
@@ -331,6 +368,7 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
     _lastCommandBeforeSave = null;
     _undoAction = null;
     _redoAction = null;
+    _navigatable = null;
   }
   
   /**
@@ -386,6 +424,18 @@ public abstract class AbstractComparisonViewer extends Viewer implements IFlusha
       _redoAction.update();
     if (_actionBars != null)
       _actionBars.updateActionBars();
+  }
+  
+  /**
+   * Register the given navigatable for this viewer,
+   * allowing navigation from the workbench menu bar buttons
+   * @param control_p the non-null control of the viewer
+   * @param navigatable_p the potentially null navigatable
+   */
+  protected void registerNavigatable(Control control_p, INavigatable navigatable_p) {
+    _navigatable = navigatable_p;
+    if (_navigatable != null)
+      control_p.setData(INavigatable.NAVIGATOR_PROPERTY, _navigatable);
   }
   
   /**

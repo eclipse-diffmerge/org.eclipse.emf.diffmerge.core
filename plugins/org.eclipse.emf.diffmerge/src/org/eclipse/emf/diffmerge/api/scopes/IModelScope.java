@@ -88,6 +88,12 @@ public interface IModelScope {
   List<EObject> getContents(EObject element_p);
   
   /**
+   * Return an object that characterizes or identifies this scope
+   * @return a non-null object
+   */
+  Object getOriginator();
+  
+  /**
    * Return the number of elements in this scope.
    * Operation is allowed to be computationally expensive.
    */

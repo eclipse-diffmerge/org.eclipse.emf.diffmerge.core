@@ -46,7 +46,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
-import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput.ScopeTypedElementWrapper;
+import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
@@ -57,10 +57,10 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.services.IDisposable;
 
 
 /**
@@ -185,10 +185,10 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
     super(
         Differencer.CHANGE,
-        comparison_p.isThreeWay()? new ScopeTypedElementWrapper(
+        comparison_p.isThreeWay()? new ModelScopeTypedElement(
             comparison_p.getScope(Role.ANCESTOR)): null,
-        new ScopeTypedElementWrapper(comparison_p.getScope(Role.TARGET)),
-        new ScopeTypedElementWrapper(comparison_p.getScope(Role.REFERENCE)));
+        new ModelScopeTypedElement(comparison_p.getScope(Role.TARGET)),
+        new ModelScopeTypedElement(comparison_p.getScope(Role.REFERENCE)));
     _resourceManager = new ComparisonResourceManager();
     _contents = new UIComparisonImpl(comparison_p);
     _editingDomain = domain_p;
@@ -369,7 +369,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * @see org.eclipse.ui.services.IDisposable#dispose()
+   * @see org.eclipse.emf.edit.provider.IDisposable#dispose()
    */
   public void dispose() {
     _resourceManager.dispose();

@@ -18,7 +18,6 @@ package org.eclipse.emf.diffmerge.ui;
 import org.eclipse.osgi.util.NLS;
 
 
-
 /**
  * String management.
  * @author Olivier Constant

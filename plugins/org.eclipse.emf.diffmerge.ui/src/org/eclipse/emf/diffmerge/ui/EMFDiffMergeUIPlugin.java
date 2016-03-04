@@ -326,7 +326,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   }
   
   /**
-   * Get the plug-in ID according to MANIFEST.MF
+   * Return the plug-in ID according to MANIFEST.MF
    * @return a non-null String
    */
   public String getPluginId() {

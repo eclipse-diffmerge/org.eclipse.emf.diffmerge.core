@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
@@ -43,13 +44,16 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
   public IEditableModelScope createScope(Object context_p) {
-    IEditableModelScope result;
-    if (context_p instanceof EditingDomain)
+    IEditableModelScope result = null;
+    if (context_p instanceof EditingDomain) {
       result = createScopeOnEditingDomain((EditingDomain)context_p);
-    else if (context_p instanceof ResourceSet)
+    } else if (context_p instanceof ResourceSet) {
       result = createScopeOnResourceSet((ResourceSet)context_p);
-    else
-      result = null;
+    } else if (context_p == null) {
+      Object defaultContext = getDefaultContext();
+      if (defaultContext != null)
+        result = createScope(defaultContext);
+    }
     return result;
   }
   
@@ -69,6 +73,14 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
    */
   protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
     return new FragmentedModelScope(getEntrypoint(), resourceSet_p, !isEditable());
+  }
+  
+  /**
+   * Return a default context for the scope
+   * @return a potentially null object
+   */
+  protected Object getDefaultContext() {
+    return new ResourceSetImpl();
   }
   
   /**

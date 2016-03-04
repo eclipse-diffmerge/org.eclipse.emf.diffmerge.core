@@ -248,6 +248,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
           _setup.setTwoWayReferenceRole(null);
         }
       });
+      noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
       // Left
       final Button leftButton = new Button(composite, SWT.RADIO);
       leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
@@ -263,6 +264,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
               EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
         }
       });
+      leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
       // Right
       final Button rightButton = new Button(composite, SWT.RADIO);
       rightButton.setText(Messages.ComparisonSetupWizardPage_ReferenceRight);
@@ -278,6 +280,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
               EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
         }
       });
+      rightButton.setEnabled(rightButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
     }
   }
   
@@ -392,35 +395,37 @@ public class ComparisonSetupWizardPage extends WizardPage {
     RowLayout buttonLayout = new RowLayout(SWT.VERTICAL);
     buttonLayout.justify = true;
     buttonSubsection.setLayout(buttonLayout);
-    // Left/right swap button
-    final Button leftRightSwap = new Button(buttonSubsection, SWT.PUSH);
-    leftRightSwap.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SWAP));
-    leftRightSwap.setToolTipText(Messages.ComparisonSetupWizardPage_SwapLeftRight);
-    leftRightSwap.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        _setup.swapScopeDefinitions(
-            EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole(), Role.REFERENCE);
-      }
-    });
-    if (_setup.isThreeWay()) {
-      // Right/ancestor swap button
-      final Button rightAnSwap = new Button(buttonSubsection, SWT.PUSH);
-      rightAnSwap.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SWAP));
-      rightAnSwap.setToolTipText(Messages.ComparisonSetupWizardPage_SwapRightAncestor);
-      rightAnSwap.addSelectionListener(new SelectionAdapter() {
+    if (_setup.canSwapScopeDefinitions()) {
+      // Left/right swap button
+      final Button leftRightSwap = new Button(buttonSubsection, SWT.PUSH);
+      leftRightSwap.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SWAP));
+      leftRightSwap.setToolTipText(Messages.ComparisonSetupWizardPage_SwapLeftRight);
+      leftRightSwap.addSelectionListener(new SelectionAdapter() {
         /**
          * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
          */
         @Override
         public void widgetSelected(SelectionEvent event_p) {
           _setup.swapScopeDefinitions(
-              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite(), Role.ANCESTOR);
+              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole(), Role.REFERENCE);
         }
       });
+      if (_setup.isThreeWay()) {
+        // Right/ancestor swap button
+        final Button rightAnSwap = new Button(buttonSubsection, SWT.PUSH);
+        rightAnSwap.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SWAP));
+        rightAnSwap.setToolTipText(Messages.ComparisonSetupWizardPage_SwapRightAncestor);
+        rightAnSwap.addSelectionListener(new SelectionAdapter() {
+          /**
+           * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+           */
+          @Override
+          public void widgetSelected(SelectionEvent event_p) {
+            _setup.swapScopeDefinitions(
+                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite(), Role.ANCESTOR);
+          }
+        });
+      }
     }
   }
   

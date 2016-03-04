@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
@@ -37,6 +38,17 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @author Olivier Constant
  */
 public abstract class AbstractModelScope implements IFeaturedModelScope {
+  
+  /** A potentially null object that identifies the origin of the scope */
+  private Object _originator;
+  
+  
+  /**
+   * Default constructor
+   */
+  protected AbstractModelScope() {
+    _originator = null;
+  }
   
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#covers(EObject)
@@ -174,6 +186,14 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
+   * Return an object that characterizes or identifies this scope by default
+   * @return a non-null object
+   */
+  protected Object getDefaultOriginator() {
+    return this;
+  }
+  
+  /**
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   protected Object getExtrinsicID(EObject element_p) {
@@ -182,11 +202,10 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * Return an object that characterizes or identifies this scope, if any
-   * @return a potentially null object
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getOriginator()
    */
   public Object getOriginator() {
-    return this;
+    return _originator != null? _originator: getDefaultOriginator();
   }
   
   /**
@@ -194,6 +213,16 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
    */
   protected boolean resolveProxies() {
     return false;
+  }
+  
+  /**
+   * Set the originator of this scope.
+   * If null, then the default originator will be used.
+   * @see IEditableModelScope#getOriginator()
+   * @param originator_p a potentially null object
+   */
+  public void setOriginator(Object originator_p) {
+    _originator = originator_p;
   }
   
   /**

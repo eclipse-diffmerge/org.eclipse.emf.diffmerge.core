@@ -83,6 +83,14 @@ implements IPersistentModelScope.Editable {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getDefaultOriginator()
+   */
+  @Override
+  protected Object getDefaultOriginator() {
+    return _root;
+  }
+  
+  /**
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   @Override
@@ -96,14 +104,6 @@ implements IPersistentModelScope.Editable {
    */
   public Resource getHoldingResource() {
     return getRoot().eResource();
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#getOriginator()
-   */
-  @Override
-  public Object getOriginator() {
-    return _root;
   }
   
   /**
