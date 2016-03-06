@@ -108,7 +108,7 @@ public class FileRevisionScopeDefinitionFactory extends GMFScopeDefinitionFactor
 		//local history or current
 		final long timestamp=revision.getTimestamp();
 		if (timestamp != -1) {
-			return new LocalRevisionURIConverter(timestamp, fullPath);
+			return new FileRevisionURIConverter(timestamp, fullPath);
 		}
 		return new ExtensibleURIConverterImpl();
 	}
