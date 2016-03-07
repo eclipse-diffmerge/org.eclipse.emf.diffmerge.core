@@ -10,6 +10,7 @@
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
  *    Stephane Bouchet (Intel Corporation) - [439901] support multi-line in table item.
+ *    Stephane Bouchet (Intel Corporation) - Bug #489137 : delegate tooltip of values viewer to proper label provider
  * 
  * </copyright>
  */
@@ -38,10 +39,12 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -153,6 +156,8 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
     _showAllValues = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     setMultilineSupport(getControl());
+    getTable().setToolTipText(""); //$NON-NLS-1$
+    ColumnViewerToolTipSupport.enableFor(this, ToolTip.NO_RECREATE);
   }
   
   /**
@@ -440,7 +445,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
    * The label provider for this viewer.
    */
   protected class LabelProvider extends DelegatingLabelProvider {
-    
+
     /**
      * Adapt the given label that describes the cross-reference of the given value
      * @param initialLabel_p a potentially null string
@@ -568,6 +573,15 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       }
       return result;
     }
+
+    /**
+     * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
+     */
+    @Override
+    public String getToolTipText(Object element_p) {
+      return getText(element_p);
+    }
+
   }
   
 }
