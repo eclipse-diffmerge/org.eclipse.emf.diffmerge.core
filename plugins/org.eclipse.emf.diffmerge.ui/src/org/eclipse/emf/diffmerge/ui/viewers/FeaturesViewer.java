@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Stephane Bouchet (Intel Corporation) - Bug #489142 : use the delegate label provider to display text
  * 
  * </copyright>
  */
@@ -366,7 +367,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     @Override
     public String getText(Object element_p) {
       EStructuralFeature feature = (EStructuralFeature)element_p;
-      String result = feature.getName();
+      String result = getDelegate().getText(element_p);
       if (getInput().getContext().usesCustomLabels()) {
         DifferenceKind kind = getDifferenceKind(feature);
         String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);
