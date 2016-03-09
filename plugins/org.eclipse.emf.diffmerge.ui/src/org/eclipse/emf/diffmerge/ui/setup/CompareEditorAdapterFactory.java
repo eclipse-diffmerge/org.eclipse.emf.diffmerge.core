@@ -30,15 +30,15 @@ public class CompareEditorAdapterFactory implements IAdapterFactory {
   /**
    * @see org.eclipse.core.runtime.IAdapterFactory#getAdapter(java.lang.Object, java.lang.Class)
    */
-  @SuppressWarnings("unchecked")
-  public <T> T getAdapter(Object adaptableObject_p, Class<T> adapterType_p) {
-    T adapter = null;
+  @SuppressWarnings("rawtypes")
+  public Object getAdapter(Object adaptableObject_p, Class adapterType_p) {
+    Object adapter = null;
     // IPropertySheetPage
     if (IPropertySheetPage.class.equals(adapterType_p) &&
         adaptableObject_p instanceof EditorPart) {
       IEditorInput input =  ((EditorPart)adaptableObject_p).getEditorInput();
       if (input instanceof EMFDiffMergeEditorInput)
-        adapter = (T)((EMFDiffMergeEditorInput)input).getPropertySheetPage();
+        adapter = ((EMFDiffMergeEditorInput)input).getPropertySheetPage();
     }
     return adapter;
   }

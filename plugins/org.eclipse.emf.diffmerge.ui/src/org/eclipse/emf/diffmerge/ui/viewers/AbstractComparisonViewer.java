@@ -214,11 +214,11 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
-  @SuppressWarnings("unchecked")
-  public <T> T  getAdapter(Class<T> adapter_p) {
-    T result = null;
+  @SuppressWarnings("rawtypes")
+  public Object  getAdapter(Class adapter_p) {
+    Object result = null;
     if (INavigatable.class.equals(adapter_p))
-      result = (T)getNavigatable();
+      result = getNavigatable();
     if (result == null)
       result = Platform.getAdapterManager().getAdapter(this, adapter_p);
     return result;
