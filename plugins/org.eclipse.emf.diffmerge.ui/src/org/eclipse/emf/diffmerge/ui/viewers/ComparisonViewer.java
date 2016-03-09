@@ -10,6 +10,7 @@
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
  *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
+ *    Stephane Bouchet (Intel Corporation) - Bug #489274 : added API viewers creation methods
  * 
  * </copyright>
  */
@@ -849,12 +850,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Create and return a features viewer
+   * Create, configure and return a features viewer
    * @param parent_p a non-null composite
    * @return a non-null viewer
    */
   protected EnhancedFeaturesViewer createViewerFeatures(Composite parent_p) {
-    final EnhancedFeaturesViewer result = new EnhancedFeaturesViewer(parent_p);
+    final EnhancedFeaturesViewer result = doCreateViewerFeatures(parent_p);
     // User selection: send to global viewer
     result.addSWTSelectionListener(new SelectionAdapter() {
       /**
@@ -920,12 +921,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Create and return the main viewer of the synthesis row
+   * Create, configure and return the main viewer of the synthesis row
    * @param parent_p a non-null composite
    * @return a non-null viewer
    */
   protected EnhancedComparisonTreeViewer createViewerSynthesis(Composite parent_p) {
-    final EnhancedComparisonTreeViewer result = new EnhancedComparisonTreeViewer(parent_p);
+    final EnhancedComparisonTreeViewer result = doCreateViewerSynthesis(parent_p);
     result.getInnerViewer().addFilter(_filterUnchangedElements);
     result.getInnerViewer().addFilter(_filterMoveOrigins);
     // Update header when filtering is activated
@@ -1008,14 +1009,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Create and return the viewer in the synthesis row for the given side
+   * Create, configure and return the viewer in the synthesis row for the given side
    * @param parent_p a non-null composite
    * @param isLeftSide_p whether the side is left or right
    * @return a non-null viewer
    */
   protected EnhancedComparisonSideViewer createViewerSynthesisSide(Composite parent_p,
       final boolean isLeftSide_p) {
-    final EnhancedComparisonSideViewer result = new EnhancedComparisonSideViewer(parent_p, isLeftSide_p);
+    final EnhancedComparisonSideViewer result = doCreateViewerSynthesisSide(parent_p, isLeftSide_p);
     // User selection: send to global viewer
     result.addSWTSelectionListener(new SelectionAdapter() {
       /**
@@ -1087,14 +1088,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Create and return the values viewer for the given side
+   * Create, configure and return the values viewer for the given side
    * @param parent_p a non-null composite
    * @param isLeftSide_p whether the side is left or right
    * @return a non-null viewer
    */
   protected EnhancedValuesViewer createViewerValues(Composite parent_p,
       final boolean isLeftSide_p) {
-    final EnhancedValuesViewer result = new EnhancedValuesViewer(parent_p, isLeftSide_p);
+    final EnhancedValuesViewer result = doCreateViewerValues(parent_p, isLeftSide_p);
     // User selection: send to global viewer
     result.addSWTSelectionListener(new SelectionAdapter() {
       /**
@@ -1564,48 +1565,42 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Ignore the current selection
-   * @param onLeft_p whether ignore occurs on the left
+   * Create and return a features viewer
+   * @param parent_p a non-null composite
+   * @return a non-null viewer
    */
-  protected void ignore(boolean onLeft_p) {
-    final ComparisonSelection selection = getSelection();
-    if (selection == null) return; // Should not happen according to ignore tool activation
-    EMFDiffNode input = getInput();
-    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
-      // Make choices
-    IgnoreChoiceData choices = new IgnoreChoiceData(
-        input.isDefaultCoverChildren(), false);
-    makeIgnoreChoices(choices, input, selectedMatches);
-    if (!choices.isProceed()) return;
-    // Ignore operation is set to proceed and choices have been made
-    final Collection<IDifference> toIgnore = !selectedMatches.isEmpty()? getDifferencesToMerge(
-        selectedMatches, input.getRoleForSide(onLeft_p), choices.isCoverChildren(), choices.isSideExclusive()):
-          getInput().getNonIgnoredDifferences(selection.asDifferencesToMerge());
-    if (!toIgnore.isEmpty()) {
-      executeOnModel(new Runnable() {
-        /**
-         * @see java.lang.Runnable#run()
-         */
-        public void run() {
-          for (IDifference diff : toIgnore) {
-            if (diff instanceof EElementRelativePresence) {
-              EElementRelativePresence presence = (EElementRelativePresence)diff;
-              getUIComparison().getDifferencesToIgnore().add(presence);
-              // Also on symmetrical if any
-              if (diff instanceof EValuePresence) {
-                IValuePresence symmetrical = ((EValuePresence)diff).getSymmetrical();
-                if (symmetrical instanceof EMergeableDifference)
-                  getUIComparison().getDifferencesToIgnore().add(
-                      (EMergeableDifference)symmetrical);
-              }
-            }
-          }
-          getUIComparison().setLastActionSelection(selection);
-        }
-      }, onLeft_p);
-      firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
-      firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
-    }
+  protected EnhancedFeaturesViewer doCreateViewerFeatures(Composite parent_p) {
+    return new EnhancedFeaturesViewer(parent_p);
+  }
+  
+  /**
+   * Create and return the main viewer of the synthesis row
+   * @param parent_p a non-null composite
+   * @return a non-null viewer
+   */
+  protected EnhancedComparisonTreeViewer doCreateViewerSynthesis(Composite parent_p) {
+    return new EnhancedComparisonTreeViewer(parent_p);
+  }
+  
+  /**
+   * Create and return a viewer in the synthesis row for the given side
+   * @param parent_p a non-null composite
+   * @param isLeftSide_p whether the side is left or right
+   * @return a non-null viewer
+   */
+  protected EnhancedComparisonSideViewer doCreateViewerSynthesisSide(
+      Composite parent_p, boolean isLeftSide_p) {
+    return new EnhancedComparisonSideViewer(parent_p, isLeftSide_p);
+  }
+  
+  /**
+   * Create a values viewer for the given side
+   * @param parent_p a non-null composite
+   * @param isLeftSide_p whether the side is left or right
+   * @return a non-null viewer
+   */
+  protected EnhancedValuesViewer doCreateViewerValues(Composite parent_p, boolean isLeftSide_p) {
+    return new EnhancedValuesViewer(parent_p, isLeftSide_p);
   }
   
   /**
@@ -1823,6 +1818,51 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _sorterSynthesis = null;
     _filterUnchangedElements = null;
     _filterMoveOrigins = null;
+  }
+  
+  /**
+   * Ignore the current selection
+   * @param onLeft_p whether ignore occurs on the left
+   */
+  protected void ignore(boolean onLeft_p) {
+    final ComparisonSelection selection = getSelection();
+    if (selection == null) return; // Should not happen according to ignore tool activation
+    EMFDiffNode input = getInput();
+    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
+      // Make choices
+    IgnoreChoiceData choices = new IgnoreChoiceData(
+        input.isDefaultCoverChildren(), false);
+    makeIgnoreChoices(choices, input, selectedMatches);
+    if (!choices.isProceed()) return;
+    // Ignore operation is set to proceed and choices have been made
+    final Collection<IDifference> toIgnore = !selectedMatches.isEmpty()? getDifferencesToMerge(
+        selectedMatches, input.getRoleForSide(onLeft_p), choices.isCoverChildren(), choices.isSideExclusive()):
+          getInput().getNonIgnoredDifferences(selection.asDifferencesToMerge());
+    if (!toIgnore.isEmpty()) {
+      executeOnModel(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          for (IDifference diff : toIgnore) {
+            if (diff instanceof EElementRelativePresence) {
+              EElementRelativePresence presence = (EElementRelativePresence)diff;
+              getUIComparison().getDifferencesToIgnore().add(presence);
+              // Also on symmetrical if any
+              if (diff instanceof EValuePresence) {
+                IValuePresence symmetrical = ((EValuePresence)diff).getSymmetrical();
+                if (symmetrical instanceof EMergeableDifference)
+                  getUIComparison().getDifferencesToIgnore().add(
+                      (EMergeableDifference)symmetrical);
+              }
+            }
+          }
+          getUIComparison().setLastActionSelection(selection);
+        }
+      }, onLeft_p);
+      firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
+      firePropertyChangeEvent(PROPERTY_DIFFERENCE_NUMBERS, null);
+    }
   }
   
   /**
