@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.api.scopes;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -86,6 +87,14 @@ public interface IPersistentModelScope extends IModelScope {
      * @return whether the ID was actually set
      */
     boolean setExtrinsicID(EObject element_p, Object id_p);
+    
+    /**
+     * Set an input stream for loading. This has no impact after load() has been called.
+     * If the stream is not null, it is used to load getHoldingResource().
+     * @param stream_p a potentially null stream
+     * @throws UnsupportedOperationException if the operation is not supported
+     */
+    void setStream(InputStream stream_p);
   }
   
 }

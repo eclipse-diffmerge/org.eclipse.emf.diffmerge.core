@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <!--
-  Copyright (c) 2015 Intel Corporation.
+  Copyright (c) 2015 Intel Corporation and others.
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the Eclipse Public License v1.0
   which accompanies this distribution, and is available at
@@ -9,24 +9,17 @@
 
   Contributors:
     Stephane Bouchet (Intel Corporation) - initial API and implementation
+    Olivier Constant (Thales Global Services) - tight integration
 -->
 <plugin>
-	<!-- configure the diffmerge scope definition for remote git resources -->
 	<extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
 		<scopeDefinition
-			factory="org.eclipse.emf.diffmerge.connector.git.GitStreamScopeDefinitionFactory">
+			factory="org.eclipse.emf.diffmerge.connector.git.ext.GitRevisionScopeDefinitionFactory">
 		</scopeDefinition>
-		<comparisonMethod
-			factory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
-		</comparisonMethod>
 	</extension>
-	<!-- configure the diffmerge scope definition for local git resources -->
 	<extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
 		<scopeDefinition
-			factory="org.eclipse.emf.diffmerge.connector.git.GitEditableRevisionScopeDefinitionFactory">
+			factory="org.eclipse.emf.diffmerge.connector.git.ext.GitIndexRevisionScopeDefinitionFactory">
 		</scopeDefinition>
-		<comparisonMethod
-			factory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
-		</comparisonMethod>
 	</extension>
 </plugin>

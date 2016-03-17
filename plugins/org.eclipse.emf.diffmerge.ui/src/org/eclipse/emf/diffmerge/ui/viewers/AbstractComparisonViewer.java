@@ -214,7 +214,7 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
   /**
    * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({ "rawtypes", "unchecked" }) // Compatibility with old versions of Eclipse
   public Object  getAdapter(Class adapter_p) {
     Object result = null;
     if (INavigatable.class.equals(adapter_p))

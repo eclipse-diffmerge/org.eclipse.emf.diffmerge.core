@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <!--
-  Copyright (c) 2015 Intel Corporation.
+  Copyright (c) 2015 Intel Corporation and others.
   All rights reserved. This program and the accompanying materials
   are made available under the terms of the Eclipse Public License v1.0
   which accompanies this distribution, and is available at
@@ -9,30 +9,22 @@
 
   Contributors:
     Stephane Bouchet (Intel Corporation) - initial API and implementation
+    Olivier Constant (Thales Global Services) - tight integration
 -->
 <plugin>
    <extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            factory="org.eclipse.emf.diffmerge.connector.svn.SVNLocalScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.connector.svn.ext.SVNLocalScopeDefinitionFactory">
       </scopeDefinition>
-      <comparisonMethod
-            factory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
-      </comparisonMethod>
    </extension>
    <extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            factory="org.eclipse.emf.diffmerge.connector.svn.SVNRemoteScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.connector.svn.ext.SVNRemoteScopeDefinitionFactory">
       </scopeDefinition>
-      <comparisonMethod
-            factory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
-      </comparisonMethod>
    </extension>
    <extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            factory="org.eclipse.emf.diffmerge.connector.svn.SVNRevisionScopeDefinitionFactory">
+            factory="org.eclipse.emf.diffmerge.connector.svn.ext.SVNRevisionScopeDefinitionFactory">
       </scopeDefinition>
-      <comparisonMethod
-            factory="org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory">
-      </comparisonMethod>
    </extension>
 </plugin>

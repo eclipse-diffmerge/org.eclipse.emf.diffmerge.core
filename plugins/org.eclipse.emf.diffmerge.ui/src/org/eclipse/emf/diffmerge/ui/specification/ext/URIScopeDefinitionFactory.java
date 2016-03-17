@@ -69,9 +69,10 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
       boolean editable_p) {
     IModelScopeDefinition result = null;
     URI uri = convertToURI(entrypoint_p);
-    String label = (label_p != null)? label_p: getLabelFor(entrypoint_p);
-    if (uri != null)
+    if (uri != null) {
+      String label = (label_p != null)? label_p: getLabelFor(entrypoint_p);
       result = createScopeDefinitionFromURI(uri, label, editable_p);
+    }
     return result;
   }
   
@@ -158,9 +159,8 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected URI toFileURI(String file_p) {
     URI result = null;
-    if (file_p != null) {
+    if (file_p != null)
       result = URI.createFileURI(file_p);
-    }
     return result;
   }
   
@@ -171,9 +171,8 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected URI toPlatformURI(IFile file_p) {
     URI result = null;
-    if (file_p != null) {
+    if (file_p != null)
       result = URI.createPlatformResourceURI(file_p.getFullPath().toPortableString(), true);
-    }
     return result;
   }
   

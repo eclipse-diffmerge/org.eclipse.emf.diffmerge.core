@@ -7,7 +7,7 @@ Bundle-Localization: plugin
 Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.emf.diffmerge.connector.EMFDiffmergeSVNConnectorPlugin
+Bundle-Activator: org.eclipse.emf.diffmerge.connector.svn.EMFDiffMergeSVNConnectorPlugin
 Require-Bundle: org.eclipse.team.core,
  org.eclipse.osgi,
  org.eclipse.emf.diffmerge.ui.gmf,
@@ -15,3 +15,5 @@ Require-Bundle: org.eclipse.team.core,
  org.eclipse.emf.diffmerge.connector.core,
  org.eclipse.team.svn.core,
  org.eclipse.team.svn.ui
+Export-Package: org.eclipse.emf.diffmerge.connector.svn,
+ org.eclipse.emf.diffmerge.connector.svn.ext

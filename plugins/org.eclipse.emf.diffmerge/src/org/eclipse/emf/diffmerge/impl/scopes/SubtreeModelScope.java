@@ -15,6 +15,7 @@
 package org.eclipse.emf.diffmerge.impl.scopes;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -162,6 +163,13 @@ implements IPersistentModelScope.Editable {
   public boolean setExtrinsicID(EObject element_p, Object id_p) {
     // Increases visibility
     return super.setExtrinsicID(element_p, id_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#setStream(java.io.InputStream)
+   */
+  public void setStream(InputStream stream_p) {
+    // Ignore since scope is always loaded
   }
   
   /**

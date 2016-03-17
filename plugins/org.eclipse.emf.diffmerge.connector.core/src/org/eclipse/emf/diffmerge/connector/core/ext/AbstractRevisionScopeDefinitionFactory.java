@@ -1,0 +1,223 @@
+/**
+ * Copyright (c) 2015 Intel Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Stephane Bouchet (Intel Corporation) - initial API and implementation
+ *    Olivier Constant (Thales Global Services) - tight integration
+ */
+package org.eclipse.emf.diffmerge.connector.core.ext;
+
+import java.io.InputStream;
+
+import org.eclipse.compare.ISharedDocumentAdapter;
+import org.eclipse.compare.ITypedElement;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin;
+import org.eclipse.emf.diffmerge.connector.core.Messages;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.team.core.history.IFileRevision;
+import org.eclipse.team.core.variants.IResourceVariant;
+import org.eclipse.ui.IEditorInput;
+
+
+/**
+ * A base scope definition factory for file revisions in histories.
+ */
+public abstract class AbstractRevisionScopeDefinitionFactory
+extends AbstractURIConvertingScopeDefinitionFactory {
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#convertToURI(java.lang.Object)
+   */
+  @Override
+  protected URI convertToURI(Object entrypoint_p) {
+    URI result = null;
+    if (entrypoint_p instanceof ITypedElement) {
+      IFileRevision revision = getRevision((ITypedElement)entrypoint_p);
+      if (revision != null)
+        try {
+          result = getURIForRevision(revision);
+        } catch (CoreException e) {
+          EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(
+              new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.getDefault().getPluginId(),
+                  e.getMessage(), e));
+        }
+    }
+    if (result == null)
+      result = super.convertToURI(entrypoint_p);
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#getLabel()
+   */
+  @Override
+  public String getLabel() {
+    return Messages.AbstractRevisionScopeDefinitionFactory_Label;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#getLabelFor(java.lang.Object)
+   */
+  @Override
+  protected String getLabelFor(Object entrypoint_p) {
+    String result = null;
+    if (entrypoint_p instanceof ITypedElement) {
+      ITypedElement typedElement = (ITypedElement)entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
+      if (revision != null)
+        result = getLabelForRevision(revision, typedElement);
+    }
+    if (result == null)
+      result = super.getLabelFor(entrypoint_p);
+    return result;
+  }
+  
+  /**
+   * Return a a user-friendly label for the given revision extracted from the given
+   * typed element, if applicable
+   * @param revision_p a non-null revision
+   * @param entrypoint_p a non-null typed element
+   * @return a potentially null string
+   */
+  protected String getLabelForRevision(IFileRevision revision_p, ITypedElement entrypoint_p) {
+    return revision_p.getContentIdentifier();
+  }
+  
+  /**
+   * Return the file revision associated to the given typed element, if any
+   * @param entrypoint_p a non-null typed element
+   * @return a potentially null object
+   */
+  @SuppressWarnings("cast") // Compatibility with old versions of Eclipse
+  protected IFileRevision getRevision(ITypedElement entrypoint_p) {
+    IFileRevision result = null;
+    // The Adapter pattern allows avoiding internal APIs
+    if (entrypoint_p instanceof IAdaptable) {
+      IAdaptable adaptable = (IAdaptable)entrypoint_p;
+      ISharedDocumentAdapter adapter =
+          (ISharedDocumentAdapter)adaptable.getAdapter(ISharedDocumentAdapter.class);
+      if (adapter != null) {
+        IEditorInput input = adapter.getDocumentKey(entrypoint_p);
+        if (input != null)
+          result = (IFileRevision)input.getAdapter(IFileRevision.class);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the storage associated to the given file revision, if any
+   * @param revision_p a non-null revision
+   * @return a potentially null object
+   * @throws CoreException if an error occurs
+   */
+  protected IStorage getStorage(IFileRevision revision_p) throws CoreException {
+    return revision_p.getStorage(new NullProgressMonitor());
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractURIConvertingScopeDefinitionFactory#getStream(java.lang.Object)
+   */
+  @Override
+  @SuppressWarnings("resource")
+  protected InputStream getStream(Object entrypoint_p) throws CoreException {
+    InputStream result = null;
+    if (entrypoint_p instanceof ITypedElement) {
+      ITypedElement typedElement = (ITypedElement)entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
+      if (revision != null) {
+        IStorage storage = getStorage(revision);
+        if (storage != null)
+          result = storage.getContents();
+      }
+    }
+    if (result == null)
+      result = super.getStream(entrypoint_p);
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractURIConvertingScopeDefinitionFactory#getURIConverter(java.lang.Object)
+   */
+  @Override
+  protected URIConverter getURIConverter(Object entrypoint_p) {
+    URIConverter result = null;
+    if (entrypoint_p instanceof ITypedElement) {
+      IFileRevision revision = getRevision((ITypedElement)entrypoint_p);
+      if (revision != null) {
+        try {
+          result = getURIConverterForRevision(revision);
+        } catch (CoreException e) {
+          EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return a URI converter for the given file revision, if possible.
+   * Precondition: isApplicableToRevision(revision_p)
+   * @param revision_p a non-null revision
+   * @return a potentially null object
+   * @throws CoreException if an error occurs
+   */
+  protected abstract URIConverter getURIConverterForRevision(IFileRevision revision_p) throws CoreException;
+  
+  /**
+   * Return a URI for the given file revision
+   * @param revision_p a non-null file revision
+   * @return a potentially null URI
+   * @throws CoreException if an error occurs
+   */
+  protected abstract URI getURIForRevision(IFileRevision revision_p) throws CoreException;
+  
+  /**
+   * Return the resource variant associated with the given file revision, if any
+   * @param revision_p a non-null revision
+   * @return a potentially null object
+   */
+  @SuppressWarnings("cast") // Compatibility with old versions of Eclipse
+  protected IResourceVariant getVariant(IFileRevision revision_p) {
+    IResourceVariant result = null;
+    if (revision_p instanceof IAdaptable)
+      result = (IResourceVariant)((IAdaptable)revision_p).getAdapter(IResourceVariant.class);
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#isApplicableTo(java.lang.Object)
+   */
+  @Override
+  public boolean isApplicableTo(Object entrypoint_p) {
+    boolean result = false;
+    if (entrypoint_p instanceof ITypedElement) {
+      ITypedElement typedElement = (ITypedElement)entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
+      if (revision != null)
+        result = isApplicableToRevision(revision, typedElement);
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether this scope definition factory is applicable to the given revision
+   * extracted from the given typed element
+   * @param revision_p a non-null revision
+   * @param entrypoint_p a non-null typed element
+   */
+  protected abstract boolean isApplicableToRevision(IFileRevision revision_p,
+      ITypedElement entrypoint_p);
+  
+}

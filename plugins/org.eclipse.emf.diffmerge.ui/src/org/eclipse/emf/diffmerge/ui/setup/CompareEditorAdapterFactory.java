@@ -30,7 +30,7 @@ public class CompareEditorAdapterFactory implements IAdapterFactory {
   /**
    * @see org.eclipse.core.runtime.IAdapterFactory#getAdapter(java.lang.Object, java.lang.Class)
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({ "rawtypes", "unchecked" }) // Compatibility with old versions of Eclipse
   public Object getAdapter(Object adaptableObject_p, Class adapterType_p) {
     Object adapter = null;
     // IPropertySheetPage

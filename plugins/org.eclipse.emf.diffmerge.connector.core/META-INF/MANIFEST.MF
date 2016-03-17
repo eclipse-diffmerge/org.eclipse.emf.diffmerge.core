@@ -12,6 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.diffmerge.ui.gmf
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.eclipse.emf.diffmerge.connector.EMFDiffMergeCoreConnectorPlugin
+Bundle-Activator: org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.eclipse.emf.diffmerge.connector.core
+Export-Package: org.eclipse.emf.diffmerge.connector.core,
+ org.eclipse.emf.diffmerge.connector.core.ext

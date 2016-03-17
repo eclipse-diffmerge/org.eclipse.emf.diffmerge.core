@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.impl.scopes;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -73,6 +74,9 @@ implements IFragmentedModelScope.Editable {
   
   /** The non-null resource set that encompasses the scope */
   protected final ResourceSet _resourceSet;
+  
+  /** The optional input stream for loading */
+  protected InputStream _loadingStream;
   
   /** The non-null, non-empty ordered set of resources defining the scope.
    *  It includes _rootResources, _includedResources and _referencedResources. */
@@ -184,6 +188,7 @@ implements IFragmentedModelScope.Editable {
    */
   protected FragmentedModelScope(ResourceSet resourceSet_p, boolean readOnly_p) {
     _state = ScopeState.INITIALIZED;
+    _loadingStream = null;
     _isReadOnly = readOnly_p;
     _resourceSet = resourceSet_p;
     _resources = new ArrayList<Resource>();
@@ -465,11 +470,31 @@ implements IFragmentedModelScope.Editable {
   public boolean load() throws Exception {
     boolean result = false;
     if (_state == ScopeState.INITIALIZED || _state == ScopeState.LOADED) {
-      result = true;
-      for (Resource rootResource : _rootResources) {
-        result = result && loadResource(rootResource);
+      if (_loadingStream != null) {
+        result = loadFromStream(_loadingStream);
+      } else {
+        result = true;
+        for (Resource rootResource : _rootResources) {
+          result = result && loadResource(rootResource);
+        }
       }
       _state = ScopeState.LOADED;
+    }
+    return result;
+  }
+  
+  /**
+   * Load the scope from the given input stream
+   * @param stream_p a non-null input stream
+   * @return whether the operation could be performed
+   */
+  protected boolean loadFromStream(InputStream stream_p) throws Exception {
+    boolean result = false;
+    Resource holdingResource = getHoldingResource();
+    if (holdingResource != null) {
+      Map<?,?> options = getLoadOptions(holdingResource);
+      holdingResource.load(stream_p, options);
+      result = true;
     }
     return result;
   }
@@ -538,6 +563,13 @@ implements IFragmentedModelScope.Editable {
   public boolean setExtrinsicID(EObject element_p, Object id_p) {
     // Increases visibility
     return super.setExtrinsicID(element_p, id_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#setStream(java.io.InputStream)
+   */
+  public void setStream(InputStream stream_p) {
+    _loadingStream = stream_p;
   }
   
   /**

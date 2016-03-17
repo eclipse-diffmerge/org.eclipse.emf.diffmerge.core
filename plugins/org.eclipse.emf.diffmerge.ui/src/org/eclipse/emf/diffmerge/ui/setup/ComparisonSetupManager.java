@@ -24,7 +24,9 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
@@ -146,23 +148,28 @@ public class ComparisonSetupManager {
       Object entrypoint2_p, Object entrypoint3_p) {
     ComparisonSetup result = null;
     List<IModelScopeDefinitionFactory> factories1 =
-      getApplicableModelScopeFactories(entrypoint1_p);
+        getApplicableModelScopeFactories(entrypoint1_p);
     List<IModelScopeDefinitionFactory> factories2 =
-      getApplicableModelScopeFactories(entrypoint2_p);
-    List<IModelScopeDefinitionFactory> factories3 =
-      entrypoint3_p == null? Collections.<IModelScopeDefinitionFactory>emptyList():
-        getApplicableModelScopeFactories(entrypoint3_p);
+        getApplicableModelScopeFactories(entrypoint2_p);
+    List<IModelScopeDefinitionFactory> factories3 = entrypoint3_p == null?
+        Collections.<IModelScopeDefinitionFactory>emptyList():
+          getApplicableModelScopeFactories(entrypoint3_p);
     if (!factories1.isEmpty() && !factories2.isEmpty()) {
-      IModelScopeDefinition scopeSpec1 =
-        factories1.get(0).createScopeDefinition(entrypoint1_p, null, true);
-      IModelScopeDefinition scopeSpec2 =
-        factories2.get(0).createScopeDefinition(entrypoint2_p, null, true);
-      IModelScopeDefinition scopeSpec3 = factories3.isEmpty()? null:
-        factories3.get(0).createScopeDefinition(entrypoint3_p, null, true);
-      List<IComparisonMethodFactory> cFactories =
-        getApplicableComparisonMethodFactories(scopeSpec1, scopeSpec2, scopeSpec3);
-      if (!cFactories.isEmpty())
-        result = new ComparisonSetup(scopeSpec1, scopeSpec2, scopeSpec3, cFactories);
+      try {
+        IModelScopeDefinition scopeSpec1 =
+            factories1.get(0).createScopeDefinition(entrypoint1_p, null, true);
+        IModelScopeDefinition scopeSpec2 =
+            factories2.get(0).createScopeDefinition(entrypoint2_p, null, true);
+        IModelScopeDefinition scopeSpec3 = factories3.isEmpty()? null:
+          factories3.get(0).createScopeDefinition(entrypoint3_p, null, true);
+        List<IComparisonMethodFactory> cFactories =
+            getApplicableComparisonMethodFactories(scopeSpec1, scopeSpec2, scopeSpec3);
+        if (!cFactories.isEmpty())
+          result = new ComparisonSetup(scopeSpec1, scopeSpec2, scopeSpec3, cFactories);
+      } catch (Exception e) {
+        EMFDiffMergeUIPlugin.getDefault().getLog().log(new Status(
+            IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getPluginId(), e.getMessage(),e));
+      }
     }
     return result;
   }
@@ -172,7 +179,7 @@ public class ComparisonSetupManager {
    * extension point, if any
    * Postcondition: _comparisonFactories != null && _scopeFactories != null
    */
-  private void discoverRegisteredComparisonContexts() {
+  protected void discoverRegisteredComparisonContexts() {
     _comparisonFactories = new HashMap<Class<?>, IComparisonMethodFactory>();
     _scopeFactories = new HashMap<Class<?>, IModelScopeDefinitionFactory>();
     IExtensionRegistry registry = Platform.getExtensionRegistry();
