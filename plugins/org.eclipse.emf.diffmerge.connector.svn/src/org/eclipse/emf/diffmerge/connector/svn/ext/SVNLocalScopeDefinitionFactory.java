@@ -20,7 +20,7 @@ import org.eclipse.team.svn.ui.compare.ResourceCompareInput.ResourceElement;
 
 
 /**
- * A scopes definition factory for local SVN files.
+ * A scope definition factory for local SVN files.
  */
 public class SVNLocalScopeDefinitionFactory extends URIScopeDefinitionFactory {
   

@@ -25,7 +25,7 @@ import org.eclipse.team.svn.ui.compare.ResourceCompareInput.ResourceElement;
 
 
 /**
- * A scopes definition factory for remote SVN files.
+ * A scope definition factory for remote SVN files.
  */
 public class SVNRemoteScopeDefinitionFactory extends AbstractURIConvertingScopeDefinitionFactory {
   
