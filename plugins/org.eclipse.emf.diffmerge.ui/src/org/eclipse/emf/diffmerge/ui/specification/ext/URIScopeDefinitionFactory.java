@@ -119,7 +119,7 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   }
   
   /**
-   * Return a user-friendly label for the given entrypoint object, if applicable
+   * Return a user-friendly label for the given entry point object, if applicable
    * @param entrypoint_p a non-null object
    * @return a potentially null label
    */

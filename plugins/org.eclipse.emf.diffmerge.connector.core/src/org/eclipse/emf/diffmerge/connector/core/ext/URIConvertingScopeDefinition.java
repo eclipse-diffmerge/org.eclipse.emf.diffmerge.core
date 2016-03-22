@@ -31,27 +31,27 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
   /** The non-null wrapped model scope definition */
   protected final IModelScopeDefinition _wrapped;
   
+  /** Whether the scope can be edited */
+  private boolean _editable;
+  
   /** The non-null URI converter */
   protected final URIConverter _uriConverter;
   
   /** The optional input stream for loading the scope */
   protected InputStream _loadingStream;
   
-  /** The optional label for the scope */
-  protected final String _label;
-  
   
   /**
    * Constructor
    * @param wrapped_p a non-null model scope definition wrapped by this one
    * @param uriConverter_p a non-null URI converter for the resource set of the scope
-   * @param label_p an optional label for the scope
+   * @param isEditable_p whether the scope can be edited
    */
-  public URIConvertingScopeDefinition(IModelScopeDefinition wrapped_p,
-      URIConverter uriConverter_p, String label_p) {
+  public URIConvertingScopeDefinition(IModelScopeDefinition wrapped_p, URIConverter uriConverter_p,
+      boolean isEditable_p) {
     _wrapped = wrapped_p;
     _uriConverter = uriConverter_p;
-    _label = label_p;
+    _editable = isEditable_p;
   }
   
   /**
@@ -60,7 +60,7 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
   public IEditableModelScope createScope(Object context_p) {
     IEditableModelScope result = _wrapped.createScope(null); // Ignore context for a fresh resource set
     if (result instanceof AbstractModelScope)
-      ((AbstractModelScope)result).setOriginator(_label);
+      ((AbstractModelScope)result).setOriginator(_wrapped.getLabel());
     if (result instanceof IPersistentModelScope) {
       IPersistentModelScope casted = (IPersistentModelScope)result;
       if (_loadingStream != null && casted instanceof IPersistentModelScope.Editable)
@@ -100,21 +100,21 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditable()
    */
   public boolean isEditable() {
-    return false; // Cannot modify element by default
+    return _editable;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditableSettable()
    */
   public boolean isEditableSettable() {
-    return false; // Cannot modify element by default
+    return false; // Imposed by SCM constraints
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#setEditable(boolean)
    */
   public void setEditable(boolean editable_p) {
-    // Cannot modify element by default
+    _editable = editable_p;
   }
   
   /**

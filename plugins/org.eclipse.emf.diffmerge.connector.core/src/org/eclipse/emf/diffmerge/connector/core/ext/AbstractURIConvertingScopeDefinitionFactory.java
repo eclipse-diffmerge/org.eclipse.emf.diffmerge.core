@@ -56,9 +56,12 @@ public abstract class AbstractURIConvertingScopeDefinitionFactory extends URISco
           IModelScopeDefinitionFactory factory = factories.get(0);
           // Create scope definition and wrap it in a revision scope definition
           String label = (label_p != null) ? label_p : getLabelFor(entrypoint_p);
+          if (label == null)
+            label = uri.toString();
           IModelScopeDefinition scopeDefinition = factory.createScopeDefinition(uri, label, editable_p);
           if (scopeDefinition != null) {
-            result = new URIConvertingScopeDefinition(scopeDefinition, uriConverter, label);
+            boolean editable = isScopeEditable(entrypoint_p);
+            result = new URIConvertingScopeDefinition(scopeDefinition, uriConverter, editable);
             result.setStream(getStream(entrypoint_p));
           }
         }
@@ -96,5 +99,13 @@ public abstract class AbstractURIConvertingScopeDefinitionFactory extends URISco
    * @return a potentially null object
    */
   protected abstract URIConverter getURIConverter(Object entrypoint_p);
+  
+  /**
+   * Return whether the scope generated for the given entry point will be editable
+   * @param entrypoint_p a non-null object
+   */
+  protected boolean isScopeEditable(Object entrypoint_p) {
+    return false;
+  }
   
 }

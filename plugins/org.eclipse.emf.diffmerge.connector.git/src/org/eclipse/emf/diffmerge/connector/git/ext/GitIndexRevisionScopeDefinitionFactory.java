@@ -30,7 +30,7 @@ import org.eclipse.team.core.history.IFileRevision;
 
 /**
  * A scope definition factory for file revisions in the Git index (staging area),
- * also used for handling conflicts.
+ * also used for handling conflicts (role "Ours").
  */
 @SuppressWarnings("restriction") // Specific EGit types
 public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefinitionFactory {
@@ -43,7 +43,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
     String result = null;
     if (entrypoint_p instanceof EditableRevision) {
       if (revision_p instanceof IndexFileRevision) {
-        if (entrypoint_p instanceof IEditableContent) {
+        if (isScopeEditable(entrypoint_p)) {
           result = String.format(
               Messages.GitIndexRevisionScopeDefinitionFactory_LabelIndexEditable,
               revision_p.getName());
@@ -136,6 +136,14 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
   @Override
   protected boolean isApplicableToRevision(IFileRevision revision_p, ITypedElement entrypoint_p) {
     return entrypoint_p instanceof EditableRevision;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractURIConvertingScopeDefinitionFactory#isScopeEditable(java.lang.Object)
+   */
+  @Override
+  protected boolean isScopeEditable(Object entrypoint_p) {
+    return entrypoint_p instanceof IEditableContent;
   }
   
 }
