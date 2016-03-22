@@ -659,17 +659,20 @@ public class DiffOperation extends AbstractExpensiveOperation {
   
   /**
    * Set the properties which are specific to three-way comparisons to the given
-   * difference
+   * difference.
+   * Precondition: getComparison().isThreeWay()
    * @param presence_p a non-null attribute value presence
    */
   protected void setThreeWayProperties(IAttributeValuePresence presence_p) {
     EObject ancestorHolder = presence_p.getElementMatch().get(Role.ANCESTOR);
-    if (ancestorHolder != null) {
+    boolean aligned;
+    if (ancestorHolder == null) {
+      aligned = false;
+    } else {
       EAttribute attribute = presence_p.getFeature();
       IFeaturedModelScope ancestorScope = _comparison.getScope(Role.ANCESTOR);
       assert ancestorScope != null; // Thanks to call context
       List<Object> valuesInAncestor = ancestorScope.get(ancestorHolder, attribute);
-      boolean aligned;
       if (presence_p.isOrder()) {
         Role presenceRole = presence_p.getPresenceRole();
         List<Object> values = _comparison.getScope(presenceRole).get(
@@ -690,27 +693,29 @@ public class DiffOperation extends AbstractExpensiveOperation {
           }
         }
       } else {
+        // Not an order
         ObjectAndIndex equalInAncestor = findEqualAttributeValue(
             attribute, presence_p.getValue(), valuesInAncestor);
         aligned = equalInAncestor.getObject() != null;
       }
-      if (!aligned) {
-        // Not aligned with ancestor
-        IAttributeValuePresence symmetrical = presence_p.getSymmetrical();
-        if (symmetrical != null && !symmetrical.isAlignedWithAncestor()) {
-          // Symmetrical is not aligned either: mark both as conflicting
-          ((IDifference.Editable)presence_p).markAsConflicting();
-          ((IDifference.Editable)symmetrical).markAsConflicting();
-        } else {
-          // No symmetrical or symmetrical aligned: just mark diff as not aligned
-          ((IDifference.Editable)presence_p).markAsDifferentFromAncestor();
-        }
+    }
+    if (!aligned) {
+      // Not aligned with ancestor
+      IAttributeValuePresence symmetrical = presence_p.getSymmetrical();
+      if (symmetrical != null && !symmetrical.isAlignedWithAncestor()) {
+        // Symmetrical is not aligned either: mark both as conflicting
+        ((IDifference.Editable)presence_p).markAsConflicting();
+        ((IDifference.Editable)symmetrical).markAsConflicting();
+      } else {
+        // No symmetrical or symmetrical aligned: just mark diff as not aligned
+        ((IDifference.Editable)presence_p).markAsDifferentFromAncestor();
       }
     }
   }
   
   /**
-   * Set the properties which are specific to three-way comparisons to the given difference
+   * Set the properties which are specific to three-way comparisons to the given difference.
+   * Precondition: getComparison().isThreeWay()
    * @param presence_p a non-null reference value presence
    */
   protected void setThreeWayProperties(IReferenceValuePresence presence_p) {
