@@ -1854,6 +1854,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                 if (symmetrical instanceof EMergeableDifference)
                   getUIComparison().getDifferencesToIgnore().add(
                       (EMergeableDifference)symmetrical);
+                // Also on symmetrical ownership if any
+                if (diff instanceof IReferenceValuePresence) {
+                  IReferenceValuePresence symmetricalOwnership =
+                      ((IReferenceValuePresence)diff).getSymmetricalOwnership();
+                  if (symmetricalOwnership instanceof EMergeableDifference)
+                    getUIComparison().getDifferencesToIgnore().add(
+                        (EMergeableDifference)symmetricalOwnership);
+                }
               }
             }
           }
