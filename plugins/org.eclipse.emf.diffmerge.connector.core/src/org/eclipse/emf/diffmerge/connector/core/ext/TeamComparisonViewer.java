@@ -13,7 +13,9 @@ package org.eclipse.emf.diffmerge.connector.core.ext;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
+import org.eclipse.compare.ICompareContainer;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -51,6 +53,9 @@ public class TeamComparisonViewer extends Viewer {
   /** The non-null control of the viewer */
   protected final Composite _control;
   
+  /** The optional compare configuration */
+  protected CompareConfiguration _configuration;
+  
   /** The initially null actual comparison viewer */
   protected AbstractComparisonViewer _innerViewer;
   
@@ -61,8 +66,10 @@ public class TeamComparisonViewer extends Viewer {
   /**
    * Constructor
    * @param parent_p a non-null composite
+   * @param configuration_p an optional compare configuration
    */
-  public TeamComparisonViewer(Composite parent_p) {
+  public TeamComparisonViewer(Composite parent_p, CompareConfiguration configuration_p) {
+    _configuration = configuration_p;
     _control = createControl(parent_p);
     _innerViewer = null;
     _input = null;
@@ -146,6 +153,7 @@ public class TeamComparisonViewer extends Viewer {
    * Dispose this viewer as a reaction to the disposal of its control
    */
   protected void handleDispose() {
+    _configuration = null; // Disposed by editor input if needed
     _innerViewer = null;
     _input = null;
   }
@@ -243,6 +251,12 @@ public class TeamComparisonViewer extends Viewer {
       EMFDiffMergeEditorInput editorInput = manager.createEditorInputWithUI(getShell(), setup);
       if (editorInput != null) {
         // Not failed/cancelled
+        if (_configuration != null) {
+          // Register container for action bars
+          ICompareContainer compareContainer = _configuration.getContainer();
+          if (compareContainer != null)
+            editorInput.setContainer(compareContainer);
+        }
         try {
           // Compute comparison
           ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());

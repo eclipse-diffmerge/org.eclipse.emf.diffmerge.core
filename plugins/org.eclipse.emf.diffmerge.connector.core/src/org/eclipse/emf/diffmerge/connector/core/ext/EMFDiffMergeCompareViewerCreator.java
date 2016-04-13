@@ -25,8 +25,8 @@ public class EMFDiffMergeCompareViewerCreator implements IViewerCreator {
   /**
    * @see org.eclipse.compare.IViewerCreator#createViewer(org.eclipse.swt.widgets.Composite, org.eclipse.compare.CompareConfiguration)
    */
-	public Viewer createViewer(Composite parent, CompareConfiguration config) {
-		return new TeamComparisonViewer(parent);
+	public Viewer createViewer(Composite parent_p, CompareConfiguration configuration_p) {
+		return new TeamComparisonViewer(parent_p, configuration_p);
 	}
 	
 }
