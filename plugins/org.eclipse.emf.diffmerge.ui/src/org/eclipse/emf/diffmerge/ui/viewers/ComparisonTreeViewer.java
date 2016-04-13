@@ -187,7 +187,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     TreePath result = null;
     TreePath next = getNextOf(path_p);
     while (result == null && next != null) {
-      if (getInput().representAsUserDifference(next))
+      if (getInput().getCategoryManager().representAsUserDifference(next))
         result = next;
       else
         next = getNextOf(next);
@@ -222,7 +222,7 @@ public class ComparisonTreeViewer extends TreeViewer {
             match_p, drivingRole.opposite());
         if (oppositeContainer != null && oppositeContainer != drivingContainer) {
           for (List<IMatch> oppositePath : getPathsFor(oppositeContainer, false)) {
-            if (!getInput().representAsMoveOrigin(UIUtil.toTreePath(oppositePath)))
+            if (!getInput().getCategoryManager().representAsMoveOrigin(UIUtil.toTreePath(oppositePath)))
               result.add(oppositePath);
           }
         }
@@ -296,7 +296,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     TreePath result = null;
     TreePath previous = getPreviousOf(path_p);
     while (result == null && previous != null) {
-      if (getInput().representAsUserDifference(previous))
+      if (getInput().getCategoryManager().representAsUserDifference(previous))
         result = previous;
       else
         previous = getPreviousOf(previous);
@@ -364,7 +364,7 @@ public class ComparisonTreeViewer extends TreeViewer {
       List<IMatch> result;
       if (end == null)
         result = getInput().getActualComparison().getContents();
-      else if (getInput().representAsMoveOrigin(parentPath_p))
+      else if (getInput().getCategoryManager().representAsMoveOrigin(parentPath_p))
         result = Collections.emptyList();
       else
         result = getInput().getActualComparison().getContentsOf(end);
@@ -431,7 +431,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     public Font getFont(Object element_p) {
       IMatch match = (IMatch)element_p;
       Font result = getControl().getFont();
-      if (getInput().representAsUserDifference(match))
+      if (getInput().getCategoryManager().representAsUserDifference(match))
         result = UIUtil.getBold(result);
       return result;
     }
@@ -442,7 +442,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     @Override
     public Color getForeground(Object element_p) {
       EMatch match = (EMatch)element_p;
-      DifferenceKind kind = getInput().getDifferenceKind(match);
+      DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
       DifferenceColorKind colorKind =
         EMFDiffMergeUIPlugin.getDefault().getDifferenceColorKind(kind);
       return getInput().getDifferenceColor(colorKind);
@@ -456,7 +456,7 @@ public class ComparisonTreeViewer extends TreeViewer {
       IMatch match = (IMatch)element_p;
       Image result = getDelegate().getImage(getElementToRepresent(match));
       if (result != null && getInput().usesCustomIcons()) {
-        DifferenceKind kind = getInput().getDifferenceKind(match);
+        DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
         result = getResourceManager().adaptImage(result, kind);
       }
       return result;
@@ -470,7 +470,7 @@ public class ComparisonTreeViewer extends TreeViewer {
     private Font getPathFont(TreePath path_p) {
       Font result = getControl().getFont();
       Object last = path_p.getLastSegment();
-      if (last != null && !getInput().representAsMoveOrigin(path_p))
+      if (last != null && !getInput().getCategoryManager().representAsMoveOrigin(path_p))
         result = getFont(last);
       return result;
     }
@@ -485,10 +485,10 @@ public class ComparisonTreeViewer extends TreeViewer {
       IMatch last = (IMatch)path_p.getLastSegment();
       if (last != null) {
         result = getDelegate().getImage(getElementToRepresent(last));
-        if (getInput().representAsMoveOrigin(path_p) && result != null)
+        if (getInput().getCategoryManager().representAsMoveOrigin(path_p) && result != null)
           result = getResourceManager().getDisabledVersion(result);
         if (result != null && getInput().usesCustomIcons()) {
-          DifferenceKind kind = getInput().getDifferenceKind(last);
+          DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(last);
           result = getResourceManager().adaptImage(result, kind);
         }
       }
@@ -516,11 +516,11 @@ public class ComparisonTreeViewer extends TreeViewer {
       EMatch match = (EMatch)element_p;
       String result = getDelegate().getText(getElementToRepresent(match));
       if (getInput().usesCustomLabels()) {
-        DifferenceKind kind = getInput().getDifferenceKind(match);
+        DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
         String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);
         result = prefix + result;
       }
-      int nb = getInput().getUIDifferenceNumber(match);
+      int nb = getInput().getCategoryManager().getUIDifferenceNumber(match);
       if (nb > 0)
         result = result + " (" + nb + ")"; //$NON-NLS-1$ //$NON-NLS-2$
       return result;

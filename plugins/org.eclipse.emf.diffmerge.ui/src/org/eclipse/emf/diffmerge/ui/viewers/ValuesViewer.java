@@ -344,8 +344,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
    */
   protected boolean showAsDifference(Object element_p) {
     return element_p instanceof IValuePresence &&
-      !((IValuePresence)element_p).isMerged() &&
-      !getInput().getContext().shouldBeIgnored((IDifference)element_p);
+      !getInput().getContext().getCategoryManager().isFiltered((IDifference)element_p);
   }
   
   /**
@@ -536,7 +535,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
               getInput().getContext().getReferenceRole() == null) {
             kind = DifferenceKind.MODIFIED;
           } else {
-            kind = getInput().getContext().getDifferenceKind(presence);
+            kind = getInput().getContext().getCategoryManager().getDifferenceKind(presence);
           }
           result = getResourceManager().adaptImage(result, kind);
         }
@@ -567,7 +566,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
             result = formatCrossReferenceValue(result, (EObject)toRepresent);
         }
         if (getInput().getContext().usesCustomLabels()) {
-          DifferenceKind kind = getInput().getContext().getDifferenceKind(presence);
+          DifferenceKind kind = getInput().getContext().getCategoryManager().getDifferenceKind(presence);
           String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);
           result = prefix + result;
         }

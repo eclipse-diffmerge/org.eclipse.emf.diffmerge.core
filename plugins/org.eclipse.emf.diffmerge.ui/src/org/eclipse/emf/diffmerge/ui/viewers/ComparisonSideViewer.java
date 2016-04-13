@@ -210,7 +210,7 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
           element, getSideRole());
       Color result;
       if (match != null) {
-        DifferenceKind kind = getInput().getDifferenceKind(match);
+        DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
         if (!kind.isNeutral())
           result = getSideColor();
         else

@@ -90,7 +90,6 @@ public class DiffMergeDialog extends Dialog {
     Composite composite = (Composite)super.createDialogArea(parent_p);
     AbstractComparisonViewer viewer = createComparisonViewer(composite);
     viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    _input.updateDifferenceNumbers();
     viewer.setInput(_input);
     return composite;
   }

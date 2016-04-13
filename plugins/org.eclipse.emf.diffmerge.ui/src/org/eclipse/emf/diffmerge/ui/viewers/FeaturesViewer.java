@@ -241,7 +241,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
             result.add(ref);
         }
       }
-      if (getInput().getContext().representAsMove(match))
+      if (getInput().getContext().getCategoryManager().representAsMove(match))
         result.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
       return result.toArray();
     }
@@ -307,7 +307,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       if (getInput() != null) {
         EMatch match = (EMatch)getInput().getMatch();
         MatchAndFeature maf = new MatchAndFeatureImpl(match, feature_p);
-        result = getInput().getContext().getDifferenceKind(maf);
+        result = getInput().getContext().getCategoryManager().getDifferenceKind(maf);
       }
       return result;
     }
@@ -346,7 +346,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     public Image getImage(Object element_p) {
       Image result = null;
       if (isOwnershipFeature(element_p)) {
-        result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.CONTAINER);
+        result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.TREE);
       } else {
         IItemLabelProvider provider = (IItemLabelProvider)_ecoreAdapterFactory.adapt(
             element_p, IItemLabelProvider.class);

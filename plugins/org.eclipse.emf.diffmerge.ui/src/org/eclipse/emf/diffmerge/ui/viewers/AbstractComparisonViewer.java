@@ -21,6 +21,8 @@ import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.contentmergeviewer.IFlushable;
+import org.eclipse.compare.structuremergeviewer.ICompareInput;
+import org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -37,6 +39,15 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.IgnoredDifferenceCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.MergedDifferenceCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.MoveCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.PropertyChangeCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ConflictCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementAdditionCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementRemovalCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ThreeWayMoveCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.UnmatchedElementCategory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
@@ -69,7 +80,7 @@ import org.eclipse.ui.actions.ActionFactory;
  * @author Olivier Constant
  */
 public abstract class AbstractComparisonViewer extends Viewer
-implements IFlushable, IPropertyChangeNotifier, IAdaptable {
+implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAdaptable {
   
   /** The name of the "current input" property */
   public static final String PROPERTY_CURRENT_INPUT = "PROPERTY_CURRENT_INPUT"; //$NON-NLS-1$
@@ -120,6 +131,13 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
    */
   public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
     _changeListeners.add(listener_p);
+  }
+  
+  /**
+   * @see org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener#compareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
+   */
+  public void compareInputChanged(ICompareInput source_p) {
+    refresh();
   }
   
   /**
@@ -392,6 +410,8 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (oldInput_p instanceof ICompareInput)
+      ((ICompareInput)oldInput_p).removeCompareInputChangeListener(this);
     if (_undoAction != null) {
       _undoAction.setEditingDomain(getEditingDomain());
       _undoAction.update();
@@ -402,6 +422,13 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
     }
     if (_actionBars != null)
       _actionBars.updateActionBars();
+    if (input_p instanceof EMFDiffNode) {
+      EMFDiffNode node = (EMFDiffNode)input_p;
+      registerCategories(node);
+      node.updateDifferenceNumbers();
+    }
+    if (input_p instanceof ICompareInput)
+      ((ICompareInput)input_p).addCompareInputChangeListener(this);
     firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
   }
   
@@ -424,6 +451,30 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
       _redoAction.update();
     if (_actionBars != null)
       _actionBars.updateActionBars();
+  }
+  
+  /**
+   * Register the difference categories that are applicable to the given input diff node
+   * @param node_p a non-null diff node
+   */
+  protected void registerCategories(EMFDiffNode node_p) {
+    Set<IDifferenceCategory> categories = node_p.getCategoryManager().getCategories();
+    // Non-pending
+    categories.add(new MergedDifferenceCategory());
+    categories.add(new IgnoredDifferenceCategory());
+    // General two-way/three-way
+    categories.add(new UnmatchedElementCategory(true));
+    categories.add(new UnmatchedElementCategory(false));
+    categories.add(new MoveCategory());
+    categories.add(new PropertyChangeCategory());
+    // Three-way
+    categories.add(new ElementAdditionCategory(true));
+    categories.add(new ElementAdditionCategory(false));
+    categories.add(new ElementRemovalCategory(true));
+    categories.add(new ElementRemovalCategory(false));
+    categories.add(new ConflictCategory());
+    categories.add(new ThreeWayMoveCategory(true));
+    categories.add(new ThreeWayMoveCategory(false));
   }
   
   /**

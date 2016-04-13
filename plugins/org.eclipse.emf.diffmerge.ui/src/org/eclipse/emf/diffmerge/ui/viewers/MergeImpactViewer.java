@@ -394,10 +394,10 @@ public class MergeImpactViewer extends Viewer {
   @Override
   public void setInput(Object input_p) {
     if (input_p instanceof ImpactInput) {
+      Object oldInput = getInput();
       _input = (ImpactInput)input_p;
       if (!_input.isComputed())
         _input.compute(null);
-      Object oldInput = getInput();
       inputChanged(_input, oldInput);
     }
   }
