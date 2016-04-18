@@ -12,12 +12,17 @@
 package org.eclipse.emf.diffmerge.connector.core.ext;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.compare.ICompareContainer;
 import org.eclipse.compare.INavigatable;
+import org.eclipse.compare.IPropertyChangeNotifier;
+import org.eclipse.compare.contentmergeviewer.IFlushable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.core.Messages;
@@ -29,6 +34,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -45,16 +51,19 @@ import org.eclipse.ui.IWorkbenchWindow;
 
 
 /**
- * A viewer that can convert ICompareInput to model comparison inputs in Team usage scenarios.
- * It wraps a comparison 
+ * A viewer that can convert an ICompareInput to a model comparison input in Team usage scenarios.
+ * It wraps the usual comparison viewer.
  */
-public class TeamComparisonViewer extends Viewer {
+public class TeamComparisonViewer extends Viewer implements IFlushable, IPropertyChangeNotifier {
   
   /** The non-null control of the viewer */
   protected final Composite _control;
   
   /** The optional compare configuration */
   protected CompareConfiguration _configuration;
+  
+  /** The non-null set of listeners that are still to be registered */
+  protected final Collection<IPropertyChangeListener> _pendingListeners;
   
   /** The initially null actual comparison viewer */
   protected AbstractComparisonViewer _innerViewer;
@@ -71,8 +80,21 @@ public class TeamComparisonViewer extends Viewer {
   public TeamComparisonViewer(Composite parent_p, CompareConfiguration configuration_p) {
     _configuration = configuration_p;
     _control = createControl(parent_p);
+    _pendingListeners = new HashSet<IPropertyChangeListener>();
     _innerViewer = null;
     _input = null;
+  }
+  
+  /**
+   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
+    if (_innerViewer == null && !_control.isDisposed()) {
+      // Inner viewer not created yet: register listener later
+      _pendingListeners.add(listener_p);
+    } else {
+      _innerViewer.addPropertyChangeListener(listener_p);
+    }
   }
   
   /**
@@ -118,6 +140,14 @@ public class TeamComparisonViewer extends Viewer {
   }
   
   /**
+   * @see org.eclipse.compare.contentmergeviewer.IFlushable#flush(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  public void flush(IProgressMonitor monitor_p) {
+    if (_innerViewer != null)
+      _innerViewer.flush(monitor_p);
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getControl()
    */
   @Override
@@ -154,6 +184,7 @@ public class TeamComparisonViewer extends Viewer {
    */
   protected void handleDispose() {
     _configuration = null; // Disposed by editor input if needed
+    _pendingListeners.clear();
     _innerViewer = null;
     _input = null;
   }
@@ -224,6 +255,19 @@ public class TeamComparisonViewer extends Viewer {
   }
   
   /**
+   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
+    if (_innerViewer != null) {
+      _innerViewer.removePropertyChangeListener(listener_p);
+    } else {
+      // In case inner viewer has not been created yet
+      _pendingListeners.remove(listener_p);
+      // Otherwise, listener list of inner viewer is automatically cleared at disposal time
+    }
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#setInput(java.lang.Object)
    */
   @Override
@@ -275,6 +319,11 @@ public class TeamComparisonViewer extends Viewer {
           _innerViewer = editorInput.getViewer();
           _control.pack();
           _control.getParent().layout();
+          // Register pending listeners
+          for (IPropertyChangeListener listener : _pendingListeners) {
+            _innerViewer.addPropertyChangeListener(listener);
+          }
+          _pendingListeners.clear();
         } else {
           // Failure (no diff): close the viewer and open a dialog
           _innerViewer = null;
