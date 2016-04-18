@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -90,10 +91,14 @@ public class ComparisonSetupManager {
   public EMFDiffMergeEditorInput createDefaultEditorInput(Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
     EMFDiffMergeEditorInput result = null;
-    ComparisonSetup selection =
-      createComparisonSetup(entrypoint1_p, entrypoint2_p, entrypoint3_p);
-    if (selection != null && selection.getComparisonMethod() != null)
-      result = new EMFDiffMergeEditorInput(selection.getComparisonMethod());
+    try {
+      ComparisonSetup setup =
+          createComparisonSetup(entrypoint1_p, entrypoint2_p, entrypoint3_p);
+      if (setup != null && setup.getComparisonMethod() != null)
+        result = new EMFDiffMergeEditorInput(setup.getComparisonMethod());
+    } catch (IllegalArgumentException e) {
+      handleSetupError(null, e.getLocalizedMessage());
+    }
     return result;
   }
   
@@ -107,10 +112,16 @@ public class ComparisonSetupManager {
    */
   public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, Object entrypoint1_p,
       Object entrypoint2_p, Object entrypoint3_p) {
-    ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-    ComparisonSetup setup = manager.createComparisonSetup(
-        entrypoint1_p, entrypoint2_p, entrypoint3_p);
-    return createEditorInputWithUI(shell_p, setup);
+    EMFDiffMergeEditorInput result = null;
+    try {
+      ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
+      ComparisonSetup setup = manager.createComparisonSetup(
+          entrypoint1_p, entrypoint2_p, entrypoint3_p);
+      result = createEditorInputWithUI(shell_p, setup);
+    } catch (IllegalArgumentException e) {
+      handleSetupError(shell_p, e.getLocalizedMessage());
+    }
+    return result;
   }
   
   /**
@@ -131,8 +142,7 @@ public class ComparisonSetupManager {
           result = new EMFDiffMergeEditorInput(method);
       }
     } else {
-      MessageDialog.openError(shell_p, EMFDiffMergeUIPlugin.LABEL,
-          Messages.CompareModelsAction_ModelsOnly);
+      handleSetupError(shell_p, null);
     }
     return result;
   }
@@ -142,6 +152,7 @@ public class ComparisonSetupManager {
    * @param entrypoint1_p a non-null object
    * @param entrypoint2_p a non-null object
    * @param entrypoint3_p an optional object
+   * @throws IllegalArgumentException if the entry points are not supported
    * @return a potentially null object (null means failure)
    */
   public ComparisonSetup createComparisonSetup(Object entrypoint1_p,
@@ -168,8 +179,12 @@ public class ComparisonSetupManager {
           result = new ComparisonSetup(scopeSpec1, scopeSpec2, scopeSpec3, cFactories);
       } catch (Exception e) {
         EMFDiffMergeUIPlugin.getDefault().getLog().log(new Status(
-            IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getPluginId(), e.getMessage(),e));
+            IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getPluginId(), e.getMessage(), e));
       }
+    } else {
+      handleUnsupportedEntrypoints(
+          factories1.isEmpty()? entrypoint1_p: null,
+          factories2.isEmpty()? entrypoint2_p: null);
     }
     return result;
   }
@@ -264,6 +279,56 @@ public class ComparisonSetupManager {
     if (_scopeFactories == null)
       discoverRegisteredComparisonContexts();
     return _scopeFactories.values();
+  }
+  
+  /**
+   * Handle the given user-level setup error message
+   * @param shell_p an optional shell (if null, error message is being logged)
+   * @param message_p an optional message (if null, replaced by a default setup error message)
+   */
+  public void handleSetupError(Shell shell_p, String message_p) {
+    String message = (message_p != null)? message_p: Messages.CompareModelsAction_ModelsOnly;
+    if (shell_p != null) {
+      MessageDialog.openError(shell_p, EMFDiffMergeUIPlugin.LABEL, message);
+    } else {
+      EMFDiffMergeUIPlugin.getDefault().getLog().log(new Status(
+          IStatus.ERROR, EMFDiffMergeUIPlugin.getDefault().getPluginId(), message, null));
+    }
+  }
+  
+  /**
+   * Handle the fact that the given left and/or right entry points are not supported by
+   * available scope factories
+   * @param unsupportedLeft_p an optional entry point for the left-hand side
+   * @param unsupportedRight_p an optional entry point for the right-hand side
+   */
+  protected void handleUnsupportedEntrypoints(Object unsupportedLeft_p, Object unsupportedRight_p) {
+    StringBuilder msgBuilder = new StringBuilder();
+    boolean leftKO = unsupportedLeft_p != null;
+    boolean rightKO = unsupportedRight_p != null;
+    if (leftKO) {
+      String leftMessage;
+      if (unsupportedLeft_p instanceof ITypedElement) {
+        String leftName = ((ITypedElement)unsupportedLeft_p).getName();
+        leftMessage = String.format(Messages.ComparisonSetupManager_CannotLoadLeftKnown, leftName);
+      } else {
+        leftMessage = Messages.ComparisonSetupManager_CannotLoadLeftUnknown;
+      }
+      msgBuilder.append(leftMessage);
+    }
+    if (leftKO && rightKO)
+      msgBuilder.append('\n');
+    if (rightKO) {
+      String rightMessage;
+      if (unsupportedRight_p instanceof ITypedElement) {
+        String rightName = ((ITypedElement)unsupportedRight_p).getName();
+        rightMessage = String.format(Messages.ComparisonSetupManager_CannotLoadRightKnown, rightName);
+      } else {
+        rightMessage = Messages.ComparisonSetupManager_CannotLoadRightUnknown;
+      }
+      msgBuilder.append(rightMessage);
+    }
+    throw new IllegalArgumentException(msgBuilder.toString());
   }
   
   /**

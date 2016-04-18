@@ -26,6 +26,10 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.messages"; //$NON-NLS-1$
   public static String CompareModelsAction_ModelsOnly;
+  public static String ComparisonSetupManager_CannotLoadLeftKnown;
+  public static String ComparisonSetupManager_CannotLoadLeftUnknown;
+  public static String ComparisonSetupManager_CannotLoadRightKnown;
+  public static String ComparisonSetupManager_CannotLoadRightUnknown;
   public static String ComparisonSetupWizardPage_ConfigureButton;
   public static String ComparisonSetupWizardPage_Description;
   public static String ComparisonSetupWizardPage_GroupMethod;

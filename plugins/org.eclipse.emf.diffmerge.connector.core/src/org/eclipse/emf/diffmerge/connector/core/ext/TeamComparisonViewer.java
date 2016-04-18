@@ -284,64 +284,70 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       Object left = ((ICompareInput) input_p).getLeft();
       Object right = ((ICompareInput) input_p).getRight();
       Object ancestor = ((ICompareInput) input_p).getAncestor();
+      if (right != null && right.equals(ancestor))
+        ancestor = null; // Just use REFERENCE as two-way reference role
       // Prompt user for comparison method
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-      ComparisonSetup setup = manager.createComparisonSetup(left, right, ancestor);
-      if (setup != null) {
-        setup.setTwoWayReferenceRole(Role.REFERENCE);
-        setup.setCanChangeTwoWayReferenceRole(false);
-        setup.setCanSwapScopeDefinitions(false);
-      }
-      EMFDiffMergeEditorInput editorInput = manager.createEditorInputWithUI(getShell(), setup);
-      if (editorInput != null) {
-        // Not failed/cancelled
-        if (_configuration != null) {
-          // Register container for action bars
-          ICompareContainer compareContainer = _configuration.getContainer();
-          if (compareContainer != null)
-            editorInput.setContainer(compareContainer);
+      try {
+        ComparisonSetup setup = manager.createComparisonSetup(left, right, ancestor);
+        if (setup != null) {
+          setup.setTwoWayReferenceRole(Role.REFERENCE);
+          setup.setCanChangeTwoWayReferenceRole(false);
+          setup.setCanSwapScopeDefinitions(false);
         }
-        try {
-          // Compute comparison
-          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-          dialog.run(true, true, editorInput);
-        } catch (InvocationTargetException e) {
-          EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
-        } catch (InterruptedException e) {
-          EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
-        }
-        EMFDiffNode compareResult = editorInput.getCompareResult();
-        if (compareResult != null) {
-          // Success: create the viewer and set the input
-          Control contents = editorInput.createContents(_control);
-          GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-          contents.setLayoutData(layoutData);
-          _innerViewer = editorInput.getViewer();
-          _control.pack();
-          _control.getParent().layout();
-          // Register pending listeners
-          for (IPropertyChangeListener listener : _pendingListeners) {
-            _innerViewer.addPropertyChangeListener(listener);
+        EMFDiffMergeEditorInput editorInput = manager.createEditorInputWithUI(getShell(), setup);
+        if (editorInput != null) {
+          // Not failed/cancelled
+          if (_configuration != null) {
+            // Register container for action bars
+            ICompareContainer compareContainer = _configuration.getContainer();
+            if (compareContainer != null)
+              editorInput.setContainer(compareContainer);
           }
-          _pendingListeners.clear();
-        } else {
-          // Failure (no diff): close the viewer and open a dialog
-          _innerViewer = null;
-          String message = editorInput.getMessage();
-          if (message == null || message.length() == 0) {
-            MessageDialog.openInformation(getShell(),
-                Messages.TeamComparisonViewer_NoDiff_Title,
-                Messages.TeamComparisonViewer_NoDiff_Message);
+          try {
+            // Compute comparison
+            ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+            dialog.run(true, true, editorInput);
+          } catch (InvocationTargetException e) {
+            EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
+          } catch (InterruptedException e) {
+            EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
+          }
+          EMFDiffNode compareResult = editorInput.getCompareResult();
+          if (compareResult != null) {
+            // Success: create the viewer and set the input
+            Control contents = editorInput.createContents(_control);
+            GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+            contents.setLayoutData(layoutData);
+            _innerViewer = editorInput.getViewer();
+            _control.pack();
+            _control.getParent().layout();
+            // Register pending listeners
+            for (IPropertyChangeListener listener : _pendingListeners) {
+              _innerViewer.addPropertyChangeListener(listener);
+            }
+            _pendingListeners.clear();
           } else {
-            MessageDialog.openError(
-                getShell(), Messages.TeamComparisonViewer_NoDiff_Title, message);
+            // Failure (no diff): close the viewer and open a dialog
+            _innerViewer = null;
+            String message = editorInput.getMessage();
+            if (message == null || message.length() == 0) {
+              MessageDialog.openInformation(getShell(),
+                  Messages.TeamComparisonViewer_NoDiff_Title,
+                  Messages.TeamComparisonViewer_NoDiff_Message);
+            } else {
+              MessageDialog.openError(
+                  getShell(), Messages.TeamComparisonViewer_NoDiff_Title, message);
+            }
+            closeEditor();
           }
-          closeEditor();
         }
+      } catch (IllegalArgumentException e) {
+        manager.handleSetupError(getShell(), e.getLocalizedMessage());
       }
     }
   }
-  
+
   /**
    * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
    */
