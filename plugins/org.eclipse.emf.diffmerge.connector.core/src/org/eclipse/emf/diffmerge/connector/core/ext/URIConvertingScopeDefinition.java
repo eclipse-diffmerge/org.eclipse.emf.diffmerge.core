@@ -58,7 +58,11 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
   public IEditableModelScope createScope(Object context_p) {
-    IEditableModelScope result = _wrapped.createScope(null); // Ignore context for a fresh resource set
+    IEditableModelScope result;
+    if (_editable)
+      result=_wrapped.createScope(context_p); // Use the same context for editable contents
+    else
+      result=_wrapped.createScope(null); // Ignore context for a fresh resource set
     if (result instanceof AbstractModelScope)
       ((AbstractModelScope)result).setOriginator(_wrapped.getLabel());
     if (result instanceof IPersistentModelScope) {

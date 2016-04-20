@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.resource.ContentHandler;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
 
@@ -29,4 +33,13 @@ public class GitIndexTheirsURIConverter extends AbstractGitConflictURIConverter 
     super(repository_p, DirCacheEntry.STAGE_3); // "Theirs" in conflict resolution
   }
   
+  /**
+   * Constructor
+   * @param uriHandlers_p a non-null list
+   * @param contentHandlers_p a non-null list
+   * @param repository_p a non-null Git repository
+   */
+  public GitIndexTheirsURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p) {
+    super(uriHandlers_p, contentHandlers_p, repository_p, DirCacheEntry.STAGE_3); // "Theirs" in conflict resolution
+  }
 }

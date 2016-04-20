@@ -13,6 +13,10 @@ package org.eclipse.emf.diffmerge.connector.git.ext;
 
 import static org.eclipse.egit.core.internal.storage.GitFileRevision.inCommit;
 
+import java.util.List;
+
+import org.eclipse.emf.ecore.resource.ContentHandler;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.team.core.history.IFileRevision;
@@ -37,6 +41,18 @@ public class GitCommitURIConverter extends AbstractGitURIConverter {
     _commitId = commitId_p;
   }
   
+  /**
+   * Constructor
+   * @param uriHandlers_p a non-null list
+   * @param contentHandlers_p a non-null list
+   * @param commitId_p a non-null commit ID
+   * @param repository_p a non-null Git repository
+   */
+  public GitCommitURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, RevCommit commitId_p, Repository repository_p) {
+    super(uriHandlers_p, contentHandlers_p, repository_p);
+    _commitId=commitId_p;
+  }
+
   /**
    * Return the commit ID for this URI Converter
    * @return a non-null object

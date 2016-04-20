@@ -289,13 +289,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       // Prompt user for comparison method
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       try {
-        ComparisonSetup setup = manager.createComparisonSetup(left, right, ancestor);
-        if (setup != null) {
-          setup.setTwoWayReferenceRole(Role.REFERENCE);
-          setup.setCanChangeTwoWayReferenceRole(false);
-          setup.setCanSwapScopeDefinitions(false);
-        }
-        EMFDiffMergeEditorInput editorInput = manager.createEditorInputWithUI(getShell(), setup);
+        EMFDiffMergeEditorInput editorInput=createEditorInput(manager, left, right, ancestor);
         if (editorInput != null) {
           // Not failed/cancelled
           if (_configuration != null) {
@@ -356,5 +350,27 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     if (_innerViewer != null)
       _innerViewer.setSelection(selection_p, reveal_p);
   }
-  
+
+  /**
+   * Create and return a compare editor input from the manager and the models passed in paramater
+   * @param manager_p a non null comparison manager
+   * @param left_p the left side model
+   * @param right_p the right side model
+   * @param ancestor_p the ancestor side model
+   * @return a compare input or null
+   */
+  protected EMFDiffMergeEditorInput createEditorInput(
+      ComparisonSetupManager manager_p, Object left_p, Object right_p,
+      Object ancestor_p) {
+    // Prompt user for comparison method
+    ComparisonSetup setup = manager_p.createComparisonSetup(left_p, right_p,
+        ancestor_p);
+    if (setup != null) {
+      setup.setTwoWayReferenceRole(Role.REFERENCE);
+      setup.setCanChangeTwoWayReferenceRole(false);
+      setup.setCanSwapScopeDefinitions(false);
+    }
+    return manager_p.createEditorInputWithUI(getShell(), setup);
+  }
+
 }

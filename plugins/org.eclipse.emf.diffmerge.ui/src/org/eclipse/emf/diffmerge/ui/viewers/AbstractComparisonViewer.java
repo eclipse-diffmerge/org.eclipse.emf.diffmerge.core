@@ -330,7 +330,7 @@ implements IFlushable, IPropertyChangeNotifier, IAdaptable {
     IWorkbenchPartSite result = null;
     try {
       IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      IWorkbenchSite site = window.getActivePage().getActiveEditor().getSite();
+      IWorkbenchSite site = window.getActivePage().getActivePart().getSite();
       if (site instanceof IWorkbenchPartSite)
         result = (IWorkbenchPartSite)site;
     } catch (Exception e) {

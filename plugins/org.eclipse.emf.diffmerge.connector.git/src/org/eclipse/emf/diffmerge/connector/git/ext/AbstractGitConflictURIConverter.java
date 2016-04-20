@@ -14,10 +14,13 @@ package org.eclipse.emf.diffmerge.connector.git.ext;
 import static org.eclipse.egit.core.internal.storage.GitFileRevision.inIndex;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
+import org.eclipse.emf.ecore.resource.ContentHandler;
+import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.team.core.history.IFileRevision;
 
@@ -40,6 +43,19 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
   public AbstractGitConflictURIConverter(Repository repository_p, int conflictRole_p) {
     super(repository_p);
     _conflictRole = conflictRole_p;
+  }
+  
+  /**
+   * Constructor
+   * @param uriHandlers_p a non-null list
+   * @param contentHandlers_p a non-null list
+   * @param repository_p a non-null Git repository
+   * @param conflictRole_p one of (STAGE_2: "Ours", STAGE_3: "Theirs") in DirCacheEntry
+   *          that defines the role held in conflict resolution
+   */
+  public AbstractGitConflictURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p, int conflictRole_p) {
+    super(uriHandlers_p, contentHandlers_p, repository_p);
+    _conflictRole=conflictRole_p;
   }
   
   /**
