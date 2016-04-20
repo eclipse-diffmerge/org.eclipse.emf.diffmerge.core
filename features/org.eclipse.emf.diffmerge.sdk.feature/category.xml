@@ -6,5 +6,11 @@
    <feature url="features/org.eclipse.emf.diffmerge.sdk.source.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.source.feature" version="0.6.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.egit.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.egit.source.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.source.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
    <category-def name="org.eclipse.emf.diffmerge.category" label="EMF Diff/Merge (Incubation)"/>
 </site>
