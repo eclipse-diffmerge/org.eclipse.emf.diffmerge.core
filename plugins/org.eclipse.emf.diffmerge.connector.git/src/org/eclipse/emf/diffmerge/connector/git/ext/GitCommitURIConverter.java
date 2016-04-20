@@ -50,9 +50,9 @@ public class GitCommitURIConverter extends AbstractGitURIConverter {
    */
   public GitCommitURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, RevCommit commitId_p, Repository repository_p) {
     super(uriHandlers_p, contentHandlers_p, repository_p);
-    _commitId=commitId_p;
+    _commitId = commitId_p;
   }
-
+  
   /**
    * Return the commit ID for this URI Converter
    * @return a non-null object

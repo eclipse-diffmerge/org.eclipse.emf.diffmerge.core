@@ -43,7 +43,7 @@ public class GitIndexOursURIConverter extends AbstractGitConflictURIConverter {
   public GitIndexOursURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p) {
     super(uriHandlers_p, contentHandlers_p, repository_p, DirCacheEntry.STAGE_2); // "Ours" in conflict resolution
   }
-
+  
   /**
    * @see org.eclipse.emf.diffmerge.connector.git.ext.AbstractGitURIConverter#getURIPathRepresentation(org.eclipse.emf.common.util.URI)
    */

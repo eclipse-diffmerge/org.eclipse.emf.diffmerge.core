@@ -39,7 +39,9 @@ public class GitIndexTheirsURIConverter extends AbstractGitConflictURIConverter 
    * @param contentHandlers_p a non-null list
    * @param repository_p a non-null Git repository
    */
-  public GitIndexTheirsURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p) {
+  public GitIndexTheirsURIConverter(List<URIHandler> uriHandlers_p,
+      List<ContentHandler> contentHandlers_p, Repository repository_p) {
     super(uriHandlers_p, contentHandlers_p, repository_p, DirCacheEntry.STAGE_3); // "Theirs" in conflict resolution
   }
+  
 }

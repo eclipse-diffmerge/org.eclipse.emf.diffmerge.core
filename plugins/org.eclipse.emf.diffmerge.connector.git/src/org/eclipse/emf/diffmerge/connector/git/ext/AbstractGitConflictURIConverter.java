@@ -53,7 +53,8 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
    * @param conflictRole_p one of (STAGE_2: "Ours", STAGE_3: "Theirs") in DirCacheEntry
    *          that defines the role held in conflict resolution
    */
-  public AbstractGitConflictURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p, int conflictRole_p) {
+  public AbstractGitConflictURIConverter(List<URIHandler> uriHandlers_p,
+      List<ContentHandler> contentHandlers_p, Repository repository_p, int conflictRole_p) {
     super(uriHandlers_p, contentHandlers_p, repository_p);
     _conflictRole=conflictRole_p;
   }

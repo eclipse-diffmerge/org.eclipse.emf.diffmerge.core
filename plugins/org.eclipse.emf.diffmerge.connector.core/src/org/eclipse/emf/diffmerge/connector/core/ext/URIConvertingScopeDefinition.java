@@ -60,9 +60,9 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
   public IEditableModelScope createScope(Object context_p) {
     IEditableModelScope result;
     if (_editable)
-      result=_wrapped.createScope(context_p); // Use the same context for editable contents
+      result = _wrapped.createScope(context_p); // Use the same context for editable contents
     else
-      result=_wrapped.createScope(null); // Ignore context for a fresh resource set
+      result = _wrapped.createScope(null); // Ignore context for a fresh resource set
     if (result instanceof AbstractModelScope)
       ((AbstractModelScope)result).setOriginator(_wrapped.getLabel());
     if (result instanceof IPersistentModelScope) {
