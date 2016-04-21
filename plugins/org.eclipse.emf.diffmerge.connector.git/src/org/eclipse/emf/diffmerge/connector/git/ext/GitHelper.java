@@ -160,9 +160,9 @@ public final class GitHelper {
    * Return whether there is a conflict on the given revision in the given repository
    * @param repository_p a non-null repository
    * @param revision_p a non-null file revision
-   * @throws NoWorkTreeException
-   * @throws CorruptObjectException
-   * @throws IOException
+   * @throws NoWorkTreeException if repository is bare
+   * @throws CorruptObjectException if a reading problem occurred at Git level
+   * @throws IOException if a low-level reading problem occurred
    */
   public boolean isConflicting(Repository repository_p, IFileRevision revision_p)
       throws NoWorkTreeException, CorruptObjectException, IOException {
@@ -183,9 +183,9 @@ public final class GitHelper {
    * Return whether there is a conflict on the given path in the given repository
    * @param repository_p a non-null repository
    * @param path_p a non-null string
-   * @throws NoWorkTreeException
-   * @throws CorruptObjectException
-   * @throws IOException
+   * @throws NoWorkTreeException if repository is bare
+   * @throws CorruptObjectException if a reading problem occurred at Git level
+   * @throws IOException if a low-level reading problem occurred
    */
   public boolean isConflicting(Repository repository_p, String path_p)
       throws NoWorkTreeException, CorruptObjectException, IOException {

@@ -11,8 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.diffmerge.ui.gmf,
  org.eclipse.emf.diffmerge.connector.core,
  org.eclipse.jgit,
- org.eclipse.egit.core,
- org.eclipse.egit.ui
+ org.eclipse.egit.core;bundle-version="3.6.0",
+ org.eclipse.egit.ui;bundle-version="3.6.0"
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin
