@@ -21,12 +21,12 @@ http://www.eclipse.org/legal/epl-v10.html
       %license
    </license>
 
-   <requires>
-      <import feature="org.eclipse.emf.diffmerge.sdk.feature" version="0.6.0.qualifier"/>
-   </requires>
-
    <includes
          id="org.eclipse.emf.diffmerge.egit.source.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.diffmerge.sdk.feature"
          version="0.0.0"/>
 
    <plugin
