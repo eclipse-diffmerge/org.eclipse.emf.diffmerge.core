@@ -12,10 +12,8 @@
     <buildLocations xsi:type="buildscm:GITBuildLocation" xmi:id="_DCUKwN1NEeGLW89eUbtzmA" gitLocation="_8hrIQN1MEeGLW89eUbtzmA" folderName="plugins"/>
     <buildLocations xsi:type="buildstep:UpdateSiteBuildLocation" xmi:id="_y9d-4NTMEeGOc4hDMM5euQ" url="${eclipse.p2}"/>
     <components xsi:type="buildstep:Feature" xmi:id="_EPIT8NTNEeGOc4hDMM5euQ" id="org.eclipse.emf.diffmerge.sdk.feature"/>
-    <components xsi:type="buildstep:Feature" xmi:id="_k3Fi8AcYEeanf-m5l1ciqQ" id="org.eclipse.emf.diffmerge.egit.feature"/>
   </steps>
   <steps xsi:type="buildstep:PublishStep" xmi:id="_zGibQNWQEeGg-5Vjl_7Xaw" name="Publish results" component="_EPIT8NTNEeGOc4hDMM5euQ" signing="true" generateDropins="true"/>
-  <steps xsi:type="buildstep:PublishStep" xmi:id="_ohVAEAcYEeanf-m5l1ciqQ" name="Publish results" component="_k3Fi8AcYEeanf-m5l1ciqQ" signing="true" generateDropins="true"/>
   <steps xsi:type="buildstep:JavadocStep" xmi:id="_NQxi0N1NEeGLW89eUbtzmA" name="Create JavaDoc" sources="_DCUKwN1NEeGLW89eUbtzmA">
     <includes>**/*.java</includes>
     <links>http://download.oracle.com/javase/1.5.0/docs/api/</links>
