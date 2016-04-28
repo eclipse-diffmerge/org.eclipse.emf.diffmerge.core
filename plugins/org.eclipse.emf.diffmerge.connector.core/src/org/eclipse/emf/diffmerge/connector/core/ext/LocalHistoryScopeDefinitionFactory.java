@@ -15,17 +15,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import org.eclipse.compare.ITypedElement;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFileState;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IStorage;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.Messages;
-import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.team.core.history.IFileRevision;
 import org.eclipse.team.core.variants.IResourceVariant;
 import org.eclipse.team.internal.core.history.LocalFileRevision;
@@ -58,47 +48,6 @@ public class LocalHistoryScopeDefinitionFactory extends AbstractRevisionScopeDef
     } else {
       // No variant and unknown time stamp
       result = super.getLabelForRevision(revision_p, entrypoint_p);
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIConverterForRevision(org.eclipse.team.core.history.IFileRevision)
-   */
-  @Override
-  protected URIConverter getURIConverterForRevision(IFileRevision revision_p) throws CoreException {
-    URIConverter result = null;
-    URI uri = getURIForRevision(revision_p);
-    if (uri != null) {
-      String fullPath = uri.trimSegments(1).toString();
-      final long timestamp = revision_p.getTimestamp();
-      // Local history or current revision
-      if (timestamp != -1)
-        result = new LocalHistoryURIConverter(timestamp, fullPath);
-      else
-        result = new ExtensibleURIConverterImpl();
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIForRevision(org.eclipse.team.core.history.IFileRevision)
-   */
-  @Override
-  protected URI getURIForRevision(IFileRevision revision_p) throws CoreException {
-    URI result = null;
-    IStorage storage = getStorage(revision_p);
-    if (storage instanceof IFile) {
-      // Local resource
-      result = toPlatformURI((IFile)storage);
-    } else if (storage instanceof IFileState) {
-      // Local file revision (local history)
-      IPath fullPath = storage.getFullPath();
-      IResource res = ResourcesPlugin.getWorkspace().getRoot().findMember(fullPath);
-      if (res.exists() && res instanceof IFile)
-        result = toPlatformURI((IFile)res);
-    } else if (storage != null) {
-      result = toFileURI(storage.getFullPath().toString());
     }
     return result;
   }

@@ -30,6 +30,7 @@ public class Messages extends NLS {
   public static String GitRevisionScopeDefinitionFactory_LabelCommit;
   public static String GitRevisionScopeDefinitionFactory_LabelIndex;
   public static String GitRevisionScopeDefinitionFactory_LabelRemote;
+  public static String GitRevisionScopeDefinitionFactory_LabelWorkspace;
 
   static {
     // initialize resource bundle

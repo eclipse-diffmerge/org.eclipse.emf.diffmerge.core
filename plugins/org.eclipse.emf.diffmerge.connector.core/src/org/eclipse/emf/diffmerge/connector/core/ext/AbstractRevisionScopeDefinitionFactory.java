@@ -15,9 +15,14 @@ import java.io.InputStream;
 
 import org.eclipse.compare.ISharedDocumentAdapter;
 import org.eclipse.compare.ITypedElement;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFileState;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -25,6 +30,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.core.Messages;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.team.core.history.IFileRevision;
 import org.eclipse.team.core.variants.IResourceVariant;
 import org.eclipse.ui.IEditorInput;
@@ -173,7 +179,21 @@ extends AbstractURIConvertingScopeDefinitionFactory {
    * @return a potentially null object
    * @throws CoreException if an error occurs
    */
-  protected abstract URIConverter getURIConverterForRevision(IFileRevision revision_p) throws CoreException;
+  protected URIConverter getURIConverterForRevision(IFileRevision revision_p)
+      throws CoreException {
+    URIConverter result = null;
+    URI uri = getURIForRevision(revision_p);
+    if (uri != null) {
+      String fullPath = uri.trimSegments(1).toString();
+      final long timestamp = revision_p.getTimestamp();
+      // Local history or current revision
+      if (timestamp != -1)
+        result = new LocalHistoryURIConverter(timestamp, fullPath);
+      else
+        result = new ExtensibleURIConverterImpl();
+    }
+    return result;
+  }
   
   /**
    * Return a URI for the given file revision
@@ -181,7 +201,25 @@ extends AbstractURIConvertingScopeDefinitionFactory {
    * @return a potentially null URI
    * @throws CoreException if an error occurs
    */
-  protected abstract URI getURIForRevision(IFileRevision revision_p) throws CoreException;
+  protected URI getURIForRevision(IFileRevision revision_p)
+      throws CoreException {
+    URI result = null;
+    IStorage storage = getStorage(revision_p);
+    if (storage instanceof IFile) {
+      // Local resource
+      result = toPlatformURI((IFile) storage);
+    } else if (storage instanceof IFileState) {
+      // Local file revision (local history)
+      IPath fullPath = storage.getFullPath();
+      IResource res = ResourcesPlugin.getWorkspace().getRoot()
+          .findMember(fullPath);
+      if (res.exists() && res instanceof IFile)
+        result = toPlatformURI((IFile) res);
+    } else if (storage != null) {
+      result = toFileURI(storage.getFullPath().toString());
+    }
+    return result;
+  }
   
   /**
    * Return the resource variant associated with the given file revision, if any

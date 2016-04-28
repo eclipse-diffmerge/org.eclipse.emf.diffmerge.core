@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.egit.core.internal.storage.CommitFileRevision;
 import org.eclipse.egit.core.internal.storage.GitFileRevision;
 import org.eclipse.egit.core.internal.storage.IndexFileRevision;
+import org.eclipse.egit.core.internal.storage.WorkspaceFileRevision;
 import org.eclipse.egit.core.synchronize.GitRemoteResource;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory;
@@ -87,6 +88,8 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
         }
       }
     }
+    if (result == null)
+      result = super.getURIConverterForRevision(revision);
     return result;
   }
   
@@ -108,7 +111,7 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
       result = URI.createURI(
           GitHelper.INSTANCE.getSchemeCommit() + SCHEME_SEP + revision.getURI().toString());
     } else {
-      result = null;
+      result = super.getURIForRevision(revision);
     }
     return result;
   }
@@ -128,6 +131,8 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
     } else if (revision_p instanceof CommitFileRevision) {
       result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelCommit, revision_p.getName(),
           getContentIdentifier(((CommitFileRevision)revision_p).getRevCommit()));
+    } else if (revision_p instanceof WorkspaceFileRevision) {
+      result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelWorkspace, revision_p.getName());
     } else {
       result = super.getLabelForRevision(revision_p, entrypoint_p);
     }
