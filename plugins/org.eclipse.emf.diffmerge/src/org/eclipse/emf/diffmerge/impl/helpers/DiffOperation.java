@@ -9,6 +9,7 @@
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
+ *    Jaafar Bouayad (Atos) - Bug #484803 - Conflict detection on deletion
  * 
  * </copyright>
  */
@@ -35,7 +36,6 @@ import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
 import org.eclipse.emf.ecore.EAttribute;
@@ -72,93 +72,6 @@ public class DiffOperation extends AbstractExpensiveOperation {
     _comparison = comparison_p;
     _diffPolicy = diffPolicy_p;
     _mergePolicy = mergePolicy_p;
-  }
-  
-  /**
-   * Detect the differences related to the attributes for the given match
-   * @param match_p a non-null, non-partial match
-   * @param createDiff whether the attribute order difference will be created
-   * @return whether the difference reference has been found
-   */
-  protected boolean detectAllAttributeDifferences(IMatch match_p, boolean createDiff) {
-    assert match_p != null && !match_p.isPartial();
-    EClass eClass = match_p.get(Role.TARGET).eClass();
-    boolean toReturn = false;
-    for (EAttribute attribute : eClass.getEAllAttributes()) {
-      if (getDiffPolicy().coverFeature(attribute))
-      {
-    	  toReturn = toReturn || detectAttributeDifferences(match_p, attribute, createDiff);
-      }
-    }
-    return toReturn;
-  }
-  
-  /**
-   * Detect the differences related to the given attribute for the given match
-   * @param match_p a non-null, non-partial match
-   * @param attribute_p a non-null attribute
-   * @param createDiff whether the attribute order difference will be created
-   * @return whether the difference reference has been found
-   */
-  protected boolean detectAttributeDifferences(IMatch match_p, EAttribute attribute_p, boolean createDiff) {
-    assert match_p != null && !match_p.isPartial() && attribute_p != null;
-    IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
-    IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
-    EObject target = match_p.get(Role.TARGET);
-    EObject reference = match_p.get(Role.REFERENCE);
-    List<Object> targetValues = targetScope.get(target, attribute_p);
-    List<Object> referenceValues = referenceScope.get(reference, attribute_p);
-    List<Object> remainingTargetValues = new ArrayList<Object>(targetValues);
-    List<Object> remainingReferenceValues = new ArrayList<Object>(referenceValues);
-    boolean checkOrder = attribute_p.isMany() && getDiffPolicy().considerOrdered(attribute_p);
-    int maxIndex = -1;
-    for (Object targetValue : targetValues) {
-      ObjectAndIndex matchingReferenceValue = findEqualAttributeValue(
-          attribute_p, targetValue, remainingReferenceValues);
-      if (matchingReferenceValue.getObject() != null) {
-        if (checkOrder) {
-          if (matchingReferenceValue.getIndex() < maxIndex) {
-        	if(createDiff){
-        	  // Ordering difference
-        		createAttributeOrderDifference(
-        				match_p, attribute_p, targetValue, matchingReferenceValue.getObject());
-            }
-        	else{
-        		return true;
-        	}
-            checkOrder = false;
-          } else {
-            maxIndex = matchingReferenceValue.getIndex();
-          }
-        }
-        remainingTargetValues.remove(targetValue);
-        remainingReferenceValues.remove(matchingReferenceValue.getObject());
-      }
-    }
-    for (Object remainingTargetValue : remainingTargetValues) {
-      if (getDiffPolicy().coverValue(remainingTargetValue, attribute_p)){
-    	  if(createDiff){
-    		  createAttributeValueDifference(match_p, attribute_p, remainingTargetValue,
-    				  Role.TARGET, false);
-    	  }
-    	  else{
-    		  return true;
-    	  }
-      }
-    }
-    for (Object remainingReferenceValue : remainingReferenceValues) {
-      if (getDiffPolicy().coverValue(remainingReferenceValue, attribute_p)){
-    	  if(createDiff){
-    		  createAttributeValueDifference(match_p, attribute_p, remainingReferenceValue,
-    				  Role.REFERENCE, false);
-    	  }
-    	  else{
-    		  return true;
-    	  }
-      }
-    }
-    return false;
-    		
   }
   
   /**
@@ -200,138 +113,15 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * Detect the differences related to ownership if needed
-   * @param match_p a non-null, non-partial match
-   * @param createDiff whether the attribute order difference will be created
-   * @return whether the difference reference has been found
+   * Create differences based on the mapping between the model scopes compared
    */
-  protected boolean detectOwnershipDifferences(IMatch match_p, boolean createDiff) {
-    assert match_p != null && !match_p.isPartial();
-    for (Role role : Arrays.asList(Role.TARGET, Role.REFERENCE)) {
-      IMatch parentMatch = getComparison().getContainerOf(match_p, role);
-      // An ownership difference needs only be created if the container
-      // is unmatched, otherwise it is already handled by container refs
-      if (parentMatch != null && parentMatch.isPartial()) {
-        EObject element = match_p.get(role);
-        EReference containment = getComparison().getScope(role).getContainment(element);
-        if(createDiff){
-        	createReferenceValueDifference(parentMatch, containment, match_p, role, false);
-        }
-        else{
-        	return true;
-        }
-      }
+  protected void createDifferences() {
+    for (IMatch match : getMapping().getContents()) {
+      checkProgress();
+      if (getDiffPolicy().coverMatch(match))
+        createTechnicalDifferences(match);
+      getMonitor().worked(1);
     }
-    return false;
-  }
-  
-  /**
-   * Detect the differences related to the non-container references for the
-   * given match
-   * @param match_p a non-null, non-partial match
-   * @param createDiff whether the attribute order difference will be created
-   * @return whether the difference reference has been found
-   */
-  protected boolean detectAllReferenceDifferences(IMatch match_p, boolean createDiff) {
-    assert match_p != null && !match_p.isPartial();
-    EClass eClass = match_p.get(Role.TARGET).eClass();
-    boolean toReturn = false;
-    for (EReference reference : eClass.getEAllReferences()) {
-      if (!reference.isContainer() && getDiffPolicy().coverFeature(reference))
-    	  toReturn= toReturn || detectReferenceDifferences(match_p, reference, createDiff);
-    }
-    return toReturn;
-  }
-  
-  /**
-   * Detect the differences related to the given reference for the given match
-   * @param match_p a non-null, non-partial match
-   * @param reference_p a non-null, non-container reference
-   * @param createDiff whether the attribute order difference will be created
-   * @return whether the difference reference has been found
-   */
-  protected boolean detectReferenceDifferences(IMatch match_p, EReference reference_p, boolean createDiff) {
-    assert match_p != null && !match_p.isPartial() && reference_p != null;
-    assert !reference_p.isContainer();
-    // Get reference values in different roles
-    IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
-    IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
-    EObject targetElement = match_p.get(Role.TARGET);
-    EObject referenceElement = match_p.get(Role.REFERENCE);
-    List<EObject> targetValues = targetScope.get(targetElement, reference_p);
-    List<EObject> referenceValues = referenceScope.get(referenceElement, reference_p);
-    List<EObject> remainingReferenceValues = new FArrayList<EObject>(
-        referenceValues, IEqualityTester.BY_REFERENCE);
-    boolean checkOrder = reference_p.isMany() && getDiffPolicy().considerOrdered(reference_p);
-    int maxIndex = -1;
-    // Check which ones match
-    List<IMatch> isolatedTargetMatches = new FArrayList<IMatch>();
-    for (EObject targetValue : targetValues) {
-      // For every value in TARGET, get its corresponding match (if none, uncovered)
-      IMatch targetValueMatch = getMapping().getMatchFor(targetValue, Role.TARGET);
-      if (targetValueMatch != null) {
-        // Get the matching value in REFERENCE
-        EObject matchReference = targetValueMatch.get(Role.REFERENCE);
-        boolean isIsolated = matchReference == null;
-        if (!isIsolated) {
-          // Check value presence and ordering
-          int index = remainingReferenceValues.indexOf(matchReference);
-          isIsolated = index < 0;
-          if (checkOrder && !isIsolated) {
-            if (index < maxIndex) {
-              // Ordering difference
-              if(createDiff){
-            	  createReferenceOrderDifference(match_p, reference_p, targetValueMatch);
-              }
-              else{
-            	  return true;
-              }
-              checkOrder = false;
-            } else {
-              maxIndex = index;
-            }
-          }
-        }
-        if (isIsolated)
-          // None found or not in referenced values: mark as isolated
-          isolatedTargetMatches.add(targetValueMatch);
-        else
-          remainingReferenceValues.remove(matchReference);
-      }
-    }
-    // For every remaining value in REFERENCE, get its corresponding isolated match
-    // if the value is covered
-    List<IMatch> isolatedReferenceMatches = new FArrayList<IMatch>();
-    for (EObject remainingReferenceValue : remainingReferenceValues) {
-      IMatch referenceValueMatch = getMapping().getMatchFor(
-          remainingReferenceValue, Role.REFERENCE);
-      if (referenceValueMatch != null)
-        isolatedReferenceMatches.add(referenceValueMatch);      
-    }
-    // Create differences for isolated values
-    for (IMatch isolatedTargetMatch : isolatedTargetMatches) {
-      if (getDiffPolicy().coverMatch(isolatedTargetMatch)){
-    	  if(createDiff){
-    		  createReferenceValueDifference(match_p, reference_p, isolatedTargetMatch,
-    				  Role.TARGET, false);
-    	  }
-    	  else{
-    		  return true;
-    	  }
-      }
-    }
-    for (IMatch isolatedReferenceMatch : isolatedReferenceMatches) {
-      if (getDiffPolicy().coverMatch(isolatedReferenceMatch)){
-    	  if(createDiff){
-	        createReferenceValueDifference(match_p, reference_p, isolatedReferenceMatch,
-	            Role.REFERENCE, false);
-    	  }
-    	  else{
-    		  return true;
-    	  }
-      }
-    }
-      return false;
   }
   
   /**
@@ -371,30 +161,6 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * Create differences based on the mapping between the model scopes compared
-   */
-  protected void createDifferences() {
-    for (IMatch match : getMapping().getContents()) {
-      checkProgress();
-      if (getDiffPolicy().coverMatch(match))
-        createTechnicalDifferences(match);
-      getMonitor().worked(1);
-    }
-  }
-  
-  /**
-   * Detect the technical differences corresponding to the given non-partial
-   * match, focusing on the content of the elements matched
-   * @param match_p a non-null, non-partial match
-   */
-  protected void detectContentDifferences(IMatch match_p) {
-    assert match_p != null && !match_p.isPartial();
-    detectAllAttributeDifferences(match_p, true);
-    detectAllReferenceDifferences(match_p, true);
-    detectOwnershipDifferences(match_p, true);
-  }
-  
-  /**
    * Create the technical differences corresponding to the given match
    * @param match_p a non-null match
    */
@@ -403,8 +169,231 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (match_p.isPartial()) {
       getOrCreateElementPresence(match_p);
     } else {
-      detectContentDifferences(match_p);
+      detectContentDifferences(match_p, true);
     }
+  }
+  
+  /**
+   * Detect the differences related to the attributes for the given match
+   * @param match_p a non-null, non-partial match
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectAllAttributeDifferences(IMatch match_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial();
+    EClass eClass = match_p.get(Role.TARGET).eClass();
+    boolean result = false;
+    for (EAttribute attribute : eClass.getEAllAttributes()) {
+      if (getDiffPolicy().coverFeature(attribute))
+        result = result || detectAttributeDifferences(match_p, attribute, create_p);
+    }
+    return result;
+  }
+  
+  /**
+   * Detect the differences related to the non-container references for the
+   * given match
+   * @param match_p a non-null, non-partial match
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectAllReferenceDifferences(IMatch match_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial();
+    EClass eClass = match_p.get(Role.TARGET).eClass();
+    boolean result = false;
+    for (EReference reference : eClass.getEAllReferences()) {
+      if (!reference.isContainer() && getDiffPolicy().coverFeature(reference))
+        result = result || detectReferenceDifferences(match_p, reference, create_p);
+    }
+    return result;
+  }
+  
+  /**
+   * Detect the differences related to the given attribute for the given match
+   * @param match_p a non-null, non-partial match
+   * @param attribute_p a non-null attribute
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectAttributeDifferences(IMatch match_p, EAttribute attribute_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial() && attribute_p != null;
+    boolean result = false;
+    IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
+    IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
+    EObject target = match_p.get(Role.TARGET);
+    EObject reference = match_p.get(Role.REFERENCE);
+    List<Object> targetValues = targetScope.get(target, attribute_p);
+    List<Object> referenceValues = referenceScope.get(reference, attribute_p);
+    List<Object> remainingTargetValues = new ArrayList<Object>(targetValues);
+    List<Object> remainingReferenceValues = new ArrayList<Object>(referenceValues);
+    boolean checkOrder = attribute_p.isMany() && getDiffPolicy().considerOrdered(attribute_p);
+    int maxIndex = -1;
+    for (Object targetValue : targetValues) {
+      ObjectAndIndex matchingReferenceValue = findEqualAttributeValue(
+          attribute_p, targetValue, remainingReferenceValues);
+      if (matchingReferenceValue.getObject() != null) {
+        if (checkOrder) {
+          if (matchingReferenceValue.getIndex() < maxIndex) {
+            // Ordering difference
+            if (!create_p)
+              return true;
+            createAttributeOrderDifference(
+                match_p, attribute_p, targetValue, matchingReferenceValue.getObject());
+            result = true;
+            checkOrder = false;
+          } else {
+            maxIndex = matchingReferenceValue.getIndex();
+          }
+        }
+        remainingTargetValues.remove(targetValue);
+        remainingReferenceValues.remove(matchingReferenceValue.getObject());
+      }
+    }
+    for (Object remainingTargetValue : remainingTargetValues) {
+      if (getDiffPolicy().coverValue(remainingTargetValue, attribute_p)){
+        if (!create_p)
+          return true;
+        createAttributeValueDifference(match_p, attribute_p, remainingTargetValue,
+            Role.TARGET, false);
+        result = true;
+      }
+    }
+    for (Object remainingReferenceValue : remainingReferenceValues) {
+      if (getDiffPolicy().coverValue(remainingReferenceValue, attribute_p)){
+        if (!create_p)
+          return true;
+        createAttributeValueDifference(match_p, attribute_p, remainingReferenceValue,
+            Role.REFERENCE, false);
+        result = true;
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Detect technical differences corresponding to the given non-partial
+   * match, focusing on the content of the elements matched
+   * @param match_p a non-null, non-partial match
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectContentDifferences(IMatch match_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial();
+    boolean result = detectAllAttributeDifferences(match_p, create_p);
+    result = result || detectAllReferenceDifferences(match_p, create_p);
+    result = result || detectOwnershipDifferences(match_p, create_p);
+    return result;
+  }
+  
+  /**
+   * Detect the differences related to ownership if needed
+   * @param match_p a non-null, non-partial match
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectOwnershipDifferences(IMatch match_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial();
+    boolean result = false;
+    for (Role role : Arrays.asList(Role.TARGET, Role.REFERENCE)) {
+      IMatch parentMatch = getComparison().getContainerOf(match_p, role);
+      // An ownership difference needs only be created if the container
+      // is unmatched, otherwise it is already handled by container refs
+      if (parentMatch != null && parentMatch.isPartial()) {
+        EObject element = match_p.get(role);
+        EReference containment = getComparison().getScope(role).getContainment(element);
+        if (!create_p)
+          return true;
+        createReferenceValueDifference(parentMatch, containment, match_p, role, false);
+        result = true;
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Detect the differences related to the given reference for the given match
+   * @param match_p a non-null, non-partial match
+   * @param reference_p a non-null, non-container reference
+   * @param create_p whether differences must actually be created
+   * @return whether at least one difference was detected
+   */
+  protected boolean detectReferenceDifferences(IMatch match_p, EReference reference_p, boolean create_p) {
+    assert match_p != null && !match_p.isPartial() && reference_p != null;
+    assert !reference_p.isContainer();
+    boolean result = false;
+    // Get reference values in different roles
+    IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
+    IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
+    EObject targetElement = match_p.get(Role.TARGET);
+    EObject referenceElement = match_p.get(Role.REFERENCE);
+    List<EObject> targetValues = targetScope.get(targetElement, reference_p);
+    List<EObject> referenceValues = referenceScope.get(referenceElement, reference_p);
+    List<EObject> remainingReferenceValues = new FArrayList<EObject>(
+        referenceValues, IEqualityTester.BY_REFERENCE);
+    boolean checkOrder = reference_p.isMany() && getDiffPolicy().considerOrdered(reference_p);
+    int maxIndex = -1;
+    // Check which ones match
+    List<IMatch> isolatedTargetMatches = new FArrayList<IMatch>();
+    for (EObject targetValue : targetValues) {
+      // For every value in TARGET, get its corresponding match (if none, uncovered)
+      IMatch targetValueMatch = getMapping().getMatchFor(targetValue, Role.TARGET);
+      if (targetValueMatch != null) {
+        // Get the matching value in REFERENCE
+        EObject matchReference = targetValueMatch.get(Role.REFERENCE);
+        boolean isIsolated = matchReference == null;
+        if (!isIsolated) {
+          // Check value presence and ordering
+          int index = remainingReferenceValues.indexOf(matchReference);
+          isIsolated = index < 0;
+          if (checkOrder && !isIsolated) {
+            if (index < maxIndex) {
+              // Ordering difference
+              if (!create_p)
+                return true;
+              createReferenceOrderDifference(match_p, reference_p, targetValueMatch);
+              result = true;
+              checkOrder = false;
+            } else {
+              maxIndex = index;
+            }
+          }
+        }
+        if (isIsolated)
+          // None found or not in referenced values: mark as isolated
+          isolatedTargetMatches.add(targetValueMatch);
+        else
+          remainingReferenceValues.remove(matchReference);
+      }
+    }
+    // For every remaining value in REFERENCE, get its corresponding isolated match
+    // if the value is covered
+    List<IMatch> isolatedReferenceMatches = new FArrayList<IMatch>();
+    for (EObject remainingReferenceValue : remainingReferenceValues) {
+      IMatch referenceValueMatch = getMapping().getMatchFor(
+          remainingReferenceValue, Role.REFERENCE);
+      if (referenceValueMatch != null)
+        isolatedReferenceMatches.add(referenceValueMatch);      
+    }
+    // Create differences for isolated values
+    for (IMatch isolatedTargetMatch : isolatedTargetMatches) {
+      if (getDiffPolicy().coverMatch(isolatedTargetMatch)){
+        if (!create_p)
+          return true;
+        createReferenceValueDifference(match_p, reference_p, isolatedTargetMatch,
+            Role.TARGET, false);
+        result = true;
+      }
+    }
+    for (IMatch isolatedReferenceMatch : isolatedReferenceMatches) {
+      if (getDiffPolicy().coverMatch(isolatedReferenceMatch)){
+        if (!create_p)
+          return true;
+        createReferenceValueDifference(match_p, reference_p, isolatedReferenceMatch,
+            Role.REFERENCE, false);
+        result = true;
+      }
+    }
+    return result;
   }
   
   /**
@@ -477,8 +466,6 @@ public class DiffOperation extends AbstractExpensiveOperation {
       Role presenceRole = match_p.getUncoveredRole().opposite();
       IMatch ownerMatch = getComparison().getContainerOf(match_p, presenceRole);
       result = getComparison().newElementPresence(match_p, ownerMatch);
-      if (getComparison().isThreeWay() && !match_p.coversRole(Role.ANCESTOR))
-        ((IDifference.Editable)result).markAsDifferentFromAncestor();
       setElementPresenceDependencies(result);
       if (getComparison().isThreeWay())
     	  setThreeWayProperties(result);
@@ -720,6 +707,27 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
+   * Set the properties which are specific to three-way comparisons to the given difference.
+   * Precondition: getComparison().isThreeWay()
+   * @param presence_p a non-null element presence
+   */
+  protected void setThreeWayProperties(IElementPresence presence_p) {
+    EObject ancestorElement = presence_p.getElementMatch().get(Role.ANCESTOR);
+    if (ancestorElement != null) {
+      // Ancestor element present: try and detect differences between ANCESTOR and TARGET/REFERENCE
+      // by assigning the TARGET role to the ancestor element locally
+      EObject sideElement = presence_p.getElement();
+      IMatch tempMach = getComparison().newMatch(ancestorElement, sideElement, null);
+      boolean diffWithAncestor = detectContentDifferences(tempMach, false);
+      if (diffWithAncestor)
+        ((IDifference.Editable)presence_p).markAsConflicting(); // Deleted and changed in parallel
+    } else {
+      // Ancestor not present: presence is not aligned with ancestor
+      ((IDifference.Editable)presence_p).markAsDifferentFromAncestor();
+    }
+  }
+  
+  /**
    * Set the properties which are specific to three-way comparisons to the given
    * difference.
    * Precondition: getComparison().isThreeWay()
@@ -834,32 +842,6 @@ public class DiffOperation extends AbstractExpensiveOperation {
         // No symmetrical or symmetrical aligned: just mark diff as not aligned
         ((IDifference.Editable)presence_p).markAsDifferentFromAncestor();
       }
-    }
-  }
-
-  /**
-   * Set the properties which are specific to three-way comparisons to the given difference
-   * @param presence_p a non-null reference value presence
-   */
-  protected void setThreeWayProperties(IElementPresence presence_p) {
-    EObject ancestorHolder = presence_p.getElementMatch().get(Role.ANCESTOR);
-    EObject targetHolder = presence_p.getElementMatch().get(Role.TARGET);
-    EObject referenceorHolder = presence_p.getElementMatch().get(Role.REFERENCE);
-    EMatchImpl tempMach = null;
-    if(targetHolder != null && ancestorHolder != null){
-    	tempMach = new EMatchImpl(ancestorHolder, targetHolder, null);
-    }
-    else if(referenceorHolder != null && ancestorHolder != null){
-    	tempMach = new EMatchImpl(ancestorHolder, referenceorHolder, null);
-    }
-    if (tempMach !=null){
-    	boolean isDiff = detectAllAttributeDifferences(tempMach, false);
-    	isDiff = isDiff || detectAllReferenceDifferences(tempMach, false);
-    	isDiff = isDiff || detectOwnershipDifferences(tempMach, false);
-    	if (isDiff) {
-    		tempMach.reset(ancestorHolder,null, null);
-    		((IDifference.Editable)presence_p).markAsConflicting();
-    	}
     }
   }
   
