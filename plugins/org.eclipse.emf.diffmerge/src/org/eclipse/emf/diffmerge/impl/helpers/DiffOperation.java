@@ -185,7 +185,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     boolean result = false;
     for (EAttribute attribute : eClass.getEAllAttributes()) {
       if (getDiffPolicy().coverFeature(attribute))
-        result = result || detectAttributeDifferences(match_p, attribute, create_p);
+        result = detectAttributeDifferences(match_p, attribute, create_p) || result;
     }
     return result;
   }
@@ -203,7 +203,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     boolean result = false;
     for (EReference reference : eClass.getEAllReferences()) {
       if (!reference.isContainer() && getDiffPolicy().coverFeature(reference))
-        result = result || detectReferenceDifferences(match_p, reference, create_p);
+        result = detectReferenceDifferences(match_p, reference, create_p) || result;
     }
     return result;
   }
@@ -280,8 +280,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
   protected boolean detectContentDifferences(IMatch match_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial();
     boolean result = detectAllAttributeDifferences(match_p, create_p);
-    result = result || detectAllReferenceDifferences(match_p, create_p);
-    result = result || detectOwnershipDifferences(match_p, create_p);
+    result = detectAllReferenceDifferences(match_p, create_p) || result;
+    result = detectOwnershipDifferences(match_p, create_p) || result;
     return result;
   }
   
