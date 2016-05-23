@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.emf.diffmerge.scm.feature"
+      label="EMF Diff/Merge SCM Integration Feature (Incubation)"
+      version="0.6.0.qualifier"
+      provider-name="Eclipse Modeling Project">
+
+   <description>
+      An integration of EMF Diff/Merge with various Eclipse SCM clients.
+   </description>
+
+   <copyright>
+      Copyright (c) 2016 Thales Global Services S.A.S. and others.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <includes
+         id="org.eclipse.emf.diffmerge.egit.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.diffmerge.svn.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.diffmerge.perforce.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.emf.diffmerge.sdk.feature"
+         version="0.0.0"/>
+
+</feature>

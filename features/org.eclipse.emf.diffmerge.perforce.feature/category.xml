@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.perforce.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.source.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.source.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.perforce.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.perforce.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.perforce.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.perforce.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.perforce.source.feature_0.6.0.qualifier.jar" id="org.eclipse.emf.diffmerge.perforce.source.feature" version="0.6.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.perforce.category"/>
+   </feature>
+   <category-def name="org.eclipse.emf.diffmerge.perforce.category" label="EMF Diff/Merge (Incubation)"/>
+</site>
