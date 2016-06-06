@@ -56,14 +56,6 @@ public class ComparisonResourceManager implements IDisposable {
     }
     
     /**
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-      return _image.hashCode() + _overlay.hashCode();
-    }
-    
-    /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -75,6 +67,19 @@ public class ComparisonResourceManager implements IDisposable {
       }
       return result;
     }
+    
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + _image.hashCode();
+      result = prime * result + _overlay.hashCode();
+      return result;
+    }
+
   }
   
   

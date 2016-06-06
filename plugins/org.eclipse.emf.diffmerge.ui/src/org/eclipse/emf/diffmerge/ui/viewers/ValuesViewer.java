@@ -120,8 +120,13 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
      */
     @Override
     public int hashCode() {
-      return _context.hashCode() + _matchAndFeature.getMatch().hashCode() +
-        _matchAndFeature.getFeature().hashCode();
+      EStructuralFeature feature = _matchAndFeature.getFeature();
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + _context.hashCode();
+      result = prime * result + _matchAndFeature.getMatch().hashCode();
+      result = prime * result + (feature == null? 0: feature.hashCode());
+      return result;
     }
   }
   

@@ -877,15 +877,23 @@ public class DiffOperation extends AbstractExpensiveOperation {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object peer_p) {
-      boolean result = false;
-      if (peer_p instanceof ObjectAndIndex) {
-        ObjectAndIndex peer = (ObjectAndIndex)peer_p;
-        result = _object == null && peer.getObject() == null ||
-          _object != null && _object.equals(peer.getObject());
-        result = result && _index == peer.getIndex();
+    public boolean equals(Object obj_p) {
+      if (this == obj_p)
+        return true;
+      if (obj_p == null)
+        return false;
+      if (getClass() != obj_p.getClass())
+        return false;
+      ObjectAndIndex other = (ObjectAndIndex)obj_p;
+      if (_index != other._index)
+        return false;
+      if (_object == null) {
+        if (other._object != null)
+          return false;
+      } else if (!_object.equals(other._object)) {
+        return false;
       }
-      return result;
+      return true;
     }
     /**
      * Return the object
@@ -906,8 +914,11 @@ public class DiffOperation extends AbstractExpensiveOperation {
      */
     @Override
     public int hashCode() {
-      return (_object != null? _object.hashCode(): 0) +
-        Integer.valueOf(_index).hashCode();
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + _index;
+      result = prime * result + ((_object == null) ? 0 : _object.hashCode());
+      return result;
     }
   }
   
