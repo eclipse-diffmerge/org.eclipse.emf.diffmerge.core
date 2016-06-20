@@ -8,14 +8,11 @@
  * Contributors:
  *    Stephane Bouchet (Intel Corporation) - initial API and implementation
  *    Olivier Constant (Thales Global Services) - tight integration
+ *    Stephane Bouchet (Intel Corporation) - bug #496397
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
-import java.util.List;
-
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.ContentHandler;
-import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
 
@@ -25,23 +22,14 @@ import org.eclipse.jgit.lib.Repository;
  * in the case of conflicts.
  */
 public class GitIndexOursURIConverter extends AbstractGitConflictURIConverter {
-  
+
   /**
    * Constructor
    * @param repository_p a non-null Git repository
+   * @param holdingResourcePath_p the non-null path of the holding resource in conflict
    */
-  public GitIndexOursURIConverter(Repository repository_p) {
-    super(repository_p, DirCacheEntry.STAGE_2); // "Ours" in conflict resolution
-  }
-  
-  /**
-   * Constructor
-   * @param uriHandlers_p a non-null list
-   * @param contentHandlers_p a non-null list
-   * @param repository_p a non-null Git repository
-   */
-  public GitIndexOursURIConverter(List<URIHandler> uriHandlers_p, List<ContentHandler> contentHandlers_p, Repository repository_p) {
-    super(uriHandlers_p, contentHandlers_p, repository_p, DirCacheEntry.STAGE_2); // "Ours" in conflict resolution
+  public GitIndexOursURIConverter(Repository repository_p,String holdingResourcePath_p) {
+    super(repository_p, DirCacheEntry.STAGE_2, holdingResourcePath_p); // "Ours" in conflict resolution
   }
   
   /**
