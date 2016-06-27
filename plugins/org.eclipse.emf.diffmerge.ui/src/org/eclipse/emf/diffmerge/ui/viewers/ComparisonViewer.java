@@ -1287,7 +1287,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.FILTER));
-    result.setToolTipText("Filters and categories");
+    result.setToolTipText(Messages.ComparisonViewer_FilterToolTip);
     result.addSelectionListener(new SelectionAdapter() {
       /** The dialog lastly opened */
       protected CategoryDialog _lastDialog;

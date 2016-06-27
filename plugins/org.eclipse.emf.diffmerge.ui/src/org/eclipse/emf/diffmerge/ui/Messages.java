@@ -58,6 +58,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_Details;
   public static String ComparisonViewer_ExpandTooltip;
   public static String ComparisonViewer_Filtered;
+  public static String ComparisonViewer_FilterToolTip;
   public static String ComparisonViewer_IconsMenuItem;
   public static String ComparisonViewer_IgnoreCommandName;
   public static String ComparisonViewer_IgnoreLeftTooltip;
