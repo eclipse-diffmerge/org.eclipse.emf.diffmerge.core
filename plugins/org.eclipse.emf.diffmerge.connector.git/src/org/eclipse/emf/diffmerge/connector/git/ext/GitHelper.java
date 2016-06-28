@@ -8,6 +8,7 @@
  * Contributors:
  *    Stephane Bouchet (Intel Corporation) - initial API and implementation
  *    Olivier Constant (Thales Global Services) - tight integration
+ *    Stephane Bouchet (Intel Corporation) - bug #496397
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
@@ -25,7 +26,6 @@ import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.egit.ui.internal.revision.LocalFileRevision;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
-import org.eclipse.jgit.errors.CorruptObjectException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.team.core.history.IFileRevision;
@@ -148,7 +148,7 @@ public final class GitHelper {
    */
   @SuppressWarnings("resource")
   public boolean isConflicting(IFileRevision revision_p)
-      throws NoWorkTreeException, CorruptObjectException, IOException {
+      throws NoWorkTreeException, IOException {
     boolean result = false;
     Repository repo = getRepository(revision_p);
     if (repo != null)
@@ -161,12 +161,11 @@ public final class GitHelper {
    * @param repository_p a non-null repository
    * @param revision_p a non-null file revision
    * @throws NoWorkTreeException if repository is bare
-   * @throws CorruptObjectException if a reading problem occurred at Git level
    * @throws IOException if a low-level reading problem occurred
    */
-  public boolean isConflicting(Repository repository_p, IFileRevision revision_p)
-      throws NoWorkTreeException, CorruptObjectException, IOException {
-    IPath revisionPath=new Path(revision_p.getURI().toString());
+  public boolean isConflicting(Repository repository_p,
+      IFileRevision revision_p) throws NoWorkTreeException, IOException {
+    IPath revisionPath = new Path(revision_p.getURI().toString());
     if (!revisionPath.isAbsolute())
       return isConflicting(repository_p, revisionPath.toString());
     else if (revision_p instanceof LocalFileRevision) {
@@ -184,11 +183,10 @@ public final class GitHelper {
    * @param repository_p a non-null repository
    * @param path_p a non-null string
    * @throws NoWorkTreeException if repository is bare
-   * @throws CorruptObjectException if a reading problem occurred at Git level
    * @throws IOException if a low-level reading problem occurred
    */
   public boolean isConflicting(Repository repository_p, String path_p)
-      throws NoWorkTreeException, CorruptObjectException, IOException {
+      throws NoWorkTreeException, IOException {
     return repository_p.readDirCache().getEntry(path_p).getStage() > 0;
   }
   

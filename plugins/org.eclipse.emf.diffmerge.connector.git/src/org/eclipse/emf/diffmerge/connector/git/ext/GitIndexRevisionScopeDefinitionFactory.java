@@ -8,8 +8,11 @@
  * Contributors:
  *    Stephane Bouchet (Intel Corporation) - initial API and implementation
  *    Olivier Constant (Thales Global Services) - tight integration
+ *    Stephane Bouchet (Intel Corporation) - bug #496397
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
+
+import java.io.IOException;
 
 import org.eclipse.compare.IEditableContent;
 import org.eclipse.compare.ITypedElement;
@@ -25,6 +28,7 @@ import org.eclipse.emf.diffmerge.connector.core.ext.LocalHistoryURIConverter;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.team.core.history.IFileRevision;
 
 
@@ -52,7 +56,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
               Messages.GitIndexRevisionScopeDefinitionFactory_LabelIndexReadOnly,
               revision_p.getName());
         }
-      } else  if (revision_p instanceof LocalFileRevision) {
+      } else if (revision_p instanceof LocalFileRevision) {
         result = String.format(
             Messages.GitIndexRevisionScopeDefinitionFactory_LabelLocal,
             getLocalFileRevisionPath((LocalFileRevision)revision_p));
@@ -91,8 +95,22 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
   @Override
   protected URIConverter getURIConverterForRevision(IFileRevision revision_p)
       throws CoreException {
-    if (revision_p instanceof IndexFileRevision)
-      return new GitIndexOursURIConverter(GitHelper.INSTANCE.getRepository(revision_p));
+    if (revision_p instanceof IndexFileRevision) {
+      try {
+        if (GitHelper.INSTANCE.isConflicting(revision_p)) {
+          return new GitIndexOursURIConverter(
+              GitHelper.INSTANCE.getRepository(revision_p),
+              ((IndexFileRevision)revision_p).getGitPath());
+        }
+        return new GitIndexURIConverter(GitHelper.INSTANCE.getRepository(revision_p));
+      } catch (IOException e) {
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
+                EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+      } catch (NoWorkTreeException e) {
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
+                EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+      }
+    }
     if (revision_p instanceof LocalFileRevision) {
       String fullPath = getLocalFileRevisionPath((LocalFileRevision)revision_p);
       // Local history or current

@@ -8,12 +8,17 @@
  * Contributors:
  *    Stephane Bouchet (Intel Corporation) - initial API and implementation
  *    Olivier Constant (Thales Global Services) - tight integration
+ *    Stephane Bouchet (Intel Corporation) - bug #496397
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
+
+import java.io.IOException;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.egit.core.internal.storage.CommitFileRevision;
 import org.eclipse.egit.core.internal.storage.GitFileRevision;
 import org.eclipse.egit.core.internal.storage.IndexFileRevision;
@@ -21,8 +26,10 @@ import org.eclipse.egit.core.internal.storage.WorkspaceFileRevision;
 import org.eclipse.egit.core.synchronize.GitRemoteResource;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory;
+import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -81,7 +88,20 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
       if (repo != null) {
         if (revision instanceof IndexFileRevision) {
           // Git index
-          result = new GitIndexTheirsURIConverter(repo);
+          try {
+            if (GitHelper.INSTANCE.isConflicting(revision))
+              result = new GitIndexTheirsURIConverter(
+                  GitHelper.INSTANCE.getRepository(revision),
+                  ((IndexFileRevision)revision).getGitPath());
+            else
+              result = new GitIndexURIConverter(GitHelper.INSTANCE.getRepository(revision));
+          } catch (IOException e) {
+            EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
+                IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+          } catch (NoWorkTreeException e) {
+            EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
+                IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+          }
         } else if (revision instanceof CommitFileRevision) {
           // Git commit
           result = new GitCommitURIConverter(((CommitFileRevision)revision).getRevCommit(), repo);
