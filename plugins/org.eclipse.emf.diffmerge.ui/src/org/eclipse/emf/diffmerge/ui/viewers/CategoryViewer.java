@@ -20,16 +20,15 @@ import java.util.List;
 
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
-import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.IToolTipProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -51,26 +50,26 @@ import org.eclipse.swt.widgets.TableColumn;
 public class CategoryViewer extends Viewer {
   
   /** The name of the "active" column */
-  protected static final String COLUMN_ACTIVE = "On";
+  protected static final String COLUMN_ACTIVE_LABEL = "On";
   
   /** The index of the "active" column */
   protected static final int COLUMN_ACTIVE_INDEX = 0;
   
   /** The name of the "name" column */
-  protected static final String COLUMN_NAME = "Category";
+  protected static final String COLUMN_NAME_LABEL = "Category";
   
   /** The index of the "name" column */
   protected static final int COLUMN_NAME_INDEX = 1;
   
   /** The name of the "mode" column */
-  protected static final String COLUMN_MODE = "Mode";
+  protected static final String COLUMN_MODE_LABEL = "Mode";
   
   /** The index of the "active" column */
   protected static final int COLUMN_MODE_INDEX = 2;
   
   /** The column names */
   protected static final String[] COLUMNS =
-      new String[] { COLUMN_ACTIVE, COLUMN_NAME, COLUMN_MODE };
+      new String[] { COLUMN_ACTIVE_LABEL, COLUMN_NAME_LABEL, COLUMN_MODE_LABEL };
   
   /** The current input (initially null) */
   private EMFDiffNode _input;
@@ -101,15 +100,15 @@ public class CategoryViewer extends Viewer {
     result.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     // Column 1: Active state
     TableColumn column1 = new TableColumn(result, SWT.CENTER, 0);   
-    column1.setText(COLUMN_ACTIVE);
+    column1.setText(COLUMN_ACTIVE_LABEL);
     column1.setWidth(30);
     // Column 2: Name
     TableColumn column2 = new TableColumn(result, SWT.LEFT, 1);
-    column2.setText(COLUMN_NAME);
+    column2.setText(COLUMN_NAME_LABEL);
     column2.setWidth(400);
     // Column 3: Mode
     TableColumn column3 = new TableColumn(result, SWT.LEFT, 2);
-    column3.setText(COLUMN_MODE);
+    column3.setText(COLUMN_MODE_LABEL);
     column3.setWidth(70);
     return result;
   }
@@ -249,7 +248,7 @@ public class CategoryViewer extends Viewer {
   /**
    * The label provider for the viewer.
    */
-  protected class LabelProvider extends BaseLabelProvider implements ITableLabelProvider, IToolTipProvider {
+  protected class LabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
     /**
      * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
      */
@@ -295,8 +294,9 @@ public class CategoryViewer extends Viewer {
       return result;
     }
     /**
-     * @see org.eclipse.jface.viewers.IToolTipProvider#getToolTipText(java.lang.Object)
+     * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
      */
+    @Override
     public String getToolTipText(Object element_p) {
       IDifferenceCategory cat = (IDifferenceCategory)element_p;
       return cat.getDescription(CategoryViewer.this.getInput());
@@ -313,7 +313,7 @@ public class CategoryViewer extends Viewer {
      * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
      */
     public boolean canModify(Object element_p, String property_p) {
-      return Arrays.asList(COLUMN_ACTIVE, COLUMN_MODE).contains(property_p);
+      return Arrays.asList(COLUMN_ACTIVE_LABEL, COLUMN_MODE_LABEL).contains(property_p);
     }
     /**
      * @see org.eclipse.jface.viewers.ICellModifier#getValue(java.lang.Object, java.lang.String)
@@ -321,9 +321,9 @@ public class CategoryViewer extends Viewer {
     public Object getValue(Object element_p, String property_p) {
       Object result;
       IDifferenceCategory cat = (IDifferenceCategory)element_p;
-      if (COLUMN_ACTIVE.equals(property_p))
+      if (COLUMN_ACTIVE_LABEL.equals(property_p))
         result = Boolean.valueOf(cat.isActive());
-      else if (COLUMN_MODE.equals(property_p))
+      else if (COLUMN_MODE_LABEL.equals(property_p))
         result = cat.isInFocusMode()? Integer.valueOf(FOCUS_MODE_VALUE): Integer.valueOf(0);
       else
         result = null;
@@ -337,13 +337,13 @@ public class CategoryViewer extends Viewer {
       boolean modified = false;
       if (element instanceof IDifferenceCategory) {
         IDifferenceCategory cat = (IDifferenceCategory)element;
-        if (COLUMN_ACTIVE.equals(property_p) && value_p instanceof Boolean) {
+        if (COLUMN_ACTIVE_LABEL.equals(property_p) && value_p instanceof Boolean) {
           boolean newValue = ((Boolean)value_p).booleanValue();
           if (newValue != cat.isActive()) {
             cat.setActive(newValue);
             modified = true;
           }
-        } else if (COLUMN_MODE.equals(property_p) && value_p instanceof Integer) {
+        } else if (COLUMN_MODE_LABEL.equals(property_p) && value_p instanceof Integer) {
           boolean newValue = ((Integer)value_p).intValue() == FOCUS_MODE_VALUE;
           if (newValue != cat.isInFocusMode()) {
             cat.setInFocusMode(newValue);
