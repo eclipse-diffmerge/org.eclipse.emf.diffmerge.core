@@ -83,13 +83,42 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
     super.inputChanged(input_p, oldInput_p);
+    EMFDiffNode input = getInput();
     IModelScope scope = getInnerViewer().getSideScope();
-    String label = getHeaderLabelProvider().getText(scope);
     Label textLabel = getTextLabel();
-    textLabel.setText(label);
-    textLabel.setToolTipText(label);
-    textLabel.setForeground(getInnerViewer().getSideColor());
-    getImageLabel().setImage(getHeaderLabelProvider().getImage(scope));
+    if (textLabel != null) {
+      textLabel.setForeground(getInnerViewer().getSideColor()); // Unrelated to input
+      updateHeaderText(textLabel, input, scope);
+    }
+    Label imageLabel = getImageLabel();
+    if (imageLabel != null)
+      updateHeaderImage(imageLabel, input, scope);
+  }
+  
+  /**
+   * Update the given "header image" widget so as to reflect the given scope
+   * of the given input
+   * @param headerImageWidget_p a non-null widget
+   * @param input_p a potentially null input object
+   * @param scope_p a potentially null model scope
+   */
+  protected void updateHeaderImage(Label headerImageWidget_p,
+      EMFDiffNode input_p, IModelScope scope_p) {
+    headerImageWidget_p.setImage(getHeaderLabelProvider().getImage(scope_p));
+  }
+  
+  /**
+   * Update the given "header text" widget so as to reflect the given scope
+   * of the given input
+   * @param headerTextWidget_p a non-null widget
+   * @param input_p a potentially null input object
+   * @param scope_p a potentially null model scope
+   */
+  protected void updateHeaderText(Label headerTextWidget_p,
+      EMFDiffNode input_p, IModelScope scope_p) {
+    String label = getHeaderLabelProvider().getText(scope_p);
+    headerTextWidget_p.setText(label);
+    headerTextWidget_p.setToolTipText(label);
   }
   
 }
