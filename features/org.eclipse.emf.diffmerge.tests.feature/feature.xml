@@ -3,7 +3,9 @@
       id="org.eclipse.emf.diffmerge.tests.feature"
       label="EMF Diff/Merge Tests Feature"
       version="0.1.0.qualifier"
-      provider-name="Eclipse Modeling Project">
+      provider-name="Eclipse Modeling Project"
+      license-feature="org.eclipse.license"
+      license-feature-version="1.0.1">
 
    <description>
       EMF Diff/Merge Tests Feature
@@ -17,9 +19,9 @@ which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
    </copyright>
 
-   <license url="%licenseURL">
-      %license
-   </license>
+   <requires>
+      <import feature="org.eclipse.emf.diffmerge.feature"/>
+   </requires>
 
    <plugin
          id="org.eclipse.emf.diffmerge.tests.elements"
@@ -37,13 +39,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.eclipse.emf.diffmerge.tests.elements.editor"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.emf.diffmerge.tests.wt.elements"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="org.eclipse.emf.diffmerge" sequenceNumber="3">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.sirius.runtime.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.team.svn.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/releases/mars"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
+<repository location="http://download.eclipse.org/cbi/updates/license/"/>
+</location>
+</locations>
+</target>

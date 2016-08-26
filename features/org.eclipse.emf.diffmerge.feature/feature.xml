@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.emf.diffmerge.sdk.feature"
-      label="EMF Diff/Merge SDK Feature (Incubation)"
+      id="org.eclipse.emf.diffmerge.feature"
+      label="EMF Diff/Merge Feature (Incubation)"
       version="0.7.0.qualifier"
       provider-name="Eclipse Modeling Project"
       license-feature="org.eclipse.license"
@@ -19,16 +19,39 @@ which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
    </copyright>
 
-   <includes
-         id="org.eclipse.emf.diffmerge.feature"
-         version="0.0.0"/>
+   <plugin
+         id="org.eclipse.emf.diffmerge"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
-   <includes
-         id="org.eclipse.emf.diffmerge.scm.feature"
-         version="0.0.0"/>
+   <plugin
+         id="org.eclipse.emf.diffmerge.gmf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
-   <includes
-         id="org.eclipse.emf.diffmerge.tests.feature"
-         version="0.0.0"/>
+   <plugin
+         id="org.eclipse.emf.diffmerge.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.diffmerge.ui.gmf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.diffmerge.connector.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
