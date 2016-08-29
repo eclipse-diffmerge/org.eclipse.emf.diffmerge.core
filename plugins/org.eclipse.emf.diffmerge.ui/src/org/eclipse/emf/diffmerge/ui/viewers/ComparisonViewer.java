@@ -11,6 +11,7 @@
  *    Thales Global Services S.A.S. - initial API and implementation
  *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  *    Stephane Bouchet (Intel Corporation) - Bug #489274 : added API viewers creation methods
+ *    Jeremy Aubry (Obeo) - Bug #500417 : Cannot call a merge with a given selection programmatically
  * 
  * </copyright>
  */
@@ -2084,11 +2085,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toLeft_p whether destination is left or right
    */
   protected void merge(final boolean toLeft_p) {
-    final ComparisonSelection selection = getSelection();
-    if (selection == null) return; // Should not happen according to merge tool activation
+    merge(toLeft_p, getSelection());
+  }
+  
+  /**
+   * Merge the given selection to the given side
+   * @param toLeft_p whether destination is left or right
+   * @param selection_p the potentially null selection (e.g., set of matches) to merge
+   */
+  protected void merge(final boolean toLeft_p, final ComparisonSelection selection_p) {
+    if (selection_p == null) return; // Should not happen according to merge tool activation
     final EMFDiffNode input = getInput();
     // Define the set of selected matches
-    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
+    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection_p);
     // Make choices
     MergeChoiceData choices = new MergeChoiceData(input.isDefaultCoverChildren(),
         input.isDefaultIncrementalMode(), input.isDefaultShowImpact());
@@ -2098,7 +2107,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final Role destination = input.getRoleForSide(toLeft_p);
     final Collection<IDifference> toMerge = !selectedMatches.isEmpty()? getDifferencesToMerge(
             selectedMatches, destination, choices.isCoverChildren(), choices.isIncrementalMode()):
-          input.getCategoryManager().getPendingDifferencesFiltered(selection.asDifferencesToMerge());
+          input.getCategoryManager().getPendingDifferencesFiltered(selection_p.asDifferencesToMerge());
     final Collection<IDifference> merged = new ArrayList<IDifference>();
     boolean done = false;
     if (!toMerge.isEmpty()) {
@@ -2117,7 +2126,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           public void run(IProgressMonitor monitor_p) throws InvocationTargetException,
           InterruptedException {
             merged.addAll(getComparison().merge(toMerge, destination, true, monitor_p));
-            getUIComparison().setLastActionSelection(selection);
+            getUIComparison().setLastActionSelection(selection_p);
           }
         }, toLeft_p);
         done = true;
