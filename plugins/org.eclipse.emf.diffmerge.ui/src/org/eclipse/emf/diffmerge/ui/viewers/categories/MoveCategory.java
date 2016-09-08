@@ -16,6 +16,7 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
@@ -26,6 +27,10 @@ import org.eclipse.swt.graphics.Image;
  * @author Olivier Constant
  */
 public class MoveCategory extends AbstractDifferenceCategory {
+  
+  /** The ID of this category */
+  public static final String ID = "Technical.Moved"; //$NON-NLS-1$
+  
   
   /**
    * Constructor
@@ -42,6 +47,21 @@ public class MoveCategory extends AbstractDifferenceCategory {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryItem#getDescription(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  public String getDescription(EMFDiffNode node_p) {
+    return Messages.MoveCategory_Description;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getID()
+   */
+  public String getID() {
+    return ID;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
@@ -53,7 +73,7 @@ public class MoveCategory extends AbstractDifferenceCategory {
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getText(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public String getText(EMFDiffNode node_p) {
-    return "Moved elements";
+    return Messages.MoveCategory_Text;
   }
   
 }

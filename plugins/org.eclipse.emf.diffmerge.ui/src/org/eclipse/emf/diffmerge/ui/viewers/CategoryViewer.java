@@ -14,7 +14,6 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,9 +26,9 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -38,8 +37,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 
 
 /**
@@ -75,7 +74,7 @@ public class CategoryViewer extends Viewer {
   private EMFDiffNode _input;
   
   /** The non-null main sub-viewer */
-  protected TableViewer _viewer;
+  protected TreeViewer _viewer;
   
   
   /**
@@ -87,47 +86,47 @@ public class CategoryViewer extends Viewer {
   }
   
   /**
-   * Create and return the table
+   * Create and return the main control
    * @param parent_p a non-null composite
-   * @return a non-null table
+   * @return a non-null tree
    */
-  protected Table createTable(Composite parent_p) {
+  protected Tree createMainControl(Composite parent_p) {
     int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
           SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
-    Table result = new Table(parent_p, style);
+    Tree result = new Tree(parent_p, style);
     result.setLinesVisible(true);
     result.setHeaderVisible(true);
     result.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     // Column 1: Active state
-    TableColumn column1 = new TableColumn(result, SWT.CENTER, 0);   
+    TreeColumn column1 = new TreeColumn(result, SWT.CENTER, 0);   
     column1.setText(COLUMN_ACTIVE_LABEL);
     column1.setWidth(30);
     // Column 2: Name
-    TableColumn column2 = new TableColumn(result, SWT.LEFT, 1);
+    TreeColumn column2 = new TreeColumn(result, SWT.LEFT, 1);
     column2.setText(COLUMN_NAME_LABEL);
     column2.setWidth(400);
     // Column 3: Mode
-    TableColumn column3 = new TableColumn(result, SWT.LEFT, 2);
+    TreeColumn column3 = new TreeColumn(result, SWT.LEFT, 2);
     column3.setText(COLUMN_MODE_LABEL);
     column3.setWidth(70);
     return result;
   }
   
   /**
-   * Create and return the table viewer
-   * @param table_p a non-null table
+   * Create and return the main viewer
+   * @param mainControl_p a non-null tree
    * @return a non-null viewer
    */
-  private TableViewer createViewer(Table table_p) {
-    TableViewer result = new TableViewer(table_p);
+  private TreeViewer createViewer(Tree mainControl_p) {
+    TreeViewer result = new TreeViewer(mainControl_p);
     result.setColumnProperties(COLUMNS);
     CellEditor[] editors = new CellEditor[COLUMNS.length];
     // Column 1: Check box editor
-    editors[0] = new CheckboxCellEditor(table_p);
+    editors[0] = new CheckboxCellEditor(mainControl_p);
     // Column 2: No editor
     editors[1] = null;
     // Column 3: Combo box editor
-    editors[2] = new ComboBoxCellEditor(table_p, new String[] {"Exclude", "Focus"}, SWT.READ_ONLY);
+    editors[2] = new ComboBoxCellEditor(mainControl_p, new String[] {"Exclude", "Focus"}, SWT.READ_ONLY);
     result.setCellEditors(editors);
     result.setCellModifier(new CellModifier());
     return result;
@@ -138,8 +137,8 @@ public class CategoryViewer extends Viewer {
    * @param parent_p a non-null composite
    */
   protected void createControls(Composite parent_p) {
-    Table table = createTable(parent_p);
-    _viewer = createViewer(table);
+    Tree mainControl = createMainControl(parent_p);
+    _viewer = createViewer(mainControl);
     _viewer.setLabelProvider(new LabelProvider());
     _viewer.setContentProvider(new ContentProvider());
     ColumnViewerToolTipSupport.enableFor(_viewer);
@@ -217,31 +216,62 @@ public class CategoryViewer extends Viewer {
   /**
    * The content provider for the viewer.
    */
-  protected static class ContentProvider implements IStructuredContentProvider {
+  protected static class ContentProvider implements ITreeContentProvider {
+    /** The current input */
+    private EMFDiffNode _input = null;
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#dispose()
      */
     public void dispose() {
-      // Nothing to do
+      _input = null;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+     */
+    public Object[] getChildren(Object parentElement_p) {
+      Object[] result;
+      if (parentElement_p instanceof IDifferenceCategorySet) {
+        IDifferenceCategorySet catSet = (IDifferenceCategorySet)parentElement_p;
+        List<IDifferenceCategoryItem> listResult;
+        if (_input == null)
+          listResult = catSet.getChildren();
+        else
+          listResult = _input.getCategoryManager().getUIChildrenItems(catSet);
+        result = listResult.toArray();
+      } else {
+        result = new Object[0];
+      }
+      return result;
     }
     /**
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
       EMFDiffNode node = (EMFDiffNode)inputElement_p;
-      List<IDifferenceCategory> visibleCategories = new ArrayList<IDifferenceCategory>();
-      for (IDifferenceCategory category : node.getCategoryManager().getCategories()) {
-        if (category.isVisible() && category.isApplicable(node))
-          visibleCategories.add(category);
-      }
-      return visibleCategories.toArray();
+      return node.getCategoryManager().getUIRootItems().toArray();
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+     */
+    public Object getParent(Object element_p) {
+      Object result = null;
+      if (element_p instanceof IDifferenceCategoryItem)
+        result = ((IDifferenceCategoryItem)element_p).getParent();
+      return result;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+     */
+    public boolean hasChildren(Object element_p) {
+      return getChildren(element_p).length > 0;
     }
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
      */
     public void inputChanged(Viewer viewer_p, Object oldInput_p,
         Object newInput_p) {
-      // Nothing to do
+      if (newInput_p instanceof EMFDiffNode)
+        _input = (EMFDiffNode)newInput_p;
     }
   }
   
@@ -254,15 +284,19 @@ public class CategoryViewer extends Viewer {
      */
     public Image getColumnImage(Object element_p, int columnIndex_p) {
       Image result;
-      IDifferenceCategory cat = (IDifferenceCategory)element_p;
+      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
       EMFDiffNode node = CategoryViewer.this.getInput();
       switch (columnIndex_p) {
       case COLUMN_ACTIVE_INDEX:
-        ImageID id = cat.isActive()? ImageID.CHECKED: ImageID.UNCHECKED;
-        result = EMFDiffMergeUIPlugin.getDefault().getImage(id);
+        if (catItem instanceof IDifferenceCategory) {
+          ImageID id = ((IDifferenceCategory)catItem).isActive()? ImageID.CHECKED: ImageID.UNCHECKED;
+          result = EMFDiffMergeUIPlugin.getDefault().getImage(id);
+        } else {
+          result = null;
+        }
         break;
       case COLUMN_NAME_INDEX:
-        result = cat.getImage(node);
+        result = catItem.getImage(node);
         break;
       default:
         result = null;
@@ -275,17 +309,20 @@ public class CategoryViewer extends Viewer {
      */
     public String getColumnText(Object element_p, int columnIndex_p) {
       String result;
-      IDifferenceCategory cat = (IDifferenceCategory)element_p;
+      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
       EMFDiffNode node = CategoryViewer.this.getInput();
       switch (columnIndex_p) {
       case COLUMN_ACTIVE_INDEX:
-        result = "";
+        result = ""; //$NON-NLS-1$
         break;
       case COLUMN_NAME_INDEX:
-        result = cat.getText(node);
+        result = catItem.getText(node);
         break;
       case COLUMN_MODE_INDEX:
-        result = cat.isInFocusMode()? "Focus": "Exclude";
+        if (catItem instanceof IDifferenceCategory)
+          result = ((IDifferenceCategory)catItem).isInFocusMode()? "Focus": "Exclude";
+        else
+          result = "-"; //$NON-NLS-1$
         break;
       default:
         result = null;
@@ -298,8 +335,8 @@ public class CategoryViewer extends Viewer {
      */
     @Override
     public String getToolTipText(Object element_p) {
-      IDifferenceCategory cat = (IDifferenceCategory)element_p;
-      return cat.getDescription(CategoryViewer.this.getInput());
+      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
+      return catItem.getDescription(CategoryViewer.this.getInput());
     }
   }
   
@@ -320,13 +357,22 @@ public class CategoryViewer extends Viewer {
      */
     public Object getValue(Object element_p, String property_p) {
       Object result;
-      IDifferenceCategory cat = (IDifferenceCategory)element_p;
-      if (COLUMN_ACTIVE_LABEL.equals(property_p))
-        result = Boolean.valueOf(cat.isActive());
-      else if (COLUMN_MODE_LABEL.equals(property_p))
-        result = cat.isInFocusMode()? Integer.valueOf(FOCUS_MODE_VALUE): Integer.valueOf(0);
-      else
+      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
+      if (COLUMN_ACTIVE_LABEL.equals(property_p)) {
+        if (catItem instanceof IDifferenceCategory)
+          result = Boolean.valueOf(((IDifferenceCategory)catItem).isActive());
+        else
+          result = Boolean.FALSE;
+      } else if (COLUMN_MODE_LABEL.equals(property_p)) {
+        if (catItem instanceof IDifferenceCategory) {
+          boolean inFocusMode = ((IDifferenceCategory)catItem).isInFocusMode();
+          result = inFocusMode? Integer.valueOf(FOCUS_MODE_VALUE): Integer.valueOf(0);
+        } else {
+          result = Integer.valueOf(0);
+        }
+      } else {
         result = null;
+      }
       return result;
     }
     /**

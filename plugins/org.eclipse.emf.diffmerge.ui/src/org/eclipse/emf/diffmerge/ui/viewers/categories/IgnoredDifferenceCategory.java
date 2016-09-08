@@ -15,8 +15,7 @@
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
@@ -26,6 +25,10 @@ import org.eclipse.swt.graphics.Image;
  * @author Olivier Constant
  */
 public class IgnoredDifferenceCategory extends AbstractDifferenceCategory {
+  
+  /** The ID of this category */
+  public static final String ID = "Technical.Ignored"; //$NON-NLS-1$
+  
   
   /**
    * Constructor
@@ -44,6 +47,21 @@ public class IgnoredDifferenceCategory extends AbstractDifferenceCategory {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryItem#getDescription(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  public String getDescription(EMFDiffNode node_p) {
+    return Messages.IgnoredDifferenceCategory_Description;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getID()
+   */
+  public String getID() {
+    return ID;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
@@ -55,7 +73,7 @@ public class IgnoredDifferenceCategory extends AbstractDifferenceCategory {
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getText(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public String getText(EMFDiffNode node_p) {
-    return "Ignored differences";
+    return Messages.IgnoredDifferenceCategory_Text;
   }
   
   /**

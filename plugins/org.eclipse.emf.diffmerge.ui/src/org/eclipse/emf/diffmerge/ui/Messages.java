@@ -25,6 +25,8 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("javadoc")
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.messages"; //$NON-NLS-1$
+  public static String AbstractComparisonViewer_CatSetTextBasic;
+  public static String AbstractComparisonViewer_CatSetTextMerge;
   public static String CompareModelsAction_ModelsOnly;
   public static String ComparisonSetupManager_CannotLoadLeftKnown;
   public static String ComparisonSetupManager_CannotLoadLeftUnknown;
@@ -114,8 +116,16 @@ public class Messages extends NLS {
   public static String ConfigureComparisonDialog_StructureCriterion;
   public static String ConfigureComparisonDialog_StructureCriterionTooltip;
   public static String ConfigureComparisonDialog_Title;
+  public static String ConflictCategory_Description;
+  public static String ConflictCategory_Text;
   public static String InconsistencyDialog_AncestorScope;
   public static String InconsistencyDialog_CopyID;
+  public static String ElementAdditionCategory_TextAdded;
+  public static String ElementAdditionCategory_TextAddedLeft;
+  public static String ElementAdditionCategory_TextAddedRight;
+  public static String ElementRemovalCategory_TextRemoved;
+  public static String ElementRemovalCategory_TextRemovedLeft;
+  public static String ElementRemovalCategory_TextRemovedRight;
   public static String EMFDiffMergeEditorInput_AncestorScopeNull;
   public static String EMFDiffMergeEditorInput_CannotLoad;
   public static String InconsistencyDialog_DuplicateIDs;
@@ -151,15 +161,27 @@ public class Messages extends NLS {
   public static String FileScopeDefinitionFactory_Label;
   public static String IgnoreChoicesDialog_IncludeChildren;
   public static String IgnoreChoicesDialog_Question;
+  public static String IgnoredDifferenceCategory_Description;
+  public static String IgnoredDifferenceCategory_Text;
   public static String MergeChoicesDialog_IncludeChildren;
   public static String MergeChoicesDialog_IncrementalMode;
   public static String MergeChoicesDialog_Question;
   public static String MergeChoicesDialog_ShowImpact;
+  public static String MergedDifferenceCategory_Description;
+  public static String MergedDifferenceCategory_Text;
   public static String MergeImpactViewer_ComputationName;
   public static String MergeImpactViewer_Implied;
   public static String MergeImpactViewer_Required;
   public static String MiscUtil_DefaultCommandName;
+  public static String MoveCategory_Description;
+  public static String MoveCategory_Text;
+  public static String PropertyChangeCategory_Description;
+  public static String PropertyChangeCategory_Text;
   public static String ResourceScopeDefinitionFactory_Label;
+  public static String ThreeWayMoveCategory_TextMovedLeft;
+  public static String ThreeWayMoveCategory_TextMovedRight;
+  public static String UnmatchedElementCategory_TextLeft;
+  public static String UnmatchedElementCategory_TextRight;
   public static String ValuesViewer_ContainerLabel;
   public static String ValuesViewer_FeatureLabel;
   public static String ValuesViewer_OrderLabel;

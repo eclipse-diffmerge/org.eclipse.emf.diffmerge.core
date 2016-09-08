@@ -15,14 +15,13 @@
 package org.eclipse.emf.diffmerge.ui.viewers;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.swt.graphics.Image;
 
 
 /**
  * A category of differences for UI purposes.
  * @author Olivier Constant
  */
-public interface IDifferenceCategory extends Cloneable {
+public interface IDifferenceCategory extends IDifferenceCategoryItem, Cloneable {
   
   /**
    * Return whether the given difference belongs to this category in the context
@@ -33,26 +32,10 @@ public interface IDifferenceCategory extends Cloneable {
   boolean covers(IDifference difference_p, EMFDiffNode node_p);
   
   /**
-   * Return a user-friendly description for this category in the context of the given
-   * diff node
-   * @return a potentially null string
-   */
-  String getDescription(EMFDiffNode node_p);
-  
-  /**
-   * Return an optional image for this category in the context of the given diff node.
-   * The image must not be owned by the category.
-   * @param node_p a non-null diff node
-   * @return a potentially null image
-   */
-  Image getImage(EMFDiffNode node_p);
-  
-  /**
-   * Return a user-friendly name for this category in the context of the given diff node
-   * @param node_p a non-null diff node
+   * Return an identifier for this category, which must be unique and stable at instance level
    * @return a non-null string
    */
-  String getText(EMFDiffNode node_p);
+  String getID();
   
   /**
    * Return whether this category is currently active

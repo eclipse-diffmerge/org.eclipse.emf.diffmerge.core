@@ -19,6 +19,7 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
@@ -28,6 +29,13 @@ import org.eclipse.swt.graphics.Image;
  * @author Olivier Constant
  */
 public class ElementAdditionCategory extends AbstractSideRelatedDifferenceCategory {
+  
+  /** The ID of this category in the left-hand-side case */
+  public static final String ID_LEFT = "Technical.Addition.Left"; //$NON-NLS-1$
+  
+  /** The ID of this category in the right-hand-side case */
+  public static final String ID_RIGHT = "Technical.Addition.Right"; //$NON-NLS-1$
+  
   
   /**
    * Constructor
@@ -55,6 +63,13 @@ public class ElementAdditionCategory extends AbstractSideRelatedDifferenceCatego
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getID()
+   */
+  public String getID() {
+    return isLeftSide()? ID_LEFT: ID_RIGHT;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
@@ -75,11 +90,11 @@ public class ElementAdditionCategory extends AbstractSideRelatedDifferenceCatego
     boolean noReference = node_p.getReferenceRole() == null;
     if (noReference)
       if (isLeftSide())
-        result = "Elements added on the left";
+        result = Messages.ElementAdditionCategory_TextAddedLeft;
       else
-        result = "Elements added on the right";
+        result = Messages.ElementAdditionCategory_TextAddedRight;
     else
-      result = "Added elements";
+      result = Messages.ElementAdditionCategory_TextAdded;
     return result;
   }
   

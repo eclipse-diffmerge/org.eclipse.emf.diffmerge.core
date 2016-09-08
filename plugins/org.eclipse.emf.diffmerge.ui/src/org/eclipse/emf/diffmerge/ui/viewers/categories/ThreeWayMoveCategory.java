@@ -18,16 +18,24 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
 
 /**
- * A difference category that covers 3-way element moves on the right.
+ * A difference category that covers 3-way element moves on the right or on the left.
  * @author Olivier Constant
  */
 public class ThreeWayMoveCategory extends AbstractSideRelatedDifferenceCategory {
+  
+  /** The ID of this category in the left-hand-side case */
+  public static final String ID_LEFT = "Technical.3WayMove.Left"; //$NON-NLS-1$
+  
+  /** The ID of this category in the right-hand-side case */
+  public static final String ID_RIGHT = "Technical.3WayMove.Right"; //$NON-NLS-1$
+  
   
   /**
    * Constructor
@@ -51,6 +59,13 @@ public class ThreeWayMoveCategory extends AbstractSideRelatedDifferenceCategory 
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getID()
+   */
+  public String getID() {
+    return isLeftSide()? ID_LEFT: ID_RIGHT;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
@@ -64,9 +79,9 @@ public class ThreeWayMoveCategory extends AbstractSideRelatedDifferenceCategory 
   public String getText(EMFDiffNode node_p) {
     String result;
     if (isLeftSide())
-      result = "Elements moved on the left";
+      result = Messages.ThreeWayMoveCategory_TextMovedLeft;
     else
-      result = "Elements moved on the right";
+      result = Messages.ThreeWayMoveCategory_TextMovedRight;
     return result;
   }
   

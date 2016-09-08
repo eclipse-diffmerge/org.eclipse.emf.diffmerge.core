@@ -17,10 +17,13 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EMap;
@@ -48,6 +51,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.TreePath;
 
+
 /**
  * A manager of difference categories for a given diff node.
  * @author Olivier Constant
@@ -57,11 +61,17 @@ public class CategoryManager {
   /** The non-null diff node that is the context of this manager */
   protected final EMFDiffNode _node;
   
-  /** The modifiable set of registered categories */
-  private final Set<IDifferenceCategory> _categories;
+  /** The modifiable set of (ID, category) registered categories */
+  private final Map<String, IDifferenceCategory> _categories;
   
   /** The modifiable set of active categories among the registered ones */
   protected final Set<IDifferenceCategory> _activeCategories;
+  
+  /** The modifiable list of root category items that should be visible in the UI */
+  protected final List<IDifferenceCategoryItem> _uiRootItems;
+  
+  /** The modifiable (parent, children) map of category items that should be visible in the UI */
+  protected final Map<IDifferenceCategorySet, Collection<IDifferenceCategoryItem>> _uiChildrenItems;
   
   /** The map from matches to difference numbers */
   private final EMap<EMatch, Integer> _matchToNb;
@@ -73,9 +83,51 @@ public class CategoryManager {
    */
   public CategoryManager(EMFDiffNode node_p) {
     _node = node_p;
-    _categories = new LinkedHashSet<IDifferenceCategory>();
+    _categories = new LinkedHashMap<String, IDifferenceCategory>();
     _activeCategories = new HashSet<IDifferenceCategory>();
+    _uiRootItems = new ArrayList<IDifferenceCategoryItem>();
+    _uiChildrenItems = new HashMap<IDifferenceCategorySet, Collection<IDifferenceCategoryItem>>();
     _matchToNb = new FHashMap<EMatch, Integer>(IEqualityTester.BY_EQUALS);
+  }
+  
+  /**
+   * Add and register the categories that are recursively associated to the given
+   * category set.
+   * @param categorySet_p a non-null category set
+   * @return whether no already-registered category was unregistered as a result
+   */
+  public boolean addCategories(IDifferenceCategorySet categorySet_p) {
+    boolean result = true;
+    for (IDifferenceCategoryItem categoryItem : categorySet_p.getChildren()) {
+      result = result && addCategoryItem(categoryItem);
+    }
+    return result;
+  }
+  
+  /**
+   * Add and register the given category to this manager.
+   * If a category with the same ID was already registered, then it is unregistered.
+   * @param category_p a non-null category
+   * @return whether the operation had no side effect, i.e., no other category was unregistered
+   */
+  public boolean addCategory(IDifferenceCategory category_p) {
+    IDifferenceCategory squatter = _categories.put(category_p.getID(), category_p);
+    return squatter == null || squatter == category_p;
+  }
+  
+  /**
+   * Add and register the categories that are recursively associated to the given
+   * category item.
+   * @param categoryItem_p a non-null category set
+   * @return whether no already-registered category was unregistered as a result
+   */
+  protected boolean addCategoryItem(IDifferenceCategoryItem categoryItem_p) {
+    boolean result = true;
+    if (categoryItem_p instanceof IDifferenceCategory)
+      result = addCategory((IDifferenceCategory)categoryItem_p);
+    else if (categoryItem_p instanceof IDifferenceCategorySet)
+      result = addCategories((IDifferenceCategorySet)categoryItem_p);
+    return result;
   }
   
   /**
@@ -139,12 +191,23 @@ public class CategoryManager {
   
   /**
    * Return the set of registered difference categories
-   * @return a non-null, modifiable set
+   * @return a non-null, non-modifiable collection
    */
-  public Set<IDifferenceCategory> getCategories() {
-    return _categories;
+  public Collection<IDifferenceCategory> getCategories() {
+    return _categories.values();
   }
   
+  /**
+   * Return the registered category of the given ID, if any
+   * @param categoryID_p a potentially null category ID
+   * @return a potentially null category
+   */
+  public IDifferenceCategory getCategory(String categoryID_p) {
+    IDifferenceCategory result = _categories.get(categoryID_p);
+    return result;
+  }
+  
+  /**
   /**
    * Return the list of visible children for merge of the given match
    * @param match_p a non-null match
@@ -277,6 +340,24 @@ public class CategoryManager {
   }
   
   /**
+   * Return the list of category items that should be visible in the UI as children of
+   * the given category set
+   * @return a non-null, potentially empty, unmodifiable list
+   */
+  public List<IDifferenceCategoryItem> getUIChildrenItems(IDifferenceCategorySet categorySet_p) {
+    List<IDifferenceCategoryItem> result = new ArrayList<IDifferenceCategoryItem>(
+        categorySet_p.getChildren());
+    Collection<IDifferenceCategoryItem> visibleChildren = _uiChildrenItems.get(categorySet_p);
+    if (visibleChildren != null) {
+      result.retainAll(visibleChildren);
+      result = Collections.unmodifiableList(result);
+    } else {
+      result = Collections.emptyList();
+    }
+    return result;
+  }
+  
+  /**
    * Return the number of differences associated to the given match from a user's perspective,
    * without recounting
    * @param match_p a non-null match
@@ -289,6 +370,14 @@ public class CategoryManager {
     if (eltPresence != null && !isFiltered(eltPresence))
       result--;
     return result;
+  }
+  
+  /**
+   * Return the root category items that should be visible in the UI
+   * @return a non-null, potentially empty, unmodifiable list
+   */
+  public List<IDifferenceCategoryItem> getUIRootItems() {
+    return Collections.unmodifiableList(_uiRootItems);
   }
   
   /**
@@ -617,6 +706,16 @@ public class CategoryManager {
   }
   
   /**
+   * Remove (i.e., unregister) the category of the given ID
+   * @param categoryID_p a potentially null category ID
+   * @return whether the category was successfully found and removed
+   */
+  public boolean removeCategory(String categoryID_p) {
+    IDifferenceCategory category = _categories.remove(categoryID_p);
+    return category != null;
+  }
+  
+  /**
    * Return whether the given match is represented as a modification
    * @param match_p a non-null match
    */
@@ -690,15 +789,57 @@ public class CategoryManager {
    * Re-compute filtering and differences numbers
    */
   public void update() {
+    updateActiveCategories();
+    updateUIItems();
     getMatchToNb().clear();
+    for (IMatch match : _node.getActualComparison().getMapping().getContents()) {
+      int nb = countDifferences(match, true);
+      incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
+    }
+  }
+  
+  /**
+   * Re-compute the set of active categories
+   */
+  protected void updateActiveCategories() {
     _activeCategories.clear();
     for (IDifferenceCategory category : getCategories()) {
       if (category.isApplicable(_node) && category.isActive())
         _activeCategories.add(category);
     }
-    for (IMatch match : _node.getActualComparison().getMapping().getContents()) {
-      int nb = countDifferences(match, true);
-      incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
+  }
+  
+  /**
+   * Re-compute the forest of category items that should be visible in the UI
+   */
+  protected void updateUIItems() {
+    _uiRootItems.clear();
+    _uiChildrenItems.clear();
+    List<IDifferenceCategoryItem> visibleItems = new LinkedList<IDifferenceCategoryItem>();
+    for (IDifferenceCategory category : getCategories()) {
+      if (category.isVisible() && category.isApplicable(_node)) {
+        // Category must be visible in the UI
+        visibleItems.add(category);
+      }
+    }
+    while (!visibleItems.isEmpty()) {
+      IDifferenceCategoryItem visibleItem = visibleItems.get(0);
+      IDifferenceCategorySet parent = visibleItem.getParent();
+      if (parent == null) {
+        // It is a root
+        if (!_uiRootItems.contains(visibleItem))
+          _uiRootItems.add(visibleItem);
+      } else {
+        // It is a child: remember its parent
+        Collection<IDifferenceCategoryItem> children = _uiChildrenItems.get(parent);
+        if (children == null) {
+          children = new HashSet<IDifferenceCategoryItem>();
+          _uiChildrenItems.put(parent, children);
+        }
+        children.add(visibleItem);
+        visibleItems.add(parent);
+      }
+      visibleItems.remove(visibleItem);
     }
   }
   

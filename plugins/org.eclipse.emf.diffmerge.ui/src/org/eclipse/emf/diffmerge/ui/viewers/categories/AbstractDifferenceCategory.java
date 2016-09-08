@@ -16,14 +16,14 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
-import org.eclipse.swt.graphics.Image;
 
 
 /**
  * A base implementation of IDifferenceCategory.
  * @author Olivier Constant
  */
-public abstract class AbstractDifferenceCategory implements IDifferenceCategory {
+public abstract class AbstractDifferenceCategory extends AbstractDifferenceCategoryItem
+implements IDifferenceCategory {
   
   /** Whether this category is visible */
   private boolean _visible;
@@ -52,13 +52,6 @@ public abstract class AbstractDifferenceCategory implements IDifferenceCategory 
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getDescription(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public String getDescription(EMFDiffNode node_p) {
-    return null;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
-   */
-  public Image getImage(EMFDiffNode node_p) {
     return null;
   }
   

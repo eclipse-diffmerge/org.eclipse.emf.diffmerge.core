@@ -18,6 +18,7 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
@@ -28,6 +29,13 @@ import org.eclipse.swt.graphics.Image;
  * @author Olivier Constant
  */
 public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCategory {
+  
+  /** The ID of this category in the left-hand-side case */
+  public static final String ID_LEFT = "Technical.Unmatched.Left"; //$NON-NLS-1$
+  
+  /** The ID of this category in the right-hand-side case */
+  public static final String ID_RIGHT = "Technical.Unmatched.Right"; //$NON-NLS-1$
+  
   
   /**
    * Constructor
@@ -51,6 +59,13 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getID()
+   */
+  public String getID() {
+    return isLeftSide()? ID_LEFT: ID_RIGHT;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
@@ -69,9 +84,9 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
   public String getText(EMFDiffNode node_p) {
     String result;
     if (isLeftSide())
-      result = "Additional elements on the left";
+      result = Messages.UnmatchedElementCategory_TextLeft;
     else
-      result = "Additional elements on the right";
+      result = Messages.UnmatchedElementCategory_TextRight;
     return result;
   }
   

@@ -39,13 +39,14 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ConflictCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.DifferenceCategorySet;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementAdditionCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementRemovalCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.IgnoredDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.MergedDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.MoveCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.PropertyChangeCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.ConflictCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementAdditionCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.ElementRemovalCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.ThreeWayMoveCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.UnmatchedElementCategory;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -458,23 +459,30 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * @param node_p a non-null diff node
    */
   protected void registerCategories(EMFDiffNode node_p) {
-    Set<IDifferenceCategory> categories = node_p.getCategoryManager().getCategories();
-    // Non-pending
-    categories.add(new MergedDifferenceCategory());
-    categories.add(new IgnoredDifferenceCategory());
-    // General two-way/three-way
-    categories.add(new UnmatchedElementCategory(true));
-    categories.add(new UnmatchedElementCategory(false));
-    categories.add(new MoveCategory());
-    categories.add(new PropertyChangeCategory());
-    // Three-way
-    categories.add(new ElementAdditionCategory(true));
-    categories.add(new ElementAdditionCategory(false));
-    categories.add(new ElementRemovalCategory(true));
-    categories.add(new ElementRemovalCategory(false));
-    categories.add(new ConflictCategory());
-    categories.add(new ThreeWayMoveCategory(true));
-    categories.add(new ThreeWayMoveCategory(false));
+    // Merge process, non-pending (already handled by the user)
+    IDifferenceCategorySet mergeCategorySet = new DifferenceCategorySet(
+        Messages.AbstractComparisonViewer_CatSetTextMerge);
+    mergeCategorySet.getChildren().add(new MergedDifferenceCategory());
+    mergeCategorySet.getChildren().add(new IgnoredDifferenceCategory());
+    // Basic two-way/three-way
+    IDifferenceCategorySet basicCategorySet = new DifferenceCategorySet(
+        Messages.AbstractComparisonViewer_CatSetTextBasic);
+    basicCategorySet.getChildren().add(new UnmatchedElementCategory(true));
+    basicCategorySet.getChildren().add(new UnmatchedElementCategory(false));
+    basicCategorySet.getChildren().add(new MoveCategory());
+    basicCategorySet.getChildren().add(new PropertyChangeCategory());
+    // Basic three-way
+    basicCategorySet.getChildren().add(new ElementAdditionCategory(true));
+    basicCategorySet.getChildren().add(new ElementAdditionCategory(false));
+    basicCategorySet.getChildren().add(new ElementRemovalCategory(true));
+    basicCategorySet.getChildren().add(new ElementRemovalCategory(false));
+    basicCategorySet.getChildren().add(new ConflictCategory());
+    basicCategorySet.getChildren().add(new ThreeWayMoveCategory(true));
+    basicCategorySet.getChildren().add(new ThreeWayMoveCategory(false));
+    // Registration
+    CategoryManager catManager = node_p.getCategoryManager();
+    catManager.addCategories(mergeCategorySet);
+    catManager.addCategories(basicCategorySet);
   }
   
   /**
