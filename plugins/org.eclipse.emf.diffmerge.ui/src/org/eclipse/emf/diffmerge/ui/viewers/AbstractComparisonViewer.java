@@ -461,12 +461,14 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   protected void registerCategories(EMFDiffNode node_p) {
     // Merge process, non-pending (already handled by the user)
     IDifferenceCategorySet mergeCategorySet = new DifferenceCategorySet(
-        Messages.AbstractComparisonViewer_CatSetTextMerge);
+        Messages.AbstractComparisonViewer_CatSetTextMerge,
+        Messages.AbstractComparisonViewer_CatSetDescriptionMerge);
     mergeCategorySet.getChildren().add(new MergedDifferenceCategory());
     mergeCategorySet.getChildren().add(new IgnoredDifferenceCategory());
     // Basic two-way/three-way
     IDifferenceCategorySet basicCategorySet = new DifferenceCategorySet(
-        Messages.AbstractComparisonViewer_CatSetTextBasic);
+        Messages.AbstractComparisonViewer_CatSetTextBasic,
+        Messages.AbstractComparisonViewer_CatSetDescriptionBasic);
     basicCategorySet.getChildren().add(new UnmatchedElementCategory(true));
     basicCategorySet.getChildren().add(new UnmatchedElementCategory(false));
     basicCategorySet.getChildren().add(new MoveCategory());

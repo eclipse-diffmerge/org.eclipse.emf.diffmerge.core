@@ -14,9 +14,15 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -28,8 +34,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class CategoryDialog extends MessageDialog {
   
-  /** The non-null diff node */
-  protected final EMFDiffNode _node;
+  /** The non-null input */
+  protected final CategoryViewer.Input _input;
   
   
   /**
@@ -38,11 +44,13 @@ public class CategoryDialog extends MessageDialog {
    * @param node_p a non-null diff node
    */
   public CategoryDialog(Shell parentShell_p, EMFDiffNode node_p) {
-    super(parentShell_p, "Filters and Categories", null,
-        "Set up categories in order to define what differences are shown.",
+    super(parentShell_p, Messages.CategoryDialog_Header, null,
+        Messages.CategoryDialog_Description,
         MessageDialog.NONE,
-        new String[] { "Apply", IDialogConstants.CLOSE_LABEL }, 0);
-    _node = node_p;
+        new String[] { Messages.CategoryDialog_ApplyLabel, IDialogConstants.OK_LABEL,
+            IDialogConstants.CANCEL_LABEL },
+        1);
+    _input = new CategoryViewer.Input(node_p);
     setShellStyle(SWT.CLOSE | SWT.MODELESS | SWT.BORDER | SWT.TITLE | SWT.RESIZE);
     setBlockOnOpen(false);
   }
@@ -52,12 +60,29 @@ public class CategoryDialog extends MessageDialog {
    */
   @Override
   protected void buttonPressed(int buttonId_p) {
-    if (buttonId_p == 0) {
+    switch (buttonId_p) {
+    case 0:
       // Apply button: Do not close dialog
-      _node.updateDifferenceNumbers();
-    } else {
+      _input.applyChanges();
+      break;
+    case 1:
+      // OK button: Apply and close
+      _input.applyChanges();
+      //$FALL-THROUGH$
+    default:
       super.buttonPressed(buttonId_p);
     }
+  }
+  
+  /**
+   * @see org.eclipse.jface.dialogs.IconAndMessageDialog#createButtonBar(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
+  protected Control createButtonBar(Composite parent_p) {
+    Control result = super.createButtonBar(parent_p);
+    getCustomOKButton().setEnabled(false);
+    getCustomApplyButton().setEnabled(false);
+    return result;
   }
   
   /**
@@ -66,8 +91,44 @@ public class CategoryDialog extends MessageDialog {
   @Override
   protected Control createCustomArea(Composite parent_p) {
     CategoryViewer viewer = new CategoryViewer(parent_p);
-    viewer.setInput(_node);
-    return viewer.getControl();
+    _input.addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (CategoryViewer.Input.PROPERTY_HAS_CHANGES.equals(event_p.getProperty())) {
+          // Update buttons according to the current changes
+          boolean unappliedChanges = ((Boolean)event_p.getNewValue()).booleanValue();
+          getCustomOKButton().setEnabled(unappliedChanges);
+          getCustomApplyButton().setEnabled(unappliedChanges);
+        }
+      }
+    });
+    viewer.setInput(_input);
+    Control result = viewer.getControl();
+    result.addDisposeListener(new DisposeListener() {
+      /**
+       * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+       */
+      public void widgetDisposed(DisposeEvent e_p) {
+        _input.removePropertyChangeListeners();
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Return the Apply button, given its specific location in this dialog
+   */
+  protected Button getCustomApplyButton() {
+    return getButton(0);
+  }
+  
+  /**
+   * Return the OK button, given its specific location in this dialog
+   */
+  protected Button getCustomOKButton() {
+    return getButton(1);
   }
   
 }

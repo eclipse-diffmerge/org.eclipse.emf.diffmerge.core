@@ -14,67 +14,66 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import java.util.Arrays;
-import java.util.List;
+import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.FILTERED;
+import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.FOCUSED;
+import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.NORMAL;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 
 
 /**
  * A viewer for setting up difference categories.
- * Input: EMFDiffNode.
+ * Input: CategoryViewer.Input.
  * @author Olivier Constant
  */
 public class CategoryViewer extends Viewer {
   
-  /** The name of the "active" column */
-  protected static final String COLUMN_ACTIVE_LABEL = "On";
-  
-  /** The index of the "active" column */
-  protected static final int COLUMN_ACTIVE_INDEX = 0;
-  
-  /** The name of the "name" column */
-  protected static final String COLUMN_NAME_LABEL = "Category";
-  
-  /** The index of the "name" column */
-  protected static final int COLUMN_NAME_INDEX = 1;
-  
-  /** The name of the "mode" column */
-  protected static final String COLUMN_MODE_LABEL = "Mode";
-  
-  /** The index of the "active" column */
-  protected static final int COLUMN_MODE_INDEX = 2;
-  
-  /** The column names */
-  protected static final String[] COLUMNS =
-      new String[] { COLUMN_ACTIVE_LABEL, COLUMN_NAME_LABEL, COLUMN_MODE_LABEL };
-  
-  /** The current input (initially null) */
-  private EMFDiffNode _input;
+  /**
+   * The UI states of difference categories.
+   */
+  public static enum CategoryState {
+    /** The 'normal', i.e. non-active, state */
+    NORMAL,
+    /** The 'active and filtering' state */
+    FILTERED,
+    /** The 'active and focusing' state */
+    FOCUSED
+  }
   
   /** The non-null main sub-viewer */
   protected TreeViewer _viewer;
+  
+  /** The current input (initially null) */
+  private Input _input;
   
   
   /**
@@ -82,54 +81,8 @@ public class CategoryViewer extends Viewer {
    * @param parent_p a non-null composite
    */
   public CategoryViewer(Composite parent_p) {
+    _input = null;
     createControls(parent_p);
-  }
-  
-  /**
-   * Create and return the main control
-   * @param parent_p a non-null composite
-   * @return a non-null tree
-   */
-  protected Tree createMainControl(Composite parent_p) {
-    int style = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
-          SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
-    Tree result = new Tree(parent_p, style);
-    result.setLinesVisible(true);
-    result.setHeaderVisible(true);
-    result.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    // Column 1: Active state
-    TreeColumn column1 = new TreeColumn(result, SWT.CENTER, 0);   
-    column1.setText(COLUMN_ACTIVE_LABEL);
-    column1.setWidth(30);
-    // Column 2: Name
-    TreeColumn column2 = new TreeColumn(result, SWT.LEFT, 1);
-    column2.setText(COLUMN_NAME_LABEL);
-    column2.setWidth(400);
-    // Column 3: Mode
-    TreeColumn column3 = new TreeColumn(result, SWT.LEFT, 2);
-    column3.setText(COLUMN_MODE_LABEL);
-    column3.setWidth(70);
-    return result;
-  }
-  
-  /**
-   * Create and return the main viewer
-   * @param mainControl_p a non-null tree
-   * @return a non-null viewer
-   */
-  private TreeViewer createViewer(Tree mainControl_p) {
-    TreeViewer result = new TreeViewer(mainControl_p);
-    result.setColumnProperties(COLUMNS);
-    CellEditor[] editors = new CellEditor[COLUMNS.length];
-    // Column 1: Check box editor
-    editors[0] = new CheckboxCellEditor(mainControl_p);
-    // Column 2: No editor
-    editors[1] = null;
-    // Column 3: Combo box editor
-    editors[2] = new ComboBoxCellEditor(mainControl_p, new String[] {"Exclude", "Focus"}, SWT.READ_ONLY);
-    result.setCellEditors(editors);
-    result.setCellModifier(new CellModifier());
-    return result;
   }
   
   /**
@@ -137,11 +90,51 @@ public class CategoryViewer extends Viewer {
    * @param parent_p a non-null composite
    */
   protected void createControls(Composite parent_p) {
-    Tree mainControl = createMainControl(parent_p);
-    _viewer = createViewer(mainControl);
-    _viewer.setLabelProvider(new LabelProvider());
-    _viewer.setContentProvider(new ContentProvider());
+    // Main
+    _viewer = new TreeViewer(
+        parent_p,
+        SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |
+        SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+    _viewer.getTree().setHeaderVisible(true);
+    _viewer.getTree().setLinesVisible(true);
+    _viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+    _viewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    // Column 1: Hierarchy
+    TreeViewerColumn catItemColumn = new TreeViewerColumn(_viewer, SWT.LEFT);
+    catItemColumn.getColumn().setText(Messages.CategoryViewer_CategoryHeader);
+    catItemColumn.getColumn().setWidth(400);
+    catItemColumn.setLabelProvider(new HierarchyLabelProvider());
+    // Column 2: Normal
+    final int STATE_COLUMN_WIDTH = 80;
+    TreeViewerColumn normalStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
+    normalStateColumn.getColumn().setText(Messages.CategoryViewer_NormalStateHeader);
+    normalStateColumn.getColumn().setToolTipText(
+        Messages.CategoryViewer_NormalStateTooltip);
+    normalStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
+    normalStateColumn.getColumn().setResizable(false);
+    normalStateColumn.setLabelProvider(new StateLabelProvider(NORMAL));
+    normalStateColumn.setEditingSupport(new StateEditingSupport(_viewer, NORMAL));
+    // Column 3: Filtered
+    TreeViewerColumn filteredStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
+    filteredStateColumn.getColumn().setText(Messages.CategoryViewer_FilteredStateHeader);
+    filteredStateColumn.getColumn().setToolTipText(
+        Messages.CategoryViewer_FilteredStateTooltip);
+    filteredStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
+    filteredStateColumn.getColumn().setResizable(false);
+       filteredStateColumn.setLabelProvider(new StateLabelProvider(FILTERED));
+    filteredStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FILTERED));
+    // Column 4: Focused
+    TreeViewerColumn focusedStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
+    focusedStateColumn.getColumn().setText(Messages.CategoryViewer_FocusedStateHeader);
+    focusedStateColumn.getColumn().setToolTipText(
+        Messages.CategoryViewer_FocusedStateTooltip);
+    focusedStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
+    focusedStateColumn.getColumn().setResizable(false);
+    focusedStateColumn.setLabelProvider(new StateLabelProvider(FOCUSED));
+    focusedStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FOCUSED));
+    // Overall
     ColumnViewerToolTipSupport.enableFor(_viewer);
+    _viewer.setContentProvider(new ContentProvider());
   }
   
   /**
@@ -156,7 +149,7 @@ public class CategoryViewer extends Viewer {
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override
-  public EMFDiffNode getInput() {
+  public Input getInput() {
     return _input;
   }
   
@@ -197,9 +190,9 @@ public class CategoryViewer extends Viewer {
    */
   @Override
   public void setInput(Object input_p) {
-    if (input_p instanceof EMFDiffNode) {
+    if (input_p instanceof Input) {
       Object oldInput = getInput();
-      _input = (EMFDiffNode)input_p;
+      _input = (Input)input_p;
       inputChanged(_input, oldInput);
     }
   }
@@ -214,11 +207,149 @@ public class CategoryViewer extends Viewer {
   
   
   /**
+   * The input for the viewer.
+   */
+  public static class Input implements IPropertyChangeNotifier {
+    /** The name of the "has changes" property */
+    public static final String PROPERTY_HAS_CHANGES = "PROPERTY_HAS_CHANGES"; //$NON-NLS-1$
+    /** The non-null wrapped node */
+    private final EMFDiffNode _node;
+    /** The non-null set of property change listeners */
+    private final Set<IPropertyChangeListener> _changeListeners;
+    /** The non-null set of modified categories along with their new state */
+    private final Map<IDifferenceCategory, CategoryState> _changedCategories;
+    /**
+     * Constructor
+     * @param node_p a non-null node
+     */
+    public Input(EMFDiffNode node_p) {
+      _node = node_p;
+      _changedCategories = new HashMap<IDifferenceCategory, CategoryViewer.CategoryState>();
+      _changeListeners = new HashSet<IPropertyChangeListener>(1);
+    }
+    /**
+     * Register the given state for the given category as a change
+     * @param category_p a non-null category
+     * @param state_p a non-null state
+     */
+    public void addChange(IDifferenceCategory category_p, CategoryState state_p) {
+      boolean hadChanges = hasChanges();
+      CategoryState currentState = getActualState(category_p);
+      if (currentState == state_p) {
+        // Re-set state to the original one
+        _changedCategories.remove(category_p);
+      } else {
+        // Actual change
+        _changedCategories.put(category_p, state_p);
+      }
+      boolean hasChanges = hasChanges();
+      if (hasChanges != hadChanges) {
+        // Lost its last change or gained its first change
+        firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
+      }
+    }
+    /**
+     * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+     */
+    public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
+      _changeListeners.add(listener_p);
+    }
+    /**
+     * Apply the current changes
+     */
+    public void applyChanges() {
+      if (hasChanges()) {
+        for (Map.Entry<IDifferenceCategory, CategoryState> change : _changedCategories.entrySet()) {
+          applyChange(change.getKey(), change.getValue());
+        }
+        _changedCategories.clear();
+        _node.updateDifferenceNumbers();
+        firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.FALSE);
+      }
+    }
+    /**
+     * Set the given category to the given state
+     * @param category_p a non-null category
+     * @param state_p a non-null state
+     */
+    protected void applyChange(IDifferenceCategory category_p, CategoryState state_p) {
+      switch (state_p) {
+      case FILTERED:
+        category_p.setInFocusMode(false);
+        category_p.setActive(true);
+        break;
+      case FOCUSED:
+        category_p.setInFocusMode(true);
+        category_p.setActive(true);
+        break;
+      default: //NORMAL
+        category_p.setActive(false);
+      }
+    }
+    /**
+     * Notify listeners of a property change event
+     * @param propertyName_p the non-null name of the property
+     * @param newValue_p the potentially null, new value of the property
+     */
+    protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p) {
+      PropertyChangeEvent event = new PropertyChangeEvent(
+          this, propertyName_p, null, newValue_p);
+      for (IPropertyChangeListener listener : _changeListeners) {
+        listener.propertyChange(event);
+      }
+    }
+    /**
+     * Return the actual state of the given category, ignoring current changes
+     * @param category_p a non-null difference category
+     * @return a non-null object
+     */
+    protected CategoryState getActualState(IDifferenceCategory category_p) {
+      return !category_p.isActive()? NORMAL: category_p.isInFocusMode()? FOCUSED: FILTERED;
+    }
+    /**
+     * Return the node wrapped by this input
+     * @return a non-null object
+     */
+    public EMFDiffNode getNode() {
+      return _node;
+    }
+    /**
+     * Return whether there are non-applied changes
+     */
+    public boolean hasChanges() {
+      return !_changedCategories.isEmpty();
+    }
+    /**
+     * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+     */
+    public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
+      _changeListeners.remove(listener_p);
+    }
+    /**
+     * Remove all listeners
+     */
+    public void removePropertyChangeListeners() {
+      _changeListeners.clear();
+    }
+    /**
+     * Return the state of the given category, taking into account current changes
+     * @param category_p a non-null category
+     * @return a non-null state
+     */
+    public CategoryState getStateWithChanges(IDifferenceCategory category_p) {
+      CategoryState result = _changedCategories.get(category_p);
+      if (result == null)
+        result = getActualState(category_p);
+      return result;
+    }
+  }
+  
+  /**
    * The content provider for the viewer.
    */
   protected static class ContentProvider implements ITreeContentProvider {
     /** The current input */
-    private EMFDiffNode _input = null;
+    private Input _input = null;
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#dispose()
      */
@@ -236,7 +367,7 @@ public class CategoryViewer extends Viewer {
         if (_input == null)
           listResult = catSet.getChildren();
         else
-          listResult = _input.getCategoryManager().getUIChildrenItems(catSet);
+          listResult = _input.getNode().getCategoryManager().getUIChildrenItems(catSet);
         result = listResult.toArray();
       } else {
         result = new Object[0];
@@ -247,7 +378,7 @@ public class CategoryViewer extends Viewer {
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      EMFDiffNode node = (EMFDiffNode)inputElement_p;
+      EMFDiffNode node = ((Input)inputElement_p).getNode();
       return node.getCategoryManager().getUIRootItems().toArray();
     }
     /**
@@ -270,63 +401,41 @@ public class CategoryViewer extends Viewer {
      */
     public void inputChanged(Viewer viewer_p, Object oldInput_p,
         Object newInput_p) {
-      if (newInput_p instanceof EMFDiffNode)
-        _input = (EMFDiffNode)newInput_p;
+      if (newInput_p instanceof Input)
+        _input = (Input)newInput_p;
     }
   }
   
+  
   /**
-   * The label provider for the viewer.
+   * The label provider for the hierarchical column.
    */
-  protected class LabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+  protected class HierarchyLabelProvider extends ColumnLabelProvider {
     /**
-     * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
+     * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
      */
-    public Image getColumnImage(Object element_p, int columnIndex_p) {
-      Image result;
-      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
-      EMFDiffNode node = CategoryViewer.this.getInput();
-      switch (columnIndex_p) {
-      case COLUMN_ACTIVE_INDEX:
-        if (catItem instanceof IDifferenceCategory) {
-          ImageID id = ((IDifferenceCategory)catItem).isActive()? ImageID.CHECKED: ImageID.UNCHECKED;
-          result = EMFDiffMergeUIPlugin.getDefault().getImage(id);
-        } else {
-          result = null;
-        }
-        break;
-      case COLUMN_NAME_INDEX:
+    @Override
+    public Image getImage(Object element_p) {
+      Image result = null;
+      if (element_p instanceof IDifferenceCategoryItem) {
+        IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
+        EMFDiffNode node = CategoryViewer.this.getInput().getNode();
         result = catItem.getImage(node);
-        break;
-      default:
-        result = null;
-        break;
       }
       return result;
     }
     /**
-     * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
+     * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
      */
-    public String getColumnText(Object element_p, int columnIndex_p) {
+    @Override
+    public String getText(Object element_p) {
       String result;
-      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
-      EMFDiffNode node = CategoryViewer.this.getInput();
-      switch (columnIndex_p) {
-      case COLUMN_ACTIVE_INDEX:
-        result = ""; //$NON-NLS-1$
-        break;
-      case COLUMN_NAME_INDEX:
+      if (element_p instanceof IDifferenceCategoryItem) {
+        IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
+        EMFDiffNode node = CategoryViewer.this.getInput().getNode();
         result = catItem.getText(node);
-        break;
-      case COLUMN_MODE_INDEX:
-        if (catItem instanceof IDifferenceCategory)
-          result = ((IDifferenceCategory)catItem).isInFocusMode()? "Focus": "Exclude";
-        else
-          result = "-"; //$NON-NLS-1$
-        break;
-      default:
-        result = null;
-        break;
+      } else {
+        result = super.getText(element_p);
       }
       return result;
     }
@@ -335,70 +444,182 @@ public class CategoryViewer extends Viewer {
      */
     @Override
     public String getToolTipText(Object element_p) {
-      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
-      return catItem.getDescription(CategoryViewer.this.getInput());
+      String result = null;
+      if (element_p instanceof IDifferenceCategoryItem) {
+        IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
+        EMFDiffNode node = CategoryViewer.this.getInput().getNode();
+        result = catItem.getDescription(node);
+      }
+      return result;
     }
   }
   
   /**
-   * A modifier for the table cells.
+   * The label provider for the state columns.
    */
-  protected class CellModifier implements ICellModifier {
-    /** The combo box value for the "focus" mode */
-    protected static final int FOCUS_MODE_VALUE = 1;
+  protected class StateLabelProvider extends ColumnLabelProvider {
+    /** The non-null state being handled */
+    protected final CategoryState _state;
     /**
-     * @see org.eclipse.jface.viewers.ICellModifier#canModify(java.lang.Object, java.lang.String)
+     * Constructor
+     * @param state_p the non-null state to handle
      */
-    public boolean canModify(Object element_p, String property_p) {
-      return Arrays.asList(COLUMN_ACTIVE_LABEL, COLUMN_MODE_LABEL).contains(property_p);
+    public StateLabelProvider(CategoryState state_p) {
+      _state = state_p;
     }
     /**
-     * @see org.eclipse.jface.viewers.ICellModifier#getValue(java.lang.Object, java.lang.String)
+     * @see org.eclipse.jface.viewers.ColumnLabelProvider#getImage(java.lang.Object)
      */
-    public Object getValue(Object element_p, String property_p) {
-      Object result;
-      IDifferenceCategoryItem catItem = (IDifferenceCategoryItem)element_p;
-      if (COLUMN_ACTIVE_LABEL.equals(property_p)) {
-        if (catItem instanceof IDifferenceCategory)
-          result = Boolean.valueOf(((IDifferenceCategory)catItem).isActive());
-        else
-          result = Boolean.FALSE;
-      } else if (COLUMN_MODE_LABEL.equals(property_p)) {
-        if (catItem instanceof IDifferenceCategory) {
-          boolean inFocusMode = ((IDifferenceCategory)catItem).isInFocusMode();
-          result = inFocusMode? Integer.valueOf(FOCUS_MODE_VALUE): Integer.valueOf(0);
-        } else {
-          result = Integer.valueOf(0);
-        }
-      } else {
-        result = null;
+    @Override
+    public Image getImage(Object element_p) {
+      Image result = null;
+      if (element_p instanceof IDifferenceCategory) {
+        IDifferenceCategory cat = (IDifferenceCategory)element_p;
+        ImageID imageId = (isSelected(cat))? ImageID.CHECKED: ImageID.UNCHECKED;
+        result = EMFDiffMergeUIPlugin.getDefault().getImage(imageId);
       }
       return result;
     }
     /**
-     * @see org.eclipse.jface.viewers.ICellModifier#modify(java.lang.Object, java.lang.String, java.lang.Object)
+     * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
      */
-    public void modify(Object element_p, String property_p, Object value_p) {
-      Object element = (element_p instanceof Item)? ((Item)element_p).getData(): element_p;
-      boolean modified = false;
-      if (element instanceof IDifferenceCategory) {
-        IDifferenceCategory cat = (IDifferenceCategory)element;
-        if (COLUMN_ACTIVE_LABEL.equals(property_p) && value_p instanceof Boolean) {
-          boolean newValue = ((Boolean)value_p).booleanValue();
-          if (newValue != cat.isActive()) {
-            cat.setActive(newValue);
-            modified = true;
-          }
-        } else if (COLUMN_MODE_LABEL.equals(property_p) && value_p instanceof Integer) {
-          boolean newValue = ((Integer)value_p).intValue() == FOCUS_MODE_VALUE;
-          if (newValue != cat.isInFocusMode()) {
-            cat.setInFocusMode(newValue);
-            modified = true;
-          }
-        }
+    @Override
+    public String getText(Object element_p) {
+      return null;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
+     */
+    @Override
+    public String getToolTipText(Object element_p) {
+      String result;
+      switch (_state) {
+      case FILTERED:
+        result = Messages.CategoryViewer_FilteredStateTooltip;
+        break;
+      case FOCUSED:
+        result = Messages.CategoryViewer_FocusedStateTooltip;
+        break;
+      default: //NORMAL
+        result = Messages.CategoryViewer_NormalStateTooltip;
       }
-      if (modified)
-        _viewer.update(element, new String[] {property_p});
+      return result;
+    }
+    /**
+     * Specify whether the given category is in the state represented by this label provider
+     * @param category_p a non-null difference category
+     */
+    protected boolean isSelected(IDifferenceCategory category_p) {
+      return _state == CategoryViewer.this.getInput().getStateWithChanges(category_p);
+    }
+  }
+  
+  /**
+   * Editing support for the state cells.
+   */
+  protected class StateEditingSupport extends EditingSupport {
+    /** The non-null state being handled */
+    protected final CategoryState _state;
+    /**
+     * Constructor
+     * @param viewer_p the non-null column viewer this editing support is for
+     * @param state_p the non-null state to handle
+     */
+    public StateEditingSupport(ColumnViewer viewer_p, CategoryState state_p) {
+      super(viewer_p);
+      _state = state_p;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.EditingSupport#getCellEditor(java.lang.Object)
+     */
+    @Override
+    protected CellEditor getCellEditor(Object element_p) {
+      return new CellEditor() {
+        // Inspired by EGit's ClickableCellEditor
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#activate
+         */
+        @Override
+        public void activate() {
+          // Trigger setValue on editing support
+          fireApplyEditorValue();
+        }
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#activate(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+         */
+        @Override
+        public void activate(ColumnViewerEditorActivationEvent activationEvent_p) {
+          if (activationEvent_p.eventType != ColumnViewerEditorActivationEvent.TRAVERSAL)
+            // All mouse, key and programmatic events, excluding mouse traversal events
+            super.activate(activationEvent_p);
+        }
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#createControl(org.eclipse.swt.widgets.Composite)
+         */
+        @Override
+        protected Control createControl(Composite parent_p) {
+          return null;
+        }
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#doGetValue()
+         */
+        @Override
+        protected Object doGetValue() {
+          return null;
+        }
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#doSetFocus()
+         */
+        @Override
+        protected void doSetFocus() {
+          // Nothing needed
+        }
+        /**
+         * @see org.eclipse.jface.viewers.CellEditor#doSetValue(java.lang.Object)
+         */
+        @Override
+        protected void doSetValue(Object value_p) {
+          // Nothing needed
+        }
+      };
+    }
+    /**
+     * @see org.eclipse.jface.viewers.EditingSupport#canEdit(java.lang.Object)
+     */
+    @Override
+    protected boolean canEdit(Object element_p) {
+      boolean result = false;
+      if (element_p instanceof IDifferenceCategory) {
+        IDifferenceCategory cat = (IDifferenceCategory)element_p;
+        result = cat.isModifiable();
+      }
+      return result;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.EditingSupport#getValue(java.lang.Object)
+     */
+    @Override
+    protected Object getValue(Object element_p) {
+      return null;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.EditingSupport#setValue(java.lang.Object, java.lang.Object)
+     */
+    @Override
+    protected void setValue(Object element_p, Object value_p) {
+      if (element_p instanceof IDifferenceCategory) {
+        IDifferenceCategory cat = (IDifferenceCategory)element_p;
+        selectState(cat);
+        getViewer().update(cat, null);
+      }
+    }
+    /**
+     * Set the given category in the state handled by this editing support
+     * @param category_p a non-null difference category
+     */
+    protected void selectState(IDifferenceCategory category_p) {
+      if (category_p.isModifiable())
+        CategoryViewer.this.getInput().addChange(category_p, _state);
     }
   }
   

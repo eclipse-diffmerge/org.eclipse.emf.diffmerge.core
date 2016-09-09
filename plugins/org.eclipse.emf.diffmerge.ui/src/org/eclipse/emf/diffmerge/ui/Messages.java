@@ -25,8 +25,20 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("javadoc")
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.messages"; //$NON-NLS-1$
+  public static String AbstractComparisonViewer_CatSetDescriptionBasic;
+  public static String AbstractComparisonViewer_CatSetDescriptionMerge;
   public static String AbstractComparisonViewer_CatSetTextBasic;
   public static String AbstractComparisonViewer_CatSetTextMerge;
+  public static String CategoryDialog_ApplyLabel;
+  public static String CategoryDialog_Description;
+  public static String CategoryDialog_Header;
+  public static String CategoryViewer_CategoryHeader;
+  public static String CategoryViewer_FilteredStateHeader;
+  public static String CategoryViewer_FilteredStateTooltip;
+  public static String CategoryViewer_FocusedStateHeader;
+  public static String CategoryViewer_FocusedStateTooltip;
+  public static String CategoryViewer_NormalStateHeader;
+  public static String CategoryViewer_NormalStateTooltip;
   public static String CompareModelsAction_ModelsOnly;
   public static String ComparisonSetupManager_CannotLoadLeftKnown;
   public static String ComparisonSetupManager_CannotLoadLeftUnknown;

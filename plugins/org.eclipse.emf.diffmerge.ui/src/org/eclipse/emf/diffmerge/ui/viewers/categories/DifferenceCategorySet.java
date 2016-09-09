@@ -29,7 +29,7 @@ public class DifferenceCategorySet extends AbstractDifferenceCategoryItem
 implements IDifferenceCategorySet {
   
   /** The default text for this item */
-  protected static final String DEFAULT_TEXT = ""; //$NON-NLS-1$
+  protected static final String DEFAULT_TEXT = "+"; //$NON-NLS-1$
   
   /** The non-null, potentially empty, modifiable list of children items */
   private EList<IDifferenceCategoryItem> _children;

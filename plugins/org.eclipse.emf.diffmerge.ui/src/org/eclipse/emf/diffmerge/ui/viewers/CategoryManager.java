@@ -691,8 +691,9 @@ public class CategoryManager {
    * pending differences
    */
   public boolean isUIFiltering(IDifferenceCategory category_p) {
-    return category_p.mayCoverPendingDifferences() && category_p.isVisible()
-        && category_p.isModifiable() && _activeCategories.contains(category_p);
+    return category_p.isVisible() && category_p.isModifiable() &&
+        _activeCategories.contains(category_p) &&
+        (category_p.mayCoverPendingDifferences() || category_p.isInFocusMode());
   }
   
   /**
