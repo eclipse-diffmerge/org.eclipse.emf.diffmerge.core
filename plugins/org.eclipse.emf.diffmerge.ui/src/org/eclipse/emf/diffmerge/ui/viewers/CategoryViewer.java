@@ -28,6 +28,7 @@ import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
@@ -36,6 +37,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -90,28 +92,28 @@ public class CategoryViewer extends Viewer {
    * @param parent_p a non-null composite
    */
   protected void createControls(Composite parent_p) {
+    // Wrapper composite, required for TreeColumnLayout
+    Composite wrapper = new Composite(parent_p, SWT.NONE);
+    GridData wrapperData = new GridData(SWT.FILL, SWT.FILL, true, true);
+    wrapper.setLayoutData(wrapperData);
+    TreeColumnLayout layout = new TreeColumnLayout();
+    wrapper.setLayout(layout);
     // Main
     _viewer = new TreeViewer(
-        parent_p,
-        SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |
-        SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+        wrapper,
+        SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
     _viewer.getTree().setHeaderVisible(true);
     _viewer.getTree().setLinesVisible(true);
     _viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-    _viewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     // Column 1: Hierarchy
     TreeViewerColumn catItemColumn = new TreeViewerColumn(_viewer, SWT.LEFT);
     catItemColumn.getColumn().setText(Messages.CategoryViewer_CategoryHeader);
-    catItemColumn.getColumn().setWidth(400);
     catItemColumn.setLabelProvider(new HierarchyLabelProvider());
     // Column 2: Normal
-    final int STATE_COLUMN_WIDTH = 80;
     TreeViewerColumn normalStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
     normalStateColumn.getColumn().setText(Messages.CategoryViewer_NormalStateHeader);
     normalStateColumn.getColumn().setToolTipText(
         Messages.CategoryViewer_NormalStateTooltip);
-    normalStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
-    normalStateColumn.getColumn().setResizable(false);
     normalStateColumn.setLabelProvider(new StateLabelProvider(NORMAL));
     normalStateColumn.setEditingSupport(new StateEditingSupport(_viewer, NORMAL));
     // Column 3: Filtered
@@ -119,8 +121,6 @@ public class CategoryViewer extends Viewer {
     filteredStateColumn.getColumn().setText(Messages.CategoryViewer_FilteredStateHeader);
     filteredStateColumn.getColumn().setToolTipText(
         Messages.CategoryViewer_FilteredStateTooltip);
-    filteredStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
-    filteredStateColumn.getColumn().setResizable(false);
        filteredStateColumn.setLabelProvider(new StateLabelProvider(FILTERED));
     filteredStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FILTERED));
     // Column 4: Focused
@@ -128,11 +128,17 @@ public class CategoryViewer extends Viewer {
     focusedStateColumn.getColumn().setText(Messages.CategoryViewer_FocusedStateHeader);
     focusedStateColumn.getColumn().setToolTipText(
         Messages.CategoryViewer_FocusedStateTooltip);
-    focusedStateColumn.getColumn().setWidth(STATE_COLUMN_WIDTH);
-    focusedStateColumn.getColumn().setResizable(false);
     focusedStateColumn.setLabelProvider(new StateLabelProvider(FOCUSED));
     focusedStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FOCUSED));
     // Overall
+    final int STATE_COLUMN_WIDTH = 70;
+    layout.setColumnData(catItemColumn.getColumn(), new ColumnWeightData(1, 400, true));
+    layout.setColumnData(
+        normalStateColumn.getColumn(), new ColumnWeightData(0, STATE_COLUMN_WIDTH, false));
+    layout.setColumnData(
+        filteredStateColumn.getColumn(), new ColumnWeightData(0, STATE_COLUMN_WIDTH, false));
+    layout.setColumnData(
+        focusedStateColumn.getColumn(), new ColumnWeightData(0, STATE_COLUMN_WIDTH, false));
     ColumnViewerToolTipSupport.enableFor(_viewer);
     _viewer.setContentProvider(new ContentProvider());
   }
