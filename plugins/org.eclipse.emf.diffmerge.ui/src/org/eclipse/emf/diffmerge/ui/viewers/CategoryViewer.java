@@ -475,7 +475,12 @@ public class CategoryViewer extends Viewer {
       Image result = null;
       if (element_p instanceof IDifferenceCategory) {
         IDifferenceCategory cat = (IDifferenceCategory)element_p;
-        ImageID imageId = (isSelected(cat))? ImageID.CHECKED: ImageID.UNCHECKED;
+        boolean selected = isSelected(cat);
+        ImageID imageId;
+        if (cat.isModifiable())
+          imageId = selected? ImageID.CHECKED: ImageID.UNCHECKED;
+        else
+          imageId = selected? ImageID.CHECKED_DISABLED: ImageID.UNCHECKED_DISABLED;
         result = EMFDiffMergeUIPlugin.getDefault().getImage(imageId);
       }
       return result;
