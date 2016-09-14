@@ -427,6 +427,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       EMFDiffNode node = (EMFDiffNode)input_p;
       registerCategories(node);
       node.updateDifferenceNumbers();
+      node.getCategoryManager().setDefaultConfiguration();
     }
     if (input_p instanceof ICompareInput)
       ((ICompareInput)input_p).addCompareInputChangeListener(this);

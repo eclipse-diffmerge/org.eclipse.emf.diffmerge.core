@@ -18,6 +18,7 @@ import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.
 import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.FOCUSED;
 import static org.eclipse.emf.diffmerge.ui.viewers.CategoryViewer.CategoryState.NORMAL;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +46,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -77,6 +80,9 @@ public class CategoryViewer extends Viewer {
   /** The current input (initially null) */
   private Input _input;
   
+  /** A non-null listener for configuration changes */
+  private final IPropertyChangeListener _configUpdater;
+  
   
   /**
    * Constructor
@@ -84,6 +90,15 @@ public class CategoryViewer extends Viewer {
    */
   public CategoryViewer(Composite parent_p) {
     _input = null;
+    _configUpdater = new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (Input.PROPERTY_CONFIGURATION.equals(event_p.getProperty()))
+          refresh();
+      }
+    };
     createControls(parent_p);
   }
   
@@ -99,9 +114,8 @@ public class CategoryViewer extends Viewer {
     TreeColumnLayout layout = new TreeColumnLayout();
     wrapper.setLayout(layout);
     // Main
-    _viewer = new TreeViewer(
-        wrapper,
-        SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+    _viewer = new TreeViewer(wrapper, SWT.SINGLE | SWT.BORDER | SWT.NO_SCROLL | SWT.V_SCROLL |
+        SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
     _viewer.getTree().setHeaderVisible(true);
     _viewer.getTree().setLinesVisible(true);
     _viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
@@ -116,6 +130,17 @@ public class CategoryViewer extends Viewer {
         Messages.CategoryViewer_NormalStateTooltip);
     normalStateColumn.setLabelProvider(new StateLabelProvider(NORMAL));
     normalStateColumn.setEditingSupport(new StateEditingSupport(_viewer, NORMAL));
+    normalStateColumn.getColumn().addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        Input input = getInput();
+        if (input != null)
+          input.setAll(NORMAL);
+      }
+    });
     // Column 3: Filtered
     TreeViewerColumn filteredStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
     filteredStateColumn.getColumn().setText(Messages.CategoryViewer_FilteredStateHeader);
@@ -123,6 +148,17 @@ public class CategoryViewer extends Viewer {
         Messages.CategoryViewer_FilteredStateTooltip);
        filteredStateColumn.setLabelProvider(new StateLabelProvider(FILTERED));
     filteredStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FILTERED));
+    filteredStateColumn.getColumn().addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        Input input = getInput();
+        if (input != null)
+          input.setAll(FILTERED);
+      }
+    });
     // Column 4: Focused
     TreeViewerColumn focusedStateColumn = new TreeViewerColumn(_viewer, SWT.CENTER);
     focusedStateColumn.getColumn().setText(Messages.CategoryViewer_FocusedStateHeader);
@@ -130,9 +166,20 @@ public class CategoryViewer extends Viewer {
         Messages.CategoryViewer_FocusedStateTooltip);
     focusedStateColumn.setLabelProvider(new StateLabelProvider(FOCUSED));
     focusedStateColumn.setEditingSupport(new StateEditingSupport(_viewer, FOCUSED));
+    focusedStateColumn.getColumn().addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        Input input = getInput();
+        if (input != null)
+          input.setAll(FOCUSED);
+      }
+    });
     // Overall
+    layout.setColumnData(catItemColumn.getColumn(), new ColumnWeightData(1, 300, true));
     final int STATE_COLUMN_WIDTH = 70;
-    layout.setColumnData(catItemColumn.getColumn(), new ColumnWeightData(1, 400, true));
     layout.setColumnData(
         normalStateColumn.getColumn(), new ColumnWeightData(0, STATE_COLUMN_WIDTH, false));
     layout.setColumnData(
@@ -180,7 +227,10 @@ public class CategoryViewer extends Viewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    refresh();
+    if (oldInput_p instanceof Input)
+      ((Input)oldInput_p).removePropertyChangeListener(_configUpdater);
+    if (input_p instanceof Input)
+      ((Input)input_p).addPropertyChangeListener(_configUpdater);
   }
   
   /**
@@ -188,7 +238,7 @@ public class CategoryViewer extends Viewer {
    */
   @Override
   public void refresh() {
-    _viewer.setInput(getInput());
+    _viewer.refresh(true);
   }
   
   /**
@@ -200,6 +250,7 @@ public class CategoryViewer extends Viewer {
       Object oldInput = getInput();
       _input = (Input)input_p;
       inputChanged(_input, oldInput);
+      _viewer.setInput(input_p);
     }
   }
   
@@ -217,7 +268,9 @@ public class CategoryViewer extends Viewer {
    */
   public static class Input implements IPropertyChangeNotifier {
     /** The name of the "has changes" property */
-    public static final String PROPERTY_HAS_CHANGES = "PROPERTY_HAS_CHANGES"; //$NON-NLS-1$
+    public static final String PROPERTY_HAS_CHANGES = "PROPERTY_CATEGORIES_HAS_CHANGES"; //$NON-NLS-1$
+    /** The name of the "configuration" property */
+    public static final String PROPERTY_CONFIGURATION = "PROPERTY_CATEGORIES_CONFIGURATION_CHANGES"; //$NON-NLS-1$
     /** The non-null wrapped node */
     private final EMFDiffNode _node;
     /** The non-null set of property change listeners */
@@ -237,22 +290,38 @@ public class CategoryViewer extends Viewer {
      * Register the given state for the given category as a change
      * @param category_p a non-null category
      * @param state_p a non-null state
+     * @return whether this 'change' had any impact
      */
-    public void addChange(IDifferenceCategory category_p, CategoryState state_p) {
+    public boolean addChange(IDifferenceCategory category_p, CategoryState state_p) {
       boolean hadChanges = hasChanges();
-      CategoryState currentState = getActualState(category_p);
-      if (currentState == state_p) {
-        // Re-set state to the original one
-        _changedCategories.remove(category_p);
-      } else {
-        // Actual change
-        _changedCategories.put(category_p, state_p);
-      }
+      boolean result = addSilentChange(category_p, state_p);
       boolean hasChanges = hasChanges();
       if (hasChanges != hadChanges) {
         // Lost its last change or gained its first change
         firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
       }
+      return result;
+    }
+    /**
+     * Register the given state for the given category as a change without
+     * notifying listeners
+     * @param category_p a non-null category
+     * @param state_p a non-null state
+     * @return whether this 'change' had any impact
+     */
+    protected boolean addSilentChange(IDifferenceCategory category_p, CategoryState state_p) {
+      boolean result;
+      CategoryState currentState = getActualState(category_p);
+      if (currentState == state_p) {
+        // Re-set state to the original one
+        CategoryState previousChange = _changedCategories.remove(category_p);
+        result = previousChange != null;
+      } else {
+        // Actual change
+        CategoryState previousState = _changedCategories.put(category_p, state_p);
+        result = previousState != state_p;
+      }
+      return result;
     }
     /**
      * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
@@ -320,6 +389,17 @@ public class CategoryViewer extends Viewer {
       return _node;
     }
     /**
+     * Return the state of the given category, taking into account current changes
+     * @param category_p a non-null category
+     * @return a non-null state
+     */
+    public CategoryState getStateWithChanges(IDifferenceCategory category_p) {
+      CategoryState result = _changedCategories.get(category_p);
+      if (result == null)
+        result = getActualState(category_p);
+      return result;
+    }
+    /**
      * Return whether there are non-applied changes
      */
     public boolean hasChanges() {
@@ -338,15 +418,50 @@ public class CategoryViewer extends Viewer {
       _changeListeners.clear();
     }
     /**
-     * Return the state of the given category, taking into account current changes
-     * @param category_p a non-null category
-     * @return a non-null state
+     * Reset the states of the current categories to match the default ones
      */
-    public CategoryState getStateWithChanges(IDifferenceCategory category_p) {
-      CategoryState result = _changedCategories.get(category_p);
-      if (result == null)
-        result = getActualState(category_p);
-      return result;
+    public void resetToDefault() {
+      boolean hadChanges = hasChanges();
+      boolean hadImpact = false;
+      CategoryManager manager = _node.getCategoryManager();
+      Collection<IDifferenceCategory> defaultConfig = manager.getDefaultConfiguration();
+      for (IDifferenceCategory defaultCat : defaultConfig) {
+        String id = defaultCat.getID();
+        IDifferenceCategory actualCat = manager.getCategory(id);
+        if (actualCat != null) {
+          CategoryState defaultState = getActualState(defaultCat);
+          boolean hasImpact = addSilentChange(actualCat, defaultState);
+          hadImpact = hadImpact || hasImpact;
+        }
+      }
+      boolean hasChanges = hasChanges();
+      if (hasChanges != hadChanges) {
+        // Lost its last change or gained its first change
+        firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
+      }
+      if (hadImpact)
+        firePropertyChangeEvent(PROPERTY_CONFIGURATION, null);
+    }
+    /**
+     * Set the state of all categories to the given one, when possible
+     * @param state_p a non-null state
+     */
+    public void setAll(CategoryState state_p) {
+      boolean hadImpact = false;
+      boolean hadChanges = hasChanges();
+      for (IDifferenceCategory cat : getNode().getCategoryManager().getCategories()) {
+        if (cat.isVisible() && cat.isModifiable()) {
+          boolean hasImpact = addSilentChange(cat, state_p);
+          hadImpact = hadImpact || hasImpact;
+        }
+      }
+      boolean hasChanges = hasChanges();
+      if (hasChanges != hadChanges) {
+        // Lost its last change or gained its first change
+        firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
+      }
+      if (hadImpact)
+        firePropertyChangeEvent(PROPERTY_CONFIGURATION, null);
     }
   }
   

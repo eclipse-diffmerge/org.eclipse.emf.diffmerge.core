@@ -32,6 +32,7 @@ public class Messages extends NLS {
   public static String CategoryDialog_ApplyLabel;
   public static String CategoryDialog_Description;
   public static String CategoryDialog_Header;
+  public static String CategoryDialog_ResetButton;
   public static String CategoryViewer_CategoryHeader;
   public static String CategoryViewer_FilteredStateHeader;
   public static String CategoryViewer_FilteredStateTooltip;

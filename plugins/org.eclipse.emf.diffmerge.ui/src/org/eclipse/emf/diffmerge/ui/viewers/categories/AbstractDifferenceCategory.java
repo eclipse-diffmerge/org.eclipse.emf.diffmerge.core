@@ -42,10 +42,29 @@ implements IDifferenceCategory {
    * Constructor
    */
   protected AbstractDifferenceCategory() {
-    _visible = true;
     _active = false;
-    _modifiable = true;
     _inFocusMode = false;
+    _modifiable = true;
+    _visible = true;
+  }
+  
+  /**
+   * @see java.lang.Object#clone()
+   */
+  @Override
+  public IDifferenceCategory clone() throws CloneNotSupportedException {
+    // Increase visibility, see Cloneable
+    return (IDifferenceCategory)super.clone();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copyState(org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory)
+   */
+  public void copyState(IDifferenceCategory peer_p) {
+    setActive(peer_p.isActive());
+    setInFocusMode(peer_p.isInFocusMode());
+    setModifiable(peer_p.isModifiable());
+    setVisible(peer_p.isVisible());
   }
   
   /**

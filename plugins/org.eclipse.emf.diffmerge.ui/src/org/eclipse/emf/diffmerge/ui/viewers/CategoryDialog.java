@@ -22,6 +22,9 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -37,6 +40,9 @@ public class CategoryDialog extends MessageDialog {
   /** The non-null input */
   protected final CategoryViewer.Input _input;
   
+  /** The initially null reset button */
+  protected Button _resetButton;
+  
   
   /**
    * Constructor
@@ -51,6 +57,7 @@ public class CategoryDialog extends MessageDialog {
             IDialogConstants.CANCEL_LABEL },
         1);
     _input = new CategoryViewer.Input(node_p);
+    _resetButton = null;
     setShellStyle(SWT.CLOSE | SWT.MODELESS | SWT.BORDER | SWT.TITLE | SWT.RESIZE);
     setBlockOnOpen(false);
   }
@@ -82,6 +89,14 @@ public class CategoryDialog extends MessageDialog {
     Control result = super.createButtonBar(parent_p);
     getCustomOKButton().setEnabled(false);
     getCustomApplyButton().setEnabled(false);
+    // Sizing the reset button according to the other buttons
+    GridData resetButtonData = (GridData)_resetButton.getLayoutData();
+    Object okButtonDataRaw = getCustomOKButton().getLayoutData();
+    if (okButtonDataRaw instanceof GridData) {
+      GridData okButtonData = (GridData)okButtonDataRaw;
+      resetButtonData.widthHint = okButtonData.widthHint;
+      _resetButton.getParent().layout();
+    }
     return result;
   }
   
@@ -90,6 +105,7 @@ public class CategoryDialog extends MessageDialog {
    */
   @Override
   protected Control createCustomArea(Composite parent_p) {
+    // Main viewer
     CategoryViewer viewer = new CategoryViewer(parent_p);
     _input.addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -104,7 +120,6 @@ public class CategoryDialog extends MessageDialog {
         }
       }
     });
-    viewer.setInput(_input);
     Control result = viewer.getControl();
     result.addDisposeListener(new DisposeListener() {
       /**
@@ -114,6 +129,21 @@ public class CategoryDialog extends MessageDialog {
         _input.removePropertyChangeListeners();
       }
     });
+    // Reset button
+    _resetButton = new Button(parent_p, SWT.PUSH);
+    _resetButton.setText(Messages.CategoryDialog_ResetButton);
+    GridData resetButtonData = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+    _resetButton.setLayoutData(resetButtonData);
+    _resetButton.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        _input.resetToDefault();
+      }
+    });
+    viewer.setInput(_input);
     return result;
   }
   

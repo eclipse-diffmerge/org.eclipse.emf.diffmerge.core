@@ -67,6 +67,9 @@ public class CategoryManager {
   /** The modifiable set of active categories among the registered ones */
   protected final Set<IDifferenceCategory> _activeCategories;
   
+  /** The set of default category states */
+  protected final Set<IDifferenceCategory> _defaultConfiguration;
+  
   /** The modifiable list of root category items that should be visible in the UI */
   protected final List<IDifferenceCategoryItem> _uiRootItems;
   
@@ -85,6 +88,7 @@ public class CategoryManager {
     _node = node_p;
     _categories = new LinkedHashMap<String, IDifferenceCategory>();
     _activeCategories = new HashSet<IDifferenceCategory>();
+    _defaultConfiguration = new HashSet<IDifferenceCategory>();
     _uiRootItems = new ArrayList<IDifferenceCategoryItem>();
     _uiChildrenItems = new HashMap<IDifferenceCategorySet, Collection<IDifferenceCategoryItem>>();
     _matchToNb = new FHashMap<EMatch, Integer>(IEqualityTester.BY_EQUALS);
@@ -291,6 +295,14 @@ public class CategoryManager {
   }
   
   /**
+   * Return the set of category states which is registered as the default configuration
+   * @return a non-null, unmodifiable, potentially empty collection
+   */
+  public Collection<IDifferenceCategory> getDefaultConfiguration() {
+    return Collections.unmodifiableSet(_defaultConfiguration);
+  }
+  
+  /**
    * Return the kind of the given difference with filtering
    * @param difference_p a non-null difference
    * @return FROM_LEFT_*, FROM_RIGHT_*, CONFLICT, MODIFIED or NONE
@@ -337,47 +349,6 @@ public class CategoryManager {
     if (currentNb == null)
       currentNb = Integer.valueOf(0);
     return currentNb.intValue();
-  }
-  
-  /**
-   * Return the list of category items that should be visible in the UI as children of
-   * the given category set
-   * @return a non-null, potentially empty, unmodifiable list
-   */
-  public List<IDifferenceCategoryItem> getUIChildrenItems(IDifferenceCategorySet categorySet_p) {
-    List<IDifferenceCategoryItem> result = new ArrayList<IDifferenceCategoryItem>(
-        categorySet_p.getChildren());
-    Collection<IDifferenceCategoryItem> visibleChildren = _uiChildrenItems.get(categorySet_p);
-    if (visibleChildren != null) {
-      result.retainAll(visibleChildren);
-      result = Collections.unmodifiableList(result);
-    } else {
-      result = Collections.emptyList();
-    }
-    return result;
-  }
-  
-  /**
-   * Return the number of differences associated to the given match from a user's perspective,
-   * without recounting
-   * @param match_p a non-null match
-   * @return a positive int or 0
-   */
-  public int getUIDifferenceNumber(IMatch match_p) {
-    if (_node.isHideDifferenceNumbers()) return 0;
-    int result = getDifferenceNumber(match_p);
-    IElementPresence eltPresence = match_p.getElementPresenceDifference();
-    if (eltPresence != null && !isFiltered(eltPresence))
-      result--;
-    return result;
-  }
-  
-  /**
-   * Return the root category items that should be visible in the UI
-   * @return a non-null, potentially empty, unmodifiable list
-   */
-  public List<IDifferenceCategoryItem> getUIRootItems() {
-    return Collections.unmodifiableList(_uiRootItems);
   }
   
   /**
@@ -449,6 +420,47 @@ public class CategoryManager {
         result.add(difference);
     }
     return Collections.unmodifiableList(result);
+  }
+  
+  /**
+   * Return the list of category items that should be visible in the UI as children of
+   * the given category set
+   * @return a non-null, potentially empty, unmodifiable list
+   */
+  public List<IDifferenceCategoryItem> getUIChildrenItems(IDifferenceCategorySet categorySet_p) {
+    List<IDifferenceCategoryItem> result = new ArrayList<IDifferenceCategoryItem>(
+        categorySet_p.getChildren());
+    Collection<IDifferenceCategoryItem> visibleChildren = _uiChildrenItems.get(categorySet_p);
+    if (visibleChildren != null) {
+      result.retainAll(visibleChildren);
+      result = Collections.unmodifiableList(result);
+    } else {
+      result = Collections.emptyList();
+    }
+    return result;
+  }
+  
+  /**
+   * Return the number of differences associated to the given match from a user's perspective,
+   * without recounting
+   * @param match_p a non-null match
+   * @return a positive int or 0
+   */
+  public int getUIDifferenceNumber(IMatch match_p) {
+    if (_node.isHideDifferenceNumbers()) return 0;
+    int result = getDifferenceNumber(match_p);
+    IElementPresence eltPresence = match_p.getElementPresenceDifference();
+    if (eltPresence != null && !isFiltered(eltPresence))
+      result--;
+    return result;
+  }
+  
+  /**
+   * Return the root category items that should be visible in the UI
+   * @return a non-null, potentially empty, unmodifiable list
+   */
+  public List<IDifferenceCategoryItem> getUIRootItems() {
+    return Collections.unmodifiableList(_uiRootItems);
   }
   
   /**
@@ -784,6 +796,33 @@ public class CategoryManager {
     if (end != null)
       result = representAsUserDifference(end) && !representAsMoveOrigin(path_p);
     return result;
+  }
+  
+  /**
+   * Reset the states of the current categories to match the default ones
+   */
+  public void resetToDefault() {
+    for (IDifferenceCategory defaultCat : _defaultConfiguration) {
+      String id = defaultCat.getID();
+      IDifferenceCategory actualCat = getCategory(id);
+      if (actualCat != null)
+        actualCat.copyState(defaultCat);
+    }
+  }
+  
+  /**
+   * Set the set of current states of all current categories as the default
+   */
+  public void setDefaultConfiguration() {
+    _defaultConfiguration.clear();
+    for (IDifferenceCategory category : getCategories()) {
+      try {
+        IDifferenceCategory clone = category.clone();
+        _defaultConfiguration.add(clone);
+      } catch (CloneNotSupportedException e) {
+        // Exclude from default configuration and proceed
+      }
+    }
   }
   
   /**

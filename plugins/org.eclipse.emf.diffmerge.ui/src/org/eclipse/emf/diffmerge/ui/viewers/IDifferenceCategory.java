@@ -24,6 +24,17 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 public interface IDifferenceCategory extends IDifferenceCategoryItem, Cloneable {
   
   /**
+   * @see Object#clone()
+   */
+  IDifferenceCategory clone() throws CloneNotSupportedException;
+  
+  /**
+   * Set the state of this category to reflect the state of the given category
+   * @param peer_p a non-null category
+   */
+  void copyState(IDifferenceCategory peer_p);
+  
+  /**
    * Return whether the given difference belongs to this category in the context
    * of the given diff node
    * @param difference_p a non-null difference
