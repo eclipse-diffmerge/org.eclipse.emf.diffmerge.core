@@ -1431,17 +1431,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected ToolItem createToolLock(ToolBar toolbar_p, final boolean onLeft_p) {
     final ToolItem result = new ToolItem(toolbar_p, SWT.CHECK);
-    Image lockImage = EMFDiffMergeUIPlugin.getDefault().getImage(EMFDiffMergeUIPlugin.ImageID.LOCK);
-    result.setImage(lockImage);
-    String lockTooltip = Messages.ComparisonViewer_LockTooltip;
-    result.setToolTipText(lockTooltip);
+    final Image openLockImage =
+        EMFDiffMergeUIPlugin.getDefault().getImage(EMFDiffMergeUIPlugin.ImageID.LOCK_OPEN);
+    final Image closedLockImage =
+        EMFDiffMergeUIPlugin.getDefault().getImage(EMFDiffMergeUIPlugin.ImageID.LOCK_CLOSED);
+    result.setImage(openLockImage);
+    final String lockedTooltip = Messages.ComparisonViewer_LockTooltip_Locked;
+    final String unlockedTooltip = Messages.ComparisonViewer_LockTooltip_Unlocked;
+    result.setToolTipText(unlockedTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        getInput().setEditable(!result.getSelection(), onLeft_p);
+        boolean editable = !result.getSelection();
+        getInput().setEditable(editable, onLeft_p);
+        result.setImage(editable? openLockImage: closedLockImage);
+        result.setToolTipText(editable? unlockedTooltip: lockedTooltip);
         refreshTools();
       }
     });
@@ -1453,7 +1460,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null) {
-            result.setSelection(!input.isEditable(onLeft_p));
+            boolean editable = input.isEditable(onLeft_p);
+            result.setSelection(!editable);
+            result.setImage(editable? openLockImage:closedLockImage);
+            result.setToolTipText(editable? unlockedTooltip: lockedTooltip);
             result.setEnabled(input.isEditionPossible(onLeft_p));
           }
         }
