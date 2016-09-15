@@ -145,10 +145,10 @@ public class CategoryManager {
     // Non-containment differences
     int result = countNonContainmentDifferences(match_p, withFilters_p);
     // Move
-    if (isMove(match_p, true))
+    if (isMove(match_p, withFilters_p))
       result++;
     // Addition/deletion
-    if (isUnmatched(match_p, true))
+    if (isUnmatched(match_p, withFilters_p))
       result++;
     return result;
   }
@@ -558,13 +558,24 @@ public class CategoryManager {
    * @param difference_p a non-null difference
    */
   public boolean isFiltered(IDifference difference_p) {
+    boolean globalFocus = false; // At least one category is in focus mode
+    boolean diffFocus = false; // At least one covering category is in focus mode
     for (IDifferenceCategory category : _activeCategories) {
+      boolean catFocus = category.isInFocusMode();
+      globalFocus = globalFocus || catFocus;
       boolean covered = category.covers(difference_p, _node);
-      boolean focus = category.isInFocusMode();
-      if (covered && !focus || !covered && focus)
-        return true;
+      if (covered) {
+        // Covered by active category
+        if (!catFocus) {
+          // Covered by category in filtering mode
+          return true;
+        }
+        // Else covered by category in focus mode: proceed
+        diffFocus = true;
+      }
     }
-    return false;
+    // Not filtered out by any category
+    return globalFocus && !diffFocus; // All categories in focus mode are non-covering
   }
   
   /**
@@ -831,11 +842,7 @@ public class CategoryManager {
   public void update() {
     updateActiveCategories();
     updateUIItems();
-    getMatchToNb().clear();
-    for (IMatch match : _node.getActualComparison().getMapping().getContents()) {
-      int nb = countDifferences(match, true);
-      incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
-    }
+    updateDifferenceNumbers();
   }
   
   /**
@@ -846,6 +853,17 @@ public class CategoryManager {
     for (IDifferenceCategory category : getCategories()) {
       if (category.isApplicable(_node) && category.isActive())
         _activeCategories.add(category);
+    }
+  }
+  
+  /**
+   * Re-compute difference numbers
+   */
+  protected void updateDifferenceNumbers() {
+    getMatchToNb().clear();
+    for (IMatch match : _node.getActualComparison().getMapping().getContents()) {
+      int nb = countDifferences(match, true);
+      incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
     }
   }
   
