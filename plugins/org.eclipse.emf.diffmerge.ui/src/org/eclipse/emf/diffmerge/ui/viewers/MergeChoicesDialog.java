@@ -40,6 +40,9 @@ public class MergeChoicesDialog extends MessageDialog {
   /** Whether the choice for children is enabled */
   private final boolean _askAboutChildren;
   
+  /** Whether the incremental mode is acceptable in this context */
+  private final boolean _acceptIncrementalMode;
+  
   
 	/**
 	 * Constructor
@@ -47,14 +50,16 @@ public class MergeChoicesDialog extends MessageDialog {
 	 * @param title_p a non-null string
 	 * @param data_p the non-null data that this dialog allows editing
 	 * @param askAboutChildren_p whether the choice for children is enabled
+   * @param acceptIncrementalMode_p whether the incremental mode is acceptable in this context
 	 */
 	public MergeChoicesDialog(Shell parentShell_p, String title_p, MergeChoiceData data_p,
-	    boolean askAboutChildren_p) {
+	    boolean askAboutChildren_p, boolean acceptIncrementalMode_p) {
 		super(parentShell_p, title_p, null,
 		    Messages.MergeChoicesDialog_Question, MessageDialog.QUESTION, 
 				new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 0);
 		_data = data_p;
 		_askAboutChildren = askAboutChildren_p;
+		_acceptIncrementalMode = acceptIncrementalMode_p;
 	}
 	
 	/**
@@ -80,18 +85,20 @@ public class MergeChoicesDialog extends MessageDialog {
       }
     });
     // Incremental mode
-    Button incrementalModeButton = new Button(result, SWT.CHECK);
-    incrementalModeButton.setText(Messages.MergeChoicesDialog_IncrementalMode);
-    incrementalModeButton.setSelection(getData().isIncrementalMode());
-    incrementalModeButton.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        getData().setIncrementalMode(!getData().isIncrementalMode());
-      }
-    });
+    if (_acceptIncrementalMode) {
+      Button incrementalModeButton = new Button(result, SWT.CHECK);
+      incrementalModeButton.setText(Messages.MergeChoicesDialog_IncrementalMode);
+      incrementalModeButton.setSelection(getData().isIncrementalMode());
+      incrementalModeButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          getData().setIncrementalMode(!getData().isIncrementalMode());
+        }
+      });
+    }
     // Show impact
     Button showImpactButton = new Button(result, SWT.CHECK);
     showImpactButton.setText(Messages.MergeChoicesDialog_ShowImpact);

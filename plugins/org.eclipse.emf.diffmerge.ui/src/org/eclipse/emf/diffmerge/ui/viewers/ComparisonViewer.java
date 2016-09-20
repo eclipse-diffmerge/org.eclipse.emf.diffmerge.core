@@ -1242,7 +1242,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        merge(onLeft_p);
+        merge(onLeft_p, false);
       }
     });
     return result;
@@ -1510,7 +1510,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        merge(toLeft_p);
+        merge(toLeft_p, true);
       }
     });
     return result;
@@ -2060,10 +2060,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param input_p a non-null diff node input
    * @param selectedMatches_p the non-null, potentially empty set of matches that have
    *          been selected for merge
+   * @param acceptIncrementalMode_p whether the incremental mode is acceptable in this context
    */
-  protected void makeMergeChoices(MergeChoiceData choices_p,
-      EMFDiffNode input_p, List<EMatch> selectedMatches_p) {
-    boolean requiresInteractions = interactionsRequiredForMerge(choices_p, input_p, selectedMatches_p);
+  protected void makeMergeChoices(MergeChoiceData choices_p, EMFDiffNode input_p,
+      List<EMatch> selectedMatches_p, boolean acceptIncrementalMode_p) {
+    boolean requiresInteractions = interactionsRequiredForMerge(
+        choices_p, input_p, selectedMatches_p);
     if (requiresInteractions) {
       // Group of differences
       boolean mayAskAboutChildren = false;
@@ -2079,7 +2081,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       // Choice dialog
       MergeChoicesDialog choicesDialog =
           new MergeChoicesDialog(getShell(), Messages.ComparisonViewer_MergeHeader,
-              choices_p, mayAskAboutChildren);
+              choices_p, mayAskAboutChildren, acceptIncrementalMode_p);
       choicesDialog.open();
       if (choices_p.isProceed()) {
         if (mayAskAboutChildren)
@@ -2093,25 +2095,29 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Merge the current selection to the given side
    * @param toLeft_p whether destination is left or right
+   * @param acceptIncrementalMode_p whether the incremental mode is acceptable in this context
    */
-  protected void merge(final boolean toLeft_p) {
-    merge(toLeft_p, getSelection());
+  protected void merge(boolean toLeft_p, boolean acceptIncrementalMode_p) {
+    merge(toLeft_p, acceptIncrementalMode_p, getSelection());
   }
   
   /**
    * Merge the given selection to the given side
    * @param toLeft_p whether destination is left or right
+   * @param acceptIncrementalMode_p whether the incremental mode is acceptable in this context
    * @param selection_p the potentially null selection (e.g., set of matches) to merge
    */
-  protected void merge(final boolean toLeft_p, final ComparisonSelection selection_p) {
+  protected void merge(final boolean toLeft_p, boolean acceptIncrementalMode_p,
+      final ComparisonSelection selection_p) {
     if (selection_p == null) return; // Should not happen according to merge tool activation
     final EMFDiffNode input = getInput();
     // Define the set of selected matches
     List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection_p);
     // Make choices
     MergeChoiceData choices = new MergeChoiceData(input.isDefaultCoverChildren(),
-        input.isDefaultIncrementalMode(), input.isDefaultShowImpact());
-    makeMergeChoices(choices, input, selectedMatches);
+        input.isDefaultIncrementalMode() && acceptIncrementalMode_p,
+        input.isDefaultShowImpact());
+    makeMergeChoices(choices, input, selectedMatches, acceptIncrementalMode_p);
     if (!choices.isProceed()) return;
     // Merge is set to proceed and choices have been made
     final Role destination = input.getRoleForSide(toLeft_p);
