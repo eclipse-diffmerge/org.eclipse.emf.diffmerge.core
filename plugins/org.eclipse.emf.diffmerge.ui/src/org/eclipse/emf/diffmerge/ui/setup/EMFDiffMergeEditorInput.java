@@ -163,6 +163,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   @Override
   protected void contentsCreated() {
     super.contentsCreated();
+    checkSelectionProvider();
     _viewer.getControl().addDisposeListener(new DisposeListener() {
       /**
        * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
@@ -543,7 +544,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   @Override
   public boolean isSaveNeeded() {
     // Redefined for compatibility with Indigo and synchronization with workbench views
-    checkSelectionProvider(); // This is a hack
+    checkSelectionProvider(); // For Eclipse 3.x when canRunAsJob() is true
     return _isDirty;
   }
   

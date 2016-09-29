@@ -37,6 +37,8 @@ public class MergedDifferenceCategory extends AbstractDifferenceCategory {
     super();
     setActive(true);
     setInFocusMode(false);
+    setVisible(true);
+    setModifiable(false);
   }
   
   /**

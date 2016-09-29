@@ -169,6 +169,7 @@ public class Messages extends NLS {
   public static String EMFDiffMergeLabelProvider_ValueDeletion;
   public static String EMFDiffMergeUIPlugin_Label;
   public static String DefaultComparisonMethodFactory_Label;
+  public static String DirectedComparisonViewer_Ignore;
   public static String EnhancedComparisonTreeViewer_DefaultHeader;
   public static String EObjectScopeDefinition_LabelInResource;
   public static String EObjectScopeDefinitionFactory_Label;

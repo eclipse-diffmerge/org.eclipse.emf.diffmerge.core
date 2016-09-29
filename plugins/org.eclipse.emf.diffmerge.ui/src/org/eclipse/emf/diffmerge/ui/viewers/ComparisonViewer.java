@@ -43,6 +43,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
@@ -60,6 +61,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -188,6 +190,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   public ComparisonViewer(Composite parent_p, IActionBars actionBars_p) {
     super(parent_p, actionBars_p);
+  }
+  
+  /**
+   * Return whether context menus can be contributed via the usual ADDITIONS group
+   * in the given viewer
+   */
+  protected boolean acceptContextMenuAdditions(Viewer viewer_p) {
+    return true;
   }
   
   /**
@@ -665,17 +675,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     return result;
   }
   
-//  /**
-//   * Fill the menu of the synthesis viewer with filtering features
-//   * @param synthesisMenu_p a non-null menu
-//   */
-//  protected void createMenuSynthesisFilters(Menu synthesisMenu_p) {
-//    createMenuShowAdditions(synthesisMenu_p);
-//    createMenuShowDeletions(synthesisMenu_p);
-//    createMenuShowMoves(synthesisMenu_p);
-//    createMenuShowNonContainmentDifferences(synthesisMenu_p);
-//  }
-//  
   /**
    * Fill the menu of the synthesis viewer with miscellaneous features
    * @param synthesisMenu_p a non-null menu
@@ -839,6 +838,34 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create context menus for the given viewer
+   * @param viewer_p a non-null viewer
+   * @param useLocalSelectionProvider_p whether the selection provider of the viewer must be used
+   * @return a potentially null menu manager for the context menus
+   */
+  protected MenuManager createViewerContextMenus(HeaderViewer<?> viewer_p,
+      boolean useLocalSelectionProvider_p) {
+    MenuManager result = new MenuManager();
+    result.setRemoveAllWhenShown(true);
+    Control control = viewer_p.getInnerViewer().getControl();
+    Menu contextMenu = result.createContextMenu(control);
+    control.setMenu(contextMenu);
+    ISelectionProvider selectionProvider = useLocalSelectionProvider_p?
+        viewer_p.getInnerViewer(): getMultiViewerSelectionProvider();
+    // Diff/merge-specific menu items
+    populateContextMenu(result, viewer_p, selectionProvider);
+    // External contributions
+    if (acceptContextMenuAdditions(viewer_p)) {
+      IWorkbenchPartSite site = getSite();
+      if (site != null) {
+        result.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+        site.registerContextMenu(result, selectionProvider);
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Create, configure and return a features viewer
    * @param parent_p a non-null composite
    * @return a non-null viewer
@@ -974,26 +1001,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     });
     // ... and enable context menus
-    createViewerSynthesisContextMenus(result);
-    return result;
-  }
-  
-  /**
-   * Create context menus for the synthesis viewer
-   * @param viewer_p the non-null synthesis viewer
-   * @return a potentially null menu manager for the context menus
-   */
-  protected MenuManager createViewerSynthesisContextMenus(EnhancedComparisonTreeViewer viewer_p) {
-    MenuManager result = null;
-    IWorkbenchPartSite site = getSite();
-    if (site != null) {
-      result = new MenuManager();
-      Control control = viewer_p.getInnerViewer().getControl();
-      Menu contextMenu = result.createContextMenu(control);
-      control.setMenu(contextMenu);
-      site.registerContextMenu(
-          IWorkbenchActionConstants.MB_ADDITIONS, result, viewer_p.getInnerViewer());
-    }
+    createViewerContextMenus(result, false);
     return result;
   }
   
@@ -1064,15 +1072,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     });
     // ... and enable context menus
-    IWorkbenchPartSite site = getSite();
-    if (site != null) {
-      MenuManager menuManager = new MenuManager();
-      Control control = result.getInnerViewer().getControl();
-      Menu contextMenu = menuManager.createContextMenu(control);
-      control.setMenu(contextMenu);
-      site.registerContextMenu(
-          IWorkbenchActionConstants.MB_ADDITIONS, menuManager, getMultiViewerSelectionProvider());
-    }
+    createViewerContextMenus(result, true);
     return result;
   }
   
@@ -1283,9 +1283,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a potentially null tool item
    */
   protected ToolItem createToolFilter(ToolBar toolbar_p) {
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
     final ToolItem result = new ToolItem(toolbar_p, SWT.CHECK);
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.FILTER));
     result.setToolTipText(Messages.ComparisonViewer_FilterToolTip);
@@ -1386,7 +1384,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.WARNING));
-    result.setToolTipText(Messages.ComparisonViewer_InconsistencyTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -1408,6 +1405,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
+    result.setDisabledImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY));
     result.setEnabled(false);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -1416,7 +1414,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           IComparison comparison = getComparison();
-          result.setEnabled(comparison != null && !comparison.isConsistent());
+          boolean enabled = comparison != null && !comparison.isConsistent();
+          result.setEnabled(enabled);
+          result.setToolTipText(enabled? Messages.ComparisonViewer_InconsistencyTooltip: null);
         }
       }
     });
@@ -2182,6 +2182,18 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Define the diff/merge-specific content of the contextual menu for
+   * the given viewer and associated (possibly the same) selection provider
+   * @param menuManager_p a non-null menu manager
+   * @param viewer_p a non-null viewer
+   * @param selectionProvider_p a non-null selection provider
+   */
+  protected void populateContextMenu(MenuManager menuManager_p,
+      Viewer viewer_p, ISelectionProvider selectionProvider_p) {
+    // Nothing by default
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#refresh()
    */
   @Override
@@ -2392,9 +2404,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show uncounted elements
     createMenuShowUncounted(synthesisMenu);
-//    // Filters
-//    new MenuItem(synthesisMenu, SWT.SEPARATOR);
-//    createMenuSynthesisFilters(synthesisMenu);
     // UI options
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     createMenuSynthesisMisc(synthesisMenu);
@@ -2432,9 +2441,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the navigation tools in the given tool bar
    */
   protected void setupToolsDetails(ToolBar toolbar_p) {
-    // Navigation tools
-    createToolNavigationNext(toolbar_p);
-    createToolNavigationPrevious(toolbar_p);
+    // Nothing by default
   }
   
   /**
@@ -2456,10 +2463,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolInconsistency(toolbar_p);
+    // Next / Previous
+    new ToolItem(toolbar_p, SWT.SEPARATOR);
+    createToolNavigationNext(toolbar_p);
+    createToolNavigationPrevious(toolbar_p);
+    // Expand / Collapse / Sort
+    new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolExpand(toolbar_p);
     createToolCollapse(toolbar_p);
     createToolSort(toolbar_p);
+    // Filters and sync
+    new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolFilter(toolbar_p);
+    new ToolItem(toolbar_p, SWT.SEPARATOR);
     createToolSync(toolbar_p);
     new ToolItem(toolbar_p, SWT.SEPARATOR);
   }

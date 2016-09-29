@@ -469,7 +469,9 @@ public class CategoryManager {
    */
   public boolean hasChildrenForMergeFiltered(IMatch match_p) {
     EComparison comparison = _node.getActualComparison();
-    List<IMatch> candidates = comparison.getContentsOf(match_p, _node.getDrivingRole());
+    Role role = match_p.isPartial()?
+        match_p.getUncoveredRole().opposite(): _node.getDrivingRole();
+    List<IMatch> candidates = comparison.getContentsOf(match_p, role);
     for (IMatch candidate : candidates) {
       if (getDifferenceNumber(candidate) > 0)
         return true;
