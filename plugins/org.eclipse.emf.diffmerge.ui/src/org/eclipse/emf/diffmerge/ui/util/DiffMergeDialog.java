@@ -22,6 +22,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -38,7 +39,7 @@ public class DiffMergeDialog extends Dialog {
   protected String _title;
   
   /** The non-null input */
-  protected EMFDiffNode _input;
+  protected final EMFDiffNode _input;
   
   
   /**
@@ -67,10 +68,17 @@ public class DiffMergeDialog extends Dialog {
    */
   @Override
   protected void createButtonsForButtonBar(Composite parent_p) {
-    boolean editable = _input.isEditionPossible(true) || _input.isEditionPossible(false);
+    boolean editable = isEditable();
     if (editable)
       createOKButton(parent_p);
     createButton(parent_p, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, !editable);
+  }
+  
+  /**
+   * Return whether the end user may edit either side
+   */
+  protected boolean isEditable() {
+    return _input.isEditionPossible(true) || _input.isEditionPossible(false);
   }
   
   /**
@@ -98,8 +106,11 @@ public class DiffMergeDialog extends Dialog {
    * Create a validation button
    * @param parent_p a non-null composite
    */
-  protected void createOKButton(Composite parent_p) {
-    createButton(parent_p, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+  protected Button createOKButton(Composite parent_p) {
+    Button result = createButton(
+        parent_p, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+    result.setEnabled(_input.getActualComparison().hasRemainingDifferences());
+    return result;
   }
   
   /**
