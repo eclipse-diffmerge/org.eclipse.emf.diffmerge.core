@@ -45,7 +45,6 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.util.structures.FHashMap;
 import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
-import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -91,7 +90,7 @@ public class CategoryManager {
     _defaultConfiguration = new HashSet<IDifferenceCategory>();
     _uiRootItems = new ArrayList<IDifferenceCategoryItem>();
     _uiChildrenItems = new HashMap<IDifferenceCategorySet, Collection<IDifferenceCategoryItem>>();
-    _matchToNb = new FHashMap<EMatch, Integer>(IEqualityTester.BY_EQUALS);
+    _matchToNb = new FHashMap<EMatch, Integer>();
   }
   
   /**
