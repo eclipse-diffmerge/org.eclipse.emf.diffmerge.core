@@ -104,11 +104,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      */
     @Override
     public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + _context.hashCode();
-      result = prime * result + _match.hashCode();
-      return result;
+      return _context.hashCode() + _match.hashCode();
     }
   }
   

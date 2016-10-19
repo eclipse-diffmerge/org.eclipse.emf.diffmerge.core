@@ -1164,14 +1164,13 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    */
   @Override
   public int hashCode() {
-    EObject target = get(TARGET);
-    EObject reference = get(REFERENCE);
-    EObject ancestor = get(ANCESTOR);
-    final int prime = 31;
-    int result = 1;
-    result = prime * (target == null? 0: target.hashCode());
-    result = prime * (reference == null? 0: reference.hashCode());
-    result = prime * (ancestor == null? 0: ancestor.hashCode());
+    int result = 0;
+    if (get(TARGET) != null)
+      result += get(TARGET).hashCode();
+    if (get(REFERENCE) != null)
+      result += get(REFERENCE).hashCode();
+    if (get(ANCESTOR) != null)
+      result += get(ANCESTOR).hashCode();
     return result;
   }
 
