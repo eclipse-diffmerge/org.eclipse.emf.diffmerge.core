@@ -16,6 +16,7 @@ package org.eclipse.emf.diffmerge.impl.scopes;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -111,14 +112,25 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
     List<Object> result;
     try {
       if (source_p.eIsSet(attribute_p)) {
+        // Attribute is set
         Object value = source_p.eGet(attribute_p, resolveProxies());
-        if (FeatureMapUtil.isMany(source_p, attribute_p))
-          result = Collections.unmodifiableList((List<Object>)value);
-        else if (value != null)
+        if (FeatureMapUtil.isMany(source_p, attribute_p)) {
+          // Set, many (may contain null values)
+          result = new LinkedList<Object>();
+          for (Object inValue : (List<Object>)value) {
+            if (inValue != null)
+              result.add(inValue);
+          }
+          result = Collections.unmodifiableList(result);
+        } else if (value != null) {
+          // Set, not many, not null
           result = Collections.singletonList(value);
-        else
+        } else {
+          // Set, not many, null
           result = Collections.emptyList();
+        }
       } else {
+        // Attribute is not set
         result = Collections.emptyList();
       }
     } catch (RuntimeException e) {
