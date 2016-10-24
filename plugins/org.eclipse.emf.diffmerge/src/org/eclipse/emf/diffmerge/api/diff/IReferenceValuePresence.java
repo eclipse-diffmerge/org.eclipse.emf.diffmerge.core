@@ -14,9 +14,10 @@
  */
 package org.eclipse.emf.diffmerge.api.diff;
 
+import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatch;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-
 
 
 /**
@@ -38,6 +39,12 @@ public interface IReferenceValuePresence extends IValuePresence {
   IReferenceValuePresence getOpposite();
   
   /**
+   * Return the out-of-scope value being held, if any
+   * @return an element that is null if and only if !isOutOfScope()
+   */
+  EObject getOutOfScopeValue();
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#getSymmetrical()
    */
   IReferenceValuePresence getSymmetrical();
@@ -52,6 +59,7 @@ public interface IReferenceValuePresence extends IValuePresence {
   
   /**
    * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#getValue()
+   * @return a match that is null if and only if isOutOfScope()
    */
   IMatch getValue();
   
@@ -61,6 +69,14 @@ public interface IReferenceValuePresence extends IValuePresence {
    * @param peer_p a non-null reference value presence
    */
   boolean isOppositeOf(IReferenceValuePresence peer_p);
+  
+  /**
+   * Return whether the value is outside the presence scope.
+   * Class invariant:
+   *    isOutOfScope() == (getOutOfScopeValue() != null) == (getValue() == null)
+   * @see IDiffPolicy#isSharedOutOfScopeElement(EObject)
+   */
+  boolean isOutOfScope();
   
   /**
    * Return whether the given reference value presence corresponds to

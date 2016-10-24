@@ -219,13 +219,20 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
    */
   protected Object getValueToRepresent(IValuePresence presence_p) {
     Object result;
-    if (presence_p.getFeature() instanceof EAttribute)
+    if (presence_p.getFeature() instanceof EAttribute) {
       result = presence_p.getValue();
-    else
-      if (isOwnership(getInput().getMatchAndFeature()))
-        result = ((IReferenceValuePresence)presence_p).getElementMatch().get(presence_p.getPresenceRole());
-      else
-        result = ((IReferenceValuePresence)presence_p).getValue().get(presence_p.getPresenceRole());
+    } else {
+      IReferenceValuePresence presence = (IReferenceValuePresence)presence_p;
+      Role presenceRole = presence.getPresenceRole();
+      if (isOwnership(getInput().getMatchAndFeature())) {
+        result = presence.getElementMatch().get(presenceRole);
+      } else {
+        if (presence.isOutOfScope())
+          result = presence.getOutOfScopeValue();
+        else
+          result = presence.getValue().get(presenceRole);
+      }
+    }
     return result;
   }
   

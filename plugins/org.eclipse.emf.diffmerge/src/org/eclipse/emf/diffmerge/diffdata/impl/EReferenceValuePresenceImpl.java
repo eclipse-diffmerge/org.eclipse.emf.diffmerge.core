@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl#getOutOfScopeValue <em>Out Of Scope Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +62,16 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
    * @ordered
    */
   protected EMatch value;
+
+  /**
+   * The cached value of the '{@link #getOutOfScopeValue() <em>Out Of Scope Value</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getOutOfScopeValue()
+   * @generated
+   * @ordered
+   */
+  protected EObject outOfScopeValue;
 
   /**
    * <!-- begin-user-doc -->
@@ -86,6 +97,24 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
       Role presenceRole_p, boolean isOrder_p) {
     super(comparison_p, elementMatch_p, reference_p, presenceRole_p, isOrder_p);
     value = value_p;
+    ((IMatch.Editable) elementMatch).addRelatedDifference(this);
+  }
+
+  /**
+   * Constructor for out-of-scope value
+   * @param comparison_p the non-null comparison to which this difference belongs
+   * @param elementMatch_p the non-null match for the element holding the value
+   * @param reference_p the non-null reference holding the value
+   * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
+   * @param isOrder_p whether the value presence is solely due to ordering
+   * @param outOfScopeValue_p the non-null out-of-scope value held
+   * @generated NOT
+   */
+  public EReferenceValuePresenceImpl(EComparison comparison_p,
+      EMatch elementMatch_p, EReference reference_p,
+      Role presenceRole_p, boolean isOrder_p, EObject outOfScopeValue_p) {
+    super(comparison_p, elementMatch_p, reference_p, presenceRole_p, isOrder_p);
+    outOfScopeValue = outOfScopeValue_p;
     ((IMatch.Editable) elementMatch).addRelatedDifference(this);
   }
 
@@ -140,6 +169,34 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
+  public EObject getOutOfScopeValue() {
+    if (outOfScopeValue != null && outOfScopeValue.eIsProxy()) {
+      InternalEObject oldOutOfScopeValue = (InternalEObject) outOfScopeValue;
+      outOfScopeValue = eResolveProxy(oldOutOfScopeValue);
+      if (outOfScopeValue != oldOutOfScopeValue) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+              DiffdataPackage.EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE,
+              oldOutOfScopeValue, outOfScopeValue));
+      }
+    }
+    return outOfScopeValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EObject basicGetOutOfScopeValue() {
+    return outOfScopeValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
@@ -147,6 +204,10 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
       if (resolve)
         return getValue();
       return basicGetValue();
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE:
+      if (resolve)
+        return getOutOfScopeValue();
+      return basicGetOutOfScopeValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -161,6 +222,8 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     switch (featureID) {
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
       return value != null;
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE:
+      return outOfScopeValue != null;
     }
     return super.eIsSet(featureID);
   }
@@ -172,9 +235,13 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
   public IReferenceValuePresence getOpposite() {
     IReferenceValuePresence result = null;
     EReference opposite = getFeature().getEOpposite();
-    if (opposite != null)
-      result = getValue().getReferenceValueDifference(opposite,
-          getElementMatch());
+    if (opposite != null) {
+      IMatch valueMatch = getValue();
+      if (valueMatch != null) {
+        result = valueMatch.getReferenceValueDifference(opposite,
+            getElementMatch());
+      }
+    }
     return result;
   }
 
@@ -207,8 +274,10 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
    * @generated NOT
    */
   public IReferenceValuePresence getSymmetricalOwnership() {
-    IReferenceValuePresence result = getValue().getOwnershipDifference(
-        getAbsenceRole());
+    IReferenceValuePresence result = null;
+    IMatch valueMatch = getValue();
+    if (valueMatch != null)
+      result = getValue().getOwnershipDifference(getAbsenceRole());
     return result;
   }
 
@@ -237,9 +306,17 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     return getPresenceRole() == peer_p.getPresenceRole()
         && getFeature().getEOpposite() == peer_p.getFeature()
         && getElementMatch() == peer_p.getValue()
-        && getValue() == peer_p.getElementMatch();
+        && getValue() != null && getValue() == peer_p.getElementMatch();
   }
-
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence#isOutOfScope()
+   * @generated NOT
+   */
+  public boolean isOutOfScope() {
+    return getValue() == null;
+  }
+  
   /**
    * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isUnrelatedToContainmentTree()
    * @generated NOT
@@ -255,7 +332,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
   public boolean isSymmetricalOwnershipTo(IReferenceValuePresence peer_p) {
     return getAbsenceRole() == peer_p.getPresenceRole()
         && getFeature().isContainment() && peer_p.getFeature().isContainment()
-        && getValue() == peer_p.getValue();
+        && getValue() != null && getValue() == peer_p.getValue();
   }
 
   /**
@@ -368,5 +445,5 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     // Otherwise, we know this difference will be merged implicitly because of dependencies
     // since a required difference implies this difference
   }
-
+  
 } //EReferenceValuePresenceImpl

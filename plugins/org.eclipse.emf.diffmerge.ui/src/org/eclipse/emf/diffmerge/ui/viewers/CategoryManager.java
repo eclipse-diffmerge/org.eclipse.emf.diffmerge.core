@@ -623,8 +623,12 @@ public class CategoryManager {
    * @param difference_p a potentially null difference
    */
   public boolean isMove(IDifference difference_p) {
-    return isOwnership(difference_p) &&
-        !((IReferenceValuePresence)difference_p).getValue().isPartial();
+    boolean result = false;
+    if (isOwnership(difference_p)) {
+      IMatch valueMatch = ((IReferenceValuePresence)difference_p).getValue();
+      result = valueMatch != null && !valueMatch.isPartial();
+    }
+    return result;
   }
   
   /**

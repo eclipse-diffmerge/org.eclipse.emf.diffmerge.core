@@ -1145,13 +1145,22 @@ public interface DiffdataPackage extends EPackage {
   int EREFERENCE_VALUE_PRESENCE__VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Out Of Scope Value</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>EReference Value Presence</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT + 1;
+  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.
@@ -2009,6 +2018,17 @@ public interface DiffdataPackage extends EPackage {
   EReference getEReferenceValuePresence_Value();
 
   /**
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getOutOfScopeValue <em>Out Of Scope Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Out Of Scope Value</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getOutOfScopeValue()
+   * @see #getEReferenceValuePresence()
+   * @generated
+   */
+  EReference getEReferenceValuePresence_OutOfScopeValue();
+
+  /**
    * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute To Value To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2770,6 +2790,15 @@ public interface DiffdataPackage extends EPackage {
      */
     EReference EREFERENCE_VALUE_PRESENCE__VALUE = eINSTANCE
         .getEReferenceValuePresence_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Out Of Scope Value</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE = eINSTANCE
+        .getEReferenceValuePresence_OutOfScopeValue();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.

@@ -15,6 +15,7 @@
 package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +26,7 @@ import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getOutOfScopeValue <em>Out Of Scope Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -49,5 +51,20 @@ public interface EReferenceValuePresence extends EValuePresence,
    * @generated
    */
   EMatch getValue();
+
+  /**
+   * Returns the value of the '<em><b>Out Of Scope Value</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Out Of Scope Value</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Out Of Scope Value</em>' reference.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_OutOfScopeValue()
+   * @model required="true" changeable="false"
+   * @generated
+   */
+  EObject getOutOfScopeValue();
   // Nothing needed
 } // EReferenceValuePresence

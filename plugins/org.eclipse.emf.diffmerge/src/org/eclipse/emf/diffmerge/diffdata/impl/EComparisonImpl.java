@@ -1028,6 +1028,18 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newOutOfScopeReferenceValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role, boolean)
+   * @generated NOT
+   */
+  public IReferenceValuePresence newOutOfScopeReferenceValuePresence(
+      IMatch elementMatch_p, EReference reference_p, EObject value_p,
+      Role presenceRole_p, boolean isOrder_p) {
+    EReferenceValuePresence result = new EReferenceValuePresenceImpl(this,
+        (EMatch) elementMatch_p, reference_p, presenceRole_p, isOrder_p, value_p);
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#newReferenceValuePresence(org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.diffmerge.api.Role, boolean)
    * @generated NOT
    */
@@ -1039,5 +1051,5 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
         presenceRole_p, isOrder_p);
     return result;
   }
-
+  
 } //EComparisonImpl

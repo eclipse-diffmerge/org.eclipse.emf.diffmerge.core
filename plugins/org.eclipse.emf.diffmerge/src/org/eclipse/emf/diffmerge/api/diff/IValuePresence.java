@@ -39,7 +39,7 @@ IPresenceDifference, IMergeableDifference {
   
   /**
    * Return the non-null value being held
-   * @return a non-null object
+   * @return a potentially null object (constrained in sub-interfaces)
    */
   Object getValue();
   

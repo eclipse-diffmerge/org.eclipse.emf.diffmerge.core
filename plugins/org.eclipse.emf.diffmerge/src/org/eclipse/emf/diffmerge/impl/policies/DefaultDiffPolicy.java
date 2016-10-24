@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.impl.policies;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
@@ -90,6 +92,22 @@ public class DefaultDiffPolicy implements IDiffPolicy {
    */
   public boolean coverValue(Object value_p, EAttribute attribute_p) {
     return true;
+  }
+  
+  /**
+   * Return whether the given element is provided by a plug-in of the current platform
+   * @param element_p a non-null element
+   */
+  protected boolean isPluginElement(EObject element_p) {
+    URI uri = EcoreUtil.getURI(element_p);
+    return uri != null && uri.isPlatformPlugin();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#isSharedOutOfScopeElement(org.eclipse.emf.ecore.EObject)
+   */
+  public boolean isSharedOutOfScopeElement(EObject element_p) {
+    return isPluginElement(element_p);
   }
   
 }

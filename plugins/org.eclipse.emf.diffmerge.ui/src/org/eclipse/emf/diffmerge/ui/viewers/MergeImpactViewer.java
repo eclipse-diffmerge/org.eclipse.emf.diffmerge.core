@@ -484,8 +484,10 @@ public class MergeImpactViewer extends Viewer {
       boolean result = false;
       if (difference_p instanceof IReferenceValuePresence) {
         IReferenceValuePresence valuePresence = (IReferenceValuePresence)difference_p;
-        if (valuePresence.getFeature() != null && valuePresence.getFeature().isContainment())
-          result = valuePresence.getValue().getElementPresenceDifference() != null;
+        if (valuePresence.getFeature() != null && valuePresence.getFeature().isContainment()) {
+          IMatch valueMatch = valuePresence.getValue();
+          result = valueMatch != null && valueMatch.getElementPresenceDifference() != null;
+        }
       }
       return result;
     }

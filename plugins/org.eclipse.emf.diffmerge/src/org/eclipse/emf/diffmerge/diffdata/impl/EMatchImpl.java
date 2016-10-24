@@ -833,7 +833,8 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    */
   protected void addReferenceValuePresence(IReferenceValuePresence presence_p) {
     assert presence_p.getElementMatch() == this;
-    EMap<EReference, EMap<IMatch, IReferenceValuePresence>> referenceMap = getModifiableReferenceMap(true);
+    EMap<EReference, EMap<IMatch, IReferenceValuePresence>> referenceMap =
+        getModifiableReferenceMap(true);
     EMap<IMatch, IReferenceValuePresence> forReference = referenceMap
         .get(presence_p.getFeature());
     if (forReference == null)
@@ -843,8 +844,9 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
       key = presence_p.getPresenceRole() == Role.TARGET ? REFERENCE_ORDER_KEY_TARGET
           : REFERENCE_ORDER_KEY_REFERENCE;
     else
-      key = presence_p.getValue();
-    forReference.put(key, presence_p);
+      key = presence_p.getValue(); //TODO add referencing of out-of-scope RVPs
+    if (key != null)
+      forReference.put(key, presence_p);
   }
 
   /**
@@ -863,9 +865,11 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
         IReferenceValuePresence presence = (IReferenceValuePresence) difference_p;
         addReferenceValuePresence(presence);
         // If relevant, register implicit universal container reference on value
-        if (presence.getFeature().isContainment() && !presence.isOrder())
-          ((IMatch.Editable) presence.getValue())
-              .addOwnershipDifference(presence);
+        if (presence.getFeature().isContainment() && !presence.isOrder()) {
+          IMatch valueMatch = presence.getValue();
+          if (valueMatch != null)
+            ((IMatch.Editable)valueMatch).addOwnershipDifference(presence);
+        }
       } else if (difference_p instanceof IAttributeValuePresence) {
         addAttributeValuePresence((IAttributeValuePresence) difference_p);
       }

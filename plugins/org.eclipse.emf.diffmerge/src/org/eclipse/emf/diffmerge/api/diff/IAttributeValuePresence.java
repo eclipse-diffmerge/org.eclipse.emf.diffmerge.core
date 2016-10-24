@@ -33,4 +33,10 @@ public interface IAttributeValuePresence extends IValuePresence {
    */
   IAttributeValuePresence getSymmetrical();
   
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IValuePresence#getValue()
+   * @return a non-null object
+   */
+  Object getValue();
+  
 }

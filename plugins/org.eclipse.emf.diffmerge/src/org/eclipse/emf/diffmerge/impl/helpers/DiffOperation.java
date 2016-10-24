@@ -580,6 +580,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
    */
   protected void setPartialReferencedValueDependencies(
       IReferenceValuePresence referenceDiff_p) {
+    assert referenceDiff_p.getValue() != null;
     assert referenceDiff_p.getValue().isPartial();
     IElementPresence presence = getOrCreateElementPresence(
         referenceDiff_p.getValue());
@@ -656,7 +657,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (presence_p.getElementMatch().isPartial())
       setPartialReferencingElementDependencies(presence_p);
     // Handling dependencies: presence of value
-    if (valueMatch.isPartial()) {
+    if (valueMatch != null && valueMatch.isPartial()) {
       setPartialReferencedValueDependencies(presence_p);
     } else if (reference.isContainment()) {
       // Handling dependencies: move of value
@@ -795,7 +796,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
       aligned = false;
     } else {
       IMatch valueMatch = presence_p.getValue();
-      EObject ancestorValue = valueMatch.get(Role.ANCESTOR); // May be null
+      EObject ancestorValue =
+          valueMatch == null? null: valueMatch.get(Role.ANCESTOR); // May be null
       IFeaturedModelScope ancestorScope = _comparison.getScope(Role.ANCESTOR);
       assert ancestorScope != null; // Thanks to call context
       List<EObject> ancestorValues = new FArrayList<EObject>(

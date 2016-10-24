@@ -15,6 +15,7 @@
 package org.eclipse.emf.diffmerge.api;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 
@@ -66,5 +67,15 @@ public interface IDiffPolicy {
    * @param attribute_p a non-null attribute
    */
   boolean coverValue(Object value_p, EAttribute attribute_p);
+  
+  /**
+   * Return whether the given element, if outside the TARGET and REFERENCE scopes,
+   * must be considered as an absolute, shared value between the scopes.
+   * If so, then differences related to references to the element are taken into account and
+   * merging such differences means copying references to the element as is.
+   * If not, then they are ignored.
+   * @param element_p a non-null element
+   */
+  boolean isSharedOutOfScopeElement(EObject element_p);
   
 }
