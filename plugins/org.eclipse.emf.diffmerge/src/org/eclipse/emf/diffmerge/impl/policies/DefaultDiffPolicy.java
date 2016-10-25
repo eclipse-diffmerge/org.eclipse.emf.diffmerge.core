@@ -81,6 +81,14 @@ public class DefaultDiffPolicy implements IDiffPolicy {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#coverOutOfScopeValue(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
+   */
+  public boolean coverOutOfScopeValue(EObject element_p, EReference reference_p) {
+    return !reference_p.isContainment() && !reference_p.isContainer() &&
+        isPluginElement(element_p);
+  }
+  
+  /**
    * Return whether transient (non-serialized) features must be covered
    */
   protected boolean coverTransientFeatures() {
@@ -101,13 +109,6 @@ public class DefaultDiffPolicy implements IDiffPolicy {
   protected boolean isPluginElement(EObject element_p) {
     URI uri = EcoreUtil.getURI(element_p);
     return uri != null && uri.isPlatformPlugin();
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#isSharedOutOfScopeElement(org.eclipse.emf.ecore.EObject)
-   */
-  public boolean isSharedOutOfScopeElement(EObject element_p) {
-    return isPluginElement(element_p);
   }
   
 }

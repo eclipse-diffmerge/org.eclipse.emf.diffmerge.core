@@ -287,30 +287,17 @@ public interface IComparison {
         EObject ancestorElement_p);
     
     /**
-     * Create and return a reference presence to a shared out-of-scope value
-     * with the given characteristics
-     * @param elementMatch_p the non-null match for the element holding the value
-     * @param reference_p the non-null reference holding the value
-     * @param value_p the non-null element corresponding to the value held
-     * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
-     * @param isOrder_p whether the value presence is solely due to ordering
-     * @return a non-null reference value presence
-     */
-    IReferenceValuePresence newOutOfScopeReferenceValuePresence(
-        IMatch elementMatch_p, EReference reference_p, EObject value_p,
-        Role presenceRole_p, boolean isOrder_p);
-    
-    /**
      * Create and return a reference value presence with the given characteristics
      * @param elementMatch_p the non-null match for the element holding the value
      * @param reference_p the non-null reference holding the value
-     * @param valueMatch_p the non-null match corresponding to the value held
+     * @param value_p the value element, which may only be null if valueMatch_p is not null
+     * @param valueMatch_p an optional match, which cannot be null if value_p or reference_p is null
      * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
      * @param isOrder_p whether the value presence is solely due to ordering
      * @return a non-null reference value presence
      */
     IReferenceValuePresence newReferenceValuePresence(
-        IMatch elementMatch_p, EReference reference_p, IMatch valueMatch_p,
+        IMatch elementMatch_p, EReference reference_p, EObject value_p, IMatch valueMatch_p,
         Role presenceRole_p, boolean isOrder_p);
   }
   

@@ -39,7 +39,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableAttributeMap"
         upperBound="-1" eType="#//AttributeToValueToDifferenceEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableReferenceMap"
-        upperBound="-1" eType="#//ReferenceToMatchToDifferenceEntry" containment="true"/>
+        upperBound="-1" eType="#//ReferenceToElementToDifferenceEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elementPresenceDifference"
         eType="#//IElementPresence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceOwnershipDifference"
@@ -92,11 +92,10 @@
         changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EReferenceValuePresence" eSuperTypes="#//EValuePresence #//IReferenceValuePresence">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//EMatch"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"
         changeable="false"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="outOfScopeValue" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"
-        changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueMatch" lowerBound="1"
+        eType="#//EMatch" changeable="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeToValueToDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
@@ -107,13 +106,14 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//IAttributeValuePresence"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ReferenceToMatchToDifferenceEntry" instanceClassName="java.util.Map$Entry">
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceToElementToDifferenceEntry"
+      instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        eType="#//MatchToDifferenceEntry" containment="true"/>
+        eType="#//ElementToDifferenceEntry" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MatchToDifferenceEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="#//IMatch"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementToDifferenceEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//IReferenceValuePresence"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IComparison" instanceClassName="org.eclipse.emf.diffmerge.api.IComparison"

@@ -23,6 +23,7 @@ import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -113,13 +114,14 @@ public interface IMatch extends IPureMatch {
       EReference reference_p);
   
   /**
-   * Return the reference differences associated to the given reference
+   * Return the reference difference that represents the referencing of the given
+   * value element via the given reference
    * @param reference_p a non-null reference
-   * @param valueMatch_p a non-null match
+   * @param value_p a non-null element
    * @return a possibly null reference value presence
    */
   IReferenceValuePresence getReferenceValueDifference(EReference reference_p,
-      IMatch valueMatch_p);
+      EObject value_p);
   
   /**
    * Return the set of references for which differences exist.

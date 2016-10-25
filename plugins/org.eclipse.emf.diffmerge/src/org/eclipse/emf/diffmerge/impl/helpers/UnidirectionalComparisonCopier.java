@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.api.IComparison;
+import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMapping;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
@@ -52,6 +53,9 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
   
   /** The initially null target scope for this copier */
   protected IEditableModelScope _destinationScope;
+  
+  /** The potentially null diff policy */
+  protected IDiffPolicy _diffPolicy;
   
   /** The potentially null merge policy to apply */
   protected IMergePolicy _mergePolicy;
@@ -196,7 +200,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
           IMatch holderMatch = _mapping.getMatchFor(source_p, _sourceRole);
           if (holderMatch != null)
             mustCopy = holderMatch.getReferenceValueDifference(
-                reference_p, valueMatch) == null;
+                reference_p, sourceValue) == null;
         }
         if (mustCopy) {
           EObject destinationValue = valueMatch.get(_sourceRole.opposite());
@@ -206,7 +210,8 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
       } else {
         // Value out of scope: keep as is if no side effect due to bidirectionality or containment
         if (useOriginalReferences && reference_p.getEOpposite() == null &&
-            !reference_p.isContainment() && !reference_p.isContainer()) {
+            !reference_p.isContainment() && !reference_p.isContainer() ||
+            _diffPolicy != null && _diffPolicy.coverOutOfScopeValue(sourceValue, reference_p)) {
           _destinationScope.add(destination_p, reference_p, sourceValue);
         }
       }
@@ -264,6 +269,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
     _mapping = comparison_p.getMapping();
     _sourceScope = comparison_p.getScope(_sourceRole);
     _destinationScope = comparison_p.getScope(_sourceRole.opposite());
+    _diffPolicy = comparison_p.getLastDiffPolicy();
     _mergePolicy = comparison_p.getLastMergePolicy();
     if (_mergePolicy != null)
       useOriginalReferences = _mergePolicy.copyOutOfScopeCrossReferences(

@@ -114,7 +114,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public Adapter caseEElementRelativePresence(EElementRelativePresence object) {
+    public Adapter caseEElementRelativePresence(
+        EElementRelativePresence object) {
       return createEElementRelativePresenceAdapter();
     }
 
@@ -151,15 +152,15 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public Adapter caseReferenceToMatchToDifferenceEntry(
-        Map.Entry<EReference, EMap<IMatch, IReferenceValuePresence>> object) {
-      return createReferenceToMatchToDifferenceEntryAdapter();
+    public Adapter caseReferenceToElementToDifferenceEntry(
+        Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> object) {
+      return createReferenceToElementToDifferenceEntryAdapter();
     }
 
     @Override
-    public Adapter caseMatchToDifferenceEntry(
-        Map.Entry<IMatch, IReferenceValuePresence> object) {
-      return createMatchToDifferenceEntryAdapter();
+    public Adapter caseElementToDifferenceEntry(
+        Map.Entry<EObject, IReferenceValuePresence> object) {
+      return createElementToDifferenceEntryAdapter();
     }
 
     @Override
@@ -206,7 +207,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public Adapter caseIElementRelativePresence(IElementRelativePresence object) {
+    public Adapter caseIElementRelativePresence(
+        IElementRelativePresence object) {
       return createIElementRelativePresenceAdapter();
     }
 
@@ -404,7 +406,7 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Reference To Match To Difference Entry</em>}'.
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Reference To Element To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -413,12 +415,12 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @see java.util.Map.Entry
    * @generated
    */
-  public Adapter createReferenceToMatchToDifferenceEntryAdapter() {
+  public Adapter createReferenceToElementToDifferenceEntryAdapter() {
     return null;
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Match To Difference Entry</em>}'.
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Element To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -427,7 +429,7 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @see java.util.Map.Entry
    * @generated
    */
-  public Adapter createMatchToDifferenceEntryAdapter() {
+  public Adapter createElementToDifferenceEntryAdapter() {
     return null;
   }
 

@@ -227,10 +227,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       if (isOwnership(getInput().getMatchAndFeature())) {
         result = presence.getElementMatch().get(presenceRole);
       } else {
-        if (presence.isOutOfScope())
-          result = presence.getOutOfScopeValue();
-        else
-          result = presence.getValue().get(presenceRole);
+        result = presence.getValue();
       }
     }
     return result;
@@ -376,6 +373,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
           if (isDifferenceAgnostic()) {
             // All values
             if (input.getFeature() instanceof EAttribute) {
+              // All attribute values
               EAttribute attribute = (EAttribute)input.getFeature();
               IComparison comparison = input.getMatch().getMapping().getComparison();
               IMatch match = input.getMatch();
@@ -392,6 +390,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
                 }
               }
             } else {
+              // All reference values
               EReference reference = (EReference)input.getFeature();
               IComparison comparison = input.getMatch().getMapping().getComparison();
               IMatch match = input.getMatch();
@@ -399,15 +398,12 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
               if (source != null) {
                 List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
                 for (EObject value : values) {
-                  IMatch valueMatch = comparison.getMapping().getMatchFor(value, getSideRole());
-                  if (valueMatch != null) {
-                    IReferenceValuePresence presence =
-                      match.getReferenceValueDifference(reference, valueMatch);
-                    if (presence != null)
-                      result.add(presence);
-                    else
-                      result.add(valueMatch);
-                  }
+                  IReferenceValuePresence presence =
+                      match.getReferenceValueDifference(reference, value);
+                  if (presence != null)
+                    result.add(presence);
+                  else
+                    result.add(value);
                 }
               }
             }

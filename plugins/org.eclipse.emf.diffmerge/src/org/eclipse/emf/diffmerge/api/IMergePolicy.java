@@ -93,16 +93,16 @@ public interface IMergePolicy {
   /**
    * Return the position that the given value should have among values held by the
    * given source via the given reference in the given destination role, according to
-   * the position it has in the opposite role in the given comparison
+   * the position it actually has in the opposite role in the given comparison
    * @param comparison_p a non-null comparison
    * @param destination_p a non-null role which is TARGET or REFERENCE
    * @param source_p a non-null match
    * @param reference_p a non-null reference
-   * @param value_p a non-null value
+   * @param sourceValue_p a non-null value on side destination_p.opposite()
    * @return a positive integer (0 inclusive) or -1 if no position could be determined
    */
   int getDesiredValuePosition(IComparison comparison_p, Role destination_p,
-      IMatch source_p, EReference reference_p, IMatch value_p);
+      IMatch source_p, EReference reference_p, EObject sourceValue_p);
   
   /**
    * Return whether the given reference is essential to its owner, i.e., adding the reference owner

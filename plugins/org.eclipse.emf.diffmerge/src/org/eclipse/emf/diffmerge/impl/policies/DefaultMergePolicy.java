@@ -99,20 +99,19 @@ public class DefaultMergePolicy implements IMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getDesiredValuePosition(org.eclipse.emf.diffmerge.api.IComparison, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.api.IMatch)
+   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getDesiredValuePosition(org.eclipse.emf.diffmerge.api.IComparison, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
    */
   public int getDesiredValuePosition(IComparison comparison_p, Role destination_p,
-      IMatch source_p, EReference reference_p, IMatch value_p) {
+      IMatch source_p, EReference reference_p, EObject sourceValue_p) {
     EObject sourceHolder = source_p.get(destination_p.opposite());
     EObject destinationHolder = source_p.get(destination_p);
-    EObject sourceValue = value_p.get(destination_p.opposite());
-    if (sourceHolder != null && destinationHolder != null && sourceValue != null) {
+    if (sourceHolder != null && destinationHolder != null && sourceValue_p != null) {
       List<EObject> sourceValues = comparison_p.getScope(destination_p.opposite()).get(
           sourceHolder, reference_p);
       List<EObject> destinationValues = comparison_p.getScope(destination_p).get(
           destinationHolder, reference_p);
       // Priority is given to the successor
-      int start = sourceValues.indexOf(sourceValue) + 1;
+      int start = sourceValues.indexOf(sourceValue_p) + 1;
       for (int i = start; i < sourceValues.size(); i++) {
         EObject nextSourceElement = sourceValues.get(i);
         IMatch nextMatch = comparison_p.getMapping().getMatchFor(

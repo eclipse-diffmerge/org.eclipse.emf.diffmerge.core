@@ -199,7 +199,7 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
             && diffPolicy.considerOrdered(containment)) {
           // Move added value if required
           int index = mergePolicy.getDesiredValuePosition(getComparison(),
-              getAbsenceRole(), getOwnerMatch(), containment, eltMatch);
+              getAbsenceRole(), getOwnerMatch(), containment, getElement());
           if (index >= 0)
             getAbsenceScope().move(container, containment, index, -1);
         }

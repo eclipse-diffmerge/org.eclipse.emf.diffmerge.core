@@ -625,7 +625,7 @@ public class CategoryManager {
   public boolean isMove(IDifference difference_p) {
     boolean result = false;
     if (isOwnership(difference_p)) {
-      IMatch valueMatch = ((IReferenceValuePresence)difference_p).getValue();
+      IMatch valueMatch = ((IReferenceValuePresence)difference_p).getValueMatch();
       result = valueMatch != null && !valueMatch.isPartial();
     }
     return result;

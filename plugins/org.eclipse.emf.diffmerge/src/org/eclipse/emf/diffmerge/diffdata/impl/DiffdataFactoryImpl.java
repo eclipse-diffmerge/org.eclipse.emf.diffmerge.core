@@ -18,7 +18,6 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -103,10 +102,10 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
       return (EObject) createAttributeToValueToDifferenceEntry();
     case DiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY:
       return (EObject) createValueToDifferenceEntry();
-    case DiffdataPackage.REFERENCE_TO_MATCH_TO_DIFFERENCE_ENTRY:
-      return (EObject) createReferenceToMatchToDifferenceEntry();
-    case DiffdataPackage.MATCH_TO_DIFFERENCE_ENTRY:
-      return (EObject) createMatchToDifferenceEntry();
+    case DiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY:
+      return (EObject) createReferenceToElementToDifferenceEntry();
+    case DiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY:
+      return (EObject) createElementToDifferenceEntry();
     default:
       throw new IllegalArgumentException(
           "The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -246,9 +245,9 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EReference, EMap<IMatch, IReferenceValuePresence>> createReferenceToMatchToDifferenceEntry() {
-    ReferenceToMatchToDifferenceEntryImpl referenceToMatchToDifferenceEntry = new ReferenceToMatchToDifferenceEntryImpl();
-    return referenceToMatchToDifferenceEntry;
+  public Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> createReferenceToElementToDifferenceEntry() {
+    ReferenceToElementToDifferenceEntryImpl referenceToElementToDifferenceEntry = new ReferenceToElementToDifferenceEntryImpl();
+    return referenceToElementToDifferenceEntry;
   }
 
   /**
@@ -256,9 +255,9 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<IMatch, IReferenceValuePresence> createMatchToDifferenceEntry() {
-    MatchToDifferenceEntryImpl matchToDifferenceEntry = new MatchToDifferenceEntryImpl();
-    return matchToDifferenceEntry;
+  public Map.Entry<EObject, IReferenceValuePresence> createElementToDifferenceEntry() {
+    ElementToDifferenceEntryImpl elementToDifferenceEntry = new ElementToDifferenceEntryImpl();
+    return elementToDifferenceEntry;
   }
 
   /**

@@ -16,7 +16,6 @@ package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.IMatch.Editable;
 import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
@@ -205,7 +204,7 @@ public interface EMatch extends EObject, Editable {
   /**
    * Returns the value of the '<em><b>Modifiable Reference Map</b></em>' map.
    * The key is of type {@link org.eclipse.emf.ecore.EReference},
-   * and the value is of type list of {@link java.util.Map.Entry<org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence>},
+   * and the value is of type list of {@link java.util.Map.Entry<org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Reference Map</em>' map isn't clear,
@@ -214,11 +213,11 @@ public interface EMatch extends EObject, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Reference Map</em>' map.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableReferenceMap()
-   * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToMatchToDifferenceEntry<org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.MatchToDifferenceEntry>"
+   * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToElementToDifferenceEntry<org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.ElementToDifferenceEntry>"
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EReference, EMap<IMatch, IReferenceValuePresence>> getModifiableReferenceMap();
+  EMap<EReference, EMap<EObject, IReferenceValuePresence>> getModifiableReferenceMap();
 
   /**
    * Returns the value of the '<em><b>Element Presence Difference</b></em>' reference.

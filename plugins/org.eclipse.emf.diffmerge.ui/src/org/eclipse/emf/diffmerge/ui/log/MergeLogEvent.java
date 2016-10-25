@@ -98,7 +98,7 @@ public class MergeLogEvent extends AbstractLogEvent {
             !((IReferenceValuePresence)difference).isOrder() &&
             ((IReferenceValuePresence)difference).getFeature() != null &&
             ((IReferenceValuePresence)difference).getFeature().isContainment())
-          match = ((IReferenceValuePresence)difference).getValue(); // Move
+          match = ((IReferenceValuePresence)difference).getValueMatch(); // Move
         else
           match = ((IElementRelativeDifference)difference).getElementMatch();
         if (match != null) {

@@ -140,14 +140,14 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass referenceToMatchToDifferenceEntryEClass = null;
+  private EClass referenceToElementToDifferenceEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass matchToDifferenceEntryEClass = null;
+  private EClass elementToDifferenceEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -320,8 +320,9 @@ public class DiffdataPackageImpl extends EPackageImpl implements
 
     // Obtain or create and register package
     DiffdataPackageImpl theDiffdataPackage = (DiffdataPackageImpl) (EPackage.Registry.INSTANCE
-        .get(eNS_URI) instanceof DiffdataPackageImpl ? EPackage.Registry.INSTANCE
-        .get(eNS_URI) : new DiffdataPackageImpl());
+        .get(eNS_URI) instanceof DiffdataPackageImpl
+            ? EPackage.Registry.INSTANCE.get(eNS_URI)
+            : new DiffdataPackageImpl());
 
     isInited = true;
 
@@ -765,7 +766,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEReferenceValuePresence_OutOfScopeValue() {
+  public EReference getEReferenceValuePresence_ValueMatch() {
     return (EReference) eReferenceValuePresenceEClass.getEStructuralFeatures()
         .get(1);
   }
@@ -833,8 +834,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getReferenceToMatchToDifferenceEntry() {
-    return referenceToMatchToDifferenceEntryEClass;
+  public EClass getReferenceToElementToDifferenceEntry() {
+    return referenceToElementToDifferenceEntryEClass;
   }
 
   /**
@@ -842,8 +843,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getReferenceToMatchToDifferenceEntry_Key() {
-    return (EReference) referenceToMatchToDifferenceEntryEClass
+  public EReference getReferenceToElementToDifferenceEntry_Key() {
+    return (EReference) referenceToElementToDifferenceEntryEClass
         .getEStructuralFeatures().get(0);
   }
 
@@ -852,8 +853,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getReferenceToMatchToDifferenceEntry_Value() {
-    return (EReference) referenceToMatchToDifferenceEntryEClass
+  public EReference getReferenceToElementToDifferenceEntry_Value() {
+    return (EReference) referenceToElementToDifferenceEntryEClass
         .getEStructuralFeatures().get(1);
   }
 
@@ -862,8 +863,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getMatchToDifferenceEntry() {
-    return matchToDifferenceEntryEClass;
+  public EClass getElementToDifferenceEntry() {
+    return elementToDifferenceEntryEClass;
   }
 
   /**
@@ -871,8 +872,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMatchToDifferenceEntry_Key() {
-    return (EReference) matchToDifferenceEntryEClass.getEStructuralFeatures()
+  public EReference getElementToDifferenceEntry_Key() {
+    return (EReference) elementToDifferenceEntryEClass.getEStructuralFeatures()
         .get(0);
   }
 
@@ -881,8 +882,8 @@ public class DiffdataPackageImpl extends EPackageImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getMatchToDifferenceEntry_Value() {
-    return (EReference) matchToDifferenceEntryEClass.getEStructuralFeatures()
+  public EReference getElementToDifferenceEntry_Value() {
+    return (EReference) elementToDifferenceEntryEClass.getEStructuralFeatures()
         .get(1);
   }
 
@@ -1144,7 +1145,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     createEReference(eReferenceValuePresenceEClass,
         EREFERENCE_VALUE_PRESENCE__VALUE);
     createEReference(eReferenceValuePresenceEClass,
-        EREFERENCE_VALUE_PRESENCE__OUT_OF_SCOPE_VALUE);
+        EREFERENCE_VALUE_PRESENCE__VALUE_MATCH);
 
     attributeToValueToDifferenceEntryEClass = createEClass(
         ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY);
@@ -1159,18 +1160,18 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     createEReference(valueToDifferenceEntryEClass,
         VALUE_TO_DIFFERENCE_ENTRY__VALUE);
 
-    referenceToMatchToDifferenceEntryEClass = createEClass(
-        REFERENCE_TO_MATCH_TO_DIFFERENCE_ENTRY);
-    createEReference(referenceToMatchToDifferenceEntryEClass,
-        REFERENCE_TO_MATCH_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(referenceToMatchToDifferenceEntryEClass,
-        REFERENCE_TO_MATCH_TO_DIFFERENCE_ENTRY__VALUE);
+    referenceToElementToDifferenceEntryEClass = createEClass(
+        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY);
+    createEReference(referenceToElementToDifferenceEntryEClass,
+        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__KEY);
+    createEReference(referenceToElementToDifferenceEntryEClass,
+        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__VALUE);
 
-    matchToDifferenceEntryEClass = createEClass(MATCH_TO_DIFFERENCE_ENTRY);
-    createEReference(matchToDifferenceEntryEClass,
-        MATCH_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(matchToDifferenceEntryEClass,
-        MATCH_TO_DIFFERENCE_ENTRY__VALUE);
+    elementToDifferenceEntryEClass = createEClass(ELEMENT_TO_DIFFERENCE_ENTRY);
+    createEReference(elementToDifferenceEntryEClass,
+        ELEMENT_TO_DIFFERENCE_ENTRY__KEY);
+    createEReference(elementToDifferenceEntryEClass,
+        ELEMENT_TO_DIFFERENCE_ENTRY__VALUE);
 
     iComparisonEClass = createEClass(ICOMPARISON);
 
@@ -1344,7 +1345,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEMatch_ModifiableReferenceMap(),
-        this.getReferenceToMatchToDifferenceEntry(), null,
+        this.getReferenceToElementToDifferenceEntry(), null,
         "modifiableReferenceMap", null, 0, -1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1457,15 +1458,15 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
         "EReferenceValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEReferenceValuePresence_Value(), this.getEMatch(), null,
-        "value", null, 1, 1, EReferenceValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-        !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEReferenceValuePresence_OutOfScopeValue(),
-        theEcorePackage.getEObject(), null, "outOfScopeValue", null, 1, 1, //$NON-NLS-1$
+    initEReference(getEReferenceValuePresence_Value(),
+        theEcorePackage.getEObject(), null, "value", null, 1, 1, //$NON-NLS-1$
         EReferenceValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
         !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getEReferenceValuePresence_ValueMatch(), this.getEMatch(),
+        null, "valueMatch", null, 1, 1, EReferenceValuePresence.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE,
+        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attributeToValueToDifferenceEntryEClass, Map.Entry.class,
         "AttributeToValueToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -1494,28 +1495,28 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
 
-    initEClass(referenceToMatchToDifferenceEntryEClass, Map.Entry.class,
-        "ReferenceToMatchToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+    initEClass(referenceToElementToDifferenceEntryEClass, Map.Entry.class,
+        "ReferenceToElementToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getReferenceToMatchToDifferenceEntry_Key(),
+    initEReference(getReferenceToElementToDifferenceEntry_Key(),
         theEcorePackage.getEReference(), null, "key", null, 1, 1, //$NON-NLS-1$
         Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
-    initEReference(getReferenceToMatchToDifferenceEntry_Value(),
-        this.getMatchToDifferenceEntry(), null, "value", null, 0, -1, //$NON-NLS-1$
+    initEReference(getReferenceToElementToDifferenceEntry_Value(),
+        this.getElementToDifferenceEntry(), null, "value", null, 0, -1, //$NON-NLS-1$
         Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
 
-    initEClass(matchToDifferenceEntryEClass, Map.Entry.class,
-        "MatchToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+    initEClass(elementToDifferenceEntryEClass, Map.Entry.class,
+        "ElementToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getMatchToDifferenceEntry_Key(), this.getIMatch(), null,
-        "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getMatchToDifferenceEntry_Value(),
+    initEReference(getElementToDifferenceEntry_Key(),
+        theEcorePackage.getEObject(), null, "key", null, 1, 1, Map.Entry.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElementToDifferenceEntry_Value(),
         this.getIReferenceValuePresence(), null, "value", null, 1, 1, //$NON-NLS-1$
         Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,

@@ -129,31 +129,33 @@ public class DiffOperation extends AbstractExpensiveOperation {
    * (holder, reference, value).
    * @param elementMatch_p a non-null match
    * @param reference_p a non-null reference
-   * @param valueMatch_p a non-null match
+   * @param value_p a value element, which is non-null unless valueMatch_p is not null
+   * @param valueMatch_p an optional match
    */
   protected void createReferenceOrderDifference(IMatch elementMatch_p,
-      EReference reference_p, IMatch valueMatch_p) {
-    createReferenceValueDifference(elementMatch_p, reference_p, valueMatch_p,
-        Role.TARGET, true);
-    createReferenceValueDifference(elementMatch_p, reference_p, valueMatch_p,
-        Role.REFERENCE, true);
+      EReference reference_p, EObject value_p, IMatch valueMatch_p) {
+    createReferenceValueDifference(elementMatch_p, reference_p, value_p,
+        valueMatch_p, Role.TARGET, true);
+    createReferenceValueDifference(elementMatch_p, reference_p, value_p,
+        valueMatch_p, Role.REFERENCE, true);
   }
   
   /**
    * Create the reference difference corresponding to the given link (holder,
    * reference, value) on the given role.
    * @param elementMatch_p a non-null match
-   * @param reference_p a non-null, non-container reference
-   * @param valueMatch_p a non-null match
+   * @param reference_p a potentially null reference (null stands for root containment)
+   * @param value_p the value element, which may only be null if valueMatch_p is not null
+   * @param valueMatch_p an optional match, which cannot be null if value_p or reference_p is null
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @param isOrder_p whether the value presence is solely due to ordering
    * @return a non-null reference value presence
    */
   protected IReferenceValuePresence createReferenceValueDifference(
-      IMatch elementMatch_p, EReference reference_p, IMatch valueMatch_p,
-      Role role_p, boolean isOrder_p) {
+      IMatch elementMatch_p, EReference reference_p, EObject value_p,
+      IMatch valueMatch_p, Role role_p, boolean isOrder_p) {
     IReferenceValuePresence result = getComparison().newReferenceValuePresence(
-        elementMatch_p, reference_p, valueMatch_p, role_p, isOrder_p);
+        elementMatch_p, reference_p, value_p, valueMatch_p, role_p, isOrder_p);
     setReferencedValueDependencies(result);
     if (getComparison().isThreeWay())
       setThreeWayProperties(result);
@@ -299,11 +301,11 @@ public class DiffOperation extends AbstractExpensiveOperation {
       // An ownership difference needs only be created if the container
       // is unmatched, otherwise it is already handled by container refs
       if (parentMatch != null && parentMatch.isPartial()) {
-        EObject element = match_p.get(role);
-        EReference containment = getComparison().getScope(role).getContainment(element);
         if (!create_p)
           return true;
-        createReferenceValueDifference(parentMatch, containment, match_p, role, false);
+        EObject element = match_p.get(role); // Non-null because match_p is not partial
+        EReference containment = getComparison().getScope(role).getContainment(element);
+        createReferenceValueDifference(parentMatch, containment, element, match_p, role, false);
         result = true;
       }
     }
@@ -321,6 +323,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     assert match_p != null && !match_p.isPartial() && reference_p != null;
     assert !reference_p.isContainer();
     boolean result = false;
+    IDiffPolicy diffPolicy = getDiffPolicy();
     // Get reference values in different roles
     IFeaturedModelScope targetScope = getComparison().getScope(Role.TARGET);
     IFeaturedModelScope referenceScope = getComparison().getScope(Role.REFERENCE);
@@ -330,27 +333,32 @@ public class DiffOperation extends AbstractExpensiveOperation {
     List<EObject> referenceValues = referenceScope.get(referenceElement, reference_p);
     List<EObject> remainingReferenceValues = new FArrayList<EObject>(
         referenceValues, IEqualityTester.BY_REFERENCE);
-    boolean checkOrder = reference_p.isMany() && getDiffPolicy().considerOrdered(reference_p);
+    boolean checkOrder = reference_p.isMany() && diffPolicy.considerOrdered(reference_p);
     int maxIndex = -1;
     // Check which ones match
-    List<IMatch> isolatedTargetMatches = new FArrayList<IMatch>();
     for (EObject targetValue : targetValues) {
-      // For every value in TARGET, get its corresponding match (if none, uncovered)
+      // For every value in TARGET, get its corresponding match if in scope
       IMatch targetValueMatch = getMapping().getMatchFor(targetValue, Role.TARGET);
-      if (targetValueMatch != null) {
-        // Get the matching value in REFERENCE
-        EObject matchReference = targetValueMatch.get(Role.REFERENCE);
-        boolean isIsolated = matchReference == null;
+      // The TARGET value is covered if a match is found or it is a covered out-of-scope value
+      boolean coverTargetValue =
+          targetValueMatch != null && diffPolicy.coverMatch(targetValueMatch) ||
+          targetValueMatch == null && diffPolicy.coverOutOfScopeValue(targetValue, reference_p);
+      if (coverTargetValue) {
+        // Check if matching value is present in REFERENCE
+        EObject matchReferenceValue = targetValueMatch == null?
+            targetValue: targetValueMatch.get(Role.REFERENCE);
+        boolean isIsolated = matchReferenceValue == null;
         if (!isIsolated) {
           // Check value presence and ordering
-          int index = remainingReferenceValues.indexOf(matchReference);
+          int index = remainingReferenceValues.indexOf(matchReferenceValue);
           isIsolated = index < 0;
           if (checkOrder && !isIsolated) {
             if (index < maxIndex) {
               // Ordering difference
               if (!create_p)
                 return true;
-              createReferenceOrderDifference(match_p, reference_p, targetValueMatch);
+              createReferenceOrderDifference(
+                  match_p, reference_p, targetValue, targetValueMatch);
               result = true;
               checkOrder = false;
             } else {
@@ -358,40 +366,34 @@ public class DiffOperation extends AbstractExpensiveOperation {
             }
           }
         }
-        if (isIsolated)
-          // None found or not in referenced values: mark as isolated
-          isolatedTargetMatches.add(targetValueMatch);
-        else
-          remainingReferenceValues.remove(matchReference);
-      }
+        if (isIsolated) {
+          // We have a covered unmatched presence on the TARGET side
+          if (!create_p)
+            return true;
+          createReferenceValueDifference(
+              match_p, reference_p, targetValue, targetValueMatch, Role.TARGET, false);
+          result = true;
+        } else {
+          remainingReferenceValues.remove(matchReferenceValue);
+        }
+      } // Else TARGET value is out of scope and not covered as such
     }
-    // For every remaining value in REFERENCE, get its corresponding isolated match
-    // if the value is covered
-    List<IMatch> isolatedReferenceMatches = new FArrayList<IMatch>();
+    // For every remaining value in REFERENCE, create a difference if covered
     for (EObject remainingReferenceValue : remainingReferenceValues) {
       IMatch referenceValueMatch = getMapping().getMatchFor(
           remainingReferenceValue, Role.REFERENCE);
-      if (referenceValueMatch != null)
-        isolatedReferenceMatches.add(referenceValueMatch);      
-    }
-    // Create differences for isolated values
-    for (IMatch isolatedTargetMatch : isolatedTargetMatches) {
-      if (getDiffPolicy().coverMatch(isolatedTargetMatch)){
+      boolean coverReferenceValue =
+          referenceValueMatch != null && diffPolicy.coverMatch(referenceValueMatch) ||
+          referenceValueMatch == null && diffPolicy.coverOutOfScopeValue(
+              remainingReferenceValue, reference_p);
+      if (coverReferenceValue) {
+        // We have a covered unmatched presence on the REFERENCE side
         if (!create_p)
           return true;
-        createReferenceValueDifference(match_p, reference_p, isolatedTargetMatch,
-            Role.TARGET, false);
+        createReferenceValueDifference(match_p, reference_p, remainingReferenceValue,
+            referenceValueMatch, Role.REFERENCE, false);
         result = true;
-      }
-    }
-    for (IMatch isolatedReferenceMatch : isolatedReferenceMatches) {
-      if (getDiffPolicy().coverMatch(isolatedReferenceMatch)){
-        if (!create_p)
-          return true;
-        createReferenceValueDifference(match_p, reference_p, isolatedReferenceMatch,
-            Role.REFERENCE, false);
-        result = true;
-      }
+      } // Else REFERENCE value is out of scope and not covered as such
     }
     return result;
   }
@@ -580,10 +582,10 @@ public class DiffOperation extends AbstractExpensiveOperation {
    */
   protected void setPartialReferencedValueDependencies(
       IReferenceValuePresence referenceDiff_p) {
-    assert referenceDiff_p.getValue() != null;
-    assert referenceDiff_p.getValue().isPartial();
+    assert referenceDiff_p.getValueMatch() != null;
+    assert referenceDiff_p.getValueMatch().isPartial();
     IElementPresence presence = getOrCreateElementPresence(
-        referenceDiff_p.getValue());
+        referenceDiff_p.getValueMatch());
     if (presence != null) {
       Role presenceRole = referenceDiff_p.getPresenceRole();
       IMergeableDifference.Editable referenceDiff =
@@ -642,7 +644,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
    */
   protected void setReferencedValueDependencies(IReferenceValuePresence presence_p) {
     EReference reference = presence_p.getFeature();
-    IMatch valueMatch = presence_p.getValue();
+    IMatch valueMatch = presence_p.getValueMatch();
     // Handling dependencies: links (non-container eOpposite)
     if (!reference.isContainment()) {
       IReferenceValuePresence oppositeDiff = presence_p.getOpposite();
@@ -795,7 +797,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (ancestorHolder == null) {
       aligned = false;
     } else {
-      IMatch valueMatch = presence_p.getValue();
+      IMatch valueMatch = presence_p.getValueMatch();
       EObject ancestorValue =
           valueMatch == null? null: valueMatch.get(Role.ANCESTOR); // May be null
       IFeaturedModelScope ancestorScope = _comparison.getScope(Role.ANCESTOR);

@@ -100,8 +100,8 @@ public class DiffdataSwitch<T> {
       return doSwitch(theEClass.getClassifierID(), theEObject);
     } else {
       List<EClass> eSuperTypes = theEClass.getESuperTypes();
-      return eSuperTypes.isEmpty() ? defaultCase(theEObject) : doSwitch(
-          eSuperTypes.get(0), theEObject);
+      return eSuperTypes.isEmpty() ? defaultCase(theEObject)
+          : doSwitch(eSuperTypes.get(0), theEObject);
     }
   }
 
@@ -242,7 +242,8 @@ public class DiffdataSwitch<T> {
     case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
       Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> attributeToValueToDifferenceEntry = (Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>>) theEObject;
-      T result = caseAttributeToValueToDifferenceEntry(attributeToValueToDifferenceEntry);
+      T result = caseAttributeToValueToDifferenceEntry(
+          attributeToValueToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
@@ -255,18 +256,19 @@ public class DiffdataSwitch<T> {
         result = defaultCase(theEObject);
       return result;
     }
-    case DiffdataPackage.REFERENCE_TO_MATCH_TO_DIFFERENCE_ENTRY: {
+    case DiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<EReference, EMap<IMatch, IReferenceValuePresence>> referenceToMatchToDifferenceEntry = (Map.Entry<EReference, EMap<IMatch, IReferenceValuePresence>>) theEObject;
-      T result = caseReferenceToMatchToDifferenceEntry(referenceToMatchToDifferenceEntry);
+      Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> referenceToElementToDifferenceEntry = (Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>>) theEObject;
+      T result = caseReferenceToElementToDifferenceEntry(
+          referenceToElementToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
-    case DiffdataPackage.MATCH_TO_DIFFERENCE_ENTRY: {
+    case DiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<IMatch, IReferenceValuePresence> matchToDifferenceEntry = (Map.Entry<IMatch, IReferenceValuePresence>) theEObject;
-      T result = caseMatchToDifferenceEntry(matchToDifferenceEntry);
+      Map.Entry<EObject, IReferenceValuePresence> elementToDifferenceEntry = (Map.Entry<EObject, IReferenceValuePresence>) theEObject;
+      T result = caseElementToDifferenceEntry(elementToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
@@ -535,34 +537,34 @@ public class DiffdataSwitch<T> {
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Reference To Match To Difference Entry</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Reference To Element To Difference Entry</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Reference To Match To Difference Entry</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Reference To Element To Difference Entry</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseReferenceToMatchToDifferenceEntry(
-      Map.Entry<EReference, EMap<IMatch, IReferenceValuePresence>> object) {
+  public T caseReferenceToElementToDifferenceEntry(
+      Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> object) {
     return null;
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Match To Difference Entry</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Element To Difference Entry</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Match To Difference Entry</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Element To Difference Entry</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMatchToDifferenceEntry(
-      Map.Entry<IMatch, IReferenceValuePresence> object) {
+  public T caseElementToDifferenceEntry(
+      Map.Entry<EObject, IReferenceValuePresence> object) {
     return null;
   }
 

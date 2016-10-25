@@ -140,7 +140,7 @@ public class MergeImpactViewer extends Viewer {
             IReferenceValuePresence presence = (IReferenceValuePresence)elementDifference;
             if (presence.getFeature() != null && presence.getFeature().isContainment() &&
                 !presence.isOrder())
-              match = presence.getValue(); // Move
+              match = presence.getValueMatch(); // Move
           }
           if (match == null)
             match = elementDifference.getElementMatch();
@@ -485,7 +485,7 @@ public class MergeImpactViewer extends Viewer {
       if (difference_p instanceof IReferenceValuePresence) {
         IReferenceValuePresence valuePresence = (IReferenceValuePresence)difference_p;
         if (valuePresence.getFeature() != null && valuePresence.getFeature().isContainment()) {
-          IMatch valueMatch = valuePresence.getValue();
+          IMatch valueMatch = valuePresence.getValueMatch();
           result = valueMatch != null && valueMatch.getElementPresenceDifference() != null;
         }
       }

@@ -348,7 +348,7 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
     } else if (!getSelectedValuePresences().isEmpty()) {
       EValuePresence presence = asValuePresence();
       if (representAsOwnership(presence))
-        result = (EMatch)presence.getValue();
+        result = (EMatch)((IReferenceValuePresence)presence).getValueMatch();
       else
         result = presence.getElementMatch();
     }
