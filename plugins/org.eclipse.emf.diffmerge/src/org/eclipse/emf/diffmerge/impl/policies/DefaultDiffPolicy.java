@@ -85,7 +85,7 @@ public class DefaultDiffPolicy implements IDiffPolicy {
    */
   public boolean coverOutOfScopeValue(EObject element_p, EReference reference_p) {
     return !reference_p.isContainment() && !reference_p.isContainer() &&
-        isPluginElement(element_p);
+        !reference_p.isTransient() && isPluginElement(element_p);
   }
   
   /**
@@ -108,7 +108,7 @@ public class DefaultDiffPolicy implements IDiffPolicy {
    */
   protected boolean isPluginElement(EObject element_p) {
     URI uri = EcoreUtil.getURI(element_p);
-    return uri != null && uri.isPlatformPlugin();
+    return uri != null && !uri.isPlatformResource();
   }
   
 }

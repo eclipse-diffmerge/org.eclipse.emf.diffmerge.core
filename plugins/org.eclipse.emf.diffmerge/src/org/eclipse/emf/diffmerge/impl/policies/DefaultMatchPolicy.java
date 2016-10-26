@@ -43,19 +43,6 @@ public class DefaultMatchPolicy implements IMatchPolicy {
   }
   
   /**
-   * Return the URI of the given element as a Comparable (String).
-   * @param element_p a non-null element
-   * @return a potentially null string
-   */
-  protected String getComparableURI(EObject element_p) {
-    String result = null;
-    URI uri = EcoreUtil.getURI(element_p);
-    if (uri != null)
-      result = uri.toString();
-    return result;
-  }
-  
-  /**
    * Return the extrinsic ID of the given element from the given scope, or null if none
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers the element
@@ -91,7 +78,7 @@ public class DefaultMatchPolicy implements IMatchPolicy {
     if (result == null)
       result = getExtrinsicID(element_p, scope_p);
     if (result == null)
-      result = getComparableURI(element_p);
+      result = getURIBasedMatchID(element_p);
     return result;
   }
   
@@ -103,6 +90,23 @@ public class DefaultMatchPolicy implements IMatchPolicy {
     // may return objects that are not Comparable or that are
     // incompatible sorts of Comparable.
     return NATURAL_ORDER_COMPARATOR;
+  }
+  
+  /**
+   * Return a match ID for the given element based on its URI, if any
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getURIBasedMatchID(EObject element_p) {
+    String result = null;
+    URI uri = EcoreUtil.getURI(element_p);
+    if (uri != null) {
+      if (uri.isPlatformResource() && uri.fragment() != null)
+        result = uri.fragment(); // Ignore name of containing file
+      else
+        result = uri.toString();
+    }
+    return result;
   }
   
   /**
