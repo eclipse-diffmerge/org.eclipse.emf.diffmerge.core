@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.Messages;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
@@ -42,6 +43,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 
 /**
@@ -340,17 +342,21 @@ public class DiffOperation extends AbstractExpensiveOperation {
       // For every value in TARGET, get its corresponding match if in scope
       IMatch targetValueMatch = getMapping().getMatchFor(targetValue, Role.TARGET);
       // The TARGET value is covered if a match is found or it is a covered out-of-scope value
+      boolean outsideTargetScope = targetValueMatch == null;
       boolean coverTargetValue =
-          targetValueMatch != null && diffPolicy.coverMatch(targetValueMatch) ||
-          targetValueMatch == null && diffPolicy.coverOutOfScopeValue(targetValue, reference_p);
+          !outsideTargetScope && diffPolicy.coverMatch(targetValueMatch) ||
+          outsideTargetScope && diffPolicy.coverOutOfScopeValue(targetValue, reference_p);
       if (coverTargetValue) {
         // Check if matching value is present in REFERENCE
-        EObject matchReferenceValue = targetValueMatch == null?
-            targetValue: targetValueMatch.get(Role.REFERENCE);
+        @SuppressWarnings("null") // OK due to the definition of outsideScope
+        EObject matchReferenceValue = outsideTargetScope? targetValue:
+          targetValueMatch.get(Role.REFERENCE);
         boolean isIsolated = matchReferenceValue == null;
+        int index = -1;
         if (!isIsolated) {
           // Check value presence and ordering
-          int index = remainingReferenceValues.indexOf(matchReferenceValue);
+          index = detectReferenceValueAmong(matchReferenceValue,
+              remainingReferenceValues, outsideTargetScope);
           isIsolated = index < 0;
           if (checkOrder && !isIsolated) {
             if (index < maxIndex) {
@@ -374,7 +380,11 @@ public class DiffOperation extends AbstractExpensiveOperation {
               match_p, reference_p, targetValue, targetValueMatch, Role.TARGET, false);
           result = true;
         } else {
-          remainingReferenceValues.remove(matchReferenceValue);
+          // Remove from the remaining values on the REFERENCE side
+          if (index > -1)
+            remainingReferenceValues.remove(index);
+          else
+            remainingReferenceValues.remove(matchReferenceValue);
         }
       } // Else TARGET value is out of scope and not covered as such
     }
@@ -382,9 +392,10 @@ public class DiffOperation extends AbstractExpensiveOperation {
     for (EObject remainingReferenceValue : remainingReferenceValues) {
       IMatch referenceValueMatch = getMapping().getMatchFor(
           remainingReferenceValue, Role.REFERENCE);
+      boolean outsideReferenceScope = referenceValueMatch == null;
       boolean coverReferenceValue =
-          referenceValueMatch != null && diffPolicy.coverMatch(referenceValueMatch) ||
-          referenceValueMatch == null && diffPolicy.coverOutOfScopeValue(
+          !outsideReferenceScope && diffPolicy.coverMatch(referenceValueMatch) ||
+          outsideReferenceScope && diffPolicy.coverOutOfScopeValue(
               remainingReferenceValue, reference_p);
       if (coverReferenceValue) {
         // We have a covered unmatched presence on the REFERENCE side
@@ -394,6 +405,35 @@ public class DiffOperation extends AbstractExpensiveOperation {
             referenceValueMatch, Role.REFERENCE, false);
         result = true;
       } // Else REFERENCE value is out of scope and not covered as such
+    }
+    return result;
+  }
+  
+  /**
+   * Return the position of the given reference value among the given list of values,
+   * given that it should or not be considered as an out-of-scope value
+   * @param value_p a non-null element
+   * @param values_p a non-null, potentially empty list
+   * @param outsideScope_p whether the value is out-of-scope
+   * @return a positive int or -1 if the element is not found
+   */
+  protected int detectReferenceValueAmong(EObject value_p, List<EObject> values_p,
+      boolean outsideScope_p) {
+    int result = values_p.indexOf(value_p);
+    if (result == -1 && outsideScope_p) {
+      // Outside scope: allow absolute detection
+      URI valueURI = EcoreUtil.getURI(value_p);
+      if (valueURI != null) {
+        int i = -1;
+        for (EObject candidateValue : values_p) {
+          i++;
+          URI candidateURI = EcoreUtil.getURI(candidateValue);
+          if (valueURI.equals(candidateURI)) {
+            result = i;
+            break;
+          }
+        }
+      }
     }
     return result;
   }
@@ -817,8 +857,9 @@ public class DiffOperation extends AbstractExpensiveOperation {
           IMatch currentValueMatch = getMapping().getMatchFor(value, presenceRole);
           if (currentValueMatch != null) {
             EObject matchAncestor = currentValueMatch.get(Role.ANCESTOR);
+            //TODO handle ancestor out-of-scope value
             if (matchAncestor != null) {
-              int index = ancestorValues.indexOf(matchAncestor);
+              int index = detectReferenceValueAmong(matchAncestor, ancestorValues, false);
               if (index >= 0) {
                 if (index < maxIndex) {
                   // Ordering difference
