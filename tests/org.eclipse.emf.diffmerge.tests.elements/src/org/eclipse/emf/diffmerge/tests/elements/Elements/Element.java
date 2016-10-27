@@ -28,8 +28,14 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getValues <em>Values</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContent <em>Many Content</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContent <em>Single Content</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContentWithUp <em>Many Content With Up</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent <em>Up From Many Content</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp <em>Single Content With Up</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent <em>Up From Single Content</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyRef <em>Many Ref</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleRef <em>Single Ref</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1 <em>Single From Single Ref1</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2 <em>Single From Single Ref2</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyFromSingleRef <em>Many From Single Ref</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromManyRef <em>Single From Many Ref</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyFromManyRef1 <em>Many From Many Ref1</em>}</li>
@@ -127,6 +133,108 @@ public interface Element extends NamedElement {
 	void setSingleContent(Element value);
 
 	/**
+   * Returns the value of the '<em><b>Many Content With Up</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element}.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent <em>Up From Many Content</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Many Content With Up</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Many Content With Up</em>' containment reference list.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_ManyContentWithUp()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent
+   * @model opposite="upFromManyContent" containment="true"
+   * @generated
+   */
+  EList<Element> getManyContentWithUp();
+
+  /**
+   * Returns the value of the '<em><b>Up From Many Content</b></em>' container reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContentWithUp <em>Many Content With Up</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Up From Many Content</em>' container reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Up From Many Content</em>' container reference.
+   * @see #setUpFromManyContent(Element)
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_UpFromManyContent()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContentWithUp
+   * @model opposite="manyContentWithUp" transient="false"
+   * @generated
+   */
+  Element getUpFromManyContent();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent <em>Up From Many Content</em>}' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Up From Many Content</em>' container reference.
+   * @see #getUpFromManyContent()
+   * @generated
+   */
+  void setUpFromManyContent(Element value);
+
+  /**
+   * Returns the value of the '<em><b>Single Content With Up</b></em>' containment reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent <em>Up From Single Content</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Single Content With Up</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Single Content With Up</em>' containment reference.
+   * @see #setSingleContentWithUp(Element)
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_SingleContentWithUp()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent
+   * @model opposite="upFromSingleContent" containment="true"
+   * @generated
+   */
+  Element getSingleContentWithUp();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp <em>Single Content With Up</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Single Content With Up</em>' containment reference.
+   * @see #getSingleContentWithUp()
+   * @generated
+   */
+  void setSingleContentWithUp(Element value);
+
+  /**
+   * Returns the value of the '<em><b>Up From Single Content</b></em>' container reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp <em>Single Content With Up</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Up From Single Content</em>' container reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Up From Single Content</em>' container reference.
+   * @see #setUpFromSingleContent(Element)
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_UpFromSingleContent()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp
+   * @model opposite="singleContentWithUp" transient="false"
+   * @generated
+   */
+  Element getUpFromSingleContent();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent <em>Up From Single Content</em>}' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Up From Single Content</em>' container reference.
+   * @see #getUpFromSingleContent()
+   * @generated
+   */
+  void setUpFromSingleContent(Element value);
+
+  /**
    * Returns the value of the '<em><b>Many Ref</b></em>' reference list.
    * The list contents are of type {@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element}.
    * <!-- begin-user-doc -->
@@ -169,6 +277,62 @@ public interface Element extends NamedElement {
 	void setSingleRef(Element value);
 
 	/**
+   * Returns the value of the '<em><b>Single From Single Ref1</b></em>' reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2 <em>Single From Single Ref2</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Single From Single Ref1</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Single From Single Ref1</em>' reference.
+   * @see #setSingleFromSingleRef1(Element)
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_SingleFromSingleRef1()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2
+   * @model opposite="singleFromSingleRef2"
+   * @generated
+   */
+  Element getSingleFromSingleRef1();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1 <em>Single From Single Ref1</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Single From Single Ref1</em>' reference.
+   * @see #getSingleFromSingleRef1()
+   * @generated
+   */
+  void setSingleFromSingleRef1(Element value);
+
+  /**
+   * Returns the value of the '<em><b>Single From Single Ref2</b></em>' reference.
+   * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1 <em>Single From Single Ref1</em>}'.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Single From Single Ref2</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Single From Single Ref2</em>' reference.
+   * @see #setSingleFromSingleRef2(Element)
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage#getElement_SingleFromSingleRef2()
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1
+   * @model opposite="singleFromSingleRef1"
+   * @generated
+   */
+  Element getSingleFromSingleRef2();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2 <em>Single From Single Ref2</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Single From Single Ref2</em>' reference.
+   * @see #getSingleFromSingleRef2()
+   * @generated
+   */
+  void setSingleFromSingleRef2(Element value);
+
+  /**
    * Returns the value of the '<em><b>Many From Single Ref</b></em>' reference list.
    * The list contents are of type {@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element}.
    * It is bidirectional and its opposite is '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromManyRef <em>Single From Many Ref</em>}'.

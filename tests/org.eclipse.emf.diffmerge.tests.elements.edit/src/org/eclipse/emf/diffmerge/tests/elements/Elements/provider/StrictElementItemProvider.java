@@ -20,20 +20,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsFactory;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.StrictElement;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -44,13 +36,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class StrictElementItemProvider
-	extends ElementItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ElementItemProvider {
 	/**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -386,6 +372,8 @@ public class StrictElementItemProvider
     boolean qualify =
       childFeature == ElementsPackage.Literals.ELEMENT__MANY_CONTENT ||
       childFeature == ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT ||
+      childFeature == ElementsPackage.Literals.ELEMENT__MANY_CONTENT_WITH_UP ||
+      childFeature == ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT_WITH_UP ||
       childFeature == ElementsPackage.Literals.STRICT_ELEMENT__SMANY_CONTENT ||
       childFeature == ElementsPackage.Literals.STRICT_ELEMENT__SSINGLE_CONTENT;
 

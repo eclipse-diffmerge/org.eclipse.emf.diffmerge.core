@@ -243,13 +243,49 @@ public interface ElementsPackage extends EPackage {
 	int ELEMENT__SINGLE_CONTENT = NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+   * The feature id for the '<em><b>Many Content With Up</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__MANY_CONTENT_WITH_UP = NAMED_ELEMENT_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Up From Many Content</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__UP_FROM_MANY_CONTENT = NAMED_ELEMENT_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Single Content With Up</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__SINGLE_CONTENT_WITH_UP = NAMED_ELEMENT_FEATURE_COUNT + 6;
+
+  /**
+   * The feature id for the '<em><b>Up From Single Content</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__UP_FROM_SINGLE_CONTENT = NAMED_ELEMENT_FEATURE_COUNT + 7;
+
+  /**
    * The feature id for the '<em><b>Many Ref</b></em>' reference list.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-	int ELEMENT__MANY_REF = NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int ELEMENT__MANY_REF = NAMED_ELEMENT_FEATURE_COUNT + 8;
 
 	/**
    * The feature id for the '<em><b>Single Ref</b></em>' reference.
@@ -258,16 +294,34 @@ public interface ElementsPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int ELEMENT__SINGLE_REF = NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int ELEMENT__SINGLE_REF = NAMED_ELEMENT_FEATURE_COUNT + 9;
 
 	/**
+   * The feature id for the '<em><b>Single From Single Ref1</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__SINGLE_FROM_SINGLE_REF1 = NAMED_ELEMENT_FEATURE_COUNT + 10;
+
+  /**
+   * The feature id for the '<em><b>Single From Single Ref2</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ELEMENT__SINGLE_FROM_SINGLE_REF2 = NAMED_ELEMENT_FEATURE_COUNT + 11;
+
+  /**
    * The feature id for the '<em><b>Many From Single Ref</b></em>' reference list.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-	int ELEMENT__MANY_FROM_SINGLE_REF = NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int ELEMENT__MANY_FROM_SINGLE_REF = NAMED_ELEMENT_FEATURE_COUNT + 12;
 
 	/**
    * The feature id for the '<em><b>Single From Many Ref</b></em>' reference.
@@ -276,7 +330,7 @@ public interface ElementsPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int ELEMENT__SINGLE_FROM_MANY_REF = NAMED_ELEMENT_FEATURE_COUNT + 7;
+	int ELEMENT__SINGLE_FROM_MANY_REF = NAMED_ELEMENT_FEATURE_COUNT + 13;
 
 	/**
    * The feature id for the '<em><b>Many From Many Ref1</b></em>' reference list.
@@ -285,7 +339,7 @@ public interface ElementsPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int ELEMENT__MANY_FROM_MANY_REF1 = NAMED_ELEMENT_FEATURE_COUNT + 8;
+	int ELEMENT__MANY_FROM_MANY_REF1 = NAMED_ELEMENT_FEATURE_COUNT + 14;
 
 	/**
    * The feature id for the '<em><b>Many From Many Ref2</b></em>' reference list.
@@ -294,7 +348,7 @@ public interface ElementsPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int ELEMENT__MANY_FROM_MANY_REF2 = NAMED_ELEMENT_FEATURE_COUNT + 9;
+	int ELEMENT__MANY_FROM_MANY_REF2 = NAMED_ELEMENT_FEATURE_COUNT + 15;
 
 	/**
    * The number of structural features of the '<em>Element</em>' class.
@@ -303,7 +357,7 @@ public interface ElementsPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 10;
+	int ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 16;
 
 	/**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.impl.StrictElementImpl <em>Strict Element</em>}' class.
@@ -370,6 +424,42 @@ public interface ElementsPackage extends EPackage {
 	int STRICT_ELEMENT__SINGLE_CONTENT = ELEMENT__SINGLE_CONTENT;
 
 	/**
+   * The feature id for the '<em><b>Many Content With Up</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__MANY_CONTENT_WITH_UP = ELEMENT__MANY_CONTENT_WITH_UP;
+
+  /**
+   * The feature id for the '<em><b>Up From Many Content</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__UP_FROM_MANY_CONTENT = ELEMENT__UP_FROM_MANY_CONTENT;
+
+  /**
+   * The feature id for the '<em><b>Single Content With Up</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__SINGLE_CONTENT_WITH_UP = ELEMENT__SINGLE_CONTENT_WITH_UP;
+
+  /**
+   * The feature id for the '<em><b>Up From Single Content</b></em>' container reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__UP_FROM_SINGLE_CONTENT = ELEMENT__UP_FROM_SINGLE_CONTENT;
+
+  /**
    * The feature id for the '<em><b>Many Ref</b></em>' reference list.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -388,6 +478,24 @@ public interface ElementsPackage extends EPackage {
 	int STRICT_ELEMENT__SINGLE_REF = ELEMENT__SINGLE_REF;
 
 	/**
+   * The feature id for the '<em><b>Single From Single Ref1</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__SINGLE_FROM_SINGLE_REF1 = ELEMENT__SINGLE_FROM_SINGLE_REF1;
+
+  /**
+   * The feature id for the '<em><b>Single From Single Ref2</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int STRICT_ELEMENT__SINGLE_FROM_SINGLE_REF2 = ELEMENT__SINGLE_FROM_SINGLE_REF2;
+
+  /**
    * The feature id for the '<em><b>Many From Single Ref</b></em>' reference list.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -844,6 +952,50 @@ public interface ElementsPackage extends EPackage {
 	EReference getElement_SingleContent();
 
 	/**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContentWithUp <em>Many Content With Up</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Many Content With Up</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyContentWithUp()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_ManyContentWithUp();
+
+  /**
+   * Returns the meta object for the container reference '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent <em>Up From Many Content</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Up From Many Content</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromManyContent()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_UpFromManyContent();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp <em>Single Content With Up</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Single Content With Up</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleContentWithUp()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_SingleContentWithUp();
+
+  /**
+   * Returns the meta object for the container reference '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent <em>Up From Single Content</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the container reference '<em>Up From Single Content</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getUpFromSingleContent()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_UpFromSingleContent();
+
+  /**
    * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyRef <em>Many Ref</em>}'.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -866,6 +1018,28 @@ public interface ElementsPackage extends EPackage {
 	EReference getElement_SingleRef();
 
 	/**
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1 <em>Single From Single Ref1</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Single From Single Ref1</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef1()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_SingleFromSingleRef1();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2 <em>Single From Single Ref2</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Single From Single Ref2</em>'.
+   * @see org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getSingleFromSingleRef2()
+   * @see #getElement()
+   * @generated
+   */
+  EReference getElement_SingleFromSingleRef2();
+
+  /**
    * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.tests.elements.Elements.Element#getManyFromSingleRef <em>Many From Single Ref</em>}'.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1252,6 +1426,38 @@ public interface ElementsPackage extends EPackage {
 		EReference ELEMENT__SINGLE_CONTENT = eINSTANCE.getElement_SingleContent();
 
 		/**
+     * The meta object literal for the '<em><b>Many Content With Up</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__MANY_CONTENT_WITH_UP = eINSTANCE.getElement_ManyContentWithUp();
+
+    /**
+     * The meta object literal for the '<em><b>Up From Many Content</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__UP_FROM_MANY_CONTENT = eINSTANCE.getElement_UpFromManyContent();
+
+    /**
+     * The meta object literal for the '<em><b>Single Content With Up</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__SINGLE_CONTENT_WITH_UP = eINSTANCE.getElement_SingleContentWithUp();
+
+    /**
+     * The meta object literal for the '<em><b>Up From Single Content</b></em>' container reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__UP_FROM_SINGLE_CONTENT = eINSTANCE.getElement_UpFromSingleContent();
+
+    /**
      * The meta object literal for the '<em><b>Many Ref</b></em>' reference list feature.
      * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1268,6 +1474,22 @@ public interface ElementsPackage extends EPackage {
 		EReference ELEMENT__SINGLE_REF = eINSTANCE.getElement_SingleRef();
 
 		/**
+     * The meta object literal for the '<em><b>Single From Single Ref1</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__SINGLE_FROM_SINGLE_REF1 = eINSTANCE.getElement_SingleFromSingleRef1();
+
+    /**
+     * The meta object literal for the '<em><b>Single From Single Ref2</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ELEMENT__SINGLE_FROM_SINGLE_REF2 = eINSTANCE.getElement_SingleFromSingleRef2();
+
+    /**
      * The meta object literal for the '<em><b>Many From Single Ref</b></em>' reference list feature.
      * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->

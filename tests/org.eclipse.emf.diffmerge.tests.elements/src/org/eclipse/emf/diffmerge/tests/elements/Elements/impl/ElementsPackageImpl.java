@@ -266,46 +266,46 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
 
 	/**
    * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_ManyContentWithUp() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_UpFromManyContent() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_SingleContentWithUp() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_UpFromSingleContent() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
    * @generated
    */
 	public EReference getElement_ManyRef() {
-    return (EReference)elementEClass.getEStructuralFeatures().get(4);
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
-	public EReference getElement_SingleRef() {
-    return (EReference)elementEClass.getEStructuralFeatures().get(5);
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
-	public EReference getElement_ManyFromSingleRef() {
-    return (EReference)elementEClass.getEStructuralFeatures().get(6);
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
-	public EReference getElement_SingleFromManyRef() {
-    return (EReference)elementEClass.getEStructuralFeatures().get(7);
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
-	public EReference getElement_ManyFromManyRef1() {
     return (EReference)elementEClass.getEStructuralFeatures().get(8);
   }
 
@@ -314,8 +314,62 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
 	 * <!-- end-user-doc -->
    * @generated
    */
-	public EReference getElement_ManyFromManyRef2() {
+	public EReference getElement_SingleRef() {
     return (EReference)elementEClass.getEStructuralFeatures().get(9);
+  }
+
+	/**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_SingleFromSingleRef1() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getElement_SingleFromSingleRef2() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(11);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+   * @generated
+   */
+	public EReference getElement_ManyFromSingleRef() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(12);
+  }
+
+	/**
+   * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+   * @generated
+   */
+	public EReference getElement_SingleFromManyRef() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(13);
+  }
+
+	/**
+   * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+   * @generated
+   */
+	public EReference getElement_ManyFromManyRef1() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(14);
+  }
+
+	/**
+   * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+   * @generated
+   */
+	public EReference getElement_ManyFromManyRef2() {
+    return (EReference)elementEClass.getEStructuralFeatures().get(15);
   }
 
 	/**
@@ -541,8 +595,14 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
     createEAttribute(elementEClass, ELEMENT__VALUES);
     createEReference(elementEClass, ELEMENT__MANY_CONTENT);
     createEReference(elementEClass, ELEMENT__SINGLE_CONTENT);
+    createEReference(elementEClass, ELEMENT__MANY_CONTENT_WITH_UP);
+    createEReference(elementEClass, ELEMENT__UP_FROM_MANY_CONTENT);
+    createEReference(elementEClass, ELEMENT__SINGLE_CONTENT_WITH_UP);
+    createEReference(elementEClass, ELEMENT__UP_FROM_SINGLE_CONTENT);
     createEReference(elementEClass, ELEMENT__MANY_REF);
     createEReference(elementEClass, ELEMENT__SINGLE_REF);
+    createEReference(elementEClass, ELEMENT__SINGLE_FROM_SINGLE_REF1);
+    createEReference(elementEClass, ELEMENT__SINGLE_FROM_SINGLE_REF2);
     createEReference(elementEClass, ELEMENT__MANY_FROM_SINGLE_REF);
     createEReference(elementEClass, ELEMENT__SINGLE_FROM_MANY_REF);
     createEReference(elementEClass, ELEMENT__MANY_FROM_MANY_REF1);
@@ -625,8 +685,14 @@ public class ElementsPackageImpl extends EPackageImpl implements ElementsPackage
     initEAttribute(getElement_Values(), ecorePackage.getEInt(), "values", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_ManyContent(), this.getElement(), null, "manyContent", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_SingleContent(), this.getElement(), null, "singleContent", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_ManyContentWithUp(), this.getElement(), this.getElement_UpFromManyContent(), "manyContentWithUp", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_UpFromManyContent(), this.getElement(), this.getElement_ManyContentWithUp(), "upFromManyContent", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_SingleContentWithUp(), this.getElement(), this.getElement_UpFromSingleContent(), "singleContentWithUp", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_UpFromSingleContent(), this.getElement(), this.getElement_SingleContentWithUp(), "upFromSingleContent", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_ManyRef(), this.getElement(), null, "manyRef", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_SingleRef(), this.getElement(), null, "singleRef", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_SingleFromSingleRef1(), this.getElement(), this.getElement_SingleFromSingleRef2(), "singleFromSingleRef1", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getElement_SingleFromSingleRef2(), this.getElement(), this.getElement_SingleFromSingleRef1(), "singleFromSingleRef2", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_ManyFromSingleRef(), this.getElement(), this.getElement_SingleFromManyRef(), "manyFromSingleRef", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_SingleFromManyRef(), this.getElement(), this.getElement_ManyFromSingleRef(), "singleFromManyRef", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getElement_ManyFromManyRef1(), this.getElement(), this.getElement_ManyFromManyRef2(), "manyFromManyRef1", null, 0, -1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

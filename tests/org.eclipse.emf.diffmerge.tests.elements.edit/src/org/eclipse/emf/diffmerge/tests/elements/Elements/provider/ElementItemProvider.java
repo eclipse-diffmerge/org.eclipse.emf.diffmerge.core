@@ -20,20 +20,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.diffmerge.tests.elements.Elements.Element;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsFactory;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsPackage;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -44,13 +36,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class ElementItemProvider
-	extends NamedElementItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends NamedElementItemProvider {
 	/**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -76,6 +62,8 @@ public class ElementItemProvider
       addValuesPropertyDescriptor(object);
       addManyRefPropertyDescriptor(object);
       addSingleRefPropertyDescriptor(object);
+      addSingleFromSingleRef1PropertyDescriptor(object);
+      addSingleFromSingleRef2PropertyDescriptor(object);
       addManyFromSingleRefPropertyDescriptor(object);
       addSingleFromManyRefPropertyDescriptor(object);
       addManyFromManyRef1PropertyDescriptor(object);
@@ -173,6 +161,50 @@ public class ElementItemProvider
   }
 
 	/**
+   * This adds a property descriptor for the Single From Single Ref1 feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSingleFromSingleRef1PropertyDescriptor(Object object) {
+    itemPropertyDescriptors.add
+      (createItemPropertyDescriptor
+        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+         getResourceLocator(),
+         getString("_UI_Element_singleFromSingleRef1_feature"),
+         getString("_UI_PropertyDescriptor_description", "_UI_Element_singleFromSingleRef1_feature", "_UI_Element_type"),
+         ElementsPackage.Literals.ELEMENT__SINGLE_FROM_SINGLE_REF1,
+         true,
+         false,
+         true,
+         null,
+         null,
+         null));
+  }
+
+  /**
+   * This adds a property descriptor for the Single From Single Ref2 feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSingleFromSingleRef2PropertyDescriptor(Object object) {
+    itemPropertyDescriptors.add
+      (createItemPropertyDescriptor
+        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+         getResourceLocator(),
+         getString("_UI_Element_singleFromSingleRef2_feature"),
+         getString("_UI_PropertyDescriptor_description", "_UI_Element_singleFromSingleRef2_feature", "_UI_Element_type"),
+         ElementsPackage.Literals.ELEMENT__SINGLE_FROM_SINGLE_REF2,
+         true,
+         false,
+         true,
+         null,
+         null,
+         null));
+  }
+
+  /**
    * This adds a property descriptor for the Many From Single Ref feature.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -274,6 +306,8 @@ public class ElementItemProvider
       super.getChildrenFeatures(object);
       childrenFeatures.add(ElementsPackage.Literals.ELEMENT__MANY_CONTENT);
       childrenFeatures.add(ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT);
+      childrenFeatures.add(ElementsPackage.Literals.ELEMENT__MANY_CONTENT_WITH_UP);
+      childrenFeatures.add(ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT_WITH_UP);
     }
     return childrenFeatures;
   }
@@ -334,6 +368,8 @@ public class ElementItemProvider
         return;
       case ElementsPackage.ELEMENT__MANY_CONTENT:
       case ElementsPackage.ELEMENT__SINGLE_CONTENT:
+      case ElementsPackage.ELEMENT__MANY_CONTENT_WITH_UP:
+      case ElementsPackage.ELEMENT__SINGLE_CONTENT_WITH_UP:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
@@ -370,6 +406,26 @@ public class ElementItemProvider
       (createChildParameter
         (ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT,
          ElementsFactory.eINSTANCE.createStrictElement()));
+
+    newChildDescriptors.add
+      (createChildParameter
+        (ElementsPackage.Literals.ELEMENT__MANY_CONTENT_WITH_UP,
+         ElementsFactory.eINSTANCE.createElement()));
+
+    newChildDescriptors.add
+      (createChildParameter
+        (ElementsPackage.Literals.ELEMENT__MANY_CONTENT_WITH_UP,
+         ElementsFactory.eINSTANCE.createStrictElement()));
+
+    newChildDescriptors.add
+      (createChildParameter
+        (ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT_WITH_UP,
+         ElementsFactory.eINSTANCE.createElement()));
+
+    newChildDescriptors.add
+      (createChildParameter
+        (ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT_WITH_UP,
+         ElementsFactory.eINSTANCE.createStrictElement()));
   }
 
 	/**
@@ -385,7 +441,9 @@ public class ElementItemProvider
 
     boolean qualify =
       childFeature == ElementsPackage.Literals.ELEMENT__MANY_CONTENT ||
-      childFeature == ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT;
+      childFeature == ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT ||
+      childFeature == ElementsPackage.Literals.ELEMENT__MANY_CONTENT_WITH_UP ||
+      childFeature == ElementsPackage.Literals.ELEMENT__SINGLE_CONTENT_WITH_UP;
 
     if (qualify) {
       return getString
