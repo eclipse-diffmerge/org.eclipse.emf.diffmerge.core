@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="egraphs" nsURI="http://www.eclipse.org/emf/diffmerge/structures/egraphs/1.0.0"
+    nsPrefix="org.eclipse.emf.diffmerge.structures.model">
+  <eClassifiers xsi:type="ecore:EClass" name="EGraph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//ENode" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ENode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//EHyperEdge" containment="true" eOpposite="#//EHyperEdge/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//EHyperEdge" eOpposite="#//EHyperEdge/targets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EHyperEdge">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ENode" eOpposite="#//ENode/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//ENode" eOpposite="#//ENode/incoming"/>
+  </eClassifiers>
+</ecore:EPackage>

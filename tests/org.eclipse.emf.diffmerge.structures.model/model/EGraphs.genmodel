@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.structures.model/src"
+    modelPluginID="org.eclipse.emf.diffmerge.structures.model" modelName="EGraphs"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" rootImplementsInterface=""
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0" copyrightFields="false"
+    runtimeVersion="2.6" operationReflection="true" importOrganizing="true">
+  <foreignModel>EGraphs.ecore</foreignModel>
+  <genPackages prefix="EGraphs" basePackage="org.eclipse.emf.diffmerge.structures.model"
+      resource="XMI" disposableProviderFactory="true" contentTypeIdentifier="" fileExtensions="egraphs"
+      ecorePackage="EGraphs.ecore#/">
+    <genClasses ecoreClass="EGraphs.ecore#//EGraph">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EGraphs.ecore#//EGraph/contents"/>
+    </genClasses>
+    <genClasses ecoreClass="EGraphs.ecore#//ENode">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EGraphs.ecore#//ENode/element"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference EGraphs.ecore#//ENode/outgoing"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference EGraphs.ecore#//ENode/incoming"/>
+    </genClasses>
+    <genClasses ecoreClass="EGraphs.ecore#//EHyperEdge">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute EGraphs.ecore#//EHyperEdge/label"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference EGraphs.ecore#//EHyperEdge/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference EGraphs.ecore#//EHyperEdge/targets"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

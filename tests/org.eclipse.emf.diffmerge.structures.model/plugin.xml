@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated EGraphs -->
+      <package
+            uri="http://www.eclipse.org/emf/diffmerge/structures/egraphs/1.0.0"
+            class="org.eclipse.emf.diffmerge.structures.model.egraphs.EGraphsPackage"
+            genModel="model/EGraphs.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated EGraphs -->
+      <parser
+            type="egraphs"
+            class="org.eclipse.emf.diffmerge.structures.model.egraphs.util.EGraphsResourceFactoryImpl"/>
+   </extension>
+</plugin>

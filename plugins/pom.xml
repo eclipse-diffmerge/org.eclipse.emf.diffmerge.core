@@ -28,6 +28,7 @@
 	</build>
 
 	<modules>
+		<module>org.eclipse.emf.diffmerge.structures</module>
 		<module>org.eclipse.emf.diffmerge</module>
 		<module>org.eclipse.emf.diffmerge.connector.core</module>
 		<module>org.eclipse.emf.diffmerge.connector.git</module>

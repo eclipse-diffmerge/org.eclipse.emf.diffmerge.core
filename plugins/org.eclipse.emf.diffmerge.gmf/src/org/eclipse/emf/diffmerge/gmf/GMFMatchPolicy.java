@@ -22,7 +22,7 @@ import java.util.Map;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
-import org.eclipse.emf.diffmerge.util.structures.comparable.ComparableTreeMap;
+import org.eclipse.emf.diffmerge.structures.common.comparable.ComparableTreeMap;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.gmf.runtime.notation.Diagram;

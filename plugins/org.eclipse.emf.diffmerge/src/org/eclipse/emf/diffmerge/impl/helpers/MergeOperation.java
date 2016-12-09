@@ -27,7 +27,7 @@ import org.eclipse.emf.diffmerge.api.IMergeSelector;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
-import org.eclipse.emf.diffmerge.util.structures.FArrayList;
+import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 
 
 /**

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.sirius.externalJavaAction">
+      <javaActions
+            actionClass="org.eclipse.emf.diffmerge.structures.design.TestAction"
+            id="org.eclipse.emf.diffmerge.structures.sirius.TestAction">
+      </javaActions>
+      <javaActions
+            actionClass="org.eclipse.emf.diffmerge.structures.design.ResetAction"
+            id="org.eclipse.emf.diffmerge.structures.sirius.ResetAction">
+      </javaActions>
+   </extension>
+
+</plugin>

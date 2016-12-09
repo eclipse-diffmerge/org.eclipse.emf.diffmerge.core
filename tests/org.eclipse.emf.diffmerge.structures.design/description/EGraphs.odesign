@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" name="EGraphs" version="12.0.0.2017041100">
+  <ownedViewpoints name="egraphs" label="EGraphs">
+    <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Graph" label="Graph" initialisation="true" showOnStartup="true" domainClass="egraphs.EGraph">
+      <metamodel href="http://www.eclipse.org/emf/diffmerge/structures/egraphs/1.0.0#/"/>
+      <defaultLayer name="Default">
+        <edgeMappings name="GraphEdge" synchronizationLock="true" sourceMapping="//@ownedViewpoints[name='egraphs']/@ownedRepresentations[name='Graph']/@defaultLayer/@containerMappings[name='GraphNode']" targetMapping="//@ownedViewpoints[name='egraphs']/@ownedRepresentations[name='Graph']/@defaultLayer/@containerMappings[name='GraphNode']" targetFinderExpression="feature:targets" sourceFinderExpression="feature:source" domainClass="egraphs.EHyperEdge" useDomainElement="true">
+          <style sizeComputationExpression="2">
+            <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
+            <centerLabelStyleDescription labelExpression="feature:label">
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            </centerLabelStyleDescription>
+          </style>
+        </edgeMappings>
+        <containerMappings name="GraphNode" synchronizationLock="true" domainClass="egraphs.ENode" childrenPresentation="List">
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelExpression="feature:element">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
+        <toolSections name="Tools">
+          <ownedTools xsi:type="tool:ToolDescription" name="Test">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="&lt;% element %>">
+                <subModelOperations xsi:type="tool:ExternalJavaAction" name="TestAction" id="org.eclipse.emf.diffmerge.structures.sirius.TestAction"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:ToolDescription" name="Reset">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="&lt;% $element %>">
+                <subModelOperations xsi:type="tool:ExternalJavaAction" name="ResetAction" id="org.eclipse.emf.diffmerge.structures.sirius.ResetAction"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+        </toolSections>
+      </defaultLayer>
+    </ownedRepresentations>
+  </ownedViewpoints>
+</description:Group>

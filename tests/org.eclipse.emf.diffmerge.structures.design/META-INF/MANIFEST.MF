@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.eclipse.emf.diffmerge.structures.design;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Vendor: %providerName
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.diffmerge.structures.model,
+ org.eclipse.sirius
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.eclipse.emf.diffmerge.structures.design.StructuresDesignPlugin
+Export-Package: org.eclipse.emf.diffmerge.structures.design

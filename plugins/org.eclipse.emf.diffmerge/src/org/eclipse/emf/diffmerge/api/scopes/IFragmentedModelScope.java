@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.api.scopes;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.ecore.resource.Resource;
@@ -38,7 +39,7 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
    * @param resource_p a non-null resource belonging to getResources()
    * @return a non-null, potentially empty list
    */
-  List<Resource> getIncludedResources(Resource resource_p);
+  Collection<Resource> getIncludedResources(Resource resource_p);
   
   /**
    * Return the list of the resources which are not included in the
@@ -49,7 +50,7 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
    * @param resource_p a non-null resource belonging to getResources()
    * @return a non-null, potentially empty list
    */
-  List<Resource> getReferencedResources(Resource resource_p);
+  Collection<Resource> getReferencedResources(Resource resource_p);
   
   /**
    * Return the list of the resources which are covered by this scope.

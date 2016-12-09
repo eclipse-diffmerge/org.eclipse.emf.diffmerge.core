@@ -31,11 +31,11 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
+import org.eclipse.emf.diffmerge.structures.binary.HashBinaryRelation;
+import org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation;
+import org.eclipse.emf.diffmerge.structures.common.FArrayList;
+import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
-import org.eclipse.emf.diffmerge.util.structures.FArrayList;
-import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
-import org.eclipse.emf.diffmerge.util.structures.HashBinaryRelation;
-import org.eclipse.emf.diffmerge.util.structures.IBinaryRelation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -355,7 +355,7 @@ implements IFragmentedModelScope.Editable {
    * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#getIncludedResources(org.eclipse.emf.ecore.resource.Resource)
    * Result is guaranteed to be accurate only if hasBeenExplored().
    */
-  public List<Resource> getIncludedResources(Resource resource_p) {
+  public Collection<Resource> getIncludedResources(Resource resource_p) {
     return _includedResources.get(resource_p);
   }
   
@@ -373,7 +373,7 @@ implements IFragmentedModelScope.Editable {
    * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#getReferencedResources(org.eclipse.emf.ecore.resource.Resource)
    * Result is guaranteed to be accurate only if hasBeenExplored().
    */
-  public List<Resource> getReferencedResources(Resource resource_p) {
+  public Collection<Resource> getReferencedResources(Resource resource_p) {
     return _referencedResources.get(resource_p);
   }
   

@@ -27,10 +27,10 @@ import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
-import org.eclipse.emf.diffmerge.util.structures.AbstractEndorelation;
-import org.eclipse.emf.diffmerge.util.structures.FArrayList;
-import org.eclipse.emf.diffmerge.util.structures.FHashSet;
-import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
+import org.eclipse.emf.diffmerge.structures.IEqualityTester;
+import org.eclipse.emf.diffmerge.structures.common.FArrayList;
+import org.eclipse.emf.diffmerge.structures.common.FHashSet;
+import org.eclipse.emf.diffmerge.structures.endo.AbstractEndorelation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -886,7 +886,7 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl implements
     }
 
     /**
-     * @see org.eclipse.emf.diffmerge.util.structures.IBinaryRelation#get(Object)
+     * @see org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation#get(java.lang.Object)
      */
     public Collection<IMergeableDifference> get(IMergeableDifference element_p) {
       Collection<IMergeableDifference> result;

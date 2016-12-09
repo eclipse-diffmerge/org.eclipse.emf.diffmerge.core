@@ -17,8 +17,8 @@ package org.eclipse.emf.diffmerge.impl.scopes;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.util.structures.FArrayList;
-import org.eclipse.emf.diffmerge.util.structures.IEqualityTester;
+import org.eclipse.emf.diffmerge.structures.IEqualityTester;
+import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
