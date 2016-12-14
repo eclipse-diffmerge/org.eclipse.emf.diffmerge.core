@@ -65,7 +65,8 @@ public interface IMergeableDifference extends IDifference {
   Collection<IMergeableDifference> getImpliesDependencies(Role role_p);
   
   /**
-   * Merge this difference to the given role.
+   * Merge this difference to the given role. The precise semantics of this operation
+   * depends on the concrete type of the difference.
    * Precondition: canMergeTo(destination_p)
    * Postcondition: isMergedTo(destination_p)
    * @param destination_p a non-null role
