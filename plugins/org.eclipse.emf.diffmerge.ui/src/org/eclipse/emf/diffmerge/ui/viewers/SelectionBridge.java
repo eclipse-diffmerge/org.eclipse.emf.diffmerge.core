@@ -60,6 +60,13 @@ public class SelectionBridge implements ISelectionChangedListener, ISelectionPro
   }
   
   /**
+   * Clear the set of listeners
+   */
+  public void clearListeners() {
+    _selectionListeners.clear();
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
    */
   public ISelection getSelection() {

@@ -63,6 +63,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
@@ -71,10 +73,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 
@@ -332,6 +339,36 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * Return the contextual workbench page, if any
+   * @return a potentially null workbench page
+   */
+  protected IWorkbenchPage getPage() {
+    IWorkbenchPage result = null;
+    IWorkbenchSite site = getSite();
+    if (site != null)
+      result = site.getPage();
+    return result;
+  }
+  
+  /**
+   * Return the Properties view if already opened
+   * @return a potentially null object
+   */
+  protected PropertySheet getPropertySheet() {
+    PropertySheet result = null;
+    IWorkbenchPage page = getPage();
+    if (page != null) {
+      IViewReference ref = page.findViewReference(IPageLayout.ID_PROP_SHEET);
+      if (ref != null) {
+        IViewPart view = ref.getView(false);
+        if (view instanceof PropertySheet)
+          result = (PropertySheet)view;
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Return a property sheet page for the Properties view if possible
    * @return a potentially null object
    */
@@ -359,6 +396,21 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
           }
         };
         afDomain.getCommandStack().addCommandStackListener(_commandStackListener);
+        // Eclipse 4.x compatibility layer workaround: force refresh of Properties View
+        // on selection
+        ISelectionChangedListener propertySheetNotifier = new ISelectionChangedListener() {
+          /**
+           * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+           */
+          public void selectionChanged(SelectionChangedEvent e_p) {
+            if (_propertySheetPage != null && !_propertySheetPage.getControl().isDisposed()) {
+              PropertySheet view = getPropertySheet();
+              if (view != null && !view.isPinned())
+                _propertySheetPage.selectionChanged(getWorkbenchPart(), e_p.getSelection());
+            }
+          }
+        };
+        _selectionBridge.addSelectionChangedListener(propertySheetNotifier);
       }
     }
     return _propertySheetPage;
@@ -420,6 +472,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
           _viewer.setSelection(StructuredSelection.EMPTY, false);
           if (_selectionBridge != null) {
             _viewer.getMultiViewerSelectionProvider().removeSelectionChangedListener(_selectionBridge);
+            _selectionBridge.clearListeners();
             _selectionBridge = null;
           }
           _viewer = null;
