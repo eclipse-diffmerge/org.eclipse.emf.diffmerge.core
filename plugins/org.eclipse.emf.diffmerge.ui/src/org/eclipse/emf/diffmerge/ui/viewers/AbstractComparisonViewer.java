@@ -429,8 +429,18 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       node.updateDifferenceNumbers();
       node.getCategoryManager().setDefaultConfiguration();
     }
-    if (input_p instanceof ICompareInput)
-      ((ICompareInput)input_p).addCompareInputChangeListener(this);
+    if (input_p instanceof ICompareInput) {
+      final ICompareInput compareInput = (ICompareInput)input_p;
+      compareInput.addCompareInputChangeListener(this);
+      getControl().addDisposeListener(new DisposeListener() {
+        /**
+         * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+         */
+        public void widgetDisposed(DisposeEvent e_p) {
+          compareInput.removeCompareInputChangeListener(AbstractComparisonViewer.this);
+        }
+      });
+    }
     firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
   }
   
