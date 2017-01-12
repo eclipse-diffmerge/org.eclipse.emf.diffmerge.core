@@ -63,6 +63,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -74,15 +75,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
-import org.eclipse.ui.views.properties.PropertySheetPage;
 
 
 /**
@@ -159,9 +161,23 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * Ensure that the selection provider of the workbench site is the intended one
    */
   protected void checkSelectionProvider() {
-    IWorkbenchSite site = getSite();
-    if (site != null && site.getSelectionProvider() != _selectionBridge)
+    final IWorkbenchSite site = getSite();
+    if (site != null && site.getSelectionProvider() != _selectionBridge) {
       site.setSelectionProvider(_selectionBridge);
+      // Eclipse 4.x compatibility layer workaround: selection changed event propagation
+      ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
+        /**
+         * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+         */
+        public void selectionChanged(SelectionChangedEvent event_p) {
+            // Force propagation to selection listeners through the selection service
+            ISelectionService service = site.getWorkbenchWindow().getSelectionService();
+            if (service instanceof ISelectionChangedListener)
+              ((ISelectionChangedListener)service).selectionChanged(event_p);
+        }
+      };
+      _selectionBridge.addSelectionChangedListener(selectionChangedListener);
+    }
   }
   
   /**
@@ -339,46 +355,16 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
-   * Return the contextual workbench page, if any
-   * @return a potentially null workbench page
-   */
-  protected IWorkbenchPage getPage() {
-    IWorkbenchPage result = null;
-    IWorkbenchSite site = getSite();
-    if (site != null)
-      result = site.getPage();
-    return result;
-  }
-  
-  /**
-   * Return the Properties view if already opened
-   * @return a potentially null object
-   */
-  protected PropertySheet getPropertySheet() {
-    PropertySheet result = null;
-    IWorkbenchPage page = getPage();
-    if (page != null) {
-      IViewReference ref = page.findViewReference(IPageLayout.ID_PROP_SHEET);
-      if (ref != null) {
-        IViewPart view = ref.getView(false);
-        if (view instanceof PropertySheet)
-          result = (PropertySheet)view;
-      }
-    }
-    return result;
-  }
-  
-  /**
    * Return a property sheet page for the Properties view if possible
    * @return a potentially null object
    */
-  public IPropertySheetPage getPropertySheetPage() {
+  protected IPropertySheetPage getPropertySheetPage() {
     if (_propertySheetPage == null) {
       EditingDomain domain = getEditingDomain();
       if (domain instanceof AdapterFactoryEditingDomain) {
         // Property sheet page
         AdapterFactoryEditingDomain afDomain = (AdapterFactoryEditingDomain)domain;
-        _propertySheetPage = new ExtendedPropertySheetPage(afDomain);
+        _propertySheetPage = new PropertySheetPage(afDomain);
         _propertySheetPage.setPropertySourceProvider(
             new AdapterFactoryContentProvider(afDomain.getAdapterFactory()));
         // Command stack listener for property sheet page update
@@ -396,21 +382,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
           }
         };
         afDomain.getCommandStack().addCommandStackListener(_commandStackListener);
-        // Eclipse 4.x compatibility layer workaround: force refresh of Properties View
-        // on selection
-        ISelectionChangedListener propertySheetNotifier = new ISelectionChangedListener() {
-          /**
-           * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-           */
-          public void selectionChanged(SelectionChangedEvent e_p) {
-            if (_propertySheetPage != null && !_propertySheetPage.getControl().isDisposed()) {
-              PropertySheet view = getPropertySheet();
-              if (view != null && !view.isPinned())
-                _propertySheetPage.selectionChanged(getWorkbenchPart(), e_p.getSelection());
-            }
-          }
-        };
-        _selectionBridge.addSelectionChangedListener(propertySheetNotifier);
       }
     }
     return _propertySheetPage;
@@ -800,6 +771,72 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     if (_viewer != null)
       result = _viewer.getControl().setFocus();
     return result;
+  }
+  
+  
+  /**
+   * A slightly enhanced property sheet page for model elements.
+   */
+  protected static class PropertySheetPage extends ExtendedPropertySheetPage {
+    /**
+     * Constructor
+     * @param editingDomain_p a non-null editing domain for the elements
+     */
+    protected PropertySheetPage(AdapterFactoryEditingDomain editingDomain_p) {
+      super(editingDomain_p);
+    }
+    /**
+     * @see org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage#dispose()
+     */
+    @Override
+    public void dispose() {
+      super.dispose();
+      // Unregister properties view as selection listener
+      ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
+      service.removeSelectionListener(this);
+    }
+    /**
+     * Return the Properties view if already opened
+     * @param part_p a potentially null workbench part
+     * @return a potentially null object
+     */
+    protected PropertySheet getPropertySheet(IWorkbenchPart part_p) {
+      PropertySheet result = null;
+      IWorkbenchSite site = part_p.getSite();
+      if (site != null) {
+        IWorkbenchPage page = site.getPage();
+        if (page != null) {
+          IViewReference ref = page.findViewReference(IPageLayout.ID_PROP_SHEET);
+          if (ref != null) {
+            IViewPart view = ref.getView(false);
+            if (view instanceof PropertySheet)
+              result = (PropertySheet)view;
+          }
+        }
+      }
+      return result;
+    }
+    /**
+     * @see org.eclipse.ui.part.Page#init(org.eclipse.ui.part.IPageSite)
+     */
+    @Override
+    public void init(IPageSite pageSite_p) {
+      super.init(pageSite_p);
+      // Register as selection listener
+      ISelectionService service = pageSite_p.getWorkbenchWindow().getSelectionService();
+      service.addSelectionListener(this);
+    }
+    /**
+     * @see org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
+     */
+    @Override
+    public void selectionChanged(IWorkbenchPart part_p, ISelection selection_p) {
+      PropertySheet propertiesView = getPropertySheet(part_p);
+      if (propertiesView != null && !propertiesView.isPinned()) {
+        if (!selection_p.isEmpty()) // Do not propagate empty selection
+          super.selectionChanged(part_p, selection_p);
+      }
+    }
   }
   
 }
