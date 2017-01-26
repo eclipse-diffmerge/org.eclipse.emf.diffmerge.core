@@ -1,0 +1,50 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TC_MovedInAdded
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _9d3K4OPDEeaykLJOso5MtA
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 1/30/17 9:19 AM
+Testcase-Type: ecl
+
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+/* Copy current test files to Example project */
+copy-example "MovedInAdded"
+/* Compare Example models */
+compare-examples
+
+/* Merge changes */
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree | select "Root (3)/Element A (2)"
+    get-button "Copy to the right" | click
+}
+with [get-window "Merge Operation"] {
+    get-button "Include differences in children" | uncheck
+    get-button OK | click
+}
+check-changes "Required"	"Element A/Addition into Root  (via 'content')"
+check-changes "Required"	"Element B/Move into Element A  (via 'manyContent')"
+check-changes "Implied"		"Element B/Move out of Root (from 'content')"
+get-window "Merge Operation" | get-button OK | click
+
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree | select "Root (1)/Element A (1)/Element B (1)"
+    get-table | select value
+}
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-table -after [get-label Details] -index 1 | select 1
+    get-button "Copy to the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+
+
+/* Check persistency */
+check-persistency
+get-window Compare | get-property "getChildren().Control[1].getText()" | equals "There are no differences between the selected inputs." | verify-true
+get-window Compare | get-button OK | click
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--

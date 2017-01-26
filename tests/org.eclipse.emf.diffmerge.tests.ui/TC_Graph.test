@@ -1,0 +1,42 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TC_Graph
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _nb1u8OLjEeatZLxI8McVXQ
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 1/30/17 10:09 AM
+Testcase-Type: ecl
+
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
+Content-Type: text/plain
+Entry-Name: .description
+
+Basic differences on a graph model.
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa--
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+/* Copy current test files to Example project */
+copy-example "Graph"
+/* Compare Example models */
+compare-examples
+//get-eclipse-window | get-object | save-screenshot [substitute-variables "${workspace_loc}/rcptt-screenshots/org.eclipse.emf.diffmerge.tests.ui.cases.Graph_screenshot_02.png"]
+
+/* Check the result of the comparison */
+check-image-dec "Root \\(8\\)/Edge N3-to-NB-Container" 							".*/inc_add_stat.gif"
+check-image-dec "Root \\(8\\)/Node N2 \\(4\\)/Node N22 \\(2\\)/Node N221"		".*/out_add_stat.gif"
+check-image-dec "Root \\(8\\)/Node N2 \\(4\\)/Node N22 \\(2\\)/Edge N221-to-N3"	".*/out_add_stat.gif"
+check-image-dec "Root \\(8\\)/Referencing Node ToN221"							".*/out_add_stat.gif"
+
+check-child-num "Root \\(8\\)"													4
+check-child-num "Root \\(8\\)/Edge N3-to-NB-Container"							0
+check-child-num "Root \\(8\\)/Node N2 \\(4\\)"									1
+check-child-num "Root \\(8\\)/Node N2 \\(4\\)/Node N22 \\(2\\)"					2
+check-child-num "Root \\(8\\)/Node N2 \\(4\\)/Node N22 \\(2\\)/Node N221"		0
+check-child-num "Root \\(8\\)/Node N2 \\(4\\)/Node N22 \\(2\\)/Edge N221-to-N3"	0
+check-child-num "Root \\(8\\)/Node N3 \\(2\\)"									0
+check-child-num "Root \\(8\\)/Referencing Node ToN221"							0
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--

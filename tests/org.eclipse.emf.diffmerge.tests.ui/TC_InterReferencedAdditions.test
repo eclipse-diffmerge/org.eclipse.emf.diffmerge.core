@@ -1,0 +1,37 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TC_InterReferencedAdditions
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _ZvRPAOOYEeaykLJOso5MtA
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 1/26/17 9:02 AM
+Testcase-Type: ecl
+
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+/* Copy current test files to Example project */
+copy-example "InterReferencedAdditions"
+/* Compare Example models */
+compare-examples
+
+/* Merge some of changes */
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree | select "Root (3)/Element E2"
+    get-button "Delete on the left" | click
+}
+with [get-window "Merge Operation"] {
+    get-button OK | click
+}
+/* Check result */
+check-child-num "Root \\(1\\)"				1
+check-child-num "Root \\(1\\)/Element E3"	0
+
+/* Check persistency */
+check-persistency
+check-child-num "Root \\(1\\)"				1
+check-child-num "Root \\(1\\)/Element E3"	0
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--

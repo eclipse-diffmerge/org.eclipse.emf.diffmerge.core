@@ -32,7 +32,14 @@
 		<module>org.eclipse.emf.diffmerge.tests.elements.edit</module>
 		<module>org.eclipse.emf.diffmerge.tests.elements.editor</module>
 		<module>org.eclipse.emf.diffmerge.tests.workspace</module>
-		<!-- <module>org.eclipse.emf.diffmerge.tests.wt.elements</module> -->
 	</modules>
+	<profiles>
+		<profile>
+			<id>gui.test</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.tests.ui</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
 

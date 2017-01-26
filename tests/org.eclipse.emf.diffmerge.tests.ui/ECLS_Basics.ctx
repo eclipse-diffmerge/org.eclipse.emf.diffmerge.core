@@ -1,0 +1,77 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Context-Type: org.eclipse.rcptt.ctx.ecl
+Element-Name: ECLS_Basics
+Element-Type: context
+Element-Version: 2.0
+Id: _LGfR4OMCEeatZLxI8McVXQ
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 2/3/17 1:17 PM
+
+------=_.ecl.context-718f04b4-ed39-33e3-af62-0995e4561998
+Content-Type: text/ecl
+Entry-Name: .ecl.context
+
+/**
+ * Copy the examples from the folder of PredefinedExamples model
+ * @name the name of the folder which contains example models
+ */
+proc "copy-example" [val name] {
+	with [get-view "Project Explorer" | get-tree] {
+	    select [format "PredefinedExamples/%s/Ex1.elements" $name] [format "PredefinedExamples/%s/Ex2.elements" $name]
+	    get-menu Copy | click
+	    select Example | get-menu Paste | click
+	}
+}
+
+/**
+ * Open the compare as model editor for Ex1.elements and Ex2.elements models of Example project
+ */
+proc "compare-examples" {
+	with [get-view "Project Explorer" | get-tree] {
+	    select "Example/Ex1.elements" "Example/Ex2.elements"
+	    get-menu "Compare With/Each Other as models" | click
+	}
+	get-window "EMF Diff/Merge" | get-button Finish | click
+}
+
+proc "check-model-validity" [val model] {
+	get-view "Project Explorer" | get-tree | select [format "Example/%s.elements" $model] | double-click
+	with [get-editor [format "%s.elements" $model] | get-tree] {
+	    get-item [format "platform:\\/resource\\/Example\\/%s.elements" $model] | click
+	    select [format "platform:\\/resource\\/Example\\/%s.elements" $model] | get-menu Validate | click
+	}
+	get-window "Validation Information" | get-label "Validation completed successfully" | get-property caption 
+	    | equals "Validation completed successfully" | verify-true
+	get-window "Validation Information" | get-button OK | click
+	get-editor [format "%s.elements" $model] | close
+}
+
+proc "check-child-num" [val element] [val childrenNum] {
+	with [get-editor "Compare ('Ex1' - 'Ex2')" | get-tree] {
+	    get-item $element | get-property childCount | equals $childrenNum | verify-true
+	}
+}
+
+proc "check-image-dec" [val element] [val imageDec] {
+	with [get-editor "Compare ('Ex1' - 'Ex2')" | get-tree] {
+	    get-item $element | get-property "image.decorations[0].path" | matches $imageDec | verify-true
+	}
+}
+
+proc "check-persistency" {
+	get-button "Save (M1+S)" | click
+	get-editor "Compare ('Ex1' - 'Ex2')" | close
+	
+	check-model-validity "Ex1"
+	check-model-validity "Ex2"
+	
+	compare-examples
+}
+
+proc "check-changes" [val direction] [val element] {
+	with [get-window "Merge Operation"] {
+	    get-group [format "%s changes" $direction] | get-tree | get-item $element | get-property childCount | equals 0 | verify-true
+    }
+}
+------=_.ecl.context-718f04b4-ed39-33e3-af62-0995e4561998--

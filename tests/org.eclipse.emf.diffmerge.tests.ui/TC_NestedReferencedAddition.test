@@ -1,0 +1,30 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TC_NestedReferencedAddition
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _lUzW0OPcEeaykLJOso5MtA
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 1/30/17 9:27 AM
+Testcase-Type: ecl
+
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+/* Copy current test files to Example project */
+copy-example "NestedReferencedAddition"
+/* Compare Example models */
+compare-examples
+
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree | select "Element ROOT (3)"
+    get-button "Copy to the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+get-window "Merge Operation" | get-button OK | click
+check-persistency
+get-window Compare | get-property "getChildren().Control[1].getText()" | equals "There are no differences between the selected inputs." | verify-true
+get-window Compare | get-button OK | click
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--

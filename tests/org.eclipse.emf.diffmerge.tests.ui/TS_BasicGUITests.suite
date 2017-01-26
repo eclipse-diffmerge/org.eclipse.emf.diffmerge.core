@@ -1,0 +1,24 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TS_BasicGUITests
+Element-Type: testsuite
+Element-Version: 2.0
+Id: _6adgkOOdEeaykLJOso5MtA
+Runtime-Version: 2.1.0.201606221726
+Save-Time: 1/26/17 4:36 PM
+
+------=_testcase-items-62c497da-4241-31f4-811a-6b453a3ecff8
+Content-Type: text/testcase
+Entry-Name: testcase-items
+
+_nb1u8OLjEeatZLxI8McVXQ	// kind: 'test' name: 'TC_Graph' path: 'TC_Graph.test'
+_9nkA4OL8EeatZLxI8McVXQ	// kind: 'test' name: 'TC_HierarchyAddition' path: 'TC_HierarchyAddition.test'
+_ZvRPAOOYEeaykLJOso5MtA	// kind: 'test' name: 'TC_InterReferencedAdditions' path: 'TC_InterReferencedAdditions.test'
+_NC530OOdEeaykLJOso5MtA	// kind: 'test' name: 'TC_InterReferencedAdditionsMandatory' path: 'TC_InterReferencedAdditionsMandatory.test'
+_Dgv9YOOjEeaykLJOso5MtA	// kind: 'test' name: 'TC_InterReferencedAdditionsNested' path: 'TC_InterReferencedAdditionsNested.test'
+_n730oOO5EeaykLJOso5MtA	// kind: 'test' name: 'TC_MandatoryRefChange' path: 'TC_MandatoryRefChange.test'
+_9d3K4OPDEeaykLJOso5MtA	// kind: 'test' name: 'TC_MovedInAdded' path: 'TC_MovedInAdded.test'
+_lUzW0OPcEeaykLJOso5MtA	// kind: 'test' name: 'TC_NestedReferencedAddition' path: 'TC_NestedReferencedAddition.test'
+_oK1IwOPcEeaykLJOso5MtA	// kind: 'test' name: 'TC_NestedReferencedAdditionOpposites' path: 'TC_NestedReferencedAdditionOpposites.test'
+
+------=_testcase-items-62c497da-4241-31f4-811a-6b453a3ecff8--

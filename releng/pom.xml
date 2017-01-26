@@ -14,5 +14,14 @@
 		<module>org.eclipse.emf.diffmerge.target</module>
 		<module>org.eclipse.emf.diffmerge.core.javadoc</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>gui.test</id>
+			<modules>
+				<!-- Product for GUI test -->
+				<module>org.eclipse.emf.diffmerge.tests.ui.product</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
 

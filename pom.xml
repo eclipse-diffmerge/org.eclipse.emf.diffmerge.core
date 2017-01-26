@@ -14,4 +14,15 @@
 		<module>tests</module>
 		<module>releng</module>
 	</modules>
+	
+  <pluginRepositories>
+    <pluginRepository>
+      <id>rcptt-releases</id>
+      <name>RCPTT Maven repository</name>
+      <url>https://repo.eclipse.org/content/repositories/rcptt-releases</url>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
