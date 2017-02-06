@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.emf.diffmerge.feature_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.scm.feature_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.scm.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.egit.feature_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.svn.feature_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.svn.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.tests.feature_0.1.0.qualifier.jar" id="org.eclipse.emf.diffmerge.tests.feature" version="0.1.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature.source_0.7.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature.source" version="0.7.0.qualifier">
+      <category name="org.eclipse.emf.diffmerge.category"/>
+   </feature>
+   <category-def name="org.eclipse.emf.diffmerge.category" label="EMF Diff/Merge (Incubation)"/>
+</site>
