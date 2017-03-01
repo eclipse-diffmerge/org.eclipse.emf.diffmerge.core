@@ -1676,13 +1676,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     List<IMatch> result = new FArrayList<IMatch>();
     EMFDiffNode input = getInput();
     if (input != null) {
-      Role role = input.getRoleForSide(onLeft_p);
-      for (Object selected : selection_p.toArray()) {
-        if (selected instanceof EObject) {
-          IMatch match = input.getActualComparison().getMapping().getMatchFor(
-              (EObject)selected, role);
-          if (match != null)
-            result.add(match);
+      IComparison comparison = input.getActualComparison();
+      if (comparison != null) {
+        Role role = input.getRoleForSide(onLeft_p);
+        for (Object selected : selection_p.toArray()) {
+          if (selected instanceof EObject) {
+            IMatch match = comparison.getMapping().getMatchFor(
+                (EObject)selected, role);
+            if (match != null)
+              result.add(match);
+          }
         }
       }
     }

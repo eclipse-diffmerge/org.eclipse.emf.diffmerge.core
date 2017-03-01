@@ -279,12 +279,15 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       EMFDiffNode input = getInput();
       if (input != null) {
         // Look for possible transactional editing domain
-        IModelScope impactedScope = input.getActualComparison().getScope(
-            input.getRoleForSide(onLeft_p));
-        if (impactedScope instanceof IPersistentModelScope) {
-          Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
-          if (resource != null)
-            result = TransactionUtil.getEditingDomain(resource);
+        IComparison comparison = input.getActualComparison();
+        if (comparison != null) {
+          IModelScope impactedScope = comparison.getScope(
+              input.getRoleForSide(onLeft_p));
+          if (impactedScope instanceof IPersistentModelScope) {
+            Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
+            if (resource != null)
+              result = TransactionUtil.getEditingDomain(resource);
+          }
         }
       }
     }

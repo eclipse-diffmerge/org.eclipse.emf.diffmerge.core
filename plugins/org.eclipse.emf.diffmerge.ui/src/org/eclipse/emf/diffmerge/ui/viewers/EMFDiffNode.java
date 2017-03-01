@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
+import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
@@ -262,7 +263,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /**
    * Return the model comparison of this node
-   * @return a non-null comparison
+   * @return a non-null comparison, unless the UI comparison has been disposed
    */
   public EComparison getActualComparison() {
     return getUIComparison().getActualComparison();
@@ -282,13 +283,17 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * @return a potentially null match
    */
   protected EMatch getContainerOf(EMatch match_p) {
-    Role containerSide;
-    Role drivingRole = getDrivingRole();
-    if (match_p.getUncoveredRole() == drivingRole)
-      containerSide = drivingRole.opposite();
-    else
-      containerSide = drivingRole;
-    EMatch result = (EMatch)getActualComparison().getContainerOf(match_p, containerSide);
+    EMatch result = null;
+    IComparison comparison = getActualComparison();
+    if (comparison != null) {
+      Role containerSide;
+      Role drivingRole = getDrivingRole();
+      if (match_p.getUncoveredRole() == drivingRole)
+        containerSide = drivingRole.opposite();
+      else
+        containerSide = drivingRole;
+      result = (EMatch)comparison.getContainerOf(match_p, containerSide);
+    }
     return result;
   }
   
@@ -365,7 +370,8 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   @Override
   public boolean hasChildren() {
     // Is there content?
-    return getUIComparison().getActualComparison().hasRemainingDifferences();
+    IComparison comparison = getActualComparison();
+    return comparison != null? comparison.hasRemainingDifferences(): false;
   }
   
   /**
@@ -386,7 +392,8 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * Return whether this comparison is 3-way
    */
   public boolean isThreeWay() {
-    return getActualComparison().isThreeWay();
+    IComparison comparison = getActualComparison();
+    return comparison != null? comparison.isThreeWay(): false;
   }
   
   /**

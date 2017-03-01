@@ -38,7 +38,6 @@ import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
@@ -217,9 +216,9 @@ public class CategoryManager {
    * @return a non-null, potentially empty, unmodifiable list
    */
   public List<IMatch> getChildrenForMerge(IMatch match_p) {
-    List<IMatch> candidates = _node.getActualComparison().getContentsOf(match_p);
     List<IMatch> result = new FOrderedSet<IMatch>();
     IComparison comparison = match_p.getMapping().getComparison();
+    List<IMatch> candidates = comparison.getContentsOf(match_p);
     for (IMatch candidate : candidates) {
       if (isMove(candidate, false) &&
           comparison.getContainerOf(candidate, _node.getDrivingRole().opposite()) == match_p)
@@ -467,15 +466,15 @@ public class CategoryManager {
    * @param match_p a non-null match
    */
   public boolean hasChildrenForMergeFiltered(IMatch match_p) {
-    EComparison comparison = _node.getActualComparison();
+    IComparison comparison = match_p.getMapping().getComparison();
     Role role = match_p.isPartial()?
         match_p.getUncoveredRole().opposite(): _node.getDrivingRole();
-    List<IMatch> candidates = comparison.getContentsOf(match_p, role);
-    for (IMatch candidate : candidates) {
-      if (getDifferenceNumber(candidate) > 0)
-        return true;
-    }
-    return false;
+        List<IMatch> candidates = comparison.getContentsOf(match_p, role);
+        for (IMatch candidate : candidates) {
+          if (getDifferenceNumber(candidate) > 0)
+            return true;
+        }
+        return false;
   }
   
   /**
@@ -866,9 +865,12 @@ public class CategoryManager {
    */
   protected void updateDifferenceNumbers() {
     getMatchToNb().clear();
-    for (IMatch match : _node.getActualComparison().getMapping().getContents()) {
-      int nb = countDifferences(match, true);
-      incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
+    IComparison comparison = _node.getActualComparison();
+    if (comparison != null) {
+      for (IMatch match : comparison.getMapping().getContents()) {
+        int nb = countDifferences(match, true);
+        incrementDifferenceNumbersInHierarchy((EMatch)match, nb);
+      }
     }
   }
   
