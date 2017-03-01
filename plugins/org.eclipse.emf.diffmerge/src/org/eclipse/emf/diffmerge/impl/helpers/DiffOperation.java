@@ -422,7 +422,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     int result = values_p.indexOf(value_p);
     if (result == -1 && outsideScope_p) {
       // Outside scope: allow absolute detection
-      URI valueURI = EcoreUtil.getURI(value_p);
+      URI valueURI = EcoreUtil.getURI(value_p); // TODO Factor out, e.g., in diff policy
       if (valueURI != null) {
         int i = -1;
         for (EObject candidateValue : values_p) {

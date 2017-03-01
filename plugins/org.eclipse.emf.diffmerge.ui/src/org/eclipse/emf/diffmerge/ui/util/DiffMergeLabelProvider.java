@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -144,9 +145,11 @@ public class DiffMergeLabelProvider extends LabelProvider {
             else
               operationKind = Messages.EMFDiffMergeLabelProvider_OrderDel;
           } else {
-            Object value = valuePresence.getValue();
-            String valueText = value instanceof IMatch?
-                getMatchText((IMatch)value, destination_p, domain_p): getText(value);
+            IMatch matchValue = (valuePresence instanceof IReferenceValuePresence)?
+                ((IReferenceValuePresence)valuePresence).getValueMatch(): null;
+            String valueText = (matchValue != null)?
+                getMatchText(matchValue, destination_p, domain_p):
+                  getText(valuePresence.getValue());
             operationKind = (added? Messages.EMFDiffMergeLabelProvider_ValueAddition:
               Messages.EMFDiffMergeLabelProvider_ValueDeletion) + SPACE + valueText;
           }

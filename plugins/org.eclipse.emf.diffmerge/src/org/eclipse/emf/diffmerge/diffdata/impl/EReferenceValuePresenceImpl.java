@@ -227,7 +227,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
       IMatch valueMatch = getValueMatch();
       if (valueMatch != null) {
         result = valueMatch.getReferenceValueDifference(opposite,
-            getElementMatch());
+            getElementMatch().get(getPresenceRole()));
       }
     }
     return result;
@@ -294,7 +294,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
     return getPresenceRole() == peer_p.getPresenceRole()
         && getFeature().getEOpposite() == peer_p.getFeature()
         && getElementMatch() == peer_p.getValueMatch()
-        && getValue() == peer_p.getElementMatch();
+        && getValueMatch() == peer_p.getElementMatch();
   }
 
   /**
