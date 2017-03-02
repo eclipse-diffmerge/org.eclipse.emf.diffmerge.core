@@ -51,7 +51,7 @@ IPresenceDifference, IMergeableDifference {
   
   /**
    * Return whether the element is a root in its scope.
-   * Class invariant: isRoot() <=> getOwnerMatch() == null
+   * Class invariant: isRoot() == (getOwnerMatch() == null)
    */
   boolean isRoot();
   

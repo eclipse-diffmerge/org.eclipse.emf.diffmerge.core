@@ -69,7 +69,8 @@ public interface IMatch extends IPureMatch {
   /**
    * Return the difference corresponding to the presence of an unmatched
    * element, if any.
-   * Class invariant: !isPartial() => getElementPresenceDifference() == null
+   * Class invariant:
+   *  isPartial() || getElementPresenceDifference() == null
    * @return a potentially null difference
    */
   IElementPresence getElementPresenceDifference();

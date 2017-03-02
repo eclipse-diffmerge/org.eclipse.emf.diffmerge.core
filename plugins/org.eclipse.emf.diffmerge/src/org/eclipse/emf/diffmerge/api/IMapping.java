@@ -129,7 +129,7 @@ public interface IMapping {
   
   /**
    * Return the number of matches, partial or not, in this mapping
-   * Class invariant: size() == partialMatches(null) + fullMatches()
+   * Class invariant: size() == getNbPartialMatches(null) + getNbFullMatches()
    */
   int size();
   
@@ -192,8 +192,6 @@ public interface IMapping {
     /**
      * Return a modifiable collection of the formerly partial matches
      * which have been completed by addition in the given role
-     * Class invariant: for every role in {TARGET, REFERENCE},
-     * getModifiableCompletedMatches(role).equals(getCompletedMatches(role))
      * @param destinationRole_p a role which is TARGET or REFERENCE
      * @return a non-null, potentially empty, modifiable collection
      */

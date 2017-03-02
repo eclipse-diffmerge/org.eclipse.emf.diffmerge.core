@@ -33,8 +33,8 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
   /**
    * Return the list of the resources containing elements which belong to
    * the direct contents of elements of the given resource.
-   * Class invariant: getResources().containsAll(getIncludedResources(_))
-   * Class invariant: getRootResources().retainsAll(getIncludedResources(_)).isEmpty()
+   * Postcondition: getResources().containsAll(result)
+   * Postcondition: getRootResources().retainsAll(result).isEmpty()
    * @param resource_p a non-null resource belonging to getResources()
    * @return a non-null, potentially empty list
    */
@@ -44,8 +44,8 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
    * Return the list of the resources which are not included in the
    * given resource and which contain elements that are cross-referenced
    * by elements of the given resource.
-   * Class invariant: getResources().containsAll(getReferencedResources(_))
-   * Class invariant: getIncludedResources(X).retainsAll(getReferencedResources(X)).isEmpty()
+   * Postcondition: getResources().containsAll(result)
+   * Postcondition: getIncludedResources(resource_p).retainsAll(result).isEmpty()
    * @param resource_p a non-null resource belonging to getResources()
    * @return a non-null, potentially empty list
    */
@@ -67,7 +67,7 @@ public interface IFragmentedModelScope extends IPersistentModelScope {
   /**
    * Return whether the scope has been fully explored. While true, the result of the methods
    * related to resources remains identical.
-   * Invariant: isFullyExplored() implies isLoaded()
+   * Class invariant: !isFullyExplored() || isLoaded()
    */
   boolean isFullyExplored();
   

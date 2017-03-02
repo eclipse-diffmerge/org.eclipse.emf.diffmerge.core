@@ -75,7 +75,7 @@ public interface IPureMatch {
   
   /**
    * Return whether the TARGET or REFERENCE role is not covered by this match.
-   * Class invariant: isPartial() => getUncoveredRole() != null
+   * Class invariant: isPartial() == getUncoveredRole() != null
    */
   boolean isPartial();
   

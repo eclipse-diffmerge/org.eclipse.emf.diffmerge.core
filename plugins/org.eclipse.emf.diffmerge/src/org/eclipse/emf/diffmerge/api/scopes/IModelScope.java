@@ -66,8 +66,8 @@ public interface IModelScope {
    * The returned element must belong to the scope.
    * Result must be consistent with getContents(EObject).
    * Operation should not be expensive.
-   * Class invariant:
-   *   (this.covers(X) && getContainer(X) == null) == this.getContents().contains(X)
+   * Postcondition:
+   *   (covers(element_p) && result == null) == getContents().contains(element_p)
    * @param element_p a non-null element which belongs to this scope
    * @return a potentially null element
    */

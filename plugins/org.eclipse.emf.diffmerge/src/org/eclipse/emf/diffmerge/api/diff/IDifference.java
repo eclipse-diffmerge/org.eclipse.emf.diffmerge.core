@@ -42,7 +42,7 @@ public interface IDifference {
   
   /**
    * Return the role into which this difference has been merged, if any.
-   * Class invariant: isMerged() <=> getMergeDestination() != null
+   * Class invariant: isMerged() == getMergeDestination() != null
    * @return a potentially null role
    */
   Role getMergeDestination();
@@ -56,7 +56,7 @@ public interface IDifference {
   /**
    * Return whether this difference is conflicting with another one.
    * In a two-way comparison, always return false.
-   * Class invariant: isConflicting() => !isAlignedWithAncestor()
+   * Class invariant: !isConflicting() || !isAlignedWithAncestor()
    */
   boolean isConflicting();
   
