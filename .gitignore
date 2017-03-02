@@ -36,6 +36,12 @@ tmp/
 
 
 ########
+## Tycho
+########
+target/
+
+
+########
 ## Sonar
 ########
 org.sonar.ide.eclipse.core.prefs

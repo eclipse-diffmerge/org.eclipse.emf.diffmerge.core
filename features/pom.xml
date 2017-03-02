@@ -50,8 +50,9 @@
 	<modules>
 		<module>org.eclipse.emf.diffmerge.feature</module>
 		<module>org.eclipse.emf.diffmerge.egit.feature</module>
+		<module>org.eclipse.emf.diffmerge.gmf.feature</module>
 		<module>org.eclipse.emf.diffmerge.svn.feature</module>
-		<module>org.eclipse.emf.diffmerge.scm.feature</module>
+		<module>org.eclipse.emf.diffmerge.sirius.feature</module>
 		<module>org.eclipse.emf.diffmerge.tests.feature</module>
 		<module>org.eclipse.emf.diffmerge.sdk.feature</module>
 	</modules>

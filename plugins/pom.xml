@@ -33,8 +33,10 @@
 		<module>org.eclipse.emf.diffmerge.connector.git</module>
 		<module>org.eclipse.emf.diffmerge.connector.svn</module>
 		<module>org.eclipse.emf.diffmerge.gmf</module>
+		<module>org.eclipse.emf.diffmerge.sirius</module>
 		<module>org.eclipse.emf.diffmerge.ui</module>
 		<module>org.eclipse.emf.diffmerge.ui.gmf</module>
+		<module>org.eclipse.emf.diffmerge.ui.sirius</module>
 	</modules>
 </project>
 
