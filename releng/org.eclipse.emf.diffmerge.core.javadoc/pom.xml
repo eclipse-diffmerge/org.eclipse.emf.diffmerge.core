@@ -1,0 +1,45 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>org.eclipse.emf.diffmerge.core.javadoc</artifactId>
+	<packaging>eclipse-plugin</packaging>
+
+	<parent>
+		<groupId>org.eclipse.emf.diffmerge</groupId>
+		<artifactId>org.eclipse.emf.diffmerge.releng</artifactId>
+		<version>0.7.0-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho.extras</groupId>
+				<artifactId>tycho-document-bundle-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>eclipse-javadoc</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<configuration>
+							<!-- Do not generate toc.xml for Eclipse help -->
+							<skipTocGen>true</skipTocGen>
+							<javadocOptions>
+								<additionalArguments>
+									<ignoreError>false</ignoreError>
+									<additionalArgument>-linkoffline http://download.oracle.com/javase/1.5.0/docs/api/ ${project.basedir}/j2se5-package-list</additionalArgument>
+									<additionalArgument>-linkoffline http://www.osgi.org/javadoc/r4v42/ ${project.basedir}/osgi-package-list</additionalArgument>
+									<additionalArgument>-linkoffline http://download.eclipse.org/modeling/emf/emf/javadoc/2.5.0/ ${project.basedir}/emf-package-list</additionalArgument>
+									<additionalArgument>-linkoffline http://help.eclipse.org/galileo/index.jsp?topic=/org.eclipse.platform.doc.isv/reference/api/ ${project.basedir}/eclipse-package-list</additionalArgument>
+									<additionalArgument>-public</additionalArgument>
+								</additionalArguments>
+							</javadocOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+

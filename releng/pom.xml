@@ -12,6 +12,7 @@
 	<modules>
 		<module>org.eclipse.emf.diffmerge.update</module>
 		<module>org.eclipse.emf.diffmerge.target</module>
+		<module>org.eclipse.emf.diffmerge.core.javadoc</module>
 	</modules>
 </project>
 
