@@ -83,6 +83,8 @@
             url="http://download.eclipse.org/releases/mars"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
+        <repository
+            url="http://download.eclipse.org/sirius/updates/releases/4.1.0/mars"/>
       </repositoryList>
       <repositoryList
           name="Luna">
