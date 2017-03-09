@@ -46,7 +46,7 @@
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
-      id="git.clone"
+      id="git.clone.edm.core"
       remoteURI="diffmerge/org.eclipse.emf.diffmerge.core">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
@@ -75,7 +75,7 @@
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <sourceLocator
-          rootFolder="${git.clone.location}"
+          rootFolder="${git.clone.edm.core.location}"
           locateNestedProjects="true"/>
       <repositoryList
           name="Mars">
@@ -115,7 +115,7 @@
       <requirement
           name="com.windowtester.ide.feature.group"/>
       <sourceLocator
-          rootFolder="${git.clone.location}"
+          rootFolder="${git.clone.edm.core.location}"
           locateNestedProjects="true"/>
       <repositoryList
           name="Mars">
@@ -194,8 +194,17 @@
       </predicate>
     </workingSet>
   </setupTask>
+  <project href="https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.patch.git/plain/releng/org.eclipse.emf.diffmerge.patch.setup/Modelpatch.setup#/"/>
   <stream name="master"
-      label="Master"/>
+      label="Master">
+    <setupTask
+        xsi:type="setup:EclipseIniTask"
+        option="-Doomph.redirection.edm.core"
+        value="=https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.git/plain/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup->${git.clone.edm.core.location|uri}/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup"
+        vm="true">
+      <description></description>
+    </setupTask>
+  </stream>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
