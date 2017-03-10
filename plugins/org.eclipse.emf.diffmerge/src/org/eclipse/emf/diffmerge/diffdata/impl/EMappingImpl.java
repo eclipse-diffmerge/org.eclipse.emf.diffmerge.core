@@ -43,7 +43,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+import org.eclipse.emf.ecore.util.EContentsEList;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
+import org.eclipse.emf.ecore.util.ECrossReferenceEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -632,7 +634,7 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     
     /** The non-null role played by the scope to cross-reference */
     protected final Role _role;
-
+    
     /**
      * Constructor
      * @param role_p a role which is TARGET or REFERENCE
@@ -657,24 +659,55 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
     protected boolean crossReference(EObject element_p, EReference reference_p,
         EObject crossReferenced_p) {
       boolean result = false;
-      if (reference_p.isChangeable() && !reference_p.isDerived()) {
-        IMatch referencingMatch = getMatchFor(element_p, _role);
-        IMatch referencedMatch = getMatchFor(crossReferenced_p, _role);
-        // Unidirectional, modifiable cross-references between unmatched elements
-        if (referencingMatch != null && referencedMatch != null)
-          result = referencingMatch.isPartial() && referencedMatch.isPartial();
-      }
+      IMatch referencingMatch = getMatchFor(element_p, _role);
+      IMatch referencedMatch = getMatchFor(crossReferenced_p, _role);
+      // Unidirectional, modifiable cross-references between unmatched elements
+      if (referencingMatch != null && referencedMatch != null)
+        result = referencingMatch.isPartial() && referencedMatch.isPartial();
       return result;
     }
 
     /**
+     * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#getCrossReferences(org.eclipse.emf.ecore.EObject)
+     */
+    @Override
+    protected EContentsEList.FeatureIterator<EObject> getCrossReferences(EObject eObject) {
+      return new ECrossReferenceEList.FeatureIteratorImpl<EObject>(eObject) {
+        /**
+         * @see org.eclipse.emf.ecore.util.EContentsEList.FeatureIteratorImpl#isIncluded(org.eclipse.emf.ecore.EStructuralFeature)
+         */
+        @Override
+        protected boolean isIncluded(EStructuralFeature feature_p) {
+          return super.isIncludedEntry(feature_p) &&
+              ScopeCrossReferencer.this.isIncluded((EReference)feature_p);
+        }
+        /**
+         * @see org.eclipse.emf.ecore.util.EContentsEList.FeatureIteratorImpl#resolve()
+         */
+        @Override
+        protected boolean resolve() {
+          return ScopeCrossReferencer.this.resolve();
+        }
+      };
+    }
+    
+   /**
      * Return the role covered by this cross-referencer
      * @return TARGET or REFERENCE
      */
     public Role getRole() {
       return _role;
     }
-
+    
+    /**
+     * Return whether the given cross-reference should be covered by this cross-referencer
+     * @param reference_p a non-null cross-reference
+     */
+    protected boolean isIncluded(EReference reference_p) {
+      // Modifiable cross-references only
+      return reference_p.isChangeable() && !reference_p.isDerived();
+    }
+    
     /**
      * @see org.eclipse.emf.ecore.util.EcoreUtil.CrossReferencer#newCollection()
      */
