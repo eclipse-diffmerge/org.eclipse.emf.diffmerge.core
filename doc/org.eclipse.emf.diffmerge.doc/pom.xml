@@ -1,0 +1,64 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>org.eclipse.emf.diffmerge.doc</artifactId>
+	<packaging>eclipse-plugin</packaging>
+
+	<parent>
+		<groupId>org.eclipse.emf.diffmerge</groupId>
+		<artifactId>org.eclipse.emf.diffmerge.docs</artifactId>
+		<version>0.8.0-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<help.copyrightNotice>
+			Copyright (c) 2006, 2016 THALES GLOBAL SERVICES.
+			All rights reserved. This program and the accompanying materials
+			are made available under the terms of the Eclipse Public License v1.0
+			which accompanies this distribution, and is available at
+			http://www.eclipse.org/legal/epl-v10.html
+		</help.copyrightNotice>
+		<help.title>EMF Diff-Merge User Guide</help.title>
+		<wikitext.version>3.0.6</wikitext.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.mylyn.docs</groupId>
+			<artifactId>org.eclipse.mylyn.wikitext.maven</artifactId>
+			<version>${wikitext.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.mylyn.docs</groupId>
+				<artifactId>org.eclipse.mylyn.wikitext.maven</artifactId>
+				<version>${wikitext.version}</version>
+				<configuration>
+					<sourceFolder>src</sourceFolder>
+					<copyrightNotice>${help.copyrightNotice}</copyrightNotice>
+					<title>${help.documentTitle}</title>
+					<multipleOutputFiles>true</multipleOutputFiles>
+					<navigationImages>true</navigationImages>
+					<formatOutput>true</formatOutput>
+					<outputFolder>html</outputFolder>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>eclipse-help</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.mylyn.docs</groupId>
+						<artifactId>org.eclipse.mylyn.wikitext.mediawiki</artifactId>
+						<version>${wikitext.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>

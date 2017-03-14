@@ -1,0 +1,54 @@
+These followings icons are made available under the terms of the Eclipse Public License v1.0
+ which accompanies this distribution, and is available at
+ http://www.eclipse.org/legal/epl-v10.html
+
+<icon file path> - <original eclipse plug-in> - <original file path>
+
+org.eclipse.emf.diffmerge.doc/*/Images
+
+Model-DiffMerge_html_13763f84.png
+Model-DiffMerge_html_29d2b86f.png
+Model-DiffMerge_html_306f66da.png
+Model-DiffMerge_html_39002cd3.png
+Model-DiffMerge_html_3f155383.png
+Model-DiffMerge_html_45465200.png
+Model-DiffMerge_html_4e8b8361.png
+Model-DiffMerge_html_5b0468f9.png
+Model-DiffMerge_html_6132844d.png
+Model-DiffMerge_html_6268bf2e.png
+Model-DiffMerge_html_6894195c.png
+Model-DiffMerge_html_69cae476.png
+Model-DiffMerge_html_6a675b42.png
+Model-DiffMerge_html_7d047cd2.png
+Model-DiffMerge_html_7eb489c7.png
+Model-DiffMerge_html_bf0aba3.png
+Model-DiffMerge_html_c86e852.png
+Model-DiffMerge_html_m1961c198.png
+Model-DiffMerge_html_m241953bf.png
+Model-DiffMerge_html_m260feba7.png
+Model-DiffMerge_html_m37e3e9e3.png
+Model-DiffMerge_html_m38d61362.jpg
+Model-DiffMerge_html_m3e423a6f.png
+Model-DiffMerge_html_m42c302d5.png
+Model-DiffMerge_html_m43da5a9d.png
+Model-DiffMerge_html_m47d0d5c1.png
+Model-DiffMerge_html_m4a2563eb.png
+Model-DiffMerge_html_m4b50cf8c.png
+Model-DiffMerge_html_m4bef3dd1.png
+Model-DiffMerge_html_m4d91695e.png
+Model-DiffMerge_html_m610d0270.png
+Model-DiffMerge_html_m617a07f2.png
+Model-DiffMerge_html_m64e99670.png
+Model-DiffMerge_html_m7a3a1b12.png
+Model-DiffMerge_html_m7ecf793e.png
+Model-DiffMerge_html_m9cba6ee.png
+Model-DiffMerge_html_ma5d5753.png
+categories_icon.png
+collapse.png
+compare_as_text.png
+expand.png
+mergeall.png
+nextdiff.png
+prevdiff.png
+sort.png
+sync.png
