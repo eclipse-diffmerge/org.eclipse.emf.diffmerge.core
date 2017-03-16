@@ -42,6 +42,10 @@
       storageURI="scope://Workspace"/>
   <setupTask
       xsi:type="setup.p2:P2Task">
+    <requirement
+        name="org.eclipse.emf.sdk.feature.group"/>
+    <requirement
+        name="org.eclipse.pde.feature.group"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -68,7 +72,7 @@
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
-        name="${scope.project.label}.core"
+        name="EMF DiffMerge Core"
         activeRepositoryList="${eclipse.target.platform}">
       <requirement
           name="org.eclipse.emf.diffmerge.sdk.feature.feature.group"/>
@@ -109,13 +113,11 @@
       </repositoryList>
     </targlet>
     <targlet
-        name="${scope.project.label}.core.tests">
+        name="EMF DiffMerge Core Tests">
       <requirement
           name="org.eclipse.emf.diffmerge.tests.feature.feature.group"/>
       <requirement
           name="org.eclipse.sdk.feature.group"/>
-      <requirement
-          name="com.windowtester.ide.feature.group"/>
       <sourceLocator
           rootFolder="${git.clone.edm.core.location}"
           locateNestedProjects="true"/>
@@ -125,8 +127,6 @@
             url="http://download.eclipse.org/releases/mars"/>
         <repository
             url="http://download.eclipse.org/cbi/updates/license"/>
-        <repository
-            url="http://dl.google.com/eclipse/inst/windowtester/latest/3.6"/>
       </repositoryList>
       <repositoryList
           name="Luna">
@@ -196,13 +196,15 @@
       </predicate>
     </workingSet>
   </setupTask>
+  <project href="https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.coevolution.git/plain/releng/org.eclipse.emf.diffmerge.coevolution.releng/setup/CoEvolution.setup#/"/>
   <project href="https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.patch.git/plain/releng/org.eclipse.emf.diffmerge.patch.setup/Modelpatch.setup#/"/>
+  <project href="https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.patterns.git/plain/releng/org.eclipse.emf.diffmerge.patterns.releng/setup/Patterns.setup#/"/>
   <stream name="master"
       label="Master">
     <setupTask
         xsi:type="setup:EclipseIniTask"
         option="-Doomph.redirection.edm.core"
-        value="=https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.git/plain/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup->${git.clone.edm.core.location|uri}/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup"
+        value="=https://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.core.git/plain/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup->${git.clone.edm.core.location|uri}/releng/org.eclipse.emf.diffmerge.releng/setup/EMFDiffMerge.setup"
         vm="true">
       <description></description>
     </setupTask>
