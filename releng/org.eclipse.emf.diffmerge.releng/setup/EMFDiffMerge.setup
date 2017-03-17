@@ -188,7 +188,7 @@
       </predicate>
     </workingSet>
     <workingSet
-        name="EMF Diff Merge Tests">
+        name="EMF DiffMerge Core Tests">
       <predicate
           xsi:type="predicates:AndPredicate">
         <operand
