@@ -20,10 +20,6 @@
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.emf.diffmerge.tests.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.emf.diffmerge.sirius.feature"
          version="0.0.0"/>
 
