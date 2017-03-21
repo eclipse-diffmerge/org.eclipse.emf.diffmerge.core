@@ -533,6 +533,49 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
+   * Set dependencies on the given presence difference related to cyclic moves, if needed
+   * @param presence_p a non-null containment value presence whose value match is non-null
+   *        and not partial
+   */
+  protected void setCyclicOwnershipDependencies(IReferenceValuePresence presence_p) {
+    // Preconditions
+    assert presence_p.getValueMatch() != null;
+    assert presence_p.getValueMatch().isAMove(); //(1)
+    assert presence_p.getFeature().isContainment(); // Normally implied by (1)
+    assert !presence_p.getValueMatch().isPartial(); // Normally implied by (1)
+    // Behavior
+    final Role orderingRole = getComparison().getMapping().getOrderingRole();
+    final Role oppositeRole = orderingRole.opposite();
+    if (presence_p.getPresenceRole() == oppositeRole) {
+      final IComparison comparison = getComparison();
+      final IMatch valueMatch = presence_p.getValueMatch();
+      IMatch oppositeAncestorMatch = valueMatch;
+      do {
+        // Going up on the non-ordering side
+        oppositeAncestorMatch = comparison.getContainerOf(oppositeAncestorMatch, oppositeRole);
+        if (oppositeAncestorMatch != null && oppositeAncestorMatch.isAMove()) {
+          IReferenceValuePresence cycleEnd = null;
+          IMatch orderingAncestorMatch = oppositeAncestorMatch;
+          do {
+            // Going up on the ordering side
+            orderingAncestorMatch =
+                comparison.getContainerOf(orderingAncestorMatch, orderingRole);
+            if (orderingAncestorMatch == valueMatch)
+              cycleEnd = oppositeAncestorMatch.getOwnershipDifference(orderingRole);
+          } while (orderingAncestorMatch != null && cycleEnd == null);
+          // Setting cycle dependencies
+          if (cycleEnd != null) {
+            // Breaking cycle on the opposite role, where cycleEnd is the ancestor
+            ((IMergeableDifference.Editable)cycleEnd).markRequires(presence_p, oppositeRole);
+            // Breaking cycle on the ordering role, where presence_p is the ancestor
+            ((IMergeableDifference.Editable)presence_p).markRequires(cycleEnd, orderingRole);
+          }
+        }
+      } while (oppositeAncestorMatch != null);
+    }
+  }
+  
+  /**
    * Set dependencies between differences of type element presence exclusively
    * @param presence_p a non-null element presence
    */
@@ -613,6 +656,26 @@ public class DiffOperation extends AbstractExpensiveOperation {
     } else {
       second.markRequires(first_p, presenceRole);
       second.markRequires(first_p, presenceRole.opposite());
+    }
+  }
+  
+  /**
+   * Set the dependencies of an ownership, excluding those of classical
+   * reference value presences
+   * @param presence_p a non-null containment value presence
+   */
+  protected void setOwnerhipDependencies(IReferenceValuePresence presence_p) {
+    assert presence_p.getFeature() != null && presence_p.getFeature().isContainment();
+    IMatch valueMatch = presence_p.getValueMatch();
+    // Handling dependencies: move of value
+    if (valueMatch == null || !valueMatch.isPartial()) {
+      // Implicit global !isMany() to containers which are implicitly symmetric
+      IReferenceValuePresence symmetricalOwnership = presence_p.getSymmetricalOwnership();
+      if (symmetricalOwnership != null)
+        setSymmetricalOwnershipDependencies(presence_p, symmetricalOwnership);
+      // "Cyclic" moves
+      if (valueMatch != null)
+        setCyclicOwnershipDependencies(presence_p);
     }
   }
   
@@ -699,15 +762,11 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (presence_p.getElementMatch().isPartial())
       setPartialReferencingElementDependencies(presence_p);
     // Handling dependencies: presence of value
-    if (valueMatch != null && valueMatch.isPartial()) {
+    if (valueMatch != null && valueMatch.isPartial())
       setPartialReferencedValueDependencies(presence_p);
-    } else if (reference.isContainment()) {
-      // Handling dependencies: move of value
-      // (implicit global !isMany() to containers which are implicitly symmetric)
-      IReferenceValuePresence symmetricalOwnership = presence_p.getSymmetricalOwnership();
-      if (symmetricalOwnership != null)
-        setSymmetricalOwnershipDependencies(presence_p, symmetricalOwnership);
-    }
+    // Handling dependencies: ownership
+    if (reference.isContainment())
+      setOwnerhipDependencies(presence_p);
   }
   
   /**

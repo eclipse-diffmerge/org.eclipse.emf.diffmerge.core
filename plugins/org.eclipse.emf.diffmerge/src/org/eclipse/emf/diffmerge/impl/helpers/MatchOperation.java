@@ -103,13 +103,13 @@ public class MatchOperation extends AbstractExpensiveOperation {
       result = createMatchIDToElementMap();
     else
       result = Collections.emptyMap();
-    IModelScope scope = _comparison.getScope(role_p);
+    IModelScope scope = getComparison().getScope(role_p);
     boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       // Explore the scope, marking its elements as unmatched
       // and registering their match IDs
       Iterator<EObject> it = scope.getAllContents();
-      IMapping.Editable mapping = _comparison.getMapping();
+      IMapping.Editable mapping = getComparison().getMapping();
       while (it.hasNext()) {
         checkProgress();
         EObject current = it.next();
@@ -153,11 +153,11 @@ public class MatchOperation extends AbstractExpensiveOperation {
       result = createMatchIDToElementMap();
     else
       result = Collections.emptyMap();
-    IModelScope scope = _comparison.getScope(role_p);
+    IModelScope scope = getComparison().getScope(role_p);
     boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       Iterator<EObject> targetIt = scope.getAllContents();
-      IMapping.Editable mapping = _comparison.getMapping();
+      IMapping.Editable mapping = getComparison().getMapping();
       while (targetIt.hasNext()) {
         checkProgress();
         EObject current = targetIt.next();
@@ -236,17 +236,19 @@ public class MatchOperation extends AbstractExpensiveOperation {
    * Postcondition: !getOutput().isThreeWay() || getOutput().isCompleteFor(ANCESTOR)
    */
   protected void match() {
+    final Role firstSide = getComparison().getMapping().getOrderingRole();
+    final Role secondSide = firstSide.opposite();
     boolean threeWay = _comparison.isThreeWay();
     getMonitor().subTask(Messages.MatchBuilder_Task_RegisteringIDs);
-    Map<Object, EObject> referenceIDRegistry = explore(Role.REFERENCE, true);
+    Map<Object, EObject> firstSideIDRegistry = explore(firstSide, true);
     getMonitor().worked(1);
     getMonitor().subTask(Messages.MatchBuilder_Task_MappingIDs);
-    Map<Object, EObject> targetIDRegistry = exploreAndMatch(
-        Role.TARGET, referenceIDRegistry, Role.REFERENCE, null, null, threeWay);
+    Map<Object, EObject> secondSideIDRegistry = exploreAndMatch(
+        secondSide, firstSideIDRegistry, firstSide, null, null, threeWay);
     getMonitor().worked(1);
     if (threeWay) {
-      exploreAndMatch(Role.ANCESTOR, referenceIDRegistry, Role.REFERENCE,
-          targetIDRegistry, Role.TARGET, false);
+      exploreAndMatch(Role.ANCESTOR, firstSideIDRegistry, firstSide,
+          secondSideIDRegistry, secondSide, false);
       getMonitor().worked(1);
     }
     _duplicateCandidatesRole1.clear();

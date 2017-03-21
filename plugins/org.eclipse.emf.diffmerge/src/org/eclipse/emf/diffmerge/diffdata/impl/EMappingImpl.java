@@ -362,6 +362,24 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.api.IMapping#getCrossReferences(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  public Collection<Setting> getCrossReferences(EObject element_p, Role role_p) {
+    Collection<Setting> result = null;
+    ScopeCrossReferencer referencer = null;
+    if (role_p == Role.TARGET)
+      referencer = _targetCrossReferencer;
+    else if (role_p == Role.REFERENCE)
+      referencer = _referenceCrossReferencer;
+    if (referencer != null)
+      result = referencer.get(element_p);
+    if (result == null)
+      result = Collections.emptyList();
+    return result;
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.api.IMapping#getMatchFor(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
    * @generated NOT
    */
@@ -428,21 +446,11 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMapping#getCrossReferences(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.api.IMapping#getOrderingRole()
    * @generated NOT
    */
-  public Collection<Setting> getCrossReferences(EObject element_p, Role role_p) {
-    Collection<Setting> result = null;
-    ScopeCrossReferencer referencer = null;
-    if (role_p == Role.TARGET)
-      referencer = _targetCrossReferencer;
-    else if (role_p == Role.REFERENCE)
-      referencer = _referenceCrossReferencer;
-    if (referencer != null)
-      result = referencer.get(element_p);
-    if (result == null)
-      result = Collections.emptyList();
-    return result;
+  public Role getOrderingRole() {
+    return Role.REFERENCE;
   }
 
   /**
@@ -733,5 +741,5 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
       return false;
     }
   }
-
+  
 } //EMappingImpl

@@ -54,7 +54,9 @@ public interface IMapping {
   Collection<IMatch> getCompletedMatches(Role destinationRole_p);
   
   /**
-   * Return the content of this mapping
+   * Return the content of this mapping.
+   * The order in the returned collection must be such that every match appears before
+   * matches of its children in side getOrderingRole().
    * @return a non-null, potentially empty, unmodifiable collection of matches
    */
   Collection<IMatch> getContents();
@@ -86,6 +88,14 @@ public interface IMapping {
    * @param covered_p an optional role covered by the matches concerned
    */
   int getNbPartialMatches(Role covered_p);
+  
+  /**
+   * Return the side in which the contents of the mapping are ordered
+   * so that the match of a container appears before the match of a child
+   * @see IMapping#getContents()
+   * @return a role which is TARGET or REFERENCE
+   */
+  Role getOrderingRole();
   
   /**
    * Return whether every element in the given scope is handled by this mapping in the given role
