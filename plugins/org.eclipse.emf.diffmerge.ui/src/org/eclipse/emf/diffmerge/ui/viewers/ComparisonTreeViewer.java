@@ -199,16 +199,21 @@ public class ComparisonTreeViewer extends TreeViewer {
    * Return a list of lists representing the possible paths to the given match.
    * @param match_p a potentially null match
    * @param parentsOnly_p whether the given match must be excluded from the paths
+   * @param coverOppositeSide_p whether paths in the non-driving side must be covered too
    * @return a non-null list
    */
-  protected List<List<IMatch>> getPathsFor(IMatch match_p, boolean parentsOnly_p) {
+  protected List<List<IMatch>> getPathsFor(IMatch match_p, boolean parentsOnly_p,
+      boolean coverOppositeSide_p) {
     List<List<IMatch>> result;
     EMFDiffNode input = getInput();
-    if (match_p == null || input == null) {
+    IComparison comparison = (input != null)? input.getActualComparison(): null;
+    if (match_p == null || comparison == null) {
+      // Cannot be computed: return the empty set
       result = new ArrayList<List<IMatch>>();
     } else {
-      IComparison comparison = input.getActualComparison();
+      // Comparison and match are well-defined
       Role drivingRole = getDrivingRole();
+      // Must the element be represented as a root?
       boolean isRoot = comparison.getContents(drivingRole).contains(match_p) ||
         match_p.getUncoveredRole() == drivingRole &&
         comparison.getContents(drivingRole.opposite()).contains(match_p);
@@ -216,14 +221,25 @@ public class ComparisonTreeViewer extends TreeViewer {
         result = new ArrayList<List<IMatch>>();
         result.add(new ArrayList<IMatch>());
       } else {
+        // We only consider paths to containers on the driving side because
+        // the children of a move origin are not provided by the content provider
+        // in order to prevent infinite recursion cases due to "cyclic" moves
+        final boolean coverContainerOppositeSide = false;
+        // Get the paths of the driving container
         IMatch drivingContainer = comparison.getContainerOf(match_p, drivingRole);
-        result = getPathsFor(drivingContainer, false);
-        IMatch oppositeContainer = comparison.getContainerOf(
-            match_p, drivingRole.opposite());
-        if (oppositeContainer != null && oppositeContainer != drivingContainer) {
-          for (List<IMatch> oppositePath : getPathsFor(oppositeContainer, false)) {
-            if (!getInput().getCategoryManager().representAsMoveOrigin(UIUtil.toTreePath(oppositePath)))
-              result.add(oppositePath);
+        result = getPathsFor(drivingContainer, false, coverContainerOppositeSide);
+        // Consider the non-driving container if required
+        if (coverOppositeSide_p) {
+          IMatch oppositeContainer = comparison.getContainerOf(
+              match_p, drivingRole.opposite());
+          if (oppositeContainer != null && oppositeContainer != drivingContainer) {
+            List<List<IMatch>> oppositePaths =
+                getPathsFor(oppositeContainer, false, coverContainerOppositeSide);
+            CategoryManager categoryManager = getInput().getCategoryManager();
+            for (List<IMatch> oppositePath : oppositePaths) {
+              if (!categoryManager.representAsMoveOrigin(UIUtil.toTreePath(oppositePath)))
+                result.add(oppositePath);
+            }
           }
         }
       }
@@ -384,7 +400,7 @@ public class ComparisonTreeViewer extends TreeViewer {
      * @see org.eclipse.jface.viewers.ITreePathContentProvider#getParents(java.lang.Object)
      */
     public TreePath[] getParents(Object element_p) {
-      List<List<IMatch>> resultAsList = getPathsFor((IMatch)element_p, true);
+      List<List<IMatch>> resultAsList = getPathsFor((IMatch)element_p, true, true);
       return UIUtil.toTreePaths(resultAsList);
     }
     
