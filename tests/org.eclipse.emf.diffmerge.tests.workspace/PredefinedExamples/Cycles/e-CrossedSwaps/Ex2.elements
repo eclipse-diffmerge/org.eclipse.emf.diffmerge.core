@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.diffmerge.tests.elements:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:org.eclipse.emf.diffmerge.tests.elements="http://www.eclipse.org/emf/diffmerge/tests/elements/1.0.0" id="_Ld8kIP_vEeCtcfaFoBQ8TQ">
+  <content xsi:type="org.eclipse.emf.diffmerge.tests.elements:Element" id="_Lzbr8P_vEeCtcfaFoBQ8TQ" name="1">
+    <singleContent id="_6oY0kgD5EeerqbMb09V_mQ" name="2">
+      <manyContent id="_8wFycAWPEeeLHd7ApWHAOw" name="C">
+        <manyContent id="_swUVQgPdEeemhvs0MXzgKA" name="3">
+          <singleContent id="_tqW7ogPdEeemhvs0MXzgKA" name="4">
+            <manyContent id="_fI_coAWNEeeLHd7ApWHAOw" name="5">
+              <manyContent id="_EQK4sAWQEeeLHd7ApWHAOw" name="D">
+                <manyContent id="_icspEAWNEeeLHd7ApWHAOw" name="6">
+                  <manyContent id="_9sDEYAWPEeeLHd7ApWHAOw" name="7">
+                    <manyContent id="_-wVL4AWPEeeLHd7ApWHAOw" name="8">
+                      <manyContent id="_rZaMsAPdEeemhvs0MXzgKA" name="A">
+                        <manyContent id="_J1zrgAWQEeeLHd7ApWHAOw" name="9">
+                          <manyContent id="_MafOwAWQEeeLHd7ApWHAOw" name="10">
+                            <manyContent id="_NUqYAAWQEeeLHd7ApWHAOw" name="11">
+                              <manyContent id="_bzDbkAWNEeeLHd7ApWHAOw" name="B">
+                                <manyContent id="_OtxgAAWQEeeLHd7ApWHAOw" name="12">
+                                  <manyContent id="_RBf2IAWQEeeLHd7ApWHAOw" name="13"/>
+                                </manyContent>
+                              </manyContent>
+                            </manyContent>
+                          </manyContent>
+                        </manyContent>
+                      </manyContent>
+                    </manyContent>
+                  </manyContent>
+                </manyContent>
+              </manyContent>
+            </manyContent>
+          </singleContent>
+        </manyContent>
+      </manyContent>
+    </singleContent>
+  </content>
+</org.eclipse.emf.diffmerge.tests.elements:Root>
