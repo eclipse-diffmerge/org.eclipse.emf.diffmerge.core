@@ -120,7 +120,7 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
     _text = createTextLabel(textImageComposite);
     if (isToolBarOnTheRight) {
       Label space = new Label(textImageComposite, SWT.WRAP);
-      space.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+      space.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
       _toolbar = createToolBar(parent_p);
     }
   }
