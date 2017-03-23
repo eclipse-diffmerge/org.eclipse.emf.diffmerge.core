@@ -482,7 +482,8 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       EReference containment = presence_p.getFeature();
       if (containment != null) {
         builder.append(' ');
-        builder.append(String.format(Messages.ValuesViewer_FeatureLabel, containment.getName()));
+        String containmentText = UIUtil.getFormattedFeatureText(containment);
+        builder.append(String.format(Messages.ValuesViewer_FeatureLabel, containmentText));
       }
       return builder.toString();
     }

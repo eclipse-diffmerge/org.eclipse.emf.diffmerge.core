@@ -14,9 +14,12 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import org.eclipse.emf.diffmerge.api.IMatch;
+import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -61,8 +64,30 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
   protected Label createTextLabel(Composite parent_p) {
     Label result = super.createTextLabel(parent_p);
     result.setFont(UIUtil.getBold(result.getFont()));
-    result.setText(Messages.ComparisonViewer_Details);
+    result.setText(getDefaultText());
     return result;
+  }
+  
+  /**
+   * Return the default text for the header
+   * @return a potentially null string
+   */
+  protected String getDefaultText() {
+    return Messages.ComparisonViewer_Details;
+  }
+  
+  /**
+   * Return the element to represent for the given input
+   * @param input_p a non-null input
+   * @return a non-null element
+   */
+  protected EObject getDrivingElement(FeaturesInput input_p) {
+    IMatch match = input_p.getMatch();
+    Role drivingRole = input_p.getContext().getDrivingRole();
+    EObject element = match.get(drivingRole);
+    if (element == null)
+      element = match.get(drivingRole.opposite());
+    return element;
   }
   
   /**
@@ -71,6 +96,28 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
   @Override
   public FeaturesInput getInput() {
     return (FeaturesInput)super.getInput();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    Label textLabel = getTextLabel();
+    if (textLabel != null && !textLabel.isDisposed()) {
+      String newText;
+      if (input_p instanceof FeaturesInput) {
+        FeaturesInput input = (FeaturesInput)input_p;
+        EObject element = getDrivingElement(input);
+        String formattedTypeText = UIUtil.getFormattedTypeText(element);
+        newText = String.format(
+            Messages.EnhancedFeaturesViewer_DetailsWithSelection, formattedTypeText);
+      } else {
+        newText = getDefaultText();
+      }
+      textLabel.setText(newText);
+    }
+    super.inputChanged(input_p, oldInput_p);
   }
   
 }

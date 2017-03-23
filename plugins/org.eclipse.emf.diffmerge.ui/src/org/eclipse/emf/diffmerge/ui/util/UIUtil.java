@@ -20,9 +20,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.provider.ReflectiveItemProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.resource.JFaceResources;
@@ -193,6 +196,24 @@ public final class UIUtil {
   }
   
   /**
+   * Return a formatted label for the given feature
+   * @param feature_p a non-null feature
+   * @return a non-null string
+   */
+  public static String getFormattedFeatureText(EStructuralFeature feature_p) {
+    return FormattedTextProvider.getInstance().getFeatureText(feature_p);
+  }
+  
+  /**
+   * Return a formatted label for the type of the given element
+   * @param element_p a non-null element
+   * @return a non-null string
+   */
+  public static String getFormattedTypeText(EObject element_p) {
+    return FormattedTextProvider.getInstance().getTypeText(element_p);
+  }
+  
+  /**
    * Return the italic variant of the given font
    * @param font_p a non-null font
    * @return a non-null font
@@ -276,6 +297,46 @@ public final class UIUtil {
       String label2 = _labelProvider.getText(o2_p);
       if (label2 == null) label2 = o2_p.toString();
       return label1.compareTo(label2);
+    }
+  }
+  
+  
+  /**
+   *  A provider for feature and type labels.
+   */
+  protected static class FormattedTextProvider extends ReflectiveItemProvider {
+    /** The singleton instance */
+    protected static FormattedTextProvider __instance = null;
+    /**
+     * Constructor
+     */
+    protected FormattedTextProvider() {
+      super(null); // OK with its current usage
+    }
+    /**
+     * @see org.eclipse.emf.edit.provider.ReflectiveItemProvider#getFeatureText(java.lang.Object)
+     */
+    @Override
+    public String getFeatureText(Object feature_p) {
+      // Increases visibility
+      return super.getFeatureText(feature_p);
+    }
+    /**
+     * @see org.eclipse.emf.edit.provider.ReflectiveItemProvider#getTypeText(java.lang.Object)
+     */
+    @Override
+    public String getTypeText(Object object_p) {
+      // Increases visibility
+      return super.getTypeText(object_p);
+    }
+    /**
+     * Return the singleton instance
+     * @return a non-null object
+     */
+    public static FormattedTextProvider getInstance() {
+      if (__instance == null)
+        __instance = new FormattedTextProvider();
+      return __instance;
     }
   }
   

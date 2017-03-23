@@ -1061,6 +1061,26 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create the "Use technical representation" item in the given context and return it
+   * @param context_p a non-null object
+   * @return result a potentially null item
+   */
+  protected Item createItemUseTechnicalRepresentation(Menu context_p) {
+      final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+      result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
+      result.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          _viewerFeatures.getInnerViewer().setTechnical(result.getSelection());
+        }
+      });
+      return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#createNavigatable()
    */
   @Override
@@ -2243,6 +2263,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createItemShowAllValues(result);
     // All values and features
     createItemShowAllFeatures(result);
+    // Technical representation
+    new MenuItem(result, SWT.SEPARATOR);
+    createItemUseTechnicalRepresentation(result);
     return result;
   }
   

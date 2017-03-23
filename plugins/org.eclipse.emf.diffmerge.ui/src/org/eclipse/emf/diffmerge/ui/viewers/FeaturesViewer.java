@@ -34,9 +34,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
-import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -51,7 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * A viewer which provides a representation of the features of a match.
- * Input: FeatureViewer.FeaturesInput ; Elements: EStructuralFeature.
+ * Input: FeaturesViewer.FeaturesInput ; Elements: EStructuralFeature.
  * @author Olivier Constant
  */
 public class FeaturesViewer extends TableViewer implements IDifferenceRelatedViewer {
@@ -113,6 +110,9 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /** Whether all features must be shown, including those with no difference */
   private boolean _showAllFeatures;
   
+  /** Whether a technical, more precise but less user-friendly representation must be used */
+  private boolean _useTechnicalRepresentation;
+  
   
   /**
    * Constructor
@@ -132,6 +132,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
     _showAllFeatures = false;
+    _useTechnicalRepresentation = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     setSorter(new ViewerSorter());
   }
@@ -186,12 +187,29 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   }
   
   /**
+   * Return whether a technical, more precise but less user-friendly representation is being used
+   */
+  public boolean isTechnical() {
+    return _useTechnicalRepresentation;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#setDifferenceAgnostic(boolean)
    */
   public void setDifferenceAgnostic(boolean agnostic_p) {
     if (agnostic_p != isDifferenceAgnostic()) {
       _showAllFeatures = agnostic_p;
       refresh(false);
+    }
+  }
+  
+  /**
+   * Set whether a technical, more precise but less user-friendly representation must be used
+   */
+  public void setTechnical(boolean technical_p) {
+    if (technical_p != isTechnical()) {
+      _useTechnicalRepresentation = technical_p;
+      refresh(true);
     }
   }
   
@@ -274,24 +292,11 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
    */
   protected class LabelProvider extends DelegatingLabelProvider {
     
-    /** An adapter factory for Ecore elements */
-    private final EcoreItemProviderAdapterFactory _ecoreAdapterFactory;
-    
     /**
      * Constructor
      */
     public LabelProvider() {
       super(DiffMergeLabelProvider.getInstance());
-      _ecoreAdapterFactory = new EcoreItemProviderAdapterFactory();
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
-     */
-    @Override
-    public void dispose() {
-      super.dispose();
-      _ecoreAdapterFactory.dispose();
     }
     
     /**
@@ -345,13 +350,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       if (isOwnershipFeature(element_p)) {
         result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.TREE);
       } else {
-        IItemLabelProvider provider = (IItemLabelProvider)_ecoreAdapterFactory.adapt(
-            element_p, IItemLabelProvider.class);
-        if (provider != null) {
-          Object rawImage = provider.getImage(element_p);
-          if (rawImage != null)
-            result = ExtendedImageRegistry.getInstance().getImage(rawImage);
-        }
+        result = getDelegate().getImage(element_p);
       }
       if (getInput().getContext().usesCustomIcons() && element_p instanceof EStructuralFeature) {
         EStructuralFeature feature = (EStructuralFeature)element_p;
@@ -367,7 +366,12 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     @Override
     public String getText(Object element_p) {
       EStructuralFeature feature = (EStructuralFeature)element_p;
-      String result = getDelegate().getText(element_p);
+      String result;
+      if (isTechnical()) {
+        result = getDelegate().getText(feature);
+      } else {
+        result = UIUtil.getFormattedFeatureText(feature);
+      }
       if (getInput().getContext().usesCustomLabels()) {
         DifferenceKind kind = getDifferenceKind(feature);
         String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);

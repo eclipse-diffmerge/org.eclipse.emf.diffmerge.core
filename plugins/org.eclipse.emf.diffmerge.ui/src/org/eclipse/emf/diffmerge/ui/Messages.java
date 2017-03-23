@@ -103,6 +103,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_SortTooltip;
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
   public static String ComparisonViewer_ShowDifferenceNumbersMenuItem;
+  public static String ComparisonViewer_UseTechnicalRepresentation;
   public static String ConfigurableComparisonMethodFactory_Label;
   public static String ConfigureComparisonDialog_AbsoluteCriteria;
   public static String ConfigureComparisonDialog_AbsoluteCriteriaTooltip;
@@ -171,6 +172,7 @@ public class Messages extends NLS {
   public static String DefaultComparisonMethodFactory_Label;
   public static String DirectedComparisonViewer_Ignore;
   public static String EnhancedComparisonTreeViewer_DefaultHeader;
+  public static String EnhancedFeaturesViewer_DetailsWithSelection;
   public static String EObjectScopeDefinition_LabelInResource;
   public static String EObjectScopeDefinitionFactory_Label;
   public static String FileScopeDefinitionFactory_Label;

@@ -6,7 +6,7 @@ Element-Version: 3.0
 External-Reference: 
 Id: _9d3K4OPDEeaykLJOso5MtA
 Runtime-Version: 2.1.0.201606221726
-Save-Time: 3/23/17 3:02 PM
+Save-Time: 3/23/17 3:36 PM
 Testcase-Type: ecl
 
 ------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
@@ -34,10 +34,10 @@ get-window "Merge Operation" | get-button OK | click
 
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (1)/Element A (1)/Element B (1)"
-    get-table | select "value : EInt"
+    get-table | select "Value"
 }
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
-    get-table -after [get-label Details] -index 1 | select 1
+    get-table -after [get-label "Details of the Element"] -index 1 | select 1
     get-button "Copy to the right" | click
 }
 get-window "Merge Operation" | get-button OK | click
