@@ -154,7 +154,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.AbstractComparisonMethod#doGetEditingDomain()
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#doGetEditingDomain()
    */
   @Override
   protected EditingDomain doGetEditingDomain() {
@@ -173,7 +173,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.AbstractComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.api.Role)
    */
   @Override
   public ResourceSet getResourceSet(Role role_p) {
