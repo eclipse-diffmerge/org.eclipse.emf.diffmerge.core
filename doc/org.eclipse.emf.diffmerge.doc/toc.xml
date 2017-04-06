@@ -10,7 +10,7 @@
   Contributors:
        Thales - initial API and implementation
 -->
-<toc label="EMF DiffMerge" topic="html/EMF-DiffMerge.html">
+<toc label="EMF Diff/Merge Guide" topic="html/EMF-DiffMerge.html">
 		<topic href="html/EMF-DiffMerge.html#Overview" label="Overview"></topic>
 		<topic href="html/EMF-DiffMerge.html#Starting_the_Diff.2FMerge_Tool" label="Starting the Diff/Merge Tool"></topic>
 		<topic href="html/EMF-DiffMerge.html#Configuration_and_Features_of_the_Diff.2FMerge_Tool" label="Configuration and Features of the Diff/Merge Tool">
