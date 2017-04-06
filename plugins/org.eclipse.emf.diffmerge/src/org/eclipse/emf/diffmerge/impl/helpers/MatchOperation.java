@@ -121,7 +121,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
               match.setMatchID(matchID);
             if (fillIDMap_p) {
               EObject squatter = result.put(matchID, current);
-              if (squatter != null && _duplicateIDs != null)
+              if (squatter != null && squatter != current && _duplicateIDs != null)
                 _duplicateCandidatesRole1.add(matchID);
             }
           }
@@ -167,7 +167,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
         if (matchID != null) {
           if (fillIDMap_p) {
             EObject squatter = result.put(matchID, current);
-            if (squatter != null && _duplicateIDs != null)
+            if (squatter != null && squatter != current && _duplicateIDs != null)
               _duplicateCandidatesRole2.add(matchID);
           }
           counterpart1 = idRegistry1_p.get(matchID);
