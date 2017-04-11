@@ -334,11 +334,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemCollapse(Menu context_p) {
-    MenuItem result = new MenuItem(context_p, SWT.PUSH);
+  protected Item createItemCollapse(ToolBar context_p) {
+    ToolItem result = new ToolItem(context_p, SWT.PUSH);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.COLLAPSEALL));
-    result.setText(Messages.ComparisonViewer_CollapseTooltip);
+    result.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -405,11 +405,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemExpand(Menu context_p) {
-    MenuItem result = new MenuItem(context_p, SWT.PUSH);
+  protected Item createItemExpand(ToolBar context_p) {
+    ToolItem result = new ToolItem(context_p, SWT.PUSH);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.EXPANDALL));
-    result.setText(Messages.ComparisonViewer_ExpandTooltip);
+    result.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -988,11 +988,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSync(ToolBar context_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.CHECK);
+  protected Item createItemSync(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.SYNCED));
-    result.setToolTipText(Messages.ComparisonViewer_LinkViewsTooltip);
+    result.setText(Messages.ComparisonViewer_LinkViewsTooltip);
     result.setSelection(_isLeftRightSynced);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -2280,9 +2280,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createItemShowUncounted(synthesisMenu);
     // Common presentation features
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
+    createItemSync(synthesisMenu);
     createItemSort(synthesisMenu);
-    createItemExpand(synthesisMenu);
-    createItemCollapse(synthesisMenu);
     // UI options
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     setupMenuSynthesisMisc(synthesisMenu);
@@ -2359,12 +2358,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createItemNavigationNext(toolbar_p);
     createItemNavigationPrevious(toolbar_p);
+    // Expand / Collapse
+    new ToolItem(toolbar_p, SWT.SEPARATOR);
+    createItemExpand(toolbar_p);
+    createItemCollapse(toolbar_p);
     // Filters and sync
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createItemFilter(toolbar_p);
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    createItemSync(toolbar_p);
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
   }
   
   /**
