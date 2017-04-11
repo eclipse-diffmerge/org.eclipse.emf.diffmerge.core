@@ -100,7 +100,7 @@ public interface IPureMatch {
    * A match with editing features.
    * All concrete classes implementing IPureMatch must also implement this interface.
    */
-  public static interface Editable extends IPureMatch {
+  interface Editable extends IPureMatch {
     /**
      * Reset this match with the given target, reference and ancestor elements
      * Precondition: at least one of the elements is not null

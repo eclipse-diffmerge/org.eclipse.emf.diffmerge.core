@@ -70,7 +70,7 @@ public interface IPersistentModelScope extends IModelScope {
   /**
    * An IPersistentModelScope which can be modified.
    */
-  public static interface Editable extends IPersistentModelScope {
+  interface Editable extends IPersistentModelScope {
     /**
      * Save the scope
      * @return whether the operation could be performed

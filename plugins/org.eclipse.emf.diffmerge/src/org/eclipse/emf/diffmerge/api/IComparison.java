@@ -246,7 +246,7 @@ public interface IComparison {
    * A comparison with editing features.
    * All concrete classes implementing IComparison must also implement this interface.
    */
-  public static interface Editable extends IComparison {
+  interface Editable extends IComparison {
     /**
      * @see org.eclipse.emf.diffmerge.api.IComparison#getMapping()
      */

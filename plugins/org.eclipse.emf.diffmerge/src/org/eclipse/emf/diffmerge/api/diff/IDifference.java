@@ -70,7 +70,7 @@ public interface IDifference {
    * A difference with editing features.
    * All concrete classes implementing IDifference must also implement this interface.
    */
-  public static interface Editable extends IDifference {
+  interface Editable extends IDifference {
     /**
      * Specify that this difference is not present in the common ancestor
      * in a three-way comparison

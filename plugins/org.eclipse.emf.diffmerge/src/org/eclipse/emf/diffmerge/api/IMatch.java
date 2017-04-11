@@ -150,7 +150,7 @@ public interface IMatch extends IPureMatch {
    * A match with editing features.
    * All concrete classes implementing IMatch must also implement this interface.
    */
-  public static interface Editable extends IMatch, IPureMatch.Editable {
+  interface Editable extends IMatch, IPureMatch.Editable {
     /**
      * Add the given difference to the differences related to this match
      * @param difference_p a non-null difference

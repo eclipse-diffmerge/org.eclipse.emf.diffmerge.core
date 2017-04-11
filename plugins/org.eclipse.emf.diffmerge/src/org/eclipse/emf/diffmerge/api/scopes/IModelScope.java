@@ -99,4 +99,38 @@ public interface IModelScope {
    */
   int size();
   
+  
+  /**
+   * A model scope which has the ability to be modified.
+   * @author Olivier Constant
+   */
+  interface Editable extends IModelScope {
+    /**
+     * Add the given element to the scope.
+     * Whether its contents belong to the scope after execution is intentionally undefined.
+     * If the element already belongs to the scope, then the behavior of this operation is
+     * undefined.
+     * Postcondition: !result || covers(element_p)
+     * @param element_p a non-null element
+     * @return whether the operation succeeded
+     */
+    boolean add(EObject element_p);
+    
+   /**
+     * Return whether this scope is read-only, which means that modification operations have
+     * no effect and always return false
+     */
+    boolean isReadOnly();
+    
+    /**
+     * Remove the given element from this scope.
+     * Whether its contents still belong to the scope after execution is intentionally undefined.
+     * Precondition: covers(element_p)
+     * Postcondition: !result || !covers(element_p)
+     * @param element_p a non-null element within the scope
+     * @return whether the operation succeeded
+     */
+    boolean remove(EObject element_p);
+  }
+  
 }
