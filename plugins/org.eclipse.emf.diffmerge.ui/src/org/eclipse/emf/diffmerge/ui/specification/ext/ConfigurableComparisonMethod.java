@@ -19,7 +19,6 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
-import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.window.Window;
@@ -123,10 +122,9 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
       ((DefaultMatchPolicy)matchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
     if (matchPolicy instanceof ConfigurableMatchPolicy) {
       ConfigurableMatchPolicy cMatchPolicy = (ConfigurableMatchPolicy)matchPolicy;
-      for (MatchCriterionKind criterion : cMatchPolicy.getApplicableCriteria()) {
-        cMatchPolicy.setUseMatchCriterion(
-            criterion, data_p.useMatchCriterion(criterion));
-      }
+      ConfigurableMatchPolicy configuredCopy = data_p.getConfigurableMatchPolicy();
+      if (configuredCopy != null)
+        cMatchPolicy.configureAccordingTo(configuredCopy);
     }
     // Diff Policy
     IDiffPolicy diffPolicy = getDiffPolicy();

@@ -68,6 +68,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
   public ComparisonSetupWizardPage(String name_p, ComparisonSetup setup_p) {
     super(name_p);
     _setup = setup_p;
+    if (_setup.getSelectedFactory() == null)
+      _setup.setSelectedFactoryToLast();
   }
   
   /**
@@ -105,10 +107,12 @@ public class ComparisonSetupWizardPage extends WizardPage {
     createConfigureMethodButton(group);
     // Init
     methodViewer.setInput(_setup);
-    Object first = methodViewer.getElementAt(0);
+    Object toSelect = _setup.getSelectedFactory();
+    if (toSelect == null)
+      toSelect = methodViewer.getElementAt(0);
     IStructuredSelection viewerSelection;
-    if (first != null)
-      viewerSelection = new StructuredSelection(first);
+    if (toSelect != null)
+      viewerSelection = new StructuredSelection(toSelect);
     else
       viewerSelection = new StructuredSelection();
     methodViewer.setSelection(viewerSelection);

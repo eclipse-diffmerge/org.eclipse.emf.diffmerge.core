@@ -81,6 +81,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -170,10 +171,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
          * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
          */
         public void selectionChanged(SelectionChangedEvent event_p) {
-            // Force propagation to selection listeners through the selection service
-            ISelectionService service = site.getWorkbenchWindow().getSelectionService();
+          // Force propagation to selection listeners through the selection service
+          IWorkbenchWindow window = site.getWorkbenchWindow();
+          if (window != null && !window.getWorkbench().isClosing()) {
+            ISelectionService service = window.getSelectionService();
             if (service instanceof ISelectionChangedListener)
               ((ISelectionChangedListener)service).selectionChanged(event_p);
+          }
         }
       };
       _selectionBridge.addSelectionChangedListener(selectionChangedListener);

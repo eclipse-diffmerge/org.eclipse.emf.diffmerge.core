@@ -46,6 +46,9 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   public static final String PROPERTY_COMPARISON_METHOD =
     "ComparisonSetup.Property.ComparisonMethod"; //$NON-NLS-1$
   
+  /** The initially null lastly used comparison method factory */
+  protected static IComparisonMethodFactory __lastComparisonMethodFactory = null;
+  
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
   
@@ -65,10 +68,10 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   private IComparisonMethodFactory _selectedFactory;
   
   /** The potentially null comparison method */ 
-  private IComparisonMethod _comparisonMethod;
+  protected IComparisonMethod _comparisonMethod;
   
   /** A non-null set of listeners on this object */
-  private final Set<IPropertyChangeListener> _listeners;
+  protected final Set<IPropertyChangeListener> _listeners;
   
   
   /**
@@ -168,8 +171,13 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    * Update the current comparison method with all available information
    */
   public void performFinish() {
-    if (!isThreeWay() && _comparisonMethod != null)
-      _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
+    if (_comparisonMethod != null) {
+      IComparisonMethodFactory selectedFactory = getSelectedFactory();
+      if (selectedFactory != null)
+        __lastComparisonMethodFactory = selectedFactory;
+      if (!isThreeWay())
+        _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
+    }
   }
   
   /**
@@ -202,6 +210,21 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
       _comparisonMethod = null;
     }
     notify(new PropertyChangeEvent(this, PROPERTY_COMPARISON_METHOD, null, null));
+  }
+  
+  /**
+   * Set the selected method factory to the one lastly used, if any and applicable
+   * @return whether the operation had any impact
+   */
+  public boolean setSelectedFactoryToLast() {
+    boolean result = false;
+    if (__lastComparisonMethodFactory != null &&
+        __lastComparisonMethodFactory != getSelectedFactory() &&
+        getApplicableComparisonMethodFactories().contains(__lastComparisonMethodFactory)) {
+      setSelectedFactory(__lastComparisonMethodFactory);
+      result = true;
+    }
+    return result;
   }
   
   /**

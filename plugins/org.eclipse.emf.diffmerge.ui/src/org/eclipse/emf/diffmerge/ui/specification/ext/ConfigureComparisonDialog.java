@@ -14,14 +14,14 @@
  */
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrainedMatchCriterion;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.Messages;
@@ -186,10 +186,11 @@ public class ConfigureComparisonDialog extends MessageDialog {
     group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     group.setLayout(new GridLayout(1, false));
     group.setText(Messages.ConfigureComparisonDialog_Matching);
-    createAbsoluteMatchingArea(group);
-    createRelativeMatchingArea(group);
     if (_data.getApplicableCriteria().size() > 1)
       createLabelWithNote(group, Messages.ConfigureComparisonDialog_MatchingTooltip);
+    createAbsoluteMatchingArea(group);
+    createRelativeMatchingArea(group);
+    createUseCacheArea(group);
     createKeepMatchIDsArea(group);
   }
   
@@ -204,18 +205,55 @@ public class ConfigureComparisonDialog extends MessageDialog {
       final MatchCriterionKind criterion_p, String label_p, String tooltip_p) {
     if (!_data.getApplicableCriteria().contains(criterion_p))
       return;
+    // Main criterion
+    final ConfigurableMatchPolicy policy = _data.getConfigurableMatchPolicy();
     Button checkBox = new Button(parent_p, SWT.CHECK);
     checkBox.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
     checkBox.setText(label_p);
-    checkBox.setSelection(_data.useMatchCriterion(criterion_p));
+    boolean selectedByDefault = policy.useMatchCriterion(criterion_p);
+    checkBox.setSelection(selectedByDefault);
     checkBox.setToolTipText(tooltip_p);
+    // Fine-grained criteria
+    Composite fgComposite = new Composite(parent_p, SWT.NONE);
+    fgComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+    GridLayout layout = new GridLayout(2, false);
+    layout.marginHeight = 0;
+    layout.marginWidth = 0;
+    fgComposite.setLayout(layout);
+    final Collection<Button> fgCheckBoxes = new ArrayList<Button>();
+    for (final FineGrainedMatchCriterion fgCriterion : policy.getAvailableFineGrainedCriteria()) {
+      if (fgCriterion.getCategory() == criterion_p) {
+        // Fine-grained criterion is relevant
+        new Label(fgComposite, SWT.NONE).setText("  "); //$NON-NLS-1$
+        Button fgCheckBox = new Button(fgComposite, SWT.CHECK);
+        fgCheckBoxes.add(fgCheckBox);
+        fgCheckBox.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+        fgCheckBox.setText(fgCriterion.getLabel());
+        fgCheckBox.setEnabled(selectedByDefault);
+        fgCheckBox.setSelection(policy.useFineGrainedMatchCriterion(fgCriterion));
+        fgCheckBox.setToolTipText(fgCriterion.getDescription());
+        fgCheckBox.addSelectionListener(new SelectionAdapter() {
+          /**
+           * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+           */
+          @Override
+          public void widgetSelected(SelectionEvent e_p) {
+            _data.changeFineGrainedMatchCriterionUse(fgCriterion);
+          }
+        });
+      }
+    }
+    // Synchronization
     checkBox.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        _data.invertMatchCriterionUse(criterion_p);
+        boolean selected = _data.changeMatchCriterionUse(criterion_p);
+        for (Button fgCheckBox : fgCheckBoxes) {
+          fgCheckBox.setEnabled(selected);
+        }
       }
     });
   }
@@ -266,6 +304,30 @@ public class ConfigureComparisonDialog extends MessageDialog {
     }
   }
   
+  /**
+   * Create the area dedicated to the "use cache" option
+   * @param parent_p a non-null composite
+   */
+  protected void createUseCacheArea(Composite parent_p) {
+    final ConfigurableMatchPolicy policy = _data.getConfigurableMatchPolicy();
+    if (policy != null) {
+      Button checkBox = new Button(parent_p, SWT.CHECK);
+      checkBox.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+      checkBox.setText("Use cache");
+      checkBox.setSelection(policy.useCache());
+      checkBox.setToolTipText("This technical option determines whether a cache is used for matching elements.\nIt may increase performance if relative matching criteria are being used and enough memory is available.\nIf memory is limited, the impact on performance will tend to be negative.");
+      checkBox.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          policy.setUseCache(!policy.useCache());
+        }
+      });
+    }
+  }
+  
   
   /**
    * Data for ConfigureComparisonDialog.
@@ -273,10 +335,8 @@ public class ConfigureComparisonDialog extends MessageDialog {
   public static class ComparisonMethodConfigurationData {
     /** Whether IDs must be remembered */
     private boolean _keepMatchIDs;
-    /** The non-null set of applicable match criteria */
-    private final Set<MatchCriterionKind> _applicableCriteria;
-    /** The non-null set of match criteria to use */
-    private final Set<MatchCriterionKind> _selectedCriteria;
+    /** The optional match policy copy to configure */
+    private ConfigurableMatchPolicy _matchPolicyCopy;
     /** Whether orders must be ignored */
     private boolean _ignoreOrders;
     
@@ -295,18 +355,14 @@ public class ConfigureComparisonDialog extends MessageDialog {
       }
       if (matchPolicy instanceof ConfigurableMatchPolicy) {
         // Match policy is configurable
-        _applicableCriteria = Collections.unmodifiableSet(
-            new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>(
-                ((ConfigurableMatchPolicy)matchPolicy).getApplicableCriteria()));
-        _selectedCriteria = new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>();
-        for (MatchCriterionKind criterion : _applicableCriteria) {
-          if (((ConfigurableMatchPolicy)matchPolicy).useMatchCriterion(criterion))
-            _selectedCriteria.add(criterion);
+        try {
+          _matchPolicyCopy = ((ConfigurableMatchPolicy)matchPolicy).clone();
+        } catch (CloneNotSupportedException e) {
+          _matchPolicyCopy = null;
         }
       } else {
         // Match policy is not configurable
-        _applicableCriteria = Collections.emptySet();
-        _selectedCriteria = _applicableCriteria;
+        _matchPolicyCopy = null;
       }
       // Diff policy
       ConfigurableDiffPolicy diffPolicy =
@@ -314,21 +370,49 @@ public class ConfigureComparisonDialog extends MessageDialog {
       _ignoreOrders = diffPolicy.isIgnoreOrders();
     }
     /**
-     * Return the set of applicable match criteria in no particular order
-     * @return a non-null, unmodifiable collection
+     * Change (enable/disable) the usage of the given fine-grained match criterion
+     * @param criterion_p a non-null fine-grained match criterion
      */
-    public Collection<MatchCriterionKind> getApplicableCriteria() {
-      return _applicableCriteria;
+    public boolean changeFineGrainedMatchCriterionUse(FineGrainedMatchCriterion criterion_p) {
+      boolean result = false;
+      ConfigurableMatchPolicy policy = getConfigurableMatchPolicy();
+      if (policy != null) {
+        result = !policy.useFineGrainedMatchCriterion(criterion_p);
+        policy.setUseFineGrainedMatchCriterion(criterion_p, result);
+      }
+      return result;
     }
     /**
-     * Invert (enable/disable) the usage of the given match criteria
+     * Change (enable/disable) the usage of the given match criterion
      * @param criterion_p a non-null match criterion
+     * @return whether the criterion is used in the end
      */
-    public void invertMatchCriterionUse(MatchCriterionKind criterion_p) {
-      if (_selectedCriteria.contains(criterion_p))
-        _selectedCriteria.remove(criterion_p);
-      else
-        _selectedCriteria.add(criterion_p);
+    public boolean changeMatchCriterionUse(MatchCriterionKind criterion_p) {
+      boolean result = false;
+      ConfigurableMatchPolicy policy = getConfigurableMatchPolicy();
+      if (policy != null) {
+        result = !policy.useMatchCriterion(criterion_p);
+        policy.setUseMatchCriterion(criterion_p, result);
+      }
+      return result;
+    }
+    /**
+     * Return the set of applicable match criteria in decreasing priority
+     * @return a non-null collection
+     */
+    public Collection<MatchCriterionKind> getApplicableCriteria() {
+      Collection<MatchCriterionKind> result = Collections.emptySet();
+      ConfigurableMatchPolicy policy = getConfigurableMatchPolicy();
+      if (policy != null)
+        result = policy.getApplicableCriteria();
+      return result;
+    }
+    /**
+     * Return the configurable match policy that is being configured, if any
+     * @return a potentially null object
+     */
+    public ConfigurableMatchPolicy getConfigurableMatchPolicy() {
+      return _matchPolicyCopy;
     }
     /**
      * Return whether orders must be ignored
@@ -353,24 +437,8 @@ public class ConfigureComparisonDialog extends MessageDialog {
      */
     public void setKeepMatchIDs(boolean keep_p) {
       _keepMatchIDs = keep_p;
-    }
-    /**
-     * Set whether the given match criterion must be used
-     * @param criterion_p a non-null criterion
-     * @param use_p whether it must be used
-     */
-    public void setUseMatchCriterion(MatchCriterionKind criterion_p, boolean use_p) {
-      if (use_p)
-        _selectedCriteria.add(criterion_p);
-      else
-        _selectedCriteria.remove(criterion_p);
-    }
-    /**
-     * Return whether the given match criterion is used by this match policy
-     * @param criterion_p a non-null criterion
-     */
-    public boolean useMatchCriterion(MatchCriterionKind criterion_p) {
-      return _selectedCriteria.contains(criterion_p);
+      if (_matchPolicyCopy != null)
+        _matchPolicyCopy.setKeepMatchIDs(keep_p);
     }
   }
   
