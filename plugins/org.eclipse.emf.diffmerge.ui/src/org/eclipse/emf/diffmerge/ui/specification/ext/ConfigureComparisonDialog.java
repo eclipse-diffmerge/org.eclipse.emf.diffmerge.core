@@ -23,6 +23,7 @@ import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
+import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -134,7 +135,7 @@ public class ConfigureComparisonDialog extends MessageDialog {
   }
   
   /**
-   * Create the area dedicated to the "keep match IDs" option
+   * Create the area dedicated to the "keep match keys" option
    * @param parent_p a non-null composite
    */
   protected void createKeepMatchIDsArea(Composite parent_p) {
@@ -287,9 +288,13 @@ public class ConfigureComparisonDialog extends MessageDialog {
         ConfigurableComparisonMethod comparisonMethod_p) {
       // Match policy
       IMatchPolicy matchPolicy = comparisonMethod_p.getMatchPolicy();
+      if (matchPolicy instanceof DefaultMatchPolicy) {
+        _keepMatchIDs = matchPolicy.keepMatchIDs();
+      } else {
+        _keepMatchIDs = false;
+      }
       if (matchPolicy instanceof ConfigurableMatchPolicy) {
         // Match policy is configurable
-        _keepMatchIDs = matchPolicy.keepMatchIDs();
         _applicableCriteria = Collections.unmodifiableSet(
             new HashSet<ConfigurableMatchPolicy.MatchCriterionKind>(
                 ((ConfigurableMatchPolicy)matchPolicy).getApplicableCriteria()));
@@ -300,7 +305,6 @@ public class ConfigureComparisonDialog extends MessageDialog {
         }
       } else {
         // Match policy is not configurable
-        _keepMatchIDs = false;
         _applicableCriteria = Collections.emptySet();
         _selectedCriteria = _applicableCriteria;
       }
