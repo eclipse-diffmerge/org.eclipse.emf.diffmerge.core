@@ -23,6 +23,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EClass;
@@ -30,6 +33,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 
 
 /**
@@ -111,23 +115,29 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
     }
   }
   
+  /** A criterion for name-based matching of exchanges and links */
+  public static final FineGrainedMatchCriterion CRITERION_QNAMES_LABELS =
+      new FineGrainedMatchCriterion(MatchCriterionKind.NAME,
+          "Use label when name is not known",
+          "If the diff/merge tool is not aware that a given element has a name, then use the label that represents the element in editors if available.\nBeware that it may only work if all labels are different.");
+  
   /** A criterion for structural matching of roots */
   public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_ROOTS =
       new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
-          "Match unambiguous roots",
+          "Match unique roots",
           "Match root elements that cannot be confused with others.");
-  
-  /** A criterion for structural matching by containments */
-  public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_CONTAINMENTS =
-      new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
-          "Match unambiguous children",
-          "Match elements that have the same container and cannot be confused with other siblings (more general than 'Match unique children').");
   
   /** A criterion for structural matching by containments */
   public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_UNIQUECHILDREN =
       new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
           "Match unique children",
           "Match elements that have the same container and play the same discriminating role within it.");
+  
+  /** A criterion for structural matching by containments */
+  public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_CONTAINMENTS =
+      new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
+          "Match unambiguous children",
+          "Match elements that have the same container and cannot be confused with other siblings (more general than 'Match unique children').");
   
   /** A criterion for semantic matching of project structure */
   public static final FineGrainedMatchCriterion CRITERION_SEMANTICS_DEFAULTCONTENTS =
@@ -205,6 +215,7 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    */
   public List<FineGrainedMatchCriterion> getAvailableFineGrainedCriteria() {
     List<FineGrainedMatchCriterion> result = new ArrayList<FineGrainedMatchCriterion>();
+    result.add(CRITERION_QNAMES_LABELS);
     result.add(CRITERION_STRUCTURE_ROOTS);
     result.add(CRITERION_STRUCTURE_UNIQUECHILDREN);
     result.add(CRITERION_STRUCTURE_CONTAINMENTS);
@@ -297,6 +308,21 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   }
   
   /**
+   * Return the label of the given element if available
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope that covers the element
+   * @return a potentially null object
+   */
+  protected String getLabel(EObject element_p, IModelScope scope_p) {
+    String result = null;
+    AdapterFactory adapterFactory = EMFDiffMergePlugin.getDefault().getAdapterFactory();
+    Adapter adapter = adapterFactory.adapt(element_p, IItemLabelProvider.class);
+    if (adapter instanceof IItemLabelProvider)
+      result = ((IItemLabelProvider)adapter).getText(element_p);
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
   @Override
@@ -327,6 +353,19 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
     default:
       result = getSemanticID(element_p, scope_p); break;
     }
+    return result;
+  }
+  
+  /**
+   * Return the name of the given element, unique within its container if possible
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope that covers the element
+   * @return a potentially null object
+   */
+  protected String getName(EObject element_p, IModelScope scope_p) {
+    String result = null;
+    if (element_p instanceof ENamedElement)
+      result = ((ENamedElement)element_p).getName();
     return result;
   }
   
@@ -372,7 +411,7 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    */
   protected String getQualifiedName(EObject element_p, IModelScope scope_p) {
     String result = null;
-    String name = getUniqueName(element_p, scope_p);
+    String name = getUnqualifiedName(element_p, scope_p);
     if (isSignificant(name))
       result = getContainerRelativeID(
           element_p, scope_p, name, getQualificationSeparatorNames());
@@ -528,15 +567,15 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   }
   
   /**
-   * Return the name of the given element, unique within the container if possible
+   * Return the unqualified name of the given element
    * @param element_p a non-null element
-   * @param scope_p a non-null scope that covers the element
-   * @return a potentially null object
+   * @param scope_p a non-null scope
+   * @return a potentially null string
    */
-  protected String getUniqueName(EObject element_p, IModelScope scope_p) {
-    String result = null;
-    if (element_p instanceof ENamedElement)
-      result = ((ENamedElement)element_p).getName();
+  protected String getUnqualifiedName(EObject element_p, IModelScope scope_p) {
+    String result = getName(element_p, scope_p);
+    if (!isSignificant(result) && useFineGrainedMatchCriterion(CRITERION_QNAMES_LABELS))
+      result = getLabel(element_p, scope_p);
     return result;
   }
   

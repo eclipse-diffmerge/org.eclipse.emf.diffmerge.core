@@ -89,15 +89,15 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getUniqueName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
   @Override
-  protected String getUniqueName(EObject element_p, IModelScope scope_p) {
+  protected String getName(EObject element_p, IModelScope scope_p) {
     String result;
     if (element_p instanceof Diagram)
       result = ((Diagram)element_p).getName();
     else
-      result = super.getUniqueName(element_p, scope_p);
+      result = super.getName(element_p, scope_p);
     return result;
   }
   

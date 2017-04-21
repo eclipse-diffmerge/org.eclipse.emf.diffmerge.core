@@ -116,28 +116,10 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
   @Override
-  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
-    String result = null;
-    if (element_p instanceof DView) {
-      result = getDViewSemanticID((DView)element_p, scope_p);
-    } else if (element_p instanceof DDiagramElement) {
-      result = getDDiagramElementSemanticID((DDiagramElement)element_p, scope_p);
-    } else if (element_p instanceof AnnotationEntry) {
-      result = getAnnotationEntrySemanticID((AnnotationEntry)element_p, scope_p);
-    }
-    if (result == null)
-      result = super.getSemanticID(element_p, scope_p);
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getUniqueName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
-   */
-  @Override
-  protected String getUniqueName(EObject element_p, IModelScope scope_p) {
+  protected String getName(EObject element_p, IModelScope scope_p) {
     String result = null;
     if (element_p instanceof DView) {
       Viewpoint viewpoint = ((DView) element_p).getViewpoint();
@@ -156,7 +138,25 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
       }
     }
     if (result == null)
-      result = super.getUniqueName(element_p, scope_p);
+      result = super.getName(element_p, scope_p);
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   */
+  @Override
+  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
+    String result = null;
+    if (element_p instanceof DView) {
+      result = getDViewSemanticID((DView)element_p, scope_p);
+    } else if (element_p instanceof DDiagramElement) {
+      result = getDDiagramElementSemanticID((DDiagramElement)element_p, scope_p);
+    } else if (element_p instanceof AnnotationEntry) {
+      result = getAnnotationEntrySemanticID((AnnotationEntry)element_p, scope_p);
+    }
+    if (result == null)
+      result = super.getSemanticID(element_p, scope_p);
     return result;
   }
   

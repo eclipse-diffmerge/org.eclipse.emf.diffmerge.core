@@ -22,6 +22,7 @@ import java.util.Set;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.Logger;
+import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
@@ -30,7 +31,6 @@ import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -89,11 +89,11 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   /** The "very dark gray" non-system color (initially null) */
   private Color _veryDarkGray;
   
-  /** A label provider based on the registered .edit plugins (initially null) */
+  /** A label provider based on the EMF Edit registry (initially null) */
   private AdapterFactoryLabelProvider _composedAdapterFactoryLabelProvider;
   
-	
-	/**
+  
+  /**
 	 * Constructor
 	 */
 	public EMFDiffMergeUIPlugin() {
@@ -109,13 +109,13 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	}
 	
 	/**
-	 * Return a label provider based on the registered .edit plugins
+	 * Return a label provider that is based on the EMF Edit registry
 	 * @return a non-null object
 	 */
 	public AdapterFactoryLabelProvider getAdapterFactoryLabelProvider() {
 	  if (_composedAdapterFactoryLabelProvider == null)
 	    _composedAdapterFactoryLabelProvider = new AdapterFactoryLabelProvider(
-	        new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+	        EMFDiffMergePlugin.getDefault().getAdapterFactory());
 	  return _composedAdapterFactoryLabelProvider;
 	}
 	

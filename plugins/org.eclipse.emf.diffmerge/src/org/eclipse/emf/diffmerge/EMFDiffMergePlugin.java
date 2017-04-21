@@ -17,6 +17,8 @@ package org.eclipse.emf.diffmerge;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.osgi.framework.BundleContext;
 
 
@@ -31,6 +33,9 @@ public class EMFDiffMergePlugin extends Plugin {
 	
 	/** Whether this plug-in is verbose */
 	private boolean _verbose;
+
+  /** A composed adapter factory based on the EMF Edit registry (initially null) */
+  private ComposedAdapterFactory _adapterFactory;
 	
 	
 	/**
@@ -38,8 +43,20 @@ public class EMFDiffMergePlugin extends Plugin {
 	 */
 	public EMFDiffMergePlugin() {
 	  _verbose = false;
+	  _adapterFactory = null;
 	}
 	
+  /**
+   * Return an adapter factory that is based on the EMF Edit registry
+   * @return a non-null object
+   */
+  public AdapterFactory getAdapterFactory() {
+    if (_adapterFactory == null)
+      _adapterFactory = new ComposedAdapterFactory(
+          ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+    return _adapterFactory;
+  }
+  
   /**
    * Return the shared instance of the activator
    * @return a non-null instance
@@ -89,6 +106,7 @@ public class EMFDiffMergePlugin extends Plugin {
 	@Override
 	public void stop(BundleContext context_p) throws Exception {
 		__plugin = null;
+		_adapterFactory.dispose();
 		super.stop(context_p);
 	}
 	
