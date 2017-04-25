@@ -41,6 +41,7 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    * Constructor
    */
   public CachingMatchPolicy() {
+    super();
     _matchCache = new WeakHashMap<EObject, WeakReference<Object>>();
   }
   

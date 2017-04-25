@@ -38,13 +38,13 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   private Role _twoWayReferenceRole;
   
   /** The (potentially null) match policy */
-  private IMatchPolicy _matchPolicy;
+  protected IMatchPolicy _matchPolicy;
   
   /** The (potentially null) diff policy */
-  private IDiffPolicy _diffPolicy;
+  protected IDiffPolicy _diffPolicy;
   
   /** The (potentially null) merge policy */
-  private IMergePolicy _mergePolicy;
+  protected IMergePolicy _mergePolicy;
   
   
   /**
@@ -103,21 +103,21 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getDiffPolicy()
    */
-  public final IDiffPolicy getDiffPolicy() {
+  public IDiffPolicy getDiffPolicy() {
     return _diffPolicy;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMatchPolicy()
    */
-  public final IMatchPolicy getMatchPolicy() {
+  public IMatchPolicy getMatchPolicy() {
     return _matchPolicy;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMergePolicy()
    */
-  public final IMergePolicy getMergePolicy() {
+  public IMergePolicy getMergePolicy() {
     return _mergePolicy;
   }
   

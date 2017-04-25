@@ -14,10 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.ui.specification;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
 import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -35,7 +33,8 @@ import org.eclipse.ui.IActionBars;
  * @see DefaultComparisonMethod
  * @author Olivier Constant
  */
-public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
+public interface IComparisonMethod extends IComparisonConfiguration,
+IEditingDomainProvider, IDisposable {
   
   /**
    * Let the user configure this comparison method, if this capability is available
@@ -55,30 +54,12 @@ public interface IComparisonMethod extends IEditingDomainProvider, IDisposable {
   AbstractComparisonViewer createComparisonViewer(Composite parent_p, IActionBars actionBars_p);
   
   /**
-   * Return the diff policy for the comparison
-   * @return a potentially null diff policy (null is for default)
-   */
-  IDiffPolicy getDiffPolicy();
-  
-  /**
    * Return the editing domain in which comparison must take place, if any.
    * If null is returned, then undo/redo operations will not be available.
    * @return a potentially null editing domain
    * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
    */
   EditingDomain getEditingDomain();
-  
-  /**
-   * Return the match policy for the comparison
-   * @return a potentially null match policy (null is for default)
-   */
-  IMatchPolicy getMatchPolicy();
-  
-  /**
-   * Return the merge policy for the comparison
-   * @return a potentially null merge policy (null is for default)
-   */
-  IMergePolicy getMergePolicy();
   
   /**
    * Return the scope definition that plays the given role

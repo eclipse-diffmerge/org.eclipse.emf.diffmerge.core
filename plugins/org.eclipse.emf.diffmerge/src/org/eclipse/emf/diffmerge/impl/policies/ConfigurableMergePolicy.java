@@ -17,20 +17,15 @@ package org.eclipse.emf.diffmerge.impl.policies;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 
 /**
- * A diff policy that provides a few characteristics which can be configured.
+ * A merge policy that provides a few characteristics which can be configured.
  * @author Olivier Constant
  */
-public class ConfigurableDiffPolicy extends DefaultDiffPolicy
+public class ConfigurableMergePolicy extends DefaultMergePolicy
 implements IConfigurablePolicy {
-  
-  /** Whether orders must be ignored */
-  private boolean _ignoreOrders;
   
   /** The non-null, potentially empty, modifiable set of listeners */
   protected final Set<IConfigurationChangedListener> _listeners;
@@ -39,8 +34,7 @@ implements IConfigurablePolicy {
   /**
    * Constructor
    */
-  public ConfigurableDiffPolicy() {
-    _ignoreOrders = false;
+  public ConfigurableMergePolicy() {
     _listeners = new LinkedHashSet<IConfigurationChangedListener>();
   }
   
@@ -48,7 +42,7 @@ implements IConfigurablePolicy {
    * Constructor
    * @param policy_p a non-null policy whose configuration to clone
    */
-  public ConfigurableDiffPolicy(ConfigurableDiffPolicy policy_p) {
+  public ConfigurableMergePolicy(ConfigurableMergePolicy policy_p) {
     this();
     update(policy_p);
   }
@@ -64,32 +58,9 @@ implements IConfigurablePolicy {
    * @see java.lang.Object#clone()
    */
   @Override
-  public ConfigurableDiffPolicy clone() throws CloneNotSupportedException {
+  public ConfigurableMergePolicy clone() throws CloneNotSupportedException {
     // Override in subclasses if the configurable state is extended or modified
-    return new ConfigurableDiffPolicy(this);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrdered(org.eclipse.emf.ecore.EStructuralFeature)
-   */
-  @Override
-  public final boolean considerOrdered(EStructuralFeature feature_p) {
-    boolean result;
-    if (_ignoreOrders)
-      result = false;
-    else
-      result = doConsiderOrdered(feature_p);
-    return result;
-  }
-  
-  /**
-   * Return whether the given feature must be considered as ordered, independently of the
-   * "ignore orders" flag
-   * @see IDiffPolicy#considerOrdered(EStructuralFeature)
-   * @param feature_p a non-null feature
-   */
-  protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
-    return super.considerOrdered(feature_p);
+    return new ConfigurableMergePolicy(this);
   }
   
   /**
@@ -103,13 +74,6 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * Return whether this policy ignores orders
-   */
-  public boolean isIgnoreOrders() {
-    return _ignoreOrders;
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
@@ -117,25 +81,10 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * Set whether orders must be ignored
-   * @param ignore_p whether orders must be ignored
-   */
-  public void setIgnoreOrders(boolean ignore_p) {
-    _ignoreOrders = ignore_p;
-    fireConfigurationChanged(null);
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy)
    */
   public boolean update(IConfigurablePolicy policy_p) {
-    boolean result = false;
-    if (policy_p instanceof ConfigurableDiffPolicy) {
-      ConfigurableDiffPolicy policy = (ConfigurableDiffPolicy)policy_p;
-      setIgnoreOrders(policy.isIgnoreOrders());
-      result = true;
-    }
-    return result;
+    return policy_p instanceof ConfigurableMergePolicy;
   }
   
 }

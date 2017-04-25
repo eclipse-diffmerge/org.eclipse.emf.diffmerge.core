@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2016  Thales Global Services S.A.S.
+ * Copyright (c) 2010-2017  Thales Global Services S.A.S.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -39,14 +39,14 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   /** A criterion for semantic matching of views by type */
   public static final FineGrainedMatchCriterion CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE =
       new FineGrainedMatchCriterion(MatchCriterionKind.SEMANTICS,
-          "Diagrams: Match remaining shapes according to type",
-          "Certain shapes, generally graphical nodes, are purely technical and do not represent an element: they only make sense in the context of other more significant shapes.\nMatch these shapes according to their type and to more significant shapes.");
+          Messages.GMFMatchPolicy_Criterion_ShapeType,
+          Messages.GMFMatchPolicy_Criterion_ShapeType_Tooltip);
   
   /** A criterion for semantic matching of views by elements */
   public static final FineGrainedMatchCriterion CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT =
       new FineGrainedMatchCriterion(MatchCriterionKind.SEMANTICS,
-          "Diagrams: Match shapes according to represented elements",
-          "Match shapes (graphical nodes or edges) which represent the same element in the same diagram.\nBeware that it only makes sense if an element cannot be represented by different shapes in the same diagram.");
+          Messages.GMFMatchPolicy_Criterion_RepresentedElement,
+          Messages.GMFMatchPolicy_Criterion_RepresentedElement_Tooltip);
   
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_VIEWTYPE_PROPERTY = "SEMANTIC_VIEWTYPE"; //$NON-NLS-1$
@@ -63,6 +63,31 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   protected static final Collection<String> NON_SEMANTIC_VIEWTYPES = Arrays.asList(
       "Note", "NoteAttachment"); //$NON-NLS-1$ //$NON-NLS-2$
   
+  
+  /**
+   * Default constructor
+   */
+  public GMFMatchPolicy() {
+    super();
+  }
+  
+  /**
+   * Constructor
+   * @param policy_p a non-null policy whose configuration to clone
+   */
+  public GMFMatchPolicy(GMFMatchPolicy policy_p) {
+    this();
+    update(policy_p);
+  }
+  
+  /**
+   * @see java.lang.Object#clone()
+   */
+  @Override
+  public GMFMatchPolicy clone() throws CloneNotSupportedException {
+    // Override in subclasses if the configurable state is extended or modified
+    return new GMFMatchPolicy(this);
+  }
   
   /**
    * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getAvailableFineGrainedCriteria()
@@ -116,12 +141,12 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
         List<EObject> values = scope.get(view_p, NotationPackage.eINSTANCE.getView_Element());
         if (values.size() == 1) {
           // Represented element is present
-          if (useFineGrainedMatchCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT))
+          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT))
             result = getViewElementBasedSemanticID(
                 view_p, scope_p, values.get(0), viewType);
         } else {
           // Represented element is absent
-          if (useFineGrainedMatchCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))
+          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))
             result = getViewTypeBasedSemanticID(view_p, scope_p, viewType);
         }
       }

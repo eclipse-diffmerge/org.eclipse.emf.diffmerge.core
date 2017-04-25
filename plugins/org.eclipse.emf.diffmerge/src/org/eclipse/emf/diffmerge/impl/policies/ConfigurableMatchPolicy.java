@@ -20,12 +20,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
+import org.eclipse.emf.diffmerge.Messages;
+import org.eclipse.emf.diffmerge.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.ecore.EClass;
@@ -37,14 +41,14 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 
 
 /**
- * A multi-criteria match policy that supports the computation of the match ID
- * of certain elements according to the match ID of other elements.
+ * A multi-criteria match policy that can be configured.
  * @author Olivier Constant
  */
-public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Cloneable {
+public class ConfigurableMatchPolicy extends CachingMatchPolicy
+implements IConfigurablePolicy {
   
   /**
-   * A predefined set of criteria for matching.
+   * A predefined set of match criteria in decreasing order of priority.
    */
   public static enum MatchCriterionKind {
     /**
@@ -71,15 +75,11 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   
   
   /**
-   * A criterion for finer-grained tuning of matching
+   * A criterion for finer-grained tuning of matching.
    */
-  public static class FineGrainedMatchCriterion {
+  public static class FineGrainedMatchCriterion extends AbstractConfigurationElement {
     /** The non-null main criterion to which this criterion is relative */
     private final MatchCriterionKind _category;
-    /** A non-null label for the criterion */
-    private final String _label;
-    /** An optional description for the criterion */
-    private final String _description;
     /**
      * Constructor
      * @param category_p a non-null main criterion
@@ -88,62 +88,55 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
      */
     public FineGrainedMatchCriterion(MatchCriterionKind category_p, String label_p,
         String description_p) {
+      super(label_p, description_p);
       _category = category_p;
-      _label = label_p;
-      _description = description_p;
     }
     /**
      * Return the main criterion to which this criterion is relative
      * @return a non-null object
      */
-    public MatchCriterionKind getCategory() {
+    public MatchCriterionKind getParentCriterion() {
       return _category;
     }
-    /**
-     * Return the description of this criterion, if any
-     * @return a potentially null object
-     */
-    public String getDescription() {
-      return _description;
-    }
-    /**
-     * Return the label of this criterion
-     * @return a non-null object
-     */
-    public String getLabel() {
-      return _label;
-    }
   }
+  
   
   /** A criterion for name-based matching of exchanges and links */
   public static final FineGrainedMatchCriterion CRITERION_QNAMES_LABELS =
       new FineGrainedMatchCriterion(MatchCriterionKind.NAME,
-          "Use label when name is not known",
-          "If the diff/merge tool is not aware that a given element has a name, then use the label that represents the element in editors if available.\nBeware that it may only work if all labels are different.");
+          Messages.ConfigurableMatchPolicy_Criterion_QNames_Labels,
+          Messages.ConfigurableMatchPolicy_Criterion_QNames_Labels_Tooltip);
   
   /** A criterion for structural matching of roots */
   public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_ROOTS =
       new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
-          "Match unique roots",
-          "Match root elements that cannot be confused with others.");
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_Roots,
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_Roots_Tooltip);
   
   /** A criterion for structural matching by containments */
   public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_UNIQUECHILDREN =
       new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
-          "Match unique children",
-          "Match elements that have the same container and play the same discriminating role within it.");
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren,
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren_Tooltip);
   
   /** A criterion for structural matching by containments */
   public static final FineGrainedMatchCriterion CRITERION_STRUCTURE_CONTAINMENTS =
       new FineGrainedMatchCriterion(MatchCriterionKind.STRUCTURE,
-          "Match unambiguous children",
-          "Match elements that have the same container and cannot be confused with other siblings (more general than 'Match unique children').");
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_UnambiguousChildren,
+          Messages.ConfigurableMatchPolicy_Criterion_Structure_UnambiguousChildren_Tooltip);
   
   /** A criterion for semantic matching of project structure */
   public static final FineGrainedMatchCriterion CRITERION_SEMANTICS_DEFAULTCONTENTS =
       new FineGrainedMatchCriterion(MatchCriterionKind.SEMANTICS,
-          "Match default model contents",
-          "When a new model is being created, it is usually filled with default model elements: match these default elements if present.\nIt may only work if the top-level elements of the models match (see 'Structure - Match unambiguous roots').");
+          Messages.ConfigurableMatchPolicy_Criterion_Semantics_DefaultContents,
+          Messages.ConfigurableMatchPolicy_Criterion_Semantics_DefaultContents_Tooltip);
+  
+  
+  /** The configuration property that represents any match criterion */
+  public static final Object PROPERTY_MATCH_CRITERIA = new Object();
+  
+  /** The configuration property that represents any fine-grained match criterion */
+  public static final Object PROPERTY_FINE_GRAINED_MATCH_CRITERIA = new Object();
   
   
   /** Whether the cache must be used */
@@ -155,18 +148,37 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   /** The set of fine-grained match criteria to use */
   private final Set<FineGrainedMatchCriterion> _selectedFineGrainedCriteria;
   
+  /** The non-null, potentially empty, modifiable set of listeners */
+  protected final Set<IConfigurationChangedListener> _listeners;
+  
   
   /**
-   * Constructor
+   * Default constructor
    */
   public ConfigurableMatchPolicy() {
-    // Cache
+    super();
     _useCache = false;
-    // Selected criteria
     _selectedCriteria = new HashSet<MatchCriterionKind>(
         MatchCriterionKind.values().length);
     _selectedCriteria.addAll(getDefaultCriteria());
     _selectedFineGrainedCriteria = new HashSet<FineGrainedMatchCriterion>();
+    _listeners = new LinkedHashSet<IConfigurationChangedListener>();
+  }
+  
+  /**
+   * Constructor
+   * @param policy_p a non-null policy whose configuration to clone
+   */
+  public ConfigurableMatchPolicy(ConfigurableMatchPolicy policy_p) {
+    this();
+    update(policy_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   */
+  public void addConfigurationChangedListener(IConfigurationChangedListener listener_p) {
+    _listeners.add(listener_p);
   }
   
   /**
@@ -174,43 +186,39 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    */
   @Override
   public ConfigurableMatchPolicy clone() throws CloneNotSupportedException {
-    // Increasing visibility and down-casting
-    return (ConfigurableMatchPolicy)super.clone();
+    // Override in subclasses if the configurable state is extended or modified
+    return new ConfigurableMatchPolicy(this);
   }
   
   /**
-   * Configure this policy according to the given one
-   * @param policy_p a non-null policy
+   * Notify all registered listeners that the configuration changed
+   * @param property_p an optional object that describes the configuration property that changed
    */
-  public void configureAccordingTo(ConfigurableMatchPolicy policy_p) {
-    // Common properties
-    setKeepMatchIDs(policy_p.keepMatchIDs());
-    setUseCache(policy_p.useCache());
-    // Match criteria
-    for (MatchCriterionKind criterion : policy_p.getApplicableCriteria()) {
-      setUseMatchCriterion(criterion, policy_p.useMatchCriterion(criterion));
-    }
-    // Fine-grained match criteria
-    for (FineGrainedMatchCriterion criterion : policy_p.getAvailableFineGrainedCriteria()) {
-      setUseFineGrainedMatchCriterion(criterion, policy_p.useFineGrainedMatchCriterion(criterion));
+  protected void fireConfigurationChanged(Object property_p) {
+    for (IConfigurationChangedListener listener : _listeners) {
+      listener.configurationChanged(this, property_p);
     }
   }
   
   /**
-   * Return the set of applicable match criteria in decreasing priority
-   * @return a non-null collection
+   * Get the exact set of fine-grained match criteria that must be used according to this policy
+   * @return a non-null, potentially empty, unmodifiable collection
    */
-  public Collection<MatchCriterionKind> getApplicableCriteria() {
-    return Arrays.asList(
-        MatchCriterionKind.STRUCTURE,
-        MatchCriterionKind.NAME,
-        MatchCriterionKind.INTRINSIC_ID,
-        MatchCriterionKind.EXTRINSIC_ID);
+  public Collection<FineGrainedMatchCriterion> getAllUsedFineGrainedCriteria() {
+    return Collections.unmodifiableCollection(_selectedFineGrainedCriteria);
+  }
+  
+  /**
+   * Get the exact set of match criteria that must be used according to this policy
+   * @return a non-null, potentially empty, unmodifiable collection
+   */
+  public Collection<MatchCriterionKind> getAllUsedCriteria() {
+    return Collections.unmodifiableCollection(_selectedCriteria);
   }
   
   /**
    * Return the set of available fine-grained match criteria, independently of the
-   * fact that their category is applicable or not
+   * fact that their parent criterion is applicable or not
    * @return a non-null, modifiable list
    */
   public List<FineGrainedMatchCriterion> getAvailableFineGrainedCriteria() {
@@ -288,7 +296,7 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   }
   
   /**
-   * Return the set of default match criteria among the applicable ones
+   * Return the set of match criteria that are used by default
    * @return a non-null collection
    */
   public Collection<MatchCriterionKind> getDefaultCriteria() {
@@ -527,13 +535,13 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   protected String getStructureBasedID(EObject element_p, IModelScope scope_p) {
     String result = null;
     EReference containment = getContainment(element_p, scope_p);
-    if (containment == null && useFineGrainedMatchCriterion(CRITERION_STRUCTURE_ROOTS)) {
+    if (containment == null && useFineGrainedCriterion(CRITERION_STRUCTURE_ROOTS)) {
       result = getStructureBasedRootQualifier(element_p, scope_p);
     } else if (containment != null &&
-        (useFineGrainedMatchCriterion(CRITERION_STRUCTURE_CONTAINMENTS) ||
-            useFineGrainedMatchCriterion(CRITERION_STRUCTURE_UNIQUECHILDREN))) {
+        (useFineGrainedCriterion(CRITERION_STRUCTURE_CONTAINMENTS) ||
+            useFineGrainedCriterion(CRITERION_STRUCTURE_UNIQUECHILDREN))) {
       result = getStructureBasedContainmentID(element_p, scope_p,
-          !useFineGrainedMatchCriterion(CRITERION_STRUCTURE_CONTAINMENTS));
+          !useFineGrainedCriterion(CRITERION_STRUCTURE_CONTAINMENTS));
     }
     return result;
   }
@@ -557,13 +565,14 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   @Override
   protected String getUncachedMatchID(EObject element_p, IModelScope scope_p) {
     String result = null;
-    Iterator<MatchCriterionKind> it = getApplicableCriteria().iterator();
-    while (result == null && it.hasNext()) {
-      MatchCriterionKind criterion = it.next();
-      if (useMatchCriterion(criterion))
+    for (MatchCriterionKind criterion : MatchCriterionKind.values()) {
+      if (useCriterion(criterion)) {
         result = getMatchID(element_p, scope_p, criterion);
+        if (result != null)
+          return result;
+      }
     }
-    return result;
+    return null;
   }
   
   /**
@@ -573,10 +582,20 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    * @return a potentially null string
    */
   protected String getUnqualifiedName(EObject element_p, IModelScope scope_p) {
-    String result = getName(element_p, scope_p);
-    if (!isSignificant(result) && useFineGrainedMatchCriterion(CRITERION_QNAMES_LABELS))
+    String result;
+    if (useFineGrainedCriterion(CRITERION_QNAMES_LABELS))
       result = getLabel(element_p, scope_p);
+    else
+      result = getName(element_p, scope_p);
     return result;
+  }
+  
+  /**
+   * Return the set of match criteria that can be exposed to the user
+   * @return a non-null collection
+   */
+  public Collection<MatchCriterionKind> getVisibleCriteria() {
+    return Arrays.asList(MatchCriterionKind.values());
   }
   
   /**
@@ -669,11 +688,48 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   */
+  public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
+    _listeners.remove(listener_p);
+  }
+  
+  /**
+   * Set the exact set of fine-grained match criteria that must be used
+   * @param criteria_p a non-null, potentially empty collection
+   */
+  public void setAllUsedFineGrainedCriteria(Collection<FineGrainedMatchCriterion> criteria_p) {
+    _selectedFineGrainedCriteria.clear();
+    _selectedFineGrainedCriteria.addAll(criteria_p);
+    fireConfigurationChanged(PROPERTY_FINE_GRAINED_MATCH_CRITERIA);
+  }
+  
+  /**
+   * Set the exact set of match criteria that must be used
+   * @param criteria_p a non-null, potentially empty collection
+   */
+  public void setAllUsedCriteria(Collection<MatchCriterionKind> criteria_p) {
+    _selectedCriteria.clear();
+    _selectedCriteria.addAll(criteria_p);
+    fireConfigurationChanged(PROPERTY_MATCH_CRITERIA);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#setKeepMatchIDs(boolean)
+   */
+  @Override
+  public void setKeepMatchIDs(boolean keep_p) {
+    super.setKeepMatchIDs(keep_p);
+    fireConfigurationChanged(null);
+  }
+  
+  /**
    * Set whether the cache must be used
    * @param useCache_p whether it must be used
    */
   public void setUseCache(boolean useCache_p) {
     _useCache = useCache_p;
+    fireConfigurationChanged(null);
   }
   
   /**
@@ -681,11 +737,12 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    * @param criterion_p a non-null criterion
    * @param use_p whether it must be used
    */
-  public void setUseFineGrainedMatchCriterion(FineGrainedMatchCriterion criterion_p, boolean use_p) {
+  public void setUseFineGrainedCriterion(FineGrainedMatchCriterion criterion_p, boolean use_p) {
     if (use_p)
       _selectedFineGrainedCriteria.add(criterion_p);
     else
       _selectedFineGrainedCriteria.remove(criterion_p);
+    fireConfigurationChanged(criterion_p);
   }
   
   /**
@@ -693,11 +750,30 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    * @param criterion_p a non-null criterion
    * @param use_p whether it must be used
    */
-  public void setUseMatchCriterion(MatchCriterionKind criterion_p, boolean use_p) {
+  public void setUseCriterion(MatchCriterionKind criterion_p, boolean use_p) {
     if (use_p)
       _selectedCriteria.add(criterion_p);
     else
       _selectedCriteria.remove(criterion_p);
+    fireConfigurationChanged(criterion_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy)
+   */
+  public boolean update(IConfigurablePolicy policy_p) {
+    boolean result = false;
+    if (policy_p instanceof IMatchPolicy) {
+      setKeepMatchIDs(((IMatchPolicy)policy_p).keepMatchIDs());
+      if (policy_p instanceof ConfigurableMatchPolicy) {
+        ConfigurableMatchPolicy policy = (ConfigurableMatchPolicy)policy_p;
+        setUseCache(policy.useCache());
+        setAllUsedCriteria(policy.getAllUsedCriteria());
+        setAllUsedFineGrainedCriteria(policy.getAllUsedFineGrainedCriteria());
+        result = true;
+      }
+    }
+    return result;
   }
   
   /**
@@ -713,7 +789,7 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    * by this match policy, independently of the fact that its category is used or not
    * @param criterion_p a non-null criterion
    */
-  public boolean useFineGrainedMatchCriterion(FineGrainedMatchCriterion criterion_p) {
+  public boolean useFineGrainedCriterion(FineGrainedMatchCriterion criterion_p) {
     return _selectedFineGrainedCriteria.contains(criterion_p);
   }
   
@@ -721,7 +797,7 @@ public class ConfigurableMatchPolicy extends CachingMatchPolicy implements Clone
    * Return whether the given match criterion is used by this match policy
    * @param criterion_p a non-null criterion
    */
-  public boolean useMatchCriterion(MatchCriterionKind criterion_p) {
+  public boolean useCriterion(MatchCriterionKind criterion_p) {
     return _selectedCriteria.contains(criterion_p);
   }
   

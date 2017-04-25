@@ -15,11 +15,30 @@
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.CRITERION_SEMANTICS_DEFAULTCONTENTS;
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.CRITERION_STRUCTURE_ROOTS;
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind.EXTRINSIC_ID;
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind.INTRINSIC_ID;
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind.SEMANTICS;
+import static org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind.STRUCTURE;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.impl.policies.ComparisonConfigurator;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrainedMatchCriterion;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
@@ -30,10 +49,36 @@ import org.eclipse.ui.PlatformUI;
  * A configurable multi-criteria comparison method.
  * @author Olivier Constant
  */
-public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
+public class ConfigurableComparisonMethod extends DefaultComparisonMethod
+implements IComparisonConfigurator.Provider {
   
-  /** The initially null last configuration for the comparison method */
-  protected static ConfigureComparisonDialog.ComparisonMethodConfigurationData __lastConfiguration = null;
+  /** The "transfer data between independent models" configurator */
+  public static final IComparisonConfigurator CONFIGURATOR_DATA_TRANSFER =
+      new ComparisonConfigurator(
+        Messages.ConfigurableComparisonMethod_Usage_Transfer,
+        Messages.ConfigurableComparisonMethod_Usage_Transfer_Tooltip,
+        Arrays.asList(INTRINSIC_ID, EXTRINSIC_ID, STRUCTURE, SEMANTICS),
+        Arrays.asList(
+            CRITERION_STRUCTURE_ROOTS,
+            CRITERION_SEMANTICS_DEFAULTCONTENTS));
+  
+  /** The "compare versions of the same model" configurator */
+  public static final IComparisonConfigurator CONFIGURATOR_VERSIONS =
+    new ComparisonConfigurator(
+        Messages.ConfigurableComparisonMethod_Usage_Versions,
+        Messages.ConfigurableComparisonMethod_Usage_Versions_Tooltip,
+        Arrays.asList(INTRINSIC_ID, EXTRINSIC_ID),
+        Collections.<FineGrainedMatchCriterion>emptySet());
+  
+  /** The initially null lastly used comparison configuration */
+  protected static ComparisonConfiguration __lastComparisonConfiguration = null;
+  
+  /** The initially null type of the lastly used comparison method */
+  protected static Class<? extends ConfigurableComparisonMethod> __lastComparisonMethodType = null;
+  
+  
+  /** The non-null, potentially empty list of predefined configurators */
+  protected final List<IComparisonConfigurator> _configurators;
   
   
   /**
@@ -45,7 +90,11 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   public ConfigurableComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
       IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p) {
     super(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p);
-    update(__lastConfiguration);
+    _configurators = new ArrayList<IComparisonConfigurator>(createConfigurators());
+    if (__lastComparisonMethodType != null &&
+        __lastComparisonMethodType.isAssignableFrom(getClass())) {
+      update(__lastComparisonConfiguration);
+    }
   }
   
   /**
@@ -55,8 +104,8 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   public void configure() {
     Shell shell = getShell();
     if (shell != null) {
-      ConfigureComparisonDialog.ComparisonMethodConfigurationData data =
-          new ConfigureComparisonDialog.ComparisonMethodConfigurationData(this);
+      ComparisonConfiguration data =
+          new ComparisonConfiguration(this);
       int confirmed = new ConfigureComparisonDialog(shell, data).open();
       if (Window.OK == confirmed)
         configurationConfirmed(data);
@@ -67,9 +116,21 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
    * Handle the confirmation of the given configuration
    * @param data_p a non-null object
    */
-  protected void configurationConfirmed(ConfigureComparisonDialog.ComparisonMethodConfigurationData data_p) {
+  protected void configurationConfirmed(ComparisonConfiguration data_p) {
+    __lastComparisonConfiguration = data_p;
+    __lastComparisonMethodType = getClass();
     update(data_p);
-    __lastConfiguration = data_p;
+  }
+  
+  /**
+   * Create and return the ordered set of configurators for this comparison method
+   * @return a non-null, potentially empty ordered set
+   */
+  protected List<IComparisonConfigurator> createConfigurators() {
+    List<IComparisonConfigurator> result = new LinkedList<IComparisonConfigurator>();
+    result.add(CONFIGURATOR_VERSIONS);
+    result.add(CONFIGURATOR_DATA_TRANSFER);
+    return result;
   }
   
   /**
@@ -86,6 +147,21 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
   @Override
   protected IMatchPolicy createMatchPolicy() {
     return new ConfigurableMatchPolicy();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createMergePolicy()
+   */
+  @Override
+  protected IMergePolicy createMergePolicy() {
+    return new ConfigurableMergePolicy();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator.Provider#getConfigurators()
+   */
+  public List<IComparisonConfigurator> getConfigurators() {
+    return Collections.unmodifiableList(_configurators);
   }
   
   /**
@@ -114,24 +190,29 @@ public class ConfigurableComparisonMethod extends DefaultComparisonMethod {
    * Update this comparison method according to the given configuration
    * @param data_p a potentially null configuration
    */
-  protected void update(ConfigureComparisonDialog.ComparisonMethodConfigurationData data_p) {
+  protected void update(ComparisonConfiguration data_p) {
     if (data_p == null) return;
     // Match policy
-    IMatchPolicy matchPolicy = getMatchPolicy();
-    if (matchPolicy instanceof DefaultMatchPolicy)
-      ((DefaultMatchPolicy)matchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
-    if (matchPolicy instanceof ConfigurableMatchPolicy) {
-      ConfigurableMatchPolicy cMatchPolicy = (ConfigurableMatchPolicy)matchPolicy;
-      ConfigurableMatchPolicy configuredCopy = data_p.getConfigurableMatchPolicy();
-      if (configuredCopy != null)
-        cMatchPolicy.configureAccordingTo(configuredCopy);
+    IMatchPolicy originalMatchPolicy = getMatchPolicy();
+    ConfigurableMatchPolicy configuredMatchPolicy = data_p.getMatchPolicy();
+    if (originalMatchPolicy instanceof ConfigurableMatchPolicy &&
+        configuredMatchPolicy != null) {
+      ((ConfigurableMatchPolicy)originalMatchPolicy).update(configuredMatchPolicy);
+    } else if (originalMatchPolicy instanceof DefaultMatchPolicy) {
+      ((DefaultMatchPolicy)originalMatchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
     }
-    // Diff Policy
-    IDiffPolicy diffPolicy = getDiffPolicy();
-    if (diffPolicy instanceof ConfigurableDiffPolicy) {
-      ConfigurableDiffPolicy cDiffPolicy = (ConfigurableDiffPolicy)diffPolicy;
-      cDiffPolicy.setIgnoreOrders(data_p.isIgnoreOrders());
-    }
+    // Diff policy
+    IDiffPolicy originalDiffPolicy = getDiffPolicy();
+    ConfigurableDiffPolicy configuredDiffPolicy = data_p.getDiffPolicy();
+    if (originalDiffPolicy instanceof ConfigurableDiffPolicy &&
+        configuredDiffPolicy != null)
+      ((ConfigurableDiffPolicy)originalDiffPolicy).update(configuredDiffPolicy);
+    // Merge policy
+    IMergePolicy originalMergePolicy = getMergePolicy();
+    ConfigurableMergePolicy configuredMergePolicy = data_p.getMergePolicy();
+    if (originalMergePolicy instanceof ConfigurableMergePolicy &&
+        configuredMergePolicy != null)
+      ((ConfigurableMergePolicy)originalMergePolicy).update(configuredMergePolicy);
   }
   
 }

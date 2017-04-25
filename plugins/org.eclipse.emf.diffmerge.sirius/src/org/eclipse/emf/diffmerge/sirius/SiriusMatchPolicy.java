@@ -38,6 +38,31 @@ import org.eclipse.sirius.viewpoint.description.Viewpoint;
 public class SiriusMatchPolicy extends GMFMatchPolicy {
   
   /**
+   * Default constructor
+   */
+  public SiriusMatchPolicy() {
+    super();
+  }
+  
+  /**
+   * Constructor
+   * @param policy_p a non-null policy whose configuration to clone
+   */
+  public SiriusMatchPolicy(SiriusMatchPolicy policy_p) {
+    this();
+    update(policy_p);
+  }
+  
+  /**
+   * @see java.lang.Object#clone()
+   */
+  @Override
+  public SiriusMatchPolicy clone() throws CloneNotSupportedException {
+    // Override in subclasses if the configurable state is extended or modified
+    return new SiriusMatchPolicy(this);
+  }
+  
+  /**
    * Return a semantic ID for the given annotation entry
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p
@@ -73,7 +98,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   protected String getDDiagramElementSemanticID(DDiagramElement element_p,
       IModelScope scope_p) {
     String result = null;
-    if (useFineGrainedMatchCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
+    if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
       // The semantic ID is defined from the diagram and the represented element,
       // the assumption being that an element cannot be represented more than once
       // in the same diagram.
@@ -106,7 +131,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   protected String getDViewSemanticID(
       DView element_p, IModelScope scope_p) {
     String result = null;
-    if (useFineGrainedMatchCriterion(CRITERION_SEMANTICS_DEFAULTCONTENTS)) {
+    if (useFineGrainedCriterion(CRITERION_SEMANTICS_DEFAULTCONTENTS)) {
       Viewpoint vp = element_p.getViewpoint();
       String vpName = (vp == null)? null: vp.getName();
       if (vpName != null)

@@ -540,6 +540,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
   protected void setCyclicOwnershipDependencies(IReferenceValuePresence presence_p) {
     // Preconditions
     assert presence_p.getValueMatch() != null;
+    assert !presence_p.isOrder();
     assert presence_p.getValueMatch().isAMove(); //(1)
     assert presence_p.getFeature().isContainment(); // Normally implied by (1)
     assert !presence_p.getValueMatch().isPartial(); // Normally implied by (1)
@@ -674,7 +675,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (symmetricalOwnership != null)
         setSymmetricalOwnershipDependencies(presence_p, symmetricalOwnership);
       // "Cyclic" moves
-      if (valueMatch != null)
+      if (valueMatch != null && !presence_p.isOrder())
         setCyclicOwnershipDependencies(presence_p);
     }
   }

@@ -10,6 +10,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.eclipse.emf.diffmerge,
  org.eclipse.emf.diffmerge.api,
+ org.eclipse.emf.diffmerge.api.config,
  org.eclipse.emf.diffmerge.api.diff,
  org.eclipse.emf.diffmerge.api.scopes,
  org.eclipse.emf.diffmerge.diffdata,

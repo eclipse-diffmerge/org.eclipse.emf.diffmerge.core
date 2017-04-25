@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2016  Thales Global Services S.A.S.
+ * Copyright (c) 2010-2017  Thales Global Services S.A.S.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,4 +32,9 @@ public class Messages extends NLS {
   private Messages() {
     // Nothing needed
   }
+
+  public static String GMFMatchPolicy_Criterion_RepresentedElement;
+  public static String GMFMatchPolicy_Criterion_RepresentedElement_Tooltip;
+  public static String GMFMatchPolicy_Criterion_ShapeType;
+  public static String GMFMatchPolicy_Criterion_ShapeType_Tooltip;
 }

@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2016  Thales Global Services S.A.S and others.
+ * Copyright (c) 2010-2017  Thales Global Services S.A.S and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -104,12 +104,17 @@ public class Messages extends NLS {
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
   public static String ComparisonViewer_ShowDifferenceNumbersMenuItem;
   public static String ComparisonViewer_UseTechnicalRepresentation;
+  public static String ConfigurableComparisonMethod_Usage_Transfer;
+  public static String ConfigurableComparisonMethod_Usage_Transfer_Tooltip;
+  public static String ConfigurableComparisonMethod_Usage_Versions;
+  public static String ConfigurableComparisonMethod_Usage_Versions_Tooltip;
   public static String ConfigurableComparisonMethodFactory_Label;
   public static String ConfigureComparisonDialog_AbsoluteCriteria;
   public static String ConfigureComparisonDialog_AbsoluteCriteriaTooltip;
   public static String ConfigureComparisonDialog_Differencing;
   public static String ConfigureComparisonDialog_EIDCriterion;
   public static String ConfigureComparisonDialog_EIDCriterionTooltip;
+  public static String ConfigureComparisonDialog_HideAdvanced;
   public static String ConfigureComparisonDialog_IgnoreOrders;
   public static String ConfigureComparisonDialog_IgnoreOrdersTooltip;
   public static String ConfigureComparisonDialog_IIDCriterion;
@@ -124,13 +129,19 @@ public class Messages extends NLS {
   public static String ConfigureComparisonDialog_Note;
   public static String ConfigureComparisonDialog_OtherMatchingCriteria;
   public static String ConfigureComparisonDialog_OtherMatchingCriteriaTooltip;
+  public static String ConfigureComparisonDialog_PredefinedUsages;
   public static String ConfigureComparisonDialog_RelativeCriteria;
   public static String ConfigureComparisonDialog_RelativeCriteriaTooltip;
   public static String ConfigureComparisonDialog_SemanticCriteria;
   public static String ConfigureComparisonDialog_SemanticCriteriaTooltip;
+  public static String ConfigureComparisonDialog_ShowAdvanced;
   public static String ConfigureComparisonDialog_StructureCriterion;
   public static String ConfigureComparisonDialog_StructureCriterionTooltip;
   public static String ConfigureComparisonDialog_Title;
+  public static String ConfigureComparisonDialog_Topic_Main;
+  public static String ConfigureComparisonDialog_Topic_Misc;
+  public static String ConfigureComparisonDialog_UseCache;
+  public static String ConfigureComparisonDialog_UseCache_Tooltip;
   public static String ConflictCategory_Description;
   public static String ConflictCategory_Text;
   public static String InconsistencyDialog_AncestorScope;

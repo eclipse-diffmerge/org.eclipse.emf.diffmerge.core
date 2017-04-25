@@ -27,13 +27,13 @@ import org.eclipse.emf.ecore.EObject;
 public class MapBasedMatchPolicy extends DefaultMatchPolicy {
   
   /** The non-null mapping of corresponding elements */
-  private final Map<? extends EObject, ? extends EObject> _mapping;
+  private final Map<?, ?> _mapping;
   
   /**
    * Constructor
    * @param mapping_p a non-null mapping of matching elements (modifying it will alter this policy)
    */
-  public MapBasedMatchPolicy(Map<? extends EObject, ? extends EObject> mapping_p) {
+  public MapBasedMatchPolicy(Map<?, ?> mapping_p) {
     _mapping = mapping_p;
   }
   
@@ -41,7 +41,7 @@ public class MapBasedMatchPolicy extends DefaultMatchPolicy {
    * Return the mapping of matching elements. Modifying it will alter this policy.
    * @return a non-null, potentially empty map
    */
-  public Map<? extends EObject, ? extends EObject> getMap() {
+  public Map<?, ?> getMap() {
     return _mapping;
   }
   
@@ -50,8 +50,8 @@ public class MapBasedMatchPolicy extends DefaultMatchPolicy {
    */
   @Override
   public Object getMatchID(EObject element_p, IModelScope scope_p) {
-    EObject mappedElement = _mapping.get(element_p);
-    EObject idProvider = mappedElement == null? element_p: mappedElement;
+    Object mapped = _mapping.get(element_p);
+    EObject idProvider = mapped instanceof EObject? (EObject)mapped: element_p;
     return super.getMatchID(idProvider, scope_p);
   }
   

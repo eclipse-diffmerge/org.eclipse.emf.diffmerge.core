@@ -29,7 +29,7 @@ import org.eclipse.swt.graphics.Color;
  * @author Olivier Constant
  */
 public class GMFDiffPolicy extends ConfigurableDiffPolicy {
-
+  
   /** The very special View::children reference (could theoretically be null) */
   private static final EStructuralFeature VIEW_CHILDREN =
       NotationPackage.eINSTANCE.getView().getEStructuralFeature("children"); //$NON-NLS-1$
