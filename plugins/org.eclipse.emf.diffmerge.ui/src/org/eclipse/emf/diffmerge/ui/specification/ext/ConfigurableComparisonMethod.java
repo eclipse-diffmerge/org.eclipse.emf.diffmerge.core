@@ -39,6 +39,7 @@ import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrain
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
@@ -83,13 +84,15 @@ implements IComparisonConfigurator.Provider {
   
   /**
    * Constructor
-   * @param leftScopeSpec_p a non-null scope specification
-   * @param rightScopeSpec_p a non-null scope specification
-   * @param ancestorScopeSpec_p an optional scope specification
+   * @param leftScopeDef_p a non-null scope definition
+   * @param rightScopeDef_p a non-null scope definition
+   * @param ancestorScopeDef_p an optional scope definition
+   * @param factory_p the optional factory this comparison method originates from
    */
-  public ConfigurableComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
-      IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p) {
-    super(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p);
+  public ConfigurableComparisonMethod(IModelScopeDefinition leftScopeDef_p,
+      IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
+      IComparisonMethodFactory factory_p) {
+    super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
     _configurators = new ArrayList<IComparisonConfigurator>(createConfigurators());
     if (__lastComparisonMethodType != null &&
         __lastComparisonMethodType.isAssignableFrom(getClass())) {

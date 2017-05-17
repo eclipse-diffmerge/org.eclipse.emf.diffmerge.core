@@ -29,6 +29,18 @@ import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMeth
 public class GMFComparisonMethodFactory extends ConfigurableComparisonMethodFactory {
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
+   */
+  @Override
+  public IComparisonMethod createComparisonMethod(
+      IModelScopeDefinition leftScopeSpec_p,
+      IModelScopeDefinition rightScopeSpec_p,
+      IModelScopeDefinition ancestorScopeSpec_p) {
+    return new GMFComparisonMethod(
+        leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p, this);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#getLabel()
    */
   @Override
@@ -42,17 +54,6 @@ public class GMFComparisonMethodFactory extends ConfigurableComparisonMethodFact
   @Override
   public Collection<Class<?>> getOverridenClasses() {
     return Collections.<Class<?>>singleton(ConfigurableComparisonMethodFactory.class);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
-   */
-  @Override
-  public IComparisonMethod createComparisonMethod(
-      IModelScopeDefinition leftScopeSpec_p,
-      IModelScopeDefinition rightScopeSpec_p,
-      IModelScopeDefinition ancestorScopeSpec_p) {
-    return new GMFComparisonMethod(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p);
   }
   
 }

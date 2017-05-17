@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -331,6 +332,21 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Return the workbench page of this viewer, if any
+   * @return a potentially null page
+   */
+  protected IWorkbenchPage getPage() {
+    IWorkbenchPage result = null;
+    try {
+      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+      result = window.getActivePage();
+    } catch (Exception e) {
+      // Just proceed
+    }
+    return result;
+  }
+  
+  /**
    * Return the resource manager for this viewer
    * @return a resource manager which is non-null iff input is not null
    */
@@ -353,8 +369,8 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   protected IWorkbenchPartSite getSite() {
     IWorkbenchPartSite result = null;
     try {
-      IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-      IWorkbenchSite site = window.getActivePage().getActivePart().getSite();
+      IWorkbenchPage page = getPage();
+      IWorkbenchSite site = page.getActivePart().getSite();
       if (site instanceof IWorkbenchPartSite)
         result = (IWorkbenchPartSite)site;
     } catch (Exception e) {

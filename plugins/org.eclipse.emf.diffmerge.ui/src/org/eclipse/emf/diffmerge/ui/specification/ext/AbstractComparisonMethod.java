@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -49,6 +50,9 @@ import org.eclipse.ui.IActionBars;
  */
 public abstract class AbstractComparisonMethod implements IComparisonMethod {
   
+  /** The optional factory that created this comparison method */
+  protected IComparisonMethodFactory _factory;
+  
   /** Whether the comparison method has been fully initialized */
   private boolean _initialized;
   
@@ -67,6 +71,7 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
     _editingDomain = null;
     _isDedicatedEditingDomain = false;
     _initialized = false;
+    _factory = null;
   }
   
   /**
@@ -226,6 +231,13 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
       _initialized = true;
     }
     return _editingDomain;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getFactory()
+   */
+  public IComparisonMethodFactory getFactory() {
+    return _factory;
   }
   
   /**

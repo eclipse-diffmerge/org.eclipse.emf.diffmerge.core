@@ -91,6 +91,15 @@ public interface UIComparison extends EObject {
 	 */
 	void setLastActionSelection(ComparisonSelection value);
 
+  /**
+   * <!-- begin-user-doc -->
+   * Clear the receiver
+   * <!-- end-user-doc -->
+   * @model
+   * @generated
+   */
+  void clear();
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * Dispose the receiver

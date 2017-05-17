@@ -21,6 +21,7 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 
 
@@ -49,17 +50,20 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   
   /**
    * Constructor
-   * @param leftScopeSpec_p a non-null scope definition
-   * @param rightScopeSpec_p a non-null scope definition
-   * @param ancestorScopeSpec_p an optional scope definition
+   * @param leftScopeDef_p a non-null scope definition
+   * @param rightScopeDef_p a non-null scope definition
+   * @param ancestorScopeDef_p an optional scope definition
+   * @param factory_p the optional factory this comparison method originates from
    */
-  public DefaultComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
-      IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p) {
+  public DefaultComparisonMethod(IModelScopeDefinition leftScopeDef_p,
+      IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
+      IComparisonMethodFactory factory_p) {
     super();
+    _factory = factory_p;
     _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
-    _roleToScopeDefinition.put(Role.TARGET, leftScopeSpec_p);
-    _roleToScopeDefinition.put(Role.REFERENCE, rightScopeSpec_p);
-    _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeSpec_p);
+    _roleToScopeDefinition.put(Role.TARGET, leftScopeDef_p);
+    _roleToScopeDefinition.put(Role.REFERENCE, rightScopeDef_p);
+    _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeDef_p);
     _twoWayReferenceRole = null;
     _matchPolicy = createMatchPolicy();
     _diffPolicy = createDiffPolicy();

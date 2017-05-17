@@ -342,6 +342,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * Return the comparison method of this editor input
+   * @return a non-null (unless the receiver is disposed) comparison method
+   */
+  public IComparisonMethod getComparisonMethod() {
+    return _comparisonMethod;
+  }
+  
+  /**
    * Return the editing domain in which comparison takes place, if any
    * @return a potentially null editing domain
    * @see IEditingDomainProvider#getEditingDomain()
@@ -749,6 +757,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
         }
       }
     }
+  }
+  
+  /**
+   * Update the comparison method
+   * @param comparisonMethod_p a non-null comparison method
+   */
+  public void setComparisonMethod(IComparisonMethod comparisonMethod_p) {
+    _comparisonMethod = comparisonMethod_p;
   }
   
   /**

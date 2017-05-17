@@ -29,6 +29,7 @@ import org.eclipse.emf.diffmerge.sirius.SiriusMatchPolicy;
 import org.eclipse.emf.diffmerge.sirius.SiriusMergePolicy;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryProvider;
@@ -54,27 +55,29 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   
   /**
    * Constructor
-   * @param leftScopeSpec a non-null scope specification
-   * @param rightScopeSpec a non-null scope specification
-   * @param ancestorScopeSpec an optional scope specification
+   * @param leftScopeDef_p a non-null scope definition
+   * @param rightScopeDef_p a non-null scope definition
+   * @param ancestorScopeDef_p an optional scope definition
+   * @param factory_p the optional factory this comparison method originates from
    */
-  public SiriusComparisonMethod(IModelScopeDefinition leftScopeSpec,
-      IModelScopeDefinition rightScopeSpec, IModelScopeDefinition ancestorScopeSpec) {
-    super(leftScopeSpec, rightScopeSpec, ancestorScopeSpec);
+  public SiriusComparisonMethod(IModelScopeDefinition leftScopeDef_p,
+      IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
+      IComparisonMethodFactory factory_p) {
+    super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
     _roleToSession = new HashMap<Role, Session>(3);
   }
   
   /**
    * Return the Sirius session for the given role if possible
    * (this method is only called once per role)
-   * @param role a non-null role
+   * @param role_p a non-null role
    * @return a potentially null resource set
    */
-  protected Session checkSession(Role role) {
+  protected Session checkSession(Role role_p) {
     Session result = null;
-    if (role != Role.ANCESTOR || isThreeWay()) {
+    if (role_p != Role.ANCESTOR || isThreeWay()) {
       // Use session resource set if available
-      IModelScopeDefinition scopeDefinition = getModelScopeDefinition(role);
+      IModelScopeDefinition scopeDefinition = getModelScopeDefinition(role_p);
       if (scopeDefinition instanceof URIScopeDefinition) {
         URIScopeDefinition uriScopeDefinition = (URIScopeDefinition)scopeDefinition;
         URI uri = uriScopeDefinition.getEntrypoint();

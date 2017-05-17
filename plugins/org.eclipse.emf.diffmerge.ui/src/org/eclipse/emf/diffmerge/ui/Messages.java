@@ -96,6 +96,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_NextTooltip;
   public static String ComparisonViewer_NoDiffsToMerge;
   public static String ComparisonViewer_PreviousTooltip;
+  public static String ComparisonViewer_RestartInProgress;
   public static String ComparisonViewer_Right;
   public static String ComparisonViewer_SaveFailed;
   public static String ComparisonViewer_ShowAllFeatures;
@@ -106,6 +107,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_SortTooltip;
   public static String ComparisonViewer_SupportUndoRedoMenuItem;
   public static String ComparisonViewer_ShowDifferenceNumbersMenuItem;
+  public static String ComparisonViewer_ToolUpdate;
   public static String ComparisonViewer_UseTechnicalRepresentation;
   public static String ConfigurableComparisonMethod_Usage_Transfer;
   public static String ConfigurableComparisonMethod_Usage_Transfer_Tooltip;

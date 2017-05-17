@@ -36,7 +36,7 @@ public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethod
       IModelScopeDefinition leftScopeSpec_p, IModelScopeDefinition rightScopeSpec_p,
       IModelScopeDefinition ancestorScopeSpec_p) {
     return new ConfigurableComparisonMethod(
-        leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p);
+        leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p, this);
   }
   
   /**

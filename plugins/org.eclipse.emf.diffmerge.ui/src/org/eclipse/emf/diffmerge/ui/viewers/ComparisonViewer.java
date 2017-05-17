@@ -38,6 +38,9 @@ import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -61,9 +64,13 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
+import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
+import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
@@ -105,6 +112,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -113,7 +121,11 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
@@ -726,6 +738,73 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent event_p) {
         navigate(false);
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "restart" item in the given context and return it
+   * @param context_p a non-null object
+   * @return result a potentially null item
+   */
+  protected Item createItemRestart(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.PUSH);
+    result.setText(Messages.ComparisonViewer_ToolUpdate);
+    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.UPDATE));
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        IWorkbenchPage page = getPage();
+        final EMFDiffNode input = getInput();
+        if (page != null && input != null) {
+          IEditorPart editor = page.getActiveEditor();
+          if (editor instanceof IReusableEditor) {
+            IEditorInput editorInput = editor.getEditorInput();
+            if (editorInput instanceof EMFDiffMergeEditorInput) {
+              EMFDiffMergeEditorInput castedInput = (EMFDiffMergeEditorInput)editorInput;
+              ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
+              boolean confirmed = manager.updateEditorInputWithUI(getShell(), castedInput);
+              if (confirmed) {
+                final IComparisonMethod method = castedInput.getComparisonMethod();
+                input.setReferenceRole(method.getTwoWayReferenceRole());
+                Job job = new Job(Messages.ComparisonViewer_RestartInProgress) {
+                  /**
+                   * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+                   */
+                  @Override
+                  protected IStatus run(final IProgressMonitor monitor_p) {
+                    MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
+                      /**
+                       * @see java.lang.Runnable#run()
+                       */
+                      public void run() {
+                        input.getUIComparison().clear();
+                        input.getActualComparison().compute(
+                            method.getMatchPolicy(), method.getDiffPolicy(), method.getMergePolicy(),
+                            monitor_p);
+                        input.getCategoryManager().update();
+                      }
+                    });
+                    Display.getDefault().syncExec(new Runnable() {
+                      /**
+                       * @see java.lang.Runnable#run()
+                       */
+                      public void run() {
+                        refresh();
+                      }
+                    });
+                    return Status.OK_STATUS;
+                  }
+                };
+                job.schedule();
+              }
+            }
+          }
+        }
       }
     });
     return result;
@@ -2265,11 +2344,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
+    createItemRestart(synthesisMenu);
+    new MenuItem(synthesisMenu, SWT.SEPARATOR);
     // Show all elements in synthesis
     createItemShowUncounted(synthesisMenu);
     createItemFilter(synthesisMenu);
-    // Common presentation features
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
+    // Common presentation features
     createItemSync(synthesisMenu);
     createItemSort(synthesisMenu);
     // UI options

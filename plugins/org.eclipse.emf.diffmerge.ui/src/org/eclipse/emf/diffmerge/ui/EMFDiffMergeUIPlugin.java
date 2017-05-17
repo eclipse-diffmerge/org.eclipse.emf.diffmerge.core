@@ -61,7 +61,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     DOWN, EMPTY, EXPANDALL, FILTER, INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED,
     LOCK_OPEN, MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
     PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED,
-    UNCHECKED_DISABLED, UNDO, UP, VIEW_MENU, WARNING }
+    UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING }
   
   /** Identifiers for colors according to the side to which a difference presence is relative */
   @SuppressWarnings("javadoc")

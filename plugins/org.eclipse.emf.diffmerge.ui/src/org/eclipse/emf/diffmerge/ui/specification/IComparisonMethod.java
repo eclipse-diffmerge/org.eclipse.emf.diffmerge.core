@@ -62,6 +62,12 @@ IEditingDomainProvider, IDisposable {
   EditingDomain getEditingDomain();
   
   /**
+   * Return the factory that created this comparison method, if any and if known
+   * @return a potentially null object
+   */
+  IComparisonMethodFactory getFactory();
+  
+  /**
    * Return the scope definition that plays the given role
    * @param role_p a non-null role
    * @return a scope definition which may only be null if role is ANCESTOR

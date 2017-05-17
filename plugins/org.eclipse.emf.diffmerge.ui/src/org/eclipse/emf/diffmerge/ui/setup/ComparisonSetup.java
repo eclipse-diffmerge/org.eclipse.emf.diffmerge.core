@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -76,6 +77,25 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   
   /**
    * Constructor
+   * @param method_p a non-null pre-selected and configured comparison method
+   */
+  public ComparisonSetup(IComparisonMethod method_p) {
+    this(
+        method_p.getModelScopeDefinition(Role.TARGET),
+        method_p.getModelScopeDefinition(Role.REFERENCE),
+        method_p.getModelScopeDefinition(Role.ANCESTOR),
+        EMFDiffMergeUIPlugin.getDefault().getSetupManager().getApplicableComparisonMethodFactories(
+            method_p.getModelScopeDefinition(Role.TARGET),
+            method_p.getModelScopeDefinition(Role.REFERENCE),
+            method_p.getModelScopeDefinition(Role.ANCESTOR))
+        );
+    _comparisonMethod = method_p;
+    _twoWayReferenceRole = method_p.getTwoWayReferenceRole();
+    _selectedFactory = method_p.getFactory();
+  }
+  
+  /**
+   * Constructor
    * @param scopeSpec1_p a non-null scope definition
    * @param scopeSpec2_p a non-null scope definition
    * @param scopeSpec3_p a potentially null scope definition
@@ -83,15 +103,23 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    */
   public ComparisonSetup(IModelScopeDefinition scopeSpec1_p, IModelScopeDefinition scopeSpec2_p,
       IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory> compatibleFactories_p) {
-    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
+    this();
     _roleToScopeDefinition.put(Role.TARGET, scopeSpec1_p);
     _roleToScopeDefinition.put(Role.REFERENCE, scopeSpec2_p);
     _roleToScopeDefinition.put(Role.ANCESTOR, scopeSpec3_p);
-    _canSwapScopeDefinitions = true;
-    _twoWayReferenceRole = null;
-    _canChangeTwoWayReferenceRole = true;
+    _compatibleMethodFactories.addAll(compatibleFactories_p);
+  }
+  
+  /**
+   * Default constructor
+   */
+  protected ComparisonSetup() {
     _comparisonMethod = null;
-    _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>(compatibleFactories_p);
+    _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>();
+    _canSwapScopeDefinitions = true;
+    _canChangeTwoWayReferenceRole = true;
+    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
+    _twoWayReferenceRole = null;
     _listeners = new HashSet<IPropertyChangeListener>();
   }
   

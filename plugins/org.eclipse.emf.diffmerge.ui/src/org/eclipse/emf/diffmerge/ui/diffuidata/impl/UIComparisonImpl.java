@@ -188,22 +188,29 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	}
 	
 	/**
-	 * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#dispose()
-	 * @generated NOT
+	 * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#clear()
+   * @generated NOT
 	 */
-	public void dispose() {
-	  if (actualComparison != null) {
-	    actualComparison.clear();
-	    actualComparison = null;
-	  }
-		if (differencesToIgnore != null)
-		  differencesToIgnore.clear();
-		if (lastActionSelection != null) {
-		  lastActionSelection.dispose();
-		  lastActionSelection = null;
-		}
+	public void clear() {
+    if (actualComparison != null)
+      actualComparison.clear();
+    if (differencesToIgnore != null)
+      differencesToIgnore.clear();
+    if (lastActionSelection != null) {
+      lastActionSelection.dispose();
+      lastActionSelection = null;
+    }
 	}
 	
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#dispose()
+   * @generated NOT
+   */
+  public void dispose() {
+    clear();
+    actualComparison = null;
+  }
+  
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

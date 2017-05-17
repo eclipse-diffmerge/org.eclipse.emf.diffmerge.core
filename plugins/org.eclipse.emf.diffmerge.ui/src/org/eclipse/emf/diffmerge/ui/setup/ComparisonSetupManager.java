@@ -133,14 +133,9 @@ public class ComparisonSetupManager {
   public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, ComparisonSetup setup_p) {
     EMFDiffMergeEditorInput result = null;
     if (setup_p != null) {
-      ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup_p);
-      WizardDialog dialog = new WizardDialog(shell_p, wizard);
-      dialog.setHelpAvailable(false);
-      if (Window.OK == dialog.open()) {
-        IComparisonMethod method = setup_p.getComparisonMethod();
-        if (method != null)
-          result = new EMFDiffMergeEditorInput(method);
-      }
+      IComparisonMethod method = openSetupWizard(shell_p, setup_p);
+      if (method != null)
+        result = new EMFDiffMergeEditorInput(method);
     } else {
       handleSetupError(shell_p, null);
     }
@@ -345,6 +340,23 @@ public class ComparisonSetupManager {
   }
   
   /**
+   * Open a setup wizard for the given setup
+   * @param shell_p a non-null shell
+   * @param setup_p a non-null setup
+   * @return the resulting comparison method of the setup, or null if the user did not confirm
+   */
+  protected IComparisonMethod openSetupWizard(Shell shell_p, ComparisonSetup setup_p) {
+    IComparisonMethod result = null;
+    ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup_p);
+    WizardDialog dialog = new WizardDialog(shell_p, wizard);
+    dialog.setHelpAvailable(false);
+    int openResult = dialog.open();
+    if (Window.OK == openResult)
+      result = setup_p.getComparisonMethod();
+    return result;
+  }
+  
+  /**
    * Return the reduced version of the given list of factories based on the "override" relation
    * @param factories_p a non-null, potentially empty list
    * @param configurationFactories_p a map from factory classes to the corresponding registered instances
@@ -359,6 +371,25 @@ public class ComparisonSetupManager {
       }
     }
     return Collections.unmodifiableList(result);
+  }
+  
+  /**
+   * Update the given editor input through a configuration GUI
+   * @param shell_p a non-null shell
+   * @param input_p a non-null, non-disposed editor input
+   * @return whether the operation succeeded
+   */
+  public boolean updateEditorInputWithUI(Shell shell_p,
+      EMFDiffMergeEditorInput input_p) {
+    assert input_p.getComparisonMethod() != null;
+    boolean result = false;
+    ComparisonSetup setup = new ComparisonSetup(input_p.getComparisonMethod());
+    IComparisonMethod method = openSetupWizard(shell_p, setup);
+    if (method != null) {
+      input_p.setComparisonMethod(method);
+      result = true;
+    }
+    return result;
   }
   
 }

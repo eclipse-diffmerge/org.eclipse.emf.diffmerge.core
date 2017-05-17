@@ -35,7 +35,8 @@ public class SiriusComparisonMethodFactory extends GMFComparisonMethodFactory {
       IModelScopeDefinition leftScopeSpec,
       IModelScopeDefinition rightScopeSpec,
       IModelScopeDefinition ancestorScopeSpec) {
-    return new SiriusComparisonMethod(leftScopeSpec, rightScopeSpec, ancestorScopeSpec);
+    return new SiriusComparisonMethod(
+        leftScopeSpec, rightScopeSpec, ancestorScopeSpec, this);
   }
   
   /**
