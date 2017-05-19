@@ -23,13 +23,14 @@ import org.eclipse.emf.diffmerge.sirius.SiriusScope;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFScopeDefinitionFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
  * A factory for comparison scopes within Sirius models.
  */
-public class SiriusScopeFactory extends GMFScopeDefinitionFactory {
+public class SiriusScopeDefinitionFactory extends GMFScopeDefinitionFactory {
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.gmf.GMFScopeDefinitionFactory#createScopeDefinitionFromURI(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
@@ -44,6 +45,13 @@ public class SiriusScopeFactory extends GMFScopeDefinitionFactory {
       @Override
       protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain) {
         return new SiriusScope(getEntrypoint(), editingDomain, !isEditable());
+      }
+      /**
+       * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnResourceSet(org.eclipse.emf.ecore.resource.ResourceSet)
+       */
+      @Override
+      protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
+        return new SiriusScope(getEntrypoint(), resourceSet_p, !isEditable());
       }
     };
   }

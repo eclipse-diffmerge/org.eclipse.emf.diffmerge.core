@@ -18,7 +18,7 @@
    <extension
          point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
       <scopeDefinition
-            factory="org.eclipse.emf.diffmerge.ui.sirius.SiriusScopeFactory">
+            factory="org.eclipse.emf.diffmerge.ui.sirius.SiriusScopeDefinitionFactory">
       </scopeDefinition>
       <comparisonMethod
             factory="org.eclipse.emf.diffmerge.ui.sirius.SiriusComparisonMethodFactory">
