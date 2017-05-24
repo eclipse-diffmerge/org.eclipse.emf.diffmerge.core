@@ -106,7 +106,10 @@ public class EMFDiffMergePlugin extends Plugin {
 	@Override
 	public void stop(BundleContext context_p) throws Exception {
 		__plugin = null;
-		_adapterFactory.dispose();
+		if(_adapterFactory != null){
+		  _adapterFactory.dispose();
+		  _adapterFactory = null;
+		}
 		super.stop(context_p);
 	}
 	
