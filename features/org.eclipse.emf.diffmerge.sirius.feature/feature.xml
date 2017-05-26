@@ -29,6 +29,10 @@
       %copyright
    </copyright>
 
+   <license url="%licenseURL">
+      %license
+   </license>
+
    <requires>
       <import feature="org.eclipse.emf.diffmerge.gmf.feature"/>
    </requires>

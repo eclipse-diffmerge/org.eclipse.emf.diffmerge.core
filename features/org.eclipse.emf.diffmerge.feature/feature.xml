@@ -15,6 +15,10 @@
       %copyright
    </copyright>
 
+   <license url="%licenseURL">
+      %license
+   </license>
+
    <plugin
          id="org.eclipse.emf.diffmerge"
          download-size="0"

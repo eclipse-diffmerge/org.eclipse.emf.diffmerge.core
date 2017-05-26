@@ -14,7 +14,11 @@
    <copyright>
       %copyright
    </copyright>
-
+   
+   <license url="%licenseURL">
+      %license
+   </license>
+   
    <includes
          id="org.eclipse.emf.diffmerge.feature"
          version="0.0.0"/>
