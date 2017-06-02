@@ -79,8 +79,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.SashForm;
@@ -164,7 +164,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected ViewerFilter _filterUnchangedElements;
   
   /** An alphanumeric sorter */
-  protected ViewerSorter _sorterSynthesis;
+  protected ViewerComparator _sorterSynthesis;
   
   /** Whether the left and right trees are synchronized with the synthesis tree */
   protected boolean _isLeftRightSynced;
@@ -975,9 +975,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent event_p) {
         if (result.getSelection())
-          _viewerSynthesisMain.getInnerViewer().setSorter(_sorterSynthesis);
+          _viewerSynthesisMain.getInnerViewer().setComparator(_sorterSynthesis);
         else
-          _viewerSynthesisMain.getInnerViewer().setSorter(null);
+          _viewerSynthesisMain.getInnerViewer().setComparator(null);
       }
     });
     return result;
@@ -1809,7 +1809,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _lastUserSelection = null;
     _multiViewerSelectionProvider = new SelectionBridge.SingleSource();
     _multiViewerSelectionProvider.setSource(this);
-    _sorterSynthesis = new ViewerSorter();
+    _sorterSynthesis = new ViewerComparator();
     _filterUnchangedElements = new ViewerFilter() {
       /**
        * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)

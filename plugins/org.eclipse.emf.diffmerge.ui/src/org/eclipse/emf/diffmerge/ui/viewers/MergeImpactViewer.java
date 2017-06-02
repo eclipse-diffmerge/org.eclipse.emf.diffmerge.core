@@ -43,7 +43,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Color;
@@ -422,9 +422,9 @@ public class MergeImpactViewer extends Viewer {
     _upperViewer.setLabelProvider(lp);
     _lowerViewer.setLabelProvider(lp);
     // Sorter
-    ViewerSorter sorter = new ViewerSorter();
-    _upperViewer.setSorter(sorter);
-    _lowerViewer.setSorter(sorter);
+    ViewerComparator sorter = new ViewerComparator();
+    _upperViewer.setComparator(sorter);
+    _lowerViewer.setComparator(sorter);
   }
   
   

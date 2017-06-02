@@ -37,7 +37,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -134,7 +134,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     _showAllFeatures = false;
     _useTechnicalRepresentation = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    setSorter(new ViewerSorter());
+    setComparator(new ViewerComparator());
   }
   
   /**

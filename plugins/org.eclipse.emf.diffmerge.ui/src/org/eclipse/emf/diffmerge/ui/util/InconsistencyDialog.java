@@ -31,7 +31,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -188,7 +188,7 @@ public class InconsistencyDialog extends MessageDialog {
         group, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER | SWT.MULTI);
     viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     viewer.setContentProvider(new ArrayContentProvider());
-    viewer.setSorter(new ViewerSorter());
+    viewer.setComparator(new ViewerComparator());
     createCopyMenuItem(viewer);
     viewer.setInput(duplicates_p.toArray());
     return group;
