@@ -36,6 +36,43 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
 public class SiriusMergePolicy extends GMFMergePolicy {
   
   /**
+   * Extend the given addition group for the given descriptor within the given scope
+   * @param group_p a non-null, modifiable collection
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope
+   */
+  protected void extendDescriptorAdditionGroup(Set<EObject> group_p,
+      DRepresentationDescriptor element_p, IFeaturedModelScope scope_p) {
+    group_p.add(element_p.getRepresentation());
+  }
+  
+  /**
+   * Extend the given addition group for the given Sirius representation within
+   * the given scope
+   * @param group_p a non-null, modifiable collection
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope
+   */
+  protected void extendDRepresentationAdditionGroup(Set<EObject> group_p,
+      DRepresentation element_p, IFeaturedModelScope scope_p) {
+    EObject container = scope_p.getContainer(element_p);
+    if (container instanceof DView) {
+      for (EObject descriptor : scope_p.get(container,
+          ViewpointPackage.Literals.DVIEW__OWNED_REPRESENTATION_DESCRIPTORS)) {
+        if (descriptor instanceof DRepresentationDescriptor) {
+          if (element_p.equals(((DRepresentationDescriptor) descriptor).getRepresentation())) {
+            group_p.add(descriptor);
+          }
+        }
+      }
+    } else if (container == null) {
+      DRepresentationDescriptor descriptor = getDescriptor(element_p, scope_p);
+      if (descriptor != null)
+        group_p.add(descriptor);
+    }
+  }
+  
+  /**
    * Extend the given addition group for the given element within the given scope
    * based on Sirius peculiarities
    * @param group_p a non-null, modifiable collection
@@ -45,40 +82,38 @@ public class SiriusMergePolicy extends GMFMergePolicy {
   protected void extendSiriusAdditionGroup(Set<EObject> group_p, EObject element_p,
       IFeaturedModelScope scope_p) {
     // Semantic element -> DSemanticDecorators
+    extendSemanticElementAdditionGroup(group_p, element_p, scope_p);
+    // Sirius 4.1: Retrieve the diagram while merging the descriptor
+    if (element_p instanceof DRepresentationDescriptor)
+      extendDescriptorAdditionGroup(group_p, (DRepresentationDescriptor)element_p, scope_p);
+    // Sirius 4.1: Retrieve the descriptor while merging the diagram
+    if (element_p instanceof DRepresentation)
+      extendDRepresentationAdditionGroup(group_p, (DRepresentation)element_p, scope_p);
+    // Sirius/GMF consistency: GMF driven by Sirius
+    if (element_p instanceof DDiagramElement)
+      extendGMFAdditionGroupSemanticTarget(group_p, element_p, scope_p);
+  }
+  
+  /**
+   * Extend the given addition group for the given element within the given scope
+   * in the case where the element is a Sirius semantic element
+   * @param group_p a non-null, modifiable collection
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope
+   */
+  protected void extendSemanticElementAdditionGroup(Set<EObject> group_p,
+      EObject element_p, IFeaturedModelScope scope_p) {
     if (isGraphicalFromSemantic()) {
       ECrossReferenceAdapter crAdapter = ECrossReferenceAdapter.getCrossReferenceAdapter(element_p);
       if (crAdapter != null) {
-        for (EStructuralFeature.Setting setting : crAdapter.getNonNavigableInverseReferences(element_p, false)) {
-          if (setting.getEStructuralFeature() == ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target())
+        for (EStructuralFeature.Setting setting :
+            crAdapter.getNonNavigableInverseReferences(element_p, false)) {
+          if (setting.getEStructuralFeature() ==
+              ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target())
             group_p.add(setting.getEObject());
         }
       }
     }
-    // Sirius 4.1: Retrieve the diagram while merging the descriptor
-    if (element_p instanceof DRepresentationDescriptor) {
-      group_p.add(((DRepresentationDescriptor) element_p).getRepresentation());
-    }
-    // Sirius 4.1: Retrieve the descriptor while merging the diagram
-    if (element_p instanceof DRepresentation) {
-      EObject container = scope_p.getContainer(element_p);
-      if (container instanceof DView) {
-        for (EObject descriptor : scope_p.get(container,
-            ViewpointPackage.Literals.DVIEW__OWNED_REPRESENTATION_DESCRIPTORS)) {
-          if (descriptor instanceof DRepresentationDescriptor) {
-            if (element_p.equals(((DRepresentationDescriptor) descriptor).getRepresentation())) {
-              group_p.add(descriptor);
-            }
-          }
-        }
-      } else if (container == null) {
-        DRepresentationDescriptor descriptor = getDescriptor((DRepresentation)element_p, scope_p);
-        if (descriptor != null)
-          group_p.add(descriptor);
-      }
-    }
-    // Sirius/GMF consistency: GMF driven by Sirius
-    if (element_p instanceof DDiagramElement)
-      extendGMFAdditionGroupSemanticTarget(group_p, element_p, scope_p);
   }
   
   /**

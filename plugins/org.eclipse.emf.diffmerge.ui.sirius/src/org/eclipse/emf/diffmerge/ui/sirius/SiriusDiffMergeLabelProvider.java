@@ -56,21 +56,60 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
   }
   
   /**
-   * Return a label for the given representation element
-   * @param representationElement_p a non-null representation element
-   * @return a non-null string
+   * Return a label for the given Sirius DAnalysis element
+   * @param element_p a non-null element
+   * @return a potentially null string
    */
-  protected String getRepresentationElementText(
-      DRepresentationElement representationElement_p) {
-    String result = getExplicitlyTypedElementText(
-        representationElement_p.getName(), representationElement_p.getMapping());
+  protected String getDAnalysisText(DAnalysis element_p) {
+    String result = null;
+    Resource resource = element_p.eResource();
+    if (resource != null && resource.getURI() != null)
+      result = resource.getURI().trimFileExtension().lastSegment();
     return result;
+  }
+  
+  /**
+   * Return a label for the given Sirius representation element
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getDRepresentationElementText(
+      DRepresentationElement element_p) {
+    String result = getExplicitlyTypedElementText(
+        element_p.getName(), element_p.getMapping());
+    return result;
+  }
+  
+  /**
+   * Return a label for the given Sirius view element
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getDViewText(DView element_p) {
+    String result = null;
+    Viewpoint viewpoint = element_p.getViewpoint();
+    if (viewpoint != null) {
+      result = viewpoint.getLabel();
+      if (result == null)
+        result = viewpoint.getName();
+    }
+    return result;
+  }
+  
+  /**
+   * Return a label for the given Sirius node style element
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getNodeStyleText(NodeStyle element_p) {
+    return ((EObject)element_p).eClass().getName() + " " + //$NON-NLS-1$
+        formatTechnicalName(DiagramPackage.eINSTANCE.getNodeStyle().getName());
   }
   
   /**
    * Return a label for the given RGBValues element
    * @param element_p a non-null RGBValues element
-   * @return a non-null string
+   * @return a potentially null string
    */
   protected String getRGBValuesText(RGBValues element_p) {
     StringBuilder builder = new StringBuilder();
@@ -92,25 +131,13 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     String result = null;
     // ****** Sirius
     if (element_p instanceof DAnalysis) {
-      DAnalysis analysis = (DAnalysis)element_p;
-      Resource resource = analysis.eResource();
-      if (resource != null && resource.getURI() != null)
-        result = resource.getURI().lastSegment();
-      if (result == null)
-        result = super.getText(analysis);
+      result = getDAnalysisText((DAnalysis)element_p);
     } else if (element_p instanceof DView) {
-      DView representationContainer = (DView) element_p;
-      Viewpoint viewpoint = representationContainer.getViewpoint();
-      if (viewpoint != null) {
-        result = viewpoint.getLabel();
-        if (result == null)
-          result = viewpoint.getName();
-      }
+      result = getDViewText((DView)element_p);
     } else if (element_p instanceof DRepresentationElement) {
-      result = getRepresentationElementText((DRepresentationElement)element_p);
+      result = getDRepresentationElementText((DRepresentationElement)element_p);
     } else if (element_p instanceof NodeStyle) {
-      result = ((EObject)element_p).eClass().getName() + " " + //$NON-NLS-1$
-          formatTechnicalName(DiagramPackage.eINSTANCE.getNodeStyle().getName());
+      result = getNodeStyleText((NodeStyle)element_p);
     } else if (element_p instanceof ContainerStyle || element_p instanceof EdgeStyle ||
         element_p instanceof BasicLabelStyle) {
       result = getManyQualifiedElementText((EObject)element_p);
