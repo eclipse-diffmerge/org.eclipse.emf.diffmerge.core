@@ -48,8 +48,8 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
           DiagramPackage.eINSTANCE.getDDiagram_OwnedDiagramElements(),
           ViewpointPackage.eINSTANCE.getDAnalysis_Models(),
           ViewpointPackage.eINSTANCE.getDAnalysis_OwnedViews(),
-          ViewpointPackage.eINSTANCE
-          .getDRepresentationElement_SemanticElements(),
+          ViewpointPackage.eINSTANCE.getDAnalysis_SelectedViews(),
+          ViewpointPackage.eINSTANCE.getDRepresentationElement_SemanticElements(),
           DiagramPackage.eINSTANCE.getEdgeTarget_IncomingEdges(),
           DiagramPackage.eINSTANCE.getEdgeTarget_OutgoingEdges());
   
