@@ -332,7 +332,12 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
           }
           EMFDiffNode compareResult = editorInput.getCompareResult();
           if (compareResult != null) {
-            // Success: create the viewer and set the input
+            // Success: remove previous viewer, create new viewer and set the input
+            if (_innerViewer != null) {
+              Control innerControl = _innerViewer.getControl();
+              if (innerControl != null && !innerControl.isDisposed())
+                innerControl.dispose();
+            }
             Control contents = editorInput.createContents(_control);
             GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
             contents.setLayoutData(layoutData);
