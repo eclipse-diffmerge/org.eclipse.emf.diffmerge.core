@@ -26,6 +26,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryProvider;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -104,10 +105,15 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
    */
   public AbstractComparisonViewer createComparisonViewer(Composite parent_p,
       IActionBars actionBars_p) {
-    ComparisonViewer result = doCreateComparisonViewer(parent_p, actionBars_p);
-    ILabelProvider customLP = getCustomLabelProvider();
-    if (customLP != null)
-      result.setDelegateLabelProvider(customLP);
+    AbstractComparisonViewer result = doCreateComparisonViewer(parent_p, actionBars_p);
+    IDifferenceCategoryProvider provider = getCustomCategoryProvider();
+    if (provider != null)
+      result.setCategoryProvider(provider);
+    if (result instanceof ComparisonViewer) {
+      ILabelProvider customLP = getCustomLabelProvider();
+      if (customLP != null)
+        ((ComparisonViewer)result).setDelegateLabelProvider(customLP);
+    }
     return result;
   }
   
@@ -170,13 +176,12 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   }
   
   /**
-   * Create and return the viewer for the comparison.
-   * Its label provider can be customized separately.
+   * Create and return the viewer for the comparison
    * @param parent_p a non-null composite
    * @param actionBars_p an optional IActionBars, typically for contributing global actions
    *          such as undo/redo
    */
-  protected ComparisonViewer doCreateComparisonViewer(Composite parent_p,
+  protected AbstractComparisonViewer doCreateComparisonViewer(Composite parent_p,
       IActionBars actionBars_p) {
     return new ComparisonViewer(parent_p, actionBars_p);
   }
@@ -192,9 +197,19 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * Return an optional difference category provider for customizing the categories
+   * that are present in the viewer
+   * @return a category provider, or null for the default one
+   */
+  protected IDifferenceCategoryProvider getCustomCategoryProvider() {
+    return null;
+  }
+  
+  /**
    * Return an optional label provider for customizing the way model elements
    * are represented in comparison widgets. The client is responsible for disposing
-   * the label provider when appropriate.
+   * the label provider when appropriate. This operation only has an impact if the
+   * viewer created by this comparison method is a ComparisonViewer.
    * @return a label provider, or null for the default label provider
    */
   protected ILabelProvider getCustomLabelProvider() {

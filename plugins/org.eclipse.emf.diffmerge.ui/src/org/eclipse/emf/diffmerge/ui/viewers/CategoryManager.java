@@ -719,8 +719,27 @@ public class CategoryManager {
    */
   public boolean isUIFiltering(IDifferenceCategory category_p) {
     return category_p.isVisible() && category_p.isModifiable() &&
-        _activeCategories.contains(category_p) &&
+        category_p.isActive() &&
         (category_p.mayCoverPendingDifferences() || category_p.isInFocusMode());
+  }
+  
+  /**
+   * Return whether pending differences may be currently filtered out while they
+   * are not in the default configuration
+   */
+  public boolean isUIMoreFilteringThanDefault() {
+    Collection<IDifferenceCategory> defaultConfig = getDefaultConfiguration();
+    for (IDifferenceCategory defaultCat : defaultConfig) {
+      String id = defaultCat.getID();
+      IDifferenceCategory actualCat = getCategory(id);
+      if (actualCat != null && _activeCategories.contains(actualCat) &&
+          isUIFiltering(actualCat)) {
+        if (!isUIFiltering(defaultCat) ||
+            defaultCat.isInFocusMode() != actualCat.isInFocusMode())
+          return true;
+      }
+    }
+    return false;
   }
   
   /**

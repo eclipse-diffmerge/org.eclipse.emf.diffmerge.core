@@ -302,7 +302,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void run() {
         if (source_p instanceof EMFDiffNode) {
           EMFDiffNode node = (EMFDiffNode)source_p;
-          boolean isFiltering = node.getCategoryManager().isUIFiltering();
+          boolean isFiltering = node.getCategoryManager().isUIMoreFilteringThanDefault();
           firePropertyChangeEvent(PROPERTY_FILTERING, Boolean.valueOf(isFiltering));
         }
         refresh();

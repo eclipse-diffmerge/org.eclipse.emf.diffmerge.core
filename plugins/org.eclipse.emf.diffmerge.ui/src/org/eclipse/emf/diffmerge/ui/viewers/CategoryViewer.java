@@ -334,7 +334,8 @@ public class CategoryViewer extends Viewer {
      */
     public void applyChanges() {
       if (hasChanges()) {
-        for (Map.Entry<IDifferenceCategory, CategoryState> change : _changedCategories.entrySet()) {
+        for (Map.Entry<IDifferenceCategory, CategoryState> change :
+            _changedCategories.entrySet()) {
           applyChange(change.getKey(), change.getValue());
         }
         _changedCategories.clear();

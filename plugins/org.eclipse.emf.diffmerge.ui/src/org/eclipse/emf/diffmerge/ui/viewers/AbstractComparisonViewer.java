@@ -39,14 +39,6 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.ConflictCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.DifferenceCategorySet;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.IgnoredDifferenceCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.MergedDifferenceCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.MoveCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.PropertyChangeCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.ThreeWayOriginCategory;
-import org.eclipse.emf.diffmerge.ui.viewers.categories.UnmatchedElementCategory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
@@ -96,6 +88,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /** The current input (initially null) */
   private EMFDiffNode _input;
   
+  /** The non-null difference category provider */
+  private IDifferenceCategoryProvider _categoryProvider;
+  
   /** The last command that was executed before the last save */
   private Command _lastCommandBeforeSave;
   
@@ -119,6 +114,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     _changeListeners = new HashSet<IPropertyChangeListener>(1);
     _input = null;
     _lastCommandBeforeSave = null;
+    _categoryProvider = new DefaultDifferenceCategoryProvider();
     setupUndoRedo();
     _control = createControls(parent_p);
     hookControl(_control);
@@ -239,6 +235,14 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     if (result == null)
       result = Platform.getAdapterManager().getAdapter(this, adapter_p);
     return result;
+  }
+  
+  /**
+   * Return the provider of difference categories of this viewer
+   * @return a potentially null object
+   */
+  public IDifferenceCategoryProvider getCategoryProvider() {
+    return _categoryProvider;
   }
   
   /**
@@ -471,32 +475,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * @param node_p a non-null diff node
    */
   protected void registerCategories(EMFDiffNode node_p) {
-    // Merge process, non-pending (already handled by the user)
-    IDifferenceCategorySet mergeCategorySet = new DifferenceCategorySet(
-        Messages.AbstractComparisonViewer_CatSetTextMerge,
-        Messages.AbstractComparisonViewer_CatSetDescriptionMerge);
-    mergeCategorySet.getChildren().add(new MergedDifferenceCategory());
-    mergeCategorySet.getChildren().add(new IgnoredDifferenceCategory());
-    // Basic two-way
-    IDifferenceCategorySet basicCategorySet = new DifferenceCategorySet(
-        Messages.AbstractComparisonViewer_CatSetTextBasic,
-        Messages.AbstractComparisonViewer_CatSetDescriptionBasic);
-    basicCategorySet.getChildren().add(new PropertyChangeCategory());
-    basicCategorySet.getChildren().add(new MoveCategory());
-    basicCategorySet.getChildren().add(new UnmatchedElementCategory(true));
-    basicCategorySet.getChildren().add(new UnmatchedElementCategory(false));
-    // Basic three-way
-    IDifferenceCategorySet threeWayCategorySet = new DifferenceCategorySet(
-        Messages.AbstractComparisonViewer_CatSetText3Way,
-        Messages.AbstractComparisonViewer_CatSetDescription3Way);
-    threeWayCategorySet.getChildren().add(new ThreeWayOriginCategory(true));
-    threeWayCategorySet.getChildren().add(new ThreeWayOriginCategory(false));
-    threeWayCategorySet.getChildren().add(new ConflictCategory());
-    // Registration
-    CategoryManager catManager = node_p.getCategoryManager();
-    catManager.addCategories(basicCategorySet);
-    catManager.addCategories(threeWayCategorySet);
-    catManager.addCategories(mergeCategorySet);
+    IDifferenceCategoryProvider provider = getCategoryProvider();
+    if (provider != null)
+      provider.provideCategories(node_p);
   }
   
   /**
@@ -516,6 +497,17 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
     _changeListeners.remove(listener_p);
+  }
+  
+  /**
+   * Set the provider of difference categories of this viewer.
+   * To have an actual impact, this operation requires that the input of this
+   * viewer be set afterwards.
+   * @param provider_p a potentially null object
+   */
+  public void setCategoryProvider(
+      IDifferenceCategoryProvider provider_p) {
+    _categoryProvider = provider_p;
   }
   
   /**
