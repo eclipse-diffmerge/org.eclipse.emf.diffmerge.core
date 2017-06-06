@@ -158,4 +158,14 @@ public class ComparisonResourceManager implements IDisposable {
     return result;
   }
   
+  /**
+   * Return an image which represents the given overlay
+   * @param overlay_p a potentially null image ID
+   * @return a non-null image
+   */
+  public Image getStandaloneOverlay(ImageID overlay_p) {
+    Image empty = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY);
+    return getOverlayVersion(empty, overlay_p);
+  }
+  
 }

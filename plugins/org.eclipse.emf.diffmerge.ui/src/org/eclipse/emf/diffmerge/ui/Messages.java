@@ -25,8 +25,10 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("javadoc")
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.messages"; //$NON-NLS-1$
+  public static String AbstractComparisonViewer_CatSetDescription3Way;
   public static String AbstractComparisonViewer_CatSetDescriptionBasic;
   public static String AbstractComparisonViewer_CatSetDescriptionMerge;
+  public static String AbstractComparisonViewer_CatSetText3Way;
   public static String AbstractComparisonViewer_CatSetTextBasic;
   public static String AbstractComparisonViewer_CatSetTextMerge;
   public static String CategoryDialog_ApplyLabel;
@@ -206,8 +208,12 @@ public class Messages extends NLS {
   public static String PropertyChangeCategory_Description;
   public static String PropertyChangeCategory_Text;
   public static String ResourceScopeDefinitionFactory_Label;
-  public static String ThreeWayMoveCategory_TextMovedLeft;
-  public static String ThreeWayMoveCategory_TextMovedRight;
+  public static String ThreeWayOriginCategory_DescriptionLeft;
+  public static String ThreeWayOriginCategory_DescriptionRight;
+  public static String ThreeWayOriginCategory_TextLeft;
+  public static String ThreeWayOriginCategory_TextRight;
+  public static String UnmatchedElementCategory_DescriptionLeft;
+  public static String UnmatchedElementCategory_DescriptionRight;
   public static String UnmatchedElementCategory_TextLeft;
   public static String UnmatchedElementCategory_TextRight;
   public static String ValuesViewer_ContainerLabel;

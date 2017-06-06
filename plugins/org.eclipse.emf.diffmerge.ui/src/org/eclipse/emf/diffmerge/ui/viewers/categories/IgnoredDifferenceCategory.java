@@ -15,6 +15,8 @@
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
@@ -66,7 +68,7 @@ public class IgnoredDifferenceCategory extends AbstractDifferenceCategory {
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    return null;
+    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.CHECKED);
   }
   
   /**

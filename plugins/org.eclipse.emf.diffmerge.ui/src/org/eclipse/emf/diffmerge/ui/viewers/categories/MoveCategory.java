@@ -66,7 +66,8 @@ public class MoveCategory extends AbstractDifferenceCategory {
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.TREE);
+    Image tree = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.TREE);
+    return node_p.getResourceManager().getOverlayVersion(tree, ImageID.MODIFIED_STAT);
   }
   
   /**

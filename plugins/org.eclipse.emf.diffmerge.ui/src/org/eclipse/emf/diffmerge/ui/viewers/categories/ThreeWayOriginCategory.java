@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
+import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -24,23 +24,24 @@ import org.eclipse.swt.graphics.Image;
 
 
 /**
- * A difference category that covers unmatched elements that are present on a given side.
+ * A difference category that covers differences originating from a specific side in a
+ * three-way comparison.
  * @author Olivier Constant
  */
-public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCategory {
+public class ThreeWayOriginCategory extends AbstractSideRelatedDifferenceCategory {
   
   /** The ID of this category in the left-hand-side case */
-  public static final String ID_LEFT = "Technical.Unmatched.Left"; //$NON-NLS-1$
+  public static final String ID_LEFT = "Technical.ThreeWayOrigin.Left"; //$NON-NLS-1$
   
   /** The ID of this category in the right-hand-side case */
-  public static final String ID_RIGHT = "Technical.Unmatched.Right"; //$NON-NLS-1$
+  public static final String ID_RIGHT = "Technical.ThreeWayOrigin.Right"; //$NON-NLS-1$
   
   
   /**
    * Constructor
    * @param sideIsLeft_p whether the category is relative to differences on the left-hand side
    */
-  public UnmatchedElementCategory(boolean sideIsLeft_p) {
+  public ThreeWayOriginCategory(boolean sideIsLeft_p) {
     super(sideIsLeft_p);
   }
   
@@ -49,10 +50,13 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
     boolean result = false;
-    if (difference_p instanceof IElementPresence) {
-      IElementPresence presence = (IElementPresence)difference_p;
+    if (difference_p instanceof IPresenceDifference) {
+      IPresenceDifference presence = (IPresenceDifference)difference_p;
       Role sideRole = node_p.getRoleForSide(isLeftSide());
-      result = presence.getPresenceRole() == sideRole;
+      Role presenceRole = presence.getPresenceRole();
+      result =
+          presenceRole == sideRole && !presence.isAlignedWithAncestor() ||
+          presenceRole != sideRole && presence.isAlignedWithAncestor();
     }
     return result;
   }
@@ -64,9 +68,9 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
   public String getDescription(EMFDiffNode node_p) {
     String result;
     if (isLeftSide())
-      result = Messages.UnmatchedElementCategory_DescriptionLeft;
+      result = Messages.ThreeWayOriginCategory_DescriptionLeft;
     else
-      result = Messages.UnmatchedElementCategory_DescriptionRight;
+      result = Messages.ThreeWayOriginCategory_DescriptionRight;
     return result;
   }
   
@@ -82,20 +86,7 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    ImageID imageID;
-    Role referenceRole = node_p.getReferenceRole();
-    Role leftRole = node_p.getRoleForSide(true);
-    if (isLeftSide()) {
-      if (referenceRole == leftRole)
-        imageID = ImageID.INC_REM_STAT;
-      else
-        imageID = ImageID.OUT_ADD_STAT;
-    } else {
-      if (referenceRole == leftRole.opposite())
-        imageID = ImageID.OUT_REM_STAT;
-      else
-        imageID = ImageID.INC_ADD_STAT;
-    }
+    ImageID imageID = isLeftSide()? ImageID.OUT_STAT: ImageID.INC_STAT;
     return node_p.getResourceManager().getStandaloneOverlay(imageID);
   }
   
@@ -105,10 +96,18 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
   public String getText(EMFDiffNode node_p) {
     String result;
     if (isLeftSide())
-      result = Messages.UnmatchedElementCategory_TextLeft;
+      result = Messages.ThreeWayOriginCategory_TextLeft;
     else
-      result = Messages.UnmatchedElementCategory_TextRight;
+      result = Messages.ThreeWayOriginCategory_TextRight;
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory#isApplicable(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  public boolean isApplicable(EMFDiffNode node_p) {
+    return node_p.isThreeWay();
   }
   
 }

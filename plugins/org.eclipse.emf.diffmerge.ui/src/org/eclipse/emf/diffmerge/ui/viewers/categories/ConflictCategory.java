@@ -15,9 +15,9 @@
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
@@ -43,7 +43,13 @@ public class ConflictCategory extends AbstractDifferenceCategory {
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
-    return difference_p.isConflicting();
+    boolean result = difference_p.isConflicting();
+    if (!result && difference_p instanceof IReferenceValuePresence) {
+      IReferenceValuePresence rvp = (IReferenceValuePresence)difference_p;
+      IReferenceValuePresence peer = rvp.getSymmetricalOwnership();
+      result = !rvp.isAlignedWithAncestor() && peer != null && !peer.isAlignedWithAncestor();
+    }
+    return result;
   }
   
   /**
@@ -58,7 +64,7 @@ public class ConflictCategory extends AbstractDifferenceCategory {
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.CONFLICT_STAT);
+    return node_p.getResourceManager().getStandaloneOverlay(ImageID.CONFLICT_STAT);
   }
   
   /**

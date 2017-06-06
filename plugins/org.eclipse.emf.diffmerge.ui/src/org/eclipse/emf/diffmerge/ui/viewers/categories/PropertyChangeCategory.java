@@ -16,9 +16,8 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
@@ -69,7 +68,7 @@ public class PropertyChangeCategory extends AbstractDifferenceCategory {
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.MODIFIED_STAT);
+    return node_p.getResourceManager().getStandaloneOverlay(ImageID.MODIFIED_STAT);
   }
   
   /**
