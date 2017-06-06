@@ -224,20 +224,6 @@ public final class UIUtil {
     return result;
   }
   
-  /**
-   * Return a UI variant of the given representation of an URI
-   * @param uri_p a potentially null string
-   * @return a string which is null iff uri_p is null
-   */
-  public static String simplifyURI(String uri_p) {
-    String result = uri_p;
-    if (result != null) {
-      result = result.replaceAll("/resource/", ""); //$NON-NLS-1$ //$NON-NLS-2$
-      result = result.replaceAll("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-    return result;
-  }
-  
 	/**
 	 * Return a UI variant of the representation of the given URI
 	 * @param uri_p a potentially null URI
@@ -245,8 +231,18 @@ public final class UIUtil {
 	 */
 	public static String simplifyURI(URI uri_p) {
 	  String result = null;
-	  if (uri_p != null)
-	    result = simplifyURI(uri_p.path());
+	  if (uri_p != null) {
+	    if (uri_p.isPlatform()) {
+	      result = uri_p.toPlatformString(true);
+      } else if (uri_p.isFile()) {
+        result = uri_p.toFileString();
+	    } else {
+	      String path = uri_p.path();
+	      if (path == null)
+	        path = uri_p.toString();
+	      result = URI.decode(path);
+	    }
+	  }
 	  return result;
 	}
 	

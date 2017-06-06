@@ -100,7 +100,7 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
     URI uri = getEntrypoint();
     if (uri.isFile() || uri.isPlatformResource())
       result = uri.trimFileExtension().lastSegment();
-    result = UIUtil.simplifyURI(result);
+    result = URI.decode(result);
     return result;
   }
   

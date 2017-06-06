@@ -14,6 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.sirius;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFDiffMergeLabelProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -64,7 +65,7 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     String result = null;
     Resource resource = element_p.eResource();
     if (resource != null && resource.getURI() != null)
-      result = resource.getURI().trimFileExtension().lastSegment();
+      result = URI.decode(resource.getURI().trimFileExtension().lastSegment());
     return result;
   }
   
