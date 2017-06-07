@@ -31,6 +31,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryProvider;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -162,6 +163,14 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
     if (result == null)
       showNoEditingDomainWarning();
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.AbstractComparisonMethod#getCustomCategoryProvider()
+   */
+  @Override
+  protected IDifferenceCategoryProvider getCustomCategoryProvider() {
+    return new SiriusDifferenceCategoryProvider();
   }
   
   /**

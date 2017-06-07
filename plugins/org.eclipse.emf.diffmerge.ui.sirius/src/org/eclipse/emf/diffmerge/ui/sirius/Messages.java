@@ -25,6 +25,10 @@ public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.ui.sirius.messages"; //$NON-NLS-1$
   public static String SiriusComparisonFactory_Label;
   public static String SiriusComparisonMethod_UndoRedoWarning;
+  public static String SiriusDifferenceCategoryProvider_SiriusSet_Description;
+  public static String SiriusDifferenceCategoryProvider_SiriusSet_Text;
+  public static String SiriusTechnicalDifferenceCategory_Description;
+  public static String SiriusTechnicalDifferenceCategory_Text;
   static {
     // initialize resource bundle
     NLS.initializeMessages(BUNDLE_NAME, Messages.class);
