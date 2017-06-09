@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2016 Thales Global Services S.A.S.
+ * Copyright (c) 2017 Thales Global Services S.A.S.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,27 +16,27 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
 
 /**
- * A difference category that covers modifications to attributes and references that
- * are unrelated to the containment tree.
+ * A difference category that covers ordering differences.
  * @author Olivier Constant
  */
-public class PropertyChangeCategory extends AbstractDifferenceCategory {
+public class OrderDifferenceCategory extends AbstractDifferenceCategory {
   
   /** The ID of this category */
-  public static final String ID = "Technical.PropertyChange"; //$NON-NLS-1$
+  public static final String ID = "Technical.OrderChange"; //$NON-NLS-1$
   
   
   /**
    * Constructor
    */
-  public PropertyChangeCategory() {
+  public OrderDifferenceCategory() {
     super();
   }
   
@@ -45,8 +45,7 @@ public class PropertyChangeCategory extends AbstractDifferenceCategory {
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
     return difference_p instanceof IValuePresence &&
-        ((IValuePresence)difference_p).isUnrelatedToContainmentTree() &&
-        !((IValuePresence)difference_p).isOrder();
+        ((IValuePresence)difference_p).isOrder();
   }
   
   /**
@@ -54,7 +53,7 @@ public class PropertyChangeCategory extends AbstractDifferenceCategory {
    */
   @Override
   public String getDescription(EMFDiffNode node_p) {
-    return Messages.PropertyChangeCategory_Description;
+    return Messages.OrderDifferenceCategory_Description;
   }
   
   /**
@@ -69,14 +68,14 @@ public class PropertyChangeCategory extends AbstractDifferenceCategory {
    */
   @Override
   public Image getImage(EMFDiffNode node_p) {
-    return node_p.getResourceManager().getStandaloneOverlay(ImageID.MODIFIED_STAT);
+    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.SORT);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#getText(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public String getText(EMFDiffNode node_p) {
-    return Messages.PropertyChangeCategory_Text;
+    return Messages.OrderDifferenceCategory_Text;
   }
   
 }

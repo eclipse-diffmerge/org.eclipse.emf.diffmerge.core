@@ -205,6 +205,8 @@ public class Messages extends NLS {
   public static String MiscUtil_DefaultCommandName;
   public static String MoveCategory_Description;
   public static String MoveCategory_Text;
+  public static String OrderDifferenceCategory_Description;
+  public static String OrderDifferenceCategory_Text;
   public static String PropertyChangeCategory_Description;
   public static String PropertyChangeCategory_Text;
   public static String ResourceScopeDefinitionFactory_Label;

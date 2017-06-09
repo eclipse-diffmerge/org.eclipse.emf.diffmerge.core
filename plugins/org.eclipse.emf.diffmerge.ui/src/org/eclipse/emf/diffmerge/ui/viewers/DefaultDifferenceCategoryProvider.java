@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.categories.DifferenceCategorySet;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.IgnoredDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.MergedDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.MoveCategory;
+import org.eclipse.emf.diffmerge.ui.viewers.categories.OrderDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.PropertyChangeCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.ThreeWayOriginCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.UnmatchedElementCategory;
@@ -64,6 +65,7 @@ public class DefaultDifferenceCategoryProvider implements IDifferenceCategoryPro
         Messages.AbstractComparisonViewer_CatSetDescriptionBasic);
     basicCategorySet.getChildren().add(new PropertyChangeCategory());
     basicCategorySet.getChildren().add(new MoveCategory());
+    basicCategorySet.getChildren().add(new OrderDifferenceCategory());
     basicCategorySet.getChildren().add(new UnmatchedElementCategory(true));
     basicCategorySet.getChildren().add(new UnmatchedElementCategory(false));
     node_p.getCategoryManager().addCategories(basicCategorySet);
