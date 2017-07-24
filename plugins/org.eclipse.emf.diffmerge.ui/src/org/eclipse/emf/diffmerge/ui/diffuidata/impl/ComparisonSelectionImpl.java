@@ -37,6 +37,7 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UidiffdataPackage;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.util.structures.FArrayList;
 import org.eclipse.emf.diffmerge.util.structures.FOrderedSet;
 import org.eclipse.emf.ecore.EAttribute;
@@ -57,26 +58,47 @@ import org.eclipse.jface.viewers.TreePath;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl#getDiffNode <em>Diff Node</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl#getSelectedMatches <em>Selected Matches</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl#getSelectedMatchAndFeature <em>Selected Match And Feature</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl#getSelectedTreePath <em>Selected Tree Path</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl#getSelectedValuePresences <em>Selected Value Presences</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
 public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSelection {
   
   /**
-	 * The cached value of the '{@link #getSelectedMatches() <em>Selected Matches</em>}' reference list.
-	 * <!-- begin-user-doc -->
+   * The default value of the '{@link #getDiffNode() <em>Diff Node</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDiffNode()
+   * @generated
+   * @ordered
+   */
+  protected static final EMFDiffNode DIFF_NODE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDiffNode() <em>Diff Node</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDiffNode()
+   * @generated
+   * @ordered
+   */
+  protected EMFDiffNode diffNode = DIFF_NODE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getSelectedMatches() <em>Selected Matches</em>}' reference list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSelectedMatches()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getSelectedMatches()
+   * @generated
+   * @ordered
+   */
 	protected EList<EMatch> selectedMatches;
 
 	/**
@@ -98,52 +120,55 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
   private Role _preferredSide;
   
 	/**
-	 * The cached value of the '{@link #getSelectedMatchAndFeature() <em>Selected Match And Feature</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getSelectedMatchAndFeature() <em>Selected Match And Feature</em>}' containment reference.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSelectedMatchAndFeature()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getSelectedMatchAndFeature()
+   * @generated
+   * @ordered
+   */
 	protected MatchAndFeature selectedMatchAndFeature;
 
 	/**
-	 * The cached value of the '{@link #getSelectedTreePath() <em>Selected Tree Path</em>}' reference list.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getSelectedTreePath() <em>Selected Tree Path</em>}' reference list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSelectedTreePath()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getSelectedTreePath()
+   * @generated
+   * @ordered
+   */
 	protected EList<EMatch> selectedTreePath;
 
 	/**
-	 * The cached value of the '{@link #getSelectedValuePresences() <em>Selected Value Presences</em>}' reference list.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getSelectedValuePresences() <em>Selected Value Presences</em>}' reference list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSelectedValuePresences()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getSelectedValuePresences()
+   * @generated
+   * @ordered
+   */
 	protected EList<EValuePresence> selectedValuePresences;
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ComparisonSelectionImpl() {
-		super();
-	}
+    super();
+  }
 	
 	/**
 	 * Constructor
 	 * @param selected_p a potentially null object
 	 * @param preferredSide_p an optional role for resolving selection ambiguities in full matches
+	 * @param diffNode_p a non-null diff node that is the context in which this selection is defined
 	 * @generated NOT
 	 */
-  public ComparisonSelectionImpl(Object selected_p, Role preferredSide_p) {
+  public ComparisonSelectionImpl(Object selected_p, Role preferredSide_p,
+      EMFDiffNode diffNode_p) {
 	  _preferredSide = preferredSide_p;
+	  diffNode = diffNode_p;
 	  if (selected_p instanceof EMatch) {
 	    getSelectedMatches().add((EMatch)selected_p);
 	  } else if (selected_p instanceof MatchAndFeature) {
@@ -178,35 +203,44 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	protected EClass eStaticClass() {
-		return DiffuidataPackage.Literals.COMPARISON_SELECTION;
-	}
+    return DiffuidataPackage.Literals.COMPARISON_SELECTION;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EMFDiffNode getDiffNode() {
+    return diffNode;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EList<EMatch> getSelectedMatches() {
-		if (selectedMatches == null) {
-			selectedMatches = new EObjectResolvingEList<EMatch>(EMatch.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES);
-		}
-		return selectedMatches;
-	}
+    if (selectedMatches == null) {
+      selectedMatches = new EObjectResolvingEList<EMatch>(EMatch.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES);
+    }
+    return selectedMatches;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public MatchAndFeature getSelectedMatchAndFeature() {
-		return selectedMatchAndFeature;
-	}
+    return selectedMatchAndFeature;
+  }
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -226,84 +260,104 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EList<EMatch> getSelectedTreePath() {
-		if (selectedTreePath == null) {
-			selectedTreePath = new EObjectResolvingEList<EMatch>(EMatch.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH);
-		}
-		return selectedTreePath;
-	}
+    if (selectedTreePath == null) {
+      selectedTreePath = new EObjectResolvingEList<EMatch>(EMatch.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH);
+    }
+    return selectedTreePath;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EList<EValuePresence> getSelectedValuePresences() {
-		if (selectedValuePresences == null) {
-			selectedValuePresences = new EObjectResolvingEList<EValuePresence>(EValuePresence.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES);
-		}
-		return selectedValuePresences;
-	}
+    if (selectedValuePresences == null) {
+      selectedValuePresences = new EObjectResolvingEList<EValuePresence>(EValuePresence.class, this, DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES);
+    }
+    return selectedValuePresences;
+  }
 
   /**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
-				return basicSetSelectedMatchAndFeature(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
+        return basicSetSelectedMatchAndFeature(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
 
   /**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES:
-				return getSelectedMatches();
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
-				return getSelectedMatchAndFeature();
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH:
-				return getSelectedTreePath();
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES:
-				return getSelectedValuePresences();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.COMPARISON_SELECTION__DIFF_NODE:
+        return getDiffNode();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES:
+        return getSelectedMatches();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
+        return getSelectedMatchAndFeature();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH:
+        return getSelectedTreePath();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES:
+        return getSelectedValuePresences();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
   /**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
   @Override
   public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES:
-				return selectedMatches != null && !selectedMatches.isEmpty();
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
-				return selectedMatchAndFeature != null;
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH:
-				return selectedTreePath != null && !selectedTreePath.isEmpty();
-			case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES:
-				return selectedValuePresences != null && !selectedValuePresences.isEmpty();
-		}
-		return super.eIsSet(featureID);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.COMPARISON_SELECTION__DIFF_NODE:
+        return DIFF_NODE_EDEFAULT == null ? diffNode != null : !DIFF_NODE_EDEFAULT.equals(diffNode);
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCHES:
+        return selectedMatches != null && !selectedMatches.isEmpty();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE:
+        return selectedMatchAndFeature != null;
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_TREE_PATH:
+        return selectedTreePath != null && !selectedTreePath.isEmpty();
+      case DiffuidataPackage.COMPARISON_SELECTION__SELECTED_VALUE_PRESENCES:
+        return selectedValuePresences != null && !selectedValuePresences.isEmpty();
+    }
+    return super.eIsSet(featureID);
+  }
   
 	/**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (diffNode: "); //$NON-NLS-1$
+    result.append(diffNode);
+    result.append(')');
+    return result.toString();
+  }
+
+  /**
 	 * @see org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection#asDifferencesToMerge()
    * @generated NOT
 	 */

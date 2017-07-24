@@ -20,6 +20,7 @@
   <genPackages prefix="Diffuidata" basePackage="org.eclipse.emf.diffmerge.ui" resource="Basic"
       disposableProviderFactory="true" ecorePackage="DiffUIData.ecore#/">
     <genDataTypes ecoreDataType="DiffUIData.ecore#//TreePath"/>
+    <genDataTypes ecoreDataType="DiffUIData.ecore#//EMFDiffNode"/>
     <genClasses ecoreClass="DiffUIData.ecore#//UIComparison">
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference DiffUIData.ecore#//UIComparison/actualComparison"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffUIData.ecore#//UIComparison/differencesToIgnore"/>
@@ -31,6 +32,7 @@
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference DiffUIData.ecore#//ComparisonSelection/selectedMatchAndFeature"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffUIData.ecore#//ComparisonSelection/selectedTreePath"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffUIData.ecore#//ComparisonSelection/selectedValuePresences"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute DiffUIData.ecore#//ComparisonSelection/emfDiffNode"/>
       <genOperations ecoreOperation="DiffUIData.ecore#//ComparisonSelection/asDifferencesToMerge"/>
       <genOperations ecoreOperation="DiffUIData.ecore#//ComparisonSelection/asFeature"/>
       <genOperations ecoreOperation="DiffUIData.ecore#//ComparisonSelection/asMatch"/>

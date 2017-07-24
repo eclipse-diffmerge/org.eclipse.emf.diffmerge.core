@@ -14,16 +14,16 @@
  */
 package org.eclipse.emf.diffmerge.ui.diffuidata.util;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
-
-import org.eclipse.emf.diffmerge.ui.diffuidata.*;
-
-import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
+import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
+import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
+import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.ecore.EObject;
-
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Switch;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 /**
@@ -39,181 +39,174 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage
  * @generated
  */
-public class DiffuidataSwitch<T> {
+public class DiffuidataSwitch<T> extends Switch<T> {
 	/**
-	 * The cached model package
-	 * <!-- begin-user-doc -->
+   * The cached model package
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected static DiffuidataPackage modelPackage;
 
 	/**
-	 * Creates an instance of the switch.
-	 * <!-- begin-user-doc -->
+   * Creates an instance of the switch.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public DiffuidataSwitch() {
-		if (modelPackage == null) {
-			modelPackage = DiffuidataPackage.eINSTANCE;
-		}
-	}
+    if (modelPackage == null) {
+      modelPackage = DiffuidataPackage.eINSTANCE;
+    }
+  }
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
+   * Checks whether this is a switch for the given package.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @generated
-	 */
-	public T doSwitch(EObject theEObject) {
-		return doSwitch(theEObject.eClass(), theEObject);
-	}
+   * @param ePackage the package in question.
+   * @return whether this is a switch for the given package.
+   * @generated
+   */
+  @Override
+  protected boolean isSwitchFor(EPackage ePackage) {
+    return ePackage == modelPackage;
+  }
 
 	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
+   * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @generated
-	 */
-	protected T doSwitch(EClass theEClass, EObject theEObject) {
-		if (theEClass.eContainer() == modelPackage)
-			return doSwitch(theEClass.getClassifierID(), theEObject);
-		List<EClass> eSuperTypes = theEClass.getESuperTypes();
-		return
-				eSuperTypes.isEmpty() ?
-					defaultCase(theEObject) :
-					doSwitch(eSuperTypes.get(0), theEObject);
-	}
-
-	/**
-	 * Calls <code>caseXXX</code> for each class of the model until one returns a non null result; it yields that result.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the first non-null result returned by a <code>caseXXX</code> call.
-	 * @generated
-	 */
+   * @return the first non-null result returned by a <code>caseXXX</code> call.
+   * @generated
+   */
+	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
-		switch (classifierID) {
-			case DiffuidataPackage.UI_COMPARISON: {
-				UIComparison uiComparison = (UIComparison)theEObject;
-				T result = caseUIComparison(uiComparison);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DiffuidataPackage.COMPARISON_SELECTION: {
-				ComparisonSelection comparisonSelection = (ComparisonSelection)theEObject;
-				T result = caseComparisonSelection(comparisonSelection);
-				if (result == null) result = caseIStructuredSelection(comparisonSelection);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DiffuidataPackage.MATCH_AND_FEATURE: {
-				MatchAndFeature matchAndFeature = (MatchAndFeature)theEObject;
-				T result = caseMatchAndFeature(matchAndFeature);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DiffuidataPackage.MATCH_TO_NB_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<EMatch, Integer> matchToNbEntry = (Map.Entry<EMatch, Integer>)theEObject;
-				T result = caseMatchToNbEntry(matchToNbEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			default: return defaultCase(theEObject);
-		}
-	}
+    switch (classifierID) {
+      case DiffuidataPackage.UI_COMPARISON: {
+        UIComparison uiComparison = (UIComparison)theEObject;
+        T result = caseUIComparison(uiComparison);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case DiffuidataPackage.COMPARISON_SELECTION: {
+        ComparisonSelection comparisonSelection = (ComparisonSelection)theEObject;
+        T result = caseComparisonSelection(comparisonSelection);
+        if (result == null) result = caseIStructuredSelection(comparisonSelection);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case DiffuidataPackage.MATCH_AND_FEATURE: {
+        MatchAndFeature matchAndFeature = (MatchAndFeature)theEObject;
+        T result = caseMatchAndFeature(matchAndFeature);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case DiffuidataPackage.MATCH_TO_NB_ENTRY: {
+        @SuppressWarnings("unchecked") Map.Entry<EMatch, Integer> matchToNbEntry = (Map.Entry<EMatch, Integer>)theEObject;
+        T result = caseMatchToNbEntry(matchToNbEntry);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case DiffuidataPackage.ISTRUCTURED_SELECTION: {
+        IStructuredSelection iStructuredSelection = (IStructuredSelection)theEObject;
+        T result = caseIStructuredSelection(iStructuredSelection);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      default: return defaultCase(theEObject);
+    }
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>UI Comparison</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>UI Comparison</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>UI Comparison</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>UI Comparison</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
 	public T caseUIComparison(UIComparison object) {
-		return null;
-	}
+    return null;
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Comparison Selection</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>Comparison Selection</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Comparison Selection</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Comparison Selection</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
 	public T caseComparisonSelection(ComparisonSelection object) {
-		return null;
-	}
+    return null;
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Match And Feature</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>Match And Feature</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Match And Feature</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Match And Feature</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
 	public T caseMatchAndFeature(MatchAndFeature object) {
-		return null;
-	}
+    return null;
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Match To Nb Entry</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>Match To Nb Entry</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Match To Nb Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Match To Nb Entry</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
 	public T caseMatchToNbEntry(Map.Entry<EMatch, Integer> object) {
-		return null;
-	}
+    return null;
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>IStructured Selection</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>IStructured Selection</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>IStructured Selection</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>IStructured Selection</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
 	public T caseIStructuredSelection(IStructuredSelection object) {
-		return null;
-	}
+    return null;
+  }
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * <!-- begin-user-doc -->
+   * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
+   * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject)
-	 * @generated
-	 */
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject)
+   * @generated
+   */
+	@Override
 	public T defaultCase(EObject object) {
-		return null;
-	}
+    return null;
+  }
 
 } //DiffuidataSwitch

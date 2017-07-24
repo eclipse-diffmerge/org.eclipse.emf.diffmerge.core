@@ -256,7 +256,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     }
-    ComparisonSelection result = new ComparisonSelectionImpl(matches, null);
+    ComparisonSelection result = new ComparisonSelectionImpl(matches, null, getInput());
     return result;
   }
   
@@ -1199,7 +1199,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             EStructuralFeature feature = (EStructuralFeature)selection.getFirstElement();
             MatchAndFeature newInputDetails = new MatchAndFeatureImpl((EMatch)match, feature);
             setSelection(new ComparisonSelectionImpl(
-                newInputDetails, getDrivingRole()), true, result.getInnerViewer());
+                newInputDetails, getDrivingRole(), getInput()), true, result.getInnerViewer());
           }
         }
       }
@@ -1285,7 +1285,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         IStructuredSelection selection = result.getSelection();
         if (!selection.isEmpty())
           setSelection(new ComparisonSelectionImpl(
-              selection.toList(), getDrivingRole()), true, result.getInnerViewer());
+              selection.toList(), getDrivingRole(), getInput()), true, result.getInnerViewer());
       }
     });
     // Global selection change: update local selection
@@ -1339,7 +1339,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           IStructuredSelection synthesisSelection = getSelectionAsSynthesis(selection, isLeftSide_p);
           if (!synthesisSelection.isEmpty())
             setSelection(new ComparisonSelectionImpl(
-                synthesisSelection.toList(), sideRole), true, result.getInnerViewer());
+                synthesisSelection.toList(), sideRole, getInput()), true, result.getInnerViewer());
         }
       }
     });
@@ -1408,7 +1408,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (!selection.isEmpty()) {
           if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
             setSelection(new ComparisonSelectionImpl(
-                selection.toList(), getInput().getRoleForSide(isLeftSide_p)), true, result.getInnerViewer());
+                selection.toList(), getInput().getRoleForSide(isLeftSide_p), getInput()), true, result.getInnerViewer());
             // One element selected: show it in scope viewer
             if (selection.size() == 1) {
               EObject selectedElement = (EObject)selection.getFirstElement();
@@ -2048,7 +2048,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     TreePath newPath = next_p? treeViewer.getNextUserDifference(current):
       treeViewer.getPreviousUserDifference(current);
     if (newPath != null)
-      setSelection(new ComparisonSelectionImpl(newPath, getDrivingRole()), true);
+      setSelection(new ComparisonSelectionImpl(newPath, getDrivingRole(), getInput()), true);
     return newPath == null;
   }
   
@@ -2198,7 +2198,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     else if (selection_p instanceof IStructuredSelection)
       newSelection = asComparisonSelection((IStructuredSelection)selection_p); // External selection
     else
-      newSelection = new ComparisonSelectionImpl(null, null); // Invalid selection
+      newSelection = new ComparisonSelectionImpl(null, null, getInput()); // Invalid selection
     _lastUserSelection = newSelection;
     fireSelectionChanged(new SelectionChangedEvent(source_p, getSelection()));
   }

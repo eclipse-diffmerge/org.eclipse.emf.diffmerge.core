@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (c) 2010-2017 Thales Global Services S.A.S.
-  All rights reserved. This program and the accompanying materials
-   are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
-  
-   Contributors:
-  Thales Global Services S.A.S - initial API and implementation
--->
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diffuidata"
-    nsURI="http://www.eclipse.org/emf/diffmerge/ui/1.0.0/diffuidata" nsPrefix="org.eclipse.emf.diffmerge.ui">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diffuidata" nsURI="http://www.eclipse.org/emf/diffmerge/ui/1.0.0/diffuidata"
+    nsPrefix="org.eclipse.emf.diffmerge.ui">
   <eClassifiers xsi:type="ecore:EClass" name="UIComparison">
     <eOperations name="dispose"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actualComparison" lowerBound="1"
@@ -32,6 +21,8 @@
     <eOperations name="asValuePresence" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EValuePresence"/>
     <eOperations name="asValuePresences" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EValuePresence"/>
     <eOperations name="dispose"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="diffNode" lowerBound="1"
+        eType="#//EMFDiffNode" changeable="false" transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedMatches" upperBound="-1"
         eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"
         changeable="false"/>
@@ -58,4 +49,6 @@
   <eClassifiers xsi:type="ecore:EDataType" name="TreePath" instanceClassName="org.eclipse.jface.viewers.TreePath"/>
   <eClassifiers xsi:type="ecore:EClass" name="IStructuredSelection" instanceClassName="org.eclipse.jface.viewers.IStructuredSelection"
       abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EMFDiffNode" instanceClassName="org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode"
+      serializable="false"/>
 </ecore:EPackage>

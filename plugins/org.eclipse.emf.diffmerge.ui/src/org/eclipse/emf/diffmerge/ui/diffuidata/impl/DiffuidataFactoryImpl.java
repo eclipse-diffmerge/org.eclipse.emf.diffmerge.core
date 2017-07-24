@@ -41,7 +41,7 @@ public class DiffuidataFactoryImpl extends EFactoryImpl implements DiffuidataFac
 	 */
 	public static DiffuidataFactory init() {
 		try {
-			DiffuidataFactory theDiffuidataFactory = (DiffuidataFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.eclipse.org/emf/diffmerge/ui/1.0.0/diffuidata"); //$NON-NLS-1$ 
+      DiffuidataFactory theDiffuidataFactory = (DiffuidataFactory)EPackage.Registry.INSTANCE.getEFactory(DiffuidataPackage.eNS_URI);
 			if (theDiffuidataFactory != null) {
 				return theDiffuidataFactory;
 			}
