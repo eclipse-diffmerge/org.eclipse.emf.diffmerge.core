@@ -10,7 +10,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.eclipse.emf.diffmerge.connector.svn.EMFDiffMergeSVNConnectorPlugin
 Require-Bundle: org.eclipse.team.core,
  org.eclipse.osgi,
- org.eclipse.emf.diffmerge.ui.gmf,
+ org.eclipse.emf.diffmerge.ui,
  org.eclipse.emf.transaction,
  org.eclipse.emf.diffmerge.connector.core,
  org.eclipse.team.svn.core,

@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.team.core,
  org.eclipse.team.ui,
- org.eclipse.emf.diffmerge.ui.gmf,
+ org.eclipse.emf.diffmerge.ui,
  org.eclipse.emf.ecore
 Bundle-Vendor: %providerName
 Bundle-ActivationPolicy: lazy
