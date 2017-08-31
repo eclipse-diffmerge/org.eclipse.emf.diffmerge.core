@@ -57,7 +57,7 @@ public interface IReferenceValuePresence extends IValuePresence {
   EObject getValue();
   
   /**
-   * Return the match that corresponds to the value.
+   * Return the match that corresponds to the value, if any.
    * Class invariant:
    *  isOutOfScope() || getValueMatch().get(getPresenceRole()) == getValue()
    * @return a match that is non-null if and only if the value is in the presence scope

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.Messages;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
@@ -43,7 +42,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 
 
 /**
@@ -355,7 +353,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
         int index = -1;
         if (!isIsolated) {
           // Check value presence and ordering
-          index = detectReferenceValueAmong(matchReferenceValue,
+          index = detectReferenceValueAmong(reference_p, matchReferenceValue,
               remainingReferenceValues, outsideTargetScope);
           isIsolated = index < 0;
           if (checkOrder && !isIsolated) {
@@ -412,26 +410,24 @@ public class DiffOperation extends AbstractExpensiveOperation {
   /**
    * Return the position of the given reference value among the given list of values,
    * given that it should or not be considered as an out-of-scope value
+   * @param reference_p a non-null reference
    * @param value_p a non-null element
    * @param values_p a non-null, potentially empty list
    * @param outsideScope_p whether the value is out-of-scope
    * @return a positive int or -1 if the element is not found
    */
-  protected int detectReferenceValueAmong(EObject value_p, List<EObject> values_p,
-      boolean outsideScope_p) {
+  protected int detectReferenceValueAmong(EReference reference_p,
+      EObject value_p, List<EObject> values_p, boolean outsideScope_p) {
     int result = values_p.indexOf(value_p);
     if (result == -1 && outsideScope_p) {
-      // Outside scope: allow absolute detection
-      URI valueURI = EcoreUtil.getURI(value_p); // TODO Factor out, e.g., in diff policy
-      if (valueURI != null) {
-        int i = -1;
-        for (EObject candidateValue : values_p) {
-          i++;
-          URI candidateURI = EcoreUtil.getURI(candidateValue);
-          if (valueURI.equals(candidateURI)) {
-            result = i;
-            break;
-          }
+      // Outside scope
+      IDiffPolicy diffPolicy = getDiffPolicy();
+      int i = -1;
+      for (EObject candidateValue : values_p) {
+        i++;
+        if (diffPolicy.considerEqualOutOfScope(value_p, candidateValue, reference_p)) {
+          result = i;
+          break;
         }
       }
     }
@@ -907,10 +903,10 @@ public class DiffOperation extends AbstractExpensiveOperation {
           IEqualityTester.BY_REFERENCE);
       if (presence_p.isOrder()) {
         // Order
+        EReference reference = presence_p.getFeature();
         Role presenceRole = presence_p.getPresenceRole();
         List<EObject> values = _comparison.getScope(presenceRole).get(
-            presence_p.getElementMatch().get(presenceRole),
-            presence_p.getFeature());
+            presence_p.getElementMatch().get(presenceRole), reference);
         int maxIndex = -1;
         aligned = true;
         for (EObject value : values) {
@@ -919,7 +915,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
             EObject matchAncestor = currentValueMatch.get(Role.ANCESTOR);
             //TODO handle ancestor out-of-scope value
             if (matchAncestor != null) {
-              int index = detectReferenceValueAmong(matchAncestor, ancestorValues, false);
+              int index = detectReferenceValueAmong(
+                  reference, matchAncestor, ancestorValues, false);
               if (index >= 0) {
                 if (index < maxIndex) {
                   // Ordering difference

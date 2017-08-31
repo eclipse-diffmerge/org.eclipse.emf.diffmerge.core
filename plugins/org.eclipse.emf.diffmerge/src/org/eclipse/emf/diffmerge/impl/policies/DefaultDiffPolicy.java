@@ -41,6 +41,20 @@ public class DefaultDiffPolicy implements IDiffPolicy {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#considerEqualOutOfScope(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
+   */
+  public boolean considerEqualOutOfScope(EObject outOfScopeValue_p,
+      EObject candidate_p, EReference reference_p) {
+    boolean result = false;
+    URI uri = EcoreUtil.getURI(outOfScopeValue_p);
+    if (uri != null) {
+      URI candidateUri = EcoreUtil.getURI(candidate_p);
+      result = uri.equals(candidateUri);
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.IDiffPolicy#considerOrdered(org.eclipse.emf.ecore.EStructuralFeature)
    */
   public boolean considerOrdered(EStructuralFeature feature_p) {

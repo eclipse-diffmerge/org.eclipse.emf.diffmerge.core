@@ -31,9 +31,19 @@ public interface IDiffPolicy {
    * Return whether the given attribute values must be considered equal
    * @param value1_p the first non-null attribute value
    * @param value2_p the second non-null attribute value
-   * @param attribute_p the optional attribute concerned
+   * @param attribute_p the non-null attribute concerned
    */
   boolean considerEqual(Object value1_p, Object value2_p, EAttribute attribute_p);
+  
+  /**
+   * Return whether the given out-of-scope value must be considered equal to the
+   * other given value. True may only be returned if the other value is also out of scope.
+   * @param outOfScopeValue_p the non-null out-of-scope value
+   * @param candidateValue_p the non-null other value
+   * @param reference_p the non-null reference concerned
+   */
+  boolean considerEqualOutOfScope(EObject outOfScopeValue_p, EObject candidateValue_p,
+      EReference reference_p);
   
   /**
    * Return whether the given feature must be considered as ordered

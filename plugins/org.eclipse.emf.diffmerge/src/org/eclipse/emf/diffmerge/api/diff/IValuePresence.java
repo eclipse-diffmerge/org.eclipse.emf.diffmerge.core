@@ -26,7 +26,8 @@ public interface IValuePresence extends IElementRelativeDifference,
 IPresenceDifference, IMergeableDifference {
   
   /**
-   * Return the feature holding the value (null stands for root containment)
+   * Return the feature holding the value
+   * @return a non-null feature
    */
   EStructuralFeature getFeature();
   
