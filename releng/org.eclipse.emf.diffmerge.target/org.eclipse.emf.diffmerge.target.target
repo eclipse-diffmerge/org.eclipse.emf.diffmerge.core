@@ -2,11 +2,11 @@
 <?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="12">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.sirius.runtime.feature.group" version="5.1.0.201709011420"/>
-<unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="5.1.0.201709011420"/>
-<unit id="org.eclipse.sirius.specifier.feature.group" version="5.1.0.201709011420"/>
-<unit id="org.eclipse.sirius.specifier.ide.ui.feature.group" version="5.1.0.201709011420"/>
-<repository location="http://download.eclipse.org/sirius/updates/stable/5.1.0-S20170901-101720/neon"/>
+<unit id="org.eclipse.sirius.runtime.feature.group" version="5.1.0.201709061112"/>
+<unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="5.1.0.201709061112"/>
+<unit id="org.eclipse.sirius.specifier.feature.group" version="5.1.0.201709061112"/>
+<unit id="org.eclipse.sirius.specifier.ide.ui.feature.group" version="5.1.0.201709061112"/>
+<repository location="http://download.eclipse.org/sirius/updates/stable/5.1.0-S20170906-071207/neon"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20170209-1843"/>
