@@ -7,7 +7,8 @@ Bundle-Activator: org.eclipse.emf.diffmerge.ui.sirius.SiriusDiffMergeUIPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.emf.diffmerge.sirius;visibility:=reexport,
  org.eclipse.emf.diffmerge.ui.gmf;visibility:=reexport,
- org.eclipse.emf.transaction
+ org.eclipse.emf.transaction,
+ org.eclipse.sirius.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.emf.diffmerge.ui.sirius

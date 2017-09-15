@@ -20,6 +20,8 @@ import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
+import org.eclipse.sirius.viewpoint.provider.SiriusEditPlugin;
+import org.eclipse.swt.graphics.Image;
 
 
 /**
@@ -27,6 +29,9 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
  * @author Olivier Constant
  */
 public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategory {
+  
+  /** The path to the Sirius file icon in the sirius.ui plug-in */
+  protected static final String SIRIUS_ICON_PATH = "icons/obj16/SiriusFile.gif"; //$NON-NLS-1$
   
   /** The ID of this category */
   public static final String ID = "Sirius.Technical"; //$NON-NLS-1$
@@ -68,6 +73,14 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
    */
   public String getID() {
     return ID;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategoryItem#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  public Image getImage(EMFDiffNode node_p) {
+    return SiriusEditPlugin.getPlugin().getBundledImage(SIRIUS_ICON_PATH);
   }
   
   /**
