@@ -16,7 +16,9 @@ package org.eclipse.emf.diffmerge.ui;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.compare.CompareUI;
@@ -69,7 +71,9 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   }
   
   /** The local path to icons */
-  private static final String ICON_PATH = "icons/full/"; //$NON-NLS-1$
+  protected static final String ICON_PATH = "icons/full/"; //$NON-NLS-1$
+  
+  
   
   /** A label for dialogs */
   public static final String LABEL = Messages.EMFDiffMergeUIPlugin_Label;
@@ -92,6 +96,9 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   /** A label provider based on the EMF Edit registry (initially null) */
   private AdapterFactoryLabelProvider _composedAdapterFactoryLabelProvider;
   
+  /** A map from a subset of image IDs to the corresponding shared image identifiers */
+  private final Map<ImageID, String> _sharedImageMap;
+  
   
   /**
 	 * Constructor
@@ -99,13 +106,39 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
 	public EMFDiffMergeUIPlugin() {
 	  _diffMergeLogger = new DiffMergeLogger();
 	  _comparisonSetupManager = new ComparisonSetupManager();
-	  _ownershipFeature = EcoreFactory.eINSTANCE.createEReference();
-	  _ownershipFeature.setName("container"); //$NON-NLS-1$
-	  _ownershipFeature.setEType(EcorePackage.eINSTANCE.getEObject());
-    _ownershipFeature.setLowerBound(0);
-	  _ownershipFeature.setUpperBound(1);
+	  _ownershipFeature = createOwnershipFeature();
 	  _veryDarkGray = null;
 	  _composedAdapterFactoryLabelProvider = null;
+	  _sharedImageMap = createImageMap();
+	}
+	
+	/**
+	 * Return a map from a subset of image IDs to the corresponding shared image identifiers
+	 * @return a non-null map
+	 */
+	protected Map<ImageID, String> createImageMap() {
+	  Map<ImageID, String> result = new HashMap<ImageID, String>();
+	  result.put(ImageID.DELETE, ISharedImages.IMG_TOOL_DELETE);
+    result.put(ImageID.LEFT, ISharedImages.IMG_TOOL_BACK);
+    result.put(ImageID.REDO, ISharedImages.IMG_TOOL_REDO);
+    result.put(ImageID.RIGHT, ISharedImages.IMG_TOOL_FORWARD);
+    result.put(ImageID.SHOW, ISharedImages.IMG_OBJS_INFO_TSK);
+    result.put(ImageID.UNDO, ISharedImages.IMG_TOOL_UNDO);
+    result.put(ImageID.WARNING, ISharedImages.IMG_OBJS_WARN_TSK);
+    return result;
+  }
+	
+  /**
+	 * Return a reference representing the virtual "ownership" feature
+	 * @return a non-null reference
+	 */
+	protected EReference createOwnershipFeature() {
+	  EReference result = EcoreFactory.eINSTANCE.createEReference();
+	  result.setName("container"); //$NON-NLS-1$
+	  result.setEType(EcorePackage.eINSTANCE.getEObject());
+	  result.setLowerBound(0);
+	  result.setUpperBound(1);
+	  return result;
 	}
 	
 	/**
@@ -240,38 +273,12 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @return a (normally) non-null image
    */
   public Image getImage(ImageID id_p) {
-    Image result = null;
-    switch (id_p) {
-      case DELETE:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_TOOL_DELETE);
-        break;
-      case LEFT:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_TOOL_BACK);
-        break;
-      case REDO:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_TOOL_REDO);
-        break;
-      case RIGHT:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_TOOL_FORWARD);
-        break;
-      case SHOW:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_OBJS_INFO_TSK);
-        break;
-      case UNDO:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_TOOL_UNDO);
-        break;
-      case WARNING:
-        result = PlatformUI.getWorkbench().getSharedImages().getImage(
-            ISharedImages.IMG_OBJS_WARN_TSK);
-        break;
-      default:
-        result = getImageRegistry().get(id_p.name());
+    Image result;
+    String sharedID = _sharedImageMap.get(id_p);
+    if (sharedID != null) {
+      result = PlatformUI.getWorkbench().getSharedImages().getImage(sharedID);
+    } else {
+      result = getImageRegistry().get(id_p.name());
     }
     return result;
   }
@@ -282,38 +289,12 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @return a (normally) non-null image
    */
   public ImageDescriptor getImageDescriptor(ImageID id_p) {
-    ImageDescriptor result = null;
-    switch (id_p) {
-      case DELETE:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_TOOL_DELETE);
-        break;
-      case LEFT:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_TOOL_BACK);
-        break;
-      case REDO:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_TOOL_REDO);
-        break;
-      case RIGHT:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_TOOL_FORWARD);
-        break;
-      case SHOW:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_OBJS_INFO_TSK);
-        break;
-      case UNDO:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_TOOL_UNDO);
-        break;
-      case WARNING:
-        result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(
-            ISharedImages.IMG_OBJS_WARN_TSK);
-        break;
-      default:
-        result = getImageRegistry().getDescriptor(id_p.name());
+    ImageDescriptor result;
+    String sharedID = _sharedImageMap.get(id_p);
+    if (sharedID != null) {
+      result = PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(sharedID);
+    } else {
+      result = getImageRegistry().getDescriptor(id_p.name());
     }
     return result;
   }
@@ -360,13 +341,13 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     super.initializeImageRegistry(reg_p);
     reg_p.put(ImageID.UP.name(), CompareUI.DESC_CTOOL_PREV);
     reg_p.put(ImageID.DOWN.name(), CompareUI.DESC_CTOOL_NEXT);
-    Set<ImageID> toRegister = new HashSet<EMFDiffMergeUIPlugin.ImageID>(
+    Set<ImageID> toRegister = new HashSet<ImageID>(
         Arrays.asList(ImageID.values()));
-    toRegister.removeAll(Arrays.asList(new ImageID[] {
-        ImageID.DELETE, ImageID.LEFT, ImageID.REDO, ImageID.RIGHT, ImageID.SHOW,
-        ImageID.UNDO, ImageID.DOWN, ImageID.UP, ImageID.WARNING}));
-    for (ImageID imageId : toRegister)
+    toRegister.removeAll(_sharedImageMap.keySet());
+    toRegister.removeAll(Arrays.asList(ImageID.DOWN, ImageID.UP));
+    for (ImageID imageId : toRegister) {
       registerLocalIcon(imageId, reg_p);
+    }
   }
   
   /**
@@ -375,7 +356,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    * @param reg_p the non-null image registry in which to register
    * @return a potentially null image descriptor
    */
-  private ImageDescriptor registerLocalIcon(ImageID imageID_p, ImageRegistry reg_p) {
+  protected ImageDescriptor registerLocalIcon(ImageID imageID_p, ImageRegistry reg_p) {
     ImageDescriptor result = null;
     String path = ICON_PATH + imageID_p.name().toLowerCase() + ".gif"; //$NON-NLS-1$
     try {
