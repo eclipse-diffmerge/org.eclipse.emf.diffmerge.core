@@ -31,7 +31,7 @@ import org.eclipse.swt.graphics.Color;
 public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   
   /** The very special View::children reference (could theoretically be null) */
-  private static final EStructuralFeature VIEW_CHILDREN =
+  protected static final EStructuralFeature VIEW_CHILDREN =
       NotationPackage.eINSTANCE.getView().getEStructuralFeature("children"); //$NON-NLS-1$
   
   /**
@@ -61,9 +61,11 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   }
   
   /**
-   * Defines a custom equality relation on SWT Color.
+   * Return whether the given colors must be considered equal
+   * @param color1_p a non-null color
+   * @param color2_p a non-null color
    */
-  private boolean equalColor(Color color1_p, Color color2_p) {
+  protected boolean equalColor(Color color1_p, Color color2_p) {
     return
       color1_p.getBlue() == color2_p.getBlue() &&
       color1_p.getRed() == color2_p.getRed() &&
@@ -71,11 +73,13 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   }
   
   /**
-   * Defines a custom equality relation on GMF RelativeBendpoint.
-   * RelativeBendpoint is a simple datatype-oriented class containing a few
-   * primitively typed attributes. It does not redefine the Object::equals method.
+   * Return whether the given GMF RelativeBendpoints must be considered equal.
+   * RelativeBendpoint is a simple data type class containing a few primitively
+   * typed attributes. It does not redefine the Object::equals method.
+   * @param point1_p a non-null RelativeBendpoint
+   * @param point2_p a non-null RelativeBendpoint
    */
-  private boolean equalRelativeBendpoint(RelativeBendpoint point1_p,
+  protected boolean equalRelativeBendpoint(RelativeBendpoint point1_p,
       RelativeBendpoint point2_p) {
     return
       point1_p.getSourceX() == point2_p.getSourceX() &&
@@ -85,10 +89,12 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   }
   
   /**
-   * Defines a custom equality relation on lists of RelativeBendpoints.
-   * This kind of list is the data-type of the RelativeBendpoints.points attribute.
+   * Return whether the given lists of GMF RelativeBendpoints must be considered equal.
+   * This kind of list is the data type of the RelativeBendpoints.points attribute.
+   * @param list1_p a non-null, potentially empty list
+   * @param list2_p a non-null, potentially empty list
    */
-  private boolean equalPoints(List<?> list1_p, List<?> list2_p) {
+  protected boolean equalPoints(List<?> list1_p, List<?> list2_p) {
     if (list1_p.size() != list2_p.size())
       return false;
     for (int i=0; i<list1_p.size(); i++) {

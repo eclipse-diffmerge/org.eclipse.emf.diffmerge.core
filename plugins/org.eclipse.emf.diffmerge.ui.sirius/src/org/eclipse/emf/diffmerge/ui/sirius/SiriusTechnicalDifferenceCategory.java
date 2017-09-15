@@ -14,18 +14,12 @@
  */
 package org.eclipse.emf.diffmerge.ui.sirius;
 
-import java.util.Arrays;
-
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementRelativePresence;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.sirius.viewpoint.ViewpointPackage;
 
 
 /**
@@ -54,17 +48,9 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
     boolean result = false;
-    if (difference_p instanceof IElementRelativePresence) {
-      IMatch match = ((IElementRelativePresence)difference_p).getElementMatch();
-      result = isSiriusTechnicalMatch(match);
-      if (!result && difference_p instanceof IReferenceValuePresence) {
-        IMatch valueMatch = ((IReferenceValuePresence)difference_p).getElementMatch();
-        result = isSiriusTechnicalMatch(valueMatch);
-      }
-      if (!result && difference_p instanceof IValuePresence) {
-        Object value = ((IValuePresence)difference_p).getValue();
-        result = isSiriusTechnicalObject(value);
-      }
+    if (difference_p instanceof IValuePresence) {
+      IValuePresence vp = (IValuePresence)difference_p;
+      result = isSiriusTechnicalFeature(vp.getFeature());
     }
     return result;
   }
@@ -92,24 +78,12 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
   }
   
   /**
-   * Return whether the given object is a Sirius technical object
-   * @param object_p a non-null object
+   * Return whether the given Sirius structural feature is technical
+   * @param feature_p a non-null structural feature
    */
-  protected boolean isSiriusTechnicalObject(Object object_p) {
-    return object_p instanceof ResourceDescriptor;
-  }
-  
-  /**
-   * Return whether the given match corresponds to Sirius technical objects
-   * @param match_p a non-null match
-   */
-  protected boolean isSiriusTechnicalMatch(IMatch match_p) {
-    for (Role role : Arrays.asList(Role.REFERENCE, Role.TARGET)) {
-      EObject element = match_p.get(role);
-      if (element != null && isSiriusTechnicalObject(element))
-        return true;
-    }
-    return false;
+  protected boolean isSiriusTechnicalFeature(EStructuralFeature feature_p) {
+    return feature_p == ViewpointPackage.eINSTANCE.getDAnalysis_Version() ||
+        feature_p == ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources();
   }
   
 }
