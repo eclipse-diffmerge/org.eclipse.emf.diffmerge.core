@@ -53,10 +53,17 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
           DiagramPackage.eINSTANCE.getEdgeTarget_IncomingEdges(),
           DiagramPackage.eINSTANCE.getEdgeTarget_OutgoingEdges());
   
-  /** The set of references that can be ignored */
-  private static final Collection<EReference> UNSIGNIFICANT_REFERENCES = Arrays
-      .asList(ViewpointPackage.eINSTANCE.getDRepresentation_UiState(),
+  /** The set of features that can be ignored */
+  private static final Collection<EStructuralFeature> UNSIGNIFICANT_FEATURES =
+      Arrays.<EStructuralFeature>asList(
+          ViewpointPackage.eINSTANCE.getDRepresentation_UiState(),
+          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath(),
           DiagramPackage.eINSTANCE.getDDiagram_HiddenElements());
+  
+  /** The set of features that cannot be ignored even through they are peculiar */
+  private static final Collection<EStructuralFeature> SIGNIFICANT_FEATURES =
+      Arrays.<EStructuralFeature>asList(
+          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation());
   
   /** The set of types that can be ignored */
   private static final Collection<EClass> UNSIGNIFICANT_TYPES = Arrays
@@ -103,8 +110,8 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
    */
   @Override
   public boolean coverFeature(EStructuralFeature feature_p) {
-    return !UNSIGNIFICANT_REFERENCES.contains(feature_p) &&
-        super.coverFeature(feature_p);
+    return SIGNIFICANT_FEATURES.contains(feature_p) ||
+        !UNSIGNIFICANT_FEATURES.contains(feature_p) && super.coverFeature(feature_p);
   }
   
   /**

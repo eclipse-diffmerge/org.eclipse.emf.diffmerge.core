@@ -36,6 +36,17 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
 public class SiriusMergePolicy extends GMFMergePolicy {
   
   /**
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   */
+  @Override
+  public boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p) {
+    return
+        feature_p == ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation() ||
+        feature_p != ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath() &&
+        super.copyFeature(feature_p, scope_p);
+  }
+  
+  /**
    * Extend the given addition group for the given descriptor within the given scope
    * @param group_p a non-null, modifiable collection
    * @param element_p a non-null element
