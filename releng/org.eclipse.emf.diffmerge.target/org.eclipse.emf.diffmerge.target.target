@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="12">
+<?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="13">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.sirius.runtime.feature.group" version="5.1.0.201709061112"/>
-<unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="5.1.0.201709061112"/>
-<unit id="org.eclipse.sirius.specifier.feature.group" version="5.1.0.201709061112"/>
-<unit id="org.eclipse.sirius.specifier.ide.ui.feature.group" version="5.1.0.201709061112"/>
-<repository location="http://download.eclipse.org/sirius/updates/stable/5.1.0-S20170906-071207/neon"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20170209-1843"/>
 <unit id="org.eclipse.jdt.feature.group" version="3.12.3.v20170301-0400"/>
@@ -23,6 +16,13 @@
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
 <repository location="http://download.eclipse.org/cbi/updates/license/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.sirius.runtime.feature.group" version="5.1.0.201709180619"/>
+<unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="5.1.0.201709180619"/>
+<unit id="org.eclipse.sirius.specifier.feature.group" version="5.1.0.201709180619"/>
+<unit id="org.eclipse.sirius.specifier.ide.ui.feature.group" version="5.1.0.201709180619"/>
+<repository location="http://download.eclipse.org/sirius/updates/stable/5.1.0-S20170918-021921/neon"/>
 </location>
 </locations>
 </target>
