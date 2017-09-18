@@ -36,6 +36,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -46,9 +47,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.Widget;
 
 
 /**
@@ -222,6 +226,105 @@ public final class UIUtil {
     FontData data = font_p.getFontData()[0];
     Font result = JFaceResources.getFontRegistry().getItalic(data.getName());
     return result;
+  }
+  
+  /**
+   * Add the given dispose listener to the given tool/menu item
+   * @param item_p a non-null tool item or menu item
+   * @param listener_p a non-null listener
+   */
+  public static void itemAddDisposeListener(Item item_p, DisposeListener listener_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    if (item_p instanceof ToolItem) {
+      ((ToolItem)item_p).addDisposeListener(listener_p);
+    } else {
+      ((MenuItem)item_p).addDisposeListener(listener_p);
+    }
+  }
+  
+  /**
+   * Add the given selection listener to the given tool/menu item
+   * @param item_p a non-null tool item or menu item
+   * @param listener_p a non-null listener
+   */
+  public static void itemAddSelectionListener(Item item_p, SelectionListener listener_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    if (item_p instanceof ToolItem) {
+      ((ToolItem)item_p).addSelectionListener(listener_p);
+    } else {
+      ((MenuItem)item_p).addSelectionListener(listener_p);
+    }
+  }
+  
+  /**
+   * Create an item in the given parent context with the given index and return it
+   * @param context_p a non-null tool bar or menu
+   * @param index_p a positive index or null
+   * @param style_p an SWT style
+   * @return a non-null tool/menu item
+   */
+  public static Item itemCreate(Widget context_p, int style_p, Integer index_p) {
+    assert context_p instanceof ToolBar || context_p instanceof Menu;
+    Item result;
+    if (context_p instanceof ToolBar) {
+      ToolBar parent = (ToolBar)context_p;
+      if (index_p == null) {
+        result = new ToolItem(parent, style_p);
+      } else {
+        result = new ToolItem(parent, style_p, index_p.intValue());
+      }
+    } else {
+      Menu parent = (Menu)context_p;
+      if (index_p == null) {
+        result = new MenuItem(parent, style_p);
+      } else {
+        result = new MenuItem(parent, style_p, index_p.intValue());
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether the given tool/menu item is selected
+   * @param item_p a non-null tool item or menu item
+   */
+  public static boolean itemGetSelection(Item item_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    boolean result;
+    if (item_p instanceof ToolItem) {
+      result = ((ToolItem)item_p).getSelection();
+    } else {
+      result = ((MenuItem)item_p).getSelection();
+    }
+    return result;
+  }
+  
+  /**
+   * Set whether the given tool/menu item is selected
+   * @param item_p a non-null tool item or menu item
+   * @param selected_p whether it is selected
+   */
+  public static void itemSetSelection(Item item_p, boolean selected_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    if (item_p instanceof ToolItem) {
+      ((ToolItem)item_p).setSelection(selected_p);
+    } else {
+      ((MenuItem)item_p).setSelection(selected_p);
+    }
+  }
+  
+  /**
+   * Set the text of the given tool/menu item
+   * @param item_p a non-null tool item or menu item
+   * @param text_p a potentially null string
+   */
+  public static void itemSetText(Item item_p, String text_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    if (item_p instanceof ToolItem) {
+      ((ToolItem)item_p).setToolTipText(text_p);
+    } else {
+      ((MenuItem)item_p).setText(text_p);
+    }
   }
   
 	/**

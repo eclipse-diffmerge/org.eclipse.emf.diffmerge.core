@@ -17,13 +17,22 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemAddDisposeListener;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemAddSelectionListener;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemCreate;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemGetSelection;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetSelection;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetText;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.INavigatable;
@@ -101,6 +110,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -174,6 +184,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   /** The non-null selection provider covering certain sub-viewers */
   protected SelectionBridge.SingleSource _multiViewerSelectionProvider;
+  
+  /** The non-null (after init) selection listener for filter items */
+  protected FilterSelectionListener _filterSelectionListener;
   
   
   /**
@@ -431,57 +444,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   /**
    * Create the "filter" item in the given context and return it
-   * @param context_p a non-null object
+   * @param context_p a non-null ToolBar or Menu
    * @return a potentially null item
    */
-  protected Item createItemFilter(ToolBar context_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.CHECK);
+  protected Item createItemFilter(Widget context_p) {
+    assert context_p instanceof ToolBar || context_p instanceof Menu;
+    final Item result = itemCreate(context_p, SWT.CHECK, null);
+    String text = (context_p instanceof ToolBar)?
+        Messages.ComparisonViewer_FilterToolTip:
+          Messages.ComparisonViewer_FilterText;
+    itemSetText(result, text);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.FILTER));
-    result.setToolTipText(Messages.ComparisonViewer_FilterToolTip);
-    result.addSelectionListener(new SelectionAdapter() {
-      /** The dialog lastly opened */
-      protected CategoryDialog _lastDialog;
-      {
-        _lastDialog = null;
-        result.addDisposeListener(new DisposeListener() {
-          /**
-           * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-           */
-          public void widgetDisposed(DisposeEvent e_p) {
-            if (_lastDialog != null)
-              _lastDialog.close();
-          }
-        });
-      }
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        if (result.getSelection()) {
-          // Just selected
-          _lastDialog = new CategoryDialog(getShell(), getInput());
-          _lastDialog.open();
-          _lastDialog.getShell().addDisposeListener(new DisposeListener() {
-            /**
-             * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-             */
-            public void widgetDisposed(DisposeEvent e_p) {
-              // Toggle tool item when closing
-              _lastDialog = null;
-              if (!result.isDisposed())
-                result.setSelection(false);
-            }
-          });
-        } else {
-          // Not selected any longer
-          if (_lastDialog != null)
-            _lastDialog.close();
-        }
-      }
-    });
-    result.setSelection(false);
+    itemSetSelection(result, false);
+    if (_filterSelectionListener == null)
+      _filterSelectionListener = new FilterSelectionListener();
+    _filterSelectionListener.addItem(result);
     return result;
   }
   
@@ -2278,6 +2256,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
     // Show all elements in synthesis
     createItemShowUncounted(synthesisMenu);
+    createItemFilter(synthesisMenu);
     // Common presentation features
     new MenuItem(synthesisMenu, SWT.SEPARATOR);
     createItemSync(synthesisMenu);
@@ -2416,6 +2395,80 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     super.undoRedoPerformed(undo_p);
     if (getInput() != null)
       getInput().updateDifferenceNumbers();
+  }
+  
+  
+  /**
+   * A selection listener common to all "filter" items.
+   */
+  protected class FilterSelectionListener extends SelectionAdapter {
+    /** The non-null, potentially empty set of tool/menu items that show/hide the
+     * non-modal filter dialog */
+    protected final Set<Item> _filterItems;
+    /** The filter dialog lastly opened */
+    protected CategoryDialog _lastDialog;
+    /**
+     * Constructor
+     */
+    public FilterSelectionListener() {
+      _lastDialog = null;
+      _filterItems = new HashSet<Item>();
+    }
+    /**
+     * Register the given item as being a "filter" item
+     * @param item_p a non-null tool/menu item
+     */
+    public void addItem(Item item_p) {
+      _filterItems.add(item_p);
+      itemAddSelectionListener(item_p, this);
+      itemAddDisposeListener(item_p, new DisposeListener() {
+        /**
+         * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+         */
+        public void widgetDisposed(DisposeEvent e_p) {
+          if (_lastDialog != null && !_lastDialog.getShell().isDisposed())
+            _lastDialog.close();
+        }
+      });
+    }
+    /**
+     * Set the selection state of all related items
+     * @param selected_p the new selection state
+     */
+    protected void setSelectionForAll(boolean selected_p) {
+      for (Item item : _filterItems) {
+        if (!item.isDisposed() && itemGetSelection(item) != selected_p)
+          itemSetSelection(item, selected_p);
+      }
+    }
+    /**
+     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+     */
+    @Override
+    public void widgetSelected(SelectionEvent event_p) {
+      final Item item = (Item)event_p.getSource();
+      boolean selected = itemGetSelection(item);
+      if (selected) {
+        // Just selected
+        _lastDialog = new CategoryDialog(getShell(), getInput());
+        _lastDialog.open();
+        _lastDialog.getShell().addDisposeListener(new DisposeListener() {
+          /**
+           * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+           */
+          public void widgetDisposed(DisposeEvent e_p) {
+            // Toggle tool item when closing
+            _lastDialog = null;
+            setSelectionForAll(false);
+          }
+        });
+      } else {
+        // Not selected any longer
+        if (_lastDialog != null)
+          _lastDialog.close();
+      }
+      setSelectionForAll(selected);
+    }
   }
   
 }
