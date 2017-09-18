@@ -87,6 +87,7 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -1282,9 +1283,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           if (matchesSize > 1) {
             newSelection = new StructuredSelection(selection.getSelectedMatches());
           } else {
-            IMatch match = selection.asMatch();
-            if (match != null)
-              newSelection = new StructuredSelection(match);
+            TreePath path = selection.asMatchPath();
+            if (path != null) {
+              newSelection = new TreeSelection(path);
+            } else {
+              IMatch match = selection.asMatch();
+              if (match != null)
+                newSelection = new StructuredSelection(match);
+            }
           }
           result.setSelection(newSelection, true);
         }
@@ -1338,9 +1344,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           if (matchesSize > 1) {
             newSelection = new StructuredSelection(selection.getSelectedMatches());
           } else {
-            IMatch match = selection.asMatch();
-            if (match != null)
-              newSelection = new StructuredSelection(match);
+            TreePath path = selection.asMatchPath();
+            if (path != null) {
+              newSelection = new TreeSelection(path);
+            } else {
+              IMatch match = selection.asMatch();
+              if (match != null)
+                newSelection = new StructuredSelection(match);
+            }
           }
           result.setSelection(getSelectionAsSide(newSelection, isLeftSide_p), true);
         }
