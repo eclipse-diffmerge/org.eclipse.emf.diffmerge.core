@@ -225,7 +225,7 @@ implements IFragmentedModelScope.Editable {
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);
     Object formerId = getExtrinsicID(value_p);
     boolean result = super.add(source_p, reference_p, value_p);
-    if (wasRoot && reference_p.isContainment())
+    if (wasRoot && reference_p.isContainment()) // Intentionally not isContainment(reference_p)
       oldResource.getContents().remove(value_p); // Not automatically handled
     if (formerId != null)
       // In case resource has changed, thus changing the extrinsic ID
@@ -512,6 +512,17 @@ implements IFragmentedModelScope.Editable {
   }
   
   /**
+   * Get notified that the given element has been found as a result of the exploration
+   * of the scope, so covers(element_p) will be true immediately after the exploration
+   * is over.
+   * Precondition: !isFullyExplored()
+   * @param element_p a non-null element
+   */
+  protected void notifyExplored(EObject element_p) {
+    // Nothing by default
+  }
+  
+  /**
    * Get notified that the given resource is included via the containment tree
    * into the other given resource. We assume that all roots of the included resource
    * are reachable from the including resource as is normally the case with
@@ -661,6 +672,8 @@ implements IFragmentedModelScope.Editable {
         EObject result = _next;
         _currentResource = _next.eResource();
         _next = null;
+        if (!isFullyExplored())
+          notifyExplored(result);
         return result;
       }
       throw new NoSuchElementException();
@@ -672,7 +685,7 @@ implements IFragmentedModelScope.Editable {
     protected void update() {
       while (_next == null && !_finished) {
         boolean resourceChangedInList = checkNextResource();
-        boolean firstExploration = _state != ScopeState.FULLY_EXPLORED;
+        boolean firstExploration = !isFullyExplored();
         if (_contentIterator == null || !_contentIterator.hasNext()) {
           // Iteration finished
           _finished = true;

@@ -538,7 +538,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
     assert presence_p.getValueMatch() != null;
     assert !presence_p.isOrder();
     assert presence_p.getValueMatch().isAMove(); //(1)
-    assert presence_p.getFeature().isContainment(); // Normally implied by (1)
+    assert presence_p.isOwnership(); // Normally implied by (1)
     assert !presence_p.getValueMatch().isPartial(); // Normally implied by (1)
     // Behavior
     final Role orderingRole = getComparison().getMapping().getOrderingRole();
@@ -659,10 +659,10 @@ public class DiffOperation extends AbstractExpensiveOperation {
   /**
    * Set the dependencies of an ownership, excluding those of classical
    * reference value presences
-   * @param presence_p a non-null containment value presence
+   * @param presence_p a non-null ownership reference value presence
    */
-  protected void setOwnerhipDependencies(IReferenceValuePresence presence_p) {
-    assert presence_p.getFeature() != null && presence_p.getFeature().isContainment();
+  protected void setOwnershipDependencies(IReferenceValuePresence presence_p) {
+    assert presence_p.isOwnership();
     IMatch valueMatch = presence_p.getValueMatch();
     // Handling dependencies: move of value
     if (valueMatch == null || !valueMatch.isPartial()) {
@@ -697,7 +697,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
       if (referenceDiff_p.getFeature() != null) {
         // If containment and presence requires ownership, value presence implies ref
         // and no ref implies value absence
-        if (referenceDiff_p.getFeature().isContainment() &&
+        if (referenceDiff_p.isOwnership() &&
             getMergePolicy().bindPresenceToOwnership(
                 _comparison.getScope(presenceRole.opposite()))) {
           ((IMergeableDifference.Editable)presence).markImplies(
@@ -743,10 +743,9 @@ public class DiffOperation extends AbstractExpensiveOperation {
    * @param presence_p a non-null reference value presence
    */
   protected void setReferencedValueDependencies(IReferenceValuePresence presence_p) {
-    EReference reference = presence_p.getFeature();
     IMatch valueMatch = presence_p.getValueMatch();
     // Handling dependencies: links (non-container eOpposite)
-    if (!reference.isContainment()) {
+    if (!presence_p.isOwnership()) {
       IReferenceValuePresence oppositeDiff = presence_p.getOpposite();
       if (oppositeDiff != null)
         setOppositeReferenceDependencies(presence_p, oppositeDiff);
@@ -762,8 +761,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (valueMatch != null && valueMatch.isPartial())
       setPartialReferencedValueDependencies(presence_p);
     // Handling dependencies: ownership
-    if (reference.isContainment())
-      setOwnerhipDependencies(presence_p);
+    if (presence_p.isOwnership())
+      setOwnershipDependencies(presence_p);
   }
   
   /**

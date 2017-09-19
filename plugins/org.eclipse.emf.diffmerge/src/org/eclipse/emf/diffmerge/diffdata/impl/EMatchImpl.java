@@ -885,7 +885,7 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
         IReferenceValuePresence presence = (IReferenceValuePresence) difference_p;
         addReferenceValuePresence(presence);
         // If relevant, register implicit universal container reference on value
-        if (presence.getFeature().isContainment() && !presence.isOrder()) {
+        if (presence.isOwnership()) {
           IMatch valueMatch = presence.getValueMatch();
           if (valueMatch != null)
             ((IMatch.Editable) valueMatch).addOwnershipDifference(presence);

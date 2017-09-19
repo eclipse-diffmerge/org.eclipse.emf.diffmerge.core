@@ -123,6 +123,12 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       return _context.hashCode() + _matchAndFeature.getMatch().hashCode() +
         _matchAndFeature.getFeature().hashCode();
     }
+    /**
+     * Return whether this input corresponds to a containment
+     */
+    public boolean isContainment() {
+      return _context.isContainment(_matchAndFeature.getFeature());
+    }
   }
   
   
@@ -229,19 +235,6 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
       } else {
         result = presence.getValue();
       }
-    }
-    return result;
-  }
-  
-  /**
-   * Return whether the given input object represents a containment
-   * @param object_p a potentially null object
-   */
-  protected boolean isContainment(Object object_p) {
-    boolean result = false;
-    if (object_p instanceof MatchAndFeature) {
-      EStructuralFeature feature = ((MatchAndFeature)object_p).getFeature();
-      result = feature instanceof EReference && ((EReference)feature).isContainment();
     }
     return result;
   }
@@ -355,28 +348,29 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      MatchAndFeature input = ((ValuesInput)inputElement_p).getMatchAndFeature();
+      ValuesInput valuesInput = (ValuesInput)inputElement_p;
+      MatchAndFeature maf = valuesInput.getMatchAndFeature();
       Collection<Object> result = new ArrayList<Object>();
-      if (isOwnership(input)) {
+      if (isOwnership(maf)) {
         // Ownership
-        IReferenceValuePresence ownership = input.getMatch().getOwnershipDifference(getSideRole());
+        IReferenceValuePresence ownership = maf.getMatch().getOwnershipDifference(getSideRole());
         if (ownership != null)
           result.add(ownership);
       } else {
         // Order
-        IValuePresence orderDifference = input.getMatch().getOrderDifference(
-            input.getFeature(), getSideRole());
+        IValuePresence orderDifference = maf.getMatch().getOrderDifference(
+            maf.getFeature(), getSideRole());
         if (orderDifference != null)
           result.add(orderDifference);
         // Only show values if no containment
-        if (!isContainment(input)) {
+        if (!valuesInput.isContainment()) {
           if (isDifferenceAgnostic()) {
             // All values
-            if (input.getFeature() instanceof EAttribute) {
+            if (maf.getFeature() instanceof EAttribute) {
               // All attribute values
-              EAttribute attribute = (EAttribute)input.getFeature();
-              IComparison comparison = input.getMatch().getMapping().getComparison();
-              IMatch match = input.getMatch();
+              EAttribute attribute = (EAttribute)maf.getFeature();
+              IComparison comparison = maf.getMatch().getMapping().getComparison();
+              IMatch match = maf.getMatch();
               EObject source = match.get(getSideRole());
               if (source != null) {
                 List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
@@ -391,9 +385,9 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
               }
             } else {
               // All reference values
-              EReference reference = (EReference)input.getFeature();
-              IComparison comparison = input.getMatch().getMapping().getComparison();
-              IMatch match = input.getMatch();
+              EReference reference = (EReference)maf.getFeature();
+              IComparison comparison = maf.getMatch().getMapping().getComparison();
+              IMatch match = maf.getMatch();
               EObject source = match.get(getSideRole());
               if (source != null) {
                 List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
@@ -410,10 +404,10 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
           } else {
             // Only differences
             Collection<? extends IValuePresence> bothSides;
-            if (input.getFeature() instanceof EAttribute)
-              bothSides = input.getMatch().getAttributeDifferences((EAttribute)input.getFeature());
+            if (maf.getFeature() instanceof EAttribute)
+              bothSides = maf.getMatch().getAttributeDifferences((EAttribute)maf.getFeature());
             else
-              bothSides = input.getMatch().getReferenceDifferences((EReference)input.getFeature());
+              bothSides = maf.getMatch().getReferenceDifferences((EReference)maf.getFeature());
             for (IValuePresence presence : bothSides) {
               if (!presence.isOrder() && presence.getPresenceRole() == getSideRole() &&
                   presence.getMergeDestination() != getSideRole() ||

@@ -1406,7 +1406,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                 match = (IMatch)selectedElement;
               } else if (selectedElement instanceof IReferenceValuePresence) {
                 IReferenceValuePresence rvp = (IReferenceValuePresence)selectedElement;
-                boolean containment = rvp.getFeature() != null && rvp.getFeature().isContainment();
+                boolean containment = rvp.isContainment();
                 match = containment? rvp.getElementMatch(): rvp.getValueMatch();
               } else {
                 match = null;

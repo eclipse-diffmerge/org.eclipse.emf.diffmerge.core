@@ -266,7 +266,7 @@ public class CategoryManager {
       // Standard feature
       Collection<? extends IValuePresence> presences;
       if (feature instanceof EReference) {
-        if (((EReference)feature).isContainment()) {
+        if (_node.isContainment(feature)) {
           // Containment on feature which is not ownership:
           // consider order only
           presences = new ArrayList<IValuePresence>();
@@ -682,10 +682,7 @@ public class CategoryManager {
     boolean result = false;
     if (difference_p instanceof IReferenceValuePresence) {
       IReferenceValuePresence presence = (IReferenceValuePresence)difference_p;
-      if (!presence.isOrder()) {
-        EReference ref = presence.getFeature();
-        result = ref == null || ref.isContainment();
-      }
+      result = presence.isOwnership();
     }
     return result;
   }

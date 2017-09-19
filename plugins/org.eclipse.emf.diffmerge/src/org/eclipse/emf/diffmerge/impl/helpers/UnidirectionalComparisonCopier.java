@@ -193,7 +193,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
         // by a ref presence diff so it must be copied
         boolean mustCopy = getCompletedMatches().contains(valueMatch) ||
           // Being a containment means there is an implicit opposite
-          (reference_p.getEOpposite() == null && !reference_p.isContainment());
+          (reference_p.getEOpposite() == null && !_sourceScope.isContainment(reference_p));
         if (!mustCopy) {
           // Otherwise, check if it is actually handled by a ref presence diff
           // (it may not be because the opposite ref may not be covered by the diff policy)
@@ -210,7 +210,7 @@ public class UnidirectionalComparisonCopier extends EcoreUtil.Copier {
       } else {
         // Value out of scope: keep as is if no side effect due to bidirectionality or containment
         if (useOriginalReferences && reference_p.getEOpposite() == null &&
-            !reference_p.isContainment() && !reference_p.isContainer() ||
+            !_sourceScope.isContainment(reference_p) && !reference_p.isContainer() ||
             _diffPolicy != null && _diffPolicy.coverOutOfScopeValue(sourceValue, reference_p)) {
           _destinationScope.add(destination_p, reference_p, sourceValue);
         }

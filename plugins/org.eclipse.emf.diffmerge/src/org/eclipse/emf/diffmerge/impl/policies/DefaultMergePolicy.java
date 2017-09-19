@@ -71,12 +71,11 @@ public class DefaultMergePolicy implements IMergePolicy {
   /**
    * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
    */
-  public Set<EObject> getAdditionGroup(EObject element_p,
-      IFeaturedModelScope scope_p) {
+  public Set<EObject> getAdditionGroup(EObject element_p, IFeaturedModelScope scope_p) {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
-      if (!reference.isDerived() && !reference.isContainer() &&
-          (!reference.isContainment() || !bindPresenceToOwnership(scope_p)) &&
+      if (reference.isChangeable() && !reference.isContainer() &&
+          (!scope_p.isContainment(reference) || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForAddition(reference))
         result.addAll(scope_p.get(element_p, reference));
     }
@@ -90,8 +89,8 @@ public class DefaultMergePolicy implements IMergePolicy {
       IFeaturedModelScope scope_p) {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
-      if (!reference.isDerived() && !reference.isContainer() &&
-          (!reference.isContainment() || !bindPresenceToOwnership(scope_p)) &&
+      if (reference.isChangeable() && !reference.isContainer() &&
+          (!scope_p.isContainment(reference) || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForDeletion(reference))
         result.addAll(scope_p.get(element_p, reference));
     }

@@ -25,6 +25,7 @@ import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
@@ -287,6 +288,23 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence#isContainment()
+   * @generated NOT
+   */
+  public boolean isContainment() {
+    boolean result;
+    EReference feature = getFeature();
+    IComparison comparison = getComparison();
+    if (comparison != null) {
+      IFeaturedModelScope scope = comparison.getScope(getPresenceRole());
+      result = scope.isContainment(feature);
+    } else {
+      result = feature.isContainment();
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence#isOppositeOf(org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence)
    * @generated NOT
    */
@@ -306,23 +324,31 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isUnrelatedToContainmentTree()
+   * @see org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence#isOwnership()
    * @generated NOT
    */
-  public boolean isUnrelatedToContainmentTree() {
-    return !getFeature().isContainment() || isOrder();
+  public boolean isOwnership() {
+    return !isOrder() && isContainment();
   }
-
+  
   /**
    * @see org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence#isSymmetricalOwnershipTo(org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence)
    * @generated NOT
    */
   public boolean isSymmetricalOwnershipTo(IReferenceValuePresence peer_p) {
     return getAbsenceRole() == peer_p.getPresenceRole()
-        && getFeature().isContainment() && peer_p.getFeature().isContainment()
+        && isOwnership() && peer_p.isOwnership()
         && getValueMatch() != null && getValueMatch() == peer_p.getValueMatch();
   }
 
+  /**
+   * @see org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference#isUnrelatedToContainmentTree()
+   * @generated NOT
+   */
+  public boolean isUnrelatedToContainmentTree() {
+    return !isOwnership();
+  }
+  
   /**
    * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#mergeOrder()
    * @generated NOT
@@ -439,7 +465,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl implements
         presenceScope.remove(getHolder(), getFeature(), valueElement);
       else
         presenceScope.remove(valueElement);
-      if (getFeature() == null || getFeature().isContainment()) {
+      if (isOwnership()) {
         // Value has been removed from its containment: delete element
         for (EStructuralFeature.Setting setting : getComparison().getMapping()
             .getCrossReferences(valueElement, getPresenceRole())) {

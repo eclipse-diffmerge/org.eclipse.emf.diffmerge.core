@@ -31,8 +31,7 @@ public interface IElementRelativeDifference extends IDifference {
   IMatch getElementMatch();
   
   /**
-   * Return whether this difference is unrelated to the container/contents
-   * relationship
+   * Return whether this difference, if merged, does not affect the containment tree
    */
   boolean isUnrelatedToContainmentTree();
   

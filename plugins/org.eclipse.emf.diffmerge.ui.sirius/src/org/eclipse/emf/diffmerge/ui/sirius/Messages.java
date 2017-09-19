@@ -27,6 +27,7 @@ public class Messages extends NLS {
   public static String SiriusComparisonMethod_UndoRedoWarning;
   public static String SiriusDifferenceCategoryProvider_SiriusSet_Description;
   public static String SiriusDifferenceCategoryProvider_SiriusSet_Text;
+  public static String SiriusDiffMergeLabelProvider_DRepresentationLabel;
   public static String SiriusTechnicalDifferenceCategory_Description;
   public static String SiriusTechnicalDifferenceCategory_Text;
   static {

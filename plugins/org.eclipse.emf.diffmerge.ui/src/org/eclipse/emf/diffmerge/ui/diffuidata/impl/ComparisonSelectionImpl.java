@@ -592,8 +592,7 @@ public class ComparisonSelectionImpl extends EObjectImpl implements ComparisonSe
     boolean result = false;
     if (difference_p instanceof IReferenceValuePresence) {
       IReferenceValuePresence presence = (IReferenceValuePresence)difference_p;
-      EReference ref = presence.getFeature();
-      result = !presence.isOrder() && ref != null && ref.isContainment();
+      result = presence.isOwnership();
     }
     return result;
   }

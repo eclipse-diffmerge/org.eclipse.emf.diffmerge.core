@@ -221,6 +221,13 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#isContainment(org.eclipse.emf.ecore.EReference)
+   */
+  public boolean isContainment(EReference reference_p) {
+    return reference_p.isContainment();
+  }
+  
+  /**
    * Return whether proxies must be resolved when this scope is navigated
    */
   protected boolean resolveProxies() {

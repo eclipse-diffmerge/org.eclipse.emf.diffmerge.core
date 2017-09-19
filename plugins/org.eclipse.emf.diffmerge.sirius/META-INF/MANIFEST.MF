@@ -8,7 +8,7 @@ Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.diffmerge.gmf,
  org.eclipse.emf.edit,
- org.eclipse.sirius;bundle-version="4.1.0";visibility:=reexport,
+ org.eclipse.sirius;bundle-version="5.1.0";visibility:=reexport,
  org.eclipse.sirius.diagram;visibility:=reexport,
  org.eclipse.sirius.diagram.sequence;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

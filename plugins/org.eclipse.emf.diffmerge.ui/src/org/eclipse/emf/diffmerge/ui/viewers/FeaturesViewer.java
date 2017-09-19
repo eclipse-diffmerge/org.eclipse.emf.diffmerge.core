@@ -215,7 +215,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   
   
   /**
-   * The content provider for this viewer
+   * The content provider for this viewer.
    */
   protected class ContentProvider implements IStructuredContentProvider {
     
@@ -244,7 +244,8 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      Role drivingRole = getInput().getContext().getDrivingRole();
+      EMFDiffNode context = getInput().getContext();
+      Role drivingRole = context.getDrivingRole();
       IMatch match = ((FeaturesInput)inputElement_p).getMatch();
       List<EStructuralFeature> result;
       if (isDifferenceAgnostic())
@@ -252,7 +253,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       else {
         result = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
         for (EReference ref : match.getReferencesWithDifferences()) {
-          if (!ref.isContainment() || match.getOrderDifference(ref, drivingRole) != null)
+          if (!context.isContainment(ref) || match.getOrderDifference(ref, drivingRole) != null)
             result.add(ref);
         }
       }
@@ -281,7 +282,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      */
     private boolean qualifies(EReference reference_p) {
       return isOwnershipFeature(reference_p) ||
-        !reference_p.isContainment() && !reference_p.isContainer() &&
+        !getInput().getContext().isContainment(reference_p) && !reference_p.isContainer() &&
         reference_p.isChangeable() && !reference_p.isDerived();
     }
   }

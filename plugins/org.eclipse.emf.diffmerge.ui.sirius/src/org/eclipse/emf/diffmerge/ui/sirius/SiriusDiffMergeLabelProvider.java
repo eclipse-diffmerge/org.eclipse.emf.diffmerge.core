@@ -24,6 +24,7 @@ import org.eclipse.sirius.diagram.EdgeStyle;
 import org.eclipse.sirius.diagram.NodeStyle;
 import org.eclipse.sirius.viewpoint.BasicLabelStyle;
 import org.eclipse.sirius.viewpoint.DAnalysis;
+import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.DRepresentationElement;
 import org.eclipse.sirius.viewpoint.DView;
 import org.eclipse.sirius.viewpoint.RGBValues;
@@ -65,7 +66,7 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     String result = null;
     Resource resource = element_p.eResource();
     if (resource != null && resource.getURI() != null)
-      result = URI.decode(resource.getURI().trimFileExtension().lastSegment());
+      result = URI.decode(resource.getURI().lastSegment());
     return result;
   }
   
@@ -78,6 +79,18 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
       DRepresentationElement element_p) {
     String result = getExplicitlyTypedElementText(
         element_p.getName(), element_p.getMapping());
+    return result;
+  }
+  
+  /**
+   * Return a label for the given Sirius representation
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getDRepresentationText(DRepresentation element_p) {
+    String result = super.getText(element_p);
+    result = String.format(
+        Messages.SiriusDiffMergeLabelProvider_DRepresentationLabel, result);
     return result;
   }
   
@@ -135,6 +148,8 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
       result = getDAnalysisText((DAnalysis)element_p);
     } else if (element_p instanceof DView) {
       result = getDViewText((DView)element_p);
+    } else if (element_p instanceof DRepresentation) {
+      result = getDRepresentationText((DRepresentation)element_p);
     } else if (element_p instanceof DRepresentationElement) {
       result = getDRepresentationElementText((DRepresentationElement)element_p);
     } else if (element_p instanceof NodeStyle) {

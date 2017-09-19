@@ -47,6 +47,8 @@ public interface IReferenceValuePresence extends IValuePresence {
    * Return the difference, if any, which is the symmetrical ownership
    * of the value in the opposite role
    * @see IReferenceValuePresence#isSymmetricalOwnershipTo(IReferenceValuePresence)
+   * Class invariant: getSymmetricalOwnership() == null ||
+   *                      isSymmetricalOwnershipTo(getSymmetricalOwnership())
    * @return a potentially null reference value presence
    */
   IReferenceValuePresence getSymmetricalOwnership();
@@ -63,6 +65,12 @@ public interface IReferenceValuePresence extends IValuePresence {
    * @return a match that is non-null if and only if the value is in the presence scope
    */
   IMatch getValueMatch();
+  
+  /**
+   * Return whether the reference of this value presence represents a containment,
+   * independently of the fact that it may represent an order.
+   */
+  boolean isContainment();
   
   /**
    * Return whether the given reference value presence corresponds to
@@ -82,8 +90,16 @@ public interface IReferenceValuePresence extends IValuePresence {
   boolean isOutOfScope();
   
   /**
+   * Return whether this reference value presence represents an ownership,
+   * i.e., it represents an arc in the containment tree.
+   * Class invariant: isOwnership() == !isOrder() && isContainment()
+   */
+  boolean isOwnership();
+  
+  /**
    * Return whether the given reference value presence corresponds to
-   * the symmetrical ownership of the same value
+   * the symmetrical ownership of the same value.
+   * Postcondition: !result || isOwnership()
    * @param peer_p a non-null reference value presence
    */
   boolean isSymmetricalOwnershipTo(IReferenceValuePresence peer_p);

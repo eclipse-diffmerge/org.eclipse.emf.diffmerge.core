@@ -138,8 +138,7 @@ public class MergeImpactViewer extends Viewer {
           IElementRelativeDifference elementDifference = (IElementRelativeDifference)difference_p;
           if (elementDifference instanceof IReferenceValuePresence) {
             IReferenceValuePresence presence = (IReferenceValuePresence)elementDifference;
-            if (presence.getFeature() != null && presence.getFeature().isContainment() &&
-                !presence.isOrder())
+            if (presence.isOwnership())
               match = presence.getValueMatch(); // Move
           }
           if (match == null)
@@ -484,7 +483,7 @@ public class MergeImpactViewer extends Viewer {
       boolean result = false;
       if (difference_p instanceof IReferenceValuePresence) {
         IReferenceValuePresence valuePresence = (IReferenceValuePresence)difference_p;
-        if (valuePresence.getFeature() != null && valuePresence.getFeature().isContainment()) {
+        if (valuePresence.isOwnership()) {
           IMatch valueMatch = valuePresence.getValueMatch();
           result = valueMatch != null && valueMatch.getElementPresenceDifference() != null;
         }

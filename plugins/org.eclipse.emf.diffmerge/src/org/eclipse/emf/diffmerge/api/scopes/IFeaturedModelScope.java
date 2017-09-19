@@ -54,11 +54,18 @@ public interface IFeaturedModelScope extends IModelScope {
   /**
    * Return the containment reference through which the given element is
    * being contained, if any. Result must be consistent with getContainer(EObject).
-   * Postcondition: result == null || result.isContainment()
+   * Postcondition: result == null || isContainment(result)
    * Postcondition: (result == null) == (getContainer(element_p) == null)
    * @param element_p a non-null element
    * @return a potentially null containment reference
    */
   EReference getContainment(EObject element_p);
+  
+  /**
+   * Return whether the given reference must be considered as a containment.
+   * Result must be consistent with getContainment(EObject).
+   * @param reference_p a non-null reference
+   */
+  boolean isContainment(EReference reference_p);
   
 }

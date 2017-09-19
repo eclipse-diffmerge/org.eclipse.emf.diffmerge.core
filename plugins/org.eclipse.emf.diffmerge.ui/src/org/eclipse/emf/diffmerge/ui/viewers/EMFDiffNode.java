@@ -22,6 +22,7 @@ import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -30,6 +31,8 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
@@ -231,6 +234,25 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public boolean isLogEvents() {
     return _isLogEvents;
+  }
+  
+  /**
+   * Return whether the given structural feature must be considered as a containment
+   * @param feature_p a potentially null feature
+   */
+  public boolean isContainment(EStructuralFeature feature_p) {
+    boolean result = false;
+    if (feature_p instanceof EReference) {
+      EReference reference = (EReference)feature_p;
+      IComparison comparison = getActualComparison();
+      if (comparison != null) {
+        IFeaturedModelScope scope = comparison.getScope(getDrivingRole());
+        result = scope.isContainment(reference);
+      } else {
+        result = reference.isContainment();
+      }
+    }
+    return result;
   }
   
   /**
