@@ -80,10 +80,10 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   private boolean _isReferenceEditable;
   
   /** Whether editing the target scope is possible at all */
-  private final boolean _isTargetEditionPossible;
+  private boolean _isTargetEditionPossible;
   
   /** Whether editing the reference scope is possible at all */
-  private final boolean _isReferenceEditionPossible;
+  private boolean _isReferenceEditionPossible;
   
   /** Whether the left model has been modified */
   private boolean _isTargetModified;
@@ -193,8 +193,15 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * @param left_p whether the side is left or right
    */
   public boolean isEditable(boolean left_p) {
-    return getRoleForSide(left_p) == Role.TARGET? _isTargetEditable:
-      _isReferenceEditable;
+    boolean result = isEditionPossible(left_p);
+    if (result) {
+      if (getRoleForSide(left_p) == Role.TARGET) {
+        result = _isTargetEditable;
+      } else {
+        result = _isReferenceEditable;
+      }
+    }
+    return result;
   }
   
   /**
@@ -468,6 +475,19 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
         _isTargetEditable = isEditable_p;
       else
         _isReferenceEditable = isEditable_p;
+    }
+  }
+  
+  /**
+   * Set whether editing the scope of the given side is possible at all
+   * @param possible_p whether it is possible
+   * @param left_p whether the side is left or right
+   */
+  public void setEditionPossible(boolean possible_p, boolean left_p) {
+    if (getRoleForSide(left_p) == Role.TARGET) {
+      _isTargetEditionPossible = possible_p;
+    } else {
+      _isReferenceEditionPossible = possible_p;
     }
   }
   

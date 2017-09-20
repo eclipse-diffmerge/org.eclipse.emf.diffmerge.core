@@ -249,7 +249,9 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent e_p) {
-          _setup.setTwoWayReferenceRole(null);
+          if (noneButton.getSelection()) {
+            _setup.setTargetRole(null);
+          }
         }
       });
       noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
@@ -264,8 +266,10 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent e_p) {
-          _setup.setTwoWayReferenceRole(
-              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+          if (leftButton.getSelection()) {
+            _setup.setTargetRole(
+                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+          }
         }
       });
       leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
@@ -280,8 +284,10 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent e_p) {
-          _setup.setTwoWayReferenceRole(
-              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+          if (rightButton.getSelection()) {
+            _setup.setTargetRole(
+                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+          }
         }
       });
       rightButton.setEnabled(rightButton.getSelection() || _setup.canChangeTwoWayReferenceRole());

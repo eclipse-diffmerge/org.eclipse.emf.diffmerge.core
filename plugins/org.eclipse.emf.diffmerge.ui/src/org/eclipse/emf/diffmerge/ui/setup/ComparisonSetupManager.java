@@ -384,6 +384,7 @@ public class ComparisonSetupManager {
     assert input_p.getComparisonMethod() != null;
     boolean result = false;
     ComparisonSetup setup = new ComparisonSetup(input_p.getComparisonMethod());
+    setup.setCanSwapScopeDefinitions(false);
     IComparisonMethod method = openSetupWizard(shell_p, setup);
     if (method != null) {
       input_p.setComparisonMethod(method);

@@ -256,10 +256,35 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * Set the role that corresponds to the target of the merge
+   * @param role_p TARGET, REFERENCE or null
+   */
+  public void setTargetRole(Role role_p) {
+    setTwoWayReferenceRole(role_p);
+    if (Role.TARGET == role_p || Role.REFERENCE == role_p) {
+      IModelScopeDefinition roleDef = getScopeDefinition(role_p);
+      IModelScopeDefinition oppositeRoleDef = getScopeDefinition(role_p.opposite());
+      if (roleDef.isEditableSettable())
+        roleDef.setEditable(true);
+      oppositeRoleDef.setEditable(false);
+    } else {
+      // No reference role defined
+      Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+      IModelScopeDefinition leftRoleDef = getScopeDefinition(leftRole);
+      IModelScopeDefinition rightRoleDef = getScopeDefinition(leftRole.opposite());
+      if (leftRoleDef.isEditableSettable())
+        leftRoleDef.setEditable(true);
+      if (rightRoleDef.isEditableSettable())
+        rightRoleDef.setEditable(true);
+    }
+    notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
    */
   public void setTwoWayReferenceRole(Role role_p) {
-    if (!isThreeWay() && Role.TARGET == role_p || Role.REFERENCE == role_p)
+    if (!isThreeWay() && (Role.TARGET == role_p || Role.REFERENCE == role_p))
       _twoWayReferenceRole = role_p;
   }
   

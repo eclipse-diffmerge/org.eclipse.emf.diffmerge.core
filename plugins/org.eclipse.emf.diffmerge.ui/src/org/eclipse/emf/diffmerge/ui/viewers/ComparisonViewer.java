@@ -758,53 +758,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        IWorkbenchPage page = getPage();
-        final EMFDiffNode input = getInput();
-        if (page != null && input != null) {
-          IEditorPart editor = page.getActiveEditor();
-          if (editor instanceof IReusableEditor) {
-            IEditorInput editorInput = editor.getEditorInput();
-            if (editorInput instanceof EMFDiffMergeEditorInput) {
-              EMFDiffMergeEditorInput castedInput = (EMFDiffMergeEditorInput)editorInput;
-              ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-              boolean confirmed = manager.updateEditorInputWithUI(getShell(), castedInput);
-              if (confirmed) {
-                final IComparisonMethod method = castedInput.getComparisonMethod();
-                input.setReferenceRole(method.getTwoWayReferenceRole());
-                Job job = new Job(Messages.ComparisonViewer_RestartInProgress) {
-                  /**
-                   * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-                   */
-                  @Override
-                  protected IStatus run(final IProgressMonitor monitor_p) {
-                    MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
-                      /**
-                       * @see java.lang.Runnable#run()
-                       */
-                      public void run() {
-                        input.getUIComparison().clear();
-                        input.getActualComparison().compute(
-                            method.getMatchPolicy(), method.getDiffPolicy(), method.getMergePolicy(),
-                            monitor_p);
-                        input.getCategoryManager().update();
-                      }
-                    });
-                    Display.getDefault().syncExec(new Runnable() {
-                      /**
-                       * @see java.lang.Runnable#run()
-                       */
-                      public void run() {
-                        refresh();
-                      }
-                    });
-                    return Status.OK_STATUS;
-                  }
-                };
-                job.schedule();
-              }
-            }
-          }
-        }
+        restart();
       }
     });
     return result;
@@ -1597,6 +1551,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return the editor input of the active editor, if of the expected type
+   * @return a potentially null editor input
+   */
+  protected EMFDiffMergeEditorInput getActiveEditorInput() {
+    EMFDiffMergeEditorInput result = null;
+    IWorkbenchPage page = getPage();
+    if (page != null) {
+      IEditorPart editor = page.getActiveEditor();
+      if (editor instanceof IReusableEditor) {
+        IEditorInput editorInput = editor.getEditorInput();
+        if (editorInput instanceof EMFDiffMergeEditorInput)
+          result = (EMFDiffMergeEditorInput)editorInput;
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Return the default respective weights of the columns (sashes) of the GUI
    * @return an int array whose size is equal to the number of columns
    */
@@ -2227,6 +2199,61 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     super.refreshTools();
   }
   
+  /**
+   * Restart the comparison via a GUI
+   */
+  protected void restart() {
+    final EMFDiffMergeEditorInput editorInput = getActiveEditorInput();
+    final EMFDiffNode input = getInput();
+    if (editorInput != null && input != null) {
+      ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
+      boolean confirmed = manager.updateEditorInputWithUI(getShell(), editorInput);
+      if (confirmed) {
+        final IComparisonMethod method = editorInput.getComparisonMethod();
+        Job job = new Job(Messages.ComparisonViewer_RestartInProgress) {
+          /**
+           * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+           */
+          @Override
+          protected IStatus run(final IProgressMonitor monitor_p) {
+            MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
+              /**
+               * @see java.lang.Runnable#run()
+               */
+              public void run() {
+                input.setReferenceRole(method.getTwoWayReferenceRole());
+                boolean leftEditable = method.getModelScopeDefinition(
+                    input.getRoleForSide(true)).isEditable();
+                boolean rightEditable = method.getModelScopeDefinition(
+                    input.getRoleForSide(false)).isEditable();
+                input.setEditionPossible(leftEditable, true);
+                input.setEditionPossible(rightEditable, false);
+                input.getUIComparison().clear();
+                input.getActualComparison().compute(
+                    method.getMatchPolicy(), method.getDiffPolicy(), method.getMergePolicy(),
+                    monitor_p);
+                input.getCategoryManager().update();
+              }
+            });
+            Display.getDefault().syncExec(new Runnable() {
+              /**
+               * @see java.lang.Runnable#run()
+               */
+              public void run() {
+                firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
+                refresh();
+                refreshTools();
+              }
+            });
+            return Status.OK_STATUS;
+          }
+        };
+        job.setUser(true);
+        job.schedule();
+      }
+    }
+  }
+
   /**
    * Set the "base" label provider for representing model elements
    * @param labelProvider_p a potentially null label provider, where null stands for default
