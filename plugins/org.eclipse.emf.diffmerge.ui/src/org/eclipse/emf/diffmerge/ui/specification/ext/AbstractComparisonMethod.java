@@ -255,10 +255,31 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isDedicatedEditingDomain()
+   */
+  public boolean isDedicatedEditingDomain() {
+    return _isDedicatedEditingDomain;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isThreeWay()
    */
   public boolean isThreeWay() {
     return getModelScopeDefinition(Role.ANCESTOR) != null;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setEditingDomain(org.eclipse.emf.edit.domain.EditingDomain, boolean)
+   */
+  public void setEditingDomain(EditingDomain domain_p, boolean dedicated_p) {
+    _editingDomain = domain_p;
+    if (domain_p != null) {
+      _isDedicatedEditingDomain = dedicated_p;
+      _initialized = true;
+    } else {
+      _isDedicatedEditingDomain = false;
+      _initialized = false;
+    }
   }
   
 }

@@ -764,6 +764,13 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @param comparisonMethod_p a non-null comparison method
    */
   public void setComparisonMethod(IComparisonMethod comparisonMethod_p) {
+    EditingDomain domain = getEditingDomain();
+    if (domain != null) {
+      // Reuse editing domain
+      boolean dedicated = _comparisonMethod == null? false:
+        _comparisonMethod.isDedicatedEditingDomain();
+      comparisonMethod_p.setEditingDomain(domain, dedicated);
+    }
     _comparisonMethod = comparisonMethod_p;
   }
   

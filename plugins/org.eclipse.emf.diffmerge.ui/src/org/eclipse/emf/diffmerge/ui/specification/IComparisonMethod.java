@@ -99,9 +99,27 @@ IEditingDomainProvider, IDisposable {
   boolean isConfigurable();
   
   /**
+   * Return whether the editing domain in which the comparison takes place, if any,
+   * is entirely dedicated to the comparison.
+   * Class invariant: !isOnDedicatedEditingDomain() || getEditingDomain() != null
+   */
+  boolean isDedicatedEditingDomain();
+  
+  /**
    * Return whether this is a three-way comparison, i.e., the ancestor scope is defined
    */
   boolean isThreeWay();
+  
+  /**
+   * Set the editing domain in which comparison must take place.
+   * If null and the comparison method does not have the ability to create
+   * its own editing domain, then undo/redo operations will not be available.
+   * @param domain_p a potentially null editing domain
+   * @param dedicated_p whether the editing domain is entirely dedicated to the comparison
+   *          (no effect if the passed editing domain is null)
+   * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
+   */
+  void setEditingDomain(EditingDomain domain_p, boolean dedicated_p);
   
   /**
    * Set the reference role in a two-way comparison.
