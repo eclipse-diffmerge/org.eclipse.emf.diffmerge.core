@@ -533,7 +533,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * @param role_p TARGET, REFERENCE, or null
    */
   public void setReferenceRole(Role role_p) {
-    if (!isThreeWay() && (Role.TARGET == role_p || Role.REFERENCE == role_p))
+    if (!isThreeWay())
       _twoWayReferenceRole = role_p;
   }
   

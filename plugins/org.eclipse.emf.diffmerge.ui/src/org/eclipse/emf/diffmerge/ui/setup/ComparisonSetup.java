@@ -284,7 +284,7 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
    */
   public void setTwoWayReferenceRole(Role role_p) {
-    if (!isThreeWay() && (Role.TARGET == role_p || Role.REFERENCE == role_p))
+    if (!isThreeWay())
       _twoWayReferenceRole = role_p;
   }
   

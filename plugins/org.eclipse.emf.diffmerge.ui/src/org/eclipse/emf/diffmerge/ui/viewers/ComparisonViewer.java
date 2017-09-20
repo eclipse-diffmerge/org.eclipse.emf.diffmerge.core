@@ -1073,6 +1073,47 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create the "use custom labels" item in the given context and return it
+   * @param context_p a non-null object
+   * @return result a potentially null item
+   */
+  protected Item createItemUseCustomLabels(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_LabelsMenuItem);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          EMFDiffNode input = getInput();
+          if (input != null && !result.isDisposed())
+            result.setSelection(input.usesCustomLabels());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setUseCustomLabels(result.getSelection());
+          _viewerSynthesisMain.refresh();
+          _viewerFeatures.refresh();
+          _viewerValuesLeft.refresh();
+          _viewerValuesRight.refresh();
+        }
+      }
+    });
+    return result;
+  }
+  
+  /**
    * Create the "Use technical representation" item in the given context and return it
    * @param context_p a non-null object
    * @return result a potentially null item
@@ -2242,7 +2283,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
               public void run() {
                 firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
                 refresh();
-                refreshTools();
               }
             });
             return Status.OK_STATUS;
@@ -2392,6 +2432,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void setupMenuSynthesisMisc(Menu synthesisMenu_p) {
     createItemUseCustomIcons(synthesisMenu_p);
+    createItemUseCustomLabels(synthesisMenu_p);
     createItemShowDifferenceNumbers(synthesisMenu_p);
     createItemShowImpact(synthesisMenu_p);
     new MenuItem(synthesisMenu_p, SWT.SEPARATOR);

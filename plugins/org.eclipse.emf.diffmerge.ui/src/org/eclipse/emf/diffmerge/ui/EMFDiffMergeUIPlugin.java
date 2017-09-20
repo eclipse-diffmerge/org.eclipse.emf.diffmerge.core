@@ -249,10 +249,9 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
         result = "<- "; break; //$NON-NLS-1$
       case CONFLICT:
         result = "! "; break; //$NON-NLS-1$
-      case FROM_BOTH:
-        result = "<> "; break; //$NON-NLS-1$
       case MODIFIED:
-        result = ">< "; break; //$NON-NLS-1$
+      case FROM_BOTH:
+        result = "| "; break; //$NON-NLS-1$
       default:
         result = ""; break; //$NON-NLS-1$
     }
