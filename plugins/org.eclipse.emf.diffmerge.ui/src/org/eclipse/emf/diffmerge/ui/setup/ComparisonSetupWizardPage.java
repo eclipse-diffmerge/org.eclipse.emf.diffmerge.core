@@ -225,7 +225,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
    * @param parent_p a non-null composite
    */
   protected void createReferenceRoleSubsection(Composite parent_p) {
-    if (!_setup.isThreeWay()) {
+    if (_setup.getScopeDefinition(Role.TARGET).isEditableSettable() &&
+        _setup.getScopeDefinition(Role.REFERENCE).isEditableSettable()) {
       // Composite
       Composite composite = new Composite(parent_p, SWT.NONE);
       GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, true);
@@ -239,7 +240,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
       Label label = new Label(composite, SWT.NONE);
       label.setText(Messages.ComparisonSetupWizardPage_ReferenceRole);
       label.setToolTipText(Messages.ComparisonSetupWizardPage_ReferenceRoleTooltip);
-      // None
+      // Both
       final Button noneButton = new Button(composite, SWT.RADIO);
       noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
       noneButton.setSelection(_setup.getTwoWayReferenceRole() == null);
@@ -368,7 +369,9 @@ public class ComparisonSetupWizardPage extends WizardPage {
       public void propertyChange(PropertyChangeEvent event_p) {
         if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
           IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(role_p);
-          editableButton.setEnabled(!isAncestor && currentScopeDef.isEditableSettable());
+          Role targetRole = _setup.getTwoWayReferenceRole();
+          editableButton.setEnabled(!isAncestor && currentScopeDef.isEditableSettable() &&
+              (targetRole == null || targetRole.opposite() != role_p));
           editableButton.setSelection(currentScopeDef.isEditable());
         }
       }

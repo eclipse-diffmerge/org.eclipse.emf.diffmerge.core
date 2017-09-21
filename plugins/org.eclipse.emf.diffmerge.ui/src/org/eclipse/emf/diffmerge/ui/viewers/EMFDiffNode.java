@@ -161,8 +161,8 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _useCustomLabels = false;
     _isTargetEditionPossible = isLeftEditionPossible_p;
     _isReferenceEditionPossible = isRightEditionPossible_p;
-    _isTargetEditable = _isTargetEditionPossible;
-    _isReferenceEditable = _isReferenceEditionPossible;
+    _isTargetEditable = true;
+    _isReferenceEditable = true;
     _isTargetModified = false;
     _isReferenceModified = false;
     _isHideDifferenceNumbers = false;
