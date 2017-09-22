@@ -571,6 +571,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     EMFDiffNode result = new EMFDiffNode(
         comparison_p, getEditingDomain(), cc.isLeftEditable(), cc.isRightEditable());
     result.setReferenceRole(_comparisonMethod.getTwoWayReferenceRole());
+    result.setEditorInput(this);
     return result;
   }
   

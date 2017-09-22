@@ -122,10 +122,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
@@ -759,6 +756,20 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         restart();
+      }
+    });
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          boolean enable = false;
+          EMFDiffNode input = getInput();
+          if (input != null && !result.isDisposed())
+            enable = input.getEditorInput() != null;
+          result.setEnabled(enable);
+        }
       }
     });
     return result;
@@ -1592,24 +1603,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Return the editor input of the active editor, if of the expected type
-   * @return a potentially null editor input
-   */
-  protected EMFDiffMergeEditorInput getActiveEditorInput() {
-    EMFDiffMergeEditorInput result = null;
-    IWorkbenchPage page = getPage();
-    if (page != null) {
-      IEditorPart editor = page.getActiveEditor();
-      if (editor instanceof IReusableEditor) {
-        IEditorInput editorInput = editor.getEditorInput();
-        if (editorInput instanceof EMFDiffMergeEditorInput)
-          result = (EMFDiffMergeEditorInput)editorInput;
-      }
-    }
-    return result;
-  }
-  
-  /**
    * Return the default respective weights of the columns (sashes) of the GUI
    * @return an int array whose size is equal to the number of columns
    */
@@ -2244,9 +2237,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Restart the comparison via a GUI
    */
   protected void restart() {
-    final EMFDiffMergeEditorInput editorInput = getActiveEditorInput();
     final EMFDiffNode input = getInput();
-    if (editorInput != null && input != null) {
+    IEditorInput rawEditorInput = input == null? null: input.getEditorInput();
+    if (input != null && rawEditorInput instanceof EMFDiffMergeEditorInput) {
+      final EMFDiffMergeEditorInput editorInput = (EMFDiffMergeEditorInput)rawEditorInput;
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       boolean confirmed = manager.updateEditorInputWithUI(getShell(), editorInput);
       if (confirmed) {
