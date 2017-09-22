@@ -26,13 +26,15 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin;
+import org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 
 
 /**
  * A URI Converter for file revisions in the local history.
  */
-public class LocalHistoryURIConverter extends ExtensibleURIConverterImpl {
+public class LocalHistoryURIConverter extends ExtensibleURIConverterImpl
+implements ITimestampProvider {
   
   /** The time stamp of the revision, >= 0 */
   private final long _timestamp;
@@ -88,11 +90,11 @@ public class LocalHistoryURIConverter extends ExtensibleURIConverterImpl {
 	  return _basePath;
 	}
 	
-  /**
-   * Return the time stamp of the revision
-   * @return a positive long
-   */
+	/**
+	 * @see org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider#getTimestamp()
+	 */
   public long getTimestamp() {
+    // The time stamp of the revision, >= 0
     return _timestamp;
   }
   

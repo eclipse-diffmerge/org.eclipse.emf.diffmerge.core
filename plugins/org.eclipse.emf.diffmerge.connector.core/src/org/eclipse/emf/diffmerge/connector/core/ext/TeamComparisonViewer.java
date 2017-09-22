@@ -31,6 +31,8 @@ import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider;
 import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -116,6 +118,28 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   }
   
   /**
+   * Set the orientation parameters of the given comparison setup
+   * @param setup_p a non-null comparison setup
+   */
+  protected void configureOrientation(ComparisonSetup setup_p) {
+    // Check order and orientation
+    if (isLaterOnTheRight()) {
+      if (!laterMayBeOnTheRight(setup_p)) {
+        // Invert left and right
+        setup_p.swapScopeDefinitions(Role.REFERENCE, Role.TARGET);
+        if (_configuration != null) {
+          // Ensure consistency with text comparison
+          _configuration.setProperty(CompareConfiguration.MIRRORED, Boolean.TRUE);
+        }
+      }
+    }
+    Role defaultLeft = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    setup_p.setTwoWayReferenceRole(defaultLeft.opposite()); // The default remote side in Eclipse
+    setup_p.setCanChangeTwoWayReferenceRole(false);
+    setup_p.setCanSwapScopeDefinitions(false);
+  }
+  
+  /**
    * Create and return the control of this viewer in the context of the given parent composite
    * @param parent_p a non-null composite
    * @return a non-null control
@@ -154,19 +178,8 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       ComparisonSetupManager manager_p, Object left_p, Object right_p,
       Object ancestor_p) {
     EMFDiffMergeEditorInput result = null;
-    ComparisonSetup setup = manager_p.createComparisonSetup(left_p, right_p,
-        ancestor_p);
+    ComparisonSetup setup = createSetup(manager_p, left_p, right_p, ancestor_p);
     if (setup != null) {
-      setup.setTwoWayReferenceRole(Role.REFERENCE);
-      setup.setCanChangeTwoWayReferenceRole(false);
-      setup.setCanSwapScopeDefinitions(false);
-      if (setup.getSelectedFactory() == null) {
-        // Setting the comparison method factory if obvious
-        if (setup.getApplicableComparisonMethodFactories().size() == 1) {
-          setup.setSelectedFactory(
-              setup.getApplicableComparisonMethodFactories().iterator().next());
-        }
-      }
       IComparisonMethod method = setup.getComparisonMethod();
       if (method != null) {
         if (method.isConfigurable()) {
@@ -180,6 +193,37 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     if (result == null)
       result = manager_p.createEditorInputWithUI(getShell(), setup);
     return result;
+  }
+  
+  /**
+   * Create and return a comparison setup input from the given setup manager and
+   * the given entry points
+   * @param manager_p a non null comparison manager
+   * @param left_p the left side model
+   * @param right_p the right side model
+   * @param ancestor_p the ancestor side model
+   * @return a compare input or null
+   */
+  protected ComparisonSetup createSetup(ComparisonSetupManager manager_p,
+      Object left_p, Object right_p, Object ancestor_p) {
+    Object actualAncestor;
+    if (right_p != null && right_p.equals(ancestor_p))
+      actualAncestor = null; // Use a two-way reference role instead
+    else
+      actualAncestor = ancestor_p;
+    ComparisonSetup setup = manager_p.createComparisonSetup(left_p, right_p, actualAncestor);
+    if (setup != null) {
+      configureOrientation(setup);
+      if (setup.getSelectedFactory() == null) {
+        // Setting the comparison method factory if obvious
+        if (setup.getApplicableComparisonMethodFactories().size() == 1) {
+          setup.setSelectedFactory(
+              setup.getApplicableComparisonMethodFactories().iterator().next());
+        }
+      }
+      setup.performFinish(false);
+    }
+    return setup;
   }
   
   /**
@@ -215,6 +259,83 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   }
   
   /**
+   * Handle the given compare input as viewer input
+   * @param input_p a non-null compare input
+   */
+  protected void handleCompareInput(ICompareInput input_p) {
+    // Requires preliminary work
+    Object left = input_p.getLeft();
+    Object right = input_p.getRight();
+    Object ancestor = input_p.getAncestor();
+    // Prompt user for comparison method
+    ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
+    try {
+      EMFDiffMergeEditorInput editorInput = createEditorInput(manager, left, right, ancestor);
+      if (editorInput != null) {
+        // Not failed/cancelled
+        if (_configuration != null) {
+          // Register container for action bars
+          ICompareContainer compareContainer = _configuration.getContainer();
+          if (compareContainer != null)
+            editorInput.setContainer(compareContainer);
+        }
+        try {
+          // Compute comparison
+          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+          dialog.run(true, true, editorInput);
+        } catch (InvocationTargetException e) {
+          EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
+        } catch (InterruptedException e) {
+          EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
+        }
+        handleComputedEditorInput(editorInput);
+      }
+    } catch (IllegalArgumentException e) {
+      manager.handleSetupError(getShell(), e.getLocalizedMessage());
+    }
+  }
+  
+  /**
+   * Handle the given editor input that has been computed to provide a comparison
+   * @param editorInput_p a non-null editor input
+   */
+  protected void handleComputedEditorInput(EMFDiffMergeEditorInput editorInput_p) {
+    EMFDiffNode compareResult = editorInput_p.getCompareResult();
+    if (compareResult != null) {
+      // Success: remove previous viewer, create new viewer and set the input
+      if (_innerViewer != null) {
+        Control innerControl = _innerViewer.getControl();
+        if (innerControl != null && !innerControl.isDisposed())
+          innerControl.dispose();
+      }
+      Control contents = editorInput_p.createContents(_control);
+      GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+      contents.setLayoutData(layoutData);
+      _innerViewer = editorInput_p.getViewer();
+      _control.pack();
+      _control.getParent().layout();
+      // Register pending listeners
+      for (IPropertyChangeListener listener : _pendingListeners) {
+        _innerViewer.addPropertyChangeListener(listener);
+      }
+      _pendingListeners.clear();
+    } else {
+      // Failure (no diff): close the viewer and open a dialog
+      _innerViewer = null;
+      String message = editorInput_p.getMessage();
+      if (message == null || message.length() == 0) {
+        MessageDialog.openInformation(getShell(),
+            Messages.TeamComparisonViewer_NoDiff_Title,
+            Messages.TeamComparisonViewer_NoDiff_Message);
+      } else {
+        MessageDialog.openError(
+            getShell(), Messages.TeamComparisonViewer_NoDiff_Title, message);
+      }
+      closeEditor();
+    }
+  }
+  
+  /**
    * Return the shell of the graphical context
    * @return a non-null shell
    */
@@ -230,6 +351,37 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     _pendingListeners.clear();
     _innerViewer = null;
     _input = null;
+  }
+  
+  /**
+   * Return whether the more recent of the compared objects must be on the right-hand side
+   */
+  protected boolean isLaterOnTheRight() {
+    return false;
+  }
+  
+  /**
+   * Return whether the more recent of the compared objects is on the right-hand side
+   * in the given setup or if it is unknown
+   * @param setup_p a non-null setup
+   */
+  protected boolean laterMayBeOnTheRight(ComparisonSetup setup_p) {
+    Role defaultLeft = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    IModelScopeDefinition leftScopeDef = setup_p.getScopeDefinition(defaultLeft);
+    IModelScopeDefinition rightScopeDef = setup_p.getScopeDefinition(defaultLeft.opposite());
+    long leftTimestamp = leftScopeDef instanceof ITimestampProvider?
+        ((ITimestampProvider)leftScopeDef).getTimestamp(): -1;
+    long rightTimestamp = rightScopeDef instanceof ITimestampProvider?
+        ((ITimestampProvider)rightScopeDef).getTimestamp(): -1;
+    boolean result = true;
+    if (leftTimestamp >= 0) {
+      // Left is known
+      result = rightTimestamp > leftTimestamp;
+    } else {
+      // Left is unknown: considered later than right if right is known
+      result = rightTimestamp < 0;
+    }
+    return result;
   }
   
   /**
@@ -323,73 +475,10 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       if (_innerViewer != null)
         _innerViewer.setInput(input_p);
     } else if (input_p instanceof ICompareInput) {
-      // Requires preliminary work
-      Object left = ((ICompareInput) input_p).getLeft();
-      Object right = ((ICompareInput) input_p).getRight();
-      Object ancestor = ((ICompareInput) input_p).getAncestor();
-      if (right != null && right.equals(ancestor))
-        ancestor = null; // Just use REFERENCE as two-way reference role
-      // Prompt user for comparison method
-      ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
-      try {
-        EMFDiffMergeEditorInput editorInput = createEditorInput(manager, left, right, ancestor);
-        if (editorInput != null) {
-          // Not failed/cancelled
-          if (_configuration != null) {
-            // Register container for action bars
-            ICompareContainer compareContainer = _configuration.getContainer();
-            if (compareContainer != null)
-              editorInput.setContainer(compareContainer);
-          }
-          try {
-            // Compute comparison
-            ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-            dialog.run(true, true, editorInput);
-          } catch (InvocationTargetException e) {
-            EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
-          } catch (InterruptedException e) {
-            EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
-          }
-          EMFDiffNode compareResult = editorInput.getCompareResult();
-          if (compareResult != null) {
-            // Success: remove previous viewer, create new viewer and set the input
-            if (_innerViewer != null) {
-              Control innerControl = _innerViewer.getControl();
-              if (innerControl != null && !innerControl.isDisposed())
-                innerControl.dispose();
-            }
-            Control contents = editorInput.createContents(_control);
-            GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-            contents.setLayoutData(layoutData);
-            _innerViewer = editorInput.getViewer();
-            _control.pack();
-            _control.getParent().layout();
-            // Register pending listeners
-            for (IPropertyChangeListener listener : _pendingListeners) {
-              _innerViewer.addPropertyChangeListener(listener);
-            }
-            _pendingListeners.clear();
-          } else {
-            // Failure (no diff): close the viewer and open a dialog
-            _innerViewer = null;
-            String message = editorInput.getMessage();
-            if (message == null || message.length() == 0) {
-              MessageDialog.openInformation(getShell(),
-                  Messages.TeamComparisonViewer_NoDiff_Title,
-                  Messages.TeamComparisonViewer_NoDiff_Message);
-            } else {
-              MessageDialog.openError(
-                  getShell(), Messages.TeamComparisonViewer_NoDiff_Title, message);
-            }
-            closeEditor();
-          }
-        }
-      } catch (IllegalArgumentException e) {
-        manager.handleSetupError(getShell(), e.getLocalizedMessage());
-      }
+      handleCompareInput((ICompareInput)input_p);
     }
   }
-
+  
   /**
    * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
    */

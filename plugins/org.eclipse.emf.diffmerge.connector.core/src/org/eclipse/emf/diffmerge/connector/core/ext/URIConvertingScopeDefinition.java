@@ -17,6 +17,7 @@ import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -26,7 +27,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
  * A model scope definition that wraps a regular model scope definition and alters
  * its behavior through a given URI Converter.
  */
-public class URIConvertingScopeDefinition implements IModelScopeDefinition {
+public class URIConvertingScopeDefinition implements IModelScopeDefinition,
+ITimestampProvider {
   
   /** The non-null wrapped model scope definition */
   protected final IModelScopeDefinition _wrapped;
@@ -98,6 +100,16 @@ public class URIConvertingScopeDefinition implements IModelScopeDefinition {
    */
   public String getShortLabel() {
     return _wrapped.getShortLabel();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider#getTimestamp()
+   */
+  public long getTimestamp() {
+    long result = -1;
+    if (_uriConverter instanceof ITimestampProvider)
+      result = ((ITimestampProvider)_uriConverter).getTimestamp();
+    return result;
   }
   
   /**

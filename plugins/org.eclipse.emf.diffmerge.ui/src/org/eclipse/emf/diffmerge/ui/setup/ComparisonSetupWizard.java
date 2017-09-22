@@ -59,7 +59,7 @@ public class ComparisonSetupWizard extends Wizard {
    */
   @Override
   public boolean performFinish() {
-    _setup.performFinish();
+    _setup.performFinish(true);
     return true;
   }
   

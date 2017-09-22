@@ -197,11 +197,13 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   
   /**
    * Update the current comparison method with all available information
+   * @param remember_p whether the configuration of this setup must be remembered.
+   *          It affects the behavior of setSelectedFactoryToLast().
    */
-  public void performFinish() {
+  public void performFinish(boolean remember_p) {
     if (_comparisonMethod != null) {
       IComparisonMethodFactory selectedFactory = getSelectedFactory();
-      if (selectedFactory != null)
+      if (remember_p && selectedFactory != null)
         __lastComparisonMethodFactory = selectedFactory;
       if (!isThreeWay())
         _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
