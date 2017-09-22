@@ -30,6 +30,8 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -151,15 +153,33 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   protected EMFDiffMergeEditorInput createEditorInput(
       ComparisonSetupManager manager_p, Object left_p, Object right_p,
       Object ancestor_p) {
-    // Prompt user for comparison method
+    EMFDiffMergeEditorInput result = null;
     ComparisonSetup setup = manager_p.createComparisonSetup(left_p, right_p,
         ancestor_p);
     if (setup != null) {
       setup.setTwoWayReferenceRole(Role.REFERENCE);
       setup.setCanChangeTwoWayReferenceRole(false);
       setup.setCanSwapScopeDefinitions(false);
+      if (setup.getSelectedFactory() == null) {
+        // Setting the comparison method factory if obvious
+        if (setup.getApplicableComparisonMethodFactories().size() == 1) {
+          setup.setSelectedFactory(
+              setup.getApplicableComparisonMethodFactories().iterator().next());
+        }
+      }
+      IComparisonMethod method = setup.getComparisonMethod();
+      if (method != null) {
+        if (method.isConfigurable()) {
+          // Setting comparison method to gconf configuration if applicable
+          ConfigurableComparisonMethod.CONFIGURATOR_VERSIONS.apply(
+              setup.getComparisonMethod());
+        }
+        result = new EMFDiffMergeEditorInput(method);
+      }
     }
-    return manager_p.createEditorInputWithUI(getShell(), setup);
+    if (result == null)
+      result = manager_p.createEditorInputWithUI(getShell(), setup);
+    return result;
   }
   
   /**

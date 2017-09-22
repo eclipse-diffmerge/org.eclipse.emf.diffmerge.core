@@ -130,7 +130,8 @@ public class ComparisonSetupManager {
    * @param shell_p a non-null shell
    * @param setup_p a comparison setup or null if none could be computed
    */
-  public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p, ComparisonSetup setup_p) {
+  public EMFDiffMergeEditorInput createEditorInputWithUI(Shell shell_p,
+      ComparisonSetup setup_p) {
     EMFDiffMergeEditorInput result = null;
     if (setup_p != null) {
       IComparisonMethod method = openSetupWizard(shell_p, setup_p);
