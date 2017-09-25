@@ -133,7 +133,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
         }
       }
     }
-    Role defaultLeft = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    Role defaultLeft = getLeftRole();
     setup_p.setTwoWayReferenceRole(defaultLeft.opposite()); // The default remote side in Eclipse
     setup_p.setCanChangeTwoWayReferenceRole(false);
     setup_p.setCanSwapScopeDefinitions(false);
@@ -248,6 +248,20 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   @Override
   public Object getInput() {
     return _input;
+  }
+  
+  /**
+   * Return the role for the left-hand side
+   * @return a role which is TARGET or REFERENCE
+   */
+  protected Role getLeftRole() {
+    Role result = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    if (_configuration != null) {
+      Object mirrored = _configuration.getProperty(CompareConfiguration.MIRRORED);
+      if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue())
+        result = result.opposite();
+    }
+    return result;
   }
   
   /**
@@ -366,7 +380,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * @param setup_p a non-null setup
    */
   protected boolean laterMayBeOnTheRight(ComparisonSetup setup_p) {
-    Role defaultLeft = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    Role defaultLeft = getLeftRole();
     IModelScopeDefinition leftScopeDef = setup_p.getScopeDefinition(defaultLeft);
     IModelScopeDefinition rightScopeDef = setup_p.getScopeDefinition(defaultLeft.opposite());
     long leftTimestamp = leftScopeDef instanceof ITimestampProvider?

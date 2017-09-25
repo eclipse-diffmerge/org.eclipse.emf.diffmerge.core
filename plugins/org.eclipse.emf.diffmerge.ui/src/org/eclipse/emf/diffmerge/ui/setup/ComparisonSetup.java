@@ -271,13 +271,12 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
       oppositeRoleDef.setEditable(false);
     } else {
       // No reference role defined
-      Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
-      IModelScopeDefinition leftRoleDef = getScopeDefinition(leftRole);
-      IModelScopeDefinition rightRoleDef = getScopeDefinition(leftRole.opposite());
-      if (leftRoleDef.isEditableSettable())
-        leftRoleDef.setEditable(true);
-      if (rightRoleDef.isEditableSettable())
-        rightRoleDef.setEditable(true);
+      IModelScopeDefinition targetRoleDef = getScopeDefinition(Role.TARGET);
+      if (targetRoleDef.isEditableSettable())
+        targetRoleDef.setEditable(true);
+      IModelScopeDefinition referenceRoleDef = getScopeDefinition(Role.REFERENCE);
+      if (referenceRoleDef.isEditableSettable())
+        referenceRoleDef.setEditable(true);
     }
     notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
   }
