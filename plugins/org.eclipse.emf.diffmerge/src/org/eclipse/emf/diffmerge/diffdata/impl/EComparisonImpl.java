@@ -235,9 +235,9 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
   protected EComparisonImpl() {
     super();
     Map<Role, Set<Object>> duplicateIDs = new HashMap<Role, Set<Object>>(3);
-    duplicateIDs.put(Role.ANCESTOR, new HashSet<Object>(0));
-    duplicateIDs.put(Role.TARGET, new HashSet<Object>(0));
-    duplicateIDs.put(Role.REFERENCE, new HashSet<Object>(0));
+    for (Role role : Role.values()) {
+      duplicateIDs.put(role, new HashSet<Object>(0));
+    }
     _duplicateIDs = Collections.unmodifiableMap(duplicateIDs);
   }
 
@@ -646,6 +646,9 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
     setLastMatchPolicy(null);
     setLastDiffPolicy(null);
     setLastMergePolicy(null);
+    for (Role role : Role.values()) {
+      _duplicateIDs.get(role).clear();
+    }
   }
 
   /**

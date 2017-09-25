@@ -2280,6 +2280,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                 refresh();
               }
             });
+            editorInput.checkInconsistency(input.getActualComparison());
             return Status.OK_STATUS;
           }
         };

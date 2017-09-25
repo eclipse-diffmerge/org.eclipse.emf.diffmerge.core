@@ -159,6 +159,16 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
+   * Ensure that appropriate actions are taken in the case where the given comparison
+   * is not consistent
+   * @param comparison_p a potentially null comparison
+   */
+  public void checkInconsistency(EComparison comparison_p) {
+    if (comparison_p != null && !comparison_p.isConsistent())
+      handleInconsistency(comparison_p);
+  }
+  
+  /**
    * Ensure that the selection provider of the workbench site is the intended one
    */
   protected void checkSelectionProvider() {
@@ -675,8 +685,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
       EComparison comparison = initializeComparison();
       comparison.compute(_comparisonMethod.getMatchPolicy(), _comparisonMethod.getDiffPolicy(),
           _comparisonMethod.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
-      if (!comparison.isConsistent())
-        handleInconsistency(comparison);
+      checkInconsistency(comparison);
       _foundDifferences = comparison.hasRemainingDifferences();
       if (_foundDifferences)
         result = initializeDiffNode(comparison);
