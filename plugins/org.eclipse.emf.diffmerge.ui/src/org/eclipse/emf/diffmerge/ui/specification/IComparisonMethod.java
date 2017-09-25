@@ -111,6 +111,11 @@ IEditingDomainProvider, IDisposable {
   boolean isThreeWay();
   
   /**
+   * Return whether this comparison method provides additional information to the end-user
+   */
+  boolean isVerbose();
+  
+  /**
    * Set the editing domain in which comparison must take place.
    * If null and the comparison method does not have the ability to create
    * its own editing domain, then undo/redo operations will not be available.
@@ -128,6 +133,12 @@ IEditingDomainProvider, IDisposable {
    * @param role_p TARGET, REFERENCE, or null
    */
   void setTwoWayReferenceRole(Role role_p);
+  
+  /**
+   * Set whether this comparison method may provide additional information to the end-user
+   * @param verbose_p whether additional information may be provided
+   */
+  void setVerbose(boolean verbose_p);
   
   /**
    * Swap the scope definitions that play the given roles

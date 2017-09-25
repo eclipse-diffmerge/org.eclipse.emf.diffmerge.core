@@ -2245,6 +2245,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       boolean confirmed = manager.updateEditorInputWithUI(getShell(), editorInput);
       if (confirmed) {
         final IComparisonMethod method = editorInput.getComparisonMethod();
+        method.setVerbose(false);
         Job job = new Job(Messages.ComparisonViewer_RestartInProgress) {
           /**
            * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)

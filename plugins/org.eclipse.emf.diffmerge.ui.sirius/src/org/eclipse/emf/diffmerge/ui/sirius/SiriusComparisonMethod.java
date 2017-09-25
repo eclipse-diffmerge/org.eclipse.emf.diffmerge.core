@@ -163,7 +163,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   @Override
   protected EditingDomain doGetEditingDomain() {
     EditingDomain result = checkSessions();
-    if (result == null)
+    if (result == null && isVerbose())
       showNoEditingDomainWarning();
     return result;
   }

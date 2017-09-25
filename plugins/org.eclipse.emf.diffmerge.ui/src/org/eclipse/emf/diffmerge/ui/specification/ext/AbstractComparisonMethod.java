@@ -63,6 +63,9 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   is entirely dedicated to the comparison */
   protected boolean _isDedicatedEditingDomain;
   
+  /** Whether this comparison method may provide additional information to the end-user */
+  private boolean _verbose;
+  
   
   /**
    * Constructor
@@ -72,6 +75,7 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
     _isDedicatedEditingDomain = false;
     _initialized = false;
     _factory = null;
+    _verbose = true;
   }
   
   /**
@@ -269,6 +273,13 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isVerbose()
+   */
+  public boolean isVerbose() {
+    return _verbose;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setEditingDomain(org.eclipse.emf.edit.domain.EditingDomain, boolean)
    */
   public void setEditingDomain(EditingDomain domain_p, boolean dedicated_p) {
@@ -280,6 +291,13 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
       _isDedicatedEditingDomain = false;
       _initialized = false;
     }
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setVerbose(boolean)
+   */
+  public void setVerbose(boolean verbose_p) {
+    _verbose = verbose_p;
   }
   
 }
