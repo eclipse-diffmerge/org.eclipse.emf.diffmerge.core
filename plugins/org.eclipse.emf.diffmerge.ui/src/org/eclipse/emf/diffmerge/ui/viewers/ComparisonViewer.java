@@ -23,6 +23,7 @@ import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemCreate;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemGetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetText;
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetToolTipText;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.Set;
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -63,6 +65,7 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
+import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
@@ -464,6 +467,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         Messages.ComparisonViewer_FilterToolTip:
           Messages.ComparisonViewer_FilterText;
     itemSetText(result, text);
+    itemSetToolTipText(result, Messages.ComparisonViewer_EnhancedFilterToolTip);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.FILTER));
     itemSetSelection(result, false);
@@ -620,6 +624,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemLogEvents(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_LogEventsMenuItem);
+    String tooltip = Messages.ComparisonViewer_LogTooltipNoFile;
+    Logger logger = getLogger();
+    if (logger instanceof DiffMergeLogger) {
+      IPath logFile = ((DiffMergeLogger)logger).getLogFile();
+      tooltip = String.format(Messages.ComparisonViewer_LogTooltipFile, logFile.toOSString());
+    }
+    result.setToolTipText(tooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -748,6 +759,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemRestart(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.PUSH);
     result.setText(Messages.ComparisonViewer_ToolUpdate);
+    result.setToolTipText(Messages.ComparisonViewer_ToolUpdate_Tooltip);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.UPDATE));
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -776,13 +788,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Create the "show all values" item in the given context and return it
+   * Create the "show all values and properties" item in the given context and return it
    * @param context_p a non-null object
    * @return result a potentially null item
    */
   protected Item createItemShowAllFeatures(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
     result.setText(Messages.ComparisonViewer_ShowAllFeatures);
+    result.setToolTipText(Messages.ComparisonViewer_ShowAllFeaturesTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -805,6 +818,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemShowAllValues(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
     result.setText(Messages.ComparisonViewer_ShowAllValues);
+    result.setToolTipText(Messages.ComparisonViewer_ShowAllValuesTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -827,6 +841,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemShowDifferenceNumbers(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_ShowDifferenceNumbersMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_ShowDifferenceNumbersTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -866,6 +881,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemShowDiffValues(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
     result.setText(Messages.ComparisonViewer_ShowValueDiffs);
+    result.setToolTipText(Messages.ComparisonViewer_ShowValueDiffsTooltip);
     result.setSelection(true);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -889,6 +905,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemShowImpact(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_ImpactMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_ImpactMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -928,6 +945,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemShowUncounted(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_ShowUncountedMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_ShowUncountedMenuItemTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -951,6 +969,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemSupportUndoRedo(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_SupportUndoRedoMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_SupportUndoRedoMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -991,6 +1010,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.SORT));
     result.setText(Messages.ComparisonViewer_SortTooltip);
+    result.setToolTipText(Messages.ComparisonViewer_EnhancedSortTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -1016,6 +1036,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.SYNCED));
     result.setText(Messages.ComparisonViewer_LinkViewsTooltip);
+    result.setToolTipText(Messages.ComparisonViewer_EnhancedLinkViewsTooltip);
     result.setSelection(_isLeftRightSynced);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -1050,6 +1071,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemUseCustomIcons(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_IconsMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_IconsMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -1091,6 +1113,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemUseCustomLabels(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_LabelsMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_LabelsMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -1132,6 +1155,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemUseTechnicalRepresentation(Menu context_p) {
       final MenuItem result = new MenuItem(context_p, SWT.CHECK);
       result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
+      result.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
       result.addSelectionListener(new SelectionAdapter() {
         /**
          * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)

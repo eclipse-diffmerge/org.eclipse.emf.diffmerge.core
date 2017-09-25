@@ -314,7 +314,8 @@ public final class UIUtil {
   }
   
   /**
-   * Set the text of the given tool/menu item
+   * Set the text of the given tool/menu item. If a tool item,
+   * then the tool tip is affected instead.
    * @param item_p a non-null tool item or menu item
    * @param text_p a potentially null string
    */
@@ -324,6 +325,19 @@ public final class UIUtil {
       ((ToolItem)item_p).setToolTipText(text_p);
     } else {
       ((MenuItem)item_p).setText(text_p);
+    }
+  }
+  
+  /**
+   * Set the tool tip text of the given tool/menu item. If a tool item,
+   * then this operation has no impact - use itemSetText instead.
+   * @param item_p a non-null tool item or menu item
+   * @param tooltip_p a potentially null string
+   */
+  public static void itemSetToolTipText(Item item_p, String tooltip_p) {
+    assert item_p instanceof ToolItem || item_p instanceof MenuItem;
+    if (item_p instanceof MenuItem) {
+      ((MenuItem)item_p).setToolTipText(tooltip_p);
     }
   }
   
