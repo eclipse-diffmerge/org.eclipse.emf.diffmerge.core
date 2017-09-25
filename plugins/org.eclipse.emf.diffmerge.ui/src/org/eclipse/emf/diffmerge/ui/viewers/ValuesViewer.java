@@ -500,8 +500,7 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
     public Color getForeground(Object element_p) {
       DifferenceColorKind result;
       if (showAsDifference(element_p)) {
-        result = (getSideRole() == getInput().getContext().getDrivingRole())?
-            DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT;
+        result = isLeftSide()? DifferenceColorKind.LEFT: DifferenceColorKind.RIGHT;
       } else {
         result = DifferenceColorKind.DEFAULT;
       }
