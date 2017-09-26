@@ -100,8 +100,12 @@ public class SiriusScope extends GMFScope {
    */
   @Override
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
+    boolean isDescriptorToRepresentation =
+        reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE;
+    if (isDescriptorToRepresentation)
+      add(value_p);
     boolean result = super.add(source_p, reference_p, value_p);
-    if (reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE) {
+    if (result && isDescriptorToRepresentation) {
       DRepresentationDescriptor descriptor = (DRepresentationDescriptor)source_p;
       String uid = getReferencedUID(descriptor);
       _idToDescriptor.put(uid, descriptor);
