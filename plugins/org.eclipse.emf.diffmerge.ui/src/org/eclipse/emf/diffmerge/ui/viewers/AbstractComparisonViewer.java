@@ -181,6 +181,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     try {
       MiscUtil.executeWithProgress(domain, null, behavior_p, recordChanges);
     } catch (Exception e) {
+      e.printStackTrace();
       throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
     }
   }

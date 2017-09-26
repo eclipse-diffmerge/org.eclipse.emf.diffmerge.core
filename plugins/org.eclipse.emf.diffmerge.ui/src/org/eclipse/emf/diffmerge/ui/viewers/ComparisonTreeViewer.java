@@ -18,12 +18,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
+import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IPureMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.Messages;
@@ -479,6 +482,18 @@ public class ComparisonTreeViewer extends TreeViewer {
     }
     
     /**
+     * Return the match policy that was used for the current comparison, if any
+     * @return a potentially null match policy
+     */
+    private IMatchPolicy getMatchPolicy() {
+      IMatchPolicy result = null;
+      IComparison comparison = getInput().getActualComparison();
+      if (comparison != null)
+        result = comparison.getLastMatchPolicy();
+      return result;
+    }
+    
+    /**
      * Return a font for the given tree path
      * @param path_p a non-null path
      * @return a potentially null font
@@ -549,11 +564,26 @@ public class ComparisonTreeViewer extends TreeViewer {
     public String getToolTipText(Object element_p) {
       String result = null;
       if (element_p instanceof IPureMatch) {
+        IMatchPolicy policy = getMatchPolicy();
         Object matchID = ((IPureMatch)element_p).getMatchID();
+        String matchIDText = null;
         if (matchID != null) {
-          String matchIDText = matchID.toString();
-          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
+          matchIDText = matchID.toString();
+          // Trying to refine based on separators
+          if (policy instanceof ConfigurableMatchPolicy) {
+            ConfigurableMatchPolicy cPolicy = (ConfigurableMatchPolicy)policy;
+            for (String separator : cPolicy.getSeparators()) {
+              final String outPattern = Matcher.quoteReplacement('\n' + separator + ' ');
+              matchIDText = matchIDText.replaceAll(separator, outPattern);
+            }
+          }
+        } else {
+          // MatchID is null
+          if (policy != null && policy.keepMatchIDs())
+            matchIDText = Messages.ComparisonTreeViewer_NoMatchID;
         }
+        if (matchIDText != null)
+          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
       }
       return result;
     }

@@ -141,9 +141,11 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
         List<EObject> values = scope.get(view_p, NotationPackage.eINSTANCE.getView_Element());
         if (values.size() == 1) {
           // Represented element is present
-          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT))
+          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
             result = getViewElementBasedSemanticID(
                 view_p, scope_p, values.get(0), viewType);
+            System.out.println();
+          }
         } else {
           // Represented element is absent
           if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))

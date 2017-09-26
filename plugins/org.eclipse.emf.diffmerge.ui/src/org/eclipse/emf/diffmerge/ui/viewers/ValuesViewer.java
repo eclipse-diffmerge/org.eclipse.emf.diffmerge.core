@@ -365,39 +365,35 @@ public class ValuesViewer extends TableViewer implements IComparisonSideViewer, 
         // Only show values if no containment
         if (!valuesInput.isContainment()) {
           if (isDifferenceAgnostic()) {
-            // All values
-            if (maf.getFeature() instanceof EAttribute) {
-              // All attribute values
-              EAttribute attribute = (EAttribute)maf.getFeature();
-              IComparison comparison = maf.getMatch().getMapping().getComparison();
-              IMatch match = maf.getMatch();
-              EObject source = match.get(getSideRole());
-              if (source != null) {
-                List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
-                for (Object value : values) {
-                  IAttributeValuePresence presence =
-                    match.getAttributeValueDifference(attribute, value);
-                  if (presence != null)
-                    result.add(presence);
-                  else
-                    result.add(value);
-                }
-              }
-            } else {
-              // All reference values
-              EReference reference = (EReference)maf.getFeature();
-              IComparison comparison = maf.getMatch().getMapping().getComparison();
-              IMatch match = maf.getMatch();
-              EObject source = match.get(getSideRole());
-              if (source != null) {
-                List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
-                for (EObject value : values) {
-                  IReferenceValuePresence presence =
-                      match.getReferenceValueDifference(reference, value);
-                  if (presence != null)
-                    result.add(presence);
-                  else
-                    result.add(value);
+            // All feature values
+            IMatch match = maf.getMatch();
+            EObject source = match.get(getSideRole());
+            if (source != null) {
+              IComparison comparison = getInput() == null? null:
+                getInput().getContext().getActualComparison();
+              if (comparison != null) {
+                if (maf.getFeature() instanceof EAttribute) {
+                  EAttribute attribute = (EAttribute)maf.getFeature();
+                  List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
+                  for (Object value : values) {
+                    IAttributeValuePresence presence =
+                        match.getAttributeValueDifference(attribute, value);
+                    if (presence != null)
+                      result.add(presence);
+                    else
+                      result.add(value);
+                  }
+                } else {
+                  EReference reference = (EReference)maf.getFeature();
+                  List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
+                  for (EObject value : values) {
+                    IReferenceValuePresence presence =
+                        match.getReferenceValueDifference(reference, value);
+                    if (presence != null)
+                      result.add(presence);
+                    else
+                      result.add(value);
+                  }
                 }
               }
             }

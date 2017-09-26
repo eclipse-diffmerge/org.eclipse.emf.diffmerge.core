@@ -99,7 +99,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
         }
       }
     } catch (RuntimeException e) {
-      // Proceed
+      e.printStackTrace();
     }
     return result;
   }

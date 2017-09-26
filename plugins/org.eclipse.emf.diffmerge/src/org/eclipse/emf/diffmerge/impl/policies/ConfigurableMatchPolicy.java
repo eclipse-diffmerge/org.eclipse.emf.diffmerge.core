@@ -437,6 +437,19 @@ implements IConfigurablePolicy {
   }
   
   /**
+   * Return the set of all separators used to build the match keys
+   * @return a non-null, potentially empty collection
+   */
+  public Collection<String> getSeparators() {
+    Set<String> result = new HashSet<String>();
+    result.add(getQualificationSeparatorDefault());
+    result.add(getQualificationSeparatorNames());
+    result.add(getQualificationSeparatorSemantics());
+    result.add(getQualificationSeparatorStructure());
+    return result;
+  }
+  
+  /**
    * Return the siblings of the given element from the given scope, including the element itself.
    * Siblings are defined as elements owned by the same setting if the element has a container,
    * as roots of the same scope/resource otherwise.
