@@ -14,6 +14,9 @@
  */
 package org.eclipse.emf.diffmerge.ui.sirius;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -25,16 +28,24 @@ import org.eclipse.swt.graphics.Image;
 
 
 /**
- * A difference category that covers merged differences.
+ * A difference category that covers technical Sirius differences.
  * @author Olivier Constant
  */
 public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategory {
   
+  /** The ID of this category */
+  public static final String ID = "Sirius.Technical"; //$NON-NLS-1$
+  
   /** The path to the Sirius file icon in the sirius.ui plug-in */
   protected static final String SIRIUS_ICON_PATH = "icons/obj16/SiriusFile.gif"; //$NON-NLS-1$
   
-  /** The ID of this category */
-  public static final String ID = "Sirius.Technical"; //$NON-NLS-1$
+  /** The path to the Sirius file icon in the sirius.ui plug-in */
+  protected static final Collection<EStructuralFeature> SIRIUS_TECHNICAL_FEATURES =
+      Arrays.<EStructuralFeature>asList(
+          ViewpointPackage.eINSTANCE.getDAnalysis_Version(),
+          ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources(),
+          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath(),
+          ViewpointPackage.eINSTANCE.getDRepresentation_Uid());
   
   
   /**
@@ -95,8 +106,7 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
    * @param feature_p a non-null structural feature
    */
   protected boolean isSiriusTechnicalFeature(EStructuralFeature feature_p) {
-    return feature_p == ViewpointPackage.eINSTANCE.getDAnalysis_Version() ||
-        feature_p == ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources();
+    return SIRIUS_TECHNICAL_FEATURES.contains(feature_p);
   }
   
 }

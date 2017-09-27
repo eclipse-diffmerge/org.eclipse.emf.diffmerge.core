@@ -129,29 +129,45 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   /**
    * Return a semantic ID for the given View
    * @param view_p a non-null view
-   * @param scope_p a non-null scope that covers element_p
+   * @param scope_p a non-null scope that covers view_p
    * @return a potentially null 
    */
   protected String getViewSemanticID(View view_p, IModelScope scope_p) {
     String result = null;
-    if (scope_p instanceof IFeaturedModelScope) {
-      IFeaturedModelScope scope = (IFeaturedModelScope)scope_p;
-      String viewType = view_p.getType();
-      if (viewType != null && !NON_SEMANTIC_VIEWTYPES.contains(viewType)) {
-        List<EObject> values = scope.get(view_p, NotationPackage.eINSTANCE.getView_Element());
-        if (values.size() == 1) {
-          // Represented element is present
-          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
-            result = getViewElementBasedSemanticID(
-                view_p, scope_p, values.get(0), viewType);
-            System.out.println();
-          }
-        } else {
-          // Represented element is absent
-          if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))
-            result = getViewTypeBasedSemanticID(view_p, scope_p, viewType);
+    String viewType = view_p.getType();
+    if (viewType != null && !NON_SEMANTIC_VIEWTYPES.contains(viewType)) {
+      EObject representedElement = getViewElement(view_p, scope_p);
+      if (representedElement != null) {
+        // Represented element is present
+        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
+          result = getViewElementBasedSemanticID(
+              view_p, scope_p, representedElement, viewType);
         }
+      } else {
+        // Represented element is absent
+        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))
+          result = getViewTypeBasedSemanticID(view_p, scope_p, viewType);
       }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the element represented by the given view, if any
+   * @param view_p a non-null view
+   * @param scope_p a non-null scope that covers view_p
+   * @return a potentially null element
+   */
+  protected EObject getViewElement(View view_p, IModelScope scope_p) {
+    EObject result = null;
+    final EReference VIEW_TO_ELEMENT = NotationPackage.eINSTANCE.getView_Element();
+    if (view_p.eIsSet(VIEW_TO_ELEMENT) && scope_p instanceof IFeaturedModelScope) {
+      IFeaturedModelScope scope = (IFeaturedModelScope)scope_p;
+      List<EObject> values = scope.get(view_p, VIEW_TO_ELEMENT);
+      if (values.size() == 1)
+        result = values.get(0);
+    } else {
+      result = view_p.getElement(); // May have value even if unset
     }
     return result;
   }

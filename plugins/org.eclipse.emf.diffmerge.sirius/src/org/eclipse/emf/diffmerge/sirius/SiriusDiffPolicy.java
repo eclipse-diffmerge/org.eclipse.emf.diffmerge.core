@@ -36,9 +36,6 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
  */
 public class SiriusDiffPolicy extends GMFDiffPolicy {
   
-  /** Separator */
-  private static final char SEGMENT_SEPARATOR = '/';
-  
   /**
    * The set of references whose order should be ignored (semantically
    * unordered references)
@@ -57,7 +54,6 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   private static final Collection<EStructuralFeature> UNSIGNIFICANT_FEATURES =
       Arrays.<EStructuralFeature>asList(
           ViewpointPackage.eINSTANCE.getDRepresentation_UiState(),
-          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath(),
           DiagramPackage.eINSTANCE.getDDiagram_HiddenElements());
   
   /** The set of features that cannot be ignored even through they are peculiar */
@@ -87,20 +83,8 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
       EAttribute attribute_p) {
     boolean result = super.considerEqual(value1_p, value2_p, attribute_p);
     if (!result && ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources() == attribute_p) {
-      // Get URI(s)
-      URI refURI = ((ResourceDescriptor) value1_p).getResourceURI();
-      URI trgtURI = ((ResourceDescriptor) value2_p).getResourceURI();
-      // Get the position of project name in URI segments
-      int positionInRefURI = getProjectPositionInURI(refURI);
-      int positionInTrgtURI = getProjectPositionInURI(trgtURI);
-      // Either make it relative or convert to string
-      String refURIStr = (positionInRefURI != -1)? 
-          makeRelativeToProject(refURI, positionInRefURI):
-            refURI.toString();
-      String trgtURIStr = (positionInTrgtURI != -1)?
-          makeRelativeToProject(trgtURI, positionInTrgtURI):
-            trgtURI.toString();
-      return refURIStr.equals(trgtURIStr);
+      result = equalResourceDescriptors(
+          (ResourceDescriptor)value1_p, (ResourceDescriptor)value2_p);
     }
     return result;
   }
@@ -145,40 +129,24 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
   
   /**
+   * Return whether the given Sirius ResourceDescriptors must be considered equal
+   * @param desc1_p a non-null object
+   * @param desc2_p a non-null object
+   */
+  protected boolean equalResourceDescriptors(ResourceDescriptor desc1_p,
+      ResourceDescriptor desc2_p) {
+    URI uri1 = desc1_p.getResourceURI();
+    URI uri2 = desc2_p.getResourceURI();
+    return (uri1 == null && uri2 == null) || (uri1 != null && uri1.equals(uri2));
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy#doConsiderOrdered(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override
   protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
     return super.doConsiderOrdered(feature_p)
         && !SEMANTICALLY_UNORDERED_REFERENCES.contains(feature_p);
-  }
-  
-  /**
-   * 
-   * @return The position of the segment which corresponds to the project name.
-   */
-  protected int getProjectPositionInURI(URI uri_p) {
-    if(uri_p.isPlatformResource()){
-      return 2;			
-    }
-    return -1;
-  }
-  
-  /**
-   * 
-   * @param uri_p The uri to make relative
-   * @param projectPositionInURI_p The position of the segment which corresponds to the project
-   *        name in the given uri
-   * 
-   * @return the relative uri as String
-   */
-  protected String makeRelativeToProject(URI uri_p, int projectPositionInURI_p) {
-    StringBuilder result = new StringBuilder();
-    for (int i = projectPositionInURI_p; i < uri_p.segments().length; i++) {
-      result.append(SEGMENT_SEPARATOR);
-      result.append(uri_p.segment(i));
-    }
-    return result.toString();
   }
   
 }
