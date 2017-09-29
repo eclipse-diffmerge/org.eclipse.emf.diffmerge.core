@@ -1215,7 +1215,7 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    */
   public boolean isAMove() {
     boolean result = false;
-    if (!isPartial()) {
+    if (!isPartial() && getElementPresenceDifference() == null) {
       IReferenceValuePresence onTarget = getOwnershipDifference(Role.TARGET);
       IReferenceValuePresence onReference = getOwnershipDifference(
           Role.REFERENCE);

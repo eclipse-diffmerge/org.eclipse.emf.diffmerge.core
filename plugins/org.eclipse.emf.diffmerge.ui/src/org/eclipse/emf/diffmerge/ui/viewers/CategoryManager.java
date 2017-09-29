@@ -637,7 +637,7 @@ public class CategoryManager {
    */
   public boolean isMove(IMatch match_p, boolean withFilters_p) {
     boolean result = false;
-    if (!match_p.isPartial()) {
+    if (!match_p.isPartial() && match_p.getElementPresenceDifference() == null) {
       IReferenceValuePresence onTarget = match_p.getOwnershipDifference(Role.TARGET);
       IReferenceValuePresence onReference = match_p.getOwnershipDifference(Role.REFERENCE);
       result = (onTarget != null && (!withFilters_p || !isFiltered(onTarget))) ||
