@@ -250,8 +250,10 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   public int size() {
     int result = 0;
     Iterator<EObject> it = getAllContents();
-    while (it.hasNext())
+    while (it.hasNext()) {
       result++;
+      it.next();
+    }
     return result;
   }
   
