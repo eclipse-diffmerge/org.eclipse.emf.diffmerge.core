@@ -60,6 +60,10 @@ import org.eclipse.ui.IWorkbenchWindow;
  */
 public class TeamComparisonViewer extends Viewer implements IFlushable, IPropertyChangeNotifier {
   
+  /** The CompareConfiguration "mirrored" property defined in Neon and later,
+   * explicit here for compatibility with older versions of Eclipse */
+  protected static final String MIRRORED = "MIRRORED"; //$NON-NLS-1$
+  
   /** The non-null control of the viewer */
   protected final Composite _control;
   
@@ -129,7 +133,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
         setup_p.swapScopeDefinitions(Role.REFERENCE, Role.TARGET);
         if (_configuration != null) {
           // Ensure consistency with text comparison
-          _configuration.setProperty(CompareConfiguration.MIRRORED, Boolean.TRUE);
+          _configuration.setProperty(MIRRORED, Boolean.TRUE);
         }
       }
     }
@@ -257,7 +261,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   protected Role getLeftRole() {
     Role result = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
     if (_configuration != null) {
-      Object mirrored = _configuration.getProperty(CompareConfiguration.MIRRORED);
+      Object mirrored = _configuration.getProperty(MIRRORED);
       if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue())
         result = result.opposite();
     }

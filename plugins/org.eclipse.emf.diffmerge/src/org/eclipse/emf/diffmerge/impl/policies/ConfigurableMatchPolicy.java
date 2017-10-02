@@ -455,6 +455,7 @@ implements IConfigurablePolicy {
    * as roots of the same scope/resource otherwise.
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p
+   * @return a non-null, potentially empty, unmodifiable collection
    */
   protected List<EObject> getSiblings(EObject element_p, IModelScope scope_p) {
     List<EObject> result;
