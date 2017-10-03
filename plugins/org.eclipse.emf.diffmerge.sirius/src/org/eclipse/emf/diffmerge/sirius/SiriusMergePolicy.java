@@ -40,7 +40,7 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    */
   @Override
   public boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p) {
-    return
+    return // Replace DResentationDescriptor::repPath by ::representation
         feature_p == ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation() ||
         feature_p != ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath() &&
         super.copyFeature(feature_p, scope_p);

@@ -24,6 +24,7 @@ import org.eclipse.sirius.diagram.EdgeStyle;
 import org.eclipse.sirius.diagram.NodeStyle;
 import org.eclipse.sirius.viewpoint.BasicLabelStyle;
 import org.eclipse.sirius.viewpoint.DAnalysis;
+import org.eclipse.sirius.viewpoint.DAnalysisCustomData;
 import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.DRepresentationElement;
 import org.eclipse.sirius.viewpoint.DView;
@@ -55,6 +56,15 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
    */
   public SiriusDiffMergeLabelProvider() {
     // Nothing needed
+  }
+  
+  /**
+   * Return a label for the given Sirius DAnalysis Custom Data element
+   * @param element_p a non-null element
+   * @return a potentially null string
+   */
+  protected String getDAnalysisCustomDataText(DAnalysisCustomData element_p) {
+    return Messages.SiriusDiffMergeLabelProvider_DAnalysisCustomDataLabel;
   }
   
   /**
@@ -157,6 +167,8 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     } else if (element_p instanceof ContainerStyle || element_p instanceof EdgeStyle ||
         element_p instanceof BasicLabelStyle) {
       result = getManyQualifiedElementText((EObject)element_p);
+    } else if (element_p instanceof DAnalysisCustomData) {
+      result = getDAnalysisCustomDataText((DAnalysisCustomData)element_p);
     } else if (element_p instanceof RGBValues) {
       result = getRGBValuesText((RGBValues)element_p);
     }
