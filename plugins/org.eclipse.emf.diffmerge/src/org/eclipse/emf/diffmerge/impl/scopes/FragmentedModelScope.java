@@ -173,11 +173,11 @@ implements IFragmentedModelScope.Editable {
   public FragmentedModelScope(Collection<URI> uris_p, ResourceSet resourceSet_p, boolean readOnly_p) {
     this(resourceSet_p, readOnly_p);
     for (URI uri : uris_p) {
-      Resource rootResource = _resourceSet.getResource(uri, false);
-      if (rootResource == null)
-        rootResource = _resourceSet.createResource(uri);
-      _rootResources.add(rootResource);
-      addNewResource(rootResource);
+      Resource rootResource = getResourceFromURI(_resourceSet, uri);
+      if (rootResource != null) {
+        _rootResources.add(rootResource);
+        addNewResource(rootResource);
+      }
     }
   }
   
@@ -419,6 +419,20 @@ implements IFragmentedModelScope.Editable {
         return resource;
     }
     return null;
+  }
+  
+  /**
+   * Return a resource of the given URI obtained on the given resource set.
+   * The returned resource does not have to be loaded.
+   * @param resourceSet_p a non-null resource set
+   * @param uri_p a non-null URI
+   * @return a potentially null resource, where null means failure
+   */
+  protected Resource getResourceFromURI(ResourceSet resourceSet_p, URI uri_p) {
+    Resource rootResource = resourceSet_p.getResource(uri_p, false);
+    if (rootResource == null)
+      rootResource = resourceSet_p.createResource(uri_p);
+    return rootResource;
   }
   
   /**

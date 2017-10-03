@@ -36,7 +36,7 @@ public class SiriusDifferenceCategoryProvider extends DefaultDifferenceCategoryP
   }
   
   /**
-   * Provide difference categories related Sirius
+   * Provide difference categories related to Sirius
    * @param node_p a non-null diff node
    */
   protected void provideSiriusCategories(EMFDiffNode node_p) {
