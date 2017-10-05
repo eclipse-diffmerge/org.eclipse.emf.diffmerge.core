@@ -206,7 +206,7 @@ implements ICachingEndorelation<T> {
       @Override
       protected void update() {
         super.update();
-        if (_next == null)
+        if (_next == null && _coveredElements != null) // Can be null during object init
           _coveredElements.clear(); // Clear when exploration is complete
       }
     };

@@ -70,7 +70,7 @@ public final class Impacts {
   /**
    * Create and return a aching impact based on the given origins and the given rules
    * @param origins_p a non-null, potentially empty set
-   * @param rules_p a non-null, potentually empty set
+   * @param rules_p a non-null, potentially empty set
    * @return a non-null impact
    */
   public static IImpact.Caching createCaching(
