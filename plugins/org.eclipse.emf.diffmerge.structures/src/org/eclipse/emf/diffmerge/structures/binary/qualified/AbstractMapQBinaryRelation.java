@@ -130,8 +130,14 @@ public abstract class AbstractMapQBinaryRelation<T, U, Q> extends AbstractQBinar
    * @see org.eclipse.emf.diffmerge.structures.binary.qualified.IQBinaryRelation#getWithDetails(java.lang.Object)
    */
   public Map<Q, Collection<U>> getWithDetails(T element_p) {
+    Map<Q, Collection<U>> result;
     EMap<Q, Collection<U>> sourceData = getContents().get(element_p);
-    return Collections.unmodifiableMap(sourceData.map());
+    if (sourceData != null) {
+      result = Collections.unmodifiableMap(sourceData.map());
+    } else {
+      result = Collections.emptyMap();
+    }
+    return result;
   }
   
   /**
