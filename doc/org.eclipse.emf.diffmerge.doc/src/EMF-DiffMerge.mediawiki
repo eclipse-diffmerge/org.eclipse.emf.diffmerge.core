@@ -4,294 +4,407 @@
  
 EMF Diff/Merge is a diff/merge technology for models. Its main purpose is to help build higher-level tools that need to merge models based on consistency rules. Typical usages include model refactoring, iterative model transformations, bridges between models or modeling tools, collaborative modeling environments, or integration with Version Control Systems.
 
-A GUI is also provided for a classical usage within Eclipse. '''This document explains how users can use the GUI to compare and merge models manually.'''
+A GUI is also provided for a classical usage within Eclipse. '''This document explains how users can use the GUI to compare and merge models manually.''' The GUI supports setting up and configuring comparisons, visualizing differences and selectively merging those differences.
 
-Other technological usages of EMF Diff/Merge as well as a more general documentation are available online on the [https://wiki.eclipse.org/EMF_DiffMerge EMF Diff/Merge wiki].
+Other technological usages of EMF Diff/Merge as well as complementary documentation are available online on the [https://wiki.eclipse.org/EMF_DiffMerge EMF Diff/Merge wiki].
 
 
 <br> 
-== Opening the Diff/Merge GUI ==
- 
-The EMF Diff/Merge GUI supports setting up comparisons, visualizing differences and selectively merging (acceptance/refusal) those differences.
-
+== Starting the Diff/Merge GUI ==
  
 The GUI is accessible via the 'Compare With' - 'Each Other as models' popup menu item. This menu item is enabled when two model files are selected in the Project Explorer as illustrated in the figure below.
 
  
-[[Image:Images/Model-DiffMerge_html_m42c302d5.png|465x503px]]
+[[Image:Images/Model-DiffMerge_html_m42c302d5.png]]
 
  
 It can also be used on model-based diagrams (GMF files, or Sirius *.aird files for example) or model fragments.
 
  
-Whenever the menu item is clicked, a comparison setup dialog involving the selected files is shown.
+Whenever the menu item is clicked, a '''setup dialog''' involving the selected files is shown.
 
 
-[[Image:Images/Model-DiffMerge_html_m4bef3dd1.png|463x335px]]
-
- 
-The ''''up-and-down-arrows'''' button on the right can be used to swap the position of models - left or right - in the tool, for convenience.
+[[Image:Images/Model-DiffMerge_html_m4bef3dd1.png|600px]]
 
  
-The ''''Modifiable'''' check boxes allow defining which model(s) can be modified. If a check box is unselected, it will not be possible to carry out merge actions which would modify the corresponding model. This is a way to protect a model against accidental changes due to a wrong usage of the tool.
+* The ''''up-and-down-arrows'''' button on the right can be used to swap the position of models - left or right - in the tool, for convenience.
 
  
-The ''''Reference'''' radio buttons specify which model should be considered as the reference model, that is, the model of which the other model is an evolution. This does not alter the way models are compared, only the way differences are represented. Setting a value which is not 'None' is equivalent to running a three-way comparison (see below) where the ancestor is the model on the selected side. More precisely:
-
+* The ''''Modifiable'''' check boxes allow defining which model(s) can be modified. If a check box is unselected, it will not be possible to carry out merge actions which would modify the corresponding model. This is a way to protect a model against accidental changes due to a wrong usage of the tool.
  
-* If 'None' is selected then elements which are present in one model and not in the other 	will always be represented as additions.
-* If 'Left' is selected then
-** Elements which are present in the left model and not in the right model will be represented as 		deletions in the right model.
-** Elements which are present in the right model and not in the left model will be represented as 		additions in the right model.
-* If 'Right' is selected then the result is symmetric to 'Left'.
+* The ''''Merge direction'''' radio buttons specify the direction of the merge, i.e., which model is the source of changes and to which model the changes can be applied. These radio buttons have an impact on the 'Modifiable' check boxes. If no direction is chosen, then the comparison is represented in a symmetric way and both models can be modified by default.
  
-The ''''Comparison method'''' combo box allows selecting the way models are compared. By default, only the standard method for version control is available. Other methods can be added via add-ons to the diff/merge tool.
+* The ''''Comparison method'''' combo box allows selecting the way models are compared. A default, configurable comparison method that is suitable, e.g., for version control is available. Other methods can be added via extensions of the diff/merge tool.
 
  
 If the user selects three files, the comparison proposes to compare two files taking into account a third common ancestor as illustrated below.
 
  
-[[Image:Images/Model-DiffMerge_html_m260feba7.png|463x337px]]
+[[Image:Images/Model-DiffMerge_html_m260feba7.png|600px]]
 
  
-The 'Configure...' button makes it possible to alter the result of the comparison. When clicked, if the selected comparison method does not provide advanced configuration settings, then the resulting dialog looks like the one below.
-
- 
-[[Image:Images/Model-DiffMerge_html_45465200.png|490x213px]]
-
-
-<br>
-* ''''Keep match IDs'''' 	activates tooltips that display the identifiers (IDs) used to match model elements, as shown in the snapshot below. Representing this 	piece of information in a tooltip allows for a better understanding of how elements have been matched, at the price of a higher memory consumption.<br>
-Note that two model elements match if and only if they have the same 'match ID', which by default refers to their ID property visible in the Properties view.
- 
-[[Image:Images/Model-DiffMerge_html_29d2b86f.png|487x222px]]
-
-
 <br> 
-* ''''Ignore order'''s' disables 	the detection of ordering differences, which has the advantage of increasing performance. If selected, then for example the fact that a class contains attributes A, B (B below A) in a model and attributes B, A (A below B) in the other model will yield no difference.<br>
-'''Warning''': This option prevents models that highly rely on orders from being consistently merged, e.g., UML or Sirius Sequence Diagrams. Do not select this option in such a situation.
+== Configuring a comparison ==
+
+The ''''Configure...'''' button in the setup dialog makes it possible to change the way a comparison is computed: how elements are being matched, what differences are detected and how they can be merged, what extra information is provided.
+
 
 <br>
-Once the 'Finish' button has been clicked, a few additional information dialogs may pop up.
+=== Predefined configurations ===
 
-* An ''''ambiguous mapping'''' 	warning message (figure below). This message pops up if at least one 	of the models being compared contains duplicate match IDs. It means, 	if no particular customisation of the diff/merge tool has been made, 	that each of the duplicates that appears in the dialog is an ID that 	several elements of the same model have in common. In other words, 	the model is not correct and violates elementary validation rules. A 	consequence, as indicated in the dialog, is that there is no 	guarantee that the comparison is correct or that merge operations 	will not break the model.
- 
-[[Image:Images/Model-DiffMerge_html_39002cd3.png|532x216px]]
+With the default comparison method, the configuration dialog looks like the one below.
 
-'''Warning''': '''Do not start a merge activity''' if this message appears; fix the model(s) first. For that purpose, it may be helpful to select the duplicate IDs in the dialog, right-click, then select a 'Copy to clipboard' menu item. This stores the list of duplicate IDs in the clipboard of the operating system.
+[[Image:Images/ConfigMain.png|400px]]
 
- 
-The 'ambiguous mapping' message can be shown again at any time after the comparison has been displayed. It is accessible via the 'Show inconsistencies' button which is otherwise disabled (red circle in figure below).
+The radio buttons correspond to predefined configurations that reflect common use cases.
 
- 
-[[Image:Images/Model-DiffMerge_html_13763f84.png|604x97px]]
+* ''''Diff/merge between different versions of the same model'''': Use this configuration for a classic diff/merge between different versions of the same model. It assumes every model element has a unique identifier, either through a dedicated property or through persistence (for example, XML or XMI IDs).
+
+* ''''Transfer of elements between models created independently'''': Use this configuration if you need to transfer elements between models that are historically unrelated but structured in a similar way.
+
+Additional configurations may be available in specific modeling tools.
+
+If the needs are not covered by these predefined configurations, it is possible for an advanced user to switch to the advanced configuration mode by clicking the ''''Show advanced settings'''' button. Additional tabs become visible as in the figure below.
+
+[[Image:Images/ConfigMainExpanded.png|400px]]
+
+The subsections below describe the options that are provided by default. However, additional options may be available in specific modeling tools.
+
 
 <br>
-* A ''''no undo/redo'''' warning message (figure below). This message pops up when a comparison is being made on Sirius *.AIRD files that are already open. The 	strategy of the tool is to try and minimize the memory usage by comparing the models in memory. This is also true if only one of the *.AIRD files is open: the comparison will operate on the model in memory. In the case of two open models, however, undo/redo cannot be enabled for technical reasons (undo/redo requires that both models are loaded in the same 'memory space').
+=== Advanced Matching ===
+
+The advanced ''''Matching'''' tab provides options that determine the way elements are matched. By default, the following options are available.
+
+[[Image:Images/ConfigMatch.png|400px]]
+
+Matching criteria fall into two categories.
+* '''Absolute criteria''' consider each model element independently of the others. A model element will always be matched in the same way if it does not change even though everything else in the model changes.
+* '''Relative criteria''', conversely, consider model elements in the context of others.
+
+Criteria are listed in increasing order of priority. For example, when 'Names' and 'Property IDs' are enabled, if an element has a qualified name then its property ID is ignored. It will only be matched to an element in the other model if that element has the same qualified name.
+
+Tool tips are available for all criterion categories and all criteria. Hover over the corresponding User Interface element to see the tool tip.
+
+* '''Technical IDs''': The technical ID of an element is an identifier that is solely defined for persistence purposes. It is sometimes called 'extrinsic' because it does not belong to the element: it depends on the way the model is persisted and it can change when the persistence technology changes. By default, models are persisted as XML or XMI files so model elements have an XML ID. Models stored in a database through the CDO technology have a CDO ID.
+
+* '''Property IDs''': A property ID is an ID that belongs to the element through a dedicated property. It normally remains the same throughout the whole life of the element, which makes it the most appropriate criterion in version control contexts. Most of the time, it is the value of an attribute of type string, typically named 'id', that is randomly generated when the element is created. Note that model elements may have a technical ID and a property ID at the same time, which may (but do not have to) be the same.
+
+
+* '''Names''': If an element has a name and all its container elements also have a name, then the element has a qualified name which is the sequence of all these names. This criterion matches two elements if they have the same qualified name. It only makes sense if elements have names and naming rules forbid two elements within the same container to have the same name. The weakness of this criterion is that it is sensitive to moves: moving an element means changing its container, which generally means changing the qualified name.<br><br>
+** ''''Use labels as names'''': This option allows using the label that elements have in editors as a name, even though they do not actually have a name. This criterion only makes sense if different elements have different labels.
+
+
+* '''Structure''': Two elements structurally match if they are at the same "location" in the model and if there is no other element at the same "location" that can also match. The sub-options refine the meaning of "location".<br><br>
+** ''''Match unique roots'''': An element can be located at the top level of a model, in which case it is called a root. This option allows matching two elements which are both root and cannot be confused with other roots, typically because they are the only ones of their type.<br><br>
+** ''''Match unique children'''': Match elements that have the same container and play the same discriminating role within it. For example, consider a modeling language that represents data, where data values can be defined as Binary Expressions that have one left operand and one right operand. Left operand and right operand are discriminating roles in the sense that only one element can play each of these roles. So if two Binary Expressions match, then their left operands will match and their right operands will match, provided they are of the same type.<br><br>
+** ''''Match unambiguous children'''': Match elements that have the same container and cannot be confused with other elements within the container. Typically, elements that play the same role within the container and that are the only ones of their type to play that role. This is a more permissive criterion than the one above.
+
+
+* '''Semantics''': Semantic matching encompasses criteria that are based on the knowledge of specific modeling languages. The general rationale is to try and match elements according to their nature and their meaning.<br><br>
+** ''''Match default model contents'''': When a new model is being created, it may be automatically filled with default model elements. Match these default elements if present. It may only work if the top-level elements of the models match (see 'Structure - Match unambiguous roots').<br><br>
+** ''''Match equivalent technical elements'''' (hidden by default, may appear in specific modeling tools): Certain modeling languages define elements that are purely technical and usually invisible to users. Match such elements according to the semantics they carry, if applicable.<br><br>
+** ''''Diagrams: Match shapes according to represented elements''': Match graphical shapes in (GMF or Sirius) diagrams if they represent the same element in the same diagram. Beware that it only makes sense if an element cannot be represented by different shapes in the same diagram.<br><br>
+** ''''Diagrams: Match remaining shapes according to type'''': Certain shapes in (GMF or Sirius) diagrams may be purely technical and may not represent an element: they only make sense in the context of other more significant shapes. Match these shapes according to their type and to more significant shapes.
+
+
+<br>
+=== Other advanced options ===
+
+The advanced '''Differencing''' tab provides options that determine what differences are detected. By default, the following options are available.
+
+[[Image:Images/ConfigDiff.png|400px]]
+
+* '''Ignore orders''' disables the detection of ordering differences, which has the advantage of increasing performance. If selected, then for example the fact that a UML class contains attributes A then B in a model and attributes B then A in the other model will yield no difference. Beware that this option prevents models whose semantics highly relies on orders from being consistently merged, e.g., UML or Sirius Sequence Diagrams. Do not select this option in such a situation.
+
+
+The advanced '''Misc''' tab provides miscellaneous additional options. By default, the following options are available.
+
+[[Image:Images/ConfigMisc.png|400px]]
+
+* '''Keep match keys''' activates tool tips that display the keys (e.g., identifiers) used to match model elements in the comparison editor, as shown in the snapshot below. Representing this piece of information in a tool tip allows for a better understanding of how elements have been matched, at the price of a higher memory consumption. Note that two model elements match if and only if they have the same match key, which depends on the selected matching options.
  
-[[Image:Images/Model-DiffMerge_html_m43da5a9d.png|522x185px]]
+[[Image:Images/Model-DiffMerge_html_29d2b86f.png|400px]]
+
+* '''Use cache''' is a technical option that determines whether a cache is used for matching elements. It speeds up the matching phase if relative matching criteria are being used and enough memory is available. It is advised to not use this option if memory is limited.
+
+
+<br>
+== Computing a comparison ==
+
+Once the 'Finish' button has been clicked in the setup dialog, a few additional information dialogs may pop up.
+
+* An ''''ambiguous mapping'''' 	warning message (figure below). This message pops up if at least one of the models being compared contains duplicate match keys. It means, 	if no particular customisation of the diff/merge tool has been made, 	that each of the duplicates that appears in the dialog is an ID that several elements of the same model have in common. In other words, the model is not correct and violates elementary validation rules. A consequence, as indicated in the dialog, is that there is no guarantee that the comparison is correct or that merge operations will result in a consistent model.
+ 
+[[Image:Images/Model-DiffMerge_html_39002cd3.png|500px]]
+
+'''Warning''': '''Do not start a merge activity''' if this message appears; fix the model(s) first. For that purpose, it may be helpful to select the duplicate IDs in the dialog, right-click, then select a 'Copy to clipboard' menu item. This action stores the list of duplicate IDs in the clipboard of the operating system for later analysis.
+
+ 
+The 'ambiguous mapping' message can be shown again at any time after the comparison has been displayed. It is accessible via the '''Show inconsistencies''' button which is otherwise hidden (red circle in figure below).
+
+ 
+[[Image:Images/Model-DiffMerge_html_13763f84.png|700px]]
+
+<br>
+* A ''''no undo/redo'''' warning message (figure below). This message pops up when a comparison is being made on Sirius *.AIRD files that are already open. The 	strategy of the tool is to try and minimize the memory usage by comparing the models in memory. This is also true if only one of the *.AIRD files is open: the comparison will operate on the model in memory. In the case of two open models, however, undo/redo cannot be enabled at this time for technical reasons.
+ 
+[[Image:Images/Model-DiffMerge_html_m43da5a9d.png]]
 
  
 As indicated in the message, if the purpose of the comparison is to merge models, not just to compare them, and undo/redo is required, then it is necessary to close at least one of the models before starting the diff/merge tool to regain the undo/redo capability.
 
 
+* A '''progress dialog''' (figure below). Computing the differences between models takes some time depending on the size of the models and the number of differences between them. Click the 'Run in background' button in order to keep using your environment while the differences are being computed in parallel. If differences are found, this phase ends with the opening of a comparison editor described in the next section.
+
+[[Image:Images/Model-DiffMerge_html_m37e3e9e3.png]]
+
+
+* A ''''no differences' message dialog''' (figure below). This message dialog states that no difference has been found. The comparison process ends and no additional information is provided. This situation is different from the one where differences have been found but are considered too technical to be visible by default. In that case, a comparison editor opens with an empty Synthesis section and the technical differences can be shown using the Difference Categories dialog (see below).
+
+[[Image:Images/NoDiffs.png|500px]]
+
+ 
 <br>
-== Features of the GUI ==
-  
-=== Main interface ===
- 
-When started, the diff/merge tool displays a progress dialog. Computing the differences between models takes time according to the size of the models and the number of differences between them. Click the 'Run in background' button in order to keep working with Eclipse while the differences are being computed in parallel.
+== Exploiting a comparison ==
+
+The comparison editor presents the differences which have been computed.
+
+
+[[Image:Images/Model-DiffMerge_html_69cae476.png|700px]]
+
+
+The editor is composed of two horizontal areas intersecting with three vertical areas or columns.
+
+
+<br>
+=== Vertical areas === 
+
+
+[[Image:Images/Model-DiffMerge_html_m4b50cf8c.png|700px]]
+
+
+The middle column represents the contents of the '''left model''' while the right column represents the contents of the '''right model'''. Each side is associated to a color: by default, '''dark red''' for the left model and '''blue''' for the right model. This color code is also used in other dialogs of the diff/merge tool in order to prevent any ambiguity.
+
+
+When hovering on the top of any of these columns, the complete path to the model is displayed as a tool tip if the window is too narrow.
 
  
-[[Image:Images/Model-DiffMerge_html_m37e3e9e3.png|376x176px]]
+[[Image:Images/Model-DiffMerge_html_m1961c198.png]]
 
  
-This phase ends with the opening of an editor. The editor presents the differences which have been computed.
+[[Image:Images/Model-DiffMerge_html_m617a07f2.png|23x19px]] A '''lock''' toggle button is visible at the top of these columns. When selected, modifications to the corresponding model are forbidden. Consequently, the merge buttons which are usually enabled will be disabled if they mean to modify the model. Use this mechanism to temporarily protect a model against accidental modifications.
+
+The upper section of the left column is the '''Synthesis section'''. It focuses on the parts of the models that actually contain differences.
+
+
+The three columns are synchronized: clicking an element in the Synthesis section highlights it in the other sections and vice-versa (unless the 'Link views' option is disabled, see below).
 
  
-[[Image:Images/Model-DiffMerge_html_69cae476.png|604x361px]]
+<br>
+=== Horizontal areas === 
 
  
-The editor is composed of 2 horizontal sections and 3 vertical sections.
+[[Image:Images/Model-DiffMerge_html_ma5d5753.png|700px]]
 
  
-=== Vertical sections === 
+The two horizontal areas correspond to two different levels of detail. The upper area focuses on which model elements are present and where. The lower area is the '''Details section''': it shows the properties (attributes and references) of the model element that is selected in the upper area.
+
+
+For example, if a modified element (in purple) is being clicked in the Synthesis section (upper area), then the Details section (lower area) displays all the properties of the element that have differences. The corresponding values are displayed in the middle and right parts of the Details section according to the model they belong to. For instance, in the snapshot above, element 'In-Flight Entertainment System' is selected in the Synthesis section; the Details section shows that it has a difference on its name: the name is 'In-Flight Entertainment System' in the left model and 'P1' in the right model.
 
  
-[[Image:Images/Model-DiffMerge_html_m4b50cf8c.png|618x425px]]
+<br>
+=== Synthesis section ===
 
- 
-The middle section represents the contents of the left model while the section on the right-hand side represents the contents of the right model. When hovering on the top of any section, the complete path to the model is displayed as a tooltip if the window is too narrow.
+The Synthesis section represents the differences between models in terms of additions, deletions and moves of elements. According to the color code, model elements which are present in the right model but not in the left model are written in blue while they are written in dark red in the opposite case. Elements which are present in both sides but have differences in their properties (attributes or references) are written in '''purple'''. The number of differences they contain is written between parentheses (unless the 'Show difference numbers' option is disabled, see below).
 
- 
-[[Image:Images/Model-DiffMerge_html_m1961c198.png|466x64px]]
+The location of an element, with respect to the model tree, is considered as a property of the element named ''''Container''''. A difference on this property can be interpreted as a '''move'''. If an element is at a different location in the left and right models, it is represented in the Synthesis section at the same location as in the left model. 
 
- 
-In addition, each side is associated to a colour: by default, dark red for the left model and blue for the right model. This colour code is also used in other dialogs of the diff/merge tool in order to prevent any ambiguity.
-
- 
-The section on the left-hand side is the Synthesis section: it represents the differences between the models. According to the colour code, model elements which are present in the right model but not in the left model are written in blue, while they are written in dark red in the opposite case. Elements which are present in both sides but have differences in their attributes or references ('modified elements') are written in purple. The number of differences they contain is written between parentheses. The 3 sections are synchronised: clicking an element in the Synthesis section highlights it in the other sections and vice-versa.
-
- 
-=== Horizontal sections === 
-
- 
-[[Image:Images/Model-DiffMerge_html_ma5d5753.png|625x368px]]
-
- 
-The 2 horizontal sections correspond to 2 levels of detail. The top section focuses on model elements and only reflects that level of granularity. The bottom section is the Details section: it shows the contents (attributes and references) of the model element which is currently selected in the top section.
-
- 
-For example, if a modified element (in purple) is being clicked in the Synthesis section, then the Details section displays all the attributes and references of that element that have differences. The corresponding values are displayed in the middle and right parts of the Details section according to the model they belong to. These sub-sections are called the Value sections. For instance, in the snapshot above, element 'N2' is selected in the Synthesis section; the Details section shows that it has a difference on its name: the name is 'N2' in the left model and 'Niveau 2' in the right model as shown in the Value sections.
-
- 
-=== Locking models ===
-
- 
-[[Image:Images/Model-DiffMerge_html_m617a07f2.png|23x19px]] The lock button prevents any modification to the corresponding model. Consequently, the merge buttons which are usually enabled will be disabled if they involve a modification in that model.
-
-
-=== Differences navigation ===
-
-These buttons are respectively meant to:
-
+The buttons in the Synthesis section are respectively meant to:
  
 * [[Image:Images/nextdiff.png|18x18px]] Fast navigation to the next element that has differences. 
 * [[Image:Images/prevdiff.png|18x18px]] Fast navigation to the previous element that has differences.
-* [[Image:Images/expand.png|18x18px]] Expand the tree of the Synthesis 	section. Be careful that this operation may take time on large 	models.
-* [[Image:Images/collapse.png|18x18px]] Collapse the tree of the Synthesis 	section.
-* [[Image:Images/sort.png|18x18px]] Sort the elements of the Synthesis 	section alphabetically.
-* [[Image:Images/sync.png|18x18px]] Enable/disable the synchronisation 	between the Synthesis section and the middle and right sections.
-* [[Image:Images/categories_icon.png|18x18px]] Open Filter and Focus capabilities 
+* [[Image:Images/expand.png|18x18px]] Expand the tree of the Synthesis section. Be careful that this operation may take time on large models.
+* [[Image:Images/collapse.png|18x18px]] Collapse the tree of the Synthesis section.
+* [[Image:Images/categories_icon.png|18x18px]] Open the 'Difference Categories' dialog that provides Filter and Focus capabilities (see below).
 
 
 Additional features are available via a click on the triangle-shaped button.
  
-* 'Use custom icons': 	whether the icons of elements are decorated with arrows indicating the origin of the differences.
-* 'Use custom labels': 	whether the name of elements is enriched with characters indicating the origin of the differences.
-* 'Show merge impact': 	whether a 'merge impact' dialog must be displayed before a merge is being performed. This dialog represents all the changes that are going to be made to the model due to the merge (see snapshot below). It allows the user to better understand the consequences of his merge actions and if needed to cancel them. Those consequences are not always trivial: in order to be merged, certain differences require others to be merged at the same time in order to preserve the integrity of the model - which is done automatically by the diff/merge tool. Those differences appear as 'Implied changes' in the dialog. Note that in 3-way comparisons, merging a difference may prevent the merge of another difference in the opposite direction - which is called a conflict. Such conflicts are highlighted by a red overlay icon in the dialog.
+* ''''Update...'''': show the setup dialog to restart the comparison, possibly with different settings, without reloading the models. All changes made to the models are preserved. This is useful for example to iteratively tune the configuration of the comparison.
+
+* ''''Show all elements'''': when disabled, the Synthesis section only represents elements the contain differences, directly or via their children. When enabled, all elements from the left and right models are represented.
+
+* ''''Difference categories...'''': similarly to the button described above, open the 'Categories' dialog that provides filter and focus capabilities (see below).
+
+* ''''Link views'''': enable/disable the synchronization between the Synthesis section and the middle and right sections.
+
+* ''''Sort alphabetically'''': sort the elements of the Synthesis section alphabetically.
+
+* ''''Use enhanced icons'''': whether the icons of elements are decorated with arrows indicating the origin of the differences.
+
+* ''''Use enhanced labels'''': similarly, whether the name of elements is enriched with characters indicating the origin of the differences.
+
+* ''''Show difference numbers'''': Whether the number of differences contained by each element is displayed as a suffix of its name.
+
+* ''''Show merge impact'''': whether a 'merge impact' dialog must be displayed before a merge is being performed. This dialog represents all the changes that are going to be made to the model due to the merge (see snapshot below). It allows the user to better understand the consequences of his merge actions and if needed to cancel them. Those consequences are not always trivial: in order to be merged, certain differences require others to be merged at the same time in order to preserve the integrity of the model - which is done automatically by the diff/merge tool. Those differences appear as 'Implied changes' in the dialog. Note that in 3-way comparisons, merging a difference may prevent the merge of another difference in the opposite direction - which is called a conflict. Such conflicts are highlighted by a red overlay icon in the dialog.
  
-[[Image:Images/Model-DiffMerge_html_6a675b42.png|443x290px]]
+[[Image:Images/Model-DiffMerge_html_6a675b42.png]]
 
  
-* 'Support undo/redo': 	when active, the user has the possibility to undo/redo his actions via the usual shortcuts Ctrl-Z and Ctrl-Y or via the 	'Edit' menu. This feature is more appropriate when the 	models have a limited size; otherwise, undoing a merge on a large 	model may be a long-running operation.
-* 'Log changes to models': 	when active, all modifications made to the models are logged in an 	HTML file. This file is named 'ModelComparisonLog.htm' and is located near the usual '.log' file in the 	'.metadata' sub-folder of the current workspace folder. If the current workspace folder is unknown, right-click a 	project that has been created from scratch, click the 'Properties' 	menu item and look for the 'Location' line in the 	'Resource' category.
+* ''''Support undo/redo'''': when active, the user has the possibility to undo/redo his actions via the usual shortcuts Ctrl-Z and Ctrl-Y or via the 	'Edit' menu. This feature is more appropriate when the 	models have a limited size; otherwise, undoing a merge on a large 	model may be a long-running operation.
+
+* ''''Log changes to models'''': when active, all modifications made to the models are logged in an 	HTML file. This file is named 'ModelComparisonLog.htm' and is at the same location as the usual '.log' file in the '.metadata' sub-folder of the current workspace folder. If the current workspace folder is unknown, right-click a 	project that has been created from scratch, click the 'Properties' 	menu item and look for the 'Location' line in the 	'Resource' category.
  
-'''Important notice''': the last 3 features ('show merge impact', 'support undo/redo', 'log changes to models') have a cost in performance. Merging differences typically takes longer and requires more memory if they are enabled. It may thus be relevant to disable them when performing large merges. Note that undo/redo is the most expensive feature and logging the least expensive.
-
- 
-=== Filter and Focus capabilities === 
-
-The [[Image:Images/categories_icon.png|18x18px]] button allows filtering out the displayed differences in order to ease their understanding and split the merge activity into successive phases that focus on different kinds of differences.
-
-A difference category covers a subset of the differences or model elements in a comparison. Conversely, a given difference or element can belong to several categories. Different modes are applicable to difference categories.
-* Normal : Represent elements and differences of the category normally, unless a focus is set on other categories.
-* Filtered : Filter out elements and differences of the category.
-* Focused : Focus on elements and differences of the category, except those that belong to filtered categories.
+'''Important notice''': the last three features ('show merge impact', 'support undo/redo', 'log changes to models') have a cost in performance. Merging differences typically takes longer and requires more memory if they are enabled. It may thus be relevant to disable them when performing large merges. Note that undo/redo is the most expensive feature and logging the least expensive.
 
 
-=== Dealing with differences === 
+<br>
+=== Difference Categories dialog === 
 
-Features are available via a click on the triangle-shaped button.
+The [[Image:Images/categories_icon.png]] button or the 'Difference categories...' menu item allow filtering out the displayed differences in order to ease their understanding and split the merge activity into successive phases that focus on different kinds of differences.
+
+A difference category covers a subset of the differences or model elements in a comparison. Conversely, a given difference or element can belong to several categories. The ''''Difference Categories'''' dialog provides control over difference categories.
+
+[[Image:Images/Categories.png|500px]]
+
+Different modes are applicable to each difference category via check boxes.
+* '''Normal''': Make elements and differences of the category visible, unless a focus is set on any other category.
+* '''Filtered''': Filter out elements and differences of the category. This mode has priority over the others: if a difference belongs to several categories and one of them is in filtered mode, the difference is still filtered out.
+* '''Focus''': Only show elements and differences that belong to the category. If several categories are in focus mode, then only show elements and differences that belong to any of these categories.
+
+Hover the mouse pointer over a category to see its description in a tool tip.
+
+Additionally, four buttons are proposed in the dialog.
+* ''''Apply'''': Apply the modes that have been set and update the whole GUI without closing the dialog.
+* ''''OK'''': Apply the modes that have been set, update the whole GUI and close the dialog.
+* ''''Reset'''': Set all categories to their default mode, which may vary according to the category.
+* ''''Cancel'''': Keep the modes that are currently applied, dismiss all changes made since the last application and close the dialog.
+
+Note that the 'Difference Categories' dialog is not modal, so differences can be navigated while the dialog is open.
+
+If there are chances that differences that are visible with default settings are filtered out due to the selected category modes, the ''''[filtered]'''' mention appears in the header of the Synthesis section (figure below). It is a warning that even though the GUI may not show any difference, the work for difference resolution may not be finished. Just click the 'Reset' button then the 'OK' or 'Apply' button to make remaining differences visible.
+
+[[Image:Images/FilteredWarning.png]]
+
+
+<br>
+=== Details section === 
+
+The properties of the element selected in the Synthesis section are visible in the Details section (lower area). This section is subdivided into a '''Property section''' that represents the properties themselves and two '''Value sections''' that represent the values of the selected property in the model that corresponds to their column.
+
+
+A click on the triangle-shaped button in the Property section brings a few options.
 
   
-[[Image:Images/Model-DiffMerge_html_c86e852.png|183x82px]]
+[[Image:Images/Model-DiffMerge_html_c86e852.png|250px]]
  
-* 'Show values on differences': when selected, only the values which are different are displayed in 	the Value sections.
-* 'Show all values': when selected, all the values of the current attribute or reference are 	shown in the Value sections. Those that are different are highlighted.
-* ''Show all values and features': when selected, all the features (attributes and 	references) of the current element are shown in the Details section. The features that have differences are highlighted as in the snapshot below. It is thus possible to see all the contents of a model element, although it is generally advised to use the [https://wiki.eclipse.org/ModelingAmalgam/ContextualExplorer Contextual Explorer of Modeling Amalgam] view instead.
+* ''''Show values on differences'''': when selected, only the values which are different are displayed in the Value sections.
+
+* ''''Show all values'''': when selected, all the values of the current attribute or reference are 	shown in the Value sections. Those that are different are highlighted.
+
+* ''''Show all values and properties'''': when selected, all the properties (attributes and references) of the current element are shown in the Details section. The properties that have differences are highlighted as in the snapshot below. It is thus possible to see all properties of a model element, although it is generally advised to use the [https://wiki.eclipse.org/ModelingAmalgam/ContextualExplorer Contextual Explorer of Modeling Amalgam] view instead.
+
+* ''''Use technical representation'''': when selected, properties are displayed in a technical form that provides harder to read but more accurate naming, and typing information.
  
-[[Image:Images/Model-DiffMerge_html_7eb489c7.png|334x126px]]
+
+<br>
+=== Difference handling buttons === 
+
+The buttons below are shown in the lower area near the Value sections. Their purpose is to decide what to do with differences.
+
+[[Image:Images/Model-DiffMerge_html_7eb489c7.png]]
 
  
-Those buttons control how the compared models are being merged. They are grouped into 2 symmetrical groups, one group for each model. The buttons in the groups are automatically enabled and disabled according to the current selection.
+In other words, those buttons control how the compared models are being merged. They are grouped into two symmetrical groups, one group for each model. The buttons in the groups are automatically enabled and disabled according to the current selection.
 
-* [[Image:Images/mergeall.png|16x16px]] The 'Copy all to the right/left' 	buttons: will propagated all displayed differences to the given panel. (This button is available only on Transition and REC/RPL tooling)
-* [[Image:Images/Model-DiffMerge_html_5b0468f9.png|22x23px]] The 'Copy to the right/left' 	buttons: given an element or a value which is present in one model 	and not in the other, clicking this button copies the element or 	value and stores it in the model where it is missing.
-* [[Image:Images/Model-DiffMerge_html_m7a3a1b12.png|21x20px]] The 'Delete on the left/right' 	buttons: given an element or value which is present in one model and 	not in the other, clicking this button deletes the element or value 	in the model where it is present.
-* [[Image:Images/Model-DiffMerge_html_3f155383.png|20x21px]] The 'Ignore on the left/right' buttons: the selected differences are ignored and will not appear any longer although they are not merged. By clicking this button, the user states that the selected differences are not interesting or relevant.
+* [[Image:Images/Model-DiffMerge_html_5b0468f9.png]] The ''''Copy to the right/left'''' buttons: given an element or a value which is present in one model and not in the other, clicking this button copies the element or value and stores it in the model where it is missing.
+
+* [[Image:Images/Model-DiffMerge_html_m7a3a1b12.png]] The ''''Delete on the left/right'''' buttons: given an element or value which is present in one model and 	not in the other, clicking this button deletes the element or value 	in the model where it is present.
+
+* [[Image:Images/Model-DiffMerge_html_3f155383.png]] The ''''Ignore on the left/right'''' buttons: the selected differences are ignored and will not appear any longer although they are not merged. By clicking this button, the user states that the selected differences are not interesting or relevant. To make them visible again, the ignore action can be undone using the usual Undo mechanism, or the visibility of all ignored differences can be temporarily restored via the 'Difference Categories' dialog.
  
 These buttons can be applied on values when the current selection is in a Value section, or on elements when the current selection is in the Synthesis section. If the selection is multiple or contains several differences, the 'Delete' buttons are disabled and the 'Copy' buttons allow merging all the differences. Clicking them pops up a dialog which allows the user to state how differences must be merged.
 
  
-[[Image:Images/Model-DiffMerge_html_306f66da.png|441x191px]]
+[[Image:Images/Model-DiffMerge_html_306f66da.png]]
 
  
-* The 'Include differences in children' check-box determines whether the differences in the selected elements and all their children in the containment tree must be merged. Otherwise, only the differences in the selected elements are merged.
-* The 'Incremental mode', when active, does not delete elements or values. Only the differences that preserve the existing data are merged.
-* 'Show merge impact': 	overrides the 'Show merge impact' option (see description of the corresponding menu item of the Synthesis section) for large merges.
- 
-Similarly to the 'Copy' buttons, the 'Ignore' buttons may trigger a dedicated dialog which allows controlling whether the action is applicable to all children of the selected elements. If the check-box is not ticked, differences on the selected elements are ignored but not differences on their children.
+* The ''''Include differences in children'''' check-box determines whether the differences in the selected elements and all their children in the containment tree must be merged. Otherwise, only the differences in the selected elements are merged.
+* The ''''Incremental mode'''', when active, does not delete elements or values. Only the differences that preserve the existing data are merged.
+* ''''Show merge impact'''' overrides the 'Show merge impact' option (see description of the corresponding menu item of the Synthesis section), which is particularly useful to avoid showing large impacts when a large number of differences are selected.
+
+Similarly to the 'Copy' buttons, the 'Ignore' buttons may trigger a dedicated dialog which allows controlling whether the action is applicable to all children of the selected elements. If the check-box is not selected, differences on the selected elements are ignored but not differences on their children.
 
  
-[[Image:Images/Model-DiffMerge_html_6268bf2e.png|441x149px]]
+[[Image:Images/Model-DiffMerge_html_6268bf2e.png]]
 
 
+<br>
 === Textual comparison ===
 
 While the recommended comparison method for model and diagram files is using the Diff/Merge tool, 
-it may sometimes be necessary to compare model and diagram files textually. 
+it may sometimes be useful to compare model and diagram files textually. 
 This is possible by selecting the two model or diagram files and choosing 'Compare With' - 'Each Other' 
 in the Project Explorer popup menu. This will open the Diff/Merge comparison, with the difference that 
 it is possible to switch to a textual comparison by selecting "Text Compare" in the comparison editor drop-down menu:
 
-[[Image:Images/compare_as_text.png|375x164px]]
+[[Image:Images/compare_as_text.png]]
 
 
 <br>
-== Merge process in a nutshell ==
+= Difference resolution in a nutshell =
  
-=== Opening the GUI ===
+== Opening the GUI ==
  
 The EMF Diff/Merge GUI can be opened in Eclipse using the 'Compare With' - 'Each Other as models' contextual menu on files of the workspace.
 
  
-[[Image:Images/Model-DiffMerge_html_m4a2563eb.png|301x100px]]
+[[Image:Images/Model-DiffMerge_html_m4a2563eb.png]]
 
- 
-=== Resolving differences ===
+
+== Resolving differences ==
  
 The following buttons can be used to resolve differences.
 
  
-* [[Image:Images/Model-DiffMerge_html_6894195c.png|48x25px]] Buttons for navigating between 	differences.
-* [[Image:Images/Model-DiffMerge_html_m47d0d5c1.png|159x25px]] Buttons for merging and ignoring 	differences.
-* [[Image:Images/Model-DiffMerge_html_7d047cd2.png|22x21px]] or the Ctrl-S shortcut for saving the changes.
- 
-The precise meaning and usage of each of them is described in the previous section.
+* [[Image:Images/Model-DiffMerge_html_6894195c.png]] Buttons for navigating between differences.
+* [[Image:Images/Model-DiffMerge_html_m47d0d5c1.png]] Buttons for merging and ignoring differences.
+* [[Image:Images/Model-DiffMerge_html_7d047cd2.png]] or the Ctrl-S shortcut for saving the changes.
+
+Note that in some cases, performing a merge can take time especially if it is a global merge between large models. A progress bar is displayed during the operation.
 
  
-Note that in some cases, performing a merge can take time especially if it is a global merge between large models. A progress bar is being displayed during the operation.
+[[Image:Images/Model-DiffMerge_html_m9cba6ee.png]]
+
+
+== Saving merge decisions ==
+ 
+Resolution of differences is considered to be finished when the content of the Synthesis section is empty, no significant difference is filtered out ('[filtered]' does not appear in the header of the Synthesis section) and changes have been saved by pressing Ctrl-S.
 
  
-[[Image:Images/Model-DiffMerge_html_m9cba6ee.png|450x188px]]
+[[Image:Images/Model-DiffMerge_html_m4d91695e.png]]
 
  
-=== Saving merge decisions ===
- 
-Resolution of differences is considered to be finished when the content of the Synthesis section is empty, no significant difference is filtered out (the '[filtered]' mention does not appear in the header of the Synthesis section) and changes have been saved by pressing Ctrl-S.
-
- 
-[[Image:Images/Model-DiffMerge_html_m4d91695e.png|427x62px]]
-
- 
-Note that the absence of visible differences does not mean that the left and right models are identical. It simply means that all differences have been checked by the user and either merged or explicitly ignored.
+Note that the absence of visible differences does not mean that the left and right models are identical. It simply means that all differences have been considered by the user and either merged or explicitly ignored or filtered out.
 
  
 <br>
-== Version Control ==
+= Integration with Version Control =
 
-=== Local File History ===
+== Local File History ==
 
 Eclipse maintains a local history of file modifications and allows to compare a file with a version from local history. For more information refer to the [[../help/topic/org.eclipse.platform.doc.user/concepts/concepts-17a.htm?cp=0_2_1_8|local history documentation]]
 
-=== Eclipse Team ===
 
-Eclipse provides mechanisms (Eclipse Team) that make interactions with Version Control Systems (VCSs) easier. VCS clients that integrate within Eclipse and use these mechanisms, for example EGit for Git or Subversive for SVN, can interact with EMF Diff/Merge in order to, e.g., compare versions, understand the content of a commit, or resolve conflicts when merging branches.
+== Version Control Systems ==
+
+Eclipse provides mechanisms (Eclipse Team) that make interactions with Version Control Systems (VCSs) easier. VCS clients that integrate within Eclipse and use these mechanisms, for example EGit for Git or Subversive for SVN, can interact with EMF Diff/Merge in order to, e.g., compare well-identified versions, commits or branches, understand the content of a commit, or resolve conflicts when merging branches.
 
 This can be achieved by
 * Installing the VCS client in Eclipse.
 * Installing the EMF Diff/Merge plug-in for this client (at this time, Subversive or EGit).
 * Declaring the file extension of the models as XMI: Window - Preferences - General - Content Types - Text - XML - XMI Metadata Interchange - Add: type, for example, '*.myfileextension'.
 
-If this setup is successful, features that are available through sub-menus of the 'Compare with...' contextual menu should use the EMF Diff/Merge GUI.
+If this setup is successful, VCS-based features, for example those available through the 'Compare with...' contextual menu, will automatically use the EMF Diff/Merge GUI when appropriate. In the case of EGit, be careful to not directly use content that is pre-merged by Git (see Window - Preferences - Team - Git, 'Merge tool content': do not select 'Workspace').

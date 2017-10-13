@@ -11,23 +11,32 @@
        Thales - initial API and implementation
 -->
 <toc label="EMF Diff/Merge Guide" topic="html/EMF-DiffMerge.html">
+	<topic href="html/EMF-DiffMerge.html" label="Basic Usage">
 		<topic href="html/EMF-DiffMerge.html#Overview" label="Overview"></topic>
-		<topic href="html/EMF-DiffMerge.html#Starting_the_Diff.2FMerge_Tool" label="Starting the Diff/Merge Tool"></topic>
-		<topic href="html/EMF-DiffMerge.html#Configuration_and_Features_of_the_Diff.2FMerge_Tool" label="Configuration and Features of the Diff/Merge Tool">
-			<topic href="html/EMF-DiffMerge.html#Main_interface" label="Main interface"></topic>
-			<topic href="html/EMF-DiffMerge.html#Vertical_sections" label="Vertical sections"></topic>
-			<topic href="html/EMF-DiffMerge.html#Horizontal_sections" label="Horizontal sections"></topic>
-			<topic href="html/EMF-DiffMerge.html#Locking_models" label="Locking models"></topic>
-			<topic href="html/EMF-DiffMerge.html#Differences_navigation" label="Differences navigation"></topic>
-			<topic href="html/EMF-DiffMerge.html#Filter_and_Focus_capabilities" label="Filter and Focus capabilities"></topic>
-			<topic href="html/EMF-DiffMerge.html#Difference_Values_manipulation" label="Difference Values manipulation"></topic>
-			<topic href="html/EMF-DiffMerge.html#Differences_manipulation" label="Differences manipulation"></topic>
+		<topic href="html/EMF-DiffMerge.html#Starting_the_Diff.2FMerge_GUI" label="Starting the Diff/Merge GUI"></topic>
+		<topic href="html/EMF-DiffMerge.html#Configuring_a_comparison" label="Configuring a comparison">
+			<topic href="html/EMF-DiffMerge.html#Predefined_configurations" label="Predefined configurations"></topic>
+			<topic href="html/EMF-DiffMerge.html#Advanced_Matching" label="Advanced Matching"></topic>
+			<topic href="html/EMF-DiffMerge.html#Other_advanced_options" label="Other advanced options"></topic>
 		</topic>
-		<topic href="html/EMF-DiffMerge.html#EMF_Diff.2FMerge_process" label="EMF Diff/Merge process">
-			<topic href="html/EMF-DiffMerge.html#Starting_the_EMF_Diff.2FMerge_tool" label="Starting the EMF Diff/Merge tool"></topic>
-			<topic href="html/EMF-DiffMerge.html#Resolve_differences" label="Resolve differences"></topic>
-			<topic href="html/EMF-DiffMerge.html#Save_for_committing_the_resolution_results" label="Save for committing the resolution results"></topic>
+		<topic href="html/EMF-DiffMerge.html#Computing_a_comparison" label="Computing a comparison"></topic>
+		<topic href="html/EMF-DiffMerge.html#Exploiting_a_comparison" label="Exploiting a comparison">
+			<topic href="html/EMF-DiffMerge.html#Vertical_areas" label="Vertical areas"></topic>
+			<topic href="html/EMF-DiffMerge.html#Horizontal_areas" label="Horizontal areas"></topic>
+			<topic href="html/EMF-DiffMerge.html#Synthesis_section" label="Synthesis section"></topic>
+			<topic href="html/EMF-DiffMerge.html#Difference_Categories_dialog" label="Difference Categories dialog"></topic>
+			<topic href="html/EMF-DiffMerge.html#Details_section" label="Details section"></topic>
+			<topic href="html/EMF-DiffMerge.html#Difference_handling_buttons" label="Difference handling buttons"></topic>
+			<topic href="html/EMF-DiffMerge.html#Textual_comparison" label="Textual comparison"></topic>
 		</topic>
-		<topic href="html/EMF-DiffMerge.html#Textual_Comparison" label="Textual Comparison"></topic>
+	</topic>
+	<topic href="html/EMF-DiffMerge.html#Difference_resolution_in_a_nutshell" label="Difference resolution in a nutshell">
+		<topic href="html/EMF-DiffMerge.html#Opening_the_GUI" label="Opening the GUI"></topic>
+		<topic href="html/EMF-DiffMerge.html#Resolving_differences" label="Resolving differences"></topic>
+		<topic href="html/EMF-DiffMerge.html#Saving_merge_decisions" label="Saving merge decisions"></topic>
+	</topic>
+	<topic href="html/EMF-DiffMerge.html#Integration_with_Version_Control" label="Integration with Version Control">
 		<topic href="html/EMF-DiffMerge.html#Local_File_History" label="Local File History"></topic>
+		<topic href="html/EMF-DiffMerge.html#Version_Control_Systems" label="Version Control Systems"></topic>
+	</topic>
 </toc>
