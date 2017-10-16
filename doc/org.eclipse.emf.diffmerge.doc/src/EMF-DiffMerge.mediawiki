@@ -1,4 +1,4 @@
-= Basic Usage =
+= User's Guide =
 
 == Overview ==
  
@@ -6,7 +6,7 @@ EMF Diff/Merge is a diff/merge technology for models. Its main purpose is to hel
 
 A GUI is also provided for a classical usage within Eclipse. '''This document explains how users can use the GUI to compare and merge models manually.''' The GUI supports setting up and configuring comparisons, visualizing differences and selectively merging those differences.
 
-Other technological usages of EMF Diff/Merge as well as complementary documentation are available online on the [https://wiki.eclipse.org/EMF_DiffMerge EMF Diff/Merge wiki].
+Other technological usages of EMF Diff/Merge as well as complementary technical documentation are available online on the [https://wiki.eclipse.org/EMF_DiffMerge EMF Diff/Merge wiki].
 
 
 <br> 
@@ -44,13 +44,13 @@ If the user selects three files, the comparison proposes to compare two files ta
 
  
 <br> 
-== Configuring a comparison ==
+== Configuring a Comparison ==
 
 The ''''Configure...'''' button in the setup dialog makes it possible to change the way a comparison is computed: how elements are being matched, what differences are detected and how they can be merged, what extra information is provided.
 
 
 <br>
-=== Predefined configurations ===
+=== Predefined Configurations ===
 
 With the default comparison method, the configuration dialog looks like the one below.
 
@@ -107,9 +107,17 @@ Tool tips are available for all criterion categories and all criteria. Hover ove
 ** ''''Diagrams: Match shapes according to represented elements''': Match graphical shapes in (GMF or Sirius) diagrams if they represent the same element in the same diagram. Beware that it only makes sense if an element cannot be represented by different shapes in the same diagram.<br><br>
 ** ''''Diagrams: Match remaining shapes according to type'''': Certain shapes in (GMF or Sirius) diagrams may be purely technical and may not represent an element: they only make sense in the context of other more significant shapes. Match these shapes according to their type and to more significant shapes.
 
+==== Applicability ====
+
+Beware that relative criteria (names, structure, semantics) are more expensive to compute     than absolute criteria: they require more computation time and more memory. If enough memory is available, the 'Use cache' option from the Misc tab (see below) allows the computation of the comparison to be done faster.
+
+Note that all matching criteria are not applicable to all models. Names, for example, only work if every model element has a unique (qualified) name. If, on the contrary, there is name duplication in the model (or, for structural/semantic criteria, structural/semantic ambiguities), then the diff/merge tool will detect that the comparison is inconsistent and will report it as described in section 'Computing a comparison'.
+
+In such a situation, the 'Keep match keys' option from the Misc tab (see below) can be useful to understand why there are matching inconsistencies. According to this analysis, the user may decide to either modify the models to avoid inconsistencies, for example by enforcing name uniqueness constraints, or use the 'Update' feature provided by the comparison editor to experiment with slightly different matching criteria.
+
 
 <br>
-=== Other advanced options ===
+=== Other Advanced Options ===
 
 The advanced '''Differencing''' tab provides options that determine what differences are detected. By default, the following options are available.
 
@@ -122,7 +130,7 @@ The advanced '''Misc''' tab provides miscellaneous additional options. By defaul
 
 [[Image:Images/ConfigMisc.png|400px]]
 
-* '''Keep match keys''' activates tool tips that display the keys (e.g., identifiers) used to match model elements in the comparison editor, as shown in the snapshot below. Representing this piece of information in a tool tip allows for a better understanding of how elements have been matched, at the price of a higher memory consumption. Note that two model elements match if and only if they have the same match key, which depends on the selected matching options.
+* '''Keep match keys''' activates tool tips that display the match keys used to match model elements in the comparison editor, as shown in the snapshot below. Two model elements match if and only if they have the same match key, which is generated for each model element according to the selected matching options. Looking at the match keys allows for a better understanding of how elements have been matched, at the price of a higher memory consumption. If a match key has been obtained through relative criteria, then it is composed of several parts that are prefixed according to their origin: by default, '::' means identification by name, '@' by structure, and '~' by semantics.
  
 [[Image:Images/Model-DiffMerge_html_29d2b86f.png|400px]]
 
@@ -130,43 +138,42 @@ The advanced '''Misc''' tab provides miscellaneous additional options. By defaul
 
 
 <br>
-== Computing a comparison ==
+== Computing a Comparison ==
 
 Once the 'Finish' button has been clicked in the setup dialog, a few additional information dialogs may pop up.
 
-* An ''''ambiguous mapping'''' 	warning message (figure below). This message pops up if at least one of the models being compared contains duplicate match keys. It means, 	if no particular customisation of the diff/merge tool has been made, 	that each of the duplicates that appears in the dialog is an ID that several elements of the same model have in common. In other words, the model is not correct and violates elementary validation rules. A consequence, as indicated in the dialog, is that there is no guarantee that the comparison is correct or that merge operations will result in a consistent model.
+* An ''''ambiguous mapping'''' 	warning message (figure below). This message pops up if at least one of the models being compared contains duplicate match keys. If the default comparison method has been used with its default configuration, seeing this message means that each of the duplicates that appears in the dialog is an identifier that several elements of the same model have in common. The model is thus not correct and violates elementary validation rules; consequently, there is no guarantee that the comparison is correct or that merge operations will behave consistently. If, conversely, advanced matching criteria have been used, then it means they are not applicable to the selected model(s)
  
 [[Image:Images/Model-DiffMerge_html_39002cd3.png|500px]]
 
-'''Warning''': '''Do not start a merge activity''' if this message appears; fix the model(s) first. For that purpose, it may be helpful to select the duplicate IDs in the dialog, right-click, then select a 'Copy to clipboard' menu item. This action stores the list of duplicate IDs in the clipboard of the operating system for later analysis.
-
- 
-The 'ambiguous mapping' message can be shown again at any time after the comparison has been displayed. It is accessible via the '''Show inconsistencies''' button which is otherwise hidden (red circle in figure below).
+'''Warning''': '''Do not start a merge activity''' if this message appears; fix the model(s) or the comparison configuration first (see the discussion on advanced matching applicability above). For that purpose, it may be helpful to select the duplicate IDs in the dialog, right-click, then select a 'Copy to clipboard' menu item. This action stores the list of duplicate IDs in the clipboard of the operating system for later analysis. The 'ambiguous mapping' message can be shown again at any time after the comparison has been displayed. It is accessible via the ''''Show inconsistencies'''' button which is otherwise hidden (red circle in figure below).
 
  
 [[Image:Images/Model-DiffMerge_html_13763f84.png|700px]]
 
-<br>
-* A ''''no undo/redo'''' warning message (figure below). This message pops up when a comparison is being made on Sirius *.AIRD files that are already open. The 	strategy of the tool is to try and minimize the memory usage by comparing the models in memory. This is also true if only one of the *.AIRD files is open: the comparison will operate on the model in memory. In the case of two open models, however, undo/redo cannot be enabled at this time for technical reasons.
+
+* A ''''no undo/redo'''' warning message (figure below). This message pops up when a comparison is being made on Sirius *.AIRD files that are already open. The 	strategy of the tool is to try and minimize the memory usage by comparing the models in memory. This is also true if only one of the *.AIRD files is open: the comparison will operate on the model in memory. In the case of two open models, however, undo/redo cannot be enabled at this time for technical reasons. As indicated in the message, if the purpose of the comparison is to merge models, not just to compare them, and undo/redo is required, then it is necessary to close at least one of the models before starting the diff/merge tool to regain the undo/redo capability.
+
  
 [[Image:Images/Model-DiffMerge_html_m43da5a9d.png]]
 
  
-As indicated in the message, if the purpose of the comparison is to merge models, not just to compare them, and undo/redo is required, then it is necessary to close at least one of the models before starting the diff/merge tool to regain the undo/redo capability.
-
-
+<br>
 * A '''progress dialog''' (figure below). Computing the differences between models takes some time depending on the size of the models and the number of differences between them. Click the 'Run in background' button in order to keep using your environment while the differences are being computed in parallel. If differences are found, this phase ends with the opening of a comparison editor described in the next section.
+
 
 [[Image:Images/Model-DiffMerge_html_m37e3e9e3.png]]
 
 
+<br>
 * A ''''no differences' message dialog''' (figure below). This message dialog states that no difference has been found. The comparison process ends and no additional information is provided. This situation is different from the one where differences have been found but are considered too technical to be visible by default. In that case, a comparison editor opens with an empty Synthesis section and the technical differences can be shown using the Difference Categories dialog (see below).
+
 
 [[Image:Images/NoDiffs.png|500px]]
 
  
 <br>
-== Exploiting a comparison ==
+== Exploiting a Comparison ==
 
 The comparison editor presents the differences which have been computed.
 
@@ -178,7 +185,7 @@ The editor is composed of two horizontal areas intersecting with three vertical 
 
 
 <br>
-=== Vertical areas === 
+=== Vertical Areas === 
 
 
 [[Image:Images/Model-DiffMerge_html_m4b50cf8c.png|700px]]
@@ -202,7 +209,7 @@ The three columns are synchronized: clicking an element in the Synthesis section
 
  
 <br>
-=== Horizontal areas === 
+=== Horizontal Areas === 
 
  
 [[Image:Images/Model-DiffMerge_html_ma5d5753.png|700px]]
@@ -215,7 +222,7 @@ For example, if a modified element (in purple) is being clicked in the Synthesis
 
  
 <br>
-=== Synthesis section ===
+=== Synthesis Section ===
 
 The Synthesis section represents the differences between models in terms of additions, deletions and moves of elements. According to the color code, model elements which are present in the right model but not in the left model are written in blue while they are written in dark red in the opposite case. Elements which are present in both sides but have differences in their properties (attributes or references) are written in '''purple'''. The number of differences they contain is written between parentheses (unless the 'Show difference numbers' option is disabled, see below).
 
@@ -261,7 +268,7 @@ Additional features are available via a click on the triangle-shaped button.
 
 
 <br>
-=== Difference Categories dialog === 
+=== Difference Categories Dialog === 
 
 The [[Image:Images/categories_icon.png]] button or the 'Difference categories...' menu item allow filtering out the displayed differences in order to ease their understanding and split the merge activity into successive phases that focus on different kinds of differences.
 
@@ -290,7 +297,7 @@ If there are chances that differences that are visible with default settings are
 
 
 <br>
-=== Details section === 
+=== Details Section === 
 
 The properties of the element selected in the Synthesis section are visible in the Details section (lower area). This section is subdivided into a '''Property section''' that represents the properties themselves and two '''Value sections''' that represent the values of the selected property in the model that corresponds to their column.
 
@@ -310,7 +317,7 @@ A click on the triangle-shaped button in the Property section brings a few optio
  
 
 <br>
-=== Difference handling buttons === 
+=== Difference Handling Buttons === 
 
 The buttons below are shown in the lower area near the Value sections. Their purpose is to decide what to do with differences.
 
@@ -342,7 +349,7 @@ Similarly to the 'Copy' buttons, the 'Ignore' buttons may trigger a dedicated di
 
 
 <br>
-=== Textual comparison ===
+=== Textual Comparison ===
 
 While the recommended comparison method for model and diagram files is using the Diff/Merge tool, 
 it may sometimes be useful to compare model and diagram files textually. 
@@ -354,9 +361,12 @@ it is possible to switch to a textual comparison by selecting "Text Compare" in 
 
 
 <br>
-= Difference resolution in a nutshell =
- 
-== Opening the GUI ==
+== Difference Resolution in a Nutshell ==
+
+This section summarizes the '''essential steps''' that must be followed to deal with model differences.
+
+
+=== Opening the GUI ===
  
 The EMF Diff/Merge GUI can be opened in Eclipse using the 'Compare With' - 'Each Other as models' contextual menu on files of the workspace.
 
@@ -364,7 +374,7 @@ The EMF Diff/Merge GUI can be opened in Eclipse using the 'Compare With' - 'Each
 [[Image:Images/Model-DiffMerge_html_m4a2563eb.png]]
 
 
-== Resolving differences ==
+=== Resolving Differences ===
  
 The following buttons can be used to resolve differences.
 
@@ -379,7 +389,7 @@ Note that in some cases, performing a merge can take time especially if it is a 
 [[Image:Images/Model-DiffMerge_html_m9cba6ee.png]]
 
 
-== Saving merge decisions ==
+=== Saving Merge Decisions ===
  
 Resolution of differences is considered to be finished when the content of the Synthesis section is empty, no significant difference is filtered out ('[filtered]' does not appear in the header of the Synthesis section) and changes have been saved by pressing Ctrl-S.
 
@@ -391,14 +401,14 @@ Note that the absence of visible differences does not mean that the left and rig
 
  
 <br>
-= Integration with Version Control =
+== Integration with Version Control ==
 
-== Local File History ==
+=== Local File History ===
 
 Eclipse maintains a local history of file modifications and allows to compare a file with a version from local history. For more information refer to the [[../help/topic/org.eclipse.platform.doc.user/concepts/concepts-17a.htm?cp=0_2_1_8|local history documentation]]
 
 
-== Version Control Systems ==
+=== Version Control Systems ===
 
 Eclipse provides mechanisms (Eclipse Team) that make interactions with Version Control Systems (VCSs) easier. VCS clients that integrate within Eclipse and use these mechanisms, for example EGit for Git or Subversive for SVN, can interact with EMF Diff/Merge in order to, e.g., compare well-identified versions, commits or branches, understand the content of a commit, or resolve conflicts when merging branches.
 
