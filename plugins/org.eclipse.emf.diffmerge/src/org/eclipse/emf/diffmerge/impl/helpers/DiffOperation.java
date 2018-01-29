@@ -59,6 +59,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
   /** The non-null comparison whose differences are being built */
   private final IComparison.Editable _comparison;
   
+  /** Whether the scope on the REFERENCE side is read-only */
+  protected final boolean _isReferenceScopeReadOnly;
+  
+  /** Whether the scope on the TARGET side is read-only */
+  protected final boolean _isTargetScopeReadOnly;
+  
   
   /**
    * Constructor based on a comparison with a predefined mapping
@@ -72,6 +78,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
     _comparison = comparison_p;
     _diffPolicy = diffPolicy_p;
     _mergePolicy = mergePolicy_p;
+    _isReferenceScopeReadOnly = getComparison().getScope(Role.REFERENCE).isReadOnly();
+    _isTargetScopeReadOnly = getComparison().getScope(Role.TARGET).isReadOnly();
   }
   
   /**
@@ -520,6 +528,54 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
+   * Return whether the scope of the given role is read-only.
+   * If no scope has the given role, then true is returned.
+   * @param role_p a non-null role
+   */
+  protected boolean isReadOnly(Role role_p) {
+    boolean result;
+    switch (role_p) {
+    case REFERENCE:
+      result = _isReferenceScopeReadOnly;
+      break;
+    case TARGET:
+      result = _isTargetScopeReadOnly;
+      break;
+    default:
+      result = true;
+    }
+    return result;
+  }
+  
+  /**
+   * Mark the given source difference as implying the given target difference
+   * when merged to the side of the given role
+   * @param source_p a non-null difference
+   * @param target_p a non-null difference
+   * @param role_p a non-null role
+   */
+  protected void markImplies(IMergeableDifference source_p, IMergeableDifference target_p,
+      Role role_p) {
+    if (!isReadOnly(role_p)) {
+      ((IMergeableDifference.Editable)source_p).markImplies(target_p, role_p);
+    }
+  }
+  
+  /**
+   * Mark the given source difference as requiring the given target difference
+   * when merged to the side of the given role
+   * @param source_p a non-null difference
+   * @param target_p a non-null difference
+   * @param role_p a non-null role
+   */
+  protected void markRequires(IMergeableDifference source_p, IMergeableDifference target_p,
+      Role role_p) {
+    if (!isReadOnly(role_p)) {
+      ((IMergeableDifference.Editable)source_p).markRequires(target_p, role_p);
+    }
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#run()
    */
   public IStatus run() {
@@ -563,9 +619,9 @@ public class DiffOperation extends AbstractExpensiveOperation {
           // Setting cycle dependencies
           if (cycleEnd != null) {
             // Breaking cycle on the opposite role, where cycleEnd is the ancestor
-            ((IMergeableDifference.Editable)cycleEnd).markRequires(presence_p, oppositeRole);
+            markRequires(cycleEnd, presence_p, oppositeRole);
             // Breaking cycle on the ordering role, where presence_p is the ancestor
-            ((IMergeableDifference.Editable)presence_p).markRequires(cycleEnd, orderingRole);
+            markRequires(presence_p, cycleEnd, orderingRole);
           }
         }
       } while (oppositeAncestorMatch != null);
@@ -585,11 +641,9 @@ public class DiffOperation extends AbstractExpensiveOperation {
         IElementPresence ownerPresence = getOrCreateElementPresence(ownerMatch);
         if (ownerPresence != null) {
           // Child addition requires container addition
-          ((IMergeableDifference.Editable)presence_p).markRequires(
-              ownerPresence, presenceRole.opposite());
+          markRequires(presence_p, ownerPresence, presenceRole.opposite());
           // Container deletion requires child deletion
-          ((IMergeableDifference.Editable)ownerPresence).markRequires(
-              presence_p, presenceRole);
+          markRequires(ownerPresence, presence_p, presenceRole);
         }
       }
     }
@@ -602,11 +656,9 @@ public class DiffOperation extends AbstractExpensiveOperation {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
         if (peerPresence != null) {
           // Element addition requires group member addition
-          ((IMergeableDifference.Editable)presence_p).markRequires(
-              peerPresence, presenceRole.opposite());
+          markRequires(presence_p, peerPresence, presenceRole.opposite());
           // Group member deletion requires element deletion
-          ((IMergeableDifference.Editable)peerPresence).markRequires(
-              presence_p, presenceRole);
+          markRequires(peerPresence, presence_p, presenceRole);
         }
       }
     }
@@ -619,8 +671,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
         IElementPresence peerPresence = getOrCreateElementPresence(peerMatch);
         if (peerPresence != null) {
           // Element deletion requires group member deletion
-          ((IMergeableDifference.Editable)presence_p).markRequires(
-              peerPresence, presenceRole);
+          markRequires(presence_p, peerPresence, presenceRole);
         }
       }
     }
@@ -635,24 +686,22 @@ public class DiffOperation extends AbstractExpensiveOperation {
   protected void setOppositeReferenceDependencies(
       IReferenceValuePresence first_p, IReferenceValuePresence second_p) {
     assert first_p.isOppositeOf(second_p);
-    IMergeableDifference.Editable first = (IMergeableDifference.Editable)first_p;
-    IMergeableDifference.Editable second = (IMergeableDifference.Editable)second_p;
     // Opposite diffs are implicitly equivalent except for non-many references
     // which bring their own constraints and must therefore be merged explicitly
     Role presenceRole = first_p.getPresenceRole();
     if (second_p.getFeature().isMany()) {
-      first.markImplies(second_p, presenceRole);
-      first.markImplies(second_p, presenceRole.opposite());
+      markImplies(first_p,second_p, presenceRole);
+      markImplies(first_p, second_p, presenceRole.opposite());
     } else {
-      first.markRequires(second_p, presenceRole);
-      first.markRequires(second_p, presenceRole.opposite());
+      markRequires(first_p, second_p, presenceRole);
+      markRequires(first_p, second_p, presenceRole.opposite());
     }
     if (first_p.getFeature().isMany()) {
-      second.markImplies(first_p, presenceRole);
-      second.markImplies(first_p, presenceRole.opposite());
+      markImplies(second_p, first_p, presenceRole);
+      markImplies(second_p, first_p, presenceRole.opposite());
     } else {
-      second.markRequires(first_p, presenceRole);
-      second.markRequires(first_p, presenceRole.opposite());
+      markRequires(second_p, first_p, presenceRole);
+      markRequires(second_p, first_p, presenceRole.opposite());
     }
   }
   
@@ -688,31 +737,26 @@ public class DiffOperation extends AbstractExpensiveOperation {
         referenceDiff_p.getValueMatch());
     if (presence != null) {
       Role presenceRole = referenceDiff_p.getPresenceRole();
-      IMergeableDifference.Editable referenceDiff =
-          (IMergeableDifference.Editable)referenceDiff_p;
       // Ref requires value presence, value absence requires no ref
-      referenceDiff.markRequires(presence, presenceRole.opposite());
-      ((IMergeableDifference.Editable)presence).markRequires(
-          referenceDiff_p, presenceRole);
+      markRequires(referenceDiff_p, presence, presenceRole.opposite());
+      markRequires(presence, referenceDiff_p, presenceRole);
       if (referenceDiff_p.getFeature() != null) {
         // If containment and presence requires ownership, value presence implies ref
         // and no ref implies value absence
         if (referenceDiff_p.isOwnership() &&
             getMergePolicy().bindPresenceToOwnership(
                 _comparison.getScope(presenceRole.opposite()))) {
-          ((IMergeableDifference.Editable)presence).markImplies(
-              referenceDiff_p, presenceRole.opposite());
-          referenceDiff.markImplies(presence, presenceRole);
+          markImplies(presence, referenceDiff_p, presenceRole.opposite());
+          markImplies(referenceDiff_p, presence, presenceRole);
         } else {
           // Not a containment or no ownership/presence coupling
           EReference opposite = referenceDiff_p.getFeature().getEOpposite();
           // If reference has an eOpposite which is mandatory for addition, then ...
           if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
             // ... value presence requires ref
-            ((IMergeableDifference.Editable)presence).markRequires(
-                referenceDiff_p, presenceRole.opposite());
+            markRequires(presence, referenceDiff_p, presenceRole.opposite());
             // ... and no ref requires value absence
-            referenceDiff.markRequires(presence, presenceRole);
+            markRequires(referenceDiff_p, presence, presenceRole);
           }
         }
       }
@@ -731,10 +775,8 @@ public class DiffOperation extends AbstractExpensiveOperation {
     if (presence != null) {
       Role presenceRole = referenceDiff_p.getPresenceRole();
       // Ref requires element presence, element absence requires no ref
-      ((IMergeableDifference.Editable)referenceDiff_p).markRequires(
-          presence, presenceRole.opposite());
-      ((IMergeableDifference.Editable)presence).markRequires(
-          referenceDiff_p, presenceRole);
+      markRequires(referenceDiff_p, presence, presenceRole.opposite());
+      markRequires(presence, referenceDiff_p, presenceRole);
     }
   }
   
@@ -775,14 +817,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
   protected void setSymmetricalOwnershipDependencies(
       IReferenceValuePresence first_p, IReferenceValuePresence second_p) {
     assert first_p.isSymmetricalOwnershipTo(second_p);
-    IMergeableDifference.Editable first = (IMergeableDifference.Editable)first_p;
-    IMergeableDifference.Editable second = (IMergeableDifference.Editable)second_p;
     // Symmetrical ownership presence is implicit on addition...
-    first.markImplies(second_p, second_p.getPresenceRole());
-    second.markImplies(first_p, first_p.getPresenceRole());
+    markImplies(first_p, second_p, second_p.getPresenceRole());
+    markImplies(second_p, first_p, first_p.getPresenceRole());
     // ... and explicit on removal
-    first.markRequires(second_p, first_p.getPresenceRole());
-    second.markRequires(first_p, second_p.getPresenceRole());
+    markRequires(first_p, second_p, first_p.getPresenceRole());
+    markRequires(second_p, first_p, second_p.getPresenceRole());
   }
   
   /**
@@ -794,14 +834,12 @@ public class DiffOperation extends AbstractExpensiveOperation {
   protected void setSymmetricalValuePresenceDependencies(
       IValuePresence first_p, IValuePresence second_p) {
     assert first_p.isSymmetricalTo(second_p);
-    IMergeableDifference.Editable first = (IMergeableDifference.Editable)first_p;
-    IMergeableDifference.Editable second = (IMergeableDifference.Editable)second_p;
     // Symmetrical diffs are implicitly dependent on addition
-    first.markImplies(second_p, second_p.getPresenceRole());
-    second.markImplies(first_p, first_p.getPresenceRole());
+    markImplies(first_p, second_p, second_p.getPresenceRole());
+    markImplies(second_p, first_p, first_p.getPresenceRole());
     // Symmetrical diffs are explicitly dependent on removal
-    first.markRequires(second_p, first_p.getPresenceRole());
-    second.markRequires(first_p, second_p.getPresenceRole());
+    markRequires(first_p, second_p, first_p.getPresenceRole());
+    markRequires(second_p, first_p, second_p.getPresenceRole());
   }
   
   /**
