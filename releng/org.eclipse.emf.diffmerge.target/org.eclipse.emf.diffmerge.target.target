@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="19">
+<?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="23">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20170209-1843"/>
-<unit id="org.eclipse.jdt.feature.group" version="3.12.3.v20170301-0400"/>
-<unit id="org.eclipse.platform.sdk" version="4.6.3.M20170301-0400"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.egit.feature.group" version="4.6.1.201703071140-r"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.12.0.v20160526-0356"/>
-<unit id="org.eclipse.team.svn.feature.group" version="4.0.4.I20170216-1700"/>
-<repository location="http://download.eclipse.org/releases/neon"/>
-</location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.license.feature.group" version="1.0.1.v20140414-1359"/>
 <repository location="http://download.eclipse.org/cbi/updates/license/"/>
@@ -22,7 +10,19 @@
 <unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="5.1.0.201710261549"/>
 <unit id="org.eclipse.sirius.specifier.feature.group" version="5.1.0.201710261549"/>
 <unit id="org.eclipse.sirius.specifier.ide.ui.feature.group" version="5.1.0.201710261549"/>
-<repository location="http://download.eclipse.org/sirius/updates/milestones/5.1.0rc4/neon"/>
+<repository location="http://download.eclipse.org/sirius/updates/releases/5.1.0/oxygen"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.2.v20171108-1834"/>
+<unit id="org.eclipse.jdt.feature.group" version="3.13.2.v20171130-0906"/>
+<unit id="org.eclipse.platform.sdk" version="4.7.2.M20171130-0510"/>
+<repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.egit.feature.group" version="4.9.2.201712150930-r"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.13.0.v20170609-0928"/>
+<unit id="org.eclipse.team.svn.feature.group" version="4.0.5.I20170425-1700"/>
+<repository location="http://download.eclipse.org/releases/oxygen"/>
 </location>
 </locations>
 </target>
