@@ -6,9 +6,6 @@
    <feature url="features/org.eclipse.emf.diffmerge.egit.feature_0.9.0.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.feature" version="0.9.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
-   <feature url="features/org.eclipse.emf.diffmerge.svn.feature_0.9.0.qualifier.jar" id="org.eclipse.emf.diffmerge.svn.feature" version="0.9.0.qualifier">
-      <category name="org.eclipse.emf.diffmerge.category"/>
-   </feature>
    <feature url="features/org.eclipse.emf.diffmerge.gmf.feature_0.9.0.qualifier.jar" id="org.eclipse.emf.diffmerge.gmf.feature" version="0.9.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
