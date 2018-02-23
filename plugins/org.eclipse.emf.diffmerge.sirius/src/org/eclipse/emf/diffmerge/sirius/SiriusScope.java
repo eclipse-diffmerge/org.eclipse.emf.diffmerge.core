@@ -70,7 +70,8 @@ public class SiriusScope extends GMFScope {
       ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation();
   
   /** The non-null map from representation UIDs to the corresponding descriptors */
-  protected final Map<String, DRepresentationDescriptor> _idToDescriptor;
+  protected final Map<String, DRepresentationDescriptor> _idToDescriptor =
+      new HashMap<String, DRepresentationDescriptor>();
   
   
   /**
@@ -81,7 +82,6 @@ public class SiriusScope extends GMFScope {
    */
   public SiriusScope(URI uri_p, EditingDomain domain, boolean readOnly_p) {
     super(uri_p, domain, readOnly_p);
-    _idToDescriptor = new HashMap<String, DRepresentationDescriptor>();
   }
   
   /**
@@ -92,7 +92,26 @@ public class SiriusScope extends GMFScope {
    */
   public SiriusScope(URI uri_p, ResourceSet resourceSet_p, boolean readOnly_p) {
     super(uri_p, resourceSet_p, readOnly_p);
-    _idToDescriptor = new HashMap<String, DRepresentationDescriptor>();
+  }
+  
+  /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param editingDomain_p a non-null editing domain that encompasses the scope
+   * @param readOnly_p whether the scope should be read-only, if supported
+   */
+  public SiriusScope(Collection<URI> uris_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+    super(uris_p, editingDomain_p, readOnly_p);
+  }
+  
+  /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param resourceSet_p a non-null resource set where the resources must be loaded
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  public SiriusScope(Collection<URI> uris_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+    super(uris_p, resourceSet_p, readOnly_p);
   }
   
   /**

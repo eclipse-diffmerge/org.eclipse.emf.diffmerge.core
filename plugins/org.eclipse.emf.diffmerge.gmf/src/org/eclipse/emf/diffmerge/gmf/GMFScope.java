@@ -63,6 +63,26 @@ public class GMFScope extends FragmentedModelScope {
   }
   
   /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param editingDomain_p a non-null editing domain that encompasses the scope
+   * @param readOnly_p whether the scope should be read-only, if supported
+   */
+  public GMFScope(Collection<URI> uris_p, EditingDomain editingDomain_p, boolean readOnly_p) {
+    super(uris_p, editingDomain_p, readOnly_p);
+  }
+  
+  /**
+   * Constructor
+   * @param uris_p a non-null collection of URIs of resources to load as roots
+   * @param resourceSet_p a non-null resource set where the resources must be loaded
+   * @param readOnly_p whether the scope is in read-only mode, if applicable
+   */
+  public GMFScope(Collection<URI> uris_p, ResourceSet resourceSet_p, boolean readOnly_p) {
+    super(uris_p, resourceSet_p, readOnly_p);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#add(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
    */
   @Override
