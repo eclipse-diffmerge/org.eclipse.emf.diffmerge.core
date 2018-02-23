@@ -1,7 +1,7 @@
 /**
  * <copyright>
  * 
- * Copyright (c) 2010-2017 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2018 Thales Global Services S.A.S.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint;
-import org.eclipse.swt.graphics.Color;
 
 
 /**
@@ -46,8 +45,6 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
       else if (value1_p instanceof RelativeBendpoint && value2_p instanceof RelativeBendpoint)
         result = equalRelativeBendpoint(
             (RelativeBendpoint)value1_p, (RelativeBendpoint)value2_p);
-      else if (value1_p instanceof Color && value2_p instanceof Color)
-        result = equalColor((Color)value1_p, (Color)value2_p);
     }
     return result;
   }
@@ -58,18 +55,6 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
   @Override
   protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
     return super.doConsiderOrdered(feature_p) && feature_p != VIEW_CHILDREN;
-  }
-  
-  /**
-   * Return whether the given colors must be considered equal
-   * @param color1_p a non-null color
-   * @param color2_p a non-null color
-   */
-  protected boolean equalColor(Color color1_p, Color color2_p) {
-    return
-      color1_p.getBlue() == color2_p.getBlue() &&
-      color1_p.getRed() == color2_p.getRed() &&
-      color1_p.getGreen() == color2_p.getGreen();
   }
   
   /**
