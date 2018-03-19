@@ -24,6 +24,7 @@ import org.eclipse.egit.core.RevUtils.ConflictCommits;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.team.core.history.IFileRevision;
 
 
@@ -69,12 +70,14 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
       // Current file not conflicting, but root resource is.
       if (DirCacheEntry.STAGE_2 == _conflictRole) {
         return inCommit(
-            getRepository(), conflictCommits.getOurCommit(),gitPath, null);
+            getRepository(), conflictCommits.getOurCommit(), gitPath, null);
       }
       // If Theirs, pick the git ancestor commitid for the current file.
       else if (DirCacheEntry.STAGE_3 == _conflictRole) {
-        return inCommit(
-            getRepository(), conflictCommits.getTheirCommit(), gitPath, null);
+        RevCommit commit = conflictCommits.getTheirCommit();
+        if (commit == null)
+          commit = conflictCommits.getOurCommit();
+        return inCommit(getRepository(), commit, gitPath, null);
       }
     } catch (IOException e) {
       EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
