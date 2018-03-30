@@ -47,8 +47,8 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class DiffdataFactoryImpl extends EFactoryImpl implements
-    DiffdataFactory {
+public class DiffdataFactoryImpl extends EFactoryImpl
+    implements DiffdataFactory {
   /**
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
@@ -131,8 +131,8 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
     case DiffdataPackage.ROLE:
       return createRoleFromString(eDataType, initialValue);
     default:
-      throw new IllegalArgumentException(
-          "The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
+          + "' is not a valid classifier"); //$NON-NLS-1$
     }
   }
 
@@ -155,8 +155,8 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
     case DiffdataPackage.ROLE:
       return convertRoleToString(eDataType, instanceValue);
     default:
-      throw new IllegalArgumentException(
-          "The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
+          + "' is not a valid classifier"); //$NON-NLS-1$
     }
   }
 
@@ -267,8 +267,8 @@ public class DiffdataFactoryImpl extends EFactoryImpl implements
    */
   public IEditableModelScope createIEditableModelScopeFromString(
       EDataType eDataType, String initialValue) {
-    return (IEditableModelScope) super
-        .createFromString(eDataType, initialValue);
+    return (IEditableModelScope) super.createFromString(eDataType,
+        initialValue);
   }
 
   /**

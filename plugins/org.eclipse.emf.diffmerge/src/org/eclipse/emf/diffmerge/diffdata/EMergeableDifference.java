@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getComparison <em>Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
@@ -39,7 +40,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference()
  * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableMergeableDifference"
@@ -55,11 +55,22 @@ public interface EMergeableDifference extends EObject, Editable {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Comparison</em>' reference.
+   * @see #setComparison(EComparison)
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Comparison()
-   * @model required="true" changeable="false"
+   * @model required="true"
    * @generated
    */
   EComparison getComparison();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getComparison <em>Comparison</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Comparison</em>' reference.
+   * @see #getComparison()
+   * @generated
+   */
+  void setComparison(EComparison value);
 
   /**
    * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.

@@ -28,8 +28,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 
 
 /**
- * A single-resource model scope covering the full EMF containment subtree of a given
- * element.
+ * A scope covering the full EMF containment subtree of a given element.
  * The root cannot be removed from the scope and the load/unload life-cycle is not handled.
  * EMF undo/redo is supported because the local state never changes.
  * Complete deletion of elements which are cross-referenced outside the scope is not supported.

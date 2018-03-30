@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getReferenceScope <em>Reference Scope</em>}</li>
@@ -37,7 +38,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getLastMergePolicy <em>Last Merge Policy</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EComparison#getMapping <em>Mapping</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison()
  * @model superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableComparison"

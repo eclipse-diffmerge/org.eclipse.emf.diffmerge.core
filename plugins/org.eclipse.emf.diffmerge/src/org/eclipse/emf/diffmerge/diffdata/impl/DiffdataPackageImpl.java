@@ -56,8 +56,8 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class DiffdataPackageImpl extends EPackageImpl implements
-    DiffdataPackage {
+public class DiffdataPackageImpl extends EPackageImpl
+    implements DiffdataPackage {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1373,7 +1373,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEMergeableDifference_Comparison(), this.getEComparison(),
         null, "comparison", null, 1, 1, EMergeableDifference.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_AlignedWithAncestor(),
         theEcorePackage.getEBoolean(), "alignedWithAncestor", "true", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
@@ -1419,11 +1419,11 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEElementRelativePresence_ElementMatch(), this.getEMatch(),
         null, "elementMatch", null, 1, 1, EElementRelativePresence.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEElementRelativePresence_PresenceRole(), this.getRole(),
         "presenceRole", null, 1, 1, EElementRelativePresence.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eElementPresenceEClass, EElementPresence.class,
@@ -1431,19 +1431,19 @@ public class DiffdataPackageImpl extends EPackageImpl implements
         IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEElementPresence_OwnerMatch(), this.getEMatch(), null,
         "ownerMatch", null, 1, 1, EElementPresence.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eValuePresenceEClass, EValuePresence.class, "EValuePresence", //$NON-NLS-1$
         IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEValuePresence_Feature(),
         theEcorePackage.getEStructuralFeature(), null, "feature", null, 1, 1, //$NON-NLS-1$
-        EValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE,
+        EValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEValuePresence_Order(), theEcorePackage.getEBoolean(),
         "order", "false", 1, 1, EValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$//$NON-NLS-2$
-        !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
 
     initEClass(eAttributeValuePresenceEClass, EAttributeValuePresence.class,
@@ -1452,7 +1452,7 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     initEAttribute(getEAttributeValuePresence_Value(),
         theEcorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
         EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
-        !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
@@ -1461,11 +1461,11 @@ public class DiffdataPackageImpl extends EPackageImpl implements
     initEReference(getEReferenceValuePresence_Value(),
         theEcorePackage.getEObject(), null, "value", null, 1, 1, //$NON-NLS-1$
         EReferenceValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
-        !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEReferenceValuePresence_ValueMatch(), this.getEMatch(),
-        null, "valueMatch", null, 1, 1, EReferenceValuePresence.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE,
+        null, "valueMatch", null, 0, 1, EReferenceValuePresence.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(attributeToValueToDifferenceEntryEClass, Map.Entry.class,

@@ -2057,7 +2057,7 @@ public interface DiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Attribute To Value To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyType="org.eclipse.emf.ecore.EAttribute" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry<org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.diffdata.IAttributeValuePresence>"
+   *        valueMapType="org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.diffdata.IAttributeValuePresence&gt;"
    * @generated
    */
   EClass getAttributeToValueToDifferenceEntry();
@@ -2125,7 +2125,7 @@ public interface DiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Reference To Element To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyType="org.eclipse.emf.ecore.EReference" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.diffdata.ElementToDifferenceEntry<org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence>"
+   *        valueMapType="org.eclipse.emf.diffmerge.diffdata.ElementToDifferenceEntry&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence&gt;"
    * @generated
    */
   EClass getReferenceToElementToDifferenceEntry();

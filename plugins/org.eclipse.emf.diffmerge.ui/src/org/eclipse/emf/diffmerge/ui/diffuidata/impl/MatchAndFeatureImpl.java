@@ -31,43 +31,43 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl#getMatch <em>Match</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl#getFeature <em>Feature</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
 public class MatchAndFeatureImpl extends EObjectImpl implements MatchAndFeature {
 	/**
-	 * The cached value of the '{@link #getMatch() <em>Match</em>}' reference.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getMatch() <em>Match</em>}' reference.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMatch()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getMatch()
+   * @generated
+   * @ordered
+   */
 	protected EMatch match;
 
 	/**
-	 * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFeature()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getFeature()
+   * @generated
+   * @ordered
+   */
 	protected EStructuralFeature feature;
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected MatchAndFeatureImpl() {
-		super();
-	}
+    super();
+  }
 	
 	/**
 	 * Constructor
@@ -81,99 +81,99 @@ public class MatchAndFeatureImpl extends EObjectImpl implements MatchAndFeature 
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	protected EClass eStaticClass() {
-		return DiffuidataPackage.Literals.MATCH_AND_FEATURE;
-	}
+    return DiffuidataPackage.Literals.MATCH_AND_FEATURE;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EMatch getMatch() {
-		if (match != null && match.eIsProxy()) {
-			InternalEObject oldMatch = (InternalEObject)match;
-			match = (EMatch)eResolveProxy(oldMatch);
-			if (match != oldMatch) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DiffuidataPackage.MATCH_AND_FEATURE__MATCH, oldMatch, match));
-			}
-		}
-		return match;
-	}
+    if (match != null && match.eIsProxy()) {
+      InternalEObject oldMatch = (InternalEObject)match;
+      match = (EMatch)eResolveProxy(oldMatch);
+      if (match != oldMatch) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, DiffuidataPackage.MATCH_AND_FEATURE__MATCH, oldMatch, match));
+      }
+    }
+    return match;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EMatch basicGetMatch() {
-		return match;
-	}
+    return match;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EStructuralFeature getFeature() {
-		if (feature != null && feature.eIsProxy()) {
-			InternalEObject oldFeature = (InternalEObject)feature;
-			feature = (EStructuralFeature)eResolveProxy(oldFeature);
-			if (feature != oldFeature) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, DiffuidataPackage.MATCH_AND_FEATURE__FEATURE, oldFeature, feature));
-			}
-		}
-		return feature;
-	}
+    if (feature != null && feature.eIsProxy()) {
+      InternalEObject oldFeature = (InternalEObject)feature;
+      feature = (EStructuralFeature)eResolveProxy(oldFeature);
+      if (feature != oldFeature) {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, DiffuidataPackage.MATCH_AND_FEATURE__FEATURE, oldFeature, feature));
+      }
+    }
+    return feature;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EStructuralFeature basicGetFeature() {
-		return feature;
-	}
+    return feature;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
-				if (resolve) return getMatch();
-				return basicGetMatch();
-			case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
-				if (resolve) return getFeature();
-				return basicGetFeature();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
+        if (resolve) return getMatch();
+        return basicGetMatch();
+      case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
+        if (resolve) return getFeature();
+        return basicGetFeature();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
-				return match != null;
-			case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
-				return feature != null;
-		}
-		return super.eIsSet(featureID);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
+        return match != null;
+      case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
+        return feature != null;
+    }
+    return super.eIsSet(featureID);
+  }
 
 } //MatchAndFeatureImpl

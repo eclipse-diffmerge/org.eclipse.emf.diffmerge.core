@@ -16,6 +16,7 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -28,6 +29,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,15 +37,15 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EAttributeValuePresenceImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
-public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
-    EAttributeValuePresence {
+public class EAttributeValuePresenceImpl extends EValuePresenceImpl
+    implements EAttributeValuePresence {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -86,7 +88,7 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
       EMatch elementMatch_p, EAttribute attribute_p, Object value_p,
       Role presenceRole_p, boolean isOrder_p) {
     super(comparison_p, elementMatch_p, attribute_p, presenceRole_p, isOrder_p);
-    value = value_p;
+    setValue(value_p);
     ((IMatch.Editable) elementMatch).addRelatedDifference(this);
   }
 
@@ -114,6 +116,19 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
+  public void setValue(Object newValue) {
+    Object oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE, oldValue, value));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
@@ -129,11 +144,41 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
    * @generated
    */
   @Override
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      setValue(newValue);
+      return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID) {
+    switch (featureID) {
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      setValue(VALUE_EDEFAULT);
+      return;
+    }
+    super.eUnset(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
     case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
-      return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT
-          .equals(value);
+      return VALUE_EDEFAULT == null ? value != null
+          : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
   }
@@ -154,7 +199,7 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
     result.append(')');
     return result.toString();
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature()
    * @generated NOT
@@ -182,8 +227,8 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl implements
         }
       }
     } else if (isOrder()) {
-      result = getElementMatch()
-          .getAttributeValueDifference(getFeature(), null);
+      result = getElementMatch().getAttributeValueDifference(getFeature(),
+          null);
     }
     return result;
   }

@@ -7,7 +7,7 @@
     <eOperations name="dispose"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="actualComparison" lowerBound="1"
         eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EComparison"
-        changeable="false" containment="true"/>
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="differencesToIgnore" ordered="false"
         upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMergeableDifference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="lastActionSelection" eType="#//ComparisonSelection"

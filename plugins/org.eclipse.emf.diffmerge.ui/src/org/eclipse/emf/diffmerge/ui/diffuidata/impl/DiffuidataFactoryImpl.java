@@ -34,158 +34,158 @@ import org.eclipse.jface.viewers.TreePath;
  */
 public class DiffuidataFactoryImpl extends EFactoryImpl implements DiffuidataFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
+   * Creates the default factory implementation.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public static DiffuidataFactory init() {
-		try {
+    try {
       DiffuidataFactory theDiffuidataFactory = (DiffuidataFactory)EPackage.Registry.INSTANCE.getEFactory(DiffuidataPackage.eNS_URI);
-			if (theDiffuidataFactory != null) {
-				return theDiffuidataFactory;
-			}
-		}
-		catch (Exception exception) {
-			EcorePlugin.INSTANCE.log(exception);
-		}
-		return new DiffuidataFactoryImpl();
-	}
+      if (theDiffuidataFactory != null) {
+        return theDiffuidataFactory;
+      }
+    }
+    catch (Exception exception) {
+      EcorePlugin.INSTANCE.log(exception);
+    }
+    return new DiffuidataFactoryImpl();
+  }
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
+   * Creates an instance of the factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public DiffuidataFactoryImpl() {
-		super();
-	}
+    super();
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case DiffuidataPackage.UI_COMPARISON: return createUIComparison();
-			case DiffuidataPackage.COMPARISON_SELECTION: return createComparisonSelection();
-			case DiffuidataPackage.MATCH_AND_FEATURE: return createMatchAndFeature();
-			case DiffuidataPackage.MATCH_TO_NB_ENTRY: return (EObject)createMatchToNbEntry();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+    switch (eClass.getClassifierID()) {
+      case DiffuidataPackage.UI_COMPARISON: return createUIComparison();
+      case DiffuidataPackage.COMPARISON_SELECTION: return createComparisonSelection();
+      case DiffuidataPackage.MATCH_AND_FEATURE: return createMatchAndFeature();
+      case DiffuidataPackage.MATCH_TO_NB_ENTRY: return (EObject)createMatchToNbEntry();
+      default:
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
-		switch (eDataType.getClassifierID()) {
-			case DiffuidataPackage.TREE_PATH:
-				return createTreePathFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+    switch (eDataType.getClassifierID()) {
+      case DiffuidataPackage.TREE_PATH:
+        return createTreePathFromString(eDataType, initialValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
-		switch (eDataType.getClassifierID()) {
-			case DiffuidataPackage.TREE_PATH:
-				return convertTreePathToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+    switch (eDataType.getClassifierID()) {
+      case DiffuidataPackage.TREE_PATH:
+        return convertTreePathToString(eDataType, instanceValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public UIComparison createUIComparison() {
-		UIComparisonImpl uiComparison = new UIComparisonImpl();
-		return uiComparison;
-	}
+    UIComparisonImpl uiComparison = new UIComparisonImpl();
+    return uiComparison;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public ComparisonSelection createComparisonSelection() {
-		ComparisonSelectionImpl comparisonSelection = new ComparisonSelectionImpl();
-		return comparisonSelection;
-	}
+    ComparisonSelectionImpl comparisonSelection = new ComparisonSelectionImpl();
+    return comparisonSelection;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public MatchAndFeature createMatchAndFeature() {
-		MatchAndFeatureImpl matchAndFeature = new MatchAndFeatureImpl();
-		return matchAndFeature;
-	}
+    MatchAndFeatureImpl matchAndFeature = new MatchAndFeatureImpl();
+    return matchAndFeature;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public Map.Entry<EMatch, Integer> createMatchToNbEntry() {
-		MatchToNbEntryImpl matchToNbEntry = new MatchToNbEntryImpl();
-		return matchToNbEntry;
-	}
+    MatchToNbEntryImpl matchToNbEntry = new MatchToNbEntryImpl();
+    return matchToNbEntry;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public TreePath createTreePathFromString(EDataType eDataType, String initialValue) {
-		return (TreePath)super.createFromString(eDataType, initialValue);
-	}
+    return (TreePath)super.createFromString(eDataType, initialValue);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public String convertTreePathToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
-	}
+    return super.convertToString(eDataType, instanceValue);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public DiffuidataPackage getDiffuidataPackage() {
-		return (DiffuidataPackage)getEPackage();
-	}
+    return (DiffuidataPackage)getEPackage();
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @deprecated
-	 * @generated
-	 */
+   * @deprecated
+   * @generated
+   */
 	@SuppressWarnings("javadoc")
   @Deprecated
 	public static DiffuidataPackage getPackage() {
-		return DiffuidataPackage.eINSTANCE;
-	}
+    return DiffuidataPackage.eINSTANCE;
+  }
 
 } //DiffuidataFactoryImpl

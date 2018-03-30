@@ -24,18 +24,18 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence()
  * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EValuePresence org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence"
  * @generated
  */
-public interface EReferenceValuePresence extends EValuePresence,
-    IReferenceValuePresence {
+public interface EReferenceValuePresence
+    extends EValuePresence, IReferenceValuePresence {
 
   /**
    * Returns the value of the '<em><b>Value</b></em>' reference.
@@ -46,11 +46,22 @@ public interface EReferenceValuePresence extends EValuePresence,
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' reference.
+   * @see #setValue(EObject)
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_Value()
-   * @model required="true" changeable="false"
+   * @model required="true"
    * @generated
    */
   EObject getValue();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Value</em>' reference.
+   * @see #getValue()
+   * @generated
+   */
+  void setValue(EObject value);
 
   /**
    * Returns the value of the '<em><b>Value Match</b></em>' reference.
@@ -61,10 +72,21 @@ public interface EReferenceValuePresence extends EValuePresence,
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value Match</em>' reference.
+   * @see #setValueMatch(EMatch)
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_ValueMatch()
-   * @model required="true" changeable="false"
+   * @model
    * @generated
    */
   EMatch getValueMatch();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Value Match</em>' reference.
+   * @see #getValueMatch()
+   * @generated
+   */
+  void setValueMatch(EMatch value);
   // Nothing needed
 } // EReferenceValuePresence

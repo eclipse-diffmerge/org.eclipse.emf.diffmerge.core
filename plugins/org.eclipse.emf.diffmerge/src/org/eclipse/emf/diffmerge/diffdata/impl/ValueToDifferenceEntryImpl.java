@@ -31,16 +31,16 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl#getTypedKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
-public class ValueToDifferenceEntryImpl extends EObjectImpl implements
-    BasicEMap.Entry<Object, IAttributeValuePresence> {
+public class ValueToDifferenceEntryImpl extends EObjectImpl
+    implements BasicEMap.Entry<Object, IAttributeValuePresence> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -124,7 +124,8 @@ public class ValueToDifferenceEntryImpl extends EObjectImpl implements
       if (value != oldValue) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY__VALUE, oldValue, value));
+              DiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY__VALUE, oldValue,
+              value));
       }
     }
     return value;

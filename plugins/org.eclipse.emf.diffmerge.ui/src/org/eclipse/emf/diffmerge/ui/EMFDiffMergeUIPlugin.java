@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
@@ -52,7 +51,7 @@ import org.osgi.framework.BundleContext;
 public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   
   /** The default file extension for UI diff models */
-  public static final String UI_DIFF_DATA_FILE_EXTENSION = DiffuidataPackage.eNAME;
+  public static final String UI_DIFF_DATA_FILE_EXTENSION = "edm"; //$NON-NLS-1$
   
   /** Identifiers for UI images */
   @SuppressWarnings("javadoc")

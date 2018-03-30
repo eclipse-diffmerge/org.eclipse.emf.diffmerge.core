@@ -23,17 +23,17 @@ import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence()
  * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence org.eclipse.emf.diffmerge.diffdata.IElementPresence"
  * @generated
  */
-public interface EElementPresence extends EElementRelativePresence,
-    IElementPresence {
+public interface EElementPresence
+    extends EElementRelativePresence, IElementPresence {
   /**
    * Returns the value of the '<em><b>Owner Match</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -43,10 +43,21 @@ public interface EElementPresence extends EElementRelativePresence,
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Owner Match</em>' reference.
+   * @see #setOwnerMatch(EMatch)
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence_OwnerMatch()
-   * @model required="true" changeable="false"
+   * @model required="true"
    * @generated
    */
   EMatch getOwnerMatch();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Owner Match</em>' reference.
+   * @see #getOwnerMatch()
+   * @generated
+   */
+  void setOwnerMatch(EMatch value);
 
 } // EElementPresence

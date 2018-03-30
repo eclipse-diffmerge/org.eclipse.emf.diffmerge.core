@@ -38,54 +38,54 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getActualComparison <em>Actual Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getDifferencesToIgnore <em>Differences To Ignore</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getLastActionSelection <em>Last Action Selection</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
 public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	/**
-	 * The cached value of the '{@link #getActualComparison() <em>Actual Comparison</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getActualComparison() <em>Actual Comparison</em>}' containment reference.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getActualComparison()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getActualComparison()
+   * @generated
+   * @ordered
+   */
 	protected EComparison actualComparison;
 
 	/**
-	 * The cached value of the '{@link #getDifferencesToIgnore() <em>Differences To Ignore</em>}' reference list.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getDifferencesToIgnore() <em>Differences To Ignore</em>}' reference list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDifferencesToIgnore()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getDifferencesToIgnore()
+   * @generated
+   * @ordered
+   */
 	protected EList<EMergeableDifference> differencesToIgnore;
 
 	/**
-	 * The cached value of the '{@link #getLastActionSelection() <em>Last Action Selection</em>}' containment reference.
-	 * <!-- begin-user-doc -->
+   * The cached value of the '{@link #getLastActionSelection() <em>Last Action Selection</em>}' containment reference.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLastActionSelection()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getLastActionSelection()
+   * @generated
+   * @ordered
+   */
 	protected ComparisonSelection lastActionSelection;
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected UIComparisonImpl() {
-		super();
-	}
+    super();
+  }
 	
 	/**
 	 * Constructor
@@ -93,27 +93,27 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	 * @generated NOT
 	 */
 	public UIComparisonImpl(EComparison comparison_p) {
-	  actualComparison = comparison_p;
+	  setActualComparison(comparison_p);
 	}
 	
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	protected EClass eStaticClass() {
-		return DiffuidataPackage.Literals.UI_COMPARISON;
-	}
+    return DiffuidataPackage.Literals.UI_COMPARISON;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EComparison getActualComparison() {
-		return actualComparison;
-	}
+    return actualComparison;
+  }
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -132,25 +132,44 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setActualComparison(EComparison newActualComparison) {
+    if (newActualComparison != actualComparison) {
+      NotificationChain msgs = null;
+      if (actualComparison != null)
+        msgs = ((InternalEObject)actualComparison).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON, null, msgs);
+      if (newActualComparison != null)
+        msgs = ((InternalEObject)newActualComparison).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON, null, msgs);
+      msgs = basicSetActualComparison(newActualComparison, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON, newActualComparison, newActualComparison));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public EList<EMergeableDifference> getDifferencesToIgnore() {
-		if (differencesToIgnore == null) {
-			differencesToIgnore = new EObjectResolvingEList<EMergeableDifference>(EMergeableDifference.class, this, DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE);
-		}
-		return differencesToIgnore;
-	}
+    if (differencesToIgnore == null) {
+      differencesToIgnore = new EObjectResolvingEList<EMergeableDifference>(EMergeableDifference.class, this, DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE);
+    }
+    return differencesToIgnore;
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public ComparisonSelection getLastActionSelection() {
-		return lastActionSelection;
-	}
+    return lastActionSelection;
+  }
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -169,23 +188,23 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	public void setLastActionSelection(ComparisonSelection newLastActionSelection) {
-		if (newLastActionSelection != lastActionSelection) {
-			NotificationChain msgs = null;
-			if (lastActionSelection != null)
-				msgs = ((InternalEObject)lastActionSelection).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, null, msgs);
-			if (newLastActionSelection != null)
-				msgs = ((InternalEObject)newLastActionSelection).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, null, msgs);
-			msgs = basicSetLastActionSelection(newLastActionSelection, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, newLastActionSelection, newLastActionSelection));
-	}
+    if (newLastActionSelection != lastActionSelection) {
+      NotificationChain msgs = null;
+      if (lastActionSelection != null)
+        msgs = ((InternalEObject)lastActionSelection).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, null, msgs);
+      if (newLastActionSelection != null)
+        msgs = ((InternalEObject)newLastActionSelection).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, null, msgs);
+      msgs = basicSetLastActionSelection(newLastActionSelection, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION, newLastActionSelection, newLastActionSelection));
+  }
 	
 	/**
 	 * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#clear()
@@ -212,93 +231,99 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
   }
   
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
-				return basicSetActualComparison(null, msgs);
-			case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
-				return basicSetLastActionSelection(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
+        return basicSetActualComparison(null, msgs);
+      case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
+        return basicSetLastActionSelection(null, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
   @Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
-				return getActualComparison();
-			case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-				return getDifferencesToIgnore();
-			case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
-				return getLastActionSelection();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
+        return getActualComparison();
+      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
+        return getDifferencesToIgnore();
+      case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
+        return getLastActionSelection();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-				getDifferencesToIgnore().clear();
-				getDifferencesToIgnore().addAll((Collection<? extends EMergeableDifference>)newValue);
-				return;
-			case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
-				setLastActionSelection((ComparisonSelection)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
+        setActualComparison((EComparison)newValue);
+        return;
+      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
+        getDifferencesToIgnore().clear();
+        getDifferencesToIgnore().addAll((Collection<? extends EMergeableDifference>)newValue);
+        return;
+      case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
+        setLastActionSelection((ComparisonSelection)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public void eUnset(int featureID) {
-		switch (featureID) {
-			case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-				getDifferencesToIgnore().clear();
-				return;
-			case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
-				setLastActionSelection((ComparisonSelection)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
+        setActualComparison((EComparison)null);
+        return;
+      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
+        getDifferencesToIgnore().clear();
+        return;
+      case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
+        setLastActionSelection((ComparisonSelection)null);
+        return;
+    }
+    super.eUnset(featureID);
+  }
 
 	/**
-	 * <!-- begin-user-doc -->
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	@Override
 	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
-				return actualComparison != null;
-			case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-				return differencesToIgnore != null && !differencesToIgnore.isEmpty();
-			case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
-				return lastActionSelection != null;
-		}
-		return super.eIsSet(featureID);
-	}
+    switch (featureID) {
+      case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
+        return actualComparison != null;
+      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
+        return differencesToIgnore != null && !differencesToIgnore.isEmpty();
+      case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
+        return lastActionSelection != null;
+    }
+    return super.eIsSet(featureID);
+  }
 	
 } //UIComparisonImpl

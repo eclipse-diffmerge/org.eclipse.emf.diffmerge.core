@@ -15,8 +15,7 @@
 package org.eclipse.emf.diffmerge.ui.diffuidata.util;
 
 import org.eclipse.emf.common.util.URI;
-
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,16 +24,16 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
  * @see org.eclipse.emf.diffmerge.ui.diffuidata.util.DiffuidataResourceFactoryImpl
  * @generated
  */
-public class DiffuidataResourceImpl extends ResourceImpl {
+public class DiffuidataResourceImpl extends XMIResourceImpl {
 	/**
-	 * Creates an instance of the resource.
-	 * <!-- begin-user-doc -->
+   * Creates an instance of the resource.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param uri_p the URI of the new resource.
-	 * @generated
-	 */
+   * @param uri_p the URI of the new resource.
+   * @generated
+   */
 	public DiffuidataResourceImpl(URI uri_p) {
-		super(uri_p);
-	}
+    super(uri_p);
+  }
 
 } //DiffuidataResourceImpl

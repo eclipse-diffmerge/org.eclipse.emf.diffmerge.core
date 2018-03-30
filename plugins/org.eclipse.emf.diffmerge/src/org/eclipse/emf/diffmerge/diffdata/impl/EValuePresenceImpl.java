@@ -33,11 +33,11 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature <em>Feature</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#isOrder <em>Order</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
@@ -94,8 +94,8 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
   protected EValuePresenceImpl(EComparison comparison_p, EMatch elementMatch_p,
       EStructuralFeature feature_p, Role presenceRole_p, boolean isOrder_p) {
     super(comparison_p, elementMatch_p, presenceRole_p);
-    feature = feature_p;
-    order = isOrder_p;
+    setFeature(feature_p);
+    setOrder(isOrder_p);
   }
 
   /**
@@ -140,8 +140,34 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  public void setFeature(EStructuralFeature newFeature) {
+    EStructuralFeature oldFeature = feature;
+    feature = newFeature;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EVALUE_PRESENCE__FEATURE, oldFeature, feature));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public boolean isOrder() {
     return order;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setOrder(boolean newOrder) {
+    boolean oldOrder = order;
+    order = newOrder;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EVALUE_PRESENCE__ORDER, oldOrder, order));
   }
 
   /**
@@ -161,6 +187,42 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
       return isOrder();
     }
     return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
+    case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
+      setFeature((EStructuralFeature) newValue);
+      return;
+    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
+      setOrder(((Boolean) newValue).booleanValue());
+      return;
+    }
+    super.eSet(featureID, newValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void eUnset(int featureID) {
+    switch (featureID) {
+    case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
+      setFeature((EStructuralFeature) null);
+      return;
+    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
+      setOrder(ORDER_EDEFAULT);
+      return;
+    }
+    super.eUnset(featureID);
   }
 
   /**

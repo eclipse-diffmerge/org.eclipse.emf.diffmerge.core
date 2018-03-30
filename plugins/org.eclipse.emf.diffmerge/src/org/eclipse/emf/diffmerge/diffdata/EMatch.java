@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.EReference;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getAncestor <em>Ancestor</em>}</li>
@@ -44,7 +45,6 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch()
  * @model superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableMatch"
@@ -195,7 +195,7 @@ public interface EMatch extends EObject, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Attribute Map</em>' map.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableAttributeMap()
-   * @model mapType="org.eclipse.emf.diffmerge.diffdata.AttributeToValueToDifferenceEntry<org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry>"
+   * @model mapType="org.eclipse.emf.diffmerge.diffdata.AttributeToValueToDifferenceEntry&lt;org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry&gt;"
    * @generated
    */
   @SuppressWarnings("javadoc")
@@ -213,7 +213,7 @@ public interface EMatch extends EObject, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Reference Map</em>' map.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableReferenceMap()
-   * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToElementToDifferenceEntry<org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.ElementToDifferenceEntry>"
+   * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToElementToDifferenceEntry&lt;org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.ElementToDifferenceEntry&gt;"
    * @generated
    */
   @SuppressWarnings("javadoc")

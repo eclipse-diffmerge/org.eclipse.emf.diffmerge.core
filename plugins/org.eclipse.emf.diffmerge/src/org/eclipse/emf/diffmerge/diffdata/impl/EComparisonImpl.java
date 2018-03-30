@@ -1043,7 +1043,7 @@ public class EComparisonImpl extends EObjectImpl implements EComparison {
         presenceRole_p, isOrder_p);
     return result;
   }
-
+	
   /**
    * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#swapScopes()
    * @generated NOT

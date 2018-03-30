@@ -105,15 +105,15 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    * A constant key representing order in the TARGET side in (reference, value presence) maps
    * @generated NOT
    */
-  protected static final EObject REFERENCE_ORDER_KEY_TARGET = 
-      EcoreFactory.eINSTANCE.createEObject();
+  protected static final EObject REFERENCE_ORDER_KEY_TARGET = EcoreFactory.eINSTANCE
+      .createEObject();
 
   /**
    * A constant key representing order in the REFERENCE side in (reference, value presence) maps
    * @generated NOT
    */
-  protected static final EObject REFERENCE_ORDER_KEY_REFERENCE =
-      EcoreFactory.eINSTANCE.createEObject();
+  protected static final EObject REFERENCE_ORDER_KEY_REFERENCE = EcoreFactory.eINSTANCE
+      .createEObject();
 
   /**
    * A constant key representing order in the TARGET side in (attribute, value presence) maps
@@ -236,9 +236,9 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    */
   public EMatchImpl(EObject target_p, EObject reference_p, EObject ancestor_p) {
     this();
-    target = target_p;
-    reference = reference_p;
-    ancestor = ancestor_p;
+    setTarget(target_p);
+    setReference(reference_p);
+    setAncestor(ancestor_p);
   }
 
   /**
@@ -446,6 +446,7 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
           ReferenceToElementToDifferenceEntryImpl.class, this,
           DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP) {
         private static final long serialVersionUID = 1L;
+
         /**
          * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForKey()
          */
@@ -453,6 +454,7 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
         protected boolean useEqualsForKey() {
           return false;
         }
+
         /**
          * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForValue()
          */
@@ -828,7 +830,8 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
     Object key;
     if (presence_p.isOrder())
       key = presence_p.getPresenceRole() == Role.TARGET
-          ? ATTRIBUTE_ORDER_KEY_TARGET : ATTRIBUTE_ORDER_KEY_REFERENCE;
+          ? ATTRIBUTE_ORDER_KEY_TARGET
+          : ATTRIBUTE_ORDER_KEY_REFERENCE;
     else
       key = presence_p.getValue();
     forAttribute.put(key, presence_p);
@@ -853,16 +856,17 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
    */
   protected void addReferenceValuePresence(IReferenceValuePresence presence_p) {
     assert presence_p.getElementMatch() == this;
-    EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap =
-        getModifiableReferenceMap(true);
-    EMap<EObject, IReferenceValuePresence> forReference =
-        referenceMap.get(presence_p.getFeature());
+    EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap = getModifiableReferenceMap(
+        true);
+    EMap<EObject, IReferenceValuePresence> forReference = referenceMap
+        .get(presence_p.getFeature());
     if (forReference == null)
       forReference = newReferenceValueToPresenceMap(presence_p.getFeature());
     EObject key;
     if (presence_p.isOrder())
       key = presence_p.getPresenceRole() == Role.TARGET
-          ? REFERENCE_ORDER_KEY_TARGET : REFERENCE_ORDER_KEY_REFERENCE;
+          ? REFERENCE_ORDER_KEY_TARGET
+          : REFERENCE_ORDER_KEY_REFERENCE;
     else
       key = presence_p.getValue();
     forReference.put(key, presence_p); // key cannot be null
@@ -1068,17 +1072,20 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
         EMap<Object, IAttributeValuePresence> forAttribute = attributeMap
             .get(feature_p);
         if (forAttribute != null)
-          result = forAttribute.get(role_p == Role.TARGET
-              ? ATTRIBUTE_ORDER_KEY_TARGET : ATTRIBUTE_ORDER_KEY_REFERENCE);
+          result = forAttribute
+              .get(role_p == Role.TARGET ? ATTRIBUTE_ORDER_KEY_TARGET
+                  : ATTRIBUTE_ORDER_KEY_REFERENCE);
       }
     } else if (feature_p instanceof EReference) {
-      EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap =
-          getModifiableReferenceMap(false);
+      EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap = getModifiableReferenceMap(
+          false);
       if (referenceMap != null) {
-        EMap<EObject, IReferenceValuePresence> forReference = referenceMap.get(feature_p);
+        EMap<EObject, IReferenceValuePresence> forReference = referenceMap
+            .get(feature_p);
         if (forReference != null)
-          result = forReference.get(role_p == Role.TARGET
-              ? REFERENCE_ORDER_KEY_TARGET : REFERENCE_ORDER_KEY_REFERENCE);
+          result = forReference
+              .get(role_p == Role.TARGET ? REFERENCE_ORDER_KEY_TARGET
+                  : REFERENCE_ORDER_KEY_REFERENCE);
       }
     }
     return result;
@@ -1115,8 +1122,8 @@ public class EMatchImpl extends EObjectImpl implements EMatch {
       EReference reference_p) {
     Collection<IReferenceValuePresence> result = null;
     if (getModifiableReferenceMap(false) != null) {
-      EMap<EObject, IReferenceValuePresence> forReference =
-          getModifiableReferenceMap(false).get(reference_p);
+      EMap<EObject, IReferenceValuePresence> forReference = getModifiableReferenceMap(
+          false).get(reference_p);
       if (forReference != null)
         result = Collections.unmodifiableCollection(forReference.values());
     }
