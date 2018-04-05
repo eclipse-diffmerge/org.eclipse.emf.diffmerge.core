@@ -16,6 +16,8 @@ package org.eclipse.emf.diffmerge.ui.specification;
 
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -52,6 +54,17 @@ IEditingDomainProvider, IDisposable {
    *          such as undo/redo
    */
   AbstractComparisonViewer createComparisonViewer(Composite parent_p, IActionBars actionBars_p);
+  
+  /**
+   * Create and return a (non-computed) comparison between the given scopes
+   * @param targetScope_p the non-null model scope playing the TARGET comparison role
+   * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
+   * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
+   * @see org.eclipse.emf.diffmerge.api.Role
+   * @return a non-null comparison
+   */
+  EComparison createComparison(IEditableModelScope targetScope_p,
+      IEditableModelScope referenceScope_p, IEditableModelScope ancestorScope_p);
   
   /**
    * Return the editing domain in which comparison must take place, if any.

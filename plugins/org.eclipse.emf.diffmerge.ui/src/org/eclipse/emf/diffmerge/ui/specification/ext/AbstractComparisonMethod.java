@@ -21,6 +21,9 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.diffdata.EComparison;
+import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
@@ -107,6 +110,14 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
    */
   public void configure() {
     // Override for configurable comparison methods
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#createComparison(org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope, org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope, org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope)
+   */
+  public EComparison createComparison(IEditableModelScope targetScope_p,
+      IEditableModelScope referenceScope_p, IEditableModelScope ancestorScope_p) {
+    return new EComparisonImpl(targetScope_p, referenceScope_p, ancestorScope_p);
   }
   
   /**

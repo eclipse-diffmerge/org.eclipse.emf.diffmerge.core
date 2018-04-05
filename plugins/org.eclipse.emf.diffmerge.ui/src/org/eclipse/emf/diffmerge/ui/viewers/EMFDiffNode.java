@@ -153,7 +153,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
         new ModelScopeTypedElement(comparison_p.getScope(Role.TARGET)),
         new ModelScopeTypedElement(comparison_p.getScope(Role.REFERENCE)));
     _resourceManager = new ComparisonResourceManager();
-    _contents = new UIComparisonImpl(comparison_p);
+    _contents = createContents(comparison_p);
     _editingDomain = domain_p;
     _editorInput = null;
     _leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
@@ -177,6 +177,15 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _defaultShowMergeImpact = _isShowMergeImpact;
     _defaultCoverChildren = true;
     _defaultIncrementalMode = false;
+  }
+  
+  /**
+   * Create and return the UI comparison contents of this node
+   * @param comparison_p a non-null comparison
+   * @return a non-null UI comparison
+   */
+  protected UIComparison createContents(EComparison comparison_p) {
+    return new UIComparisonImpl(comparison_p);
   }
   
   /**
@@ -300,7 +309,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * Return the model comparison of this node
    * @return a non-null comparison, unless the UI comparison has been disposed
    */
-  public EComparison getActualComparison() {
+  public IComparison getActualComparison() {
     return getUIComparison().getActualComparison();
   }
   

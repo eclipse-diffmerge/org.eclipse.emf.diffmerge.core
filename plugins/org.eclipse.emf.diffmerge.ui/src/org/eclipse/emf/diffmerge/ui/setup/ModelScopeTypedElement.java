@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.ui.setup;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
@@ -38,7 +38,7 @@ public class ModelScopeTypedElement implements ITypedElement {
    * Constructor
    * @param scope_p a non-null model scope
    */
-  public ModelScopeTypedElement(IEditableModelScope scope_p) {
+  public ModelScopeTypedElement(IFeaturedModelScope scope_p) {
     _scope = scope_p;
   }
   

@@ -34,7 +34,6 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -163,7 +162,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * is not consistent
    * @param comparison_p a potentially null comparison
    */
-  public void checkInconsistency(EComparison comparison_p) {
+  public void checkInconsistency(IComparison comparison_p) {
     if (comparison_p != null && !comparison_p.isConsistent())
       handleInconsistency(comparison_p);
   }
@@ -559,7 +558,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @return a non-null comparison
    */
   protected EComparison initializeComparison() {
-    EComparison result = new EComparisonImpl(_leftScope, _rightScope, _ancestorScope);
+    EComparison result = _comparisonMethod.createComparison(_leftScope, _rightScope, _ancestorScope);
     return result;
   }
   
