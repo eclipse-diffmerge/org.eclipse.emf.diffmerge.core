@@ -55,7 +55,7 @@ public interface IModelScopeDefinition {
   boolean isEditable();
   
   /**
-   * Return whether the editable property can be changed
+   * Return whether the editable property can be changed by the end-user
    */
   boolean isEditableSettable();
   

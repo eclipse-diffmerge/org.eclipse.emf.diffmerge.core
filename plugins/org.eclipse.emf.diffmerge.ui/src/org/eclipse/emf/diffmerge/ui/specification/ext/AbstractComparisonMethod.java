@@ -25,6 +25,7 @@ import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.setup.AbstractComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
@@ -51,7 +52,8 @@ import org.eclipse.ui.IActionBars;
  * A base implementation of IComparisonMethod.
  * @author Olivier Constant
  */
-public abstract class AbstractComparisonMethod implements IComparisonMethod {
+public abstract class AbstractComparisonMethod extends AbstractComparisonSetup
+implements IComparisonMethod {
   
   /** The optional factory that created this comparison method */
   protected IComparisonMethodFactory _factory;
@@ -66,6 +68,11 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   is entirely dedicated to the comparison */
   protected boolean _isDedicatedEditingDomain;
   
+  /** Whether the comparison and merge scenario is of a "source-target"
+   * kind, that is, differences are relative to the TARGET side and merge may
+   * only occur on that side */
+  private boolean _isDirected;
+  
   /** Whether this comparison method may provide additional information to the end-user */
   private boolean _verbose;
   
@@ -75,9 +82,9 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
    */
   protected AbstractComparisonMethod() {
     _editingDomain = null;
+    _factory = null;
     _isDedicatedEditingDomain = false;
     _initialized = false;
-    _factory = null;
     _verbose = true;
   }
   
@@ -277,6 +284,13 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isDirected()
+   */
+  public boolean isDirected() {
+    return _isDirected;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#isThreeWay()
    */
   public boolean isThreeWay() {
@@ -288,6 +302,13 @@ public abstract class AbstractComparisonMethod implements IComparisonMethod {
    */
   public boolean isVerbose() {
     return _verbose;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setDirected(boolean)
+   */
+  public void setDirected(boolean isDirected_p) {
+    _isDirected = isDirected_p;
   }
   
   /**

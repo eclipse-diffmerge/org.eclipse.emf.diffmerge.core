@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup.Side;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -221,81 +222,6 @@ public class ComparisonSetupWizardPage extends WizardPage {
   }
   
   /**
-   * Create the subsection for setting the reference role in a two-way comparison
-   * @param parent_p a non-null composite
-   */
-  protected void createReferenceRoleSubsection(Composite parent_p) {
-    if (_setup.getScopeDefinition(Role.TARGET).isEditableSettable() &&
-        _setup.getScopeDefinition(Role.REFERENCE).isEditableSettable()) {
-      // Composite
-      Composite composite = new Composite(parent_p, SWT.NONE);
-      GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, true);
-      composite.setLayoutData(gridData);
-      GridLayout layout = new GridLayout(4, false);
-      layout.marginHeight = 0;
-      layout.marginWidth = 0;
-      layout.marginTop = 2;
-      composite.setLayout(layout);
-      // Label
-      Label label = new Label(composite, SWT.NONE);
-      label.setText(Messages.ComparisonSetupWizardPage_ReferenceRole);
-      label.setToolTipText(Messages.ComparisonSetupWizardPage_ReferenceRoleTooltip);
-      // Both
-      final Button noneButton = new Button(composite, SWT.RADIO);
-      noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
-      noneButton.setSelection(_setup.getTwoWayReferenceRole() == null);
-      noneButton.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          if (noneButton.getSelection()) {
-            _setup.setTargetRole(null);
-          }
-        }
-      });
-      noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
-      // Left
-      final Button leftButton = new Button(composite, SWT.RADIO);
-      leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
-      leftButton.setSelection(
-          _setup.getTwoWayReferenceRole() == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
-      leftButton.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          if (leftButton.getSelection()) {
-            _setup.setTargetRole(
-                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
-          }
-        }
-      });
-      leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
-      // Right
-      final Button rightButton = new Button(composite, SWT.RADIO);
-      rightButton.setText(Messages.ComparisonSetupWizardPage_ReferenceRight);
-      rightButton.setSelection(
-          _setup.getTwoWayReferenceRole() == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
-      rightButton.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          if (rightButton.getSelection()) {
-            _setup.setTargetRole(
-                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
-          }
-        }
-      });
-      rightButton.setEnabled(rightButton.getSelection() || _setup.canChangeTwoWayReferenceRole());
-    }
-  }
-  
-  /**
    * Create the section for selecting the roles
    * @param parent_p a non-null composite
    */
@@ -308,21 +234,20 @@ public class ComparisonSetupWizardPage extends WizardPage {
     // Subsections
     createRolesSubsection(group);
     createSwapRolesSubsection(group);
-    createReferenceRoleSubsection(group);
+    createTargetSideSubsection(group);
   }
   
   /**
-   * Create the subsection for the given role
+   * Create the subsection for the given side
    * @param parent_p a non-null composite
-   * @param role_p a non-null role
+   * @param side_p the non-null side
    */
-  protected void createRoleSubsection(Composite parent_p, final Role role_p) {
-    final boolean isAncestor = role_p == Role.ANCESTOR;
+  protected void createRoleSubsection(Composite parent_p, final Side side_p) {
+    final boolean isAncestor = side_p == Side.ANCESTOR;
     // Label
-    String labelText = (role_p == Role.ANCESTOR)? Messages.ComparisonSetupWizardPage_RoleAncestor:
-      (role_p == EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole())? 
-          Messages.ComparisonSetupWizardPage_RoleLeft:
-            Messages.ComparisonSetupWizardPage_RoleRight;
+    String labelText = isAncestor? Messages.ComparisonSetupWizardPage_RoleAncestor:
+      (side_p == Side.LEFT)? Messages.ComparisonSetupWizardPage_RoleLeft:
+        Messages.ComparisonSetupWizardPage_RoleRight;
     new Label(parent_p, SWT.NONE).setText(labelText);
     // Row composite
     Composite composite = new Composite(parent_p, SWT.BORDER);
@@ -340,7 +265,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IModelScopeDefinition scope = _setup.getScopeDefinition(role_p);
+          Role role = _setup.getRoleForSide(side_p);
+          IModelScopeDefinition scope = _setup.getScopeDefinition(role);
           roleText.setText(scope.getLabel());
         }
       }
@@ -349,8 +275,12 @@ public class ComparisonSetupWizardPage extends WizardPage {
     final Button editableButton = new Button(composite, SWT.CHECK);
     editableButton.setText(Messages.ComparisonSetupWizardPage_ModifiableScope);
     editableButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
-    final IModelScopeDefinition scopeDef = _setup.getScopeDefinition(role_p);
-    editableButton.setEnabled(!isAncestor && scopeDef.isEditableSettable());
+    Role role = _setup.getRoleForSide(side_p);
+    final IModelScopeDefinition scopeDef = _setup.getScopeDefinition(role);
+    Role targetRole = _setup.getRoleForSide(_setup.getTargetSide());
+    boolean isTargetOpposite = targetRole != null && targetRole.opposite() == role;
+    editableButton.setEnabled(
+        !isAncestor && !isTargetOpposite && scopeDef.isEditableSettable());
     editableButton.setSelection(scopeDef.isEditable());
     editableButton.addSelectionListener(new SelectionAdapter() {
       /**
@@ -358,7 +288,8 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(role_p);
+        Role currentRole = _setup.getRoleForSide(side_p);
+        IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(currentRole);
         currentScopeDef.setEditable(!currentScopeDef.isEditable());
       }
     });
@@ -368,10 +299,14 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (ComparisonSetup.PROPERTY_ROLES.equals(event_p.getProperty())) {
-          IModelScopeDefinition currentScopeDef = _setup.getScopeDefinition(role_p);
-          Role targetRole = _setup.getTwoWayReferenceRole();
-          editableButton.setEnabled(!isAncestor && currentScopeDef.isEditableSettable() &&
-              (targetRole == null || targetRole.opposite() != role_p));
+          Role currentRole = _setup.getRoleForSide(side_p);
+          IModelScopeDefinition currentScopeDef =
+              _setup.getScopeDefinition(currentRole);
+          Role currentTargetRole = _setup.getRoleForSide(_setup.getTargetSide());
+          boolean currentIsTargetOpposite = currentTargetRole != null &&
+              currentTargetRole.opposite() == currentRole;
+          editableButton.setEnabled(!isAncestor &&
+              !currentIsTargetOpposite && currentScopeDef.isEditableSettable());
           editableButton.setSelection(currentScopeDef.isEditable());
         }
       }
@@ -391,10 +326,10 @@ public class ComparisonSetupWizardPage extends WizardPage {
     rolesLayout.marginWidth = 0;
     subsection.setLayout(rolesLayout);
     // Role rows
-    createRoleSubsection(subsection, EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
-    createRoleSubsection(subsection, EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite());
+    createRoleSubsection(subsection, Side.LEFT);
+    createRoleSubsection(subsection, Side.RIGHT);
     if (_setup.isThreeWay())
-      createRoleSubsection(subsection, Role.ANCESTOR);
+      createRoleSubsection(subsection, Side.ANCESTOR);
   }
   
   /**
@@ -419,8 +354,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
          */
         @Override
         public void widgetSelected(SelectionEvent event_p) {
-          _setup.swapScopeDefinitions(
-              EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole(), Role.REFERENCE);
+          _setup.swapScopeDefinitions(Role.TARGET, Role.REFERENCE);
         }
       });
       if (_setup.isThreeWay()) {
@@ -435,10 +369,81 @@ public class ComparisonSetupWizardPage extends WizardPage {
           @Override
           public void widgetSelected(SelectionEvent event_p) {
             _setup.swapScopeDefinitions(
-                EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole().opposite(), Role.ANCESTOR);
+                _setup.getLeftRole().opposite(), Role.ANCESTOR);
           }
         });
       }
+    }
+  }
+  
+  /**
+   * Create the subsection for setting the target side in a two-way comparison
+   * @param parent_p a non-null composite
+   */
+  protected void createTargetSideSubsection(Composite parent_p) {
+    if (_setup.getScopeDefinition(Role.TARGET).isEditableSettable() &&
+        _setup.getScopeDefinition(Role.REFERENCE).isEditableSettable()) {
+      // Composite
+      Composite composite = new Composite(parent_p, SWT.NONE);
+      GridData gridData = new GridData(SWT.FILL, SWT.TOP, true, true);
+      composite.setLayoutData(gridData);
+      GridLayout layout = new GridLayout(4, false);
+      layout.marginHeight = 0;
+      layout.marginWidth = 0;
+      layout.marginTop = 2;
+      composite.setLayout(layout);
+      // Label
+      Label label = new Label(composite, SWT.NONE);
+      label.setText(Messages.ComparisonSetupWizardPage_ReferenceRole);
+      label.setToolTipText(Messages.ComparisonSetupWizardPage_ReferenceRoleTooltip);
+      // Both
+      final Button noneButton = new Button(composite, SWT.RADIO);
+      noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
+      noneButton.setSelection(_setup.getTargetSide() == null);
+      noneButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          if (noneButton.getSelection()) {
+            _setup.setTargetSide(null);
+          }
+        }
+      });
+      noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTargetSide());
+      // Left
+      final Button leftButton = new Button(composite, SWT.RADIO);
+      leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
+      leftButton.setSelection(_setup.getTargetSide() == Side.LEFT);
+      leftButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          if (leftButton.getSelection()) {
+            _setup.setTargetSide(Side.LEFT);
+          }
+        }
+      });
+      leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTargetSide());
+      // Right
+      final Button rightButton = new Button(composite, SWT.RADIO);
+      rightButton.setText(Messages.ComparisonSetupWizardPage_ReferenceRight);
+      rightButton.setSelection(_setup.getTargetSide() == Side.RIGHT);
+      rightButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          if (rightButton.getSelection()) {
+            _setup.setTargetSide(Side.RIGHT);
+          }
+        }
+      });
+      rightButton.setEnabled(rightButton.getSelection() || _setup.canChangeTargetSide());
     }
   }
   

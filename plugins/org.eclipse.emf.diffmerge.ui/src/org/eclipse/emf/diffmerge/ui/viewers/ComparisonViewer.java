@@ -70,10 +70,12 @@ import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
@@ -269,20 +271,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected ComparisonSelection asComparisonSelection(IStructuredSelection selection_p) {
     Collection<IMatch> matches = new ArrayList<IMatch>();
-    EComparison comparison = getComparison();
-    if (comparison != null) {
-      for (Object selected : selection_p.toArray()) {
-        if (selected instanceof EObject) {
-          EObject selectedElement = (EObject)selected;
-          IMatch match = comparison.getMapping().getMatchFor(selectedElement, Role.TARGET);
-          if (match == null)
-            match = comparison.getMapping().getMatchFor(selectedElement, Role.REFERENCE);
-          if (match != null)
-            matches.add(match);
+    EMFDiffNode input = getInput();
+    if (input != null) {
+      EComparison comparison = getComparison();
+      if (comparison != null) {
+        Role mainRole = input.getDrivingRole();
+        for (Object selected : selection_p.toArray()) {
+          if (selected instanceof EObject) {
+            EObject selectedElement = (EObject)selected;
+            IMatch match = comparison.getMapping().getMatchFor(selectedElement, mainRole);
+            if (match == null)
+              match = comparison.getMapping().getMatchFor(
+                  selectedElement, mainRole.opposite());
+            if (match != null)
+              matches.add(match);
+          }
         }
       }
     }
-    ComparisonSelection result = new ComparisonSelectionImpl(matches, null, getInput());
+    ComparisonSelection result = new ComparisonSelectionImpl(matches, null, input);
     return result;
   }
   
@@ -656,7 +663,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (input != null) {
           input.setLogEvents(logEvents);
           if (logEvents)
-            getLogger().log(new CompareLogEvent(getEditingDomain(), getComparison()));
+            getLogger().log(new CompareLogEvent(getEditingDomain(), input));
         }
       }
     });
@@ -1423,6 +1430,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final EnhancedComparisonTreeViewer result = doCreateViewerSynthesis(parent_p);
     result.getInnerViewer().addFilter(_filterUnchangedElements);
     result.getInnerViewer().addFilter(_filterMoveOrigins);
+    // Preserve expansion and selection whenever possible when sides are swapped
+    result.getInnerViewer().setComparer(new SymmetricMatchComparer());
     // Update header when filtering is activated
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -2076,8 +2085,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _viewerSynthesisMain.setInput(input_p);
     _viewerSynthesisLeft.setInput(input_p);
     _viewerSynthesisRight.setInput(input_p);
-    if (getInput() != null && getInput().isLogEvents())
-      getLogger().log(new CompareLogEvent(getEditingDomain(), getComparison()));
+    EMFDiffNode input = getInput();
+    if (input != null && input.isLogEvents())
+      getLogger().log(new CompareLogEvent(getEditingDomain(), input));
   }
   
   /**
@@ -2205,8 +2215,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
       input.updateDifferenceNumbers();
       if (input.isLogEvents())
-        getLogger().log(
-            new MergeLogEvent(getEditingDomain(), getComparison(), merged, toLeft_p));
+        getLogger().log(new MergeLogEvent(input, merged, toLeft_p));
     }
   }
   
@@ -2343,6 +2352,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     IEditorInput rawEditorInput = input == null? null: input.getEditorInput();
     if (input != null && rawEditorInput instanceof EMFDiffMergeEditorInput) {
       final EMFDiffMergeEditorInput editorInput = (EMFDiffMergeEditorInput)rawEditorInput;
+      IComparisonMethod origMethod = editorInput.getComparisonMethod();
+      final IModelScopeDefinition origTrgScopeDef =
+          origMethod.getModelScopeDefinition(Role.TARGET);
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       boolean confirmed = manager.updateEditorInputWithUI(getShell(), editorInput);
       if (confirmed) {
@@ -2359,17 +2371,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                * @see java.lang.Runnable#run()
                */
               public void run() {
+                boolean sidesSwapped =
+                    method.getModelScopeDefinition(Role.TARGET) != origTrgScopeDef;
+                input.getUIComparison().clear();
+                if (sidesSwapped) {
+                  input.setLeftRole(input.getRoleForSide(false));
+                  input.getActualComparison().swapScopes();
+                }
                 input.setReferenceRole(method.getTwoWayReferenceRole());
+                input.setDrivingRole(method.getTwoWayReferenceRole());
                 boolean leftEditable = method.getModelScopeDefinition(
                     input.getRoleForSide(true)).isEditable();
                 boolean rightEditable = method.getModelScopeDefinition(
                     input.getRoleForSide(false)).isEditable();
                 input.setEditionPossible(leftEditable, true);
                 input.setEditionPossible(rightEditable, false);
-                input.getUIComparison().clear();
                 input.getActualComparison().compute(
-                    method.getMatchPolicy(), method.getDiffPolicy(), method.getMergePolicy(),
-                    monitor_p);
+                    method.getMatchPolicy(), method.getDiffPolicy(),
+                    method.getMergePolicy(), monitor_p);
                 input.getCategoryManager().update();
               }
             });

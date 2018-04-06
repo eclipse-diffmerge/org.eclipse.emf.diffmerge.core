@@ -18,10 +18,11 @@ import static org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger.LINE_SEP;
 
 import java.util.Date;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 
@@ -35,10 +36,10 @@ public class CompareLogEvent extends AbstractLogEvent {
   /**
    * Constructor
    * @param domain_p an optional editing domain
-   * @param comparison_p a non-null comparison
+   * @param node_p a non-null diff node
    */
-  public CompareLogEvent(EditingDomain domain_p, IComparison comparison_p) {
-    super(comparison_p);
+  public CompareLogEvent(EditingDomain domain_p, EMFDiffNode node_p) {
+    super(node_p);
   }
   
   /**
@@ -46,8 +47,7 @@ public class CompareLogEvent extends AbstractLogEvent {
    * @return a non-null string
    */
   public String getLeftLabel() {
-    return DiffMergeLabelProvider.getInstance().getText(
-        getComparison().getScope(Role.TARGET));
+    return getSideLabel(true);
   }
   
   /**
@@ -55,8 +55,7 @@ public class CompareLogEvent extends AbstractLogEvent {
    * @return a non-null string
    */
   public String getRightLabel() {
-    return DiffMergeLabelProvider.getInstance().getText(
-        getComparison().getScope(Role.REFERENCE));
+    return getSideLabel(false);
   }
   
   /**
@@ -80,6 +79,18 @@ public class CompareLogEvent extends AbstractLogEvent {
     builder.append(getRightLabel());
     builder.append(LINE_SEP);
     return builder.toString();
+  }
+  
+  /**
+   * Return the label describing the given side
+   * @param left_p whether the side is left or right
+   * @return a non-null string
+   */
+  protected String getSideLabel(boolean left_p) {
+    EMFDiffNode node = getDiffNode();
+    Role sideRole = node.getRoleForSide(left_p);
+    IFeaturedModelScope sideScope = node.getActualComparison().getScope(sideRole);
+    return DiffMergeLabelProvider.getInstance().getText(sideScope);
   }
   
 }

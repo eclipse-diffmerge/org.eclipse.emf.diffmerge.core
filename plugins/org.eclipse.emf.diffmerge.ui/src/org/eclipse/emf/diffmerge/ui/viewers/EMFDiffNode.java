@@ -30,6 +30,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -59,7 +60,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** The optional associated editor input */
   private IEditorInput _editorInput;
   
-  /** The role that drives the representation of the comparison */
+  /** The non-null role that drives the representation of the comparison */
   private Role _drivingRole;
   
   /** The non-null role on the left-hand side */
@@ -149,17 +150,32 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
+    this(comparison_p, domain_p, isLeftEditionPossible_p, isRightEditionPossible_p,
+        EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
+  }
+  
+  /**
+   * Constructor
+   * @param comparison_p a non-null comparison
+   * @param domain_p the optional editing domain for undo/redo
+   * @param isLeftEditionPossible_p whether edition on the left is possible at all
+   * @param isRightEditionPossible_p whether edition on the right is possible at all
+   * @param leftRole_p the non-null role on the left-hand side
+   */
+  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p,
+      boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p,
+      Role leftRole_p) {
     super(
         Differencer.CHANGE,
         comparison_p.isThreeWay()? new ModelScopeTypedElement(
             comparison_p.getScope(Role.ANCESTOR)): null,
-        new ModelScopeTypedElement(comparison_p.getScope(Role.TARGET)),
-        new ModelScopeTypedElement(comparison_p.getScope(Role.REFERENCE)));
+        new ModelScopeTypedElement(comparison_p.getScope(leftRole_p)),
+        new ModelScopeTypedElement(comparison_p.getScope(leftRole_p.opposite())));
     _resourceManager = new ComparisonResourceManager();
     _contents = createContents(comparison_p);
     _editingDomain = domain_p;
     _editorInput = null;
-    _leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    _leftRole = leftRole_p;
     _drivingRole = _leftRole;
     _twoWayReferenceRole = null;
     _categoryManager = new CategoryManager(this);
@@ -167,8 +183,10 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     initializeDifferenceColors(_differenceColors);
     _useCustomIcons = true;
     _useCustomLabels = false;
-    _isTargetEditionPossible = isLeftEditionPossible_p;
-    _isReferenceEditionPossible = isRightEditionPossible_p;
+    _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
+      isRightEditionPossible_p;
+    _isReferenceEditionPossible = (leftRole_p == Role.TARGET)? isRightEditionPossible_p:
+      isLeftEditionPossible_p;
     _isTargetEditable = true;
     _isReferenceEditable = true;
     _isTargetModified = false;
@@ -320,7 +338,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * Return the model comparison of this node
    * @return a non-null comparison, unless the UI comparison has been disposed
    */
-  public IComparison getActualComparison() {
+  public EComparison getActualComparison() {
     return getUIComparison().getActualComparison();
   }
   
@@ -383,11 +401,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /**
    * Return the role which is used as the reference role, if any.
-   * The reference role determines that all differences should be represented
-   * in a way which is relative to it. In a three-way comparison, it is always
-   * ANCESTOR. In a two-way comparison, it can naturally be REFERENCE but it
-   * does not have to. If null, then both sides in the two-way comparison
-   * are represented in a symmetric way.
+   * @see IComparisonMethod#setTwoWayReferenceRole(Role)
    * @return ANCESTOR, TARGET, REFERENCE, or null
    */
   public Role getReferenceRole() {
@@ -494,8 +508,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    * @param drivingRole_p a non-null role which is TARGET or REFERENCE
    */
   public void setDrivingRole(Role drivingRole_p) {
-    if (Role.TARGET == drivingRole_p || Role.REFERENCE == drivingRole_p)
+    if (Role.TARGET == drivingRole_p || Role.REFERENCE == drivingRole_p) {
       _drivingRole = drivingRole_p;
+    }
   }
   
   /**
@@ -571,12 +586,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /**
    * Set the role which is used as the reference role.
    * In a three-way comparison, this operation has no effect.
-   * @see EMFDiffNode#getReferenceRole()
+   * @see IComparisonMethod#setTwoWayReferenceRole(Role)
    * @param role_p TARGET, REFERENCE, or null
    */
   public void setReferenceRole(Role role_p) {
-    if (!isThreeWay())
+    if (!isThreeWay()) {
       _twoWayReferenceRole = role_p;
+    }
   }
   
   /**

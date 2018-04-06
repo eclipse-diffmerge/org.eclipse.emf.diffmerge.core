@@ -59,10 +59,11 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
       IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
       IComparisonMethodFactory factory_p) {
     super();
+    Role leftRole = getLeftRole();
     _factory = factory_p;
     _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
-    _roleToScopeDefinition.put(Role.TARGET, leftScopeDef_p);
-    _roleToScopeDefinition.put(Role.REFERENCE, rightScopeDef_p);
+    _roleToScopeDefinition.put(leftRole, leftScopeDef_p);
+    _roleToScopeDefinition.put(leftRole.opposite(), rightScopeDef_p);
     _roleToScopeDefinition.put(Role.ANCESTOR, ancestorScopeDef_p);
     _twoWayReferenceRole = null;
     _matchPolicy = createMatchPolicy();

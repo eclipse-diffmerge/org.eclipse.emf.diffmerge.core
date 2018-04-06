@@ -130,16 +130,16 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     if (isLaterOnTheRight()) {
       if (!laterMayBeOnTheRight(setup_p)) {
         // Invert left and right
-        setup_p.swapScopeDefinitions(Role.REFERENCE, Role.TARGET);
+        setup_p.swapLeftRole();
         if (_configuration != null) {
           // Ensure consistency with text comparison
           _configuration.setProperty(MIRRORED, Boolean.TRUE);
         }
       }
     }
-    Role defaultLeft = getLeftRole();
-    setup_p.setTwoWayReferenceRole(defaultLeft.opposite()); // The default remote side in Eclipse
-    setup_p.setCanChangeTwoWayReferenceRole(false);
+    Role leftRole = setup_p.getLeftRole();
+    setup_p.setTwoWayReferenceRole(leftRole.opposite()); // The default remote side in Eclipse
+    setup_p.setCanChangeTargetSide(false);
     setup_p.setCanSwapScopeDefinitions(false);
   }
   
@@ -258,8 +258,8 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * Return the role for the left-hand side
    * @return a role which is TARGET or REFERENCE
    */
-  protected Role getLeftRole() {
-    Role result = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+  protected Role getLeftRole(ComparisonSetup setup_p) {
+    Role result = setup_p.getLeftRole();
     if (_configuration != null) {
       Object mirrored = _configuration.getProperty(MIRRORED);
       if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue())
@@ -384,9 +384,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * @param setup_p a non-null setup
    */
   protected boolean laterMayBeOnTheRight(ComparisonSetup setup_p) {
-    Role defaultLeft = getLeftRole();
-    IModelScopeDefinition leftScopeDef = setup_p.getScopeDefinition(defaultLeft);
-    IModelScopeDefinition rightScopeDef = setup_p.getScopeDefinition(defaultLeft.opposite());
+    Role leftRole = getLeftRole(setup_p);
+    IModelScopeDefinition leftScopeDef = setup_p.getScopeDefinition(leftRole);
+    IModelScopeDefinition rightScopeDef = setup_p.getScopeDefinition(leftRole.opposite());
     long leftTimestamp = leftScopeDef instanceof ITimestampProvider?
         ((ITimestampProvider)leftScopeDef).getTimestamp(): -1;
     long rightTimestamp = rightScopeDef instanceof ITimestampProvider?

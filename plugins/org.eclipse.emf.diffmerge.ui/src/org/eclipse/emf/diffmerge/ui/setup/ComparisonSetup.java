@@ -38,7 +38,20 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * for creating a comparison method.
  * @author Olivier Constant
  */
-public class ComparisonSetup implements IPropertyChangeNotifier {
+public class ComparisonSetup extends AbstractComparisonSetup
+implements IPropertyChangeNotifier {
+  
+  /**
+   * The visual side in a graphically-presented comparison.
+   */
+  public static enum Side {
+    /** The left-hand side */
+    LEFT,
+    /** The right-hand side */
+    RIGHT,
+    /** The ancestor side */
+    ANCESTOR
+  }
   
   /** An identifier for changes to the roles of the scope definitions */
   public static final String PROPERTY_ROLES = "ComparisonSetup.Property.Roles"; //$NON-NLS-1$
@@ -59,14 +72,17 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   /** The potentially null role to use as a reference in a two-way comparison */
   private Role _twoWayReferenceRole;
   
-  /** Whether the two-way reference role can be changed by the end user */
-  private boolean _canChangeTwoWayReferenceRole;
+  /** Whether the target side of the merge can be set */
+  private boolean _canChangeTargetSide;
   
   /** The non-null, non-empty list of applicable method factories */ 
   private final List<IComparisonMethodFactory> _compatibleMethodFactories;
   
   /** The potentially null selected factory (among the compatible factories) */ 
   private IComparisonMethodFactory _selectedFactory;
+  
+  /** The potentially null target side of the merge */
+  protected Side _targetSide;
   
   /** The potentially null comparison method */ 
   protected IComparisonMethod _comparisonMethod;
@@ -81,16 +97,18 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    */
   public ComparisonSetup(IComparisonMethod method_p) {
     this(
-        method_p.getModelScopeDefinition(Role.TARGET),
-        method_p.getModelScopeDefinition(Role.REFERENCE),
+        method_p.getModelScopeDefinition(method_p.getLeftRole()),
+        method_p.getModelScopeDefinition(method_p.getLeftRole().opposite()),
         method_p.getModelScopeDefinition(Role.ANCESTOR),
         EMFDiffMergeUIPlugin.getDefault().getSetupManager().getApplicableComparisonMethodFactories(
-            method_p.getModelScopeDefinition(Role.TARGET),
-            method_p.getModelScopeDefinition(Role.REFERENCE),
+            method_p.getModelScopeDefinition(method_p.getLeftRole()),
+            method_p.getModelScopeDefinition(method_p.getLeftRole().opposite()),
             method_p.getModelScopeDefinition(Role.ANCESTOR))
         );
     _comparisonMethod = method_p;
     _twoWayReferenceRole = method_p.getTwoWayReferenceRole();
+    _targetSide = method_p.isDirected()? method_p.getLeftRole() == Role.TARGET?
+        Side.LEFT: Side.RIGHT: null;
     _selectedFactory = method_p.getFactory();
   }
   
@@ -104,8 +122,10 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   public ComparisonSetup(IModelScopeDefinition scopeSpec1_p, IModelScopeDefinition scopeSpec2_p,
       IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory> compatibleFactories_p) {
     this();
-    _roleToScopeDefinition.put(Role.TARGET, scopeSpec1_p);
-    _roleToScopeDefinition.put(Role.REFERENCE, scopeSpec2_p);
+    // 1->left, 2->right, 3->ancestor
+    Role leftRole = getLeftRole();
+    _roleToScopeDefinition.put(leftRole, scopeSpec1_p);
+    _roleToScopeDefinition.put(leftRole.opposite(), scopeSpec2_p);
     _roleToScopeDefinition.put(Role.ANCESTOR, scopeSpec3_p);
     _compatibleMethodFactories.addAll(compatibleFactories_p);
   }
@@ -114,20 +134,46 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    * Default constructor
    */
   protected ComparisonSetup() {
+    super();
     _comparisonMethod = null;
     _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>();
+    _canChangeTargetSide = true;
     _canSwapScopeDefinitions = true;
-    _canChangeTwoWayReferenceRole = true;
-    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
     _twoWayReferenceRole = null;
+    _targetSide = null;
+    _roleToScopeDefinition = new HashMap<Role, IModelScopeDefinition>();
     _listeners = new HashSet<IPropertyChangeListener>();
   }
   
   /**
-   * Return whether the two-way reference role can be changed by the end user
+   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
    */
-  public boolean canChangeTwoWayReferenceRole() {
-    return _canChangeTwoWayReferenceRole;
+  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
+    _listeners.add(listener_p);
+  }
+  
+  /**
+   * Set the "editable" property of scope definitions whenever possible to match
+   * the role allocation and the target side policy
+   */
+  protected void applyEditableRules() {
+    IModelScopeDefinition targetScopeDef = _roleToScopeDefinition.get(Role.TARGET);
+    if (targetScopeDef.isEditableSettable())
+      targetScopeDef.setEditable(true);
+    IModelScopeDefinition referenceScopeDef = _roleToScopeDefinition.get(Role.REFERENCE);
+    if (referenceScopeDef.isEditableSettable())
+      referenceScopeDef.setEditable(getTargetSide() == null);
+    IModelScopeDefinition ancestorScopeDef =
+        _roleToScopeDefinition.get(Role.ANCESTOR);
+    if (ancestorScopeDef != null && ancestorScopeDef.isEditableSettable())
+      ancestorScopeDef.setEditable(false);
+  }
+  
+  /**
+   * Return whether the target side of the merge can be set
+   */
+  public boolean canChangeTargetSide() {
+    return _canChangeTargetSide;
   }
   
   /**
@@ -135,6 +181,36 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    */
   public boolean canSwapScopeDefinitions() {
     return _canSwapScopeDefinitions;
+  }
+  
+  /**
+   * Swap the role that corresponds to the left-hand side without sending notifications
+   */
+  protected void doSwapLeftRole() {
+    super.swapLeftRole();
+    if (_comparisonMethod != null)
+      _comparisonMethod.swapLeftRole();
+  }
+  
+  /**
+   * Swap the scope definitions that play the given roles without sending notifications
+   * @param role1_p a non-null role
+   * @param role2_p a non-null role
+   * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
+   */
+  protected boolean doSwapScopeDefinitions(Role role1_p, Role role2_p) {
+    boolean result = true;
+    if (_comparisonMethod != null)
+      result = _comparisonMethod.swapScopeDefinitions(role1_p, role2_p);
+    if (result) {
+      IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
+      IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
+      if (scope1 != null && scope2 != null) {
+        _roleToScopeDefinition.put(role1_p, scope2);
+        _roleToScopeDefinition.put(role2_p, scope1);
+      }
+    }
+    return result;
   }
   
   /**
@@ -155,6 +231,26 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * Return the role that corresponds to the given side
+   * @param side_p a potentially null side
+   * @return a role which is non-null if and only if side_p is not null
+   */
+  public Role getRoleForSide(Side side_p) {
+    Role result = null;
+    if (side_p != null) {
+      switch(side_p) {
+      case ANCESTOR:
+        result = Role.ANCESTOR; break;
+      case LEFT:
+        result = getLeftRole(); break;
+      default: // RIGHT
+        result = getLeftRole().opposite(); break;
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Return the scope definition that plays the given role
    * @param role_p a non-null role
    * @return a scope definition which may only be null if role is ANCESTOR
@@ -169,6 +265,14 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
    */
   public IComparisonMethodFactory getSelectedFactory() {
     return _selectedFactory;
+  }
+  
+  /**
+   * Return the target side of the merge, if any
+   * @return LEFT, RIGHT or null
+   */
+  public Side getTargetSide() {
+    return _targetSide;
   }
   
   /**
@@ -196,6 +300,13 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * Notify listeners of a change in roles
+   */
+  protected void notifyRolesChanged() {
+    notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
+  }
+  
+  /**
    * Update the current comparison method with all available information
    * @param remember_p whether the configuration of this setup must be remembered.
    *          It affects the behavior of setSelectedFactoryToLast().
@@ -205,17 +316,32 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
       IComparisonMethodFactory selectedFactory = getSelectedFactory();
       if (remember_p && selectedFactory != null)
         __lastComparisonMethodFactory = selectedFactory;
+      _comparisonMethod.setDirected(getTargetSide() != null);
       if (!isThreeWay())
         _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
     }
   }
   
   /**
-   * Set whether the two-way reference role can be changed by the end user
+   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
+    _listeners.remove(listener_p);
+  }
+  
+  /**
+   * Remove all property change listeners
+   */
+  public void removePropertyChangeListeners() {
+    _listeners.clear();
+  }
+  
+  /**
+   * Set whether the target side of the merge can be changed by the end user
    * @param canChange_p whether it can be changed
    */
-  public void setCanChangeTwoWayReferenceRole(boolean canChange_p) {
-    _canChangeTwoWayReferenceRole = canChange_p;
+  public void setCanChangeTargetSide(boolean canChange_p) {
+    _canChangeTargetSide = canChange_p;
   }
   
   /**
@@ -233,9 +359,14 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   public void setSelectedFactory(IComparisonMethodFactory selectedFactory_p) {
     _selectedFactory = selectedFactory_p;
     if (_selectedFactory != null) {
+      Role leftRole = getLeftRole();
       _comparisonMethod = _selectedFactory.createComparisonMethod(
-          getScopeDefinition(Role.TARGET), getScopeDefinition(Role.REFERENCE),
+          getScopeDefinition(leftRole), getScopeDefinition(leftRole.opposite()),
           getScopeDefinition(Role.ANCESTOR));
+      if (_comparisonMethod.getLeftRole() != leftRole) {
+        _comparisonMethod.swapLeftRole();
+        _comparisonMethod.swapScopeDefinitions(leftRole, leftRole.opposite());
+      }
     } else {
       _comparisonMethod = null;
     }
@@ -258,27 +389,28 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
-   * Set the role that corresponds to the target of the merge
-   * @param role_p TARGET, REFERENCE or null
+   * Set the target side of the merge regardless of whether it can be changed
+   * by the end-user or not
+   * @param targetSide_p LEFT, RIGHT or null
+   * @see ComparisonSetup#canChangeTargetSide()
    */
-  public void setTargetRole(Role role_p) {
-    setTwoWayReferenceRole(role_p);
-    if (Role.TARGET == role_p || Role.REFERENCE == role_p) {
-      IModelScopeDefinition roleDef = getScopeDefinition(role_p);
-      IModelScopeDefinition oppositeRoleDef = getScopeDefinition(role_p.opposite());
-      if (roleDef.isEditableSettable())
-        roleDef.setEditable(true);
-      oppositeRoleDef.setEditable(false);
+  public void setTargetSide(Side targetSide_p) {
+    assert targetSide_p != Side.ANCESTOR;
+    if (Side.LEFT == targetSide_p || Side.RIGHT == targetSide_p) {
+      if (getRoleForSide(targetSide_p) != Role.TARGET) {
+        // Enforce TARGET as the target role
+        doSwapLeftRole();
+        doSwapScopeDefinitions(Role.TARGET, Role.REFERENCE);
+      }
+      _targetSide = targetSide_p;
+      setTwoWayReferenceRole(Role.TARGET);
     } else {
-      // No reference role defined
-      IModelScopeDefinition targetRoleDef = getScopeDefinition(Role.TARGET);
-      if (targetRoleDef.isEditableSettable())
-        targetRoleDef.setEditable(true);
-      IModelScopeDefinition referenceRoleDef = getScopeDefinition(Role.REFERENCE);
-      if (referenceRoleDef.isEditableSettable())
-        referenceRoleDef.setEditable(true);
+      // No target side defined
+      _targetSide = null;
+      setTwoWayReferenceRole(null);
     }
-    notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
+    applyEditableRules();
+    notifyRolesChanged();
   }
   
   /**
@@ -290,46 +422,27 @@ public class ComparisonSetup implements IPropertyChangeNotifier {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.setup.AbstractComparisonSetup#swapLeftRole()
+   */
+  @Override
+  public void swapLeftRole() {
+    doSwapLeftRole();
+    notifyRolesChanged();
+  }
+  
+  /**
    * Swap the scope definitions that play the given roles
    * @param role1_p a non-null role
    * @param role2_p a non-null role
    * @return whether the operation succeeded (it may only fail to prevent inconsistencies)
    */
   public boolean swapScopeDefinitions(Role role1_p, Role role2_p) {
-    boolean result = true;
-    if (_comparisonMethod != null)
-      result = _comparisonMethod.swapScopeDefinitions(role1_p, role2_p);
+    boolean result = doSwapScopeDefinitions(role1_p, role2_p);
     if (result) {
-      IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
-      IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
-      if (scope1 != null && scope2 != null) {
-        _roleToScopeDefinition.put(role1_p, scope2);
-        _roleToScopeDefinition.put(role2_p, scope1);
-      }
-      notify(new PropertyChangeEvent(this, PROPERTY_ROLES, null, null));
+      applyEditableRules();
+      notifyRolesChanged();
     }
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
-   */
-  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
-    _listeners.add(listener_p);
-  }
-  
-  /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
-   */
-  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
-    _listeners.remove(listener_p);
-  }
-  
-  /**
-   * Remove all property change listeners
-   */
-  public void removePropertyChangeListeners() {
-    _listeners.clear();
   }
   
 }

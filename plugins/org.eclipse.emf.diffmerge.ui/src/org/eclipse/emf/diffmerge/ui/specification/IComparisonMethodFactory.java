@@ -33,7 +33,8 @@ public interface IComparisonMethodFactory extends IOverridableFactory {
       IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p);
   
   /**
-   * Return whether this factory is applicable to the given scope definitions
+   * Return whether this factory is applicable to the given scope definitions.
+   * The left/right/ancestor distinction is not assumed significant.
    * @param leftScopeSpec_p a non-null scope definition
    * @param rightScopeSpec_p a non-null scope definition
    * @param ancestorScopeSpec_p an optional scope definition

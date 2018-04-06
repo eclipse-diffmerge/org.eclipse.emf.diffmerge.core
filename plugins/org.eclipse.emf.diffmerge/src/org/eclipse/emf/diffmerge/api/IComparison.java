@@ -251,10 +251,12 @@ public interface IComparison {
      * @see org.eclipse.emf.diffmerge.api.IComparison#getMapping()
      */
     IMapping.Editable getMapping();
+    
     /**
      * @see org.eclipse.emf.diffmerge.api.IComparison#getScope(org.eclipse.emf.diffmerge.api.Role)
      */
     IEditableModelScope getScope(Role role_p);
+    
     /**
      * Create and return an attribute value presence with the given characteristics
      * @param elementMatch_p the non-null match for the element holding the value
@@ -299,6 +301,14 @@ public interface IComparison {
     IReferenceValuePresence newReferenceValuePresence(
         IMatch elementMatch_p, EReference reference_p, EObject value_p, IMatch valueMatch_p,
         Role presenceRole_p, boolean isOrder_p);
+    
+    /**
+     * Swap the TARGET and REFERENCE scopes.
+     * This operation succeeds if and only if the comparison is empty:
+     * it has not been computed yet or it has been cleared.
+     * @return whether the operation succeeded
+     */
+    boolean swapScopes();
   }
   
 }

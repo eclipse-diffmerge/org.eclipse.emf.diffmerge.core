@@ -37,7 +37,6 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
-import org.eclipse.emf.diffmerge.ui.diffuidata.util.UidiffdataResourceFactoryImpl;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
@@ -232,7 +231,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @return a potentially null string
    */
   protected String createTitle() {
-    Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    Role leftRole = getLeftRole();
     String leftDesc = _comparisonMethod.getModelScopeDefinition(leftRole).getShortLabel();
     String rightDesc = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).getShortLabel();
     String result = String.format(Messages.EMFDiffMergeEditorInput_Title, leftDesc, rightDesc);
@@ -326,6 +325,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   public EditingDomain getEditingDomain() {
     return _comparisonMethod != null? _comparisonMethod.getEditingDomain(): null;
+  }
+  
+  /**
+   * Return the role that corresponds to the left-hand side
+   * @return TARGET or REFERENCE, or null if disposed
+   */
+  protected Role getLeftRole() {
+    return _comparisonMethod != null? _comparisonMethod.getLeftRole(): null;
   }
   
   /**
@@ -490,13 +497,18 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   protected void initializeCompareConfiguration() {
     CompareConfiguration cc = getCompareConfiguration();
-    cc.setLeftLabel(_comparisonMethod.getModelScopeDefinition(Role.TARGET).getLabel());
-    cc.setRightLabel(_comparisonMethod.getModelScopeDefinition(Role.REFERENCE).getLabel());
+    Role leftRole = getLeftRole();
+    IModelScopeDefinition leftScopeDefinition =
+        _comparisonMethod.getModelScopeDefinition(leftRole);
+    IModelScopeDefinition rightScopeDefinition =
+        _comparisonMethod.getModelScopeDefinition(leftRole.opposite());
     IModelScopeDefinition ancestorDefinition =
-      _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR);
+        _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR);
+    cc.setLeftLabel(leftScopeDefinition.getLabel());
+    cc.setRightLabel(rightScopeDefinition.getLabel());
     cc.setAncestorLabel((ancestorDefinition == null) ? "" : ancestorDefinition.getLabel()); //$NON-NLS-1$
-    cc.setLeftEditable(_comparisonMethod.getModelScopeDefinition(Role.TARGET).isEditable());
-    cc.setRightEditable(_comparisonMethod.getModelScopeDefinition(Role.REFERENCE).isEditable());
+    cc.setLeftEditable(leftScopeDefinition.isEditable());
+    cc.setRightEditable(rightScopeDefinition.isEditable());
   }
   
   /**
@@ -504,7 +516,11 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    * @return a non-null comparison
    */
   protected EComparison initializeComparison() {
-    EComparison result = _comparisonMethod.createComparison(_leftScope, _rightScope, _ancestorScope);
+    boolean leftIsTarget = getLeftRole() == Role.TARGET;
+    IEditableModelScope targetScope = leftIsTarget? _leftScope: _rightScope;
+    IEditableModelScope referenceScope = leftIsTarget? _rightScope: _leftScope;
+    EComparison result = _comparisonMethod.createComparison(
+        targetScope, referenceScope, _ancestorScope);
     return result;
   }
   
@@ -516,15 +532,14 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   protected EMFDiffNode initializeDiffNode(EComparison comparison_p) {
     ResourceSet resourceSet = (getEditingDomain() != null)? getEditingDomain().getResourceSet(): null;
     if (resourceSet != null) {
-      resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(
-          EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION, new UidiffdataResourceFactoryImpl());
-      String resourceURI = "platform:/resource/comparison/comparison." + //$NON-NLS-1$
-          EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION;
-      _comparisonResource = resourceSet.createResource(URI.createURI(resourceURI));
+      URI defaultURI = URI.createPlatformResourceURI("comparison/comparison", true); //$NON-NLS-1$
+      defaultURI = defaultURI.appendFileExtension(
+          EMFDiffMergeUIPlugin.UI_DIFF_DATA_FILE_EXTENSION);
+      _comparisonResource = resourceSet.createResource(defaultURI);
     }
     CompareConfiguration cc = getCompareConfiguration();
-    EMFDiffNode result = new EMFDiffNode(
-        comparison_p, getEditingDomain(), cc.isLeftEditable(), cc.isRightEditable());
+    EMFDiffNode result = new EMFDiffNode(comparison_p, getEditingDomain(),
+        cc.isLeftEditable(), cc.isRightEditable(), _comparisonMethod.getLeftRole());
     result.setReferenceRole(_comparisonMethod.getTwoWayReferenceRole());
     result.setEditorInput(this);
     return result;
@@ -546,7 +561,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   protected void loadScopes(IProgressMonitor monitor_p) {
     EditingDomain domain = getEditingDomain();
     boolean threeWay = _comparisonMethod.isThreeWay();
-    Role leftRole = EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole();
+    Role leftRole = getLeftRole();
     String mainTaskName = Messages.EMFDiffMergeEditorInput_Loading;
     SubMonitor loadingMonitor = SubMonitor.convert(
         monitor_p, mainTaskName, threeWay ? 4 : 3);

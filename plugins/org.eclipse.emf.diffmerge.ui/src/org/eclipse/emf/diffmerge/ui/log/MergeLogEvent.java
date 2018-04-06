@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
@@ -28,8 +27,8 @@ import org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.domain.EditingDomain;
 
 
 /**
@@ -38,9 +37,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
  */
 @SuppressWarnings("nls")
 public class MergeLogEvent extends AbstractLogEvent {
-  
-  /** The optional editing domain in which the merge event occurs */
-  private final EditingDomain _domain;
   
   /** The non-null, potentially empty list of differences */
   private final List<IDifference> _diffs;
@@ -51,25 +47,23 @@ public class MergeLogEvent extends AbstractLogEvent {
   
   /**
    * Constructor
-   * @param domain_p an optional editing domain in which the merge event occurs
+   * @param node_p a non-null diff node
    * @param diff_p the non-null difference being merged
    * @param mergeToLeft_p whether the direction of the merge event is left
    */
-  public MergeLogEvent(EditingDomain domain_p, IDifference diff_p, boolean mergeToLeft_p) {
-    this(domain_p, diff_p.getComparison(), Collections.singletonList(diff_p), mergeToLeft_p);
+  public MergeLogEvent(EMFDiffNode node_p, IDifference diff_p, boolean mergeToLeft_p) {
+    this(node_p, Collections.singletonList(diff_p), mergeToLeft_p);
   }
   
   /**
    * Constructor
-   * @param domain_p an optional editing domain in which the merge event occurs
-   * @param comparison_p the non-null comparison in which the merge event occurs
+   * @param node_p a non-null diff node
    * @param diffs_p the non-null differences being merged
    * @param mergeToLeft_p whether the direction of the merge event is left
    */
-  public MergeLogEvent(EditingDomain domain_p, IComparison comparison_p,
+  public MergeLogEvent(EMFDiffNode node_p,
       Collection<? extends IDifference> diffs_p, boolean mergeToLeft_p) {
-    super(comparison_p);
-    _domain = domain_p;
+    super(node_p);
     _mergeToLeft = mergeToLeft_p;
     _diffs = new FArrayList<IDifference>(diffs_p, null);
   }
@@ -88,7 +82,8 @@ public class MergeLogEvent extends AbstractLogEvent {
   @Override
   public String getRepresentation() {
     StringBuilder builder = new StringBuilder();
-    Role destination = isToLeft()? Role.TARGET: Role.REFERENCE;
+    EMFDiffNode node = getDiffNode();
+    Role destination = node.getRoleForSide(isToLeft());
     String destinationName = isToLeft()? "Left": "Right";
     for (IDifference difference : getDifferences()) {
       builder.append(LINE_SEP);
@@ -103,7 +98,7 @@ public class MergeLogEvent extends AbstractLogEvent {
           EObject location = getNonNull(match, destination);
           String type = location.eClass().getName();
           String name = DiffMergeLabelProvider.getInstance().getMatchText(
-              match, destination, _domain);
+              match, destination, node.getEditingDomain());
           String id = getID(location);
           builder.append('[');
           builder.append(destinationName);
@@ -121,7 +116,7 @@ public class MergeLogEvent extends AbstractLogEvent {
         }
       }
       String msg = DiffMergeLabelProvider.getInstance().getDifferenceText(
-          difference, destination, _domain);
+          difference, destination, node.getEditingDomain());
       DiffMergeLogger.appendAtLevel(builder, 1, msg);
     }
     return builder.toString();

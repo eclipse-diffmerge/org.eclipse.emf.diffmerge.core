@@ -450,7 +450,7 @@ public class EMappingImpl extends EObjectImpl implements EMapping {
    * @generated NOT
    */
   public Role getOrderingRole() {
-    return Role.REFERENCE;
+    return Role.TARGET;
   }
 
   /**

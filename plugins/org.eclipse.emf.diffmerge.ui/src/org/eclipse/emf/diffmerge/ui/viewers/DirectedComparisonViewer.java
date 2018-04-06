@@ -215,7 +215,9 @@ public class DirectedComparisonViewer extends ComparisonViewer {
   protected void inputChanged(Object input_p, Object oldInput_p) {
     if (input_p instanceof EMFDiffNode) {
       EMFDiffNode node = (EMFDiffNode)input_p;
-      node.setReferenceRole(node.getRoleForSide(!isLeftToRight()));
+      Role targetRole = node.getRoleForSide(!isLeftToRight());
+      node.setReferenceRole(targetRole);
+      node.setDrivingRole(targetRole);
     }
     super.inputChanged(input_p, oldInput_p);
   }
