@@ -80,7 +80,7 @@ public interface DiffuidataPackage extends EPackage {
 	int UI_COMPARISON = 0;
 
 	/**
-   * The feature id for the '<em><b>Actual Comparison</b></em>' containment reference.
+   * The feature id for the '<em><b>Actual Comparison</b></em>' reference.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
    * @generated
@@ -305,10 +305,10 @@ public interface DiffuidataPackage extends EPackage {
 	EClass getUIComparison();
 
 	/**
-   * Returns the meta object for the containment reference '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}'.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Actual Comparison</em>'.
+   * @return the meta object for the reference '<em>Actual Comparison</em>'.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison()
    * @see #getUIComparison()
    * @generated
@@ -534,7 +534,7 @@ public interface DiffuidataPackage extends EPackage {
 		EClass UI_COMPARISON = eINSTANCE.getUIComparison();
 
 		/**
-     * The meta object literal for the '<em><b>Actual Comparison</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Actual Comparison</b></em>' reference feature.
      * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
      * @generated

@@ -718,7 +718,9 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
                * @see java.lang.Runnable#run()
                */
               public void run() {
-                _comparisonResource.getContents().add(getCompareResult().getUIComparison());
+                UIComparison uiComparison = getCompareResult().getUIComparison();
+                _comparisonResource.getContents().add(uiComparison);
+                _comparisonResource.getContents().add(uiComparison.getActualComparison());
               }
             });
             domain.getCommandStack().flush();

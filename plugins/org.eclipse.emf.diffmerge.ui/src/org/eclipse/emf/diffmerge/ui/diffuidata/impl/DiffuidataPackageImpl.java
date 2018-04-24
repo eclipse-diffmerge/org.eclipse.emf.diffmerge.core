@@ -420,7 +420,7 @@ public class DiffuidataPackageImpl extends EPackageImpl implements DiffuidataPac
 
     // Initialize classes and features; add operations and parameters
     initEClass(uiComparisonEClass, UIComparison.class, "UIComparison", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getUIComparison_ActualComparison(), theDiffdataPackage.getEComparison(), null, "actualComparison", null, 1, 1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getUIComparison_ActualComparison(), theDiffdataPackage.getEComparison(), null, "actualComparison", null, 1, 1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
     initEReference(getUIComparison_DifferencesToIgnore(), theDiffdataPackage.getEMergeableDifference(), null, "differencesToIgnore", null, 0, -1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED); //$NON-NLS-1$
     initEReference(getUIComparison_LastActionSelection(), this.getComparisonSelection(), null, "lastActionSelection", null, 0, 1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
