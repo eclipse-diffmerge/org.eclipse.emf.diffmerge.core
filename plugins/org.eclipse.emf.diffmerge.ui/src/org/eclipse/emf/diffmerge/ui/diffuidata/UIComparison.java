@@ -14,9 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -30,7 +28,6 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getDifferencesToIgnore <em>Differences To Ignore</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getLastActionSelection <em>Last Action Selection</em>}</li>
  * </ul>
  *
@@ -66,19 +63,6 @@ public interface UIComparison extends EObject {
   void setActualComparison(EComparison value);
 
   /**
-   * Returns the value of the '<em><b>Differences To Ignore</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference}.
-   * <!-- begin-user-doc -->
-	 * The differences which should not be represented
-	 * <!-- end-user-doc -->
-   * @return the value of the '<em>Differences To Ignore</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison_DifferencesToIgnore()
-   * @model ordered="false"
-   * @generated
-   */
-	EList<EMergeableDifference> getDifferencesToIgnore();
-
-	/**
    * Returns the value of the '<em><b>Last Action Selection</b></em>' containment reference.
    * <!-- begin-user-doc -->
 	 * The user selection when the user last made an action

@@ -181,17 +181,8 @@ public class DiffuidataPackageImpl extends EPackageImpl implements DiffuidataPac
 	 * <!-- end-user-doc -->
    * @generated
    */
-	public EReference getUIComparison_DifferencesToIgnore() {
-    return (EReference)uiComparisonEClass.getEStructuralFeatures().get(1);
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
 	public EReference getUIComparison_LastActionSelection() {
-    return (EReference)uiComparisonEClass.getEStructuralFeatures().get(2);
+    return (EReference)uiComparisonEClass.getEStructuralFeatures().get(1);
   }
 
 	/**
@@ -359,7 +350,6 @@ public class DiffuidataPackageImpl extends EPackageImpl implements DiffuidataPac
     // Create classes and their features
     uiComparisonEClass = createEClass(UI_COMPARISON);
     createEReference(uiComparisonEClass, UI_COMPARISON__ACTUAL_COMPARISON);
-    createEReference(uiComparisonEClass, UI_COMPARISON__DIFFERENCES_TO_IGNORE);
     createEReference(uiComparisonEClass, UI_COMPARISON__LAST_ACTION_SELECTION);
 
     comparisonSelectionEClass = createEClass(COMPARISON_SELECTION);
@@ -421,7 +411,6 @@ public class DiffuidataPackageImpl extends EPackageImpl implements DiffuidataPac
     // Initialize classes and features; add operations and parameters
     initEClass(uiComparisonEClass, UIComparison.class, "UIComparison", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEReference(getUIComparison_ActualComparison(), theDiffdataPackage.getEComparison(), null, "actualComparison", null, 1, 1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getUIComparison_DifferencesToIgnore(), theDiffdataPackage.getEMergeableDifference(), null, "differencesToIgnore", null, 0, -1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED); //$NON-NLS-1$
     initEReference(getUIComparison_LastActionSelection(), this.getComparisonSelection(), null, "lastActionSelection", null, 0, 1, UIComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
     addEOperation(uiComparisonEClass, null, "clear", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

@@ -61,6 +61,11 @@ public interface IDifference {
   boolean isConflicting();
   
   /**
+   * Return whether this difference has been explicitly ignored.
+   */
+  boolean isIgnored();
+  
+  /**
    * Return whether this difference has been merged.
    */
   boolean isMerged();
@@ -82,6 +87,12 @@ public interface IDifference {
      * three-way comparison
      */
     void markAsConflicting();
+    
+    /**
+     * Set whether this difference must be ignored
+     * @param ignored_p whether it must be ignored
+     */
+    void setIgnored(boolean ignored_p);
   }
   
 }

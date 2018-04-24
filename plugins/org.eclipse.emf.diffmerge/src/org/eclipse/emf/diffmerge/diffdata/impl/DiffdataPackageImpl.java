@@ -594,7 +594,7 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getEMergeableDifference_MergeDestination() {
+  public EAttribute getEMergeableDifference_Ignored() {
     return (EAttribute) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(3);
   }
@@ -604,7 +604,7 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getEMergeableDifference_PossibleMergeDestinations() {
+  public EAttribute getEMergeableDifference_MergeDestination() {
     return (EAttribute) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(4);
   }
@@ -614,8 +614,8 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMergeableDifference_ExplicitDependenciesForTarget() {
-    return (EReference) eMergeableDifferenceEClass.getEStructuralFeatures()
+  public EAttribute getEMergeableDifference_PossibleMergeDestinations() {
+    return (EAttribute) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(5);
   }
 
@@ -624,7 +624,7 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMergeableDifference_ExplicitDependenciesForReference() {
+  public EReference getEMergeableDifference_ExplicitDependenciesForTarget() {
     return (EReference) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(6);
   }
@@ -634,7 +634,7 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMergeableDifference_ImplicitDependenciesForTarget() {
+  public EReference getEMergeableDifference_ExplicitDependenciesForReference() {
     return (EReference) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(7);
   }
@@ -644,9 +644,19 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMergeableDifference_ImplicitDependenciesForReference() {
+  public EReference getEMergeableDifference_ImplicitDependenciesForTarget() {
     return (EReference) eMergeableDifferenceEClass.getEStructuralFeatures()
         .get(8);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getEMergeableDifference_ImplicitDependenciesForReference() {
+    return (EReference) eMergeableDifferenceEClass.getEStructuralFeatures()
+        .get(9);
   }
 
   /**
@@ -1112,6 +1122,8 @@ public class DiffdataPackageImpl extends EPackageImpl
     createEAttribute(eMergeableDifferenceEClass,
         EMERGEABLE_DIFFERENCE__CONFLICTING);
     createEAttribute(eMergeableDifferenceEClass,
+        EMERGEABLE_DIFFERENCE__IGNORED);
+    createEAttribute(eMergeableDifferenceEClass,
         EMERGEABLE_DIFFERENCE__MERGE_DESTINATION);
     createEAttribute(eMergeableDifferenceEClass,
         EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS);
@@ -1381,6 +1393,10 @@ public class DiffdataPackageImpl extends EPackageImpl
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_Conflicting(),
         theEcorePackage.getEBoolean(), "conflicting", "false", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
+        EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEMergeableDifference_Ignored(),
+        theEcorePackage.getEBoolean(), "ignored", null, 1, 1, //$NON-NLS-1$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_MergeDestination(), this.getRole(),

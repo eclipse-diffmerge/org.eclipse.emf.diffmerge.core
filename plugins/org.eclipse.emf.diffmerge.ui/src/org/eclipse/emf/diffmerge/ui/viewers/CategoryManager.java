@@ -579,14 +579,6 @@ public class CategoryManager {
   }
   
   /**
-   * Return whether the given difference is being explicitly ignored by the user
-   * @param difference_p a non-null difference
-   */
-  public boolean isIgnored(IDifference difference_p) {
-    return _node.getUIComparison().getDifferencesToIgnore().contains(difference_p);
-  }
-  
-  /**
    * Return whether the given difference represents a value presence with no
    * multiplicity constraint
    * @param difference_p a non-null difference
@@ -693,7 +685,7 @@ public class CategoryManager {
    * @param difference_p a non-null difference
    */
   public boolean isPending(IDifference difference_p) {
-    return isMergeable(difference_p) && !isIgnored(difference_p);
+    return isMergeable(difference_p) && !difference_p.isIgnored();
   }
   
   /**

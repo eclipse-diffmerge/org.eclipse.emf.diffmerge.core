@@ -14,13 +14,9 @@
  */
 package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -29,7 +25,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 
 /**
@@ -41,7 +36,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getActualComparison <em>Actual Comparison</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getDifferencesToIgnore <em>Differences To Ignore</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl#getLastActionSelection <em>Last Action Selection</em>}</li>
  * </ul>
  *
@@ -57,16 +51,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * @ordered
    */
 	protected EComparison actualComparison;
-
-	/**
-   * The cached value of the '{@link #getDifferencesToIgnore() <em>Differences To Ignore</em>}' reference list.
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @see #getDifferencesToIgnore()
-   * @generated
-   * @ordered
-   */
-	protected EList<EMergeableDifference> differencesToIgnore;
 
 	/**
    * The cached value of the '{@link #getLastActionSelection() <em>Last Action Selection</em>}' containment reference.
@@ -165,18 +149,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	 * <!-- end-user-doc -->
    * @generated
    */
-	public EList<EMergeableDifference> getDifferencesToIgnore() {
-    if (differencesToIgnore == null) {
-      differencesToIgnore = new EObjectResolvingEList<EMergeableDifference>(EMergeableDifference.class, this, DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE);
-    }
-    return differencesToIgnore;
-  }
-
-	/**
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   */
 	public ComparisonSelection getLastActionSelection() {
     return lastActionSelection;
   }
@@ -223,8 +195,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	public void clear() {
     if (actualComparison != null)
       actualComparison.clear();
-    if (differencesToIgnore != null)
-      differencesToIgnore.clear();
     if (lastActionSelection != null) {
       lastActionSelection.dispose();
       lastActionSelection = null;
@@ -265,8 +235,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
       case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
         if (resolve) return getActualComparison();
         return basicGetActualComparison();
-      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-        return getDifferencesToIgnore();
       case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
         return getLastActionSelection();
     }
@@ -278,16 +246,11 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
 	 * <!-- end-user-doc -->
    * @generated
    */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
     switch (featureID) {
       case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
         setActualComparison((EComparison)newValue);
-        return;
-      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-        getDifferencesToIgnore().clear();
-        getDifferencesToIgnore().addAll((Collection<? extends EMergeableDifference>)newValue);
         return;
       case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
         setLastActionSelection((ComparisonSelection)newValue);
@@ -307,9 +270,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
       case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
         setActualComparison((EComparison)null);
         return;
-      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-        getDifferencesToIgnore().clear();
-        return;
       case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
         setLastActionSelection((ComparisonSelection)null);
         return;
@@ -327,8 +287,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
     switch (featureID) {
       case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
         return actualComparison != null;
-      case DiffuidataPackage.UI_COMPARISON__DIFFERENCES_TO_IGNORE:
-        return differencesToIgnore != null && !differencesToIgnore.isEmpty();
       case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
         return lastActionSelection != null;
     }

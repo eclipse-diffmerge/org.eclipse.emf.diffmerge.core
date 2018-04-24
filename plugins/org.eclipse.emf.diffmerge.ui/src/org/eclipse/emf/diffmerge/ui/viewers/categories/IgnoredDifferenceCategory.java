@@ -45,7 +45,7 @@ public class IgnoredDifferenceCategory extends AbstractDifferenceCategory {
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
-    return node_p.getCategoryManager().isIgnored(difference_p);
+    return difference_p.isIgnored();
   }
   
   /**

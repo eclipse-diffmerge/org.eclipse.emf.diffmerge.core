@@ -426,6 +426,16 @@ public interface DiffdataPackage extends EPackage {
       + 2;
 
   /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EMERGEABLE_DIFFERENCE__IGNORED = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
+      + 3;
+
+  /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -433,7 +443,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 3;
+      + 4;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -443,7 +453,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 4;
+      + 5;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -453,7 +463,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 5;
+      + 6;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -463,7 +473,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 6;
+      + 7;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -473,7 +483,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 7;
+      + 8;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -483,7 +493,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 8;
+      + 9;
 
   /**
    * The number of structural features of the '<em>EMergeable Difference</em>' class.
@@ -493,7 +503,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = IEDITABLE_MERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 9;
+      + 10;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EElementRelativePresenceImpl <em>EElement Relative Presence</em>}' class.
@@ -531,6 +541,15 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EELEMENT_RELATIVE_PRESENCE__CONFLICTING = EMERGEABLE_DIFFERENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EELEMENT_RELATIVE_PRESENCE__IGNORED = EMERGEABLE_DIFFERENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -652,6 +671,15 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EELEMENT_PRESENCE__CONFLICTING = EELEMENT_RELATIVE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EELEMENT_PRESENCE__IGNORED = EELEMENT_RELATIVE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -781,6 +809,15 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EVALUE_PRESENCE__CONFLICTING = EELEMENT_RELATIVE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EVALUE_PRESENCE__IGNORED = EELEMENT_RELATIVE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -918,6 +955,15 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -1064,6 +1110,15 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EREFERENCE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EREFERENCE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -1845,6 +1900,17 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    */
   EAttribute getEMergeableDifference_Conflicting();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isIgnored <em>Ignored</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Ignored</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isIgnored()
+   * @see #getEMergeableDifference()
+   * @generated
+   */
+  EAttribute getEMergeableDifference_Ignored();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}'.
@@ -2647,6 +2713,15 @@ public interface DiffdataPackage extends EPackage {
      */
     EAttribute EMERGEABLE_DIFFERENCE__CONFLICTING = eINSTANCE
         .getEMergeableDifference_Conflicting();
+
+    /**
+     * The meta object literal for the '<em><b>Ignored</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EMERGEABLE_DIFFERENCE__IGNORED = eINSTANCE
+        .getEMergeableDifference_Ignored();
 
     /**
      * The meta object literal for the '<em><b>Merge Destination</b></em>' attribute feature.

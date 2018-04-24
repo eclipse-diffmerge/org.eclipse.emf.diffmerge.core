@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getComparison <em>Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isIgnored <em>Ignored</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
@@ -125,6 +126,32 @@ public interface EMergeableDifference extends EObject, Editable {
    * @generated
    */
   void setConflicting(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Ignored</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Ignored</em>' attribute.
+   * @see #setIgnored(boolean)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference_Ignored()
+   * @model required="true"
+   * @generated
+   */
+  boolean isIgnored();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference#isIgnored <em>Ignored</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Ignored</em>' attribute.
+   * @see #isIgnored()
+   * @generated
+   */
+  void setIgnored(boolean value);
 
   /**
    * Returns the value of the '<em><b>Merge Destination</b></em>' attribute.

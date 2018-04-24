@@ -1960,20 +1960,18 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           for (IDifference diff : toIgnore) {
             if (diff instanceof EElementRelativePresence) {
               EElementRelativePresence presence = (EElementRelativePresence)diff;
-              getUIComparison().getDifferencesToIgnore().add(presence);
+              presence.setIgnored(true);
               // Also on symmetrical if any
               if (diff instanceof EValuePresence) {
                 IValuePresence symmetrical = ((EValuePresence)diff).getSymmetrical();
                 if (symmetrical instanceof EMergeableDifference)
-                  getUIComparison().getDifferencesToIgnore().add(
-                      (EMergeableDifference)symmetrical);
+                  ((EMergeableDifference) symmetrical).setIgnored(true);
                 // Also on symmetrical ownership if any
                 if (diff instanceof IReferenceValuePresence) {
                   IReferenceValuePresence symmetricalOwnership =
                       ((IReferenceValuePresence)diff).getSymmetricalOwnership();
                   if (symmetricalOwnership instanceof EMergeableDifference)
-                    getUIComparison().getDifferencesToIgnore().add(
-                        (EMergeableDifference)symmetricalOwnership);
+                    ((EMergeableDifference)symmetricalOwnership).setIgnored(true);
                 }
               }
             }

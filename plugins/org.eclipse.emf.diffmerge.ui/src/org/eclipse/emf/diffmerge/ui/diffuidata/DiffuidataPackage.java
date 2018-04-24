@@ -89,22 +89,13 @@ public interface DiffuidataPackage extends EPackage {
 	int UI_COMPARISON__ACTUAL_COMPARISON = 0;
 
 	/**
-   * The feature id for the '<em><b>Differences To Ignore</b></em>' reference list.
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-	int UI_COMPARISON__DIFFERENCES_TO_IGNORE = 1;
-
-	/**
    * The feature id for the '<em><b>Last Action Selection</b></em>' containment reference.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-	int UI_COMPARISON__LAST_ACTION_SELECTION = 2;
+	int UI_COMPARISON__LAST_ACTION_SELECTION = 1;
 
 	/**
    * The number of structural features of the '<em>UI Comparison</em>' class.
@@ -113,7 +104,7 @@ public interface DiffuidataPackage extends EPackage {
    * @generated
    * @ordered
    */
-	int UI_COMPARISON_FEATURE_COUNT = 3;
+	int UI_COMPARISON_FEATURE_COUNT = 2;
 
 	/**
    * The meta object id for the '{@link org.eclipse.jface.viewers.IStructuredSelection <em>IStructured Selection</em>}' class.
@@ -314,17 +305,6 @@ public interface DiffuidataPackage extends EPackage {
    * @generated
    */
 	EReference getUIComparison_ActualComparison();
-
-	/**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getDifferencesToIgnore <em>Differences To Ignore</em>}'.
-   * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @return the meta object for the reference list '<em>Differences To Ignore</em>'.
-   * @see org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getDifferencesToIgnore()
-   * @see #getUIComparison()
-   * @generated
-   */
-	EReference getUIComparison_DifferencesToIgnore();
 
 	/**
    * Returns the meta object for the containment reference '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getLastActionSelection <em>Last Action Selection</em>}'.
@@ -540,14 +520,6 @@ public interface DiffuidataPackage extends EPackage {
      * @generated
      */
     EReference UI_COMPARISON__ACTUAL_COMPARISON = eINSTANCE.getUIComparison_ActualComparison();
-
-		/**
-     * The meta object literal for the '<em><b>Differences To Ignore</b></em>' reference list feature.
-     * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-     * @generated
-     */
-		EReference UI_COMPARISON__DIFFERENCES_TO_IGNORE = eINSTANCE.getUIComparison_DifferencesToIgnore();
 
 		/**
      * The meta object literal for the '<em><b>Last Action Selection</b></em>' containment reference feature.

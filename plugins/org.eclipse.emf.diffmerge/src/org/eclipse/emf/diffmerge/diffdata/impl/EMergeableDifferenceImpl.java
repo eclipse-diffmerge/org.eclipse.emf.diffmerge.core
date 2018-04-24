@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#getComparison <em>Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#isConflicting <em>Conflicting</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#isIgnored <em>Ignored</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#getMergeDestination <em>Merge Destination</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMergeableDifferenceImpl#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
@@ -111,6 +112,26 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
    * @ordered
    */
   protected boolean conflicting = CONFLICTING_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isIgnored() <em>Ignored</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIgnored()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean IGNORED_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isIgnored() <em>Ignored</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIgnored()
+   * @generated
+   * @ordered
+   */
+  protected boolean ignored = IGNORED_EDEFAULT;
 
   /**
    * The default value of the '{@link #getMergeDestination() <em>Merge Destination</em>}' attribute.
@@ -324,6 +345,28 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isIgnored() {
+    return ignored;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setIgnored(boolean newIgnored) {
+    boolean oldIgnored = ignored;
+    ignored = newIgnored;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED, oldIgnored, ignored));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public Role getMergeDestination() {
     return mergeDestination;
   }
@@ -428,6 +471,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
       return isAlignedWithAncestor();
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
       return isConflicting();
+    case DiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+      return isIgnored();
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       return getMergeDestination();
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
@@ -461,6 +506,9 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
       return;
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
       setConflicting((Boolean) newValue);
+      return;
+    case DiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+      setIgnored((Boolean) newValue);
       return;
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       setMergeDestination((Role) newValue);
@@ -511,6 +559,9 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
       setConflicting(CONFLICTING_EDEFAULT);
       return;
+    case DiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+      setIgnored(IGNORED_EDEFAULT);
+      return;
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       setMergeDestination(MERGE_DESTINATION_EDEFAULT);
       return;
@@ -547,6 +598,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
       return alignedWithAncestor != ALIGNED_WITH_ANCESTOR_EDEFAULT;
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
       return conflicting != CONFLICTING_EDEFAULT;
+    case DiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+      return ignored != IGNORED_EDEFAULT;
     case DiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       return MERGE_DESTINATION_EDEFAULT == null ? mergeDestination != null
           : !MERGE_DESTINATION_EDEFAULT.equals(mergeDestination);
@@ -584,6 +637,8 @@ public abstract class EMergeableDifferenceImpl extends EObjectImpl
     result.append(alignedWithAncestor);
     result.append(", conflicting: "); //$NON-NLS-1$
     result.append(conflicting);
+    result.append(", ignored: "); //$NON-NLS-1$
+    result.append(ignored);
     result.append(", mergeDestination: "); //$NON-NLS-1$
     result.append(mergeDestination);
     result.append(", possibleMergeDestinations: "); //$NON-NLS-1$
