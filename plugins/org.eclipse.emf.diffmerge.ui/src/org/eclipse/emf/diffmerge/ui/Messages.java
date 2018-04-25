@@ -121,6 +121,8 @@ public class Messages extends NLS {
   public static String ComparisonViewer_SupportUndoRedoMenuItemTooltip;
   public static String ComparisonViewer_ShowDifferenceNumbersMenuItem;
   public static String ComparisonViewer_ShowDifferenceNumbersTooltip;
+  public static String ComparisonViewer_ShowSidesMenuItem;
+  public static String ComparisonViewer_ShowSidesMenuItemTooltip;
   public static String ComparisonViewer_ToolUpdate;
   public static String ComparisonViewer_ToolUpdate_Tooltip;
   public static String ComparisonViewer_UseTechnicalRepresentation;

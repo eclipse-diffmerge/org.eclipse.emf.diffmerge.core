@@ -938,6 +938,46 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create the "show left/right contents" item in the given context and return it
+   * @param context_p a non-null object
+   * @return result a potentially null item
+   */
+  protected Item createItemShowSides(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_ShowSidesMenuItem);
+    result.setToolTipText(Messages.ComparisonViewer_ShowSidesMenuItemTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          EMFDiffNode input = getInput();
+          if (input != null && !result.isDisposed()) {
+            boolean isShowSidesPossible = input.isShowSidesPossible();
+            result.setSelection(isShowSidesPossible);
+            result.setEnabled(isShowSidesPossible);
+            showSides(isShowSidesPossible);
+          }
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        boolean show = result.getSelection();
+        showSides(show);
+      }
+    });
+    return result;
+  }
+  
+  /**
    * Create the "show uncounted elements" item in the given context and return it
    * @param context_p a non-null object
    * @return result a potentially null item
@@ -2453,6 +2493,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected void setupMenuSynthesisMisc(Menu synthesisMenu_p) {
     createItemUseCustomIcons(synthesisMenu_p);
     createItemUseCustomLabels(synthesisMenu_p);
+    new MenuItem(synthesisMenu_p, SWT.SEPARATOR);
+    createItemShowSides(synthesisMenu_p);
     createItemShowDifferenceNumbers(synthesisMenu_p);
     createItemShowImpact(synthesisMenu_p);
     new MenuItem(synthesisMenu_p, SWT.SEPARATOR);
@@ -2565,6 +2607,20 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       // Proceed
     }
     return result;
+  }
+  
+  /**
+   * Set whether the contents of the left and right sides is visible
+   * @param show_p whether it is visible
+   */
+  protected void showSides(boolean show_p) {
+    Control leftControl = _viewerSynthesisLeft.getControl();
+    if (leftControl != null && !leftControl.isDisposed() &&
+        show_p != leftControl.isVisible()) {
+      leftControl.setVisible(show_p);
+      _viewerSynthesisRight.getControl().setVisible(show_p);
+      leftControl.getParent().layout();
+    }
   }
   
   /**

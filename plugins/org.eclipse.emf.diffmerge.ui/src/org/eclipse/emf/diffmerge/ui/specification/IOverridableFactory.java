@@ -32,7 +32,7 @@ public interface IOverridableFactory {
   /**
    * Return the classes that this factory overrides when applicable.
    * This "override" relation must be such that its transitive
-   * closure is antisymmmetric (no "loops"). Only instances of the returned classes are
+   * closure is antisymmetric (no "loops"). Only instances of the returned classes are
    * concerned, not instances of sub-classes.
    * @return a non-null, potentially empty, non-modifiable collection
    */

@@ -101,6 +101,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** Whether an impact dialog must be shown at merge time */
   private boolean _isShowMergeImpact;
   
+  /** Whether the left and right sides may be shown */
+  private boolean _isShowSidesPossible;
+  
   /** Whether to support undo/redo (cost in memory usage and response time) */
   private boolean _isUndoRedoSupported;
   
@@ -172,6 +175,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _isReferenceModified = false;
     _isHideDifferenceNumbers = false;
     _isShowMergeImpact = true;
+    _isShowSidesPossible = true;
     _isUndoRedoSupported = _editingDomain != null;
     _isLogEvents = false;
     _defaultShowMergeImpact = _isShowMergeImpact;
@@ -241,6 +245,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public boolean isShowMergeImpact() {
     return _isShowMergeImpact;
+  }
+  
+  /**
+   * Return whether the left and right sides may be shown
+   */
+  public boolean isShowSidesPossible() {
+    return _isShowSidesPossible;
   }
   
   /**
@@ -573,6 +584,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public void setShowMergeImpact(boolean showMergeImpact_p) {
     _isShowMergeImpact = showMergeImpact_p;
+  }
+  
+  /**
+   * Set whether the left and right sides may be shown
+   */
+  public void setShowSidesPossible(boolean showSidesPossible_p) {
+    _isShowSidesPossible = showSidesPossible_p;
   }
   
   /**
