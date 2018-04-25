@@ -12,7 +12,11 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diffdata" nsURI="http://www.eclipse.org/emf/diffmerge/1.0.0/diffdata"
     nsPrefix="org.eclipse.emf.diffmerge">
-  <eClassifiers xsi:type="ecore:EClass" name="EComparison" eSuperTypes="#//IEditableComparison">
+  <eClassifiers xsi:type="ecore:EClass" name="EIdentified" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EComparison" eSuperTypes="#//EIdentified #//IEditableComparison">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestorScope" eType="#//IEditableModelScope"
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceScope" lowerBound="1"
@@ -28,7 +32,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" lowerBound="1"
         eType="#//EMapping" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EMapping" eSuperTypes="#//IEditableMapping">
+  <eClassifiers xsi:type="ecore:EClass" name="EMapping" eSuperTypes="#//EIdentified #//IEditableMapping">
     <eOperations name="getComparison" eType="#//EComparison"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         eType="#//EMatch" changeable="false" containment="true"/>
@@ -37,7 +41,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetCompletedMatches"
         upperBound="-1" eType="#//IMatch" resolveProxies="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EMatch" eSuperTypes="#//IEditableMatch">
+  <eClassifiers xsi:type="ecore:EClass" name="EMatch" eSuperTypes="#//EIdentified #//IEditableMatch">
     <eOperations name="getMapping" eType="#//EMapping"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchID" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
         transient="true"/>
@@ -58,7 +62,7 @@
         eType="#//IReferenceValuePresence"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMergeableDifference" abstract="true"
-      eSuperTypes="#//IEditableMergeableDifference">
+      eSuperTypes="#//EIdentified #//IEditableMergeableDifference">
     <eStructuralFeatures xsi:type="ecore:EReference" name="comparison" lowerBound="1"
         eType="#//EComparison"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alignedWithAncestor" lowerBound="1"

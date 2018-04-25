@@ -47,10 +47,10 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableMatch"
+ * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EIdentified org.eclipse.emf.diffmerge.diffdata.IEditableMatch"
  * @generated
  */
-public interface EMatch extends EObject, Editable {
+public interface EMatch extends EIdentified, Editable {
   /**
    * Returns the value of the '<em><b>Match ID</b></em>' attribute.
    * <!-- begin-user-doc -->

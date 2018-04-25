@@ -2670,8 +2670,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void showSides(boolean show_p) {
     Control leftControl = _viewerSynthesisLeft.getControl();
-    if (leftControl != null && !leftControl.isDisposed() &&
-        show_p != leftControl.isVisible()) {
+    if (leftControl != null && !leftControl.isDisposed()) {
+      // Do not check whether show_p != isVisible() because at workbench
+      // init time, isVisible()==false while setVisible(false) has an impact
       leftControl.setVisible(show_p);
       _viewerSynthesisRight.getControl().setVisible(show_p);
       leftControl.getParent().layout();

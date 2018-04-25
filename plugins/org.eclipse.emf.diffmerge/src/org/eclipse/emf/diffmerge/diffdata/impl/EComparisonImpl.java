@@ -69,7 +69,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -90,7 +89,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class EComparisonImpl extends EObjectImpl implements EComparison {
+public class EComparisonImpl extends EIdentifiedImpl implements EComparison {
   /**
    * The default value of the '{@link #getAncestorScope() <em>Ancestor Scope</em>}' attribute.
    * <!-- begin-user-doc -->

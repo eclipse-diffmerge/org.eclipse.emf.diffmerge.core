@@ -256,6 +256,21 @@ public class ComparisonSetupManager {
   }
   
   /**
+   * Return the registered comparison method factory that has the given ID
+   * @param id_p a non-null string
+   * @return a potentially null comparison method factory
+   */
+  public IComparisonMethodFactory getComparisonMethodFactory(String id_p) {
+    Collection<IComparisonMethodFactory> factories =
+        getRegisteredComparisonMethodFactories();
+    for (IComparisonMethodFactory current : factories) {
+      if (id_p.equals(current.getID()))
+          return current;
+    }
+    return null;
+  }
+  
+  /**
    * Return the comparison method factories which are registered through the dedicated
    * extension point, if any
    * @return a non-null, potentially empty list

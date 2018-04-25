@@ -19,8 +19,6 @@ import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference.Editable;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EMergeable Difference</b></em>'.
@@ -43,10 +41,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMergeableDifference()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableMergeableDifference"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.diffdata.EIdentified org.eclipse.emf.diffmerge.diffdata.IEditableMergeableDifference"
  * @generated
  */
-public interface EMergeableDifference extends EObject, Editable {
+public interface EMergeableDifference extends EIdentified, Editable {
   /**
    * Returns the value of the '<em><b>Comparison</b></em>' reference.
    * <!-- begin-user-doc -->

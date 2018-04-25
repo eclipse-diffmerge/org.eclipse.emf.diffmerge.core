@@ -37,6 +37,7 @@ import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
+import org.eclipse.emf.diffmerge.diffdata.EIdentified;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
@@ -58,6 +59,13 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  */
 public class DiffdataPackageImpl extends EPackageImpl
     implements DiffdataPackage {
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass eIdentifiedEClass = null;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -341,6 +349,24 @@ public class DiffdataPackageImpl extends EPackageImpl
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(DiffdataPackage.eNS_URI, theDiffdataPackage);
     return theDiffdataPackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEIdentified() {
+    return eIdentifiedEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEIdentified_Id() {
+    return (EAttribute) eIdentifiedEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -1088,6 +1114,9 @@ public class DiffdataPackageImpl extends EPackageImpl
     isCreated = true;
 
     // Create classes and their features
+    eIdentifiedEClass = createEClass(EIDENTIFIED);
+    createEAttribute(eIdentifiedEClass, EIDENTIFIED__ID);
+
     eComparisonEClass = createEClass(ECOMPARISON);
     createEAttribute(eComparisonEClass, ECOMPARISON__ANCESTOR_SCOPE);
     createEAttribute(eComparisonEClass, ECOMPARISON__REFERENCE_SCOPE);
@@ -1253,9 +1282,13 @@ public class DiffdataPackageImpl extends EPackageImpl
     // Set bounds for type parameters
 
     // Add supertypes to classes
+    eComparisonEClass.getESuperTypes().add(this.getEIdentified());
     eComparisonEClass.getESuperTypes().add(this.getIEditableComparison());
+    eMappingEClass.getESuperTypes().add(this.getEIdentified());
     eMappingEClass.getESuperTypes().add(this.getIEditableMapping());
+    eMatchEClass.getESuperTypes().add(this.getEIdentified());
     eMatchEClass.getESuperTypes().add(this.getIEditableMatch());
+    eMergeableDifferenceEClass.getESuperTypes().add(this.getEIdentified());
     eMergeableDifferenceEClass.getESuperTypes()
         .add(this.getIEditableMergeableDifference());
     eElementRelativePresenceEClass.getESuperTypes()
@@ -1278,6 +1311,13 @@ public class DiffdataPackageImpl extends EPackageImpl
         .add(this.getIReferenceValuePresence());
 
     // Initialize classes and features; add operations and parameters
+    initEClass(eIdentifiedEClass, EIdentified.class, "EIdentified", IS_ABSTRACT, //$NON-NLS-1$
+        !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEIdentified_Id(), theEcorePackage.getEString(), "id", //$NON-NLS-1$
+        null, 0, 1, EIdentified.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
+
     initEClass(eComparisonEClass, EComparison.class, "EComparison", //$NON-NLS-1$
         !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getEComparison_AncestorScope(),

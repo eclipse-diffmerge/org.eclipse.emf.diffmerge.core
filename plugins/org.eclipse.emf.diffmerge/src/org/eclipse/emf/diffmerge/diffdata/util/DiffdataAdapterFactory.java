@@ -94,6 +94,11 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    */
   protected DiffdataSwitch<Adapter> modelSwitch = new DiffdataSwitch<Adapter>() {
     @Override
+    public Adapter caseEIdentified(EIdentified object) {
+      return createEIdentifiedAdapter();
+    }
+
+    @Override
     public Adapter caseEComparison(EComparison object) {
       return createEComparisonAdapter();
     }
@@ -249,6 +254,20 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   @Override
   public Adapter createAdapter(Notifier target) {
     return modelSwitch.doSwitch((EObject) target);
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.diffdata.EIdentified <em>EIdentified</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.emf.diffmerge.diffdata.EIdentified
+   * @generated
+   */
+  public Adapter createEIdentifiedAdapter() {
+    return null;
   }
 
   /**

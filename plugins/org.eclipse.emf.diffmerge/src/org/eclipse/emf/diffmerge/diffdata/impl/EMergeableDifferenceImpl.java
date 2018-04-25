@@ -34,7 +34,6 @@ import org.eclipse.emf.diffmerge.structures.endo.AbstractEndorelation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
@@ -61,7 +60,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * @generated
  */
 @SuppressWarnings("boxing")
-public abstract class EMergeableDifferenceImpl extends EObjectImpl
+public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
     implements EMergeableDifference {
   /**
    * The cached value of the '{@link #getComparison() <em>Comparison</em>}' reference.

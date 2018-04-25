@@ -17,7 +17,6 @@ package org.eclipse.emf.diffmerge.diffdata;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.api.IMapping.Editable;
 import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,10 +33,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableMapping"
+ * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EIdentified org.eclipse.emf.diffmerge.diffdata.IEditableMapping"
  * @generated
  */
-public interface EMapping extends EObject, Editable {
+public interface EMapping extends EIdentified, Editable {
   /**
    * Returns the value of the '<em><b>Modifiable Contents</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EMatch}.

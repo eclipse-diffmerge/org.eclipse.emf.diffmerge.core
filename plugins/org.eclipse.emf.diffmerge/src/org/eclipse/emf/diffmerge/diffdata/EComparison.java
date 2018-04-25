@@ -19,7 +19,6 @@ import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,10 +39,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.IEditableComparison"
+ * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EIdentified org.eclipse.emf.diffmerge.diffdata.IEditableComparison"
  * @generated
  */
-public interface EComparison extends EObject, Editable {
+public interface EComparison extends EIdentified, Editable {
   /**
    * Returns the value of the '<em><b>Ancestor Scope</b></em>' attribute.
    * <!-- begin-user-doc -->

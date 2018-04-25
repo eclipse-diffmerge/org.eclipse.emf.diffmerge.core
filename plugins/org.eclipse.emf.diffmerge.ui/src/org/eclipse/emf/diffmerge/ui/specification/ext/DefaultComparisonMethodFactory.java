@@ -17,6 +17,8 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
@@ -40,10 +42,27 @@ public class DefaultComparisonMethodFactory implements IComparisonMethodFactory 
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonConfiguration()
+   */
+  public IComparisonConfiguration createComparisonConfiguration() {
+    return createComparisonMethod(
+        EMPTY_MODEL_SCOPE_DEFINITION,
+        EMPTY_MODEL_SCOPE_DEFINITION,
+        EMPTY_MODEL_SCOPE_DEFINITION);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#getLabel()
    */
   public String getLabel() {
     return Messages.DefaultComparisonMethodFactory_Label;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#getID()
+   */
+  public String getID() {
+    return getClass().getName();
   }
   
   /**
@@ -61,5 +80,53 @@ public class DefaultComparisonMethodFactory implements IComparisonMethodFactory 
       IModelScopeDefinition ancestorScopeSpec_p) {
     return true;
   }
+  
+  
+  /** A model scope definition that cannot do anything */
+  public static final IModelScopeDefinition EMPTY_MODEL_SCOPE_DEFINITION =
+    new IModelScopeDefinition() {
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
+     */
+    public IEditableModelScope createScope(Object context_p) {
+      return null;
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getEntrypoint()
+     */
+    public Object getEntrypoint() {
+      return this;
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getLabel()
+     */
+    public String getLabel() {
+      return getShortLabel();
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#getShortLabel()
+     */
+    public String getShortLabel() {
+      return ""; //$NON-NLS-1$
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditable()
+     */
+    public boolean isEditable() {
+      return false;
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#isEditableSettable()
+     */
+    public boolean isEditableSettable() {
+      return false;
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#setEditable(boolean)
+     */
+    public void setEditable(boolean editable_p) {
+      // Ignore
+    }
+  };
   
 }

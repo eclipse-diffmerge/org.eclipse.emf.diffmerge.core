@@ -42,7 +42,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EContentsEList;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.ECrossReferenceEList;
@@ -66,7 +65,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMappingImpl extends EObjectImpl implements EMapping {
+public class EMappingImpl extends EIdentifiedImpl implements EMapping {
   /**
    * The cached value of the '{@link #getModifiableContents() <em>Modifiable Contents</em>}' containment reference list.
    * <!-- begin-user-doc -->

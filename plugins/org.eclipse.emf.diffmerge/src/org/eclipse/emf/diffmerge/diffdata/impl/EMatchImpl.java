@@ -51,7 +51,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
@@ -79,7 +78,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMatchImpl extends EObjectImpl implements EMatch {
+public class EMatchImpl extends EIdentifiedImpl implements EMatch {
 
   /**
    * The default value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
