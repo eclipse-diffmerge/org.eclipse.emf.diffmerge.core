@@ -1072,11 +1072,49 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return a potentially null item
    */
   protected Item createItemSync(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    final MenuItem result = new MenuItem(context_p, SWT.CASCADE);
     result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
         EMFDiffMergeUIPlugin.ImageID.SYNCED));
-    result.setText(Messages.ComparisonViewer_LinkViewsTooltip);
-    result.setToolTipText(Messages.ComparisonViewer_EnhancedLinkViewsTooltip);
+    result.setText(Messages.ComparisonViewer_LinkViews);
+    Menu innerMenu = new Menu(result);
+    createItemSyncInternal(innerMenu);
+    createItemSyncExternal(innerMenu);
+    result.setMenu(innerMenu);
+    return result;
+  }
+  
+  /**
+   * Create the "sync with external" item in the given context and return it
+   * @param context_p a non-null object
+   * @return a potentially null item
+   */
+  protected Item createItemSyncExternal(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_LinkViewsExternal);
+    result.setToolTipText(Messages.ComparisonViewer_LinkViewsExternalToolTip);
+    result.setSelection(_isExternallySynced);
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event_p) {
+        boolean synced = result.getSelection();
+        _isExternallySynced = synced;
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create the "sync internally" item in the given context and return it
+   * @param context_p a non-null object
+   * @return a potentially null item
+   */
+  protected Item createItemSyncInternal(Menu context_p) {
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_LinkViewsInternal);
+    result.setToolTipText(Messages.ComparisonViewer_LinkViewsInternalTooltip);
     result.setSelection(_isLeftRightSynced);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -1485,7 +1523,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
         if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer() &&
-            (source != _viewerSynthesisMain || _isLeftRightSynced)) {
+            (source != _viewerSynthesisMain.getInnerViewer() || _isLeftRightSynced)) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           // New selection
           IStructuredSelection newSelection = StructuredSelection.EMPTY;
@@ -1768,7 +1806,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#getMultiViewerSelectionProvider()
    */
   @Override
-  public ISelectionProvider getMultiViewerSelectionProvider() {
+  protected ISelectionProvider getMultiViewerSelectionProvider() {
     return _multiViewerSelectionProvider;
   }
   

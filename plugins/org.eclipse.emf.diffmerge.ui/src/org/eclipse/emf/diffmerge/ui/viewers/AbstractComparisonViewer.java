@@ -48,7 +48,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
@@ -57,6 +60,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
@@ -86,6 +90,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /** The main control of the viewer */
   private Composite _control;
   
+  /** Whether the selection is provided outside the viewer */
+  protected boolean _isExternallySynced;
+  
   /** The current input (initially null) */
   private EMFDiffNode _input;
   
@@ -104,6 +111,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /** The optional navigatable for navigation from the workbench menu bar buttons */
   private INavigatable _navigatable;
   
+  /** The (initially null) selection bridge from this viewer to the outside */
+  protected SelectionBridge _selectionBridgeToOutside;
+  
   
   /**
    * Constructor
@@ -114,10 +124,13 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     _actionBars = actionBars_p;
     _changeListeners = new HashSet<IPropertyChangeListener>(1);
     _input = null;
+    _isExternallySynced = true;
     _lastCommandBeforeSave = null;
     _categoryProvider = new DefaultDifferenceCategoryProvider();
+    _selectionBridgeToOutside = null;
     setupUndoRedo();
     _control = createControls(parent_p);
+    setupSelectionProvider();
     hookControl(_control);
     registerNavigatable(_control, createNavigatable());
   }
@@ -127,6 +140,44 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
     _changeListeners.add(listener_p);
+  }
+  
+  /**
+   * Set up the selection provider
+   */
+  protected void setupSelectionProvider() {
+    final IWorkbenchSite site = getSite();
+    if (site != null) {
+      _selectionBridgeToOutside = new SelectionBridge() {
+        /**
+         * @see org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge#notifyListeners()
+         */
+        @Override
+        protected void notifyListeners() {
+          if (_isExternallySynced) {
+            super.notifyListeners();
+          }
+        }
+      };
+      getMultiViewerSelectionProvider().addSelectionChangedListener(_selectionBridgeToOutside);
+      site.setSelectionProvider(_selectionBridgeToOutside);
+      // Eclipse 4.x compatibility layer workaround: selection changed event propagation
+      ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
+        /**
+         * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+         */
+        public void selectionChanged(SelectionChangedEvent event_p) {
+          // Force propagation to selection listeners through the selection service
+          IWorkbenchWindow window = site.getWorkbenchWindow();
+          if (window != null && !window.getWorkbench().isClosing()) {
+            ISelectionService service = window.getSelectionService();
+            if (service instanceof ISelectionChangedListener)
+              ((ISelectionChangedListener)service).selectionChanged(event_p);
+          }
+        }
+      };
+      _selectionBridgeToOutside.addSelectionChangedListener(selectionChangedListener);
+    }
   }
   
   /**
@@ -317,12 +368,10 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
-   * Return a selection provider that covers the selection of sub-viewers if any
+   * Return a selection provider that covers the selection of the sub-viewers
    * @return a non-null selection provider
    */
-  public ISelectionProvider getMultiViewerSelectionProvider() {
-    return this;
-  }
+  protected abstract ISelectionProvider getMultiViewerSelectionProvider();
   
   /**
    * Return the navigatable for this viewer, if any
@@ -353,6 +402,15 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   protected ComparisonResourceManager getResourceManager() {
     return getInput() == null? null: getInput().getResourceManager();
+  }
+  
+  /**
+   * Return a selection provider for outside this viewer which may selectively reflect
+   * the selection of this viewer, e.g., for performance reasons
+   * @return a non-null selection provider
+   */
+  public ISelectionProvider getSelectionProvider() {
+    return _selectionBridgeToOutside;
   }
   
   /**
@@ -400,9 +458,17 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * Dispose this viewer as a reaction to the disposal of its control
    */
   protected void handleDispose() {
-    if (_actionBars != null)
+    setSelection(StructuredSelection.EMPTY, false);
+    if (_selectionBridgeToOutside != null) {
+      getMultiViewerSelectionProvider().removeSelectionChangedListener(
+          _selectionBridgeToOutside);
+      _selectionBridgeToOutside.clearListeners();
+      _selectionBridgeToOutside = null;
+    }
+    if (_actionBars != null) {
       _actionBars.clearGlobalActionHandlers();
-    _actionBars = null;
+      _actionBars = null;
+    }
     _changeListeners.clear();
     _input = null;
     _control = null;

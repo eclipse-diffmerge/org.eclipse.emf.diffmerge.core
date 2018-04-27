@@ -44,7 +44,6 @@ import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -63,9 +62,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -80,7 +76,6 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -124,9 +119,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   /** The (initially null) command stack listener on the editing domain, if any */
   protected CommandStackListener _commandStackListener;
   
-  /** The non-null (unless disposed) selection bridge between the viewer and the workbench site */
-  protected SelectionBridge _selectionBridge;
-  
   /** The (initially null) compare navigator for the workbench navigation buttons */
   private ICompareNavigator _navigator;
   
@@ -145,7 +137,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     _foundDifferences = true;
     _isDirty = false;
     _navigator = createNavigator();
-    _selectionBridge = new SelectionBridge();
     initializeCompareConfiguration();
   }
   
@@ -168,38 +159,11 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   }
   
   /**
-   * Ensure that the selection provider of the workbench site is the intended one
-   */
-  protected void checkSelectionProvider() {
-    final IWorkbenchSite site = getSite();
-    if (site != null && site.getSelectionProvider() != _selectionBridge) {
-      site.setSelectionProvider(_selectionBridge);
-      // Eclipse 4.x compatibility layer workaround: selection changed event propagation
-      ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
-        /**
-         * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-         */
-        public void selectionChanged(SelectionChangedEvent event_p) {
-          // Force propagation to selection listeners through the selection service
-          IWorkbenchWindow window = site.getWorkbenchWindow();
-          if (window != null && !window.getWorkbench().isClosing()) {
-            ISelectionService service = window.getSelectionService();
-            if (service instanceof ISelectionChangedListener)
-              ((ISelectionChangedListener)service).selectionChanged(event_p);
-          }
-        }
-      };
-      _selectionBridge.addSelectionChangedListener(selectionChangedListener);
-    }
-  }
-  
-  /**
    * @see org.eclipse.compare.CompareEditorInput#contentsCreated()
    */
   @Override
   protected void contentsCreated() {
     super.contentsCreated();
-    checkSelectionProvider();
     _viewer.getControl().addDisposeListener(new DisposeListener() {
       /**
        * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
@@ -225,9 +189,6 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
   public Control createContents(Composite parent_p) {
     // Create viewer
     _viewer = _comparisonMethod.createComparisonViewer(parent_p, getActionBars());
-    // Plug it to the selection provider
-    if (_selectionBridge != null)
-      _viewer.getMultiViewerSelectionProvider().addSelectionChangedListener(_selectionBridge);
     _viewer.addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -455,22 +416,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
           _propertySheetPage.dispose();
         }
       });
-    if (_viewer != null) {
-      display.asyncExec(new Runnable() {
-        /**
-         * @see java.lang.Runnable#run()
-         */
-        public void run() {
-          _viewer.setSelection(StructuredSelection.EMPTY, false);
-          if (_selectionBridge != null) {
-            _viewer.getMultiViewerSelectionProvider().removeSelectionChangedListener(_selectionBridge);
-            _selectionBridge.clearListeners();
-            _selectionBridge = null;
-          }
-          _viewer = null;
-        }
-      });
-    }
+    _viewer = null;
     if (_commandStackListener != null && getEditingDomain() != null)
       getEditingDomain().getCommandStack().removeCommandStackListener(_commandStackListener);
     super.handleDispose();
@@ -589,8 +535,7 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
    */
   @Override
   public boolean isSaveNeeded() {
-    // Redefined for compatibility with Indigo and synchronization with workbench views
-    checkSelectionProvider(); // For Eclipse 3.x when canRunAsJob() is true
+    // Redefined for compatibility with Indigo
     return _isDirty;
   }
   

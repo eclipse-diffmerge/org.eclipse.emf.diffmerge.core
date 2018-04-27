@@ -74,7 +74,8 @@ public class Messages extends NLS {
   public static String ComparisonViewer_DeleteRightTooltip;
   public static String ComparisonViewer_Details;
   public static String ComparisonViewer_EnhancedFilterToolTip;
-  public static String ComparisonViewer_EnhancedLinkViewsTooltip;
+  public static String ComparisonViewer_LinkViewsInternal;
+  public static String ComparisonViewer_LinkViewsInternalTooltip;
   public static String ComparisonViewer_EnhancedSortTooltip;
   public static String ComparisonViewer_ExpandTooltip;
   public static String ComparisonViewer_Filtered;
@@ -92,7 +93,9 @@ public class Messages extends NLS {
   public static String ComparisonViewer_LabelsMenuItem;
   public static String ComparisonViewer_LabelsMenuItemTooltip;
   public static String ComparisonViewer_Left;
-  public static String ComparisonViewer_LinkViewsTooltip;
+  public static String ComparisonViewer_LinkViews;
+  public static String ComparisonViewer_LinkViewsExternal;
+  public static String ComparisonViewer_LinkViewsExternalToolTip;
   public static String ComparisonViewer_LockTooltip_Locked;
   public static String ComparisonViewer_LockTooltip_Unlocked;
   public static String ComparisonViewer_LogEventsMenuItem;
