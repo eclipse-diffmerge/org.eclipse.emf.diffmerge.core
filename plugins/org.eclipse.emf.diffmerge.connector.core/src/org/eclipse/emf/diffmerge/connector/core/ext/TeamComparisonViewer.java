@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
+import org.eclipse.compare.CompareViewerPane;
 import org.eclipse.compare.ICompareContainer;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.compare.IPropertyChangeNotifier;
@@ -36,6 +37,7 @@ import org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider;
 import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -87,6 +89,10 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    */
   public TeamComparisonViewer(Composite parent_p, CompareConfiguration configuration_p) {
     _configuration = configuration_p;
+    ToolBarManager manager = CompareViewerPane.getToolBarManager(parent_p);
+    if (manager != null) {
+      manager.removeAll(); // Remove text compare contributions to avoid side effects
+    }
     _control = createControl(parent_p);
     _pendingListeners = new HashSet<IPropertyChangeListener>();
     _innerViewer = null;
@@ -130,12 +136,15 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     if (isLaterOnTheRight()) {
       if (!laterMayBeOnTheRight(setup_p)) {
         // Invert left and right
-        setup_p.swapLeftRole();
         if (_configuration != null) {
           // Ensure consistency with text comparison
           _configuration.setProperty(MIRRORED, Boolean.TRUE);
         }
       }
+    }
+    Object mirroredProp = _configuration.getProperty(MIRRORED);
+    if (mirroredProp instanceof Boolean && ((Boolean)mirroredProp).booleanValue()) {
+      setup_p.swapLeftRole();
     }
     Role leftRole = setup_p.getLeftRole();
     setup_p.setTwoWayReferenceRole(leftRole.opposite()); // The default remote side in Eclipse
