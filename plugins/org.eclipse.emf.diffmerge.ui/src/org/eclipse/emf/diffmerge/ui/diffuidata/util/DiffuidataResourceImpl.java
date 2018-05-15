@@ -25,14 +25,14 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
  * @generated
  */
 public class DiffuidataResourceImpl extends XMIResourceImpl {
-	/**
+  /**
    * Creates an instance of the resource.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @param uri_p the URI of the new resource.
    * @generated
    */
-	public DiffuidataResourceImpl(URI uri_p) {
+  public DiffuidataResourceImpl(URI uri_p) {
     super(uri_p);
   }
 

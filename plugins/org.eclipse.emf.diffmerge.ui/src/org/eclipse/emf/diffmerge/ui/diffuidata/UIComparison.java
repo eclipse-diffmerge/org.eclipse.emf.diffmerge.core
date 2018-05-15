@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.ui.diffuidata;
 
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.ecore.EObject;
-
+import org.eclipse.emf.edit.provider.IDisposable;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,27 +32,27 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.ui.diffuidata.IDisposable"
  * @generated
  */
-public interface UIComparison extends EObject {
-	/**
+public interface UIComparison extends EObject, IDisposable {
+  /**
    * Returns the value of the '<em><b>Actual Comparison</b></em>' reference.
    * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Actual Comparison</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Actual Comparison</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
    * @return the value of the '<em>Actual Comparison</em>' reference.
    * @see #setActualComparison(EComparison)
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison_ActualComparison()
    * @model required="true"
    * @generated
    */
-	EComparison getActualComparison();
+  EComparison getActualComparison();
 
-	/**
+  /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -65,26 +65,26 @@ public interface UIComparison extends EObject {
   /**
    * Returns the value of the '<em><b>Last Action Selection</b></em>' containment reference.
    * <!-- begin-user-doc -->
-	 * The user selection when the user last made an action
-	 * <!-- end-user-doc -->
+   * The user selection when the user last made an action
+   * <!-- end-user-doc -->
    * @return the value of the '<em>Last Action Selection</em>' containment reference.
    * @see #setLastActionSelection(ComparisonSelection)
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison_LastActionSelection()
    * @model containment="true"
    * @generated
    */
-	ComparisonSelection getLastActionSelection();
+  ComparisonSelection getLastActionSelection();
 
-	/**
+  /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getLastActionSelection <em>Last Action Selection</em>}' containment reference.
    * <!-- begin-user-doc -->
-	 * Set selection that was effective when the user last made an action
-	 * <!-- end-user-doc -->
+   * Set selection that was effective when the user last made an action
+   * <!-- end-user-doc -->
    * @param value the new value of the '<em>Last Action Selection</em>' containment reference.
    * @see #getLastActionSelection()
    * @generated
    */
-	void setLastActionSelection(ComparisonSelection value);
+  void setLastActionSelection(ComparisonSelection value);
 
   /**
    * <!-- begin-user-doc -->
@@ -94,14 +94,5 @@ public interface UIComparison extends EObject {
    * @generated
    */
   void clear();
-
-	/**
-   * <!-- begin-user-doc -->
-	 * Dispose the receiver
-	 * <!-- end-user-doc -->
-   * @model
-   * @generated
-   */
-	void dispose();
 
 } // UIComparison

@@ -28,24 +28,24 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
  * @generated
  */
 public class DiffuidataResourceFactoryImpl extends ResourceFactoryImpl {
-	/**
+  /**
    * Creates an instance of the resource factory.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public DiffuidataResourceFactoryImpl() {
+  public DiffuidataResourceFactoryImpl() {
     super();
   }
 
-	/**
+  /**
    * Creates an instance of the resource.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public Resource createResource(URI uri) {
+  @Override
+  public Resource createResource(URI uri) {
     Resource result = new DiffuidataResourceImpl(uri);
     return result;
   }

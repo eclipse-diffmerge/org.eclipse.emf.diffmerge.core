@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Match To Nb Entry</b></em>'.
@@ -41,192 +40,199 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 @SuppressWarnings("hiding")
-public class MatchToNbEntryImpl extends EObjectImpl implements BasicEMap.Entry<EMatch,Integer> {
-	/**
+public class MatchToNbEntryImpl extends EObjectImpl
+    implements BasicEMap.Entry<EMatch, Integer> {
+  /**
    * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #getTypedKey()
    * @generated
    * @ordered
    */
-	protected EMatch key;
+  protected EMatch key;
 
-	/**
+  /**
    * The default value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #getTypedValue()
    * @generated
    * @ordered
    */
-	protected static final Integer VALUE_EDEFAULT = null;
+  protected static final Integer VALUE_EDEFAULT = null;
 
-	/**
+  /**
    * The cached value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @see #getTypedValue()
    * @generated
    * @ordered
    */
-	protected Integer value = VALUE_EDEFAULT;
+  protected Integer value = VALUE_EDEFAULT;
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	protected MatchToNbEntryImpl() {
+  protected MatchToNbEntryImpl() {
     super();
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	protected EClass eStaticClass() {
+  @Override
+  protected EClass eStaticClass() {
     return DiffuidataPackage.Literals.MATCH_TO_NB_ENTRY;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public EMatch getTypedKey() {
+  public EMatch getTypedKey() {
     if (key != null && key.eIsProxy()) {
-      InternalEObject oldKey = (InternalEObject)key;
-      key = (EMatch)eResolveProxy(oldKey);
+      InternalEObject oldKey = (InternalEObject) key;
+      key = (EMatch) eResolveProxy(oldKey);
       if (key != oldKey) {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY, oldKey, key));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+              DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY, oldKey, key));
       }
     }
     return key;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public EMatch basicGetTypedKey() {
+  public EMatch basicGetTypedKey() {
     return key;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public void setTypedKey(EMatch newKey) {
+  public void setTypedKey(EMatch newKey) {
     EMatch oldKey = key;
     key = newKey;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY, oldKey, key));
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY, oldKey, key));
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public Integer getTypedValue() {
+  public Integer getTypedValue() {
     return value;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public void setTypedValue(Integer newValue) {
+  public void setTypedValue(Integer newValue) {
     Integer oldValue = value;
     value = newValue;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE, oldValue, value));
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE, oldValue, value));
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-        if (resolve) return getTypedKey();
-        return basicGetTypedKey();
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
-        return getTypedValue();
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
+      if (resolve)
+        return getTypedKey();
+      return basicGetTypedKey();
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
+      return getTypedValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public void eSet(int featureID, Object newValue) {
+  @Override
+  public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-        setTypedKey((EMatch)newValue);
-        return;
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
-        setTypedValue((Integer)newValue);
-        return;
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
+      setTypedKey((EMatch) newValue);
+      return;
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
+      setTypedValue((Integer) newValue);
+      return;
     }
     super.eSet(featureID, newValue);
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public void eUnset(int featureID) {
+  @Override
+  public void eUnset(int featureID) {
     switch (featureID) {
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-        setTypedKey((EMatch)null);
-        return;
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
-        setTypedValue(VALUE_EDEFAULT);
-        return;
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
+      setTypedKey((EMatch) null);
+      return;
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
+      setTypedValue(VALUE_EDEFAULT);
+      return;
     }
     super.eUnset(featureID);
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public boolean eIsSet(int featureID) {
+  @Override
+  public boolean eIsSet(int featureID) {
     switch (featureID) {
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-        return key != null;
-      case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
-        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
+      return key != null;
+    case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
+      return VALUE_EDEFAULT == null ? value != null
+          : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@Override
-	public String toString() {
-    if (eIsProxy()) return super.toString();
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (value: "); //$NON-NLS-1$
@@ -235,19 +241,19 @@ public class MatchToNbEntryImpl extends EObjectImpl implements BasicEMap.Entry<E
     return result.toString();
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	protected int hash = -1;
+  protected int hash = -1;
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public int getHash() {
+  public int getHash() {
     if (hash == -1) {
       Object theKey = getKey();
       hash = (theKey == null ? 0 : theKey.hashCode());
@@ -255,62 +261,63 @@ public class MatchToNbEntryImpl extends EObjectImpl implements BasicEMap.Entry<E
     return hash;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public void setHash(int hash) {
+  public void setHash(int hash) {
     this.hash = hash;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public EMatch getKey() {
+  public EMatch getKey() {
     return getTypedKey();
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public void setKey(EMatch key) {
+  public void setKey(EMatch key) {
     setTypedKey(key);
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public Integer getValue() {
+  public Integer getValue() {
     return getTypedValue();
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public Integer setValue(Integer value) {
+  public Integer setValue(Integer value) {
     Integer oldValue = getValue();
     setTypedValue(value);
     return oldValue;
   }
 
-	/**
+  /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	@SuppressWarnings("unchecked")
-	public EMap<EMatch, Integer> getEMap() {
+  @SuppressWarnings("unchecked")
+  public EMap<EMatch, Integer> getEMap() {
     EObject container = eContainer();
-    return container == null ? null : (EMap<EMatch, Integer>)container.eGet(eContainmentFeature());
+    return container == null ? null
+        : (EMap<EMatch, Integer>) container.eGet(eContainmentFeature());
   }
 
 } //MatchToNbEntryImpl

@@ -14,7 +14,6 @@
  */
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
-
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -37,28 +36,28 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @generated
  */
 public interface MatchAndFeature extends EObject {
-	/**
+  /**
    * Returns the value of the '<em><b>Match</b></em>' reference.
    * <!-- begin-user-doc -->
-	 * Returns the non-null match
-	 * <!-- end-user-doc -->
+   * Returns the non-null match
+   * <!-- end-user-doc -->
    * @return the value of the '<em>Match</em>' reference.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getMatchAndFeature_Match()
    * @model required="true" changeable="false"
    * @generated
    */
-	EMatch getMatch();
+  EMatch getMatch();
 
-	/**
+  /**
    * Returns the value of the '<em><b>Feature</b></em>' reference.
    * <!-- begin-user-doc -->
    * Returns the non-null feature
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @return the value of the '<em>Feature</em>' reference.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getMatchAndFeature_Feature()
    * @model required="true" changeable="false"
    * @generated
    */
-	EStructuralFeature getFeature();
+  EStructuralFeature getFeature();
 
 } // MatchAndFeature
