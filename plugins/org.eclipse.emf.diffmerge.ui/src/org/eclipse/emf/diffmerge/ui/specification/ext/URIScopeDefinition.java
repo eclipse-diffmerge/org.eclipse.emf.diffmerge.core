@@ -32,7 +32,7 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
   
   /**
    * Constructor
-   * @param uri_p a non-null uri
+   * @param uri_p a non-null URI
    * @param label_p an optional label
    * @param editable_p whether the scope can be edited
    */

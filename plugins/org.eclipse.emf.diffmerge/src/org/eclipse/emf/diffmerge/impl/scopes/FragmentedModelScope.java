@@ -64,7 +64,7 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
  * @author Olivier Constant
  */
 public class FragmentedModelScope extends AbstractEditableModelScope
-implements IFragmentedModelScope.Editable {
+implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   
   /** Whether the resources should be opened in read-only mode */
   private final boolean _isReadOnly;
@@ -333,6 +333,13 @@ implements IFragmentedModelScope.Editable {
   @Override
   protected Object getDefaultOriginator() {
     return getHoldingResource();
+  }
+  
+  /**
+   * @see org.eclipse.emf.edit.domain.IEditingDomainProvider#getEditingDomain()
+   */
+  public EditingDomain getEditingDomain() {
+    return _editingDomain;
   }
   
   /**

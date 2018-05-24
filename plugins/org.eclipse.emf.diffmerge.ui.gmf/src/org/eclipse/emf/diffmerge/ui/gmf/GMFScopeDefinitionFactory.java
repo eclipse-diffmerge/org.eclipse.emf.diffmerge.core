@@ -34,27 +34,42 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 public class GMFScopeDefinitionFactory extends URIScopeDefinitionFactory {
   
   /**
+   * A scope definition for GMF.
+   */
+  public static class GMFScopeDefinition extends URIScopeDefinition {
+    /**
+     * Constructor
+     * @param uri_p a non-null URI
+     * @param label_p an optional label
+     * @param editable_p whether the scope can be edited
+     */
+    public GMFScopeDefinition(URI uri_p, String label_p, boolean editable_p) {
+      super(uri_p, label_p, editable_p);
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnEditingDomain(org.eclipse.emf.edit.domain.EditingDomain)
+     */
+    @Override
+    protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain_p) {
+      return new GMFScope(getEntrypoint(), editingDomain_p, !isEditable());
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnResourceSet(org.eclipse.emf.ecore.resource.ResourceSet)
+     */
+    @Override
+    protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
+      return new GMFScope(getEntrypoint(), resourceSet_p, !isEditable());
+    }
+  }
+  
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#createScopeDefinitionFromURI(org.eclipse.emf.common.util.URI, java.lang.String, boolean)
    */
   @Override
   protected IModelScopeDefinition createScopeDefinitionFromURI(URI uri_p, String label_p,
       boolean editable_p) {
-    return new URIScopeDefinition(uri_p, label_p, editable_p) {
-      /**
-       * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnEditingDomain(org.eclipse.emf.edit.domain.EditingDomain)
-       */
-      @Override
-      protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain_p) {
-        return new GMFScope(getEntrypoint(), editingDomain_p, !isEditable());
-      }
-      /**
-       * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition#createScopeOnResourceSet(org.eclipse.emf.ecore.resource.ResourceSet)
-       */
-      @Override
-      protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
-        return new GMFScope(getEntrypoint(), resourceSet_p, !isEditable());
-      }
-    };
+    return new GMFScopeDefinition(uri_p, label_p, editable_p);
   }
   
   /**
