@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.connector.git.ext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -23,20 +24,30 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.egit.core.internal.storage.GitFileRevision;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
 import org.eclipse.emf.ecore.resource.ContentHandler;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.jgit.dircache.DirCacheCheckout;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.team.core.history.IFileRevision;
 
 
 /**
  * A base URI Converter for Git.
  */
+@SuppressWarnings("restriction")
 public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl {
+  
+  /** The "inCommit" method for EGit version 5 */
+  private static Method __inCommitEGit5Method = null;
+  /** The "inCommit" method for EGit prior to version 5 */
+  private static Method __inCommitLegacyMethod = null;
   
   /** The non-null Git repository */
   private final Repository _repository;
@@ -61,6 +72,49 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
       List<ContentHandler> contentHandlers_p, Repository repository_p) {
     super(uriHandlers_p, contentHandlers_p);
     _repository = repository_p;
+  }
+  
+  /**
+   * Check which "inCommit" method is provided by EGit/JGit
+   */
+  @SuppressWarnings("nls")
+  private static void checkEGitMethod() {
+    if (__inCommitEGit5Method == null && __inCommitLegacyMethod == null) {
+      // Not initialized (successfully) yet
+      final String inCommitMethodName = "inCommit";
+      // Looking for EGit 5 method
+      // First, looking for EGit 5 parameter class for the method
+      final String egit5ParameterClassName = "CheckoutMetadata";
+      Class<?> egit5ParameterClass = null;
+      for (Class<?> nested : DirCacheCheckout.class.getDeclaredClasses()) {
+        if (egit5ParameterClassName.equals(nested.getSimpleName())) {
+          egit5ParameterClass = nested;
+          break;
+        }
+      }
+      if (egit5ParameterClass != null) {
+        // EGit 5 parameter class found: using it to retrieve EGit 5 method
+        try {
+          __inCommitEGit5Method = GitFileRevision.class.getMethod(
+              inCommitMethodName, Repository.class,
+              RevCommit.class, String.class, ObjectId.class,
+              egit5ParameterClass);
+        } catch (NoSuchMethodException e) {
+          // Failure: method not found
+        }
+      }
+      if (__inCommitEGit5Method == null) {
+        // EGit 5 method not found, looking for legacy method
+        try {
+          __inCommitLegacyMethod = GitFileRevision.class.getMethod(
+              inCommitMethodName, Repository.class,
+              RevCommit.class, String.class, ObjectId.class);
+        } catch (Exception e) {
+          // Failure too, which is unexpected
+          e.printStackTrace();
+        }
+      }
+    }
   }
   
   /**
@@ -113,6 +167,44 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
    */
   protected String getURIPathRepresentation(URI uri_p) {
     return uri_p.devicePath();
+  }
+  
+  /**
+   * See GitFileRevision#inCommit(...)
+   */
+  protected GitFileRevision inCommit(Repository db_p, RevCommit commit_p, String path_p,
+      ObjectId blobId_p) {
+    checkEGitMethod();
+    Object returned = null;
+    try {
+      if (__inCommitEGit5Method != null) {
+        returned = __inCommitEGit5Method.invoke(
+            null, db_p, commit_p, path_p, blobId_p, null);
+      } else if (__inCommitLegacyMethod != null) {
+        returned = __inCommitLegacyMethod.invoke(
+            null, db_p, commit_p, path_p, blobId_p);
+      }
+    } catch (Exception e) {
+      // Unexpected
+      e.printStackTrace();
+    }
+    GitFileRevision result = (returned instanceof GitFileRevision)?
+        (GitFileRevision)returned: null;
+    return result;
+  }
+  
+  /**
+   * @see GitFileRevision#inIndex(Repository, String)
+   */
+  protected GitFileRevision inIndex(Repository db_p, String path_p) {
+    return GitFileRevision.inIndex(db_p, path_p);
+  }
+  
+  /**
+   * @see GitFileRevision#inIndex(Repository, String, int)
+   */
+  protected GitFileRevision inIndex(Repository db_p, String path_p, int stage_p) {
+    return GitFileRevision.inIndex(db_p, path_p, stage_p);
   }
   
   /**

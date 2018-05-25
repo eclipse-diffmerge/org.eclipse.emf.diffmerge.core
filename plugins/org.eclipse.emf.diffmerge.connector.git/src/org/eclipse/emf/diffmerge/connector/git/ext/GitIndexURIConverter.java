@@ -10,8 +10,6 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
-import static org.eclipse.egit.core.internal.storage.GitFileRevision.inIndex;
-
 import java.util.List;
 
 import org.eclipse.emf.ecore.resource.ContentHandler;
@@ -49,7 +47,6 @@ public class GitIndexURIConverter extends AbstractGitURIConverter {
    * @see org.eclipse.emf.diffmerge.connector.git.ext.AbstractGitURIConverter#getGitFileRevision(java.lang.String)
    */
   @Override
-  @SuppressWarnings("restriction")
   protected IFileRevision getGitFileRevision(String gitPath_p) {
     return inIndex(getRepository(), gitPath_p);
   }

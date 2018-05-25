@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
-import static org.eclipse.egit.core.internal.storage.GitFileRevision.inCommit;
-import static org.eclipse.egit.core.internal.storage.GitFileRevision.inIndex;
-
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IStatus;
