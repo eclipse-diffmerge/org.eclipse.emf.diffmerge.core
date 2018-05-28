@@ -1,53 +1,60 @@
-Contributing to EMF Diff/Merge
-==============================
+# Contributing to EMF Diff/Merge
 
 Thanks for your interest in this project.
 
+## Project description
 
-Project description:
---------------------
+Eclipse EMF Diff/Merge is a diff/merge tool for models. Its main purpose is to
+help build higher-level tools that need to merge models based on consistency
+rules. GUI components are also provided. Typical usages include model
+refactoring, iterative model transformations, bridges between models or modeling
+tools, collaborative modeling environments, or versioning systems.
 
-EMF Diff/Merge is a diff/merge tool for models. Its main purpose is to help build higher-level tools that need to merge models based on consistency rules. GUI components are also provided. Typical usages include model refactoring, iterative model transformations, bridges between models or modeling tools, collaborative modeling environments, or versioning systems.
-Link: EMF Diff/Merge Wiki
+* https://projects.eclipse.org/projects/modeling.emf.diffmerge
+* http://wiki.eclipse.org/EMF_DiffMerge
 
-- http://wiki.eclipse.org/EMF_DiffMerge
+## Developer resources
 
+Information regarding source code management, builds, coding standards, and
+more.
 
-Developer resources:
---------------------
+* https://projects.eclipse.org/projects/modeling.emf.diffmerge/developer
+* http://wiki.eclipse.org/EMF_DiffMerge
 
-Information regarding source code management, builds, coding standards, and more.
+The project maintains the following source code repositories
 
-- http://wiki.eclipse.org/EMF_DiffMerge/Developer
-
-
-Contributor License Agreement:
-------------------------------
-
-Before your contribution can be accepted by the project, you need to create and electronically sign the Eclipse Foundation Contributor License Agreement (CLA).
-
-- http://www.eclipse.org/legal/CLA.php
-
-
-Contact:
---------
-
-Contact the project developers via the project's "dev" list.
-
-- https://dev.eclipse.org/mailman/listinfo/diffmerge-dev
-
-
-Search for bugs:
-----------------
+* http://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.core.git
+* http://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.patterns.git
+* http://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.coevolution.git
+* http://git.eclipse.org/c/diffmerge/org.eclipse.emf.diffmerge.patch.git
 
 This project uses Bugzilla to track ongoing development and issues.
 
-- https://bugs.eclipse.org/bugs/buglist.cgi?product=EMF.Diffmerge
+* Search for issues: https://eclipse.org/bugs/buglist.cgi?product=EMF.Diffmerge
+* Create a new report:
+   https://eclipse.org/bugs/enter_bug.cgi?product=EMF.Diffmerge
 
+Be sure to search for existing bugs before you create another one. Remember that
+contributions are always welcome!
 
-Create a new bug:
------------------
+## Eclipse Contributor Agreement
 
-Be sure to search for existing bugs before you create another one. Remember that contributions are always welcome!
+Before your contribution can be accepted by the project team contributors must
+electronically sign the Eclipse Contributor Agreement (ECA).
 
-- https://bugs.eclipse.org/bugs/enter_bug.cgi?product=EMF.Diffmerge
+* http://www.eclipse.org/legal/ECA.php
+
+Commits that are provided by non-committers must have a Signed-off-by field in
+the footer indicating that the author is aware of the terms by which the
+contribution has been provided to the project. The non-committer must
+additionally have an Eclipse Foundation account and must have a signed Eclipse
+Contributor Agreement (ECA) on file.
+
+For more information, please see the Eclipse Committer Handbook:
+https://www.eclipse.org/projects/handbook/#resources-commit
+
+## Contact
+
+Contact the project developers via the project's "dev" list.
+
+* https://dev.eclipse.org/mailman/listinfo/diffmerge-dev
