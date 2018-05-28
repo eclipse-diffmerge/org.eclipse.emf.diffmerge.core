@@ -410,11 +410,11 @@ Eclipse maintains a local history of file modifications and allows to compare a 
 
 === Version Control Systems ===
 
-Eclipse provides mechanisms (Eclipse Team) that make interactions with Version Control Systems (VCSs) easier. VCS clients that integrate within Eclipse and use these mechanisms, for example EGit for Git or Subversive for SVN, can interact with EMF Diff/Merge in order to, e.g., compare well-identified versions, commits or branches, understand the content of a commit, or resolve conflicts when merging branches.
+Eclipse provides mechanisms (Eclipse Team) that make interactions with Version Control Systems (VCSs) easier. VCS clients that integrate within Eclipse and use these mechanisms, for example EGit for Git, can interact with EMF Diff/Merge in order to, e.g., compare well-identified versions, commits or branches, understand the content of a commit, or resolve conflicts when merging branches.
 
 This can be achieved by
 * Installing the VCS client in Eclipse.
-* Installing the EMF Diff/Merge plug-in for this client (at this time, Subversive or EGit).
+* Installing the EMF Diff/Merge plug-in for this client (at this time, only EGit).
 * Declaring the file extension of the models as XMI: Window - Preferences - General - Content Types - Text - XML - XMI Metadata Interchange - Add: type, for example, '*.myfileextension'.
 
 If this setup is successful, VCS-based features, for example those available through the 'Compare with...' contextual menu, will automatically use the EMF Diff/Merge GUI when appropriate. In the case of EGit, be careful to not directly use content that is pre-merged by Git (see Window - Preferences - Team - Git, 'Merge tool content': do not select 'Workspace').
