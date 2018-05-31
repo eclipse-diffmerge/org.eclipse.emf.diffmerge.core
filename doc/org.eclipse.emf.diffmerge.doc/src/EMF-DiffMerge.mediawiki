@@ -239,13 +239,15 @@ The buttons in the Synthesis section are respectively meant to:
 
 Additional features are available via a click on the triangle-shaped button.
  
+[[Image:Images/SynthesisMenu.png|220px]]
+
 * ''''Update...'''': show the setup dialog to restart the comparison, possibly with different settings, without reloading the models. All changes made to the models are preserved. This is useful for example to iteratively tune the configuration of the comparison.
 
 * ''''Show all elements'''': when disabled, the Synthesis section only represents elements the contain differences, directly or via their children. When enabled, all elements from the left and right models are represented.
 
 * ''''Difference categories...'''': similarly to the button described above, open the 'Categories' dialog that provides filter and focus capabilities (see below).
 
-* ''''Link views'''': enable/disable the synchronization between the Synthesis section and the middle and right sections.
+* ''''Link views'''': this menu item has two sub-items. ''''Left/right models and synthesis'''' enables/disables the synchronization between the Synthesis section and the middle and right sections. ''''Outside views'''' enables/disables the synchronization between the whole diff/merge UI and other Eclipse views such as the Properties view.
 
 * ''''Sort alphabetically'''': sort the elements of the Synthesis section alphabetically.
 
@@ -253,7 +255,9 @@ Additional features are available via a click on the triangle-shaped button.
 
 * ''''Use enhanced labels'''': similarly, whether the name of elements is enriched with characters indicating the origin of the differences.
 
-* ''''Show difference numbers'''': Whether the number of differences contained by each element is displayed as a suffix of its name.
+* ''''Show left/right contents'''': whether the right and left models are shown in the upper area. Hiding them can be convenient if the horizontal space is limited.
+
+* ''''Show difference numbers'''': whether the number of differences contained by each element is displayed as a suffix of its name.
 
 * ''''Show merge impact'''': whether a 'merge impact' dialog must be displayed before a merge is being performed. This dialog represents all the changes that are going to be made to the model due to the merge (see snapshot below). It allows the user to better understand the consequences of his merge actions and if needed to cancel them. Those consequences are not always trivial: in order to be merged, certain differences require others to be merged at the same time in order to preserve the integrity of the model - which is done automatically by the diff/merge tool. Those differences appear as 'Implied changes' in the dialog. Note that in 3-way comparisons, merging a difference may prevent the merge of another difference in the opposite direction - which is called a conflict. Such conflicts are highlighted by a red overlay icon in the dialog.
  
