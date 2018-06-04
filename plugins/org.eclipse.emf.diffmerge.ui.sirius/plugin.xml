@@ -30,7 +30,7 @@
             base-type="org.eclipse.emf.ecore.xmi"
             file-extensions="aird,airdfragment"
             id="org.eclipse.emf.diffmerge.sirius.aird.content-type"
-            name="Sirius diagram files"
+            name="%content-type.name"
             priority="normal">
       </content-type>
    </extension>

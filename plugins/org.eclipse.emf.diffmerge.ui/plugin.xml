@@ -38,7 +38,7 @@
                class="org.eclipse.emf.diffmerge.ui.setup.CompareModelsAction"
                enablesFor="2+"
                id="org.eclipse.emf.diffmerge.ui.compareFilesAction"
-               label="Each Other as models"
+               label="%action.label"
                menubarPath="compareWithMenu/compareWithGroup">
          </action>
       </objectContribution>
