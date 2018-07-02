@@ -89,7 +89,7 @@ public abstract class EElementRelativePresenceImpl
    */
   protected EElementRelativePresenceImpl(EComparison comparison_p,
       EMatch match_p, Role presenceRole_p) {
-    this();
+    super(false);
     setComparison(comparison_p);
     setElementMatch(match_p);
     setPresenceRole(presenceRole_p);

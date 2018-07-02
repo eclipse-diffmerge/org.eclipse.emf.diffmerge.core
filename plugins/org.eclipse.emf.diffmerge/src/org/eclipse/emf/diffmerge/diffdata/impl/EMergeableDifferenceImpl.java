@@ -232,13 +232,25 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated NOT
    */
   protected EMergeableDifferenceImpl() {
+    this(true);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * @param deferInit_p whether the full initialization of the difference must be deferred
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected EMergeableDifferenceImpl(boolean deferInit_p) {
     super();
-    getPossibleMergeDestinations().add(Role.TARGET);
-    getPossibleMergeDestinations().add(Role.REFERENCE);
     _allImplicitDependenciesTarget = null;
     _allImplicitDependenciesReference = null;
     _allExplicitDependenciesTarget = null;
     _allExplicitDependenciesReference = null;
+    if (!deferInit_p) {
+      getPossibleMergeDestinations().add(Role.TARGET);
+      getPossibleMergeDestinations().add(Role.REFERENCE);
+    }
   }
 
   /**

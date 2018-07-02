@@ -82,7 +82,8 @@ public interface IMergeableDifference extends IDifference {
    */
   interface Editable extends IMergeableDifference, IDifference.Editable {
     /**
-     * Core behavior for mergeIn(Role, IMergePolicy) ignoring dependencies
+     * Core behavior for mergeTo(Role) independently of the current state
+     * of the difference (related differences, merge status, etc.)
      * @param destination_p a non-null destination role
      */
     void doMergeIn(Role destination_p);
