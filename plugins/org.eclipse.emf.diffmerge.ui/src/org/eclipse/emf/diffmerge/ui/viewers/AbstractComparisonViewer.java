@@ -23,11 +23,12 @@ import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.contentmergeviewer.IFlushable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
@@ -41,6 +42,7 @@ import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.emf.transaction.util.TransactionUtil;
@@ -58,6 +60,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionService;
@@ -99,8 +102,8 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /** The non-null difference category provider */
   private IDifferenceCategoryProvider _categoryProvider;
   
-  /** The last command that was executed before the last save */
-  private Command _lastCommandBeforeSave;
+  /** The last command/operation that was executed before the last save */
+  private Object _lastCommandBeforeSave;
   
   /** The (initially null) undo action */
   private UndoAction _undoAction;
@@ -183,8 +186,23 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /**
    * @see org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener#compareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
    */
-  public void compareInputChanged(ICompareInput source_p) {
-    refresh();
+  public void compareInputChanged(final ICompareInput source_p) {
+    final Display display = getDisplay();
+    display.syncExec(new Runnable() {
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      public void run() {
+        BusyIndicator.showWhile(display, new Runnable() {
+          /**
+           * @see java.lang.Runnable#run()
+           */
+          public void run() {
+            handleCompareInputChanged(source_p);
+          }
+        });
+      }
+    });
   }
   
   /**
@@ -213,9 +231,20 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     final boolean recordChanges = input != null && input.isUndoRedoSupported();
     final EditingDomain domain = getEditingDomain(onLeft_p);
     try {
-      MiscUtil.executeWithBusyCursor(domain, null, runnable_p, recordChanges, getShell().getDisplay());
+      MiscUtil.executeWithBusyCursor(domain, null, runnable_p, recordChanges, getDisplay());
     } catch (Exception e) {
       throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
+    }
+  }
+  
+  /**
+   * Notify that save has just occurred
+   */
+  protected void didSave() {
+    // Update the last command before save so as to later determine the dirty state
+    Object[] currentUndoCommand = getUndoCommand();
+    if (currentUndoCommand.length > 0) {
+      _lastCommandBeforeSave = currentUndoCommand[0];
     }
   }
   
@@ -268,8 +297,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
             ((IPersistentModelScope.Editable)rightScope).save();
         }
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
-        if (getEditingDomain() != null)
-          _lastCommandBeforeSave = getEditingDomain().getCommandStack().getUndoCommand();
+        didSave();
       } catch (Exception e) {
         MessageDialog.openError(
             getShell(), EMFDiffMergeUIPlugin.LABEL, Messages.ComparisonViewer_SaveFailed + e);
@@ -316,6 +344,18 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Return an appropriate display for the UI without specific assumptions
+   * @return a non-null display
+   */
+  protected Display getDisplay() {
+    Display result = Display.getCurrent();
+    if (result == null) {
+      result = Display.getDefault();
+    }
+    return result;
+  }
+  
+  /**
    * Return the editing domain for this viewer
    * @return an editing domain which may be non-null after setInput(Object) has been invoked
    */
@@ -350,10 +390,10 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
-   * Return the last command that was executed before the last save
-   * @return a potentially null command
+   * Return the last command/operation that was executed before the last save
+   * @return a potentially null object
    */
-  protected Command getLastCommandBeforeSave() {
+  protected Object getLastCommandBeforeSave() {
     return _lastCommandBeforeSave;
   }
   
@@ -414,7 +454,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
-   * Return the shell of this viewer
+   * Return the shell of this viewer. Must only be called from the UI thread.
    * @return a non-null shell
    */
   protected Shell getShell() {
@@ -455,6 +495,29 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Return the current undo command, if any
+   * @return a singleton array in case of success that may contain null, an empty array otherwise
+   */
+  protected Object[] getUndoCommand() {
+    Object[] result = new Object[0];
+    EMFDiffNode input = getInput();
+    if (input != null) {
+      IUndoContext undoContext = input.getUndoContext();
+      if (undoContext != null) {
+        IOperationHistory opHistory =
+            PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+        result = new Object[] { opHistory.getUndoOperation(undoContext) };
+      } else {
+        EditingDomain domain = input.getEditingDomain();
+        if (domain != null) {
+          result = new Object[] { getEditingDomain().getCommandStack().getUndoCommand() };
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Dispose this viewer as a reaction to the disposal of its control
    */
   protected void handleDispose() {
@@ -476,6 +539,26 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     _undoAction = null;
     _redoAction = null;
     _navigatable = null;
+  }
+  
+  /**
+   * Delegated from compareInputChanged. It can be assumed that the current thread is the UI thread.
+   * @see org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener#compareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
+   */
+  protected void handleCompareInputChanged(ICompareInput source_p) {
+    // Dirty state
+    if (source_p instanceof IEditingDomainProvider) {
+      EditingDomain domain = ((IEditingDomainProvider)source_p).getEditingDomain();
+      if (domain != null) {
+        Object[] undoCommand = getUndoCommand();
+        if (undoCommand.length > 0) {
+          boolean newDirty = undoCommand[0] != getLastCommandBeforeSave();
+          firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(newDirty));
+        }
+      }
+    }
+    // Viewer contents and tools
+    refresh();
   }
   
   /**
@@ -662,7 +745,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   protected void undoRedo(final boolean undo_p) {
     final EditingDomain editingDomain = getEditingDomain();
     if (editingDomain != null) {
-      BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+      BusyIndicator.showWhile(getDisplay(), new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
@@ -673,22 +756,16 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
             stack.undo();
           else if (!undo_p && stack.canRedo())
             stack.redo();
-          boolean dirty = stack.getUndoCommand() != getLastCommandBeforeSave();
-          firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(dirty));
-          undoRedoPerformed(undo_p);
-          if (lastActionSelection != null)
+          EMFDiffNode input = getInput();
+          if (input != null && !input.isReactive()) {
+            input.updateDifferenceNumbers();
+          }
+          if (lastActionSelection != null) {
             setSelection(lastActionSelection, true);
+          }
         }
       });
     }
-  }
-  
-  /**
-   * Called when undo/redo has been performed, override to react
-   * @param undo_p whether it was undo or redo
-   */
-  protected void undoRedoPerformed(final boolean undo_p) {
-    // Nothing by default
   }
   
 }

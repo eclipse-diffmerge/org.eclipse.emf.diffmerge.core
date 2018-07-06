@@ -23,6 +23,7 @@ import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.ICompareNavigator;
 import org.eclipse.compare.INavigatable;
+import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
@@ -86,7 +87,8 @@ import org.eclipse.ui.views.properties.PropertySheet;
  * @see CompareEditorInput
  * @author Olivier Constant
  */
-public class EMFDiffMergeEditorInput extends CompareEditorInput {
+public class EMFDiffMergeEditorInput extends CompareEditorInput
+implements IEditingDomainProvider {
   
   /** The non-null (unless disposed) comparison method **/
   protected IComparisonMethod _comparisonMethod;
@@ -271,14 +273,15 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     if (domain != null)
       domain.getCommandStack().flush();
     if (domain instanceof TransactionalEditingDomain) {
+      TransactionalEditingDomain tDomain = (TransactionalEditingDomain)domain;
+      IOperationHistory opHistory =
+          PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
       for (Resource resource : unloaded) {
         TransactionUtil.disconnectFromEditingDomain(resource);
         // Cleaning up Eclipse operation history
         try {
-          ResourceUndoContext context = new ResourceUndoContext(
-              (TransactionalEditingDomain)domain, resource);
-          PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().dispose(
-              context, true, true, false);
+          ResourceUndoContext context = new ResourceUndoContext(tDomain, resource);
+          opHistory.dispose(context, true, true, false);
         } catch (Exception e) {
           // Workbench being disposed: proceed
         }

@@ -324,26 +324,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#compareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
-   */
-  @Override
-  public void compareInputChanged(final ICompareInput source_p) {
-    BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
-      /**
-       * @see java.lang.Runnable#run()
-       */
-      public void run() {
-        if (source_p instanceof EMFDiffNode) {
-          EMFDiffNode node = (EMFDiffNode)source_p;
-          boolean isFiltering = node.getCategoryManager().isUIMoreFilteringThanDefault();
-          firePropertyChangeEvent(PROPERTY_FILTERING, Boolean.valueOf(isFiltering));
-        }
-        refresh();
-      }
-    });
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#createControls(org.eclipse.swt.widgets.Composite)
    */
   @Override
@@ -378,7 +358,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+        BusyIndicator.showWhile(getDisplay(), new Runnable() {
           /**
            * @see java.lang.Runnable#run()
            */
@@ -449,7 +429,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+        BusyIndicator.showWhile(getDisplay(), new Runnable() {
           /**
            * @see java.lang.Runnable#run()
            */
@@ -1132,7 +1112,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         boolean synced = result.getSelection();
         _isLeftRightSynced = synced;
         if (_isLeftRightSynced) {
-          BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
+          BusyIndicator.showWhile(getDisplay(), new Runnable() {
             /**
              * @see java.lang.Runnable#run()
              */
@@ -1916,6 +1896,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#handleCompareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
+   */
+  @Override
+  protected void handleCompareInputChanged(final ICompareInput source_p) {
+    if (source_p instanceof EMFDiffNode) {
+      EMFDiffNode node = (EMFDiffNode)source_p;
+      boolean isFiltering = node.getCategoryManager().isUIMoreFilteringThanDefault();
+      firePropertyChangeEvent(PROPERTY_FILTERING, Boolean.valueOf(isFiltering));
+    }
+    super.handleCompareInputChanged(source_p);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#handleDispose()
    */
   @Override
@@ -1979,8 +1972,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           getUIComparison().setLastActionSelection(selection);
         }
       }, onLeft_p);
-      firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
-      input.updateDifferenceNumbers();
+      if (!input.isReactive()) {
+        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
+        input.updateDifferenceNumbers();
+      }
     }
   }
   
@@ -2210,8 +2205,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (!merged.isEmpty() && done) {
       // React to merge
       input.setModified(true, toLeft_p);
-      firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
-      input.updateDifferenceNumbers();
+      if (!input.isReactive()) {
+        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
+        input.updateDifferenceNumbers();
+      }
       if (input.isLogEvents())
         getLogger().log(new MergeLogEvent(input, merged, toLeft_p));
     }
@@ -2677,16 +2674,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       _viewerSynthesisRight.getControl().setVisible(show_p);
       leftControl.getParent().layout();
     }
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#undoRedoPerformed(boolean)
-   */
-  @Override
-  protected void undoRedoPerformed(final boolean undo_p) {
-    super.undoRedoPerformed(undo_p);
-    if (getInput() != null)
-      getInput().updateDifferenceNumbers();
   }
   
   

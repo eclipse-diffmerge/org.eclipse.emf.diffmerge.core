@@ -15,11 +15,17 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IOperationHistoryListener;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryEvent;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
@@ -31,12 +37,17 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.util.CompositeUndoContext;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.IDisposable;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.workspace.IWorkspaceCommandStack;
+import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorInput;
@@ -56,6 +67,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /** The optional editing domain */
   private final EditingDomain _editingDomain;
+  
+  /** The optional listener that reacts to changes on the editing domain */
+  protected IOperationHistoryListener _domainChangeListener;
   
   /** The optional associated editor input */
   private IEditorInput _editorInput;
@@ -199,6 +213,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _defaultShowMergeImpact = _isShowMergeImpact;
     _defaultCoverChildren = true;
     _defaultIncrementalMode = false;
+    _domainChangeListener = (domain_p == null)? null: createDomainListener(domain_p);
   }
   
   /**
@@ -211,119 +226,36 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Initialize the given map from color kinds to SWT color codes
-   * @param differenceColorsMap_p a non-null, modifiable map
+   * Create and return a listener for the given editing domain that ensures
+   * this node is kept in sync, if possible, otherwise return null
+   * @param domain_p a non-null editing domain
+   * @return a potentially null object
    */
-  protected void initializeDifferenceColors(
-      Map<DifferenceColorKind, Integer> differenceColorsMap_p) {
-    differenceColorsMap_p.put(DifferenceColorKind.LEFT, Integer.valueOf(SWT.COLOR_DARK_RED));
-    differenceColorsMap_p.put(DifferenceColorKind.RIGHT, Integer.valueOf(SWT.COLOR_BLUE));
-    differenceColorsMap_p.put(DifferenceColorKind.BOTH, Integer.valueOf(SWT.COLOR_DARK_MAGENTA));
-    differenceColorsMap_p.put(DifferenceColorKind.NONE, Integer.valueOf(SWT.COLOR_GRAY));
-    differenceColorsMap_p.put(DifferenceColorKind.CONFLICT, Integer.valueOf(SWT.COLOR_RED));
-    differenceColorsMap_p.put(DifferenceColorKind.DEFAULT, Integer.valueOf(SWT.COLOR_BLACK));
-  }
-  
-  /**
-   * Return whether edition of the given side is enabled
-   * @param left_p whether the side is left or right
-   */
-  public boolean isEditable(boolean left_p) {
-    boolean result = isEditionPossible(left_p);
-    if (result) {
-      if (getRoleForSide(left_p) == Role.TARGET) {
-        result = _isTargetEditable;
-      } else {
-        result = _isReferenceEditable;
-      }
+  protected IOperationHistoryListener createDomainListener(EditingDomain domain_p) {
+    IOperationHistoryListener result = null;
+    if (domain_p.getCommandStack() instanceof IWorkspaceCommandStack) {
+      IOperationHistory opHistory =
+          ((IWorkspaceCommandStack)domain_p.getCommandStack()).getOperationHistory();
+      result = new IOperationHistoryListener() {
+        /**
+         * @see org.eclipse.core.commands.operations.IOperationHistoryListener#historyNotification(org.eclipse.core.commands.operations.OperationHistoryEvent)
+         */
+        public void historyNotification(OperationHistoryEvent event_p) {
+          if (event_p.getOperation().hasContext(getUndoContext())) {
+            switch (event_p.getEventType()) {
+            case OperationHistoryEvent.OPERATION_ADDED:
+            case OperationHistoryEvent.REDONE:
+            case OperationHistoryEvent.UNDONE:
+              updateDifferenceNumbers();
+              break;
+            default: // Ignore
+            }
+          }
+        }
+      };
+      opHistory.addOperationHistoryListener(result);
     }
     return result;
-  }
-  
-  /**
-   * Return whether editing the scope of the given side is possible at all
-   * @param left_p whether the side is left or right
-   */
-  public boolean isEditionPossible(boolean left_p) {
-    return getRoleForSide(left_p) == Role.TARGET? _isTargetEditionPossible:
-      _isReferenceEditionPossible;
-  }
-  
-  /**
-   * Return whether the given side has been modified
-   * @param left_p whether the side is left or right
-   */
-  public boolean isModified(boolean left_p) {
-    return getRoleForSide(left_p) == Role.TARGET? _isTargetModified:
-      _isReferenceModified;
-  }
-  
-  /**
-   * Return whether an impact dialog must be shown at merge time
-   */
-  public boolean isShowMergeImpact() {
-    return _isShowMergeImpact;
-  }
-  
-  /**
-   * Return whether the left and right sides may be shown
-   */
-  public boolean isShowSidesPossible() {
-    return _isShowSidesPossible;
-  }
-  
-  /**
-   * Return whether to support undo/redo (cost in memory usage and response time)
-   */
-  public boolean isUndoRedoSupported() {
-    return _isUndoRedoSupported;
-  }
-  
-  /**
-   * Return whether events must be logged
-   */
-  public boolean isLogEvents() {
-    return _isLogEvents;
-  }
-  
-  /**
-   * Return whether the given structural feature must be considered as a containment
-   * @param feature_p a potentially null feature
-   */
-  public boolean isContainment(EStructuralFeature feature_p) {
-    boolean result = false;
-    if (feature_p instanceof EReference) {
-      EReference reference = (EReference)feature_p;
-      IComparison comparison = getActualComparison();
-      if (comparison != null) {
-        IFeaturedModelScope scope = comparison.getScope(getDrivingRole());
-        result = scope.isContainment(reference);
-      } else {
-        result = reference.isContainment();
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * Return the default value for the "cover children" property as proposed to the user when merging 
-   */
-  public boolean isDefaultCoverChildren() {
-    return _defaultCoverChildren;
-  }
-  
-  /**
-   * Return the default value for the "incremental mode" property as proposed to the user when merging 
-   */
-  public boolean isDefaultIncrementalMode() {
-    return _defaultIncrementalMode;
-  }
-  
-  /**
-   * Return the default value for the "show merge impact" property as proposed to the user when merging 
-   */
-  public boolean isDefaultShowImpact() {
-    return _defaultShowMergeImpact;
   }
   
   /**
@@ -331,6 +263,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public void dispose() {
     _resourceManager.dispose();
+    EditingDomain domain = getEditingDomain();
+    if (domain != null && _domainChangeListener != null) {
+      IOperationHistory opHistory =
+          ((IWorkspaceCommandStack)domain.getCommandStack()).getOperationHistory();
+      opHistory.removeOperationHistoryListener(_domainChangeListener);
+      _domainChangeListener = null;
+    }
     _editorInput = null;
   }
   
@@ -400,20 +339,20 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Return the editor input associated to this node, if any
+   * @return a potentially null editor input
+   */
+  public IEditorInput getEditorInput() {
+    return _editorInput;
+  }
+  
+  /**
    * Return the role which is used as the reference role, if any.
    * @see IComparisonMethod#setTwoWayReferenceRole(Role)
    * @return ANCESTOR, TARGET, REFERENCE, or null
    */
   public Role getReferenceRole() {
     return isThreeWay()? Role.ANCESTOR: _twoWayReferenceRole;
-  }
-  
-  /**
-   * Return the editor input associated to this node, if any
-   * @return a potentially null editor input
-   */
-  public IEditorInput getEditorInput() {
-    return _editorInput;
   }
   
   /**
@@ -442,6 +381,29 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Return the undo context for this node, if applicable.
+   * Class invariant: getUndoContext() == null || isReactive()
+   * @return a potentially null undo context
+   */
+  public IUndoContext getUndoContext() {
+    IUndoContext result = null;
+    if (isReactive()) {
+      Collection<IUndoContext> contexts = new HashSet<IUndoContext>();
+      TransactionalEditingDomain tDomain = (TransactionalEditingDomain)getEditingDomain();
+      Resource uiResource = getUIComparison().eResource();
+      if (uiResource != null) {
+        contexts.add(new ResourceUndoContext(tDomain, uiResource));
+      }
+      Resource coreResource = getActualComparison().eResource();
+      if (coreResource != null) {
+        contexts.add(new ResourceUndoContext(tDomain, coreResource));
+      }
+      result = new CompositeUndoContext(contexts);
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.compare.structuremergeviewer.DiffContainer#hasChildren()
    */
   @Override
@@ -449,6 +411,98 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     // Is there content?
     IComparison comparison = getActualComparison();
     return comparison != null? comparison.hasRemainingDifferences(): false;
+  }
+  
+  /**
+   * Initialize the given map from color kinds to SWT color codes
+   * @param differenceColorsMap_p a non-null, modifiable map
+   */
+  protected void initializeDifferenceColors(
+      Map<DifferenceColorKind, Integer> differenceColorsMap_p) {
+    differenceColorsMap_p.put(DifferenceColorKind.LEFT, Integer.valueOf(SWT.COLOR_DARK_RED));
+    differenceColorsMap_p.put(DifferenceColorKind.RIGHT, Integer.valueOf(SWT.COLOR_BLUE));
+    differenceColorsMap_p.put(DifferenceColorKind.BOTH, Integer.valueOf(SWT.COLOR_DARK_MAGENTA));
+    differenceColorsMap_p.put(DifferenceColorKind.NONE, Integer.valueOf(SWT.COLOR_GRAY));
+    differenceColorsMap_p.put(DifferenceColorKind.CONFLICT, Integer.valueOf(SWT.COLOR_RED));
+    differenceColorsMap_p.put(DifferenceColorKind.DEFAULT, Integer.valueOf(SWT.COLOR_BLACK));
+  }
+  
+  /**
+   * Return whether this node is able to react to changes
+   */
+  public boolean isReactive() {
+    boolean result = _domainChangeListener != null;
+    if (result) {
+      Resource mainResource = getUIComparison().eResource();
+      result = mainResource != null &&
+          getEditingDomain().getResourceSet().getResources().contains(mainResource);
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether the given structural feature must be considered as a containment
+   * @param feature_p a potentially null feature
+   */
+  public boolean isContainment(EStructuralFeature feature_p) {
+    boolean result = false;
+    if (feature_p instanceof EReference) {
+      EReference reference = (EReference)feature_p;
+      IComparison comparison = getActualComparison();
+      if (comparison != null) {
+        IFeaturedModelScope scope = comparison.getScope(getDrivingRole());
+        result = scope.isContainment(reference);
+      } else {
+        result = reference.isContainment();
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the default value for the "cover children" property as proposed to the user when merging 
+   */
+  public boolean isDefaultCoverChildren() {
+    return _defaultCoverChildren;
+  }
+  
+  /**
+   * Return the default value for the "incremental mode" property as proposed to the user when merging 
+   */
+  public boolean isDefaultIncrementalMode() {
+    return _defaultIncrementalMode;
+  }
+  
+  /**
+   * Return the default value for the "show merge impact" property as proposed to the user when merging 
+   */
+  public boolean isDefaultShowImpact() {
+    return _defaultShowMergeImpact;
+  }
+  
+  /**
+   * Return whether edition of the given side is enabled
+   * @param left_p whether the side is left or right
+   */
+  public boolean isEditable(boolean left_p) {
+    boolean result = isEditionPossible(left_p);
+    if (result) {
+      if (getRoleForSide(left_p) == Role.TARGET) {
+        result = _isTargetEditable;
+      } else {
+        result = _isReferenceEditable;
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether editing the scope of the given side is possible at all
+   * @param left_p whether the side is left or right
+   */
+  public boolean isEditionPossible(boolean left_p) {
+    return getRoleForSide(left_p) == Role.TARGET? _isTargetEditionPossible:
+      _isReferenceEditionPossible;
   }
   
   /**
@@ -466,11 +520,48 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Return whether events must be logged
+   */
+  public boolean isLogEvents() {
+    return _isLogEvents;
+  }
+  
+  /**
+   * Return whether the given side has been modified
+   * @param left_p whether the side is left or right
+   */
+  public boolean isModified(boolean left_p) {
+    return getRoleForSide(left_p) == Role.TARGET? _isTargetModified:
+      _isReferenceModified;
+  }
+  
+  /**
+   * Return whether an impact dialog must be shown at merge time
+   */
+  public boolean isShowMergeImpact() {
+    return _isShowMergeImpact;
+  }
+  
+  /**
+   * Return whether the left and right sides may be shown
+   */
+  public boolean isShowSidesPossible() {
+    return _isShowSidesPossible;
+  }
+  
+  /**
    * Return whether this comparison is 3-way
    */
   public boolean isThreeWay() {
     IComparison comparison = getActualComparison();
     return comparison != null? comparison.isThreeWay(): false;
+  }
+  
+  /**
+   * Return whether to support undo/redo (cost in memory usage and response time)
+   */
+  public boolean isUndoRedoSupported() {
+    return _isUndoRedoSupported;
   }
   
   /**
@@ -632,6 +723,14 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * Re-compute filtering and differences numbers
+   */
+  public void updateDifferenceNumbers() {
+    getCategoryManager().update();
+    fireChange();
+  }
+  
+  /**
    * Return whether this viewer uses custom icons to represent differences
    */
   public boolean usesCustomIcons() {
@@ -643,14 +742,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public boolean usesCustomLabels() {
     return _useCustomLabels;
-  }
-  
-  /**
-   * Re-compute filtering and differences numbers
-   */
-  public void updateDifferenceNumbers() {
-    getCategoryManager().update();
-    fireChange();
   }
   
 }
