@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="28">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target includeMode="feature" name="org.eclipse.emf.diffmerge" sequenceNumber="28">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.2.v20171108-1834"/>
@@ -12,9 +11,9 @@
 <repository location="http://download.eclipse.org/cbi/updates/license/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.egit.feature.group" version="5.0.0.201805221745-rc1"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.14.0.v20180421-1151"/>
-<unit id="org.eclipse.sirius.specifier.feature.group" version="6.0.0.201805231500"/>
+<unit id="org.eclipse.egit.feature.group" version="5.0.0.201806131550-r"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.14.0.v20180529-1157"/>
+<unit id="org.eclipse.sirius.specifier.feature.group" version="6.0.0.201806111309"/>
 <repository location="http://download.eclipse.org/releases/photon"/>
 </location>
 </locations>
