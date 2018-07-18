@@ -44,8 +44,7 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
       Arrays.<EStructuralFeature>asList(
           ViewpointPackage.eINSTANCE.getDAnalysis_Version(),
           ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources(),
-          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath(),
-          ViewpointPackage.eINSTANCE.getDRepresentation_Uid());
+          ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath());
   
   
   /**
