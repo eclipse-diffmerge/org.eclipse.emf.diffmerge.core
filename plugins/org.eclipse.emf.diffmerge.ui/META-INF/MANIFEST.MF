@@ -30,3 +30,4 @@ Export-Package: org.eclipse.emf.diffmerge.ui,
  org.eclipse.emf.diffmerge.ui.util,
  org.eclipse.emf.diffmerge.ui.viewers,
  org.eclipse.emf.diffmerge.ui.viewers.categories
+Automatic-Module-Name: org.eclipse.emf.diffmerge.ui

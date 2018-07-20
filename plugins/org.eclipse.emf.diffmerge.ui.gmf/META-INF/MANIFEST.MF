@@ -13,3 +13,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.emf.diffmerge.ui.gmf
+Automatic-Module-Name: org.eclipse.emf.diffmerge.ui.gmf

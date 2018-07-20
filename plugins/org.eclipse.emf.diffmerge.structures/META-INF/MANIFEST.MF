@@ -18,3 +18,4 @@ Export-Package: org.eclipse.emf.diffmerge.structures,
  org.eclipse.emf.diffmerge.structures.endo,
  org.eclipse.emf.diffmerge.structures.endo.qualified,
  org.eclipse.emf.diffmerge.structures.impacts
+Automatic-Module-Name: org.eclipse.emf.diffmerge.structures
