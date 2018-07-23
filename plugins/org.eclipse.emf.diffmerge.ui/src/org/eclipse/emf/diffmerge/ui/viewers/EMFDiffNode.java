@@ -206,7 +206,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _isTargetModified = false;
     _isReferenceModified = false;
     _isHideDifferenceNumbers = false;
-    _isShowMergeImpact = true;
+    _isShowMergeImpact = false;
     _isShowSidesPossible = true;
     _isUndoRedoSupported = _editingDomain != null;
     _isLogEvents = false;

@@ -5,8 +5,8 @@ Element-Type: testcase
 Element-Version: 3.0
 External-Reference: 
 Id: _GIY1gBB7Eee03ahGL0O-5w
-Runtime-Version: 2.1.0.201606221726
-Save-Time: 3/24/17 11:51 AM
+Runtime-Version: 2.3.0.201805302312
+Save-Time: 8/28/18 10:14 AM
 Testcase-Type: ecl
 
 ------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
@@ -22,7 +22,7 @@ Entry-Name: .content
 /* Copy current test files to Example project */
 copy-example "OwnershipCycles/e-CrossedSwaps"
 /* Compare Example models */
-compare-examples
+compare-examples-for-impact-analysis
 
 /* Merge an atomic move */
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {

@@ -56,7 +56,7 @@ public class MergeImpactMessageDialog extends MessageDialog {
     super(parentShell_p, Messages.ComparisonViewer_MergeHeader, null,
         String.format(
             Messages.ComparisonViewer_ImpactDescription, input_p.isOnTheLeft()?
-                Messages.ComparisonViewer_Left: Messages.ComparisonViewer_Right),
+                input_p.getContext().getLeft().getName() : input_p.getContext().getRight().getName()),
         MessageDialog.INFORMATION,
         new String[] { IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL }, 0);
     _dialogInput = input_p;
