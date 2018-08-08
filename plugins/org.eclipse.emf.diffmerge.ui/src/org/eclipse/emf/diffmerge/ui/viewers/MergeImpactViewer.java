@@ -33,9 +33,10 @@ import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.impl.helpers.AbstractExpensiveOperation;
 import org.eclipse.emf.diffmerge.structures.common.FHashMap;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.ui.util.DefaultDiffLabelDecorator;
+import org.eclipse.emf.diffmerge.ui.util.DefaultDiffLabelDecorator.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -569,7 +570,7 @@ public class MergeImpactViewer extends Viewer {
       else
         result = getInput().isOnTheLeft()? DifferenceColorKind.LEFT:
           DifferenceColorKind.RIGHT;
-      return getInput().getContext().getDifferenceColor(result);
+      return DefaultDiffLabelDecorator.getInstance().getDifferenceColor(result);
     }
     
     /**

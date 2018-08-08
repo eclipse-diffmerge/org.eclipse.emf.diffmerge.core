@@ -16,9 +16,7 @@
 package org.eclipse.emf.diffmerge.ui.viewers;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
@@ -32,13 +30,11 @@ import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.CompositeUndoContext;
-import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -48,8 +44,6 @@ import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.IWorkspaceCommandStack;
 import org.eclipse.emf.workspace.ResourceUndoContext;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorInput;
 
 
@@ -134,9 +128,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   /** The default value for "show merge impact" property as proposed to the user when merging */
   private boolean _defaultShowMergeImpact;
   
-  /** A map from color kind to SWT color code from the SWT class */
-  private final Map<DifferenceColorKind, Integer> _differenceColors;
-  
   
   /**
    * Constructor
@@ -193,8 +184,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _drivingRole = _leftRole;
     _twoWayReferenceRole = null;
     _categoryManager = new CategoryManager(this);
-    _differenceColors = new HashMap<EMFDiffMergeUIPlugin.DifferenceColorKind, Integer>();
-    initializeDifferenceColors(_differenceColors);
     _useCustomIcons = true;
     _useCustomLabels = false;
     _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
@@ -310,19 +299,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Return the color that corresponds to the given color kind
-   * @param colorKind_p a non-null color kind
-   * @return a non-null color
-   */
-  public Color getDifferenceColor(DifferenceColorKind colorKind_p) {
-    int colorCode = SWT.COLOR_BLACK;
-    Integer colorCodeI = _differenceColors.get(colorKind_p);
-    if (colorCodeI != null)
-      colorCode = colorCodeI.intValue();
-    return UIUtil.getColor(colorCode);
-  }
-  
-  /**
    * Return the role that drives the representation of the model comparison
    * @return a non-null role which is TARGET or REFERENCE
    */
@@ -411,20 +387,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     // Is there content?
     IComparison comparison = getActualComparison();
     return comparison != null? comparison.hasRemainingDifferences(): false;
-  }
-  
-  /**
-   * Initialize the given map from color kinds to SWT color codes
-   * @param differenceColorsMap_p a non-null, modifiable map
-   */
-  protected void initializeDifferenceColors(
-      Map<DifferenceColorKind, Integer> differenceColorsMap_p) {
-    differenceColorsMap_p.put(DifferenceColorKind.LEFT, Integer.valueOf(SWT.COLOR_DARK_RED));
-    differenceColorsMap_p.put(DifferenceColorKind.RIGHT, Integer.valueOf(SWT.COLOR_BLUE));
-    differenceColorsMap_p.put(DifferenceColorKind.BOTH, Integer.valueOf(SWT.COLOR_DARK_MAGENTA));
-    differenceColorsMap_p.put(DifferenceColorKind.NONE, Integer.valueOf(SWT.COLOR_GRAY));
-    differenceColorsMap_p.put(DifferenceColorKind.CONFLICT, Integer.valueOf(SWT.COLOR_RED));
-    differenceColorsMap_p.put(DifferenceColorKind.DEFAULT, Integer.valueOf(SWT.COLOR_BLACK));
   }
   
   /**
@@ -583,15 +545,6 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
    */
   public void setDefaultShowImpact(boolean showImpact_p) {
     _defaultShowMergeImpact = showImpact_p;
-  }
-  
-  /**
-   * Set the color that corresponds to the given color kind
-   * @param colorKind_p a non-null color kind
-   * @param swtColor_p an identifier of an SWT color from class SWT
-   */
-  public void setDifferenceColor(DifferenceColorKind colorKind_p, int swtColor_p) {
-    _differenceColors.put(colorKind_p, new Integer(swtColor_p));
   }
   
   /**

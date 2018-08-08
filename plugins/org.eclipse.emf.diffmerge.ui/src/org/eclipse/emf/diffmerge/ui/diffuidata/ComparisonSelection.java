@@ -137,6 +137,14 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
 
   /**
    * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model
+   * @generated
+   */
+  MatchAndFeature asMatchAndFeature();
+
+  /**
+   * <!-- begin-user-doc -->
    * Return the content of the selection in terms of match
    * @return a potentially null match
    * <!-- end-user-doc -->

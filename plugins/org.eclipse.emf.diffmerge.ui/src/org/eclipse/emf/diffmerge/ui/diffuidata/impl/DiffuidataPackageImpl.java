@@ -130,7 +130,7 @@ public class DiffuidataPackageImpl extends EPackageImpl
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link DiffuidataPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -146,10 +146,11 @@ public class DiffuidataPackageImpl extends EPackageImpl
           .getEPackage(DiffuidataPackage.eNS_URI);
 
     // Obtain or create and register package
-    DiffuidataPackageImpl theDiffuidataPackage = (DiffuidataPackageImpl) (EPackage.Registry.INSTANCE
-        .get(eNS_URI) instanceof DiffuidataPackageImpl
-            ? EPackage.Registry.INSTANCE.get(eNS_URI)
-            : new DiffuidataPackageImpl());
+    Object registeredDiffuidataPackage = EPackage.Registry.INSTANCE
+        .get(eNS_URI);
+    DiffuidataPackageImpl theDiffuidataPackage = registeredDiffuidataPackage instanceof DiffuidataPackageImpl
+        ? (DiffuidataPackageImpl) registeredDiffuidataPackage
+        : new DiffuidataPackageImpl();
 
     isInited = true;
 
@@ -501,6 +502,9 @@ public class DiffuidataPackageImpl extends EPackageImpl
     addEOperation(comparisonSelectionEClass,
         theEcorePackage.getEStructuralFeature(), "asFeature", 0, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
+
+    addEOperation(comparisonSelectionEClass, this.getMatchAndFeature(),
+        "asMatchAndFeature", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     addEOperation(comparisonSelectionEClass, theDiffdataPackage.getEMatch(),
         "asMatch", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

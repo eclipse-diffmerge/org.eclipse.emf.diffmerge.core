@@ -12,6 +12,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ComparisonSelection" eSuperTypes="#//IStructuredSelection">
     <eOperations name="asDifferencesToMerge" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMergeableDifference"/>
     <eOperations name="asFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    <eOperations name="asMatchAndFeature" eType="#//MatchAndFeature"/>
     <eOperations name="asMatch" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"/>
     <eOperations name="asMatches" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"/>
     <eOperations name="asMatchPath" eType="#//TreePath"/>

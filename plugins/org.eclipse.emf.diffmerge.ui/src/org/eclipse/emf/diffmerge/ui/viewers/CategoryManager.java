@@ -45,6 +45,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.TreePath;
@@ -230,74 +231,27 @@ public class CategoryManager {
   }
   
   /**
-   * Return the difference kind of the given match with filtering
-   * @param match_p a non-null match
-   * @return FROM_LEFT*, FROM_RIGHT*, CONFLICT, MODIFIED, COUNTED or NONE
-   */
-  public DifferenceKind getDifferenceKind(IMatch match_p) {
-    DifferenceKind result = DifferenceKind.NONE;
-    IElementPresence presence = match_p.getElementPresenceDifference();
-    boolean considerReference = _node.getReferenceRole() != null;
-    if (presence != null) {
-      result = getDifferenceKind(presence);
-    } else {
-      result = getModificationKind(match_p);
-      result = result.with(getOwnershipDifferenceKind(match_p), considerReference);
-      result = result.keepOnlyDirection(considerReference);
-    }
-    if (result == DifferenceKind.NONE && getDifferenceNumber(match_p) > 0)
-      result = DifferenceKind.COUNTED;
-    return result;
-  }
-  
-  /**
-   * Return the difference kind of the given match and feature with filtering
-   * @param maf_p a non-null match and feature
-   * @return FROM_LEFT*, FROM_RIGHT*, CONFLICT, MODIFIED, COUNTED or NONE
-   */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  public DifferenceKind getDifferenceKind(MatchAndFeature maf_p) {
-    DifferenceKind result = DifferenceKind.NONE;
-    EStructuralFeature feature = maf_p.getFeature();
-    if (feature == EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature()) {
-      // Ownership feature (move)
-      result = getOwnershipDifferenceKind(maf_p.getMatch());
-    } else {
-      // Standard feature
-      Collection<? extends IValuePresence> presences;
-      if (feature instanceof EReference) {
-        if (_node.isContainment(feature)) {
-          // Containment on feature which is not ownership:
-          // consider order only
-          presences = new ArrayList<IValuePresence>();
-          IValuePresence orderDiff = maf_p.getMatch().getOrderDifference(feature, _node.getDrivingRole());
-          if (orderDiff != null)
-            ((List)presences).add(orderDiff);
-          orderDiff = maf_p.getMatch().getOrderDifference(feature, _node.getDrivingRole().opposite());
-          if (orderDiff != null)
-            ((List)presences).add(orderDiff);
-        } else {
-          presences = maf_p.getMatch().getReferenceDifferences((EReference)feature);
-        }
-      } else {
-        presences = maf_p.getMatch().getAttributeDifferences((EAttribute)feature);
-      }
-      Iterator<? extends IValuePresence> it = presences.iterator();
-      while (it.hasNext() && result != DifferenceKind.CONFLICT &&
-          result != DifferenceKind.FROM_BOTH && result != DifferenceKind.MODIFIED) {
-        DifferenceKind current = getDifferenceKind(it.next());
-        result = result.with(current, true);
-      }
-    }
-    return result;
-  }
-  
-  /**
    * Return the set of category states which is registered as the default configuration
    * @return a non-null, unmodifiable, potentially empty collection
    */
   public Collection<IDifferenceCategory> getDefaultConfiguration() {
     return Collections.unmodifiableSet(_defaultConfiguration);
+  }
+  
+  /**
+   * Return the difference kind of the given model element from the given side
+   * with filtering
+   * @param element_p a non-null element
+   * @param side_p the non-null side of the comparison the element belongs to
+   * @return FROM_LEFT_*, FROM_RIGHT_*, CONFLICT, MODIFIED or NONE
+    */
+  public DifferenceKind getDifferenceKind(EObject element_p, Role side_p) {
+    DifferenceKind result = DifferenceKind.NONE;
+    IMatch match = _node.getActualComparison().getMapping().getMatchFor(element_p, side_p);
+    if (match != null) {
+      result = getDifferenceKind(match);
+    }
+    return result;
   }
   
   /**
@@ -307,7 +261,7 @@ public class CategoryManager {
    */
   public DifferenceKind getDifferenceKind(IDifference difference_p) {
     DifferenceKind result = DifferenceKind.NONE;
-    if (!isFiltered(difference_p)) {
+    if (representAsUserDifference(difference_p)) {
       if (difference_p.isConflicting()) {
         result = DifferenceKind.CONFLICT;
       } else if (difference_p instanceof IPresenceDifference) {
@@ -335,6 +289,85 @@ public class CategoryManager {
       }
     }
     return result;
+  }
+  
+  /**
+   * Return the difference kind of the given match with filtering
+   * @param match_p a non-null match
+   * @return FROM_LEFT*, FROM_RIGHT*, CONFLICT, MODIFIED, COUNTED or NONE
+   */
+  public DifferenceKind getDifferenceKind(IMatch match_p) {
+    DifferenceKind result = DifferenceKind.NONE;
+    if (isComparisonPart(match_p)) {
+      IElementPresence presence = match_p.getElementPresenceDifference();
+      boolean considerReference = _node.getReferenceRole() != null;
+      if (presence != null) {
+        result = getDifferenceKind(presence);
+      } else {
+        result = getModificationKind(match_p);
+        result = result.with(getOwnershipDifferenceKind(match_p), considerReference);
+        result = result.keepOnlyDirection(considerReference);
+      }
+      if (result == DifferenceKind.NONE && getDifferenceNumber(match_p) > 0) {
+        result = DifferenceKind.COUNTED;
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the difference kind of the given feature for the given match with filtering
+   * @param match_p a non-null match
+   * @param feature_p a non-null feature
+   * @return FROM_LEFT_*, FROM_RIGHT_*, CONFLICT, MODIFIED or NONE
+    */
+  public DifferenceKind getDifferenceKind(IMatch match_p, EStructuralFeature feature_p) {
+    DifferenceKind result = DifferenceKind.NONE;
+    if (isComparisonPart(match_p)) {
+      if (feature_p == EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature()) {
+        // Ownership feature (move)
+        result = getOwnershipDifferenceKind(match_p);
+      } else {
+        // Standard feature
+        Collection<? extends IValuePresence> presences;
+        if (feature_p instanceof EReference) {
+          if (_node.isContainment(feature_p)) {
+            // Containment on feature which is not ownership:
+            // consider order only
+            List<IValuePresence> vPresences = new ArrayList<IValuePresence>();
+            IValuePresence orderDiff = match_p.getOrderDifference(feature_p, _node.getDrivingRole());
+            if (orderDiff != null) {
+              vPresences.add(orderDiff);
+            }
+            orderDiff = match_p.getOrderDifference(feature_p, _node.getDrivingRole().opposite());
+            if (orderDiff != null) {
+              vPresences.add(orderDiff);
+            }
+            presences = vPresences;
+          } else {
+            presences = match_p.getReferenceDifferences((EReference)feature_p);
+          }
+        } else {
+          presences = match_p.getAttributeDifferences((EAttribute)feature_p);
+        }
+        Iterator<? extends IValuePresence> it = presences.iterator();
+        while (it.hasNext() && result != DifferenceKind.CONFLICT &&
+            result != DifferenceKind.FROM_BOTH && result != DifferenceKind.MODIFIED) {
+          DifferenceKind current = getDifferenceKind(it.next());
+          result = result.with(current, true);
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the difference kind of the given match and feature with filtering
+   * @param maf_p a non-null match and feature
+   * @return FROM_LEFT*, FROM_RIGHT*, CONFLICT, MODIFIED, COUNTED or NONE
+   */
+  public DifferenceKind getDifferenceKind(MatchAndFeature maf_p) {
+    return getDifferenceKind(maf_p.getMatch(), maf_p.getFeature());
   }
   
   /**
@@ -383,7 +416,7 @@ public class CategoryManager {
   /**
    * Return the difference kind for the ownership of the given match
    * @param match_p a non-null match
-   * @return a non-null difference kind
+   * @return FROM_LEFT, FROM_RIGHT, CONFLICT, MODIFIED or NONE
    */
   protected DifferenceKind getOwnershipDifferenceKind(IMatch match_p) {
     DifferenceKind result = DifferenceKind.NONE;
@@ -538,6 +571,31 @@ public class CategoryManager {
   }
   
   /**
+   * Return whether the given difference actually belongs to the current comparison, i.e.,
+   * it is not a compared element
+   * @param difference_p a non-null difference
+   */
+  public boolean isComparisonPart(IDifference difference_p) {
+    IComparison comparison = difference_p.getComparison();
+    boolean result =
+        comparison != null && comparison == _node.getActualComparison();
+    return result;
+  }
+  
+  /**
+   * Return whether the given match actually belongs to the current comparison, i.e.,
+   * it is not a compared element
+   * @param match_p a non-null match
+   */
+  public boolean isComparisonPart(IMatch match_p) {
+    IComparison comparison =
+        match_p.getMapping() == null? null: match_p.getMapping().getComparison();
+    boolean result =
+        comparison != null && comparison == _node.getActualComparison();
+    return result;
+  }
+  
+  /**
    * Return whether the are still differences that the user has to handle
    */
   public boolean isEmpty() {
@@ -680,7 +738,7 @@ public class CategoryManager {
   }
   
   /**
-   * Return whether the given difference is still pending for the user
+   * Return whether the given difference is still pending
    * (mergeable, not merged, not ignored)
    * @param difference_p a non-null difference
    */
@@ -703,7 +761,7 @@ public class CategoryManager {
   
   /**
    * Return whether the given category is filtering from a user point of view,
-   * that is, categories that are visible, modifiable and active may be filtering out
+   * that is, it is visible, modifiable and active and it may be filtering out
    * pending differences
    */
   public boolean isUIFiltering(IDifferenceCategory category_p) {
@@ -799,14 +857,29 @@ public class CategoryManager {
   }
   
   /**
+   * Return whether the given difference is a difference to represent
+   * @param difference_p a non-null difference
+   */
+  public boolean representAsUserDifference(IDifference difference_p) {
+    return isComparisonPart(difference_p) && !isFiltered(difference_p);
+  }
+  
+  /**
    * Return whether the given match contains differences to represent
    * @param match_p a non-null match
    */
   public boolean representAsUserDifference(IMatch match_p) {
     DifferenceKind kind = getDifferenceKind(match_p);
-    boolean result = kind != DifferenceKind.NONE &&
-      kind != DifferenceKind.COUNTED;
-    return result;
+    return !kind.isNeutral();
+  }
+  
+  /**
+   * Return whether the given match and feature couple contains differences to represent
+   * @param maf_p a non-null match and feature couple
+   */
+  public boolean representAsUserDifference(MatchAndFeature maf_p) {
+    DifferenceKind kind = getDifferenceKind(maf_p);
+    return !kind.isNeutral();
   }
   
   /**
@@ -816,8 +889,10 @@ public class CategoryManager {
   public boolean representAsUserDifference(TreePath path_p) {
     boolean result = false;
     IMatch end = (IMatch)path_p.getLastSegment();
-    if (end != null)
-      result = representAsUserDifference(end) && !representAsMoveOrigin(path_p);
+    if (end != null) {
+      result = representAsUserDifference(end) &&
+          !representAsMoveOrigin(path_p); // Move origins are duplicates, ignore them
+    }
     return result;
   }
   

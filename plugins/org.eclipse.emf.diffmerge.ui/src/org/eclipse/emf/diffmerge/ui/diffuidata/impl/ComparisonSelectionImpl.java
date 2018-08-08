@@ -364,7 +364,7 @@ public class ComparisonSelectionImpl extends EObjectImpl
     if (eIsProxy())
       return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (diffNode: "); //$NON-NLS-1$
     result.append(diffNode);
     result.append(')');
@@ -399,6 +399,13 @@ public class ComparisonSelectionImpl extends EObjectImpl
       }
     }
     return result;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection#asMatchAndFeature()
+   */
+  public MatchAndFeature asMatchAndFeature() {
+    return selectedMatchAndFeature;
   }
 
   /**

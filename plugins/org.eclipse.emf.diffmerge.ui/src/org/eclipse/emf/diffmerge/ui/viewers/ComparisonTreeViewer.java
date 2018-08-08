@@ -18,34 +18,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
 
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IPureMatch;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
-import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
+import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ITreePathContentProvider;
-import org.eclipse.jface.viewers.ITreePathLabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerLabel;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -426,179 +411,27 @@ public class ComparisonTreeViewer extends TreeViewer {
   /**
    * The label provider for this viewer.
    */
-  protected class LabelProvider extends DelegatingLabelProvider implements ITreePathLabelProvider {
-    
+  protected class LabelProvider extends AbstractDiffDelegatingLabelProvider {
     /**
-     * Return the element to represent for the given match
-     * @param match_p a non-null match
-     * @return a non-null element
-     */
-    private EObject getElementToRepresent(IMatch match_p) {
-      EObject result;
-      Role drivingRole = getDrivingRole();
-      if (match_p.getUncoveredRole() == drivingRole)
-        result = match_p.get(drivingRole.opposite());
-      else
-        result = match_p.get(drivingRole);
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getDiffNode()
      */
     @Override
-    public Font getFont(Object element_p) {
-      IMatch match = (IMatch)element_p;
-      Font result = getControl().getFont();
-      if (getInput().getCategoryManager().representAsUserDifference(match))
-        result = UIUtil.getBold(result);
-      return result;
+    protected EMFDiffNode getDiffNode() {
+      return getInput();
     }
-    
     /**
-     * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getSide()
      */
     @Override
-    public Color getForeground(Object element_p) {
-      EMatch match = (EMatch)element_p;
-      DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
-      DifferenceColorKind colorKind =
-        EMFDiffMergeUIPlugin.getDefault().getDifferenceColorKind(kind);
-      return getInput().getDifferenceColor(colorKind);
+    protected Role getSide() {
+      return null;
     }
-    
     /**
-     * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-     */
-    @Override
-    public Image getImage(Object element_p) {
-      IMatch match = (IMatch)element_p;
-      Image result = getDelegate().getImage(getElementToRepresent(match));
-      if (result != null && getInput().usesCustomIcons()) {
-        DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
-        result = getResourceManager().adaptImage(result, kind);
-      }
-      return result;
-    }
-    
-    /**
-     * Return the match policy that was used for the current comparison, if any
-     * @return a potentially null match policy
-     */
-    private IMatchPolicy getMatchPolicy() {
-      IMatchPolicy result = null;
-      IComparison comparison = getInput().getActualComparison();
-      if (comparison != null)
-        result = comparison.getLastMatchPolicy();
-      return result;
-    }
-    
-    /**
-     * Return a font for the given tree path
-     * @param path_p a non-null path
-     * @return a potentially null font
-     */
-    private Font getPathFont(TreePath path_p) {
-      Font result = getControl().getFont();
-      Object last = path_p.getLastSegment();
-      if (last != null && !getInput().getCategoryManager().representAsMoveOrigin(path_p))
-        result = getFont(last);
-      return result;
-    }
-    
-    /**
-     * Return an image for the given tree path
-     * @param path_p a non-null path
-     * @return a potentially null image
-     */
-    private Image getPathImage(TreePath path_p) {
-      Image result = null;
-      IMatch last = (IMatch)path_p.getLastSegment();
-      if (last != null) {
-        result = getDelegate().getImage(getElementToRepresent(last));
-        if (getInput().getCategoryManager().representAsMoveOrigin(path_p) && result != null)
-          result = getResourceManager().getDisabledVersion(result);
-        if (result != null && getInput().usesCustomIcons()) {
-          DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(last);
-          result = getResourceManager().adaptImage(result, kind);
-        }
-      }
-      return result;
-    }
-    
-    /**
-     * Return a label for the given tree path
-     * @param path_p a non-null path
-     * @return a potentially null string
-     */
-    private String getPathText(TreePath path_p) {
-      String result = null;
-      IMatch last = (IMatch)path_p.getLastSegment();
-      if (last != null)
-        result = getText(last);
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-     */
-    @Override
-    public String getText(Object element_p) {
-      EMatch match = (EMatch)element_p;
-      String result = getDelegate().getText(getElementToRepresent(match));
-      if (getInput().usesCustomLabels()) {
-        DifferenceKind kind = getInput().getCategoryManager().getDifferenceKind(match);
-        String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);
-        result = prefix + result;
-      }
-      int nb = getInput().getCategoryManager().getUIDifferenceNumber(match);
-      if (nb > 0)
-        result = result + " (" + nb + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getToolTipText(java.lang.Object)
      */
     @Override
     public String getToolTipText(Object element_p) {
-      String result = null;
-      if (element_p instanceof IPureMatch) {
-        IMatchPolicy policy = getMatchPolicy();
-        Object matchID = ((IPureMatch)element_p).getMatchID();
-        String matchIDText = null;
-        if (matchID != null) {
-          matchIDText = matchID.toString();
-          // Trying to refine based on separators
-          if (policy instanceof ConfigurableMatchPolicy) {
-            ConfigurableMatchPolicy cPolicy = (ConfigurableMatchPolicy)policy;
-            for (String separator : cPolicy.getSeparators()) {
-              final String outPattern = Matcher.quoteReplacement('\n' + separator + ' ');
-              matchIDText = matchIDText.replaceAll(separator, outPattern);
-            }
-          }
-        } else {
-          // MatchID is null
-          if (policy != null && policy.keepMatchIDs())
-            matchIDText = Messages.ComparisonTreeViewer_NoMatchID;
-        }
-        if (matchIDText != null)
-          result = Messages.ComparisonTreeViewer_MatchIDTooltip + matchIDText;
-      }
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.jface.viewers.ITreePathLabelProvider#updateLabel(org.eclipse.jface.viewers.ViewerLabel, org.eclipse.jface.viewers.TreePath)
-     */
-    public void updateLabel(ViewerLabel label_p, TreePath elementPath_p) {
-      String text = getPathText(elementPath_p);
-      label_p.setText(text);
-      Object element = elementPath_p.getLastSegment();
-      label_p.setImage(getPathImage(elementPath_p));
-      label_p.setBackground(getBackground(element));
-      label_p.setForeground(getForeground(element));
-      label_p.setFont(getPathFont(elementPath_p));
+      return getMatchIDText(element_p);
     }
   }
   

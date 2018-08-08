@@ -63,7 +63,6 @@ import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl;
-import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.log.CompareLogEvent;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.log.MergeLogEvent;
@@ -71,8 +70,10 @@ import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
+import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
@@ -81,7 +82,6 @@ import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -1340,14 +1340,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent event_p) {
         IStructuredSelection selection = result.getSelection();
         if (selection.size() == 1) {
-          IMatch match = result.getInput() == null? null:
-            result.getInput().getMatch();
-          if (match instanceof EMatch) {
-            EStructuralFeature feature = (EStructuralFeature)selection.getFirstElement();
-            MatchAndFeature newInputDetails = new MatchAndFeatureImpl((EMatch)match, feature);
-            setSelection(new ComparisonSelectionImpl(
-                newInputDetails, getDrivingRole(), getInput()), true, result.getInnerViewer());
-          }
+          MatchAndFeature maf = (MatchAndFeature)selection.getFirstElement();
+          setSelection(new ComparisonSelectionImpl(
+              maf, getDrivingRole(), getInput()), true, result.getInnerViewer());
         }
       }
     });
@@ -1371,15 +1366,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
               if (changeInput)
                 result.setInput(newInput);
               // New selection
-              EStructuralFeature feature = selection.asFeature();
-              if (feature != null) {
-                IStructuredSelection newSelection = new StructuredSelection(feature);
+              MatchAndFeature maf = selection.asMatchAndFeature();
+              if (maf != null) {
+                IStructuredSelection newSelection = new StructuredSelection(maf);
                 result.setSelection(newSelection, true);
               } else if (changeInput) {
                 // New input and no feature selected: select first feature if any
-                EStructuralFeature firstFeature = result.getInnerViewer().getFirstIn(newInput);
-                if (firstFeature != null)
-                  result.setSelection(new StructuredSelection(firstFeature));
+                MatchAndFeature firstMAF = result.getInnerViewer().getFirstIn(newInput);
+                if (firstMAF != null) {
+                  result.setSelection(new StructuredSelection(firstMAF));
+                }
               }
             } else {
               // No match: no input
@@ -1599,18 +1595,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         Object source = event_p.getSource();
         if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer()) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
-          EStructuralFeature feature = selection.asFeature();
-          if (feature != null) {
+          MatchAndFeature maf = selection.asMatchAndFeature();
+          if (maf != null) {
             // New input
-            MatchAndFeature mnf = new MatchAndFeatureImpl(selection.asMatch(), feature);
-            ValuesInput newInput = new ValuesInput(getInput(), mnf);
+            ValuesInput newInput = new ValuesInput(getInput(), maf);
             if (!newInput.equals(result.getInput()))
               result.setInput(newInput);
             // New selection
             List<EValuePresence> values = selection.getSelectedValuePresences();
             result.setSelection(new StructuredSelection(values), true);
           } else {
-            // No feature in selection
+            // No 'match and feature' in selection
             // Determine whether there is a change of match, triggering a new input and selection
             ValuesInput newInput = null;
             if (selection.getSelectedMatches().size() <= 1 && getInput() != null) {
@@ -1628,10 +1623,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                   if (rawFeaturesViewer instanceof EnhancedFeaturesViewer) {
                     EnhancedFeaturesViewer featuresViewer = (EnhancedFeaturesViewer)rawFeaturesViewer;
                     FeaturesInput featuresInput = new FeaturesInput(getInput(), newMatch);
-                    EStructuralFeature firstFeature = featuresViewer.getInnerViewer().getFirstIn(featuresInput);
-                    if (firstFeature != null) {
+                    MatchAndFeature firstMAF = featuresViewer.getInnerViewer().getFirstIn(featuresInput);
+                    if (firstMAF != null) {
                       // First feature must be selected
-                      newInput = new ValuesInput(getInput(), new MatchAndFeatureImpl(newMatch, firstFeature));
+                      newInput = new ValuesInput(getInput(), firstMAF);
                     }
                   }
                 } else {
@@ -2411,6 +2406,23 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (rawLP instanceof DelegatingLabelProvider) {
           DelegatingLabelProvider delegatingLP = (DelegatingLabelProvider)rawLP;
           delegatingLP.setDelegate(labelProvider_p);
+        }
+      }
+    }
+  }
+  
+  /**
+   * Set the diff label decorator for representing the diff status of model elements and features
+   * @param diffDecorator_p a potentially null diff label decorator, where null stands for default
+   */
+  public void setDiffLabelDecorator(IDiffLabelDecorator diffDecorator_p) {
+    for (Viewer viewer : getInnerViewers()) {
+      if (viewer instanceof ContentViewer) {
+        IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
+        if (rawLP instanceof AbstractDiffDelegatingLabelProvider) {
+          AbstractDiffDelegatingLabelProvider enhancedLP =
+              (AbstractDiffDelegatingLabelProvider)rawLP;
+          enhancedLP.setDiffLabelDecorator(diffDecorator_p);
         }
       }
     }

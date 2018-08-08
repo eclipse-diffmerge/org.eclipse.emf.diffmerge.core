@@ -16,8 +16,11 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -58,7 +61,18 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    * @return a non-null label provider
    */
   protected LabelProvider getHeaderLabelProvider() {
-    return DiffMergeLabelProvider.getInstance();
+    LabelProvider result = null;
+    if (getInnerViewer() != null) {
+      // Use LP of inner viewer if available
+      IBaseLabelProvider baseLP = getInnerViewer().getLabelProvider();
+      if (baseLP instanceof LabelProvider) {
+        result = (LabelProvider)baseLP;
+      }
+    }
+    if (result == null) {
+      result = DiffMergeLabelProvider.getInstance();
+    }
+    return result;
   }
   
   /**
@@ -87,7 +101,11 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
     IModelScope scope = getInnerViewer().getSideScope();
     Label textLabel = getTextLabel();
     if (textLabel != null) {
-      textLabel.setForeground(getInnerViewer().getSideColor()); // Unrelated to input
+      IBaseLabelProvider lp = getInnerViewer().getLabelProvider();
+      if (lp instanceof IColorProvider) {
+        Color newColor = ((IColorProvider)lp).getForeground(scope);
+        textLabel.setForeground(newColor);
+      }
       updateHeaderText(textLabel, input, scope);
     }
     Label imageLabel = getImageLabel();

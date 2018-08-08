@@ -19,14 +19,12 @@ import java.util.Map;
 
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
-import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-
 
 
 /**
@@ -91,21 +89,6 @@ public class ComparisonResourceManager implements IDisposable {
   public ComparisonResourceManager() {
     _normalToDisabled = new HashMap<Image, Image>();
     _normalToOverlay = new HashMap<ImageOverlay, Image>();
-  }
-  
-  /**
-   * Return a variant of the given image that corresponds to the given difference kind
-   * @param image_p a potentially null image
-   * @param kind_p a potentially null difference kind
-   * @return a potentially null image
-   */
-  public Image adaptImage(Image image_p, DifferenceKind kind_p) {
-    Image result = image_p;
-    if (kind_p != null && image_p != null) {
-      ImageID overlay = EMFDiffMergeUIPlugin.getDefault().getDifferenceOverlay(kind_p);
-      result = getOverlayVersion(image_p, overlay);
-    }
-    return result;
   }
   
   /**

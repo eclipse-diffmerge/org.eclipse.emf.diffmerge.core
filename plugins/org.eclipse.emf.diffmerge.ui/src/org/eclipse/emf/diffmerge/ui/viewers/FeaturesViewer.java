@@ -22,13 +22,9 @@ import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.DifferenceColorKind;
-import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
-import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
+import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -39,16 +35,13 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 
 /**
  * A viewer which provides a representation of the features of a match.
- * Input: FeaturesViewer.FeaturesInput ; Elements: EStructuralFeature.
+ * Input: FeaturesViewer.FeaturesInput ; Elements: MatchAndFeature.
  * @author Olivier Constant
  */
 public class FeaturesViewer extends TableViewer implements IDifferenceRelatedViewer {
@@ -138,18 +131,18 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   }
   
   /**
-   * Return the first feature to show for the given input, if any
+   * Return the first 'match and feature' to show for the given input, if any
    * @param input_p a potentially null input object
-   * @return the first feature to show, or null if none
+   * @return the first match and feature to show, or null if none
    */
-  public EStructuralFeature getFirstIn(FeaturesInput input_p) {
-    EStructuralFeature result = null;
+  public MatchAndFeature getFirstIn(FeaturesInput input_p) {
+    MatchAndFeature result = null;
     if (input_p != null) {
       Object[] elements = getSortedChildren(input_p);
       if (elements != null && elements.length > 0) {
         Object firstElement = elements[0];
-        if (firstElement instanceof EStructuralFeature)
-          result = (EStructuralFeature)firstElement;
+        if (firstElement instanceof MatchAndFeature)
+          result = (MatchAndFeature)firstElement;
       }
     }
     return result;
@@ -161,14 +154,6 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   @Override
   public FeaturesInput getInput() {
     return (FeaturesInput)super.getInput();
-  }
-  
-  /**
-   * Return the resource manager for this viewer
-   * @return a resource manager which is non-null iff input is not null
-   */
-  protected ComparisonResourceManager getResourceManager() {
-    return getInput() == null? null: getInput().getContext().getResourceManager();
   }
   
   /**
@@ -218,7 +203,6 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
    * The content provider for this viewer.
    */
   protected class ContentProvider implements IStructuredContentProvider {
-    
     /**
      * Return a list of all the relevant features for the given match
      * @param match_p a non-null match
@@ -239,7 +223,6 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       }
       return result;
     }
-    
     /**
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
@@ -247,43 +230,44 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       EMFDiffNode context = getInput().getContext();
       Role drivingRole = context.getDrivingRole();
       IMatch match = ((FeaturesInput)inputElement_p).getMatch();
-      List<EStructuralFeature> result;
+      List<EStructuralFeature> features;
       if (isDifferenceAgnostic())
-        result = getAllFeatures(match);
+        features = getAllFeatures(match);
       else {
-        result = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
+        features = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
         for (EReference ref : match.getReferencesWithDifferences()) {
           if (!context.isContainment(ref) || match.getOrderDifference(ref, drivingRole) != null)
-            result.add(ref);
+            features.add(ref);
         }
       }
       if (getInput().getContext().getCategoryManager().representAsMove(match))
-        result.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
+        features.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
+      List<MatchAndFeature> result = new ArrayList<MatchAndFeature>();
+      for (EStructuralFeature feature : features) {
+        MatchAndFeature maf = new MatchAndFeatureImpl((EMatch)match, feature);
+        result.add(maf);
+      }
       return result.toArray();
     }
-    
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#dispose()
      */
     public void dispose() {
       // Nothing needed
     }
-    
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
      */
     public void inputChanged(Viewer viewer_p, Object oldInput_p, Object newInput_p) {
       // Nothing needed
     }
-    
     /**
      * Return whether the given reference may be shown
      * @param reference_p a non-null reference
      */
     private boolean qualifies(EReference reference_p) {
       return isOwnershipFeature(reference_p) ||
-        !getInput().getContext().isContainment(reference_p) && !reference_p.isContainer() &&
-        reference_p.isChangeable() && !reference_p.isDerived();
+        !getInput().getContext().isContainment(reference_p) && !reference_p.isContainer();
     }
   }
   
@@ -291,92 +275,31 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /**
    * The label provider for this viewer
    */
-  protected class LabelProvider extends DelegatingLabelProvider {
-    
+  protected class LabelProvider extends AbstractDiffDelegatingLabelProvider {
     /**
-     * Constructor
-     */
-    public LabelProvider() {
-      super(DiffMergeLabelProvider.getInstance());
-    }
-    
-    /**
-     * Return the difference kind that corresponds to the given feature for the current input
-     * @param feature_p a non-null feature
-     * @return a non-null kind
-     */
-    protected DifferenceKind getDifferenceKind(EStructuralFeature feature_p) {
-      DifferenceKind result = DifferenceKind.NONE;
-      if (getInput() != null) {
-        EMatch match = (EMatch)getInput().getMatch();
-        MatchAndFeature maf = new MatchAndFeatureImpl(match, feature_p);
-        result = getInput().getContext().getCategoryManager().getDifferenceKind(maf);
-      }
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getFont(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getDiffNode()
      */
     @Override
-    public Font getFont(Object element_p) {
-      Font result = getControl().getFont();
-      EStructuralFeature feature = (EStructuralFeature)element_p;
-      DifferenceKind kind = getDifferenceKind(feature);
-      if (!kind.isNeutral())
-        result = UIUtil.getBold(result);
-      return result;
+    protected EMFDiffNode getDiffNode() {
+      return getInput() == null? null: getInput().getContext();
     }
-    
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getForeground(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getSide()
      */
     @Override
-    public Color getForeground(Object element_p) {
-      EStructuralFeature feature = (EStructuralFeature)element_p;
-      DifferenceKind kind = getDifferenceKind(feature);
-      DifferenceColorKind colorKind = EMFDiffMergeUIPlugin.getDefault().getDifferenceColorKind(kind);
-      if (colorKind == DifferenceColorKind.NONE)
-        colorKind = DifferenceColorKind.DEFAULT;
-      Color result = getInput().getContext().getDifferenceColor(colorKind);
-      return result;
+    protected Role getSide() {
+      return null;
     }
-    
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getImage(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getUndecoratedText(java.lang.Object)
      */
     @Override
-    public Image getImage(Object element_p) {
-      Image result = null;
-      if (isOwnershipFeature(element_p)) {
-        result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.TREE);
-      } else {
-        result = getDelegate().getImage(element_p);
-      }
-      if (getInput().getContext().usesCustomIcons() && element_p instanceof EStructuralFeature) {
-        EStructuralFeature feature = (EStructuralFeature)element_p;
-        DifferenceKind kind = getDifferenceKind(feature);
-        result = getResourceManager().adaptImage(result, kind);
-      }
-      return result;
-    }
-    
-    /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider#getText(java.lang.Object)
-     */
-    @Override
-    public String getText(Object element_p) {
-      EStructuralFeature feature = (EStructuralFeature)element_p;
+    public String getUndecoratedText(Object element_p) {
       String result;
-      if (isTechnical()) {
-        result = getDelegate().getText(feature);
+      if (element_p instanceof EStructuralFeature && !isTechnical()) {
+        result = UIUtil.getFormattedFeatureText((EStructuralFeature)element_p);
       } else {
-        result = UIUtil.getFormattedFeatureText(feature);
-      }
-      if (getInput().getContext().usesCustomLabels()) {
-        DifferenceKind kind = getDifferenceKind(feature);
-        String prefix = EMFDiffMergeUIPlugin.getDefault().getDifferencePrefix(kind);
-        result = prefix + result;
+        result = super.getUndecoratedText(element_p); 
       }
       return result;
     }

@@ -28,7 +28,6 @@ import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
-import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -61,13 +60,6 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
     LOCK_OPEN, MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
     PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED,
     UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING }
-  
-  /** Identifiers for colors according to the side to which a difference presence is relative */
-  @SuppressWarnings("javadoc")
-  public static enum DifferenceColorKind {
-    LEFT, RIGHT, BOTH, NONE,
-    CONFLICT, DEFAULT
-  }
   
   /** The local path to icons */
   protected static final String ICON_PATH = "icons/full/"; //$NON-NLS-1$
@@ -165,96 +157,6 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    */
   public Role getDefaultLeftRole() {
     return Role.TARGET;
-  }
-  
-  /**
-   * Return the color kind that corresponds to the given difference kind
-   * @param originKind_p a potentially null difference kind
-   * @return a non-null color kind
-   */
-  public DifferenceColorKind getDifferenceColorKind(DifferenceKind originKind_p) {
-    DifferenceColorKind result;
-    if (originKind_p == null) {
-      result = DifferenceColorKind.DEFAULT;
-    } else {
-      switch (originKind_p) {
-        case NONE:
-          result = DifferenceColorKind.NONE; break;
-        case CONFLICT:
-          result = DifferenceColorKind.CONFLICT; break;
-        case MODIFIED: case FROM_LEFT: case FROM_RIGHT: case FROM_BOTH:
-          result = DifferenceColorKind.BOTH; break;
-        case FROM_LEFT_ADD: case FROM_RIGHT_DEL:
-          result = DifferenceColorKind.LEFT; break;
-        case FROM_RIGHT_ADD: case FROM_LEFT_DEL:
-          result = DifferenceColorKind.RIGHT; break;
-        default:
-          result = DifferenceColorKind.DEFAULT; break;
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * Return the image ID that corresponds to the given difference origin kind
-   * @param originKind_p a non-null difference origin kind
-   * @return a potentially null image ID
-   */
-  public ImageID getDifferenceOverlay(DifferenceKind originKind_p) {
-    ImageID result;
-    switch (originKind_p) {
-      case FROM_LEFT:
-        result = ImageID.OUT_STAT; break;
-      case FROM_LEFT_ADD:
-        result = ImageID.OUT_ADD_STAT; break;
-      case FROM_LEFT_DEL:
-        result = ImageID.OUT_REM_STAT; break;
-      case FROM_RIGHT:
-        result = ImageID.INC_STAT; break;
-      case FROM_RIGHT_ADD:
-        result = ImageID.INC_ADD_STAT; break;
-      case FROM_RIGHT_DEL:
-        result = ImageID.INC_REM_STAT; break;
-      case MODIFIED:
-      case FROM_BOTH:
-        result = ImageID.MODIFIED_STAT; break;
-      case CONFLICT:
-        result = ImageID.CONFLICT_STAT; break;
-      default:
-        result = null; break;
-    }
-    return result;
-  }
-  
-  /**
-   * Return the prefix that corresponds to the given difference kind
-   * @param originKind_p a non-null difference origin kind
-   * @return a non-null string
-   */
-  public String getDifferencePrefix(DifferenceKind originKind_p) {
-    String result;
-    switch (originKind_p) {
-      case FROM_LEFT:
-        result = "|> "; break; //$NON-NLS-1$
-      case FROM_LEFT_ADD:
-        result = "+> "; break; //$NON-NLS-1$
-      case FROM_LEFT_DEL:
-        result = "-> "; break; //$NON-NLS-1$
-      case FROM_RIGHT:
-        result = "<| "; break; //$NON-NLS-1$
-      case FROM_RIGHT_ADD:
-        result = "<+ "; break; //$NON-NLS-1$
-      case FROM_RIGHT_DEL:
-        result = "<- "; break; //$NON-NLS-1$
-      case CONFLICT:
-        result = "! "; break; //$NON-NLS-1$
-      case MODIFIED:
-      case FROM_BOTH:
-        result = "| "; break; //$NON-NLS-1$
-      default:
-        result = ""; break; //$NON-NLS-1$
-    }
-    return result;
   }
   
   /**
