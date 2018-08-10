@@ -28,6 +28,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.setup.AbstractComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
+import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -134,12 +135,18 @@ implements IComparisonMethod {
       IActionBars actionBars_p) {
     AbstractComparisonViewer result = doCreateComparisonViewer(parent_p, actionBars_p);
     IDifferenceCategoryProvider provider = getCustomCategoryProvider();
-    if (provider != null)
+    if (provider != null) {
       result.setCategoryProvider(provider);
+    }
     if (result instanceof ComparisonViewer) {
       ILabelProvider customLP = getCustomLabelProvider();
-      if (customLP != null)
+      if (customLP != null) {
         ((ComparisonViewer)result).setDelegateLabelProvider(customLP);
+      }
+      IDiffLabelDecorator customLD = getCustomDiffLabelDecorator();
+      if (customLD != null) {
+        ((ComparisonViewer)result).setDiffLabelDecorator(customLD);
+      }
     }
     return result;
   }
@@ -229,6 +236,17 @@ implements IComparisonMethod {
    * @return a category provider, or null for the default one
    */
   protected IDifferenceCategoryProvider getCustomCategoryProvider() {
+    return null;
+  }
+  
+  /**
+   * Return an optional diff label decorator for customizing the way the diff status
+   * of model elements is represented in comparison widgets.
+   * This operation only has an impact if the viewer created by this comparison method
+   * is a ComparisonViewer.
+   * @return a diff label decorator, or null for the default one
+   */
+  protected IDiffLabelDecorator getCustomDiffLabelDecorator() {
     return null;
   }
   

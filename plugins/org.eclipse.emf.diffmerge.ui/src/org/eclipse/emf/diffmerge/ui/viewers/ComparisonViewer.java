@@ -70,7 +70,7 @@ import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
@@ -2419,9 +2419,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     for (Viewer viewer : getInnerViewers()) {
       if (viewer instanceof ContentViewer) {
         IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
-        if (rawLP instanceof AbstractDiffDelegatingLabelProvider) {
-          AbstractDiffDelegatingLabelProvider enhancedLP =
-              (AbstractDiffDelegatingLabelProvider)rawLP;
+        if (rawLP instanceof DiffDelegatingLabelProvider) {
+          DiffDelegatingLabelProvider enhancedLP =
+              (DiffDelegatingLabelProvider)rawLP;
           enhancedLP.setDiffLabelDecorator(diffDecorator_p);
         }
       }

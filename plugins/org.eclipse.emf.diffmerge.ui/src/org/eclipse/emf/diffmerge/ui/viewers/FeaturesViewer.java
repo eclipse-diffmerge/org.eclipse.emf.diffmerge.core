@@ -24,7 +24,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
-import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -275,23 +275,23 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /**
    * The label provider for this viewer
    */
-  protected class LabelProvider extends AbstractDiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDelegatingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
       return getInput() == null? null: getInput().getContext();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {
       return null;
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getUndecoratedText(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getUndecoratedText(java.lang.Object)
      */
     @Override
     public String getUndecoratedText(Object element_p) {

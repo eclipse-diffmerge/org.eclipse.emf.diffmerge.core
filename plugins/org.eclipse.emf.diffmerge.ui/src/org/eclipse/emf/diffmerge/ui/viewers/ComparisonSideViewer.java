@@ -16,7 +16,7 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -184,16 +184,16 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
   /**
    * The label provider for this viewer.
    */
-  protected class LabelProvider extends AbstractDiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDelegatingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
       return getInput();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {

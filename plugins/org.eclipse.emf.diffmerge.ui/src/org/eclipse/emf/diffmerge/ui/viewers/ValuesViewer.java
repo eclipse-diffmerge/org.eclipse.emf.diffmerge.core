@@ -28,7 +28,7 @@ import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
-import org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -311,9 +311,9 @@ IDifferenceRelatedViewer {
   /**
    * The label provider for this viewer.
    */
-  protected class LabelProvider extends AbstractDiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDelegatingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
@@ -321,7 +321,7 @@ IDifferenceRelatedViewer {
       return input == null? null: input.getContext();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {
@@ -335,7 +335,7 @@ IDifferenceRelatedViewer {
       return getText(element_p);
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.AbstractDiffDelegatingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
      */
     @Override
     protected boolean isFromValue(IValuePresence valuePresence_p) {

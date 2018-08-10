@@ -53,7 +53,7 @@ import org.eclipse.swt.graphics.Image;
  * (IDifference), MatchAndFeature, EObject (elements of the models compared).
  * @author Olivier Constant
  */
-public abstract class AbstractDiffDelegatingLabelProvider extends DelegatingLabelProvider
+public abstract class DiffDelegatingLabelProvider extends DelegatingLabelProvider
 implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorator.Provider {
   
   /**
@@ -136,7 +136,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   /**
    * Default constructor
    */
-  public AbstractDiffDelegatingLabelProvider() {
+  public DiffDelegatingLabelProvider() {
     super();
     _diffDecorator = getDefaultDiffLabelDecorator();
     _diffCache = null;
@@ -146,7 +146,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * Constructor
    * @param delegate_p the optional label provider to which behavior is delegated
    */
-  public AbstractDiffDelegatingLabelProvider(ILabelProvider delegate_p) {
+  public DiffDelegatingLabelProvider(ILabelProvider delegate_p) {
     super(delegate_p);
     _diffDecorator = getDefaultDiffLabelDecorator();
     _diffCache = null;
@@ -185,6 +185,16 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
       Object representedElement = doGetElementToRepresent(element_p);
       _diffCache = new CacheEntry(element_p, representedElement, diffKind);
     }
+  }
+  
+  /**
+   * @see org.eclipse.jface.viewers.StyledCellLabelProvider#dispose()
+   */
+  @Override
+  public void dispose() {
+    super.dispose();
+    cacheClear();
+    setDiffLabelDecorator(null);
   }
   
   /**
@@ -568,7 +578,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   
   /**
    * Return the undecorated background color
-   * @see AbstractDiffDelegatingLabelProvider#getBackground(Object)
+   * @see DiffDelegatingLabelProvider#getBackground(Object)
    */
   public Color getUndecoratedBackground(Object element_p) {
     Object elementToRepresent = getElementToRepresent(element_p);
@@ -579,7 +589,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   
   /**
    * Return the undecorated font
-   * @see AbstractDiffDelegatingLabelProvider#getFont(Object)
+   * @see DiffDelegatingLabelProvider#getFont(Object)
    */
   public Font getUndecoratedFont(Object element_p) {
     Object elementToRepresent = getElementToRepresent(element_p);
@@ -590,7 +600,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   
   /**
    * Return the undecorated foreground color
-   * @see AbstractDiffDelegatingLabelProvider#getForeground(Object)
+   * @see DiffDelegatingLabelProvider#getForeground(Object)
    */
   public Color getUndecoratedForeground(Object element_p) {
     Object elementToRepresent = getElementToRepresent(element_p);
@@ -611,7 +621,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   
   /**
    * Return the undecorated styled text
-   * @see AbstractDiffDelegatingLabelProvider#getStyledText(Object)
+   * @see DiffDelegatingLabelProvider#getStyledText(Object)
    */
   public StyledString getUndecoratedStyledText(Object element_p) {
     Object elementToRepresent = getElementToRepresent(element_p);
