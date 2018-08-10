@@ -24,7 +24,6 @@ import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -34,21 +33,13 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TableItem;
 
 
 /**
@@ -155,28 +146,6 @@ IDifferenceRelatedViewer {
     _sideIsLeft = sideIsLeft_p;
     _showAllValues = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    setMultilineSupport(getControl());
-    getTable().setToolTipText(""); //$NON-NLS-1$
-    ColumnViewerToolTipSupport.enableFor(this, ToolTip.NO_RECREATE);
-  }
-  
-  /**
-   * Return the model element that corresponds to the given viewer value, if applicable
-   * @param viewerValueElement_p a potentially null object
-   * @return a potentially null element
-   */
-  public EObject getElementForValue(Object viewerValueElement_p) {
-    EObject result;
-    if (viewerValueElement_p instanceof IReferenceValuePresence)
-      result = (EObject)getValueToRepresent((IValuePresence)viewerValueElement_p);
-//    else if (viewerValueElement_p instanceof IMatch)
-//      result = ((IMatch)viewerValueElement_p).get(getSideRole());
-    else if (viewerValueElement_p instanceof EObject &&
-        !(viewerValueElement_p instanceof IDifference))
-      result = (EObject)viewerValueElement_p;
-    else
-      result = null;
-    return result;
   }
   
   /**
@@ -185,14 +154,6 @@ IDifferenceRelatedViewer {
   @Override
   public ValuesInput getInput() {
     return (ValuesInput)super.getInput();
-  }
-  
-  /**
-   * Return the resource manager for this viewer
-   * @return a resource manager which is non-null iff input is not null
-   */
-  protected ComparisonResourceManager getResourceManager() {
-    return getInput() == null? null: getInput().getContext().getResourceManager();
   }
   
   /**
@@ -210,27 +171,6 @@ IDifferenceRelatedViewer {
   @Override
   public IStructuredSelection getSelection() {
     return (IStructuredSelection)super.getSelection();
-  }
-  
-  /**
-   * Return the value object of the given value presence that should be represented
-   * @param presence_p a non-null value presence
-   * @return a non-null object
-   */
-  protected Object getValueToRepresent(IValuePresence presence_p) {
-    Object result;
-    if (presence_p.getFeature() instanceof EAttribute) {
-      result = presence_p.getValue();
-    } else {
-      IReferenceValuePresence presence = (IReferenceValuePresence)presence_p;
-      Role presenceRole = presence.getPresenceRole();
-      if (isOwnership(getInput().getMatchAndFeature())) {
-        result = presence.getElementMatch().get(presenceRole);
-      } else {
-        result = presence.getValue();
-      }
-    }
-    return result;
   }
   
   /**
@@ -273,65 +213,6 @@ IDifferenceRelatedViewer {
     }
   }
   
-  /**
-   * Add multi-line support for long strings to the table of this viewer.
-   * See http://git.eclipse.org/c/platform/eclipse.platform.swt.git/tree/examples/org.eclipse.swt.snippets/src/org/eclipse/swt/snippets/Snippet231.java for reference. 
-   * @param control_p the non-null control (presumably a table) to which multi-line support must be added
-   */
-  protected void setMultilineSupport(Control control_p) {
-    control_p.addListener(SWT.MeasureItem, new Listener() {
-      /**
-       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
-       */
-      public void handleEvent(Event event_p) {
-        TableItem item = (TableItem)event_p.item;
-        if (item != null) {
-          String text = item.getText(event_p.index);
-          Point size = event_p.gc.textExtent(text);
-          event_p.width = size.x + item.getImageBounds(0).width + 4;
-          event_p.height = size.y;
-        }
-      }
-    });
-    control_p.addListener(SWT.EraseItem, new Listener() {
-      /**
-       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
-       */
-      public void handleEvent(Event event_p) {
-        event_p.detail &= ~SWT.FOREGROUND;
-      }
-    });
-    control_p.addListener(SWT.PaintItem, new Listener() {
-      /**
-       * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
-       */
-      public void handleEvent(Event event_p) {
-        TableItem item = (TableItem)event_p.item;
-        if (item != null) {
-          String text = item.getText(event_p.index);
-          Point size = (text != null)? event_p.gc.textExtent(text): new Point(0,0);
-          event_p.width = size.x + 8;
-          event_p.height = Math.max(event_p.height, size.y);
-          // Based on the offset before the image, draw image and text
-          int offset = event_p.x;
-          Image image = item.getImage();
-          if (image != null)
-            event_p.gc.drawImage(image, offset, event_p.y);
-          if (text != null)
-            event_p.gc.drawText(text, offset + item.getImageBounds(0).width + 4, event_p.y, true);
-        }
-      }
-    });
-  }
-  
-  /**
-   * Return whether the given object must be represented as a difference
-   * @param element_p a potentially null object
-   */
-  protected boolean showAsDifference(Object element_p) {
-    return element_p instanceof IValuePresence &&
-      !getInput().getContext().getCategoryManager().isFiltered((IDifference)element_p);
-  }
   
   /**
    * The content provider for this viewer.

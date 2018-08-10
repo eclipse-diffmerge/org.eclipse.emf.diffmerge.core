@@ -323,14 +323,6 @@ public class ComparisonTreeViewer extends TreeViewer {
   }
   
   /**
-   * Return the resource manager for this viewer
-   * @return a resource manager which is non-null iff getInput() is not null
-   */
-  protected ComparisonResourceManager getResourceManager() {
-    return getInput() == null? null: getInput().getResourceManager();
-  }
-  
-  /**
    * @see org.eclipse.jface.viewers.AbstractTreeViewer#getSelection()
    */
   @Override

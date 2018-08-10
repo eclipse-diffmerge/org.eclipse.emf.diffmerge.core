@@ -104,7 +104,7 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   public Font getFont(Object object_p, Font base_p, DifferenceKind diffKind_p,
       Role side_p, EMFDiffNode node_p) {
     Font result = super.getFont(object_p, base_p, diffKind_p, side_p, node_p);
-    if (result != null && side_p == null && diffKind_p != null && !diffKind_p.isNeutral()) {
+    if (result != null && diffKind_p != null && !diffKind_p.isNeutral()) {
       result = UIUtil.getBold(result);
     }
     return result;

@@ -201,7 +201,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   protected StyledString getStyledLabelPrefix(Object object_p, DifferenceKind diffKind_p,
       Role side_p, EMFDiffNode node_p) {
     String rawPrefix = getLabelPrefix(object_p, diffKind_p, side_p, node_p);
-    StyledString result = new StyledString(rawPrefix, StyledString.QUALIFIER_STYLER);
+    StyledString result = new StyledString(rawPrefix, StyledString.COUNTER_STYLER);
     return result;
   }
   
@@ -261,7 +261,9 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
    */
   protected boolean needsIconDecoration(Object object_p, Image base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
-    return side_p == null && node_p != null && node_p.usesCustomIcons();
+    return node_p != null && node_p.usesCustomIcons() &&
+        !(side_p != null && object_p instanceof IMatch &&
+        node_p.getCategoryManager().isComparisonPart((IMatch)object_p));
   }
   
   /**
