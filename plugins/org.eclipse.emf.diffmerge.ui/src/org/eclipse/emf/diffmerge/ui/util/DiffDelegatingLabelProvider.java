@@ -267,44 +267,6 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   }
   
   /**
-   * Decorate the given label of the given value presence so that it conveniently
-   * describes the value
-   * @param valueLabel_p a potentially null string
-   * @param valuePresence_p a non-null value presence
-   * @return a potentially null string
-   */
-  protected String getDecoratedTextFromHolder(String valueLabel_p, IValuePresence valuePresence_p) {
-    String result = valueLabel_p;
-    if (valuePresence_p instanceof IReferenceValuePresence) {
-      EObject value = ((IReferenceValuePresence)valuePresence_p).getValue();
-      EObject container = value.eContainer();
-      String containerLabel = container == null? null:
-        getDelegate().getText(container);
-      if (containerLabel != null) {
-        result = String.format(Messages.ValuesViewer_ContainerLabel, result, containerLabel);
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * Decorate the given label of the given value presence so that it conveniently
-   * describes the holder
-   * @param holderLabel_p a potentially null string
-   * @param valuePresence_p a non-null value presence
-   * @return a potentially null string
-   */
-  protected String getDecoratedTextFromValue(String holderLabel_p, IValuePresence valuePresence_p) {
-    String result = holderLabel_p;
-    EStructuralFeature feature = valuePresence_p.getFeature();
-    if (feature != null) {
-      String featureText = getText(feature);
-      String.format(Messages.ValuesViewer_FeatureLabel, holderLabel_p, featureText);
-    }
-    return result;
-  }
-  
-  /**
    * Return the default diff label decorator for this label provider
    * @return a non-null object
    */
@@ -418,17 +380,9 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    */
   @Override
   public Image getImage(Object element_p) {
-    Image base;
-    if (isOwnershipFeature(getElementToRepresent(element_p))) {
-      base = getOwnershipFeatureImage();
-    } else if (isOrderDifference(element_p)) {
-      base = getOrderDifferenceImage();
-    } else {
-      base = getUndecoratedImage(element_p);
-    }
     Image result = getDiffLabelDecorator().getImage(
         element_p,
-        base,
+        getUndecoratedImage(element_p),
         getDifferenceKind(element_p),
         getSide(),
         getDiffNode());
@@ -534,20 +488,9 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    */
   @Override
   public String getText(Object element_p) {
-    String base;
-    if (isOrderDifference(element_p)) {
-      base = Messages.ValuesViewer_OrderLabel;
-    } else if (element_p instanceof IValuePresence) {
-      IValuePresence valuePresence = (IValuePresence)element_p;
-      base = getUndecoratedText(element_p);
-      base = isFromValue(valuePresence)? getDecoratedTextFromValue(base, valuePresence):
-        getDecoratedTextFromHolder(base, valuePresence);
-    } else {
-      base = getUndecoratedText(element_p);
-    }
     CharSequence label = getDiffLabelDecorator().getText(
         element_p,
-        base,
+        getUndecoratedText(element_p),
         getDifferenceKind(element_p),
         getSide(),
         getDiffNode());
@@ -565,11 +508,9 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    */
   @Override
   public String getToolTipText(Object element_p) {
-    Object elementToRepresent = getElementToRepresent(element_p);
-    String base = super.getToolTipText(elementToRepresent);
     String result = getDiffLabelDecorator().getToolTipText(
         element_p,
-        base,
+        getUndecoratedToolTipText(element_p),
         getDifferenceKind(element_p),
         getSide(),
         getDiffNode());
@@ -613,10 +554,18 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @see org.eclipse.emf.common.ui.viewer.IUndecoratingLabelProvider#getUndecoratedImage(java.lang.Object)
    */
   public Image getUndecoratedImage(Object element_p) {
-    Object elementToRepresent = getElementToRepresent(element_p);
-    return elementToRepresent == element_p?
-        super.getImage(elementToRepresent):
-          getUndecoratedImage(elementToRepresent);
+    Image result;
+    if (isOwnershipFeature(element_p)) {
+      result = getOwnershipFeatureImage();
+    } else if (isOrderDifference(element_p)) {
+      result = getOrderDifferenceImage();
+    } else {
+      Object elementToRepresent = getElementToRepresent(element_p);
+      result = (elementToRepresent == element_p)?
+          super.getImage(elementToRepresent):
+            getUndecoratedImage(elementToRepresent);
+    }
+    return result;
   }
   
   /**
@@ -624,22 +573,97 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @see DiffDelegatingLabelProvider#getStyledText(Object)
    */
   public StyledString getUndecoratedStyledText(Object element_p) {
-    Object elementToRepresent = getElementToRepresent(element_p);
-    return elementToRepresent == element_p?
-        super.getStyledText(elementToRepresent):
-          getUndecoratedStyledText(elementToRepresent);
+    StyledString result;
+    if (element_p instanceof IValuePresence) {
+      result = getUndecoratedStyledTextFromValuePresence((IValuePresence)element_p);
+    } else {
+      Object elementToRepresent = getElementToRepresent(element_p);
+      result = (elementToRepresent == element_p)?
+          super.getStyledText(elementToRepresent):
+            getUndecoratedStyledText(elementToRepresent);
+    }
+    return result;
+  }
+  
+  /**
+   * Return an undecorated styled label for the given value presence representing
+   * the value from the point of view of the holder
+   * @param valueLabel_p a potentially null string
+   * @param valuePresence_p a non-null value presence
+   * @return a potentially null styled string
+   */
+  protected StyledString getUndecoratedStyledTextFromHolder(String valueLabel_p,
+      IValuePresence valuePresence_p) {
+    StyledString result = new StyledString(valueLabel_p);
+    if (valuePresence_p instanceof IReferenceValuePresence) {
+      EObject value = ((IReferenceValuePresence)valuePresence_p).getValue();
+      EObject container = value.eContainer();
+      String containerLabel = (container == null)? null:
+        getUndecoratedText(container);
+      if (containerLabel != null) {
+        containerLabel = String.format(Messages.ValuesViewer_ContainerLabel, containerLabel);
+        result.append(' ');
+        result.append(containerLabel, StyledString.QUALIFIER_STYLER);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return an undecorated styled label for the given value presence representing
+   * the holder from the point of view of the value
+   * @param holderLabel_p a potentially null string
+   * @param valuePresence_p a non-null value presence
+   * @return a potentially null styled string
+   */
+  protected StyledString getUndecoratedStyledTextFromValue(String holderLabel_p,
+      IValuePresence valuePresence_p) {
+    StyledString result = new StyledString(holderLabel_p);
+    EStructuralFeature feature = valuePresence_p.getFeature();
+    if (feature != null) {
+      String featureText = getUndecoratedText(feature);
+      if (featureText != null) {
+        featureText = String.format(Messages.ValuesViewer_FeatureLabel, featureText);
+        result.append(' ');
+        result.append(featureText, StyledString.QUALIFIER_STYLER);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return an undecorated styled label for the given value presence
+   * @param valuePresence_p a non-null object
+   * @return a potentially null styled string
+   */
+  protected StyledString getUndecoratedStyledTextFromValuePresence(
+      IValuePresence valuePresence_p) {
+    StyledString result;
+    String base = getUndecoratedText(valuePresence_p);
+    result = isFromValue(valuePresence_p)?
+        getUndecoratedStyledTextFromValue(base, valuePresence_p):
+          getUndecoratedStyledTextFromHolder(base, valuePresence_p);
+    return result;
   }
   
   /**
    * @see org.eclipse.emf.common.ui.viewer.IUndecoratingLabelProvider#getUndecoratedText(java.lang.Object)
    */
   public String getUndecoratedText(Object element_p) {
-    Object elementToRepresent = getElementToRepresent(element_p);
-    return elementToRepresent == element_p?
-        super.getText(elementToRepresent):
-          getUndecoratedText(elementToRepresent);
+    String result;
+    if (isOrderDifference(element_p)) {
+      result = Messages.ValuesViewer_OrderLabel;
+    } else if (element_p instanceof EStructuralFeature && !isTextTechnicalForMeta()) {
+      result = UIUtil.getFormattedFeatureText((EStructuralFeature)element_p);
+    } else {
+      Object elementToRepresent = getElementToRepresent(element_p);
+      result = (elementToRepresent == element_p)?
+          super.getText(elementToRepresent):
+            getUndecoratedText(elementToRepresent);
+    }
+    return result;
   }
-  
+
   /**
    * Return the undecorated tool tip text
    * @see org.eclipse.jface.viewers.CellLabelProvider#getToolTipText(java.lang.Object)
@@ -676,6 +700,15 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    */
   protected boolean isOwnershipFeature(Object object_p) {
     return EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature().equals(object_p);
+  }
+  
+  /**
+   * Return whether meta-elements (instances of EClass, EStructuralFeature, etc.)
+   * must have technical vs. user-friendly labels
+   */
+  protected boolean isTextTechnicalForMeta() {
+    // Override if needed
+    return false;
   }
   
   /**

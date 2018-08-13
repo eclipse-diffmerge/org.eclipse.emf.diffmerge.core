@@ -25,7 +25,6 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -103,9 +102,6 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /** Whether all features must be shown, including those with no difference */
   private boolean _showAllFeatures;
   
-  /** Whether a technical, more precise but less user-friendly representation must be used */
-  private boolean _useTechnicalRepresentation;
-  
   
   /**
    * Constructor
@@ -125,7 +121,6 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
     _showAllFeatures = false;
-    _useTechnicalRepresentation = false;
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     setComparator(new ViewerComparator());
   }
@@ -175,7 +170,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
    * Return whether a technical, more precise but less user-friendly representation is being used
    */
   public boolean isTechnical() {
-    return _useTechnicalRepresentation;
+    return getInput() != null? getInput().getContext().usesTechicalLabels(): false;
   }
   
   /**
@@ -193,8 +188,11 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
    */
   public void setTechnical(boolean technical_p) {
     if (technical_p != isTechnical()) {
-      _useTechnicalRepresentation = technical_p;
-      refresh(true);
+      FeaturesInput input = getInput();
+      if (input != null) {
+        input.getContext().setUseTechicalLabels(technical_p);
+        refresh(true);
+      }
     }
   }
   
@@ -291,17 +289,11 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       return null;
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getUndecoratedText(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isTextTechnicalForMeta()
      */
     @Override
-    public String getUndecoratedText(Object element_p) {
-      String result;
-      if (element_p instanceof EStructuralFeature && !isTechnical()) {
-        result = UIUtil.getFormattedFeatureText((EStructuralFeature)element_p);
-      } else {
-        result = super.getUndecoratedText(element_p); 
-      }
-      return result;
+    protected boolean isTextTechnicalForMeta() {
+      return isTechnical();
     }
   }
   

@@ -1221,7 +1221,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
          */
         @Override
         public void widgetSelected(SelectionEvent e_p) {
-          _viewerFeatures.getInnerViewer().setTechnical(result.getSelection());
+          _viewerFeatures.getInnerViewer().setTechnical(result.getSelection()); //TODO change this
         }
       });
       return result;

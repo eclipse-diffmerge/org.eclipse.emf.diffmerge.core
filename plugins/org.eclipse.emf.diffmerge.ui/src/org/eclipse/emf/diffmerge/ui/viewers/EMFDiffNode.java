@@ -17,7 +17,9 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
+import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -44,6 +46,8 @@ import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.IWorkspaceCommandStack;
 import org.eclipse.emf.workspace.ResourceUndoContext;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IEditorInput;
 
 
@@ -51,7 +55,11 @@ import org.eclipse.ui.IEditorInput;
  * An ICompareInput that wraps a model comparison.
  * @author Olivier Constant
  */
-public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider {
+public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider,
+IPropertyChangeNotifier {
+  
+  /** The name of the "use technical labels" property */
+  public static final String PROPERTY_TECHNICAL_LABELS = "PROPERTY_TECHNICAL_LABELS"; //$NON-NLS-1$
   
   /** The resource manager */
   private final ComparisonResourceManager _resourceManager;
@@ -64,6 +72,9 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /** The optional listener that reacts to changes on the editing domain */
   protected IOperationHistoryListener _domainChangeListener;
+  
+  /** The non-null set of property change listeners */
+  private final Set<IPropertyChangeListener> _changeListeners;
   
   /** The optional associated editor input */
   private IEditorInput _editorInput;
@@ -85,6 +96,10 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   
   /** Whether to use custom labels for differences */
   private boolean _useCustomLabels;
+  
+  /** Whether to use technical (vs. simplified) labels to represent, 
+   * in particular, meta elements */
+  private boolean _useTechicalLabels;
   
   /** Whether the left model is editable */
   private boolean _isTargetEditable;
@@ -186,6 +201,7 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _categoryManager = new CategoryManager(this);
     _useCustomIcons = true;
     _useCustomLabels = false;
+    _useTechicalLabels = false;
     _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
       isRightEditionPossible_p;
     _isReferenceEditionPossible = (leftRole_p == Role.TARGET)? isRightEditionPossible_p:
@@ -203,6 +219,14 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
     _defaultCoverChildren = true;
     _defaultIncrementalMode = false;
     _domainChangeListener = (domain_p == null)? null: createDomainListener(domain_p);
+    _changeListeners = new HashSet<IPropertyChangeListener>(1);
+  }
+  
+  /**
+   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
+    _changeListeners.add(listener_p);
   }
   
   /**
@@ -260,6 +284,20 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
       _domainChangeListener = null;
     }
     _editorInput = null;
+    _changeListeners.clear();
+  }
+  
+  /**
+   * Notify listeners of a property change event
+   * @param propertyName_p the non-null name of the property
+   * @param newValue_p the potentially null, new value of the property
+   */
+  protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p) {
+    PropertyChangeEvent event = new PropertyChangeEvent(
+        this, propertyName_p, null, newValue_p);
+    for (IPropertyChangeListener listener : _changeListeners) {
+      listener.propertyChange(event);
+    }
   }
   
   /**
@@ -527,6 +565,13 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
+   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
+    _changeListeners.remove(listener_p);
+  }
+  
+  /**
    * Set the default value for the "cover children" property as proposed to the user when merging 
    */
   public void setDefaultCoverChildren(boolean coverChildren_p) {
@@ -662,17 +707,27 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Set whether this viewer should use custom icons to represent differences
+   * Set whether viewers must use custom icons to represent differences
    */
   public void setUseCustomIcons(boolean useCustom_p) {
     _useCustomIcons = useCustom_p;
   }
   
   /**
-   * Set whether this viewer should use custom labels to represent differences
+   * Set whether viewers must use custom labels to represent differences
    */
   public void setUseCustomLabels(boolean useCustom_p) {
     _useCustomLabels = useCustom_p;
+  }
+  
+  /**
+   * Set whether viewers must use technical (vs. simplified) labels to represent,
+   * in particular, meta elements
+   * @param useTechicalLabels_p whether techical labels must be used
+   */
+  public void setUseTechicalLabels(boolean useTechicalLabels_p) {
+    _useTechicalLabels = useTechicalLabels_p;
+    firePropertyChangeEvent(PROPERTY_TECHNICAL_LABELS, Boolean.valueOf(useTechicalLabels_p));
   }
   
   /**
@@ -691,10 +746,18 @@ public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomain
   }
   
   /**
-   * Return whether this viewer uses custom labels to represent differences
+   * Return whether viewers must custom labels to represent differences
    */
   public boolean usesCustomLabels() {
     return _useCustomLabels;
+  }
+  
+  /**
+   * Return whether viewers must use technical (vs. simplified) labels to represent,
+   * in particular, meta elements
+   */
+  public boolean usesTechicalLabels() {
+    return _useTechicalLabels;
   }
   
 }

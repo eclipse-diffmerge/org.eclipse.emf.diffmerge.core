@@ -69,6 +69,20 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
   }
   
   /**
+   * Return context-sensitive text for the header
+   * @param input_p a non-null input object
+   * @return a potentially null string
+   */
+  protected String getContextualText(FeaturesInput input_p) {
+    EObject element = getDrivingElement(input_p);
+    String formattedTypeText = input_p.getContext().usesTechicalLabels()?
+        element.eClass().getName(): UIUtil.getFormattedTypeText(element);
+    String result = String.format(
+        Messages.EnhancedFeaturesViewer_DetailsWithSelection, formattedTypeText);
+    return result;
+  }
+  
+  /**
    * Return the default text for the header
    * @return a potentially null string
    */
@@ -108,10 +122,7 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
       String newText;
       if (input_p instanceof FeaturesInput) {
         FeaturesInput input = (FeaturesInput)input_p;
-        EObject element = getDrivingElement(input);
-        String formattedTypeText = UIUtil.getFormattedTypeText(element);
-        newText = String.format(
-            Messages.EnhancedFeaturesViewer_DetailsWithSelection, formattedTypeText);
+        newText = getContextualText(input);
       } else {
         newText = getDefaultText();
       }

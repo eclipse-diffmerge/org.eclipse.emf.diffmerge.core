@@ -33,6 +33,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -123,6 +125,9 @@ IDifferenceRelatedViewer {
   /** Whether all values must be shown, including those not related to a difference */
   private boolean _showAllValues;
   
+  /** A listener to changes on properties of the input */
+  protected final IPropertyChangeListener _inputPropertyChangeListener;
+  
   
   /**
    * Constructor
@@ -145,7 +150,25 @@ IDifferenceRelatedViewer {
     setLabelProvider(new LabelProvider());
     _sideIsLeft = sideIsLeft_p;
     _showAllValues = false;
+    _inputPropertyChangeListener = createInputPropertyChangeListener();
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+  }
+  
+  /**
+   * Create and return a listener to changes on properties of the input
+   * @return a non-null object
+   */
+  protected IPropertyChangeListener createInputPropertyChangeListener() { //TODO do the same on (Enhanced)FeaturesViewer
+    return new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (EMFDiffNode.PROPERTY_TECHNICAL_LABELS.equals(event_p.getProperty())) {
+          refresh(true);
+        }
+      }
+    };
   }
   
   /**
@@ -171,6 +194,22 @@ IDifferenceRelatedViewer {
   @Override
   public IStructuredSelection getSelection() {
     return (IStructuredSelection)super.getSelection();
+  }
+  
+  /**
+   * @see org.eclipse.jface.viewers.AbstractTableViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (oldInput_p instanceof ValuesInput) {
+      ((ValuesInput)oldInput_p).getContext().removePropertyChangeListener(
+          _inputPropertyChangeListener);
+    }
+    if (input_p instanceof ValuesInput) {
+      ((ValuesInput)input_p).getContext().addPropertyChangeListener(
+          _inputPropertyChangeListener);
+    }
+    super.inputChanged(input_p, oldInput_p);
   }
   
   /**
@@ -340,6 +379,13 @@ IDifferenceRelatedViewer {
     @Override
     protected boolean isFromValue(IValuePresence valuePresence_p) {
       return isOwnership(getInput());
+    }
+    /**
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isTextTechnicalForMeta()
+     */
+    @Override
+    protected boolean isTextTechnicalForMeta() {
+      return getInput() != null? getInput().getContext().usesTechicalLabels(): false;
     }
   }
   
