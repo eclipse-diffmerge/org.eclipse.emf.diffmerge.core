@@ -29,6 +29,8 @@ import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -158,13 +160,13 @@ IDifferenceRelatedViewer {
    * Create and return a listener to changes on properties of the input
    * @return a non-null object
    */
-  protected IPropertyChangeListener createInputPropertyChangeListener() { //TODO do the same on (Enhanced)FeaturesViewer
+  protected IPropertyChangeListener createInputPropertyChangeListener() {
     return new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (EMFDiffNode.PROPERTY_TECHNICAL_LABELS.equals(event_p.getProperty())) {
+        if (TECHNICAL_LABELS.matches(event_p)) {
           refresh(true);
         }
       }
@@ -202,12 +204,12 @@ IDifferenceRelatedViewer {
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
     if (oldInput_p instanceof ValuesInput) {
-      ((ValuesInput)oldInput_p).getContext().removePropertyChangeListener(
-          _inputPropertyChangeListener);
+      ((ValuesInput)oldInput_p).getContext().removeUserPropertyChangeListener(
+          TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     if (input_p instanceof ValuesInput) {
-      ((ValuesInput)input_p).getContext().addPropertyChangeListener(
-          _inputPropertyChangeListener);
+      ((ValuesInput)input_p).getContext().addUserPropertyChangeListener(
+          TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     super.inputChanged(input_p, oldInput_p);
   }
@@ -385,7 +387,8 @@ IDifferenceRelatedViewer {
      */
     @Override
     protected boolean isTextTechnicalForMeta() {
-      return getInput() != null? getInput().getContext().usesTechicalLabels(): false;
+      return getInput() == null? false:
+        getInput().getContext().getUserPropertyValue(TECHNICAL_LABELS).booleanValue();
     }
   }
   

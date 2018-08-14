@@ -149,44 +149,6 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
-   * Set up the selection provider
-   */
-  protected void setupSelectionProvider() {
-    final IWorkbenchSite site = getSite();
-    if (site != null) {
-      _selectionBridgeToOutside = new SelectionBridge() {
-        /**
-         * @see org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge#notifyListeners()
-         */
-        @Override
-        protected void notifyListeners() {
-          if (_isExternallySynced) {
-            super.notifyListeners();
-          }
-        }
-      };
-      getMultiViewerSelectionProvider().addSelectionChangedListener(_selectionBridgeToOutside);
-      site.setSelectionProvider(_selectionBridgeToOutside);
-      // Eclipse 4.x compatibility layer workaround: selection changed event propagation
-      ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
-        /**
-         * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
-         */
-        public void selectionChanged(SelectionChangedEvent event_p) {
-          // Force propagation to selection listeners through the selection service
-          IWorkbenchWindow window = site.getWorkbenchWindow();
-          if (window != null && !window.getWorkbench().isClosing()) {
-            ISelectionService service = window.getSelectionService();
-            if (service instanceof ISelectionChangedListener)
-              ((ISelectionChangedListener)service).selectionChanged(event_p);
-          }
-        }
-      };
-      _selectionBridgeToOutside.addSelectionChangedListener(selectionChangedListener);
-    }
-  }
-  
-  /**
    * @see org.eclipse.compare.structuremergeviewer.ICompareInputChangeListener#compareInputChanged(org.eclipse.compare.structuremergeviewer.ICompareInput)
    */
   public void compareInputChanged(final ICompareInput source_p) {
@@ -603,8 +565,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (oldInput_p instanceof ICompareInput)
+    if (oldInput_p instanceof ICompareInput) {
       ((ICompareInput)oldInput_p).removeCompareInputChangeListener(this);
+    }
     if (_undoAction != null) {
       _undoAction.setEditingDomain(getEditingDomain());
       _undoAction.update();
@@ -613,10 +576,12 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       _redoAction.setEditingDomain(getEditingDomain());
       _redoAction.update();
     }
-    if (_actionBars != null)
+    if (_actionBars != null) {
       _actionBars.updateActionBars();
+    }
     if (input_p instanceof EMFDiffNode) {
       EMFDiffNode node = (EMFDiffNode)input_p;
+      registerUserProperties(node);
       registerCategories(node);
       node.updateDifferenceNumbers();
       node.getCategoryManager().setDefaultConfiguration();
@@ -680,6 +645,14 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Register the user properties this viewer supports in the given input
+   * @param input_p a non-null viewer input supporting user properties
+   */
+  protected void registerUserProperties(EMFDiffNode input_p) {
+    // Override for specific user properties
+  }
+  
+/**
    * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
    */
   public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
@@ -706,6 +679,44 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       Object oldInput = getInput();
       _input = (EMFDiffNode)input_p;
       inputChanged(_input, oldInput);
+    }
+  }
+  
+  /**
+   * Set up the selection provider
+   */
+  protected void setupSelectionProvider() {
+    final IWorkbenchSite site = getSite();
+    if (site != null) {
+      _selectionBridgeToOutside = new SelectionBridge() {
+        /**
+         * @see org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge#notifyListeners()
+         */
+        @Override
+        protected void notifyListeners() {
+          if (_isExternallySynced) {
+            super.notifyListeners();
+          }
+        }
+      };
+      getMultiViewerSelectionProvider().addSelectionChangedListener(_selectionBridgeToOutside);
+      site.setSelectionProvider(_selectionBridgeToOutside);
+      // Eclipse 4.x compatibility layer workaround: selection changed event propagation
+      ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
+        /**
+         * @see org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
+         */
+        public void selectionChanged(SelectionChangedEvent event_p) {
+          // Force propagation to selection listeners through the selection service
+          IWorkbenchWindow window = site.getWorkbenchWindow();
+          if (window != null && !window.getWorkbench().isClosing()) {
+            ISelectionService service = window.getSelectionService();
+            if (service instanceof ISelectionChangedListener)
+              ((ISelectionChangedListener)service).selectionChanged(event_p);
+          }
+        }
+      };
+      _selectionBridgeToOutside.addSelectionChangedListener(selectionChangedListener);
     }
   }
   

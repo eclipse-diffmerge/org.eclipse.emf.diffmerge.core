@@ -15,6 +15,8 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -102,6 +106,9 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /** Whether all features must be shown, including those with no difference */
   private boolean _showAllFeatures;
   
+  /** A listener to changes on properties of the input */
+  protected final IPropertyChangeListener _inputPropertyChangeListener;
+  
   
   /**
    * Constructor
@@ -121,8 +128,26 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     setContentProvider(new ContentProvider());
     setLabelProvider(new LabelProvider());
     _showAllFeatures = false;
+    _inputPropertyChangeListener = createInputPropertyChangeListener();
     getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     setComparator(new ViewerComparator());
+  }
+  
+  /**
+   * Create and return a listener to changes on properties of the input
+   * @return a non-null object
+   */
+  protected IPropertyChangeListener createInputPropertyChangeListener() {
+    return new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (TECHNICAL_LABELS.matches(event_p)) {
+          refresh(true);
+        }
+      }
+    };
   }
   
   /**
@@ -152,6 +177,22 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   }
   
   /**
+   * @see org.eclipse.jface.viewers.AbstractTableViewer#inputChanged(java.lang.Object, java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    if (oldInput_p instanceof FeaturesInput) {
+      ((FeaturesInput)oldInput_p).getContext().removeUserPropertyChangeListener(
+          TECHNICAL_LABELS, _inputPropertyChangeListener);
+    }
+    if (input_p instanceof FeaturesInput) {
+      ((FeaturesInput)input_p).getContext().addUserPropertyChangeListener(
+          TECHNICAL_LABELS, _inputPropertyChangeListener);
+    }
+    super.inputChanged(input_p, oldInput_p);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#isDifferenceAgnostic()
    */
   public boolean isDifferenceAgnostic() {
@@ -167,32 +208,12 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   }
   
   /**
-   * Return whether a technical, more precise but less user-friendly representation is being used
-   */
-  public boolean isTechnical() {
-    return getInput() != null? getInput().getContext().usesTechicalLabels(): false;
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceRelatedViewer#setDifferenceAgnostic(boolean)
    */
   public void setDifferenceAgnostic(boolean agnostic_p) {
     if (agnostic_p != isDifferenceAgnostic()) {
       _showAllFeatures = agnostic_p;
       refresh(false);
-    }
-  }
-  
-  /**
-   * Set whether a technical, more precise but less user-friendly representation must be used
-   */
-  public void setTechnical(boolean technical_p) {
-    if (technical_p != isTechnical()) {
-      FeaturesInput input = getInput();
-      if (input != null) {
-        input.getContext().setUseTechicalLabels(technical_p);
-        refresh(true);
-      }
     }
   }
   
@@ -293,7 +314,8 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      */
     @Override
     protected boolean isTextTechnicalForMeta() {
-      return isTechnical();
+      return getInput() == null? false:
+        getInput().getContext().getUserPropertyValue(TECHNICAL_LABELS).booleanValue();
     }
   }
   

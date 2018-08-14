@@ -24,6 +24,7 @@ import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemGetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetText;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetToolTipText;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -70,8 +71,8 @@ import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
-import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
@@ -1212,19 +1213,23 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @return result a potentially null item
    */
   protected Item createItemUseTechnicalRepresentation(Menu context_p) {
-      final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-      result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
-      result.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
-      result.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          _viewerFeatures.getInnerViewer().setTechnical(result.getSelection()); //TODO change this
+    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
+    result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
+    result.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent e_p) {
+        EMFDiffNode node = getInput();
+        if (node != null) {
+          boolean newValue = result.getSelection();
+          node.setUserPropertyValue(DefaultUserProperties.TECHNICAL_LABELS, Boolean.valueOf(newValue));
         }
-      });
-      return result;
+      }
+    });
+    return result;
   }
   
   /**
@@ -2326,6 +2331,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     firePropertyChangeEvent(
         PROPERTY_ACTIVATION_IGNORE_RIGHT, new Boolean(onRight && allowIgnoring));
     super.refreshTools();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#registerUserProperties(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  protected void registerUserProperties(EMFDiffNode input_p) {
+    input_p.addUserProperty(TECHNICAL_LABELS, Boolean.FALSE);
   }
   
   /**

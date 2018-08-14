@@ -16,10 +16,11 @@
 package org.eclipse.emf.diffmerge.ui.viewers;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
-import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -37,17 +38,18 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
 import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.CompositeUndoContext;
+import org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner;
+import org.eclipse.emf.diffmerge.ui.util.UserProperty;
+import org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
-import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.workspace.IWorkspaceCommandStack;
 import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IEditorInput;
 
 
@@ -55,11 +57,8 @@ import org.eclipse.ui.IEditorInput;
  * An ICompareInput that wraps a model comparison.
  * @author Olivier Constant
  */
-public class EMFDiffNode extends DiffNode implements IDisposable, IEditingDomainProvider,
-IPropertyChangeNotifier {
-  
-  /** The name of the "use technical labels" property */
-  public static final String PROPERTY_TECHNICAL_LABELS = "PROPERTY_TECHNICAL_LABELS"; //$NON-NLS-1$
+public class EMFDiffNode extends DiffNode implements IEditingDomainProvider,
+IUserPropertyOwner {
   
   /** The resource manager */
   private final ComparisonResourceManager _resourceManager;
@@ -72,9 +71,6 @@ IPropertyChangeNotifier {
   
   /** The optional listener that reacts to changes on the editing domain */
   protected IOperationHistoryListener _domainChangeListener;
-  
-  /** The non-null set of property change listeners */
-  private final Set<IPropertyChangeListener> _changeListeners;
   
   /** The optional associated editor input */
   private IEditorInput _editorInput;
@@ -96,10 +92,6 @@ IPropertyChangeNotifier {
   
   /** Whether to use custom labels for differences */
   private boolean _useCustomLabels;
-  
-  /** Whether to use technical (vs. simplified) labels to represent, 
-   * in particular, meta elements */
-  private boolean _useTechicalLabels;
   
   /** Whether the left model is editable */
   private boolean _isTargetEditable;
@@ -142,6 +134,9 @@ IPropertyChangeNotifier {
   
   /** The default value for "show merge impact" property as proposed to the user when merging */
   private boolean _defaultShowMergeImpact;
+  
+  /** The user properties carried */
+  protected final Map<Identifier<?>, UserProperty<?>> _userProperties;
   
   
   /**
@@ -201,7 +196,6 @@ IPropertyChangeNotifier {
     _categoryManager = new CategoryManager(this);
     _useCustomIcons = true;
     _useCustomLabels = false;
-    _useTechicalLabels = false;
     _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
       isRightEditionPossible_p;
     _isReferenceEditionPossible = (leftRole_p == Role.TARGET)? isRightEditionPossible_p:
@@ -219,14 +213,34 @@ IPropertyChangeNotifier {
     _defaultCoverChildren = true;
     _defaultIncrementalMode = false;
     _domainChangeListener = (domain_p == null)? null: createDomainListener(domain_p);
-    _changeListeners = new HashSet<IPropertyChangeListener>(1);
+    _userProperties = new HashMap<UserProperty.Identifier<?>, UserProperty<?>>();
   }
   
   /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#addPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#addUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, java.lang.Object)
    */
-  public void addPropertyChangeListener(IPropertyChangeListener listener_p) {
-    _changeListeners.add(listener_p);
+  public <T> boolean addUserProperty(Identifier<T> id_p, T initialValue_p) {
+    boolean result = false;
+    if (!hasUserProperty(id_p)) {
+      UserProperty<T> prop = id_p.createProperty(initialValue_p);
+      _userProperties.put(id_p, prop);
+      result = true;
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#addUserPropertyChangeListener(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public boolean addUserPropertyChangeListener(Identifier<?> id_p,
+      IPropertyChangeListener listener_p) {
+    boolean result = false;
+    UserProperty<?> prop = getUserProperty(id_p);
+    if (prop != null) {
+      prop.addPropertyChangeListener(listener_p);
+      result = true;
+    }
+    return result;
   }
   
   /**
@@ -275,7 +289,14 @@ IPropertyChangeNotifier {
    * @see org.eclipse.emf.edit.provider.IDisposable#dispose()
    */
   public void dispose() {
+    // Resource manager
     _resourceManager.dispose();
+    // User properties
+    for (UserProperty<?> prop : _userProperties.values()) {
+      prop.dispose();
+    }
+    _userProperties.clear();
+    // Command stack
     EditingDomain domain = getEditingDomain();
     if (domain != null && _domainChangeListener != null) {
       IOperationHistory opHistory =
@@ -283,21 +304,8 @@ IPropertyChangeNotifier {
       opHistory.removeOperationHistoryListener(_domainChangeListener);
       _domainChangeListener = null;
     }
+    // Input
     _editorInput = null;
-    _changeListeners.clear();
-  }
-  
-  /**
-   * Notify listeners of a property change event
-   * @param propertyName_p the non-null name of the property
-   * @param newValue_p the potentially null, new value of the property
-   */
-  protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p) {
-    PropertyChangeEvent event = new PropertyChangeEvent(
-        this, propertyName_p, null, newValue_p);
-    for (IPropertyChangeListener listener : _changeListeners) {
-      listener.propertyChange(event);
-    }
   }
   
   /**
@@ -418,6 +426,36 @@ IPropertyChangeNotifier {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#getUserProperties()
+   */
+  public Collection<Identifier<?>> getUserProperties() {
+    return Collections.unmodifiableCollection(_userProperties.keySet());
+  }
+  
+  /**
+   * Return the user property of the given ID
+   * @param <T> the type of the user property
+   * @param id_p a non-null user property ID
+   * @return a potentially null user property
+   */
+  @SuppressWarnings("unchecked")
+  protected <T> UserProperty<T> getUserProperty(Identifier<T> id_p) {
+    return (UserProperty<T>)_userProperties.get(id_p); // OK by construction of the map
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#getUserPropertyValue(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
+   */
+  public <T> T getUserPropertyValue(Identifier<T> id_p) {
+    T result = null;
+    UserProperty<T> prop = getUserProperty(id_p);
+    if (prop != null) {
+      result = prop.getValue();
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.compare.structuremergeviewer.DiffContainer#hasChildren()
    */
   @Override
@@ -438,6 +476,13 @@ IPropertyChangeNotifier {
           getEditingDomain().getResourceSet().getResources().contains(mainResource);
     }
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#hasUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
+   */
+  public boolean hasUserProperty(Identifier<?> id_p) {
+    return getUserProperty(id_p) != null;
   }
   
   /**
@@ -565,10 +610,34 @@ IPropertyChangeNotifier {
   }
   
   /**
-   * @see org.eclipse.compare.IPropertyChangeNotifier#removePropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#removeUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
    */
-  public void removePropertyChangeListener(IPropertyChangeListener listener_p) {
-    _changeListeners.remove(listener_p);
+  public boolean removeUserProperty(Identifier<?> id_p) {
+    Object prop = _userProperties.remove(id_p);
+    return prop != null;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#removeUserPropertyChangeListener(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public boolean removeUserPropertyChangeListener(Identifier<?> id_p,
+      IPropertyChangeListener listener_p) {
+    boolean result = false;
+    UserProperty<?> prop = getUserProperty(id_p);
+    if (prop != null) {
+      prop.removePropertyChangeListener(listener_p);
+      result = true;
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#removeUserPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
+   */
+  public void removeUserPropertyChangeListener(IPropertyChangeListener listener_p) {
+    for (UserProperty<?> prop : _userProperties.values()) {
+      prop.removePropertyChangeListener(listener_p);
+    }
   }
   
   /**
@@ -721,13 +790,21 @@ IPropertyChangeNotifier {
   }
   
   /**
-   * Set whether viewers must use technical (vs. simplified) labels to represent,
-   * in particular, meta elements
-   * @param useTechicalLabels_p whether techical labels must be used
+   * Set the value of the user property of the given ID, if any
+   * @param <T> the type of the user property
+   * @param id_p a non-null user property identifier
+   * @param newValue_p a non-null object
+   * @return whether the operation succeeded
    */
-  public void setUseTechicalLabels(boolean useTechicalLabels_p) {
-    _useTechicalLabels = useTechicalLabels_p;
-    firePropertyChangeEvent(PROPERTY_TECHNICAL_LABELS, Boolean.valueOf(useTechicalLabels_p));
+  public <T> boolean setUserPropertyValue(Identifier<T> id_p, T newValue_p) {
+    assert newValue_p != null;
+    boolean result = false;
+    UserProperty<T> property = getUserProperty(id_p);
+    if (property != null) {
+      property.setValue(newValue_p);
+      result = true;
+    }
+    return result;
   }
   
   /**
@@ -750,14 +827,6 @@ IPropertyChangeNotifier {
    */
   public boolean usesCustomLabels() {
     return _useCustomLabels;
-  }
-  
-  /**
-   * Return whether viewers must use technical (vs. simplified) labels to represent,
-   * in particular, meta elements
-   */
-  public boolean usesTechicalLabels() {
-    return _useTechicalLabels;
   }
   
 }
