@@ -109,20 +109,24 @@ implements IPropertyChangeNotifier {
     _twoWayReferenceRole = method_p.getTwoWayReferenceRole();
     _targetSide = method_p.isDirected()? method_p.getLeftRole() == Role.TARGET?
         Side.LEFT: Side.RIGHT: null;
+    if (getLeftRole() != method_p.getLeftRole()) {
+      // Align left role and consequently swap scope definitions
+      super.swapLeftRole();
+      swapScopeDefinitions(getLeftRole(), getLeftRole().opposite());
+    }
     _selectedFactory = method_p.getFactory();
   }
   
   /**
    * Constructor
-   * @param scopeSpec1_p a non-null scope definition
-   * @param scopeSpec2_p a non-null scope definition
-   * @param scopeSpec3_p a potentially null scope definition
+   * @param scopeSpec1_p a non-null scope definition for the left-hand side
+   * @param scopeSpec2_p a non-null scope definition for the right-hand side
+   * @param scopeSpec3_p a potentially null scope definition for the ancestor side
    * @param compatibleFactories_p a non-null, non-empty list
    */
   public ComparisonSetup(IModelScopeDefinition scopeSpec1_p, IModelScopeDefinition scopeSpec2_p,
       IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory> compatibleFactories_p) {
     this();
-    // 1->left, 2->right, 3->ancestor
     Role leftRole = getLeftRole();
     _roleToScopeDefinition.put(leftRole, scopeSpec1_p);
     _roleToScopeDefinition.put(leftRole.opposite(), scopeSpec2_p);
