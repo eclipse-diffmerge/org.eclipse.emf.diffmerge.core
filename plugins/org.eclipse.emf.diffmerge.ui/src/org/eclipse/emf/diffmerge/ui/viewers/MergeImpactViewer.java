@@ -418,9 +418,8 @@ public class MergeImpactViewer extends Viewer {
     _upperViewer.setContentProvider(new MergeImpactContentProvider(true));
     _lowerViewer.setContentProvider(new MergeImpactContentProvider(false));
     // Label provider
-    MergeImpactLabelProvider lp = new MergeImpactLabelProvider();
-    _upperViewer.setLabelProvider(lp);
-    _lowerViewer.setLabelProvider(lp);
+    _upperViewer.setLabelProvider(new MergeImpactLabelProvider());
+    _lowerViewer.setLabelProvider(new MergeImpactLabelProvider());
     // Sorter
     ViewerComparator sorter = new ViewerComparator();
     _upperViewer.setComparator(sorter);

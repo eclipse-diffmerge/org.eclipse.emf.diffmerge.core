@@ -28,8 +28,8 @@ import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
-import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -166,7 +166,7 @@ IDifferenceRelatedViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (TECHNICAL_LABELS.matches(event_p)) {
+        if (P_TECHNICAL_LABELS.matches(event_p)) {
           refresh(true);
         }
       }
@@ -205,11 +205,11 @@ IDifferenceRelatedViewer {
   protected void inputChanged(Object input_p, Object oldInput_p) {
     if (oldInput_p instanceof ValuesInput) {
       ((ValuesInput)oldInput_p).getContext().removeUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     if (input_p instanceof ValuesInput) {
       ((ValuesInput)input_p).getContext().addUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     super.inputChanged(input_p, oldInput_p);
   }
@@ -352,9 +352,9 @@ IDifferenceRelatedViewer {
   /**
    * The label provider for this viewer.
    */
-  protected class LabelProvider extends DiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDecoratingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
@@ -362,7 +362,7 @@ IDifferenceRelatedViewer {
       return input == null? null: input.getContext();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {
@@ -376,19 +376,19 @@ IDifferenceRelatedViewer {
       return getText(element_p);
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
      */
     @Override
     protected boolean isFromValue(IValuePresence valuePresence_p) {
       return isOwnership(getInput());
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isTextTechnicalForMeta()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isTextTechnicalForMeta()
      */
     @Override
     protected boolean isTextTechnicalForMeta() {
       return getInput() == null? false:
-        getInput().getContext().getUserPropertyValue(TECHNICAL_LABELS).booleanValue();
+        getInput().getContext().isUserPropertyTrue(P_TECHNICAL_LABELS);
     }
   }
   

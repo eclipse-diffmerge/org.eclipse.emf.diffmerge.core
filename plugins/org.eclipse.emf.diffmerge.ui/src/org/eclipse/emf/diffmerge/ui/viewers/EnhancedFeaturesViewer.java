@@ -14,7 +14,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
@@ -77,7 +77,7 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (TECHNICAL_LABELS.matches(event_p)) {
+        if (P_TECHNICAL_LABELS.matches(event_p)) {
           updateTextLabel();
         }
       }
@@ -102,8 +102,8 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
    */
   protected String getContextualText(FeaturesInput input_p) {
     EObject element = getDrivingElement(input_p);
-    boolean useTechnicalLabels = input_p.getContext().getUserPropertyValue(
-        DefaultUserProperties.TECHNICAL_LABELS).booleanValue();
+    boolean useTechnicalLabels =
+        input_p.getContext().isUserPropertyTrue(P_TECHNICAL_LABELS);
     String formattedTypeText;
     if (useTechnicalLabels) {
       EClass type = element.eClass();
@@ -154,11 +154,11 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
     super.inputChanged(input_p, oldInput_p);
     if (oldInput_p instanceof FeaturesInput) {
       ((FeaturesInput)oldInput_p).getContext().removeUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     if (input_p instanceof FeaturesInput) {
       ((FeaturesInput)input_p).getContext().addUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     updateTextLabel();
   }

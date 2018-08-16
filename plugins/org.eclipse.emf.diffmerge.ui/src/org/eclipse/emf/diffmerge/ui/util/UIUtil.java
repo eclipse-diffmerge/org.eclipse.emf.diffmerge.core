@@ -129,6 +129,17 @@ public final class UIUtil {
   }
   
   /**
+   * Return the base (non-bold, non-italic) variant of the given font
+   * @param font_p a non-null font
+   * @return a non-null font
+   */
+  public static Font getBase(Font font_p) {
+    FontData data = font_p.getFontData()[0];
+    Font result = JFaceResources.getFontRegistry().get(data.getName());
+    return result;
+  }
+  
+  /**
    * Return the bold variant of the given font
    * @param font_p a non-null font
    * @return a non-null font

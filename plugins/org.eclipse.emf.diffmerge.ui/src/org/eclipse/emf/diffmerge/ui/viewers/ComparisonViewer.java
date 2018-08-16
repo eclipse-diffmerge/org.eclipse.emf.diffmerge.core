@@ -24,7 +24,17 @@ import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemGetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetSelection;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetText;
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetToolTipText;
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_ICONS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_LABELS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_DEFAULT_COVER_CHILDREN;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_DEFAULT_INCREMENTAL_MODE;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_DEFAULT_SHOW_MERGE_IMPACT;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_LOG_EVENTS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_DIFFERENCE_NUMBERS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_MERGE_IMPACT;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_SIDES_POSSIBLE;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SUPPORT_UNDO_REDO;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -72,7 +82,7 @@ import org.eclipse.emf.diffmerge.ui.setup.EMFDiffMergeEditorInput;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.DelegatingLabelProvider;
-import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
@@ -628,7 +638,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null && !result.isDisposed())
-            result.setSelection(input.isLogEvents());
+            result.setSelection(input.isUserPropertyTrue(P_LOG_EVENTS));
         }
       }
     });
@@ -642,7 +652,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         boolean logEvents = result.getSelection();
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setLogEvents(logEvents);
+          input.setUserPropertyValue(P_LOG_EVENTS, logEvents);
           if (logEvents)
             getLogger().log(new CompareLogEvent(getEditingDomain(), input));
         }
@@ -835,7 +845,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null && !result.isDisposed())
-            result.setSelection(!input.isHideDifferenceNumbers());
+            result.setSelection(input.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
         }
       }
     });
@@ -846,10 +856,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        boolean showDiffNumbers = result.getSelection();
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setHideDifferenceNumbers(!showDiffNumbers);
+          input.setUserPropertyValue(P_SHOW_DIFFERENCE_NUMBERS, result.getSelection());
           refresh();
         }
       }
@@ -899,7 +908,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null && !result.isDisposed())
-            result.setSelection(input.isShowMergeImpact());
+            result.setSelection(input.isUserPropertyTrue(P_SHOW_MERGE_IMPACT));
         }
       }
     });
@@ -913,8 +922,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         boolean showImpact = result.getSelection();
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setShowMergeImpact(showImpact);
-          input.setDefaultShowImpact(showImpact);
+          input.setUserPropertyValue(P_SHOW_MERGE_IMPACT, showImpact);
+          input.setUserPropertyValue(P_DEFAULT_SHOW_MERGE_IMPACT, showImpact);
         }
       }
     });
@@ -939,7 +948,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null && !result.isDisposed()) {
-            boolean isShowSidesPossible = input.isShowSidesPossible();
+            boolean isShowSidesPossible = input.isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE);
             result.setSelection(isShowSidesPossible);
             result.setEnabled(isShowSidesPossible);
             showSides(isShowSidesPossible);
@@ -1018,7 +1027,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent e_p) {
         EMFDiffNode input = getInput();
         if (input != null)
-          input.setUndoRedoSupported(result.getSelection());
+          input.setUserPropertyValue(P_SUPPORT_UNDO_REDO, result.getSelection());
       }
     });
     return result;
@@ -1140,8 +1149,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
-            result.setSelection(input.usesCustomIcons());
+          if (input != null && !result.isDisposed()) {
+            Boolean value = input.getUserPropertyValue(P_CUSTOM_ICONS);
+            if (value != null) {
+              result.setSelection(value.booleanValue());
+            }
+          }
         }
       }
     });
@@ -1154,7 +1167,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent e_p) {
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setUseCustomIcons(result.getSelection());
+          input.setUserPropertyValue(P_CUSTOM_ICONS, result.getSelection());
           _viewerSynthesisMain.refresh();
           _viewerFeatures.refresh();
           _viewerValuesLeft.refresh();
@@ -1182,8 +1195,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
-            result.setSelection(input.usesCustomLabels());
+          if (input != null && !result.isDisposed()) {
+            Boolean value = input.getUserPropertyValue(P_CUSTOM_LABELS);
+            result.setSelection(value.booleanValue());
+          }
         }
       }
     });
@@ -1196,7 +1211,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent e_p) {
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setUseCustomLabels(result.getSelection());
+          input.setUserPropertyValue(P_CUSTOM_LABELS, result.getSelection());
           _viewerSynthesisMain.refresh();
           _viewerFeatures.refresh();
           _viewerValuesLeft.refresh();
@@ -1216,6 +1231,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
     result.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          EMFDiffNode input = getInput();
+          if (input != null && !result.isDisposed()) {
+            Boolean value = input.getUserPropertyValue(P_TECHNICAL_LABELS);
+            if (value != null) {
+              result.setSelection(value.booleanValue());
+            }
+          }
+        }
+      }
+    });
+    // Selection
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -1224,8 +1257,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent e_p) {
         EMFDiffNode node = getInput();
         if (node != null) {
-          boolean newValue = result.getSelection();
-          node.setUserPropertyValue(DefaultUserProperties.TECHNICAL_LABELS, Boolean.valueOf(newValue));
+          node.setUserPropertyValue(P_TECHNICAL_LABELS, result.getSelection());
         }
       }
     });
@@ -1931,7 +1963,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
       // Make choices
     IgnoreChoiceData choices = new IgnoreChoiceData(
-        input.isDefaultCoverChildren(), false);
+        input.isUserPropertyTrue(P_DEFAULT_COVER_CHILDREN), false);
     makeIgnoreChoices(choices, input, selectedMatches);
     if (!choices.isProceed()) return;
     // Ignore operation is set to proceed and choices have been made
@@ -2073,8 +2105,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _viewerSynthesisLeft.setInput(input_p);
     _viewerSynthesisRight.setInput(input_p);
     EMFDiffNode input = getInput();
-    if (input != null && input.isLogEvents())
+    if (input != null && input.isUserPropertyTrue(P_LOG_EVENTS)) {
       getLogger().log(new CompareLogEvent(getEditingDomain(), input));
+    }
   }
   
   /**
@@ -2093,7 +2126,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           new IgnoreChoicesDialog(getShell(), Messages.ComparisonViewer_IgnoreCommandName, choices_p);
       choicesDialog.open();
       if (choices_p.isProceed())
-        getInput().setDefaultCoverChildren(choices_p.isCoverChildren());
+        getInput().setUserPropertyValue(P_DEFAULT_COVER_CHILDREN, choices_p.isCoverChildren());
     }
   }
   
@@ -2128,10 +2161,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
               choices_p, mayAskAboutChildren, acceptIncrementalMode_p);
       choicesDialog.open();
       if (choices_p.isProceed()) {
-        if (mayAskAboutChildren)
-          input_p.setDefaultCoverChildren(choices_p.isCoverChildren());
-        input_p.setDefaultIncrementalMode(choices_p.isIncrementalMode());
-        input_p.setDefaultShowImpact(choices_p.isShowImpact());
+        if (mayAskAboutChildren) {
+          input_p.setUserPropertyValue(P_DEFAULT_COVER_CHILDREN, choices_p.isCoverChildren());
+        }
+        input_p.setUserPropertyValue(P_DEFAULT_INCREMENTAL_MODE, choices_p.isIncrementalMode());
+        input_p.setUserPropertyValue(P_DEFAULT_SHOW_MERGE_IMPACT, choices_p.isShowImpact());
       }
     }
   }
@@ -2158,9 +2192,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     // Define the set of selected matches
     List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection_p);
     // Make choices
-    MergeChoiceData choices = new MergeChoiceData(input.isDefaultCoverChildren(),
-        input.isDefaultIncrementalMode() && acceptIncrementalMode_p,
-        input.isDefaultShowImpact());
+    MergeChoiceData choices = new MergeChoiceData(
+        input.isUserPropertyTrue(P_DEFAULT_COVER_CHILDREN),
+        input.isUserPropertyTrue(P_DEFAULT_INCREMENTAL_MODE) && acceptIncrementalMode_p,
+        input.isUserPropertyTrue(P_DEFAULT_SHOW_MERGE_IMPACT));
     makeMergeChoices(choices, input, selectedMatches, acceptIncrementalMode_p);
     if (!choices.isProceed()) return;
     // Merge is set to proceed and choices have been made
@@ -2203,8 +2238,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
         input.updateDifferenceNumbers();
       }
-      if (input.isLogEvents())
+      if (input.isUserPropertyTrue(P_LOG_EVENTS)) {
         getLogger().log(new MergeLogEvent(input, merged, toLeft_p));
+      }
     }
   }
   
@@ -2338,7 +2374,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @Override
   protected void registerUserProperties(EMFDiffNode input_p) {
-    input_p.addUserProperty(TECHNICAL_LABELS, Boolean.FALSE);
+    input_p.addUserProperty(P_CUSTOM_ICONS, Boolean.TRUE);
+    input_p.addUserProperty(P_CUSTOM_LABELS, Boolean.FALSE);
+    input_p.addUserProperty(P_DEFAULT_COVER_CHILDREN, Boolean.TRUE);
+    input_p.addUserProperty(P_DEFAULT_INCREMENTAL_MODE, Boolean.FALSE);
+    input_p.addUserProperty(P_DEFAULT_SHOW_MERGE_IMPACT, Boolean.FALSE);
+    input_p.addUserProperty(P_LOG_EVENTS, Boolean.FALSE);
+    input_p.addUserProperty(P_SHOW_DIFFERENCE_NUMBERS, Boolean.TRUE);
+    input_p.addUserProperty(P_SHOW_MERGE_IMPACT, Boolean.FALSE);
+    input_p.addUserProperty(P_SHOW_SIDES_POSSIBLE, Boolean.TRUE);
+    input_p.addUserProperty(P_SUPPORT_UNDO_REDO, Boolean.TRUE);
+    input_p.addUserProperty(P_TECHNICAL_LABELS, Boolean.FALSE);
   }
   
   /**
@@ -2432,9 +2478,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     for (Viewer viewer : getInnerViewers()) {
       if (viewer instanceof ContentViewer) {
         IBaseLabelProvider rawLP = ((ContentViewer)viewer).getLabelProvider();
-        if (rawLP instanceof DiffDelegatingLabelProvider) {
-          DiffDelegatingLabelProvider enhancedLP =
-              (DiffDelegatingLabelProvider)rawLP;
+        if (rawLP instanceof DiffDecoratingLabelProvider) {
+          DiffDecoratingLabelProvider enhancedLP =
+              (DiffDecoratingLabelProvider)rawLP;
           enhancedLP.setDiffLabelDecorator(diffDecorator_p);
         }
       }
@@ -2679,8 +2725,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           getShell(), mergeInput, getResourceManager(),
           _viewerSynthesisMain.getInnerViewer().getLabelProvider());
       result = dialog.openAndConfirm();
-    } catch (Exception exception_p) {
-      // Proceed
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     return result;
   }

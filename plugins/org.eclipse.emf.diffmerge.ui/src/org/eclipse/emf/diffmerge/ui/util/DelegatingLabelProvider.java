@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Image;
  * delegates to another label provider for certain operations.
  * The delegate can be changed. It is not automatically disposed.
  * If both a label and a styled label are provided then the latter is used.
+ * An instance of this class cannot be used in two different viewers.
  * Sub-classes are free to define parts of the behavior that diverge from the delegate.
  * @author Olivier Constant
  */
@@ -198,7 +199,7 @@ implements IColorProvider, IFontProvider, ILabelProvider, IStyledLabelProvider {
     cell_p.setImage(getImage(element));
     cell_p.setBackground(getBackground(element));
     cell_p.setForeground(getForeground(element));
-    _defaultFont = cell_p.getFont();
+    _defaultFont = cell_p.getControl().getFont();
     cell_p.setFont(getFont(element));
     _defaultFont = null;
     // No need to call super.update(ViewerCell) similarly to

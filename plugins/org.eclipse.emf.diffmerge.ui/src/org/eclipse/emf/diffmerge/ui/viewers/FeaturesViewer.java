@@ -15,7 +15,7 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.TECHNICAL_LABELS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
-import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -143,7 +143,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (TECHNICAL_LABELS.matches(event_p)) {
+        if (P_TECHNICAL_LABELS.matches(event_p)) {
           refresh(true);
         }
       }
@@ -183,11 +183,11 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   protected void inputChanged(Object input_p, Object oldInput_p) {
     if (oldInput_p instanceof FeaturesInput) {
       ((FeaturesInput)oldInput_p).getContext().removeUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     if (input_p instanceof FeaturesInput) {
       ((FeaturesInput)input_p).getContext().addUserPropertyChangeListener(
-          TECHNICAL_LABELS, _inputPropertyChangeListener);
+          P_TECHNICAL_LABELS, _inputPropertyChangeListener);
     }
     super.inputChanged(input_p, oldInput_p);
   }
@@ -294,28 +294,28 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
   /**
    * The label provider for this viewer
    */
-  protected class LabelProvider extends DiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDecoratingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
       return getInput() == null? null: getInput().getContext();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {
       return null;
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#isTextTechnicalForMeta()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isTextTechnicalForMeta()
      */
     @Override
     protected boolean isTextTechnicalForMeta() {
       return getInput() == null? false:
-        getInput().getContext().getUserPropertyValue(TECHNICAL_LABELS).booleanValue();
+        getInput().getContext().isUserPropertyTrue(P_TECHNICAL_LABELS);
     }
   }
   

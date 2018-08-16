@@ -14,6 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.ui.util;
 
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.*;
+
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -261,7 +263,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
    */
   protected boolean needsIconDecoration(Object object_p, Image base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
-    return node_p != null && node_p.usesCustomIcons() &&
+    return node_p != null && node_p.isUserPropertyTrue(P_CUSTOM_ICONS) &&
         !(side_p != null && object_p instanceof IMatch &&
         node_p.getCategoryManager().isComparisonPart((IMatch)object_p));
   }
@@ -280,7 +282,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   protected boolean needsLabelDifferenceNumber(Object object_p, CharSequence base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
     return object_p instanceof IMatch && side_p == null &&
-        (node_p == null || !node_p.isHideDifferenceNumbers());
+        (node_p == null || node_p.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
   }
   
   /**
@@ -296,7 +298,8 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
    */
   protected boolean needsLabelPrefix(Object object_p, CharSequence base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
-    return side_p == null && node_p != null && node_p.usesCustomLabels();
+    return side_p == null && node_p != null &&
+        node_p.isUserPropertyTrue(P_CUSTOM_LABELS);
   }
   
 }

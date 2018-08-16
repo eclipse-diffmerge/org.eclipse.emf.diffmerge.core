@@ -15,11 +15,10 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SUPPORT_UNDO_REDO;
+
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
@@ -39,8 +38,8 @@ import org.eclipse.emf.diffmerge.ui.setup.ModelScopeTypedElement;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.util.CompositeUndoContext;
 import org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner;
-import org.eclipse.emf.diffmerge.ui.util.UserProperty;
 import org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier;
+import org.eclipse.emf.diffmerge.ui.util.UserPropertyOwner;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -87,12 +86,6 @@ IUserPropertyOwner {
   /** The non-null difference category manager */
   private final CategoryManager _categoryManager;
   
-  /** Whether to use custom icons for differences */
-  private boolean _useCustomIcons;
-  
-  /** Whether to use custom labels for differences */
-  private boolean _useCustomLabels;
-  
   /** Whether the left model is editable */
   private boolean _isTargetEditable;
   
@@ -111,32 +104,8 @@ IUserPropertyOwner {
   /** Whether the right model has been modified */
   private boolean _isReferenceModified;
   
-  /** Whether differences number must be hidden */
-  private boolean _isHideDifferenceNumbers;
-  
-  /** Whether an impact dialog must be shown at merge time */
-  private boolean _isShowMergeImpact;
-  
-  /** Whether the left and right sides may be shown */
-  private boolean _isShowSidesPossible;
-  
-  /** Whether to support undo/redo (cost in memory usage and response time) */
-  private boolean _isUndoRedoSupported;
-  
-  /** Whether events must be logged */
-  private boolean _isLogEvents;
-  
-  /** The default value for the "cover children" property as proposed to the user when merging */
-  private boolean _defaultCoverChildren;
-  
-  /** The default value for the "incremental mode" property as proposed to the user when merging */
-  private boolean _defaultIncrementalMode;
-  
-  /** The default value for "show merge impact" property as proposed to the user when merging */
-  private boolean _defaultShowMergeImpact;
-  
-  /** The user properties carried */
-  protected final Map<Identifier<?>, UserProperty<?>> _userProperties;
+  /** The user property owner for delegation */
+  private final IUserPropertyOwner _userPropertyOwnerDelegate;
   
   
   /**
@@ -194,8 +163,6 @@ IUserPropertyOwner {
     _drivingRole = _leftRole;
     _twoWayReferenceRole = null;
     _categoryManager = new CategoryManager(this);
-    _useCustomIcons = true;
-    _useCustomLabels = false;
     _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
       isRightEditionPossible_p;
     _isReferenceEditionPossible = (leftRole_p == Role.TARGET)? isRightEditionPossible_p:
@@ -204,29 +171,15 @@ IUserPropertyOwner {
     _isReferenceEditable = true;
     _isTargetModified = false;
     _isReferenceModified = false;
-    _isHideDifferenceNumbers = false;
-    _isShowMergeImpact = false;
-    _isShowSidesPossible = true;
-    _isUndoRedoSupported = _editingDomain != null;
-    _isLogEvents = false;
-    _defaultShowMergeImpact = _isShowMergeImpact;
-    _defaultCoverChildren = true;
-    _defaultIncrementalMode = false;
     _domainChangeListener = (domain_p == null)? null: createDomainListener(domain_p);
-    _userProperties = new HashMap<UserProperty.Identifier<?>, UserProperty<?>>();
+    _userPropertyOwnerDelegate = new UserPropertyOwner();
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#addUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, java.lang.Object)
    */
   public <T> boolean addUserProperty(Identifier<T> id_p, T initialValue_p) {
-    boolean result = false;
-    if (!hasUserProperty(id_p)) {
-      UserProperty<T> prop = id_p.createProperty(initialValue_p);
-      _userProperties.put(id_p, prop);
-      result = true;
-    }
-    return result;
+    return getUserPropertyOwnerDelegate().addUserProperty(id_p, initialValue_p);
   }
   
   /**
@@ -234,13 +187,7 @@ IUserPropertyOwner {
    */
   public boolean addUserPropertyChangeListener(Identifier<?> id_p,
       IPropertyChangeListener listener_p) {
-    boolean result = false;
-    UserProperty<?> prop = getUserProperty(id_p);
-    if (prop != null) {
-      prop.addPropertyChangeListener(listener_p);
-      result = true;
-    }
-    return result;
+    return getUserPropertyOwnerDelegate().addUserPropertyChangeListener(id_p, listener_p);
   }
   
   /**
@@ -292,10 +239,7 @@ IUserPropertyOwner {
     // Resource manager
     _resourceManager.dispose();
     // User properties
-    for (UserProperty<?> prop : _userProperties.values()) {
-      prop.dispose();
-    }
-    _userProperties.clear();
+    getUserPropertyOwnerDelegate().dispose();
     // Command stack
     EditingDomain domain = getEditingDomain();
     if (domain != null && _domainChangeListener != null) {
@@ -429,30 +373,22 @@ IUserPropertyOwner {
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#getUserProperties()
    */
   public Collection<Identifier<?>> getUserProperties() {
-    return Collections.unmodifiableCollection(_userProperties.keySet());
+    return getUserPropertyOwnerDelegate().getUserProperties();
   }
   
   /**
-   * Return the user property of the given ID
-   * @param <T> the type of the user property
-   * @param id_p a non-null user property ID
-   * @return a potentially null user property
+   * Return the delegate user property owner
+   * @return a non-null object
    */
-  @SuppressWarnings("unchecked")
-  protected <T> UserProperty<T> getUserProperty(Identifier<T> id_p) {
-    return (UserProperty<T>)_userProperties.get(id_p); // OK by construction of the map
+  protected IUserPropertyOwner getUserPropertyOwnerDelegate() {
+    return _userPropertyOwnerDelegate;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#getUserPropertyValue(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
    */
   public <T> T getUserPropertyValue(Identifier<T> id_p) {
-    T result = null;
-    UserProperty<T> prop = getUserProperty(id_p);
-    if (prop != null) {
-      result = prop.getValue();
-    }
-    return result;
+    return getUserPropertyOwnerDelegate().getUserPropertyValue(id_p);
   }
   
   /**
@@ -482,7 +418,7 @@ IUserPropertyOwner {
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#hasUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
    */
   public boolean hasUserProperty(Identifier<?> id_p) {
-    return getUserProperty(id_p) != null;
+    return getUserPropertyOwnerDelegate().hasUserProperty(id_p);
   }
   
   /**
@@ -502,27 +438,6 @@ IUserPropertyOwner {
       }
     }
     return result;
-  }
-  
-  /**
-   * Return the default value for the "cover children" property as proposed to the user when merging 
-   */
-  public boolean isDefaultCoverChildren() {
-    return _defaultCoverChildren;
-  }
-  
-  /**
-   * Return the default value for the "incremental mode" property as proposed to the user when merging 
-   */
-  public boolean isDefaultIncrementalMode() {
-    return _defaultIncrementalMode;
-  }
-  
-  /**
-   * Return the default value for the "show merge impact" property as proposed to the user when merging 
-   */
-  public boolean isDefaultShowImpact() {
-    return _defaultShowMergeImpact;
   }
   
   /**
@@ -558,40 +473,12 @@ IUserPropertyOwner {
   }
   
   /**
-   * Return whether this viewer displays difference numbers
-   */
-  public boolean isHideDifferenceNumbers() {
-    return _isHideDifferenceNumbers;
-  }
-  
-  /**
-   * Return whether events must be logged
-   */
-  public boolean isLogEvents() {
-    return _isLogEvents;
-  }
-  
-  /**
    * Return whether the given side has been modified
    * @param left_p whether the side is left or right
    */
   public boolean isModified(boolean left_p) {
     return getRoleForSide(left_p) == Role.TARGET? _isTargetModified:
       _isReferenceModified;
-  }
-  
-  /**
-   * Return whether an impact dialog must be shown at merge time
-   */
-  public boolean isShowMergeImpact() {
-    return _isShowMergeImpact;
-  }
-  
-  /**
-   * Return whether the left and right sides may be shown
-   */
-  public boolean isShowSidesPossible() {
-    return _isShowSidesPossible;
   }
   
   /**
@@ -606,15 +493,29 @@ IUserPropertyOwner {
    * Return whether to support undo/redo (cost in memory usage and response time)
    */
   public boolean isUndoRedoSupported() {
-    return _isUndoRedoSupported;
+    return getEditingDomain() != null && (!hasUserProperty(P_SUPPORT_UNDO_REDO) ||
+        isUserPropertyTrue(P_SUPPORT_UNDO_REDO));
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#isUserPropertyFalse(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
+   */
+  public boolean isUserPropertyFalse(Identifier<Boolean> id_p) {
+    return getUserPropertyOwnerDelegate().isUserPropertyFalse(id_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#isUserPropertyTrue(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
+   */
+  public boolean isUserPropertyTrue(Identifier<Boolean> id_p) {
+    return getUserPropertyOwnerDelegate().isUserPropertyTrue(id_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#removeUserProperty(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier)
    */
   public boolean removeUserProperty(Identifier<?> id_p) {
-    Object prop = _userProperties.remove(id_p);
-    return prop != null;
+    return getUserPropertyOwnerDelegate().removeUserProperty(id_p);
   }
   
   /**
@@ -622,43 +523,14 @@ IUserPropertyOwner {
    */
   public boolean removeUserPropertyChangeListener(Identifier<?> id_p,
       IPropertyChangeListener listener_p) {
-    boolean result = false;
-    UserProperty<?> prop = getUserProperty(id_p);
-    if (prop != null) {
-      prop.removePropertyChangeListener(listener_p);
-      result = true;
-    }
-    return result;
+    return getUserPropertyOwnerDelegate().removeUserPropertyChangeListener(id_p, listener_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#removeUserPropertyChangeListener(org.eclipse.jface.util.IPropertyChangeListener)
    */
   public void removeUserPropertyChangeListener(IPropertyChangeListener listener_p) {
-    for (UserProperty<?> prop : _userProperties.values()) {
-      prop.removePropertyChangeListener(listener_p);
-    }
-  }
-  
-  /**
-   * Set the default value for the "cover children" property as proposed to the user when merging 
-   */
-  public void setDefaultCoverChildren(boolean coverChildren_p) {
-    _defaultCoverChildren = coverChildren_p;
-  }
-  
-  /**
-   * Set the default value for the "incremental mode" property as proposed to the user when merging 
-   */
-  public void setDefaultIncrementalMode(boolean isIncrementalMode_p) {
-    _defaultIncrementalMode = isIncrementalMode_p;
-  }
-  
-  /**
-   * Set the default value for the "show merge impact" property as proposed to the user when merging 
-   */
-  public void setDefaultShowImpact(boolean showImpact_p) {
-    _defaultShowMergeImpact = showImpact_p;
+    getUserPropertyOwnerDelegate().removeUserPropertyChangeListener(listener_p);
   }
   
   /**
@@ -707,26 +579,12 @@ IUserPropertyOwner {
   }
   
   /**
-   * Set whether this viewer should display differences numbers
-   */
-  public void setHideDifferenceNumbers(boolean hideDifferenceNumbers_p) {
-    _isHideDifferenceNumbers = hideDifferenceNumbers_p;
-  }
-  
-  /**
    * Set the role on the left-hand side
    * @param leftRole_p a non-null role which is TARGET or REFERENCE
    */
   public void setLeftRole(Role leftRole_p) {
     if (Role.TARGET == leftRole_p || Role.REFERENCE == leftRole_p)
       _leftRole = leftRole_p;
-  }
-  
-  /**
-   * Set whether events must be logged
-   */
-  public void setLogEvents(boolean logEvents_p) {
-    _isLogEvents = logEvents_p;
   }
   
   /**
@@ -754,57 +612,17 @@ IUserPropertyOwner {
   }
   
   /**
-   * Set whether an impact dialog must be shown at merge time
-   */
-  public void setShowMergeImpact(boolean showMergeImpact_p) {
-    _isShowMergeImpact = showMergeImpact_p;
-  }
-  
-  /**
-   * Set whether the left and right sides may be shown
-   */
-  public void setShowSidesPossible(boolean showSidesPossible_p) {
-    _isShowSidesPossible = showSidesPossible_p;
-  }
-  
-  /**
-   * Set whether to support undo/redo (cost in memory usage and response time).
-   * Undo/redo may only be supported if the editing domain is known (see getEditingDomain()).
-   */
-  public void setUndoRedoSupported(boolean supportUndoRedo_p) {
-    _isUndoRedoSupported = getEditingDomain() != null && supportUndoRedo_p;
-  }
-  
-  /**
-   * Set whether viewers must use custom icons to represent differences
-   */
-  public void setUseCustomIcons(boolean useCustom_p) {
-    _useCustomIcons = useCustom_p;
-  }
-  
-  /**
-   * Set whether viewers must use custom labels to represent differences
-   */
-  public void setUseCustomLabels(boolean useCustom_p) {
-    _useCustomLabels = useCustom_p;
-  }
-  
-  /**
-   * Set the value of the user property of the given ID, if any
-   * @param <T> the type of the user property
-   * @param id_p a non-null user property identifier
-   * @param newValue_p a non-null object
-   * @return whether the operation succeeded
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#setUserPropertyValue(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, java.lang.Object)
    */
   public <T> boolean setUserPropertyValue(Identifier<T> id_p, T newValue_p) {
-    assert newValue_p != null;
-    boolean result = false;
-    UserProperty<T> property = getUserProperty(id_p);
-    if (property != null) {
-      property.setValue(newValue_p);
-      result = true;
-    }
-    return result;
+    return getUserPropertyOwnerDelegate().setUserPropertyValue(id_p, newValue_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner#setUserPropertyValue(org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier, boolean)
+   */
+  public boolean setUserPropertyValue(Identifier<Boolean> id_p, boolean newValue_p) {
+    return getUserPropertyOwnerDelegate().setUserPropertyValue(id_p, newValue_p);
   }
   
   /**
@@ -813,20 +631,6 @@ IUserPropertyOwner {
   public void updateDifferenceNumbers() {
     getCategoryManager().update();
     fireChange();
-  }
-  
-  /**
-   * Return whether this viewer uses custom icons to represent differences
-   */
-  public boolean usesCustomIcons() {
-    return _useCustomIcons;
-  }
-  
-  /**
-   * Return whether viewers must custom labels to represent differences
-   */
-  public boolean usesCustomLabels() {
-    return _useCustomLabels;
   }
   
 }

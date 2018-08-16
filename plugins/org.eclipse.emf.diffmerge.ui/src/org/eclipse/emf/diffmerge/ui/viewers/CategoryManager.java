@@ -14,6 +14,8 @@
  */
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_DIFFERENCE_NUMBERS;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -478,7 +480,7 @@ public class CategoryManager {
    * @return a positive int or 0
    */
   public int getUIDifferenceNumber(IMatch match_p) {
-    if (_node.isHideDifferenceNumbers()) return 0;
+    if (!_node.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS)) return 0;
     int result = getDifferenceNumber(match_p);
     IElementPresence eltPresence = match_p.getElementPresenceDifference();
     if (eltPresence != null && !isFiltered(eltPresence))

@@ -22,7 +22,7 @@ import java.util.List;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider;
+import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ITreePathContentProvider;
@@ -403,23 +403,23 @@ public class ComparisonTreeViewer extends TreeViewer {
   /**
    * The label provider for this viewer.
    */
-  protected class LabelProvider extends DiffDelegatingLabelProvider {
+  protected class LabelProvider extends DiffDecoratingLabelProvider {
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getDiffNode()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getDiffNode()
      */
     @Override
     protected EMFDiffNode getDiffNode() {
       return getInput();
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getSide()
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getSide()
      */
     @Override
     protected Role getSide() {
       return null;
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDelegatingLabelProvider#getToolTipText(java.lang.Object)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getToolTipText(java.lang.Object)
      */
     @Override
     public String getToolTipText(Object element_p) {

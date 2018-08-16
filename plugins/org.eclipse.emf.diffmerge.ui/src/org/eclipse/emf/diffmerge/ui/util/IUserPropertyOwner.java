@@ -65,6 +65,20 @@ public interface IUserPropertyOwner extends IDisposable {
   boolean hasUserProperty(Identifier<?> id_p);
   
   /**
+   * Return whether the boolean user property of the given ID is present
+   * and has value FALSE
+   * @param id_p a non-null user property identifier
+   */
+  boolean isUserPropertyFalse(Identifier<Boolean> id_p);
+  
+  /**
+   * Return whether the boolean user property of the given ID is present
+   * and has value TRUE
+   * @param id_p a non-null user property identifier
+   */
+  boolean isUserPropertyTrue(Identifier<Boolean> id_p);
+  
+  /**
    * Remove the user property of the given identifier if present
    * @param id_p a non-null user property identifier
    * @return whether the operation succeeded, i.e., a user property with the given
@@ -94,5 +108,13 @@ public interface IUserPropertyOwner extends IDisposable {
    * @return whether the operation succeeded, i.e., the property was found
    */
   <T> boolean setUserPropertyValue(Identifier<T> id_p, T newValue_p);
+  
+  /**
+   * Set the value of the boolean user property of the given ID, if any
+   * @param id_p a non-null user property identifier
+   * @param newValue_p a non-null object
+   * @return whether the operation succeeded, i.e., the property was found
+   */
+  boolean setUserPropertyValue(Identifier<Boolean> id_p, boolean newValue_p);
   
 }
