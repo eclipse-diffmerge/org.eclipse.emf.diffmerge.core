@@ -2453,7 +2453,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     }
   }
-
+  
   /**
    * Set the "base" label provider for representing model elements
    * @param labelProvider_p a potentially null label provider, where null stands for default

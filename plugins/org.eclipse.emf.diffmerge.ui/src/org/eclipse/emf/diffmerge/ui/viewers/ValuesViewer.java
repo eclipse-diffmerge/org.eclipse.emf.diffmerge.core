@@ -376,6 +376,17 @@ IDifferenceRelatedViewer {
       return getText(element_p);
     }
     /**
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#getUndecoratedText(java.lang.Object)
+     */
+    @Override
+    public String getUndecoratedText(Object element_p) {
+      String result = super.getUndecoratedText(element_p);
+      // Adapt multi-line string for one-line display
+      result = result.replace('\n', '\\');
+      result = result.replace('\r', '\\');
+      return result;
+    }
+    /**
      * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
      */
     @Override
