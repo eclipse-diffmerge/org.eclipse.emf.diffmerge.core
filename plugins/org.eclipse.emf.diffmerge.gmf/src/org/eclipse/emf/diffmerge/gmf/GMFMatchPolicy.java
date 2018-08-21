@@ -19,14 +19,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.BasicEMap.Entry;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.structures.common.comparable.ComparableTreeMap;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.gmf.runtime.notation.Anchor;
+import org.eclipse.gmf.runtime.notation.Bendpoints;
+import org.eclipse.gmf.runtime.notation.Connector;
 import org.eclipse.gmf.runtime.notation.Diagram;
+import org.eclipse.gmf.runtime.notation.Location;
+import org.eclipse.gmf.runtime.notation.Node;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
+import org.eclipse.gmf.runtime.notation.Style;
 import org.eclipse.gmf.runtime.notation.View;
 
 
@@ -35,7 +43,7 @@ import org.eclipse.gmf.runtime.notation.View;
  * @author Olivier Constant
  */
 public class GMFMatchPolicy extends ConfigurableMatchPolicy {
-  
+
   /** A criterion for semantic matching of views by type */
   public static final FineGrainedMatchCriterion CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE =
       new FineGrainedMatchCriterion(MatchCriterionKind.SEMANTICS,
@@ -50,18 +58,37 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_VIEWTYPE_PROPERTY = "SEMANTIC_VIEWTYPE"; //$NON-NLS-1$
+  
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_ELEMENT_PROPERTY = "SEMANTIC_ELEMENT"; //$NON-NLS-1$
+  
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_DIAGRAM_PROPERTY = "SEMANTIC_DIAGRAM"; //$NON-NLS-1$
+  
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_TYPE_PROPERTY = "SEMANTIC_TYPE"; //$NON-NLS-1$
+  
   /** A representation of the corresponding semantic property */
   protected static final String SEMANTIC_ID_CONTAINER_PROPERTY = "SEMANTIC_ID_CONTAINER"; //$NON-NLS-1$
   
+  /** A representation of the corresponding semantic property */
+  protected static final String SEMANTIC_ID_CLASS_NAME_PROPERTY = "SEMANTIC_CLASS_NAME"; //$NON-NLS-1$
+  
+  /** A representation of the corresponding semantic property */
+  protected static final String SEMANTIC_ID_CONTAINING_FEATURE_PROPERTY = "SEMANTIC_CONTAINING_FEATURE"; //$NON-NLS-1$
+  
+  /** A representation of the corresponding semantic property */
+  protected static final String SEMANTIC_ID_ANNOTATION_SOURCE_PROPERTY = "SEMANTIC_ANNOTATION_SOURCE"; //$NON-NLS-1$
+  
+  /** A representation of the corresponding semantic property */
+  protected static final String SEMANTIC_ID_ENTRY_KEY_PROPERTY = "SEMANTIC_ENTRY_KEY"; //$NON-NLS-1$
+  
+  /** A representation of the corresponding semantic property */
+  protected static final String SEMANTIC_ID_ENTRY_VALUE_PROPERTY = "SEMANTIC_ENTRY_VALUE"; //$NON-NLS-1$
+
   /** The set of GMF ViewTypes for which no semantic ID is supported */
   protected static final Collection<String> NON_SEMANTIC_VIEWTYPES = Arrays.asList(
-      "Note", "NoteAttachment"); //$NON-NLS-1$ //$NON-NLS-2$
+      "Note", "Text", "NoteAttachment"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   
   
   /**
@@ -90,6 +117,29 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
+   * Return a semantic ID for the given annotation
+   * @param annotation_p a non-null element
+   * @param scope_p a non-null scope that covers annotation_p
+   * @return a potentially null string
+   */
+  protected String getAnnotationSemanticID(EAnnotation annotation_p, IModelScope scope_p) {
+    String result = null;
+    // Based on container ID and source
+    EObject container = getContainer(annotation_p, scope_p);
+    if (container != null) {
+      String containerID = getMatchID(container, scope_p);
+      if (containerID != null) {
+        String annotationSource = annotation_p.getSource();
+        Map<String, String> map = new ComparableTreeMap<String, String>();
+        map.put(SEMANTIC_ID_CONTAINER_PROPERTY, containerID);
+        map.put(SEMANTIC_ID_ANNOTATION_SOURCE_PROPERTY, annotationSource);
+        result = map.toString();
+      }
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getAvailableFineGrainedCriteria()
    */
   @Override
@@ -101,15 +151,70 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * Return a semantic ID for the given Diagram
+   * @param diagram_p a non-null element
+   * @param scope_p a non-null scope that covers diagram_p
+   * @return a potentially null string
    */
-  @Override
-  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
+  protected String getDiagramSemanticID(Diagram diagram_p, IModelScope scope_p) {
+    // Based on represented element
+    EObject representedElement = diagram_p.getElement();
+    Map<String, String> map = new ComparableTreeMap<String, String>();
+    map.put(SEMANTIC_ID_DIAGRAM_PROPERTY, getMatchID(representedElement, scope_p));
+    String result = map.toString();
+    return result;
+  }
+  
+  /**
+   * Return a semantic ID for the given GMF object
+   * @param element_p a non-null element considered as a GMF technical object
+   * @param scope_p a non-null scope that covers element_p
+   * @param viewType_p a potentially null view type for the element
+   * @return a potentially null string
+   */
+  protected String getGMFObjectSemanticID(EObject element_p, IModelScope scope_p, String viewType_p) {
     String result = null;
-    if (element_p instanceof View && !(element_p instanceof Diagram))
-      result = getViewSemanticID((View)element_p, scope_p);
-    if (result == null)
-      result = super.getSemanticID(element_p, scope_p);
+    // Based on class name, containing feature, container ID and given view type
+    EObject container = getContainer(element_p, scope_p);
+    if (container != null) {
+      String containerID = getMatchID(container, scope_p);
+      if (containerID != null) {
+        Map<String, String> map = new ComparableTreeMap<String, String>();
+        map.put(SEMANTIC_ID_CLASS_NAME_PROPERTY, element_p.eClass().getName());
+        map.put(SEMANTIC_ID_CONTAINING_FEATURE_PROPERTY,
+            element_p.eContainingFeature().getName());
+        map.put(SEMANTIC_ID_CONTAINER_PROPERTY, containerID);
+        if (viewType_p != null) {
+          map.put(SEMANTIC_ID_VIEWTYPE_PROPERTY, viewType_p);
+        }
+        result = map.toString();
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return a semantic ID for the given map entry
+   * @param entry_p a non-null element which is also a BasisEMap.Entry
+   * @param scope_p a non-null scope that covers entry_p
+   * @return a potentially null string
+   */
+  protected String getMapEntrySemanticID(EObject entry_p, IModelScope scope_p) {
+    String result = null;
+    // Based on container ID, key and value
+    if (entry_p instanceof Entry) {
+      EObject container = getContainer(entry_p, scope_p);
+      if (container != null) {
+        String containerID = getMatchID(container, scope_p);
+        if (containerID != null) {
+          Map<String, String> map = new ComparableTreeMap<String, String>();
+          map.put(SEMANTIC_ID_CONTAINER_PROPERTY, containerID);
+          map.put(SEMANTIC_ID_ENTRY_KEY_PROPERTY, ((Entry<?, ?>) entry_p).getKey().toString());
+          map.put(SEMANTIC_ID_ENTRY_VALUE_PROPERTY, ((Entry<?, ?>) entry_p).getValue().toString());
+          result = map.toString();
+        }
+      }
+    }
     return result;
   }
   
@@ -127,27 +232,31 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * Return a semantic ID for the given View
-   * @param view_p a non-null view
-   * @param scope_p a non-null scope that covers view_p
-   * @return a potentially null 
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
    */
-  protected String getViewSemanticID(View view_p, IModelScope scope_p) {
+  @Override
+  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
     String result = null;
-    String viewType = view_p.getType();
-    if (viewType != null && !NON_SEMANTIC_VIEWTYPES.contains(viewType)) {
-      EObject representedElement = getViewElement(view_p, scope_p);
-      if (representedElement != null) {
-        // Represented element is present
-        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
-          result = getViewElementBasedSemanticID(
-              view_p, scope_p, representedElement, viewType);
-        }
-      } else {
-        // Represented element is absent
-        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE))
-          result = getViewTypeBasedSemanticID(view_p, scope_p, viewType);
-      }
+    if (element_p instanceof Diagram) {
+      // Diagram
+      result = getDiagramSemanticID((Diagram)element_p, scope_p);
+    } else if (element_p instanceof EAnnotation) {
+      // EAnnotation
+      result = getAnnotationSemanticID((EAnnotation)element_p, scope_p);
+    } else if (element_p instanceof Entry) {
+      // BasicEMap.Entry and EObject at the same time
+      result = getMapEntrySemanticID(element_p, scope_p);
+    } else if (element_p instanceof View) {
+      // View and not Diagram
+      View view = (View)element_p;
+      result = getViewSemanticID(view, scope_p);
+    } else if (element_p instanceof Style || element_p instanceof Location ||
+        element_p instanceof Bendpoints || element_p instanceof Anchor) {
+      // Technical elements
+      result = getGMFObjectSemanticID(element_p, scope_p, null);
+    }
+    if (result == null) {
+      result = super.getSemanticID(element_p, scope_p);
     }
     return result;
   }
@@ -203,6 +312,33 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
+   * Return a semantic ID for the given View
+   * @param view_p a non-null view
+   * @param scope_p a non-null scope that covers view_p
+   * @return a potentially null string
+   */
+  protected String getViewSemanticID(View view_p, IModelScope scope_p) {
+    String result = null;
+    String viewType = view_p.getType();
+    if (viewType != null && !hasNoSemantics(view_p)) {
+      EObject representedElement = getViewElement(view_p, scope_p);
+      if (representedElement != null) {
+        // Represented element is present
+        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYELEMENT)) {
+          result = getViewElementBasedSemanticID(
+              view_p, scope_p, representedElement, viewType);
+        }
+      } else {
+        // Represented element is absent
+        if (useFineGrainedCriterion(CRITERION_SEMANTICS_DIAGRAMS_VIEWBYTYPE)) {
+          result = getViewTypeBasedSemanticID(view_p, scope_p, viewType);
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Return a semantic ID for the given view based on its given properties
    * @param view_p a non-null element
    * @param scope_p a non-null scope that covers element_p
@@ -227,12 +363,37 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
+   * Return whether the given view has no semantics, i.e., it is purely graphical
+   */
+  protected boolean hasNoSemantics(View view_p) {
+    String viewType = view_p.getType();
+    return NON_SEMANTIC_VIEWTYPES.contains(viewType);
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#isDiscriminatingContainment(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
    */
   @Override
   protected boolean isDiscriminatingContainment(EObject element_p, EReference containment_p) {
     return super.isDiscriminatingContainment(element_p, containment_p) ||
         containment_p == NotationPackage.eINSTANCE.getView_Styles();
+  }
+  
+  /**
+   * Return whether the given node can be considered as a Note
+   * @param node_p a non-null node
+   */
+  protected boolean isNote(Node node_p) {
+    String viewType = node_p.getType();
+    return "Note".equals(viewType) || "Text".equals(viewType); //$NON-NLS-1$ //$NON-NLS-2$
+  }
+  
+  /**
+   * Return whether the given connector is a NoteAttachment
+   * @param connector_p a non-null connector
+   */
+  protected boolean isNoteAttachment(Connector connector_p) {
+    return "NoteAttachment".equals(connector_p.getType()); //$NON-NLS-1$
   }
   
 }

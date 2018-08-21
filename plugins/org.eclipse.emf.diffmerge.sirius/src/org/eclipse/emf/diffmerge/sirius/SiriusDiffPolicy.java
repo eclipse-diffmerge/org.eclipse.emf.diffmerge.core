@@ -86,9 +86,13 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
       result = equalResourceDescriptors(
           (ResourceDescriptor)value1_p, (ResourceDescriptor)value2_p);
     }
+    if (!result && DiagramPackage.eINSTANCE.getWorkspaceImage_WorkspacePath() == attribute_p) {
+      result = equalResourcePaths(
+          (String)value1_p, (String)value2_p);
+    }
     return result;
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
@@ -129,6 +133,15 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy#doConsiderOrdered(org.eclipse.emf.ecore.EStructuralFeature)
+   */
+  @Override
+  protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
+    return super.doConsiderOrdered(feature_p)
+        && !SEMANTICALLY_UNORDERED_REFERENCES.contains(feature_p);
+  }
+  
+  /**
    * Return whether the given Sirius ResourceDescriptors must be considered equal
    * @param desc1_p a non-null object
    * @param desc2_p a non-null object
@@ -141,12 +154,19 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy#doConsiderOrdered(org.eclipse.emf.ecore.EStructuralFeature)
+   * Return whether two workspace path are equal. 
+   * Only the segments of the path are considered, not the protocol.
    */
-  @Override
-  protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
-    return super.doConsiderOrdered(feature_p)
-        && !SEMANTICALLY_UNORDERED_REFERENCES.contains(feature_p);
+  protected boolean equalResourcePaths(String value1_p, String value2_p) {
+    boolean result;
+    try {
+      URI uri1 = URI.createURI(value1_p);
+      URI uri2 = URI.createURI(value2_p);
+      result = uri1.segmentsList().equals(uri2.segmentsList());
+    } catch (Exception e) {
+      result = false;
+    }
+    return result;
   }
   
 }
