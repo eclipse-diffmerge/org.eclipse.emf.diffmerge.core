@@ -186,6 +186,22 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Execute the given runnable that may solely modify the comparison
+   * and ignores transactional aspects
+   * @param runnable_p a non-null object
+   */
+  protected void executeOnComparison(final Runnable runnable_p) {
+    EMFDiffNode input = getInput();
+    final boolean recordChanges = input != null && input.isUndoRedoSupported();
+    final EditingDomain domain = getEditingDomain();
+    try {
+      MiscUtil.executeWithBusyCursor(domain, null, runnable_p, recordChanges, getDisplay());
+    } catch (Exception e) {
+      throw new OperationCanceledException(e.getLocalizedMessage()); // Trigger transaction rollback
+    }
+  }
+  
+  /**
    * Execute the given runnable that may modify the model on the given side
    * and ignores transactional aspects
    * @param runnable_p a non-null object
@@ -343,7 +359,10 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
         if (comparison != null) {
           IModelScope impactedScope = comparison.getScope(
               input.getRoleForSide(onLeft_p));
-          if (impactedScope instanceof IPersistentModelScope) {
+          if (impactedScope instanceof IEditingDomainProvider) {
+            result = ((IEditingDomainProvider)impactedScope).getEditingDomain();
+          }
+          if (result == null && impactedScope instanceof IPersistentModelScope) {
             Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
             if (resource != null)
               result = TransactionUtil.getEditingDomain(resource);

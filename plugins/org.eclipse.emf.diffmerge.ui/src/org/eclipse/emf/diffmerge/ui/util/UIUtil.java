@@ -68,6 +68,10 @@ public final class UIUtil {
 	  //Forbid instantiation
 	}
 	
+  /** The CompareConfiguration "mirrored" property defined in Neon and later,
+   * explicit here for compatibility with older versions of Eclipse */
+  public static final String CC_MIRRORED_PROPERTY = "MIRRORED"; //$NON-NLS-1$
+  
   /**
    * Create and return a composite within the given one with default characteristics
    * @param parent_p a non-null composite

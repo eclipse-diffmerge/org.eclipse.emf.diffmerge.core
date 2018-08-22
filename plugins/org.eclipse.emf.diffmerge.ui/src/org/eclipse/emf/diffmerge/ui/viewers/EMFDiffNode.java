@@ -28,6 +28,10 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryEvent;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
@@ -339,6 +343,17 @@ IUserPropertyOwner {
   }
   
   /**
+   * Return the scope o the given side
+   * @param left_p whether the side is left or right
+   * @return a non-null scope, unless the UI comparison has been disposed
+   */
+  public IEditableModelScope getScope(boolean left_p) {
+    EComparison comparison = getActualComparison();
+    return comparison != null?
+        comparison.getScope(getRoleForSide(left_p)): null;
+  }
+  
+  /**
    * Return the UI comparison of this node
    * @return a non-null UI comparison
    */
@@ -419,6 +434,33 @@ IUserPropertyOwner {
    */
   public boolean hasUserProperty(Identifier<?> id_p) {
     return getUserPropertyOwnerDelegate().hasUserProperty(id_p);
+  }
+  
+  /**
+   * Silently mark the given set of differences as ignored
+   * @param differences_p a non-null, potentially empty collection
+   */
+  public void ignore(Collection<? extends IDifference> differences_p) {
+    for (IDifference difference : differences_p) {
+      if (difference instanceof IDifference.Editable) {
+        ((IDifference.Editable)difference).setIgnored(true);
+        // Also on symmetrical if any
+        if (difference instanceof IValuePresence) {
+          IValuePresence symmetrical = ((IValuePresence)difference).getSymmetrical();
+          if (symmetrical instanceof IDifference.Editable) {
+            ((IDifference.Editable)symmetrical).setIgnored(true);
+          }
+          // Also on symmetrical ownership if any
+          if (difference instanceof IReferenceValuePresence) {
+            IReferenceValuePresence symmetricalOwnership =
+                ((IReferenceValuePresence)difference).getSymmetricalOwnership();
+            if (symmetricalOwnership instanceof IDifference.Editable) {
+              ((IDifference.Editable)symmetricalOwnership).setIgnored(true);
+            }
+          }
+        }
+      }
+    }
   }
   
   /**

@@ -55,7 +55,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -64,8 +63,8 @@ import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
@@ -93,12 +92,11 @@ import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
-import org.eclipse.emf.diffmerge.ui.viewers.TextMergerViewerDialog.EMFDiffNodeWrapper;
+import org.eclipse.emf.diffmerge.ui.viewers.TextMergerDialog.TextDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -156,7 +154,6 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.menus.IMenuService;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressService;
 
 
@@ -194,8 +191,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /** The name of the "ignore right activation" property */
   public static final String PROPERTY_ACTIVATION_IGNORE_RIGHT = "PROPERTY_ACTIVATION_IGNORE_RIGHT"; //$NON-NLS-1$
   
-  /** The name of the "open in external viewer activation" property */
-  public static final String PROPERTY_ACTIVATION_OPEN_EXTERNAL = "PROPERTY_ACTIVATION_OPEN_EXTERNAL"; //$NON-NLS-1$
+  /** The name of the "open in dedicated viewer activation" property */
+  public static final String PROPERTY_ACTIVATION_OPEN_DEDICATED = "PROPERTY_ACTIVATION_OPEN_DEDICATED"; //$NON-NLS-1$
   
   /** The synthesis model tree viewer */
   protected EnhancedComparisonTreeViewer _viewerSynthesisMain;
@@ -629,7 +626,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "log events" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemLogEvents(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -758,9 +755,52 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create the "open in dedicated editor" item in the given context
+   * and return it
+   * @param toolbar_p a non-null object
+   * @return a potentially null item
+   */
+  protected Item createItemOpenDedicated(ToolBar toolbar_p) {
+    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+    // Image
+    result.setImage(getImage(ImageID.COMPARE));
+    // Tool tip text
+    result.setToolTipText(Messages.ComparisonViewer_OpenDedicated_ToolTip);
+    result.setEnabled(false);
+    // Enabled/visible state
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event) {
+        if (PROPERTY_ACTIVATION_OPEN_DEDICATED.equals(event.getProperty())) {
+          boolean newEnabled = ((Boolean)event.getNewValue()).booleanValue();
+          result.setEnabled(newEnabled);
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event) {
+        EMFDiffNode input = getInput();
+        ComparisonSelection selection = getSelection();
+        if (isDedicatedViewerApplicable(input, selection)) {
+          openDedicatedViewer(getInput(), getSelection().asMatch(),
+              (EAttribute)selection.asFeature());
+        }
+      }
+    });
+    return result;
+  }
+  
+  /**
    * Create the "restart" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemRestart(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.PUSH);
@@ -796,7 +836,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show all values and properties" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowAllFeatures(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
@@ -819,7 +859,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show all values" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowAllValues(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
@@ -842,7 +882,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show difference numbers per match" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowDifferenceNumbers(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -881,7 +921,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show values on differences" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowDiffValues(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.RADIO);
@@ -905,7 +945,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show merge impact" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowImpact(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -945,7 +985,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show left/right contents" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowSides(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -985,7 +1025,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "show uncounted elements" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemShowUncounted(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -1009,7 +1049,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "support undo/redo" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemSupportUndoRedo(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -1147,7 +1187,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "use custom icons" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemUseCustomIcons(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -1193,7 +1233,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "use custom labels" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemUseCustomLabels(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -1237,7 +1277,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "Use technical representation" item in the given context and return it
    * @param context_p a non-null object
-   * @return result a potentially null item
+   * @return a potentially null item
    */
   protected Item createItemUseTechnicalRepresentation(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
@@ -1412,8 +1452,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
               // One match: new input
               FeaturesInput newInput = new FeaturesInput(getInput(), match);
               boolean changeInput = !newInput.equals(result.getInput());
-              if (changeInput)
+              if (changeInput) {
                 result.setInput(newInput);
+              }
               // New selection
               MatchAndFeature maf = selection.asMatchAndFeature();
               if (maf != null) {
@@ -1421,7 +1462,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                 result.setSelection(newSelection, true);
               } else if (changeInput) {
                 // New input and no feature selected: select first feature if any
-                MatchAndFeature firstMAF = result.getInnerViewer().getFirstIn(newInput);
+                MatchAndFeature firstMAF =
+                    getDefaultFeatureSelection(newInput, result.getInnerViewer());
                 if (firstMAF != null) {
                   result.setSelection(new StructuredSelection(firstMAF));
                 }
@@ -1433,6 +1475,21 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           } else {
             // More than one match: no input
             result.setInput(null);
+          }
+        }
+      }
+    });
+    // Double click: open dedicated viewer
+    result.getInnerViewer().addDoubleClickListener(new IDoubleClickListener() {
+      public void doubleClick(DoubleClickEvent event) {
+        ISelection selection = event.getViewer().getSelection();
+        if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
+          Object first = ((IStructuredSelection)selection).getFirstElement();
+          if (first instanceof MatchAndFeature) {
+            MatchAndFeature maf = (MatchAndFeature)first;
+            if (TextMergerDialog.isApplicableTo(maf.getFeature())) {
+              openDedicatedViewer(getInput(), maf.getMatch(), (EAttribute)maf.getFeature());
+            }
           }
         }
       }
@@ -1668,15 +1725,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
                   currentMatch = currentInput.getMatchAndFeature().getMatch();
                 if (newMatch != currentMatch) {
                   // New match is different from current match
-                  HeaderViewer<?> rawFeaturesViewer = getFeaturesViewer();
-                  if (rawFeaturesViewer instanceof EnhancedFeaturesViewer) {
-                    EnhancedFeaturesViewer featuresViewer = (EnhancedFeaturesViewer)rawFeaturesViewer;
-                    FeaturesInput featuresInput = new FeaturesInput(getInput(), newMatch);
-                    MatchAndFeature firstMAF = featuresViewer.getInnerViewer().getFirstIn(featuresInput);
-                    if (firstMAF != null) {
-                      // First feature must be selected
-                      newInput = new ValuesInput(getInput(), firstMAF);
-                    }
+                  FeaturesInput featuresInput = new FeaturesInput(getInput(), newMatch);
+                  MatchAndFeature firstMAF = getDefaultFeatureSelection(featuresInput);
+                  if (firstMAF != null) {
+                    // Feature selected by default
+                    newInput = new ValuesInput(getInput(), firstMAF);
                   }
                 } else {
                   // Same match and no feature
@@ -1689,14 +1742,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
-
-    // add double click listener
+    // Double click: open dedicated viewer
     result.getInnerViewer().addDoubleClickListener(new IDoubleClickListener() {
       public void doubleClick(DoubleClickEvent event) {
         ValuesInput input = (ValuesInput) event.getViewer().getInput();
-        if (canOpenInExternalEditor(input.getMatchAndFeature().getFeature())) {
-          openExternalViewer(getInput(), input.getMatchAndFeature().getMatch(),
-              input.getMatchAndFeature().getFeature(), isLeftSide_p);
+        MatchAndFeature maf = input.getMatchAndFeature();
+        if (TextMergerDialog.isApplicableTo(maf.getFeature())) {
+          openDedicatedViewer(getInput(), maf.getMatch(), (EAttribute)maf.getFeature());
         }
       }
     });
@@ -1748,6 +1800,37 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected int[] getDefaultColumnWeights() {
     return new int[] {3, 2, 2};
+  }
+  
+  /**
+   * Return the match and feature that must be selected by default in the Features Viewer
+   * when its input is the given one
+   * @param nodeAndMatch_p a non-null object
+   * @return a potentially null object
+   */
+  protected MatchAndFeature getDefaultFeatureSelection(FeaturesInput nodeAndMatch_p) {
+    MatchAndFeature result = null;
+    HeaderViewer<?> rawFeaturesViewer = getFeaturesViewer();
+    if (rawFeaturesViewer instanceof EnhancedFeaturesViewer) {
+      FeaturesViewer viewer = ((EnhancedFeaturesViewer)rawFeaturesViewer).getInnerViewer();
+      if (viewer != null) {
+        result = getDefaultFeatureSelection(nodeAndMatch_p, viewer);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the match and feature that must be selected by default in the given
+   * Features Viewer when its input is the given one
+   * @param nodeAndMatch_p a non-null object
+   * @param viewer_p a non-null viewer
+   * @return a potentially null object
+   */
+  protected MatchAndFeature getDefaultFeatureSelection(FeaturesInput nodeAndMatch_p,
+      FeaturesViewer viewer_p) {
+    MatchAndFeature result = viewer_p.getFirstIn(nodeAndMatch_p);
+    return result;
   }
   
   /**
@@ -1983,6 +2066,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final ComparisonSelection selection = getSelection();
     if (selection == null) return; // Should not happen according to ignore tool activation
     EMFDiffNode input = getInput();
+    if (input == null) return; // Should not happen according to ignore tool activation
     List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
       // Make choices
     IgnoreChoiceData choices = new IgnoreChoiceData(
@@ -1990,37 +2074,35 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     makeIgnoreChoices(choices, input, selectedMatches);
     if (!choices.isProceed()) return;
     // Ignore operation is set to proceed and choices have been made
-    final Collection<IDifference> toIgnore = !selectedMatches.isEmpty()? getDifferencesToMerge(
-        selectedMatches, input.getRoleForSide(onLeft_p), choices.isCoverChildren(), choices.isSideExclusive()):
-          getInput().getCategoryManager().getPendingDifferencesFiltered(selection.asDifferencesToMerge());
-    if (!toIgnore.isEmpty()) {
-      executeOnModel(new Runnable() {
+    Collection<IDifference> toIgnore;
+    if (!selectedMatches.isEmpty()) {
+      toIgnore = getDifferencesToMerge(
+        selectedMatches, input.getRoleForSide(onLeft_p),
+        choices.isCoverChildren(), choices.isSideExclusive());
+    } else {
+      toIgnore = getInput().getCategoryManager().getPendingDifferencesFiltered(
+          selection.asDifferencesToMerge());
+    }
+    ignore(toIgnore);
+  }
+  
+  /**
+   * Ignore the given set of differences
+   * @param differences_p a non-null, potentially empty set of differences
+   */
+  protected void ignore(final Collection<IDifference> differences_p) {
+    final EMFDiffNode input = getInput();
+    final ComparisonSelection selection = getSelection();
+    if (input != null && !differences_p.isEmpty()) {
+      executeOnComparison(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
         public void run() {
-          for (IDifference diff : toIgnore) {
-            if (diff instanceof EElementRelativePresence) {
-              EElementRelativePresence presence = (EElementRelativePresence)diff;
-              presence.setIgnored(true);
-              // Also on symmetrical if any
-              if (diff instanceof EValuePresence) {
-                IValuePresence symmetrical = ((EValuePresence)diff).getSymmetrical();
-                if (symmetrical instanceof EMergeableDifference)
-                  ((EMergeableDifference) symmetrical).setIgnored(true);
-                // Also on symmetrical ownership if any
-                if (diff instanceof IReferenceValuePresence) {
-                  IReferenceValuePresence symmetricalOwnership =
-                      ((IReferenceValuePresence)diff).getSymmetricalOwnership();
-                  if (symmetricalOwnership instanceof EMergeableDifference)
-                    ((EMergeableDifference)symmetricalOwnership).setIgnored(true);
-                }
-              }
-            }
-          }
+          input.ignore(differences_p);
           getUIComparison().setLastActionSelection(selection);
         }
-      }, onLeft_p);
+      });
       if (!input.isReactive()) {
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
         input.updateDifferenceNumbers();
@@ -2131,6 +2213,31 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (input != null && input.isUserPropertyTrue(P_LOG_EVENTS)) {
       getLogger().log(new CompareLogEvent(getEditingDomain(), input));
     }
+  }
+  
+  /**
+   * Return whether the "open dedicated viewer" tool is applicable in the given context
+   * @param input_p a potentially null input
+   * @param selection_p a potentially null selection
+   */
+  protected boolean isDedicatedViewerApplicable(EMFDiffNode input_p,
+      ComparisonSelection selection_p) {
+    boolean result = false;
+    if (input_p != null && selection_p != null && !selection_p.isEmpty()) {
+      EStructuralFeature feature = selection_p.asFeature();
+      if (feature == null) {
+        EMatch selectedMatch = selection_p.asMatch();
+        if (selectedMatch != null) {
+          FeaturesInput nodeAndMatch = new FeaturesInput(input_p, selectedMatch);
+          MatchAndFeature defaultMAF = getDefaultFeatureSelection(nodeAndMatch);
+          if (defaultMAF != null) {
+            feature = defaultMAF.getFeature();
+          }
+        }
+      }
+      result = TextMergerDialog.isApplicableTo(feature);
+    }
+    return result;
   }
   
   /**
@@ -2268,6 +2375,45 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Apply the merge of a value defined through a dedicated viewer
+   * @param node_p the non-null diff node
+   * @param match_p the non-null match element concerned
+   * @param feature_p the non-null feature concerned
+   * @param textDiffNode_p the non-null output of the dedicated merge operation
+   */
+  protected void mergeFromDedicatedViewer(final EMFDiffNode node_p, final IMatch match_p,
+      final EAttribute feature_p, TextDiffNode textDiffNode_p) {
+    final ComparisonSelection selection = getSelection();
+    final List<EMergeableDifference> toIgnore = selection.asDifferencesToMerge();
+    TextCompareContent left = textDiffNode_p.getLeft();
+    TextCompareContent right = textDiffNode_p.getRight();
+    String leftMergedValue = left.getEditedContent();
+    String rightMergedValue = right.getEditedContent();
+    if (leftMergedValue != null || rightMergedValue != null) {
+      // They cannot be both non-null due to TextMergerDialog.isEditable(boolean)
+      final boolean onLeft = leftMergedValue != null;
+      final String newValue = onLeft? leftMergedValue: rightMergedValue;
+      final IEditableModelScope impactedScope = node_p.getScope(onLeft);
+      executeOnModel(new IRunnableWithProgress() {
+        /**
+         * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+         */
+        public void run(IProgressMonitor monitor_p)
+            throws InvocationTargetException, InterruptedException {
+          EObject holder = match_p.get(node_p.getRoleForSide(onLeft));
+          impactedScope.add(holder, feature_p, newValue);
+          node_p.setModified(true, onLeft);
+          node_p.ignore(toIgnore);
+          getUIComparison().setLastActionSelection(selection);
+        }
+      }, onLeft);
+      setSelection(null);
+      firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.TRUE);
+      getInput().updateDifferenceNumbers();
+    }
+  }
+  
+  /**
    * Navigate to the next/previous difference according to the given flag
    * @param next_p whether navigation must be forward or back
    * @return whether the operation could not be completed due to the
@@ -2283,6 +2429,37 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (newPath != null)
       setSelection(new ComparisonSelectionImpl(newPath, getDrivingRole(), getInput()), true);
     return newPath == null;
+  }
+  
+  /**
+   * Open a dedicated comparison viewer in order to view or merge a value
+   * on a given match through a given attribute.
+   * Precondition: the match and attribute qualify for a dedicated viewer.
+   * @param node_p a non-null diff node
+   * @param match_p the non-null match concerned
+   * @param feature_p the potentially null feature concerned where null stands for default
+   */
+  protected void openDedicatedViewer(final EMFDiffNode node_p, EMatch match_p,
+      EAttribute feature_p) {
+    assert feature_p == null || TextMergerDialog.isApplicableTo(feature_p);
+    EAttribute attribute = feature_p;
+    if (attribute == null) {
+      FeaturesInput nodeAndMatch = new FeaturesInput(node_p, match_p);
+      MatchAndFeature defaultMAF = getDefaultFeatureSelection(nodeAndMatch);
+      if (defaultMAF != null &&
+          TextMergerDialog.isApplicableTo(defaultMAF.getFeature())) {
+        attribute = (EAttribute)defaultMAF.getFeature();
+      }
+    }
+    if (attribute != null) {
+      TextMergerDialog dialog = new TextMergerDialog(
+          getShell(), node_p, match_p, attribute);
+      if (dialog.open() == Window.OK) {
+        // Merge confirmed
+        mergeFromDedicatedViewer(
+            node_p, match_p, attribute, dialog.getViewerInput());
+      }
+    }
   }
   
   /**
@@ -2376,38 +2553,21 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     }
     if (input != null) {
-      firePropertyChangeEvent(
-          PROPERTY_ACTIVATION_MERGE_TO_RIGHT, new Boolean(input.isEditable(false) && onLeft));
-      firePropertyChangeEvent(
-          PROPERTY_ACTIVATION_DELETE_LEFT, new Boolean(input.isEditable(true) && onLeft && allowDeletion));
-      firePropertyChangeEvent(
-          PROPERTY_ACTIVATION_MERGE_TO_LEFT, new Boolean(input.isEditable(true) && onRight));
-      firePropertyChangeEvent(
-          PROPERTY_ACTIVATION_DELETE_RIGHT, new Boolean(input.isEditable(false) && onRight && allowDeletion));
+      firePropertyChangeEvent(PROPERTY_ACTIVATION_MERGE_TO_RIGHT,
+          Boolean.valueOf(input.isEditable(false) && onLeft));
+      firePropertyChangeEvent(PROPERTY_ACTIVATION_DELETE_LEFT,
+          Boolean.valueOf(input.isEditable(true) && onLeft && allowDeletion));
+      firePropertyChangeEvent(PROPERTY_ACTIVATION_MERGE_TO_LEFT,
+          Boolean.valueOf(input.isEditable(true) && onRight));
+      firePropertyChangeEvent(PROPERTY_ACTIVATION_DELETE_RIGHT,
+          Boolean.valueOf(input.isEditable(false) && onRight && allowDeletion));
     }
-    firePropertyChangeEvent(
-        PROPERTY_ACTIVATION_IGNORE_LEFT, new Boolean(onLeft && allowIgnoring));
-    firePropertyChangeEvent(
-        PROPERTY_ACTIVATION_IGNORE_RIGHT, new Boolean(onRight && allowIgnoring));
-    // refresh open in external window state.
-    // use current selection to trigger open in external window action for
-    // strings differences.
-    if (selection != null && !selection.isEmpty()) {
-      Boolean canOpenExternal = Boolean.FALSE;
-      if (selection.asFeature() != null) {
-        canOpenExternal = Boolean
-            .valueOf(canOpenInExternalEditor(selection.asFeature()));
-      } else if (selection.asMatch() != null) {
-        Collection<EAttribute> attributesWithDifferences = selection.asMatch()
-            .getAttributesWithDifferences();
-        if (!attributesWithDifferences.isEmpty()) {
-          EAttribute attribute = attributesWithDifferences.iterator().next();
-          canOpenExternal = Boolean.valueOf(canOpenInExternalEditor(attribute));
-        }
-      }
-      firePropertyChangeEvent(PROPERTY_ACTIVATION_OPEN_EXTERNAL,
-          canOpenExternal);
-    }
+    firePropertyChangeEvent(PROPERTY_ACTIVATION_IGNORE_LEFT,
+        Boolean.valueOf(onLeft && allowIgnoring));
+    firePropertyChangeEvent(PROPERTY_ACTIVATION_IGNORE_RIGHT,
+        Boolean.valueOf(onRight && allowIgnoring));
+    firePropertyChangeEvent(PROPERTY_ACTIVATION_OPEN_DEDICATED,
+        Boolean.valueOf(isDedicatedViewerApplicable(input, selection)));
     super.refreshTools();
   }
   
@@ -2692,7 +2852,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the navigation tools in the given tool bar
    */
   protected void setupToolsDetails(ToolBar toolbar_p) {
-    // Nothing by default
+    createItemOpenDedicated(toolbar_p);
   }
   
   /**
@@ -2705,8 +2865,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createItemMerge(toolbar_p, !onLeft_p);
     createItemIgnore(toolbar_p, onLeft_p);
     createItemDelete(toolbar_p, onLeft_p);
-    // create open in external window action
-    createToolOpenExternal(toolbar_p, onLeft_p);
   }
   
   /**
@@ -2864,166 +3022,4 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     }
   }
   
-  /**
-   * Utility method to indicate if the text viewer can be opened with the content of the feature.
-   * By default, any EString type feature can be opened in the text viewer.
-   * 
-   * @param feature_p the feature containing the content to display in the text viewer.
-   * @return true if the feature content can be opened in the text viewer.
-   */
-  protected boolean canOpenInExternalEditor(EStructuralFeature feature_p) {
-    return feature_p.getEType() == EcorePackage.Literals.ESTRING;
-  }
-
-  /**
-   * Opens the textviewer on a modal dialog via the toolbar.
-   * 
-   * @param diffNode the diffnode element
-   * @param match the match element
-   * @param onLeft the side
-   */
-  protected void openExternalViewer(final EMFDiffNode diffNode, EMatch match,
-      boolean onLeft) {
-    Collection<EAttribute> attributesWithDifferences = match
-        .getAttributesWithDifferences();
-    if (!attributesWithDifferences.isEmpty()) {
-      EStructuralFeature feature = attributesWithDifferences.iterator().next();
-      if (feature != null) {
-        openExternalViewer(diffNode, match, feature, onLeft);
-      }
-    }
-  }
-
-  /**
-   * Opens the textviwer on a modal dialog.
-   * 
-   * @param diffNode the diffnode element
-   * @param match the match element
-   * @param feature the feature containing the contents to show in the textviewer
-   * @param onLeft the side
-   */
-  protected void openExternalViewer(final EMFDiffNode diffNode, EMatch match,
-      EStructuralFeature feature, boolean onLeft) {
-    TextMergerViewerDialog dialog = new TextMergerViewerDialog(getShell(),
-        diffNode, match, feature);
-    if (dialog.open() == Window.OK) {
-      // merge has been done on the dialog. refresh the viewer
-      mergeAndRefresh(diffNode, match, feature, dialog.getViewerInput(),
-          onLeft);
-    }
-  }
-
-  /**
-   * Run the merge operation from the content of the textviewer, and refresh the editor.
-   * 
-   * @param diffNode the diffnode element
-   * @param match the match element
-   * @param feature the feature containing the contents to show in the textviewer
-   * @param diffNodeWrapper the contents to be merge on the model
-   * @param toLeft_p the side
-   */
-  private void mergeAndRefresh(final EMFDiffNode diffNode, final EMatch match,
-      final EStructuralFeature feature, EMFDiffNodeWrapper diffNodeWrapper,
-      boolean toLeft_p) {
-    final ComparisonSelection selection = getSelection();
-    final EList<EMergeableDifference> toIgnore = selection
-        .asDifferencesToMerge();
-    MergerContent left = (MergerContent) diffNodeWrapper.getLeft();
-    final String mergedLeft = left.getEditedContent();
-
-    MergerContent right = (MergerContent) diffNodeWrapper.getRight();
-    final String mergedRight = right.getEditedContent();
-    final Object leftContent = match.get(Role.TARGET).eGet(feature);
-    final Object rightContent = match.get(Role.REFERENCE).eGet(feature);
-
-    executeOnModel(new IRunnableWithProgress() {
-      /**
-       * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
-       */
-      public void run(IProgressMonitor monitor_p)
-          throws InvocationTargetException, InterruptedException {
-        if (mergedLeft != null) {
-          if (leftContent instanceof String) {
-            match.get(Role.TARGET).eSet(feature, mergedLeft);
-          }
-          diffNode.setModified(true, true);
-        }
-        if (mergedRight != null) {
-          if (rightContent instanceof String) {
-            match.get(Role.REFERENCE).eSet(feature, mergedRight);
-          }
-          diffNode.setModified(true, false);
-        }
-        if (!toIgnore.isEmpty()) {
-          for (IDifference diff : toIgnore) {
-            if (diff instanceof EElementRelativePresence) {
-              EElementRelativePresence presence = (EElementRelativePresence) diff;
-              presence.setIgnored(true);
-              // Also on symmetrical if any
-              if (diff instanceof EValuePresence) {
-                IValuePresence symmetrical = ((EValuePresence) diff)
-                    .getSymmetrical();
-                if (symmetrical instanceof EMergeableDifference) {
-                  ((EMergeableDifference)symmetrical).setIgnored(true);
-                }
-              }
-            }
-          }
-        }
-      }
-    }, toLeft_p);
-    getUIComparison().setLastActionSelection(null);
-    setSelection(null);
-    firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.TRUE);
-    getInput().updateDifferenceNumbers();
-  }
-
-  /**
-   * Create the open in external textviwer editor tool item.
-   * 
-   * @param toolbar the toolbar element
-   * @param onLeft the side
-   * @return the tool item created
-   */
-  private ToolItem createToolOpenExternal(ToolBar toolbar,
-      final boolean onLeft) {
-    final ToolItem result = new ToolItem(toolbar, SWT.PUSH);
-    EMFDiffMergeUIPlugin.getDefault();
-    // Image
-    result.setImage(AbstractUIPlugin
-        .imageDescriptorFromPlugin("org.eclipse.compare", //$NON-NLS-1$
-            "$nl$/icons/full/eview16/compare_view.gif") //$NON-NLS-1$
-        .createImage());
-    // Tool tip
-    result.setToolTipText("Open in external editor"); //$NON-NLS-1$
-    result.setEnabled(false);
-    // Activation.
-    addPropertyChangeListener(new IPropertyChangeListener() {
-      /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event) {
-        if (PROPERTY_ACTIVATION_OPEN_EXTERNAL.equals(event.getProperty())) {
-          result.setEnabled(((Boolean) event.getNewValue()).booleanValue());
-        }
-      }
-    });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event) {
-        if (getSelection().asFeature() != null) {
-          openExternalViewer(getInput(), getSelection().asMatch(),
-              getSelection().asFeature(), onLeft);
-        } else if (getSelection().asMatch() != null) {
-          openExternalViewer(getInput(), getSelection().asMatch(), onLeft);
-        }
-      }
-    });
-    return result;
-  }
-
 }

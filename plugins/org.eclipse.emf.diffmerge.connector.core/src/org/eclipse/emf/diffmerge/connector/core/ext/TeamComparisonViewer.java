@@ -11,6 +11,8 @@
  */
 package org.eclipse.emf.diffmerge.connector.core.ext;
 
+import static org.eclipse.emf.diffmerge.ui.util.UIUtil.CC_MIRRORED_PROPERTY;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,10 +63,6 @@ import org.eclipse.ui.IWorkbenchWindow;
  * It wraps the usual comparison viewer.
  */
 public class TeamComparisonViewer extends Viewer implements IFlushable, IPropertyChangeNotifier {
-  
-  /** The CompareConfiguration "mirrored" property defined in Neon and later,
-   * explicit here for compatibility with older versions of Eclipse */
-  protected static final String MIRRORED = "MIRRORED"; //$NON-NLS-1$
   
   /** The non-null control of the viewer */
   protected final Composite _control;
@@ -138,11 +136,11 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
         // Invert left and right
         if (_configuration != null) {
           // Ensure consistency with text comparison
-          _configuration.setProperty(MIRRORED, Boolean.TRUE);
+          _configuration.setProperty(CC_MIRRORED_PROPERTY, Boolean.TRUE);
         }
       }
     }
-    Object mirroredProp = _configuration.getProperty(MIRRORED);
+    Object mirroredProp = _configuration.getProperty(CC_MIRRORED_PROPERTY);
     if (mirroredProp instanceof Boolean && ((Boolean)mirroredProp).booleanValue()) {
       setup_p.swapLeftRole();
     }
@@ -270,7 +268,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   protected Role getLeftRole(ComparisonSetup setup_p) {
     Role result = setup_p.getLeftRole();
     if (_configuration != null) {
-      Object mirrored = _configuration.getProperty(MIRRORED);
+      Object mirrored = _configuration.getProperty(CC_MIRRORED_PROPERTY);
       if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue())
         result = result.opposite();
     }

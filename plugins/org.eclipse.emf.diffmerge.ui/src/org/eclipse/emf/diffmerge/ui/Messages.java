@@ -106,6 +106,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_MergeRightTooltip;
   public static String ComparisonViewer_NextTooltip;
   public static String ComparisonViewer_NoDiffsToMerge;
+  public static String ComparisonViewer_OpenDedicated_ToolTip;
   public static String ComparisonViewer_PreviousTooltip;
   public static String ComparisonViewer_RestartInProgress;
   public static String ComparisonViewer_Right;
@@ -234,6 +235,8 @@ public class Messages extends NLS {
   public static String PropertyChangeCategory_Description;
   public static String PropertyChangeCategory_Text;
   public static String ResourceScopeDefinitionFactory_Label;
+  public static String TextMergerDialog_HeaderLabel;
+  public static String TextMergerDialog_ShellLabel;
   public static String ThreeWayOriginCategory_DescriptionLeft;
   public static String ThreeWayOriginCategory_DescriptionRight;
   public static String ThreeWayOriginCategory_TextLeft;

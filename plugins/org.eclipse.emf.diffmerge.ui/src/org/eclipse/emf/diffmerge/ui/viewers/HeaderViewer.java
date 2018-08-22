@@ -181,7 +181,7 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
   }
   
   /**
-   * Return the wrapped viewer
+   * Return the wrapped viewer, non-null after controls have been created
    */
   public V getInnerViewer() {
     return _innerViewer;
