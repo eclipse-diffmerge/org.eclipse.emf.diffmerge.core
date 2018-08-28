@@ -82,8 +82,13 @@ import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -130,6 +135,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.progress.IProgressService;
 
 
@@ -141,6 +147,10 @@ import org.eclipse.ui.progress.IProgressService;
  * @author Olivier Constant
  */
 public class ComparisonViewer extends AbstractComparisonViewer {
+  
+  /** The location for contributions to the Synthesis toolbar in Menu API URI format */
+  public static final String LOCATION_TOOLBAR_SYNTHESIS =
+      "toolbar:org.eclipse.emf.diffmerge.ui.toolbars.synthesis"; //$NON-NLS-1$
   
   /** The name of the "filtering state" property */
   public static final String PROPERTY_FILTERING = "PROPERTY_FILTERING"; //$NON-NLS-1$
@@ -349,8 +359,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemCollapse(ToolBar context_p) {
     ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.COLLAPSEALL));
+    result.setImage(getImage(ImageID.COLLAPSEALL));
     result.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -380,8 +389,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemDelete(ToolBar context_p, final boolean onLeft_p) {
     final ToolItem result = new ToolItem(context_p, SWT.PUSH);
     // Image
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.DELETE));
+    result.setImage(getImage(ImageID.DELETE));
     // Tool tip
     result.setToolTipText(onLeft_p? Messages.ComparisonViewer_DeleteLeftTooltip:
       Messages.ComparisonViewer_DeleteRightTooltip);
@@ -420,8 +428,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemExpand(ToolBar context_p) {
     ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.EXPANDALL));
+    result.setImage(getImage(ImageID.EXPANDALL));
     result.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -455,8 +462,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           Messages.ComparisonViewer_FilterText;
     itemSetText(result, text);
     itemSetToolTipText(result, Messages.ComparisonViewer_EnhancedFilterToolTip);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.FILTER));
+    result.setImage(getImage(ImageID.FILTER));
     itemSetSelection(result, false);
     if (_filterSelectionListener == null)
       _filterSelectionListener = new FilterSelectionListener();
@@ -473,8 +479,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemIgnore(ToolBar context_p, final boolean onLeft_p) {
     final ToolItem result = new ToolItem(context_p, SWT.PUSH);
     // Image
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.CHECKED));
+    result.setImage(getImage(ImageID.CHECKED));
     // Tool tip
     result.setToolTipText(onLeft_p? Messages.ComparisonViewer_IgnoreLeftTooltip:
       Messages.ComparisonViewer_IgnoreRightTooltip);
@@ -509,18 +514,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * Create the "inconsistency" item in the given context and return it
    * @param context_p a non-null object
-   * @return a potentially null item
    */
-  protected Item createItemInconsistency(ToolBar context_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.WARNING));
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
+  protected ActionContributionItem createItemInconsistency(IContributionManager context_p) {
+    final Action action = new Action() {
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
+      public void run() {
         final Shell shell = getShell();
         final EComparison comparison = getComparison();
         if (shell != null && comparison != null) {
@@ -535,9 +533,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           });
         }
       }
-    });
-    result.setDisabledImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY));
-    result.setEnabled(false);
+    };
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
+    action.setImageDescriptor(getImageDescriptor(ImageID.WARNING));
+    action.setDisabledImageDescriptor(getImageDescriptor(ImageID.EMPTY));
+    action.setEnabled(false);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -546,8 +547,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           IComparison comparison = getComparison();
           boolean enabled = comparison != null && !comparison.isConsistent();
-          result.setEnabled(enabled);
-          result.setToolTipText(enabled? Messages.ComparisonViewer_InconsistencyTooltip: null);
+          action.setEnabled(enabled);
+          action.setToolTipText(
+              enabled ? Messages.ComparisonViewer_InconsistencyTooltip : null);
         }
       }
     });
@@ -562,10 +564,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemLock(ToolBar context_p, final boolean onLeft_p) {
     final ToolItem result = new ToolItem(context_p, SWT.CHECK);
-    final Image openLockImage =
-        EMFDiffMergeUIPlugin.getDefault().getImage(EMFDiffMergeUIPlugin.ImageID.LOCK_OPEN);
-    final Image closedLockImage =
-        EMFDiffMergeUIPlugin.getDefault().getImage(EMFDiffMergeUIPlugin.ImageID.LOCK_CLOSED);
+    final Image openLockImage = getImage(ImageID.LOCK_OPEN);
+    final Image closedLockImage = getImage(ImageID.LOCK_CLOSED);
     result.setImage(openLockImage);
     final String lockedTooltip = Messages.ComparisonViewer_LockTooltip_Locked;
     final String unlockedTooltip = Messages.ComparisonViewer_LockTooltip_Unlocked;
@@ -659,10 +659,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   protected Item createItemMerge(ToolBar toolbar_p, final boolean toLeft_p) {
     final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
     // Image
-    EMFDiffMergeUIPlugin.ImageID imageID = toLeft_p?
-        EMFDiffMergeUIPlugin.ImageID.CHECKOUT_ACTION:
-          EMFDiffMergeUIPlugin.ImageID.CHECKIN_ACTION;
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(imageID));
+    ImageID imageID = toLeft_p? ImageID.CHECKOUT_ACTION: ImageID.CHECKIN_ACTION;
+    result.setImage(getImage(imageID));
     // Tool tip
     result.setToolTipText(toLeft_p? Messages.ComparisonViewer_MergeLeftTooltip:
       Messages.ComparisonViewer_MergeRightTooltip);
@@ -701,8 +699,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemNavigationNext(ToolBar toolbar_p) {
     ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.NEXT_DIFF_NAV));
+    result.setImage(getImage(ImageID.NEXT_DIFF_NAV));
     result.setToolTipText(Messages.ComparisonViewer_NextTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -723,8 +720,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemNavigationPrevious(ToolBar context_p) {
     ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.PREV_DIFF_NAV));
+    result.setImage(getImage(ImageID.PREV_DIFF_NAV));
     result.setToolTipText(Messages.ComparisonViewer_PreviousTooltip);
     result.addSelectionListener(new SelectionAdapter() {
       /**
@@ -747,7 +743,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final MenuItem result = new MenuItem(context_p, SWT.PUSH);
     result.setText(Messages.ComparisonViewer_ToolUpdate);
     result.setToolTipText(Messages.ComparisonViewer_ToolUpdate_Tooltip);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.UPDATE));
+    result.setImage(getImage(ImageID.UPDATE));
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -1034,8 +1030,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemSort(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SORT));
+    result.setImage(getImage(ImageID.SORT));
     result.setText(Messages.ComparisonViewer_SortTooltip);
     result.setToolTipText(Messages.ComparisonViewer_EnhancedSortTooltip);
     result.addSelectionListener(new SelectionAdapter() {
@@ -1060,8 +1055,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected Item createItemSync(Menu context_p) {
     final MenuItem result = new MenuItem(context_p, SWT.CASCADE);
-    result.setImage(EMFDiffMergeUIPlugin.getDefault().getImage(
-        EMFDiffMergeUIPlugin.ImageID.SYNCED));
+    result.setImage(getImage(ImageID.SYNCED));
     result.setText(Messages.ComparisonViewer_LinkViews);
     Menu innerMenu = new Menu(result);
     createItemSyncInternal(innerMenu);
@@ -2605,8 +2599,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param toolbar_p a non-null tool bar
    */
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    createItemInconsistency(toolbar_p);
+    ToolBarManager toolbarManager = new ToolBarManager(toolbar_p);
+    toolbarManager.add(new Separator("consistencyGroup")); //$NON-NLS-1$
+    createItemInconsistency(toolbarManager);
+    toolbarManager.add(new Separator("additionalToolbarItems")); //$NON-NLS-1$
+    // Associate ID to current location in the synthesis toolbar for contributions
+    IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
+    menuService.populateContributionManager(toolbarManager, LOCATION_TOOLBAR_SYNTHESIS);
     // Next / Previous
     new ToolItem(toolbar_p, SWT.SEPARATOR);
     createItemNavigationNext(toolbar_p);

@@ -35,6 +35,7 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -48,6 +49,7 @@ import org.eclipse.emf.edit.ui.action.UndoAction;
 import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -58,6 +60,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -487,6 +490,24 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Return the image of the given ID
+   * @param id_p a non-null image ID
+   * @return a (normally) non-null image
+   */
+  protected Image getImage(ImageID id_p) {
+    return EMFDiffMergeUIPlugin.getDefault().getImage(id_p);
+  }
+  
+  /**
+   * Return the image descriptor of the given ID
+   * @param id_p a non-null image ID
+   * @return a (normally) non-null image descriptor
+   */
+  protected ImageDescriptor getImageDescriptor(ImageID id_p) {
+    return EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(id_p);
+  }
+  
+  /**
    * @see org.eclipse.jface.viewers.Viewer#getInput()
    */
   @Override
@@ -710,8 +731,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
           super.update();
       }
     };
-    _undoAction.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(
-        EMFDiffMergeUIPlugin.ImageID.UNDO));
+    _undoAction.setImageDescriptor(getImageDescriptor(ImageID.UNDO));
     // Redo
     _redoAction = new RedoAction() {
       /**
@@ -730,8 +750,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
           super.update();
       }
     };
-    _redoAction.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(
-        EMFDiffMergeUIPlugin.ImageID.REDO));
+    _redoAction.setImageDescriptor(getImageDescriptor(ImageID.REDO));
     if (_actionBars != null) {
       _actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), _undoAction);
       _actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), _redoAction);

@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
+import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup.Side;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -117,6 +118,7 @@ public class ComparisonSetupManager {
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       ComparisonSetup setup = manager.createComparisonSetup(
           entrypoint1_p, entrypoint2_p, entrypoint3_p);
+      setup.setTargetSide(Side.RIGHT); // Target on the right by default
       result = createEditorInputWithUI(shell_p, setup);
     } catch (IllegalArgumentException e) {
       handleSetupError(shell_p, e.getLocalizedMessage());

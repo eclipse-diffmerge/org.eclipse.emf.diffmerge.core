@@ -396,39 +396,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
       Label label = new Label(composite, SWT.NONE);
       label.setText(Messages.ComparisonSetupWizardPage_ReferenceRole);
       label.setToolTipText(Messages.ComparisonSetupWizardPage_ReferenceRoleTooltip);
-      // Both
-      final Button noneButton = new Button(composite, SWT.RADIO);
-      noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
-      noneButton.setSelection(_setup.getTargetSide() == null);
-      noneButton.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          if (noneButton.getSelection()) {
-            _setup.setTargetSide(null);
-          }
-        }
-      });
-      noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTargetSide());
-      // Left
-      final Button leftButton = new Button(composite, SWT.RADIO);
-      leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
-      leftButton.setSelection(_setup.getTargetSide() == Side.LEFT);
-      leftButton.addSelectionListener(new SelectionAdapter() {
-        /**
-         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-         */
-        @Override
-        public void widgetSelected(SelectionEvent e_p) {
-          if (leftButton.getSelection()) {
-            _setup.setTargetSide(Side.LEFT);
-          }
-        }
-      });
-      leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTargetSide());
-      // Right
+      // Left to Right
       final Button rightButton = new Button(composite, SWT.RADIO);
       rightButton.setText(Messages.ComparisonSetupWizardPage_ReferenceRight);
       rightButton.setSelection(_setup.getTargetSide() == Side.RIGHT);
@@ -444,6 +412,38 @@ public class ComparisonSetupWizardPage extends WizardPage {
         }
       });
       rightButton.setEnabled(rightButton.getSelection() || _setup.canChangeTargetSide());
+      // Right to Left
+      final Button leftButton = new Button(composite, SWT.RADIO);
+      leftButton.setText(Messages.ComparisonSetupWizardPage_ReferenceLeft);
+      leftButton.setSelection(_setup.getTargetSide() == Side.LEFT);
+      leftButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          if (leftButton.getSelection()) {
+            _setup.setTargetSide(Side.LEFT);
+          }
+        }
+      });
+      leftButton.setEnabled(leftButton.getSelection() || _setup.canChangeTargetSide());
+      // Any
+      final Button noneButton = new Button(composite, SWT.RADIO);
+      noneButton.setText(Messages.ComparisonSetupWizardPage_ReferenceNone);
+      noneButton.setSelection(_setup.getTargetSide() == null);
+      noneButton.addSelectionListener(new SelectionAdapter() {
+        /**
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected(SelectionEvent e_p) {
+          if (noneButton.getSelection()) {
+            _setup.setTargetSide(null);
+          }
+        }
+      });
+      noneButton.setEnabled(noneButton.getSelection() || _setup.canChangeTargetSide());
     }
   }
   

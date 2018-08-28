@@ -284,7 +284,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   /**
    * Return the image descriptor of the given ID
    * @param id_p a non-null image ID
-   * @return a (normally) non-null image
+   * @return a (normally) non-null image descriptor
    */
   public ImageDescriptor getImageDescriptor(ImageID id_p) {
     ImageDescriptor result;

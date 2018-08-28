@@ -6,7 +6,7 @@ Element-Type: context
 Element-Version: 2.0
 Id: _LGfR4OMCEeatZLxI8McVXQ
 Runtime-Version: 2.3.0.201805302312
-Save-Time: 8/28/18 10:13 AM
+Save-Time: 8/28/18 11:28 AM
 
 ------=_.ecl.context-718f04b4-ed39-33e3-af62-0995e4561998
 Content-Type: text/ecl
@@ -32,6 +32,7 @@ proc "compare-examples" {
 	    select "Example/Ex1.elements" "Example/Ex2.elements"
 	    get-menu "Compare With/Each Other as models" | click
 	}
+	get-window "EMF Diff/Merge" | get-group Roles | get-button Any | click
 	get-window "EMF Diff/Merge" | get-button Finish | click
 }
 
