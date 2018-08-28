@@ -12,6 +12,7 @@
  *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  *    Stephane Bouchet (Intel Corporation) - Bug #489274 : added API viewers creation methods
  *    Jeremy Aubry (Obeo) - Bug #500417 : Cannot call a merge with a given selection programmatically
+ *    Stephane Bouchet (Intel Corporation) - Bug # : added external editor for text differences
  * 
  * </copyright>
  */
@@ -54,6 +55,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -91,8 +93,12 @@ import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
+import org.eclipse.emf.diffmerge.ui.viewers.TextMergerViewerDialog.EMFDiffNodeWrapper;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -105,7 +111,9 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ContentViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -119,6 +127,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.SashForm;
@@ -147,6 +156,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressService;
 
 
@@ -184,6 +194,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /** The name of the "ignore right activation" property */
   public static final String PROPERTY_ACTIVATION_IGNORE_RIGHT = "PROPERTY_ACTIVATION_IGNORE_RIGHT"; //$NON-NLS-1$
   
+  /** The name of the "open in external viewer activation" property */
+  public static final String PROPERTY_ACTIVATION_OPEN_EXTERNAL = "PROPERTY_ACTIVATION_OPEN_EXTERNAL"; //$NON-NLS-1$
   
   /** The synthesis model tree viewer */
   protected EnhancedComparisonTreeViewer _viewerSynthesisMain;
@@ -1677,6 +1689,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
+
+    // add double click listener
+    result.getInnerViewer().addDoubleClickListener(new IDoubleClickListener() {
+      public void doubleClick(DoubleClickEvent event) {
+        ValuesInput input = (ValuesInput) event.getViewer().getInput();
+        if (canOpenInExternalEditor(input.getMatchAndFeature().getFeature())) {
+          openExternalViewer(getInput(), input.getMatchAndFeature().getMatch(),
+              input.getMatchAndFeature().getFeature(), isLeftSide_p);
+        }
+      }
+    });
     return result;
   }
   
@@ -2366,6 +2389,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         PROPERTY_ACTIVATION_IGNORE_LEFT, new Boolean(onLeft && allowIgnoring));
     firePropertyChangeEvent(
         PROPERTY_ACTIVATION_IGNORE_RIGHT, new Boolean(onRight && allowIgnoring));
+    // refresh open in external window state.
+    // use current selection to trigger open in external window action for
+    // strings differences.
+    if (selection != null && !selection.isEmpty()) {
+      Boolean canOpenExternal = Boolean.FALSE;
+      if (selection.asFeature() != null) {
+        canOpenExternal = Boolean
+            .valueOf(canOpenInExternalEditor(selection.asFeature()));
+      } else if (selection.asMatch() != null) {
+        Collection<EAttribute> attributesWithDifferences = selection.asMatch()
+            .getAttributesWithDifferences();
+        if (!attributesWithDifferences.isEmpty()) {
+          EAttribute attribute = attributesWithDifferences.iterator().next();
+          canOpenExternal = Boolean.valueOf(canOpenInExternalEditor(attribute));
+        }
+      }
+      firePropertyChangeEvent(PROPERTY_ACTIVATION_OPEN_EXTERNAL,
+          canOpenExternal);
+    }
     super.refreshTools();
   }
   
@@ -2663,6 +2705,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     createItemMerge(toolbar_p, !onLeft_p);
     createItemIgnore(toolbar_p, onLeft_p);
     createItemDelete(toolbar_p, onLeft_p);
+    // create open in external window action
+    createToolOpenExternal(toolbar_p, onLeft_p);
   }
   
   /**
@@ -2820,4 +2864,166 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     }
   }
   
+  /**
+   * Utility method to indicate if the text viewer can be opened with the content of the feature.
+   * By default, any EString type feature can be opened in the text viewer.
+   * 
+   * @param feature_p the feature containing the content to display in the text viewer.
+   * @return true if the feature content can be opened in the text viewer.
+   */
+  protected boolean canOpenInExternalEditor(EStructuralFeature feature_p) {
+    return feature_p.getEType() == EcorePackage.Literals.ESTRING;
+  }
+
+  /**
+   * Opens the textviewer on a modal dialog via the toolbar.
+   * 
+   * @param diffNode the diffnode element
+   * @param match the match element
+   * @param onLeft the side
+   */
+  protected void openExternalViewer(final EMFDiffNode diffNode, EMatch match,
+      boolean onLeft) {
+    Collection<EAttribute> attributesWithDifferences = match
+        .getAttributesWithDifferences();
+    if (!attributesWithDifferences.isEmpty()) {
+      EStructuralFeature feature = attributesWithDifferences.iterator().next();
+      if (feature != null) {
+        openExternalViewer(diffNode, match, feature, onLeft);
+      }
+    }
+  }
+
+  /**
+   * Opens the textviwer on a modal dialog.
+   * 
+   * @param diffNode the diffnode element
+   * @param match the match element
+   * @param feature the feature containing the contents to show in the textviewer
+   * @param onLeft the side
+   */
+  protected void openExternalViewer(final EMFDiffNode diffNode, EMatch match,
+      EStructuralFeature feature, boolean onLeft) {
+    TextMergerViewerDialog dialog = new TextMergerViewerDialog(getShell(),
+        diffNode, match, feature);
+    if (dialog.open() == Window.OK) {
+      // merge has been done on the dialog. refresh the viewer
+      mergeAndRefresh(diffNode, match, feature, dialog.getViewerInput(),
+          onLeft);
+    }
+  }
+
+  /**
+   * Run the merge operation from the content of the textviewer, and refresh the editor.
+   * 
+   * @param diffNode the diffnode element
+   * @param match the match element
+   * @param feature the feature containing the contents to show in the textviewer
+   * @param diffNodeWrapper the contents to be merge on the model
+   * @param toLeft_p the side
+   */
+  private void mergeAndRefresh(final EMFDiffNode diffNode, final EMatch match,
+      final EStructuralFeature feature, EMFDiffNodeWrapper diffNodeWrapper,
+      boolean toLeft_p) {
+    final ComparisonSelection selection = getSelection();
+    final EList<EMergeableDifference> toIgnore = selection
+        .asDifferencesToMerge();
+    MergerContent left = (MergerContent) diffNodeWrapper.getLeft();
+    final String mergedLeft = left.getEditedContent();
+
+    MergerContent right = (MergerContent) diffNodeWrapper.getRight();
+    final String mergedRight = right.getEditedContent();
+    final Object leftContent = match.get(Role.TARGET).eGet(feature);
+    final Object rightContent = match.get(Role.REFERENCE).eGet(feature);
+
+    executeOnModel(new IRunnableWithProgress() {
+      /**
+       * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
+       */
+      public void run(IProgressMonitor monitor_p)
+          throws InvocationTargetException, InterruptedException {
+        if (mergedLeft != null) {
+          if (leftContent instanceof String) {
+            match.get(Role.TARGET).eSet(feature, mergedLeft);
+          }
+          diffNode.setModified(true, true);
+        }
+        if (mergedRight != null) {
+          if (rightContent instanceof String) {
+            match.get(Role.REFERENCE).eSet(feature, mergedRight);
+          }
+          diffNode.setModified(true, false);
+        }
+        if (!toIgnore.isEmpty()) {
+          for (IDifference diff : toIgnore) {
+            if (diff instanceof EElementRelativePresence) {
+              EElementRelativePresence presence = (EElementRelativePresence) diff;
+              presence.setIgnored(true);
+              // Also on symmetrical if any
+              if (diff instanceof EValuePresence) {
+                IValuePresence symmetrical = ((EValuePresence) diff)
+                    .getSymmetrical();
+                if (symmetrical instanceof EMergeableDifference) {
+                  ((EMergeableDifference)symmetrical).setIgnored(true);
+                }
+              }
+            }
+          }
+        }
+      }
+    }, toLeft_p);
+    getUIComparison().setLastActionSelection(null);
+    setSelection(null);
+    firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.TRUE);
+    getInput().updateDifferenceNumbers();
+  }
+
+  /**
+   * Create the open in external textviwer editor tool item.
+   * 
+   * @param toolbar the toolbar element
+   * @param onLeft the side
+   * @return the tool item created
+   */
+  private ToolItem createToolOpenExternal(ToolBar toolbar,
+      final boolean onLeft) {
+    final ToolItem result = new ToolItem(toolbar, SWT.PUSH);
+    EMFDiffMergeUIPlugin.getDefault();
+    // Image
+    result.setImage(AbstractUIPlugin
+        .imageDescriptorFromPlugin("org.eclipse.compare", //$NON-NLS-1$
+            "$nl$/icons/full/eview16/compare_view.gif") //$NON-NLS-1$
+        .createImage());
+    // Tool tip
+    result.setToolTipText("Open in external editor"); //$NON-NLS-1$
+    result.setEnabled(false);
+    // Activation.
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event) {
+        if (PROPERTY_ACTIVATION_OPEN_EXTERNAL.equals(event.getProperty())) {
+          result.setEnabled(((Boolean) event.getNewValue()).booleanValue());
+        }
+      }
+    });
+    // Selection
+    result.addSelectionListener(new SelectionAdapter() {
+      /**
+       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       */
+      @Override
+      public void widgetSelected(SelectionEvent event) {
+        if (getSelection().asFeature() != null) {
+          openExternalViewer(getInput(), getSelection().asMatch(),
+              getSelection().asFeature(), onLeft);
+        } else if (getSelection().asMatch() != null) {
+          openExternalViewer(getInput(), getSelection().asMatch(), onLeft);
+        }
+      }
+    });
+    return result;
+  }
+
 }
