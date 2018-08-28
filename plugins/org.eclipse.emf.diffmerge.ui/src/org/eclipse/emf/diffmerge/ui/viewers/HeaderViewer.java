@@ -224,8 +224,9 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (!_innerViewer.getControl().isDisposed())
+    if (!_innerViewer.getControl().isDisposed()) {
       _innerViewer.setInput(input_p);
+    }
   }
   
   /**
@@ -240,8 +241,9 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
    */
   @Override
   public void refresh() {
-    if (!_innerViewer.getControl().isDisposed())
+    if (!_innerViewer.getControl().isDisposed()) {
       _innerViewer.refresh();
+    }
   }
   
   /**

@@ -53,18 +53,49 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   public static final String UI_DIFF_DATA_FILE_EXTENSION = "edm"; //$NON-NLS-1$
   
   /** Identifiers for UI images */
-  @SuppressWarnings("javadoc")
-  public static enum ImageID {
+  @SuppressWarnings({"javadoc", "nls"})
+  public enum ImageID {
     CHECKED, CHECKED_DISABLED, CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, COMPARE, CONFLICT_STAT,
-    DELETE, DOWN, EMPTY, EXPANDALL, FILTER, INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED,
+    DELETE, DOWN, EMPTY, EXPANDALL, FILTER, GIT_ADDED(true, 75), GIT_CHANGED(true, 50),
+    GIT_REMOVED(true, 75), INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED,
     LOCK_OPEN, MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
     PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED,
-    UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING }
+    UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING;
+    /** Whether the image file is a PNG instead of a GIF */
+    private boolean _isPNG;
+    /** The scaling percentage for use as an overlay, between 0 and 100 inclusive */
+    private int _overlayScaling;
+    /** Default constructor */
+    private ImageID() {
+      this(false, 100);
+    }
+    /** Complete constructor */
+    private ImageID(boolean isPNG_p, int overlayScaling_p) {
+      assert overlayScaling_p >= 0 && overlayScaling_p <= 100;
+      _isPNG = isPNG_p;
+      _overlayScaling = overlayScaling_p;
+    }
+    /**
+     * Return the scaling percentage for use as an overlay
+     * @return an int between 0 and 100 inclusive
+     */
+    public int getOverlayScaling() {
+      return _overlayScaling;
+    }
+    /**
+     * Return the short name of the corresponding image file
+     * @return a non-null, non-empty string
+     */
+    public String toImageFileName() {
+      String ext = _isPNG? "png": "gif";
+      String result = name().toLowerCase() + '.' + ext;
+      return result;
+    }
+  }
+  
   
   /** The local path to icons */
   protected static final String ICON_PATH = "icons/full/"; //$NON-NLS-1$
-  
-  
   
   /** A label for dialogs */
   public static final String LABEL = Messages.EMFDiffMergeUIPlugin_Label;
@@ -258,7 +289,7 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
    */
   protected ImageDescriptor registerLocalIcon(ImageID imageID_p, ImageRegistry reg_p) {
     ImageDescriptor result = null;
-    String path = ICON_PATH + imageID_p.name().toLowerCase() + ".gif"; //$NON-NLS-1$
+    String path = ICON_PATH + imageID_p.toImageFileName();
     try {
       result = ImageDescriptor.createFromURL(FileLocator.toFileURL(
           getBundle().getEntry(path)));

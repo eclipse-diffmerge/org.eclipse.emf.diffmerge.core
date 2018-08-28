@@ -25,6 +25,7 @@ import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 
 
 /**
@@ -132,6 +133,14 @@ public class ComparisonResourceManager implements IDisposable {
       result = _normalToOverlay.get(io);
       if (result == null) {
         ImageDescriptor overlayDescriptor = EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(overlay_p);
+        int scaling = overlay_p.getOverlayScaling();
+        if (scaling != 100) {
+          ImageData overlayData = overlayDescriptor.getImageData();
+          int newWidth = overlayData.width * scaling / 100;
+          int newHeight = overlayData.height * scaling / 100;
+          overlayDescriptor = ImageDescriptor.createFromImageData(
+              overlayData.scaledTo(newWidth, newHeight));
+        }
         DecorationOverlayIcon icon = new DecorationOverlayIcon(
             image_p, overlayDescriptor, IDecoration.BOTTOM_RIGHT);
         result = icon.createImage(image_p.getDevice());

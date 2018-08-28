@@ -18,8 +18,8 @@ import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -57,16 +57,32 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   }
   
   /**
+   * Refresh this viewer ignoring the inner viewer
+   */
+  protected void doRefresh() {
+    EMFDiffNode input = getInput();
+    IModelScope scope = getInnerViewer().getSideScope();
+    Label textLabel = getTextLabel();
+    if (textLabel != null) {
+      updateHeaderText(textLabel, input, scope);
+    }
+    Label imageLabel = getImageLabel();
+    if (imageLabel != null) {
+      updateHeaderImage(imageLabel, input, scope);
+    }
+  }
+  
+  /**
    * Return a label provider for header information
    * @return a non-null label provider
    */
-  protected LabelProvider getHeaderLabelProvider() {
-    LabelProvider result = null;
+  protected ILabelProvider getHeaderLabelProvider() {
+    ILabelProvider result = null;
     if (getInnerViewer() != null) {
       // Use LP of inner viewer if available
       IBaseLabelProvider baseLP = getInnerViewer().getLabelProvider();
-      if (baseLP instanceof LabelProvider) {
-        result = (LabelProvider)baseLP;
+      if (baseLP instanceof ILabelProvider) {
+        result = (ILabelProvider)baseLP;
       }
     }
     if (result == null) {
@@ -97,20 +113,16 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
     super.inputChanged(input_p, oldInput_p);
-    EMFDiffNode input = getInput();
-    IModelScope scope = getInnerViewer().getSideScope();
-    Label textLabel = getTextLabel();
-    if (textLabel != null) {
-      IBaseLabelProvider lp = getInnerViewer().getLabelProvider();
-      if (lp instanceof IColorProvider) {
-        Color newColor = ((IColorProvider)lp).getForeground(scope);
-        textLabel.setForeground(newColor);
-      }
-      updateHeaderText(textLabel, input, scope);
-    }
-    Label imageLabel = getImageLabel();
-    if (imageLabel != null)
-      updateHeaderImage(imageLabel, input, scope);
+    doRefresh();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#refresh()
+   */
+  @Override
+  public void refresh() {
+    super.refresh();
+    doRefresh();
   }
   
   /**
@@ -134,7 +146,12 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    */
   protected void updateHeaderText(Label headerTextWidget_p,
       EMFDiffNode input_p, IModelScope scope_p) {
-    String label = getHeaderLabelProvider().getText(scope_p);
+    ILabelProvider lp = getHeaderLabelProvider();
+    if (lp instanceof IColorProvider) {
+      Color newColor = ((IColorProvider)lp).getForeground(scope_p);
+      headerTextWidget_p.setForeground(newColor);
+    }
+    String label = lp.getText(scope_p);
     headerTextWidget_p.setText(label);
     headerTextWidget_p.setToolTipText(label);
   }
