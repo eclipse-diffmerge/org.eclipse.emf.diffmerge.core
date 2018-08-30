@@ -86,6 +86,24 @@ public interface DefaultUserProperties {
       "PROPERTY_SUPPORT_UNDO_REDO");
   
   /**
+   * Whether undo/redo support is optional, see above
+   */
+  Identifier<Boolean> P_SUPPORT_UNDO_REDO_OPTIONAL = new Identifier<Boolean>(
+      "PROPERTY_SUPPORT_UNDO_REDO_OPTIONAL");
+  
+  /**
+   * Whether to synchronize the left/right model viewers and the synthesis viewer
+   */
+  Identifier<Boolean> P_SYNC_EXTERNAL = new Identifier<Boolean>(
+      "PROPERTY_SYNC_EXTERNAL");
+  
+  /**
+   * Whether to synchronize the left/right model viewers and the synthesis viewer
+   */
+  Identifier<Boolean> P_SYNC_SYNTHESIS_AND_SIDES = new Identifier<Boolean>(
+      "PROPERTY_SYNC_SYNTHESIS_AND_SIDES");
+  
+  /**
    * Whether to use technical (vs. simplified) labels to represent, 
    * in particular, meta elements
    */

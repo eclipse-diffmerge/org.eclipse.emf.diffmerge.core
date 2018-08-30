@@ -35,6 +35,8 @@ import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_MERGE_IMPACT;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_SIDES_POSSIBLE;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SUPPORT_UNDO_REDO;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SUPPORT_UNDO_REDO_OPTIONAL;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SYNC_SYNTHESIS_AND_SIDES;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import java.lang.reflect.InvocationTargetException;
@@ -220,9 +222,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   /** An alphanumeric sorter */
   protected ViewerComparator _sorterSynthesis;
-  
-  /** Whether the left and right trees are synchronized with the synthesis tree */
-  protected boolean _isLeftRightSynced;
   
   /** The potentially null last selection */
   private ComparisonSelection _lastUserSelection;
@@ -423,8 +422,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (onLeft_p && PROPERTY_ACTIVATION_DELETE_LEFT.equals(event_p.getProperty()) ||
             !onLeft_p && PROPERTY_ACTIVATION_DELETE_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
-          if (newValue instanceof Boolean)
+          if (newValue instanceof Boolean) {
             result.setEnabled(((Boolean)newValue).booleanValue());
+          }
         }
       }
     });
@@ -513,8 +513,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (onLeft_p && PROPERTY_ACTIVATION_IGNORE_LEFT.equals(event_p.getProperty()) ||
             !onLeft_p && PROPERTY_ACTIVATION_IGNORE_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
-          if (newValue instanceof Boolean)
+          if (newValue instanceof Boolean) {
             result.setEnabled(((Boolean)newValue).booleanValue());
+          }
         }
       }
     });
@@ -608,7 +609,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
           EMFDiffNode input = getInput();
           if (input != null) {
             boolean editable = input.isEditable(onLeft_p);
@@ -644,10 +645,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
           EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
+          if (input != null) {
             result.setSelection(input.isUserPropertyTrue(P_LOG_EVENTS));
+          }
         }
       }
     });
@@ -694,8 +696,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (toLeft_p && PROPERTY_ACTIVATION_MERGE_TO_LEFT.equals(event_p.getProperty()) ||
             !toLeft_p && PROPERTY_ACTIVATION_MERGE_TO_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
-          if (newValue instanceof Boolean)
+          if (newValue instanceof Boolean) {
             result.setEnabled(((Boolean)newValue).booleanValue());
+          }
         }
       }
     });
@@ -821,11 +824,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
           boolean enable = false;
           EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
+          if (input != null) {
             enable = input.getEditorInput() != null;
+          }
           result.setEnabled(enable);
         }
       }
@@ -894,10 +898,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
-            result.setSelection(input.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
         }
       }
     });
@@ -957,10 +959,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed())
-            result.setSelection(input.isUserPropertyTrue(P_SHOW_MERGE_IMPACT));
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_SHOW_MERGE_IMPACT));
         }
       }
     });
@@ -997,14 +997,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed()) {
-            boolean isShowSidesPossible = input.isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE);
-            result.setSelection(isShowSidesPossible);
-            result.setEnabled(isShowSidesPossible);
-            showSides(isShowSidesPossible);
-          }
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          boolean isShowSidesPossible = isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE);
+          result.setSelection(isShowSidesPossible);
+          result.setEnabled(isShowSidesPossible);
+          showSides(isShowSidesPossible);
         }
       }
     });
@@ -1061,11 +1058,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
           EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed()) {
+          if (input != null) {
             result.setSelection(input.isUndoRedoSupported());
-            result.setEnabled(input.getEditingDomain() != null);
+            result.setEnabled(input.getEditingDomain() != null &&
+                !isUserPropertyFalse(P_SUPPORT_UNDO_REDO_OPTIONAL));
           }
         }
       }
@@ -1078,8 +1076,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         EMFDiffNode input = getInput();
-        if (input != null)
+        if (input != null) {
           input.setUserPropertyValue(P_SUPPORT_UNDO_REDO, result.getSelection());
+        }
       }
     });
     return result;
@@ -1158,7 +1157,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final MenuItem result = new MenuItem(context_p, SWT.CHECK);
     result.setText(Messages.ComparisonViewer_LinkViewsInternal);
     result.setToolTipText(Messages.ComparisonViewer_LinkViewsInternalTooltip);
-    result.setSelection(_isLeftRightSynced);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_SYNC_SYNTHESIS_AND_SIDES));
+          result.setEnabled(isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE));
+        }
+      }
+    });
+    // Selection
     result.addSelectionListener(new SelectionAdapter() {
       /**
        * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
@@ -1166,18 +1177,21 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void widgetSelected(SelectionEvent event_p) {
         boolean synced = result.getSelection();
-        _isLeftRightSynced = synced;
-        if (_isLeftRightSynced) {
-          BusyIndicator.showWhile(getDisplay(), new Runnable() {
-            /**
-             * @see java.lang.Runnable#run()
-             */
-            public void run() {
-              IStructuredSelection selection = _viewerSynthesisMain.getSelection();
-              _viewerSynthesisLeft.setSelection(getSelectionAsSide(selection, true), true);
-              _viewerSynthesisRight.setSelection(getSelectionAsSide(selection, false), true);
-            }
-          });
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setUserPropertyValue(P_SYNC_SYNTHESIS_AND_SIDES, synced);
+          if (isLeftRightSynced()) {
+            BusyIndicator.showWhile(getDisplay(), new Runnable() {
+              /**
+               * @see java.lang.Runnable#run()
+               */
+              public void run() {
+                IStructuredSelection selection = _viewerSynthesisMain.getSelection();
+                _viewerSynthesisLeft.setSelection(getSelectionAsSide(selection, true), true);
+                _viewerSynthesisRight.setSelection(getSelectionAsSide(selection, false), true);
+              }
+            });
+          }
         }
       }
     });
@@ -1199,14 +1213,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed()) {
-            Boolean value = input.getUserPropertyValue(P_CUSTOM_ICONS);
-            if (value != null) {
-              result.setSelection(value.booleanValue());
-            }
-          }
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_CUSTOM_ICONS));
         }
       }
     });
@@ -1245,12 +1253,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed()) {
-            Boolean value = input.getUserPropertyValue(P_CUSTOM_LABELS);
-            result.setSelection(value.booleanValue());
-          }
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_CUSTOM_LABELS));
         }
       }
     });
@@ -1289,14 +1293,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          EMFDiffNode input = getInput();
-          if (input != null && !result.isDisposed()) {
-            Boolean value = input.getUserPropertyValue(P_TECHNICAL_LABELS);
-            if (value != null) {
-              result.setSelection(value.booleanValue());
-            }
-          }
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+          result.setSelection(isUserPropertyTrue(P_CUSTOM_LABELS));
         }
       }
     });
@@ -1589,7 +1587,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        if (_isLeftRightSynced) {
+        if (isLeftRightSynced()) {
           IStructuredSelection selection = result.getSelection();
           Role sideRole = getInput().getRoleForSide(isLeftSide_p);
           IStructuredSelection synthesisSelection = getSelectionAsSynthesis(selection, isLeftSide_p);
@@ -1608,7 +1606,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         ISelection rawSelection = event_p.getSelection();
         Object source = event_p.getSource();
         if (rawSelection instanceof ComparisonSelection && source != result.getInnerViewer() &&
-            (source != _viewerSynthesisMain.getInnerViewer() || _isLeftRightSynced)) {
+            (source != _viewerSynthesisMain.getInnerViewer() || isLeftRightSynced())) {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           // New selection
           IStructuredSelection newSelection = StructuredSelection.EMPTY;
@@ -2114,7 +2112,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Initialize the non-graphical instance variables
    */
   protected void initialize() {
-    _isLeftRightSynced = true;
     _lastUserSelection = null;
     _multiViewerSelectionProvider = new SelectionBridge.SingleSource();
     _multiViewerSelectionProvider.setSource(this);
@@ -2238,6 +2235,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       result = TextMergerDialog.isApplicableTo(feature);
     }
     return result;
+  }
+  
+  /**
+   * Return whether the left/right model viewers must be synchronized with the synthesis viewer
+   * and can actually be visible
+   */
+  protected boolean isLeftRightSynced() {
+    return isUserPropertyTrue(P_SYNC_SYNTHESIS_AND_SIDES) &&
+        isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE);
   }
   
   /**
@@ -2586,6 +2592,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     input_p.addUserProperty(P_SHOW_MERGE_IMPACT, Boolean.FALSE);
     input_p.addUserProperty(P_SHOW_SIDES_POSSIBLE, Boolean.TRUE);
     input_p.addUserProperty(P_SUPPORT_UNDO_REDO, Boolean.TRUE);
+    input_p.addUserProperty(P_SUPPORT_UNDO_REDO_OPTIONAL, Boolean.TRUE);
+    input_p.addUserProperty(P_SYNC_SYNTHESIS_AND_SIDES,
+        input_p.getUserPropertyValue(P_SHOW_SIDES_POSSIBLE));
     input_p.addUserProperty(P_TECHNICAL_LABELS, Boolean.FALSE);
   }
   

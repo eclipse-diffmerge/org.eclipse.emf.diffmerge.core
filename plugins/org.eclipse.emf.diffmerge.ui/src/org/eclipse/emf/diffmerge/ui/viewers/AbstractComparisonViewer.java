@@ -41,6 +41,7 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -253,8 +254,19 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * @param newValue_p the potentially null, new value of the property
    */
   protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p) {
+    firePropertyChangeEvent(propertyName_p, newValue_p, null);
+  }
+  
+  /**
+   * Notify listeners of a property change event
+   * @param propertyName_p the non-null name of the property
+   * @param newValue_p the potentially null new value of the property
+   * @param oldValue_p the potentially null previous value of the property
+   */
+  protected void firePropertyChangeEvent(String propertyName_p, Object newValue_p,
+      Object oldValue_p) {
     PropertyChangeEvent event = new PropertyChangeEvent(
-        this, propertyName_p, null, newValue_p);
+        this, propertyName_p, oldValue_p, newValue_p);
     for (IPropertyChangeListener listener : _changeListeners) {
       listener.propertyChange(event);
     }
@@ -617,7 +629,25 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
         }
       });
     }
-    firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
+    firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, input_p, oldInput_p);
+  }
+  
+  /**
+   * Return whether the boolean user property of the given ID is set and has value true
+   * @param id_p a non-null object
+   */
+  protected boolean isUserPropertyFalse(Identifier<Boolean> id_p) {
+    EMFDiffNode input = getInput();
+    return input != null && input.isUserPropertyFalse(id_p);
+  }
+  
+  /**
+   * Return whether the boolean user property of the given ID is set and has value true
+   * @param id_p a non-null object
+   */
+  protected boolean isUserPropertyTrue(Identifier<Boolean> id_p) {
+    EMFDiffNode input = getInput();
+    return input != null && input.isUserPropertyTrue(id_p);
   }
   
   /**
@@ -730,8 +760,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
           IWorkbenchWindow window = site.getWorkbenchWindow();
           if (window != null && !window.getWorkbench().isClosing()) {
             ISelectionService service = window.getSelectionService();
-            if (service instanceof ISelectionChangedListener)
+            if (service instanceof ISelectionChangedListener) {
               ((ISelectionChangedListener)service).selectionChanged(event_p);
+            }
           }
         }
       };
