@@ -56,31 +56,20 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   @SuppressWarnings({"javadoc", "nls"})
   public enum ImageID {
     CHECKED, CHECKED_DISABLED, CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, COMPARE, CONFLICT_STAT,
-    DELETE, DOWN, EMPTY, EXPANDALL, FILTER, GIT_ADDED(true, 75), GIT_CHANGED(true, 50),
-    GIT_REMOVED(true, 75), INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED,
-    LOCK_OPEN, MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
+    DELETE, DOWN, EMPTY, EXPANDALL, FILTER, GIT_ADDED(true), GIT_DIRTY(true), GIT_REMOVED(true),
+    GIT_STAGED(true), INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED, LOCK_OPEN,
+    MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
     PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED,
     UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING;
     /** Whether the image file is a PNG instead of a GIF */
     private boolean _isPNG;
-    /** The scaling percentage for use as an overlay, between 0 and 100 inclusive */
-    private int _overlayScaling;
     /** Default constructor */
     private ImageID() {
-      this(false, 100);
+      this(false);
     }
     /** Complete constructor */
-    private ImageID(boolean isPNG_p, int overlayScaling_p) {
-      assert overlayScaling_p >= 0 && overlayScaling_p <= 100;
+    private ImageID(boolean isPNG_p) {
       _isPNG = isPNG_p;
-      _overlayScaling = overlayScaling_p;
-    }
-    /**
-     * Return the scaling percentage for use as an overlay
-     * @return an int between 0 and 100 inclusive
-     */
-    public int getOverlayScaling() {
-      return _overlayScaling;
     }
     /**
      * Return the short name of the corresponding image file

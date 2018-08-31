@@ -82,7 +82,7 @@ public class GitLikeDiffLabelDecorator extends DiffLabelDecorator {
       case FROM_LEFT:
       case FROM_RIGHT:
       case FROM_BOTH:
-        result = ImageID.GIT_CHANGED; break;
+        result = ImageID.GIT_STAGED; break;
       case FROM_LEFT_ADD:
       case FROM_RIGHT_ADD:
         result = ImageID.GIT_ADDED; break;
