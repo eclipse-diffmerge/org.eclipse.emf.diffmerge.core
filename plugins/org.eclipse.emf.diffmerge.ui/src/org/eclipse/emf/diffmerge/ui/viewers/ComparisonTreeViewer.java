@@ -371,8 +371,11 @@ public class ComparisonTreeViewer extends TreeViewer {
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
+      List<IMatch> result = Collections.emptyList();
       EMFDiffNode input = (EMFDiffNode)inputElement_p;
-      List<IMatch> result = input.getActualComparison().getContents();
+      if (input != null) {
+        result = input.getActualComparison().getContents();
+      }
       return result.toArray();
     }
     

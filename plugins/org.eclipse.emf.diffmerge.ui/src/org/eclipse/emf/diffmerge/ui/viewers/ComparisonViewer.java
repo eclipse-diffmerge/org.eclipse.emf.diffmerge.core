@@ -1793,6 +1793,18 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return the currently selected tree path from the Synthesis viewer
+   * @return a non-null, potentially empty path
+   */
+  protected TreePath getCurrentPath() {
+    ComparisonTreeViewer treeViewer = getSynthesisViewer().getInnerViewer();
+    ITreeSelection selection = treeViewer.getSelection();
+    TreePath result = (selection == null || selection.isEmpty())? TreePath.EMPTY:
+      selection.getPaths()[0];
+    return result;
+  }
+  
+  /**
    * Return the default respective weights of the columns (sashes) of the GUI
    * @return an int array whose size is equal to the number of columns
    */
@@ -2426,14 +2438,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * last/first difference being reached
    */
   protected boolean navigate(boolean next_p) {
+    return navigate(getCurrentPath(), next_p);
+  }
+  
+  /**
+   * Navigate to the next/previous difference from the given origin path
+   * according to the given flag
+   * @param origin_p a non-null tree path
+   * @param next_p whether navigation must be forward or back
+   * @return whether the operation could not be completed due to the
+   * last/first difference being reached
+   */
+  protected boolean navigate(TreePath origin_p, boolean next_p) {
     ComparisonTreeViewer treeViewer = _viewerSynthesisMain.getInnerViewer();
-    ITreeSelection selection = treeViewer.getSelection();
-    TreePath current = (selection == null || selection.isEmpty())? TreePath.EMPTY:
-      selection.getPaths()[0];
-    TreePath newPath = next_p? treeViewer.getNextUserDifference(current):
-      treeViewer.getPreviousUserDifference(current);
-    if (newPath != null)
+    TreePath newPath = next_p? treeViewer.getNextUserDifference(origin_p):
+      treeViewer.getPreviousUserDifference(origin_p);
+    if (newPath != null) {
       setSelection(new ComparisonSelectionImpl(newPath, getDrivingRole(), getInput()), true);
+    }
     return newPath == null;
   }
   

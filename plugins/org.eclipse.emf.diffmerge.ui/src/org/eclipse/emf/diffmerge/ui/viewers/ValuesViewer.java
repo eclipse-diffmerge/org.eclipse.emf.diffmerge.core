@@ -264,68 +264,70 @@ IDifferenceRelatedViewer {
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      ValuesInput valuesInput = (ValuesInput)inputElement_p;
-      MatchAndFeature maf = valuesInput.getMatchAndFeature();
       Collection<Object> result = new ArrayList<Object>();
-      if (isOwnership(maf)) {
-        // Ownership
-        IReferenceValuePresence ownership = maf.getMatch().getOwnershipDifference(getSideRole());
-        if (ownership != null)
-          result.add(ownership);
-      } else {
-        // Order
-        IValuePresence orderDifference = maf.getMatch().getOrderDifference(
-            maf.getFeature(), getSideRole());
-        if (orderDifference != null)
-          result.add(orderDifference);
-        // Only show values if no containment
-        if (!valuesInput.isContainment()) {
-          if (isDifferenceAgnostic()) {
-            // All feature values
-            IMatch match = maf.getMatch();
-            EObject source = match.get(getSideRole());
-            if (source != null) {
-              IComparison comparison = getInput() == null? null:
-                getInput().getContext().getActualComparison();
-              if (comparison != null) {
-                if (maf.getFeature() instanceof EAttribute) {
-                  EAttribute attribute = (EAttribute)maf.getFeature();
-                  List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
-                  for (Object value : values) {
-                    IAttributeValuePresence presence =
-                        match.getAttributeValueDifference(attribute, value);
-                    if (presence != null)
-                      result.add(presence);
-                    else
-                      result.add(value);
-                  }
-                } else {
-                  EReference reference = (EReference)maf.getFeature();
-                  List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
-                  for (EObject value : values) {
-                    IReferenceValuePresence presence =
-                        match.getReferenceValueDifference(reference, value);
-                    if (presence != null)
-                      result.add(presence);
-                    else
-                      result.add(value);
+      ValuesInput valuesInput = (ValuesInput)inputElement_p;
+      if (valuesInput != null) {
+        MatchAndFeature maf = valuesInput.getMatchAndFeature();
+        if (isOwnership(maf)) {
+          // Ownership
+          IReferenceValuePresence ownership = maf.getMatch().getOwnershipDifference(getSideRole());
+          if (ownership != null)
+            result.add(ownership);
+        } else {
+          // Order
+          IValuePresence orderDifference = maf.getMatch().getOrderDifference(
+              maf.getFeature(), getSideRole());
+          if (orderDifference != null)
+            result.add(orderDifference);
+          // Only show values if no containment
+          if (!valuesInput.isContainment()) {
+            if (isDifferenceAgnostic()) {
+              // All feature values
+              IMatch match = maf.getMatch();
+              EObject source = match.get(getSideRole());
+              if (source != null) {
+                IComparison comparison = getInput() == null? null:
+                  getInput().getContext().getActualComparison();
+                if (comparison != null) {
+                  if (maf.getFeature() instanceof EAttribute) {
+                    EAttribute attribute = (EAttribute)maf.getFeature();
+                    List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
+                    for (Object value : values) {
+                      IAttributeValuePresence presence =
+                          match.getAttributeValueDifference(attribute, value);
+                      if (presence != null)
+                        result.add(presence);
+                      else
+                        result.add(value);
+                    }
+                  } else {
+                    EReference reference = (EReference)maf.getFeature();
+                    List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
+                    for (EObject value : values) {
+                      IReferenceValuePresence presence =
+                          match.getReferenceValueDifference(reference, value);
+                      if (presence != null)
+                        result.add(presence);
+                      else
+                        result.add(value);
+                    }
                   }
                 }
               }
-            }
-          } else {
-            // Only differences
-            Collection<? extends IValuePresence> bothSides;
-            if (maf.getFeature() instanceof EAttribute)
-              bothSides = maf.getMatch().getAttributeDifferences((EAttribute)maf.getFeature());
-            else
-              bothSides = maf.getMatch().getReferenceDifferences((EReference)maf.getFeature());
-            for (IValuePresence presence : bothSides) {
-              if (!presence.isOrder() && presence.getPresenceRole() == getSideRole() &&
-                  presence.getMergeDestination() != getSideRole() ||
-                  !presence.isOrder() && presence.getPresenceRole() == getSideRole().opposite() &&
-                  presence.getMergeDestination() == getSideRole())
-                result.add(presence);
+            } else {
+              // Only differences
+              Collection<? extends IValuePresence> bothSides;
+              if (maf.getFeature() instanceof EAttribute)
+                bothSides = maf.getMatch().getAttributeDifferences((EAttribute)maf.getFeature());
+              else
+                bothSides = maf.getMatch().getReferenceDifferences((EReference)maf.getFeature());
+              for (IValuePresence presence : bothSides) {
+                if (!presence.isOrder() && presence.getPresenceRole() == getSideRole() &&
+                    presence.getMergeDestination() != getSideRole() ||
+                    !presence.isOrder() && presence.getPresenceRole() == getSideRole().opposite() &&
+                    presence.getMergeDestination() == getSideRole())
+                  result.add(presence);
+              }
             }
           }
         }

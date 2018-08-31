@@ -18,6 +18,7 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -246,25 +247,29 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      EMFDiffNode context = getInput().getContext();
-      Role drivingRole = context.getDrivingRole();
-      IMatch match = ((FeaturesInput)inputElement_p).getMatch();
-      List<EStructuralFeature> features;
-      if (isDifferenceAgnostic())
-        features = getAllFeatures(match);
-      else {
-        features = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
-        for (EReference ref : match.getReferencesWithDifferences()) {
-          if (!context.isContainment(ref) || match.getOrderDifference(ref, drivingRole) != null)
-            features.add(ref);
+      List<MatchAndFeature> result = Collections.emptyList();
+      FeaturesInput input = getInput();
+      if (input != null) {
+        EMFDiffNode context = input.getContext();
+        Role drivingRole = context.getDrivingRole();
+        IMatch match = ((FeaturesInput)inputElement_p).getMatch();
+        List<EStructuralFeature> features;
+        if (isDifferenceAgnostic())
+          features = getAllFeatures(match);
+        else {
+          features = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
+          for (EReference ref : match.getReferencesWithDifferences()) {
+            if (!context.isContainment(ref) || match.getOrderDifference(ref, drivingRole) != null)
+              features.add(ref);
+          }
         }
-      }
-      if (getInput().getContext().getCategoryManager().representAsMove(match))
-        features.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
-      List<MatchAndFeature> result = new ArrayList<MatchAndFeature>();
-      for (EStructuralFeature feature : features) {
-        MatchAndFeature maf = new MatchAndFeatureImpl((EMatch)match, feature);
-        result.add(maf);
+        if (getInput().getContext().getCategoryManager().representAsMove(match))
+          features.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
+        result = new ArrayList<MatchAndFeature>();
+        for (EStructuralFeature feature : features) {
+          MatchAndFeature maf = new MatchAndFeatureImpl((EMatch)match, feature);
+          result.add(maf);
+        }
       }
       return result.toArray();
     }
