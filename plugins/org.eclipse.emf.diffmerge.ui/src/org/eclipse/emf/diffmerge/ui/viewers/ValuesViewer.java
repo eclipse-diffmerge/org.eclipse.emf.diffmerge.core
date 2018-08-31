@@ -382,8 +382,10 @@ IDifferenceRelatedViewer {
     public String getUndecoratedText(Object element_p) {
       String result = super.getUndecoratedText(element_p);
       // Adapt multi-line string for one-line display
-      result = result.replace('\n', '\\');
-      result = result.replace('\r', '\\');
+      String[] lines = result.split("\r\n|\r|\n", 2); //$NON-NLS-1$
+      if (lines.length > 1) {
+        result = lines[0] + " [...]"; //$NON-NLS-1$
+      }
       return result;
     }
     /**
