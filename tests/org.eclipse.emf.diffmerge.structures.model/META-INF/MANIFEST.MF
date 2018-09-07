@@ -16,3 +16,4 @@ Export-Package: org.eclipse.emf.diffmerge.structures.model.integration,
  org.eclipse.emf.diffmerge.structures.model.egraphs,
  org.eclipse.emf.diffmerge.structures.model.egraphs.impl,
  org.eclipse.emf.diffmerge.structures.model.egraphs.util
+Automatic-Module-Name: org.eclipse.emf.diffmerge.structures.model

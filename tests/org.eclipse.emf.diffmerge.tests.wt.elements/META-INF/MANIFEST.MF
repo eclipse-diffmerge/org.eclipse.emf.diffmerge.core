@@ -15,5 +15,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.wt.elements
 Bundle-ActivationPolicy: lazy
-Bundle-Name: WindowTester-based test plug-in on Elements
+Bundle-Name: WindowTester-based test plug-in on Elements (Incubation)
 Bundle-Vendor: Eclipse Modeling Project
+Automatic-Module-Name: org.eclipse.emf.diffmerge.tests.wt.elements

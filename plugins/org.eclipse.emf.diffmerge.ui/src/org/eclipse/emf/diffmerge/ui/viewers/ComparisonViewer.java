@@ -1,11 +1,10 @@
-/**
- * <copyright>
- * 
+/*********************************************************************
  * Copyright (c) 2010-2018 Thales Global Services S.A.S and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
@@ -13,9 +12,7 @@
  *    Stephane Bouchet (Intel Corporation) - Bug #489274 : added API viewers creation methods
  *    Jeremy Aubry (Obeo) - Bug #500417 : Cannot call a merge with a given selection programmatically
  *    Stephane Bouchet (Intel Corporation) - Bug # : added external editor for text differences
- * 
- * </copyright>
- */
+ **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
 import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemAddDisposeListener;
