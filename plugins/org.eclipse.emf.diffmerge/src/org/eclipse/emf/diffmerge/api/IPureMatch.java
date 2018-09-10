@@ -77,6 +77,13 @@ public interface IPureMatch {
   boolean isPartial();
   
   /**
+   * Return whether at least one of the given roles is not covered by this match.
+   * Class invariant: isPartial(role1_p, role2_p) == isPartial(role2_p, role1_p)
+   * Class invariant: isPartial(TARGET, REFERENCE) == isPartial()
+   */
+  boolean isPartial(Role role1_p, Role role2_p);
+  
+  /**
    * Return whether this match corresponds to the given elements,
    * ignoring the ancestor if any.
    * @param target_p a potentially null element playing the TARGET role

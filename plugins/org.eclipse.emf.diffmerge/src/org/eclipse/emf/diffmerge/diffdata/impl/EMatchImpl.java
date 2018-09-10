@@ -1236,6 +1236,14 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.api.IPureMatch#isPartial(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
+   * @generated NOT
+   */
+  public boolean isPartial(Role role1_p, Role role2_p) {
+    return !coversRole(role1_p) || !coversRole(role2_p);
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.api.IPureMatch#maps(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
    * @generated NOT
    */
