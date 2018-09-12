@@ -15,13 +15,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemAddDisposeListener;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemAddSelectionListener;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemCreate;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemGetSelection;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetSelection;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetText;
-import static org.eclipse.emf.diffmerge.ui.util.UIUtil.itemSetToolTipText;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_ICONS;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_LABELS;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_DEFAULT_COVER_CHILDREN;
@@ -89,6 +82,7 @@ import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
+import org.eclipse.emf.diffmerge.ui.util.UIUtil.MenuDropDownAction;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.TextMergerDialog.TextDiffNode;
@@ -96,15 +90,19 @@ import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ContentViewer;
@@ -136,10 +134,10 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -165,9 +163,28 @@ import org.eclipse.ui.progress.IProgressService;
  */
 public class ComparisonViewer extends AbstractComparisonViewer {
   
-  /** The location for contributions to the Synthesis toolbar in Menu API URI format */
+  /** The location for contributions to the Synthesis tool bar in Menu API URI format */
   public static final String LOCATION_TOOLBAR_SYNTHESIS =
       "toolbar:org.eclipse.emf.diffmerge.ui.toolbars.synthesis"; //$NON-NLS-1$
+  
+  /** The location for contributions to the Details tool bar in Menu API URI format */
+  public static final String LOCATION_TOOLBAR_DETAILS =
+      "toolbar:org.eclipse.emf.diffmerge.ui.toolbars.details"; //$NON-NLS-1$
+  
+  /** The name of the corresponding group of tool/menu items in the GUI */
+  public static final String LOCATION_TOOLBAR_GROUP_CONSISTENCY = "consistencyGroup"; //$NON-NLS-1$
+  
+  /** The name of the corresponding group of tool/menu items in the GUI */
+  public static final String LOCATION_TOOLBAR_GROUP_NAVIGATION = "navigationGroup"; //$NON-NLS-1$
+  
+  /** The name of the corresponding group of tool/menu items in the GUI */
+  public static final String LOCATION_TOOLBAR_GROUP_EXPANSION = "expansionGroup"; //$NON-NLS-1$
+  
+  /** The name of the corresponding group of tool/menu items in the GUI */
+  public static final String LOCATION_TOOLBAR_GROUP_FILTERING = "filteringGroup"; //$NON-NLS-1$
+  
+  /** The name of the corresponding group of tool/menu items in the GUI */
+  public static final String LOCATION_TOOLBAR_GROUP_MENU = "menuGroup"; //$NON-NLS-1$
   
   /** The name of the "filtering state" property */
   public static final String PROPERTY_FILTERING = "PROPERTY_FILTERING"; //$NON-NLS-1$
@@ -373,16 +390,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemCollapse(ToolBar context_p) {
-    ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(getImage(ImageID.COLLAPSEALL));
-    result.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemCollapse(IContributionManager context_p) {
+    final IAction action = new Action() {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
+      public void run() {
         BusyIndicator.showWhile(getDisplay(), new Runnable() {
           /**
            * @see java.lang.Runnable#run()
@@ -392,7 +406,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           }
         });
       }
-    });
+    };
+    action.setImageDescriptor(getImageDescriptor(ImageID.COLLAPSEALL));
+    action.setToolTipText(Messages.ComparisonViewer_CollapseTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -402,14 +420,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param onLeft_p whether the side is left
    * @return a potentially null item
    */
-  protected Item createItemDelete(ToolBar context_p, final boolean onLeft_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.PUSH);
+  protected ActionContributionItem createItemDelete(IContributionManager context_p, final boolean onLeft_p) {
+    final IAction action = new Action() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        merge(onLeft_p, false);
+      }
+    };
     // Image
-    result.setImage(getImage(ImageID.DELETE));
+    action.setImageDescriptor(getImageDescriptor(ImageID.DELETE));
     // Tool tip
-    result.setToolTipText(onLeft_p? Messages.ComparisonViewer_DeleteLeftTooltip:
+    action.setToolTipText(onLeft_p? Messages.ComparisonViewer_DeleteLeftTooltip:
       Messages.ComparisonViewer_DeleteRightTooltip);
-    result.setEnabled(false);
+    action.setEnabled(false);
     // Activation
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -420,21 +446,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             !onLeft_p && PROPERTY_ACTIVATION_DELETE_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
           if (newValue instanceof Boolean) {
-            result.setEnabled(((Boolean)newValue).booleanValue());
+            action.setEnabled(((Boolean)newValue).booleanValue());
           }
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        merge(onLeft_p, false);
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -443,16 +461,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemExpand(ToolBar context_p) {
-    ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(getImage(ImageID.EXPANDALL));
-    result.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemExpand(IContributionManager context_p) {
+    final IAction action = new Action() {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
+      public void run() {
         BusyIndicator.showWhile(getDisplay(), new Runnable() {
           /**
            * @see java.lang.Runnable#run()
@@ -462,27 +477,41 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           }
         });
       }
-    });
+    };
+    action.setImageDescriptor(getImageDescriptor(ImageID.EXPANDALL));
+    action.setToolTipText(Messages.ComparisonViewer_ExpandTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
   /**
    * Create the "filter" item in the given context and return it
-   * @param context_p a non-null ToolBar or Menu
+   * @param context_p a non-null context
    * @return a potentially null item
    */
-  protected Item createItemFilter(Widget context_p) {
-    assert context_p instanceof ToolBar || context_p instanceof Menu;
-    final Item result = itemCreate(context_p, SWT.CHECK, null);
+  protected ActionContributionItem createItemFilter(IContributionManager context_p) {
+    final IAction action = new Action(null, IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#runWithEvent(org.eclipse.swt.widgets.Event)
+       */
+      @Override
+      public void runWithEvent(Event event_p) {
+        _filterSelectionListener.runWithEvent(event_p);
+      }
+    };
     String text = (context_p instanceof ToolBar)?
         Messages.ComparisonViewer_FilterToolTip:
           Messages.ComparisonViewer_FilterText;
-    itemSetText(result, text);
-    itemSetToolTipText(result, Messages.ComparisonViewer_EnhancedFilterToolTip);
-    result.setImage(getImage(ImageID.FILTER));
-    itemSetSelection(result, false);
-    if (_filterSelectionListener == null)
+    action.setText(text);
+    action.setToolTipText(Messages.ComparisonViewer_EnhancedFilterToolTip);
+    action.setImageDescriptor(getImageDescriptor(ImageID.FILTER));
+    action.setChecked(false);
+    if (_filterSelectionListener == null) {
       _filterSelectionListener = new FilterSelectionListener();
+    }
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     _filterSelectionListener.addItem(result);
     return result;
   }
@@ -493,14 +522,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param onLeft_p whether the side is left
    * @return a potentially null item
    */
-  protected Item createItemIgnore(ToolBar context_p, final boolean onLeft_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.PUSH);
+  protected ActionContributionItem createItemIgnore(IContributionManager context_p, final boolean onLeft_p) {
+    final IAction action = new Action() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        ignore(onLeft_p);
+      }
+    };
     // Image
-    result.setImage(getImage(ImageID.CHECKED));
+    action.setImageDescriptor(getImageDescriptor(ImageID.CHECKED));
     // Tool tip
-    result.setToolTipText(onLeft_p? Messages.ComparisonViewer_IgnoreLeftTooltip:
+    action.setToolTipText(onLeft_p? Messages.ComparisonViewer_IgnoreLeftTooltip:
       Messages.ComparisonViewer_IgnoreRightTooltip);
-    result.setEnabled(false);
+    action.setEnabled(false);
     // Activation
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -511,21 +548,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             !onLeft_p && PROPERTY_ACTIVATION_IGNORE_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
           if (newValue instanceof Boolean) {
-            result.setEnabled(((Boolean)newValue).booleanValue());
+            action.setEnabled(((Boolean)newValue).booleanValue());
           }
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        ignore(onLeft_p);
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -533,8 +562,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Create the "inconsistency" item in the given context and return it
    * @param context_p a non-null object
    */
-  protected ActionContributionItem createItemInconsistency(IContributionManager context_p) {
+  protected ActionContributionItem createItemInconsistency(
+      IContributionManager context_p) {
     final Action action = new Action() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
       @Override
       public void run() {
         final Shell shell = getShell();
@@ -552,8 +585,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     };
-    ActionContributionItem result = new ActionContributionItem(action);
-    context_p.add(result);
     action.setImageDescriptor(getImageDescriptor(ImageID.WARNING));
     action.setDisabledImageDescriptor(getImageDescriptor(ImageID.EMPTY));
     action.setEnabled(false);
@@ -571,6 +602,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -580,44 +613,46 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param onLeft_p whether the side is left or right
    * @return a potentially null item
    */
-  protected Item createItemLock(ToolBar context_p, final boolean onLeft_p) {
-    final ToolItem result = new ToolItem(context_p, SWT.CHECK);
-    final Image openLockImage = getImage(ImageID.LOCK_OPEN);
-    final Image closedLockImage = getImage(ImageID.LOCK_CLOSED);
-    result.setImage(openLockImage);
+  protected ActionContributionItem createItemLock(IContributionManager context_p,
+      final boolean onLeft_p) {
+    final ImageDescriptor openLockImage = getImageDescriptor(ImageID.LOCK_OPEN);
+    final ImageDescriptor closedLockImage = getImageDescriptor(ImageID.LOCK_CLOSED);
     final String lockedTooltip = Messages.ComparisonViewer_LockTooltip_Locked;
     final String unlockedTooltip = Messages.ComparisonViewer_LockTooltip_Unlocked;
-    result.setToolTipText(unlockedTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+    final IAction action = new Action(null, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        boolean editable = !result.getSelection();
+      public void run() {
+        boolean editable = !isChecked();
         getInput().setEditable(editable, onLeft_p);
-        result.setImage(editable? openLockImage: closedLockImage);
-        result.setToolTipText(editable? unlockedTooltip: lockedTooltip);
+        setImageDescriptor(editable? openLockImage: closedLockImage);
+        setToolTipText(editable? unlockedTooltip: lockedTooltip);
         refreshTools();
       }
-    });
+    };
+    action.setImageDescriptor(openLockImage);
+    action.setToolTipText(unlockedTooltip);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null) {
             boolean editable = input.isEditable(onLeft_p);
-            result.setSelection(!editable);
-            result.setImage(editable? openLockImage:closedLockImage);
-            result.setToolTipText(editable? unlockedTooltip: lockedTooltip);
-            result.setEnabled(input.isEditionPossible(onLeft_p));
+            action.setChecked(!editable);
+            action.setImageDescriptor(editable? openLockImage:closedLockImage);
+            action.setToolTipText(editable? unlockedTooltip: lockedTooltip);
+            action.setEnabled(input.isEditionPossible(onLeft_p));
           }
         }
       }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -626,64 +661,74 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemLogEvents(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_LogEventsMenuItem);
+  protected ActionContributionItem createItemLogEvents(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_LogEventsMenuItem, IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        boolean logEvents = isChecked();
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setUserPropertyValue(P_LOG_EVENTS, logEvents);
+          if (logEvents) {
+            getLogger().log(new CompareLogEvent(getEditingDomain(), input));
+          }
+        }
+      }
+    };
     String tooltip = Messages.ComparisonViewer_LogTooltipNoFile;
     Logger logger = getLogger();
     if (logger instanceof DiffMergeLogger) {
       IPath logFile = ((DiffMergeLogger)logger).getLogFile();
       tooltip = String.format(Messages.ComparisonViewer_LogTooltipFile, logFile.toOSString());
     }
-    result.setToolTipText(tooltip);
+    action.setToolTipText(tooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null) {
-            result.setSelection(input.isUserPropertyTrue(P_LOG_EVENTS));
+            action.setChecked(input.isUserPropertyTrue(P_LOG_EVENTS));
           }
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        boolean logEvents = result.getSelection();
-        EMFDiffNode input = getInput();
-        if (input != null) {
-          input.setUserPropertyValue(P_LOG_EVENTS, logEvents);
-          if (logEvents)
-            getLogger().log(new CompareLogEvent(getEditingDomain(), input));
-        }
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
   /**
    * Create the "merge" item to the given side in the given context and return it
-   * @param toolbar_p a non-null object
+   * @param context_p a non-null object
    * @param toLeft_p whether the side is left
    * @return a potentially null item
    */
-  protected Item createItemMerge(ToolBar toolbar_p, final boolean toLeft_p) {
-    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+  protected ActionContributionItem createItemMerge(
+      IContributionManager context_p, final boolean toLeft_p) {
+    final IAction action = new Action() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        merge(toLeft_p, true);
+      }
+    };
     // Image
     ImageID imageID = toLeft_p? ImageID.CHECKOUT_ACTION: ImageID.CHECKIN_ACTION;
-    result.setImage(getImage(imageID));
+    action.setImageDescriptor(getImageDescriptor(imageID));
     // Tool tip
-    result.setToolTipText(toLeft_p? Messages.ComparisonViewer_MergeLeftTooltip:
+    action.setToolTipText(toLeft_p? Messages.ComparisonViewer_MergeLeftTooltip:
       Messages.ComparisonViewer_MergeRightTooltip);
-    result.setEnabled(false);
+    action.setEnabled(false);
     // Activation
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -694,42 +739,36 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             !toLeft_p && PROPERTY_ACTIVATION_MERGE_TO_RIGHT.equals(event_p.getProperty())) {
           Object newValue = event_p.getNewValue();
           if (newValue instanceof Boolean) {
-            result.setEnabled(((Boolean)newValue).booleanValue());
+            action.setEnabled(((Boolean)newValue).booleanValue());
           }
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        merge(toLeft_p, true);
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
   /**
    * Create the "next" navigation item in the given context and return it
-   * @param toolbar_p a non-null context
+   * @param context_p a non-null context
    * @return a potentially null item
    */
-  protected Item createItemNavigationNext(ToolBar toolbar_p) {
-    ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
-    result.setImage(getImage(ImageID.NEXT_DIFF_NAV));
-    result.setToolTipText(Messages.ComparisonViewer_NextTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemNavigationNext(
+      IContributionManager context_p) {
+    final IAction action = new Action() {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
+      public void run() {
         navigate(true);
       }
-    });
+    };
+    action.setImageDescriptor(getImageDescriptor(ImageID.NEXT_DIFF_NAV));
+    action.setToolTipText(Messages.ComparisonViewer_NextTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -738,35 +777,50 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null tool item
    */
-  protected Item createItemNavigationPrevious(ToolBar context_p) {
-    ToolItem result = new ToolItem(context_p, SWT.PUSH);
-    result.setImage(getImage(ImageID.PREV_DIFF_NAV));
-    result.setToolTipText(Messages.ComparisonViewer_PreviousTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemNavigationPrevious(
+      IContributionManager context_p) {
+    final IAction action = new Action() {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
+      public void run() {
         navigate(false);
       }
-    });
+    };
+    action.setImageDescriptor(getImageDescriptor(ImageID.PREV_DIFF_NAV));
+    action.setToolTipText(Messages.ComparisonViewer_PreviousTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
   /**
    * Create the "open in dedicated editor" item in the given context
    * and return it
-   * @param toolbar_p a non-null object
+   * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemOpenDedicated(ToolBar toolbar_p) {
-    final ToolItem result = new ToolItem(toolbar_p, SWT.PUSH);
+  protected ActionContributionItem createItemOpenDedicated(IContributionManager context_p) {
+    final IAction action = new Action() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        EMFDiffNode input = getInput();
+        ComparisonSelection selection = getSelection();
+        if (isDedicatedViewerApplicable(input, selection)) {
+          openDedicatedViewer(getInput(), getSelection().asMatch(),
+              (EAttribute)selection.asFeature());
+        }
+      }
+    };
     // Image
-    result.setImage(getImage(ImageID.COMPARE));
+    action.setImageDescriptor(getImageDescriptor(ImageID.COMPARE));
     // Tool tip text
-    result.setToolTipText(Messages.ComparisonViewer_OpenDedicated_ToolTip);
-    result.setEnabled(false);
+    action.setToolTipText(Messages.ComparisonViewer_OpenDedicated_ToolTip);
+    action.setEnabled(false);
     // Enabled/visible state
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
@@ -775,25 +829,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void propertyChange(PropertyChangeEvent event) {
         if (PROPERTY_ACTIVATION_OPEN_DEDICATED.equals(event.getProperty())) {
           boolean newEnabled = ((Boolean)event.getNewValue()).booleanValue();
-          result.setEnabled(newEnabled);
+          action.setEnabled(newEnabled);
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent event) {
-        EMFDiffNode input = getInput();
-        ComparisonSelection selection = getSelection();
-        if (isDedicatedViewerApplicable(input, selection)) {
-          openDedicatedViewer(getInput(), getSelection().asMatch(),
-              (EAttribute)selection.asFeature());
-        }
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -802,35 +843,35 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemRestart(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.PUSH);
-    result.setText(Messages.ComparisonViewer_ToolUpdate);
-    result.setToolTipText(Messages.ComparisonViewer_ToolUpdate_Tooltip);
-    result.setImage(getImage(ImageID.UPDATE));
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemRestart(IContributionManager context_p) {
+    final IAction action = new Action() {
       /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        restart();
-      }
-    });
+      public void run() {
+        restart();      }
+    };
+    action.setText(Messages.ComparisonViewer_ToolUpdate);
+    action.setToolTipText(Messages.ComparisonViewer_ToolUpdate_Tooltip);
+    action.setImageDescriptor(getImageDescriptor(ImageID.UPDATE));
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           boolean enable = false;
           EMFDiffNode input = getInput();
           if (input != null) {
             enable = input.getEditorInput() != null;
           }
-          result.setEnabled(enable);
+          action.setEnabled(enable);
         }
       }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -839,21 +880,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowAllFeatures(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.RADIO);
-    result.setText(Messages.ComparisonViewer_ShowAllFeatures);
-    result.setToolTipText(Messages.ComparisonViewer_ShowAllFeaturesTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemShowAllFeatures(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowAllFeatures, IAction.AS_RADIO_BUTTON) {
       /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
+      public void run() {
         _viewerFeatures.getInnerViewer().setDifferenceAgnostic(true);
         _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(true);
         _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(true);
       }
-    });
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ShowAllFeaturesTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -862,21 +904,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowAllValues(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.RADIO);
-    result.setText(Messages.ComparisonViewer_ShowAllValues);
-    result.setToolTipText(Messages.ComparisonViewer_ShowAllValuesTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemShowAllValues(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowAllValues, IAction.AS_RADIO_BUTTON) {
       /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
+      public void run() {
         _viewerFeatures.getInnerViewer().setDifferenceAgnostic(false);
         _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(true);
         _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(true);
       }
-    });
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ShowAllValuesTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -885,35 +928,36 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowDifferenceNumbers(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_ShowDifferenceNumbersMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_ShowDifferenceNumbersTooltip);
+  protected ActionContributionItem createItemShowDifferenceNumbers(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowDifferenceNumbersMenuItem,
+        IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setUserPropertyValue(P_SHOW_DIFFERENCE_NUMBERS, isChecked());
+          refresh();
+        }
+      }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ShowDifferenceNumbersTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS));
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        EMFDiffNode input = getInput();
-        if (input != null) {
-          input.setUserPropertyValue(P_SHOW_DIFFERENCE_NUMBERS, result.getSelection());
-          refresh();
-        }
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -922,22 +966,23 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowDiffValues(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.RADIO);
-    result.setText(Messages.ComparisonViewer_ShowValueDiffs);
-    result.setToolTipText(Messages.ComparisonViewer_ShowValueDiffsTooltip);
-    result.setSelection(true);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemShowDiffValues(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowValueDiffs, IAction.AS_RADIO_BUTTON) {
       /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
+      public void run() {
         _viewerFeatures.getInnerViewer().setDifferenceAgnostic(false);
         _viewerValuesLeft.getInnerViewer().setDifferenceAgnostic(false);
         _viewerValuesRight.getInnerViewer().setDifferenceAgnostic(false);
       }
-    });
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ShowValueDiffsTooltip);
+    action.setChecked(true);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -946,36 +991,36 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowImpact(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_ImpactMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_ImpactMenuItemTooltip);
-    // Initialization
-    addPropertyChangeListener(new IPropertyChangeListener() {
+  protected ActionContributionItem createItemShowImpact(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ImpactMenuItem, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_SHOW_MERGE_IMPACT));
-        }
-      }
-    });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        boolean showImpact = result.getSelection();
+      public void run() {
+        boolean showImpact = isChecked();
         EMFDiffNode input = getInput();
         if (input != null) {
           input.setUserPropertyValue(P_SHOW_MERGE_IMPACT, showImpact);
           input.setUserPropertyValue(P_DEFAULT_SHOW_MERGE_IMPACT, showImpact);
         }
       }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ImpactMenuItemTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_SHOW_MERGE_IMPACT));
+        }
+      }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -984,35 +1029,34 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowSides(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_ShowSidesMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_ShowSidesMenuItemTooltip);
+  protected ActionContributionItem createItemShowSides(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowSidesMenuItem, IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        showSides(isChecked());
+      }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_ShowSidesMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           boolean isShowSidesPossible = isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE);
-          result.setSelection(isShowSidesPossible);
-          result.setEnabled(isShowSidesPossible);
+          action.setChecked(isShowSidesPossible);
+          action.setEnabled(isShowSidesPossible);
           showSides(isShowSidesPossible);
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        boolean show = result.getSelection();
-        showSides(show);
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1021,22 +1065,25 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemShowUncounted(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_ShowUncountedMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_ShowUncountedMenuItemTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemShowUncounted(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_ShowUncountedMenuItem, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        if (result.getSelection())
+      public void run() {
+        if (isChecked()) {
           _viewerSynthesisMain.getInnerViewer().removeFilter(_filterUnchangedElements);
-        else
+        } else {
           _viewerSynthesisMain.getInnerViewer().addFilter(_filterUnchangedElements);
+        }
       }
-    });
+    };
+    action.setChecked(true);
+    action.setToolTipText(Messages.ComparisonViewer_ShowUncountedMenuItemTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1045,39 +1092,39 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSupportUndoRedo(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_SupportUndoRedoMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_SupportUndoRedoMenuItemTooltip);
+  protected ActionContributionItem createItemSupportUndoRedo(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_SupportUndoRedoMenuItem, IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        EMFDiffNode input = getInput();
+        if (input != null) {
+          input.setUserPropertyValue(P_SUPPORT_UNDO_REDO, isChecked());
+        }
+      }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_SupportUndoRedoMenuItemTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
           EMFDiffNode input = getInput();
           if (input != null) {
-            result.setSelection(input.isUndoRedoSupported());
-            result.setEnabled(input.getEditingDomain() != null &&
+            action.setChecked(input.isUndoRedoSupported());
+            action.setEnabled(input.getEditingDomain() != null &&
                 !isUserPropertyFalse(P_SUPPORT_UNDO_REDO_OPTIONAL));
           }
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        EMFDiffNode input = getInput();
-        if (input != null) {
-          input.setUserPropertyValue(P_SUPPORT_UNDO_REDO, result.getSelection());
-        }
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1086,23 +1133,26 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSort(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setImage(getImage(ImageID.SORT));
-    result.setText(Messages.ComparisonViewer_SortTooltip);
-    result.setToolTipText(Messages.ComparisonViewer_EnhancedSortTooltip);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemSort(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_SortTooltip, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        if (result.getSelection())
+      public void run() {
+        if (isChecked()) {
           _viewerSynthesisMain.getInnerViewer().setComparator(_sorterSynthesis);
-        else
+        } else {
           _viewerSynthesisMain.getInnerViewer().setComparator(null);
+        }
       }
-    });
+    };
+    action.setChecked(false);
+    action.setImageDescriptor(getImageDescriptor(ImageID.SORT));
+    action.setToolTipText(Messages.ComparisonViewer_EnhancedSortTooltip);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1111,14 +1161,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSync(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CASCADE);
-    result.setImage(getImage(ImageID.SYNCED));
-    result.setText(Messages.ComparisonViewer_LinkViews);
-    Menu innerMenu = new Menu(result);
-    createItemSyncInternal(innerMenu);
-    createItemSyncExternal(innerMenu);
-    result.setMenu(innerMenu);
+  protected ActionContributionItem createItemSync(IContributionManager context_p) {
+    final MenuDropDownAction action = new MenuDropDownAction();
+    action.setText(Messages.ComparisonViewer_LinkViews);
+    action.setImageDescriptor(getImageDescriptor(ImageID.SYNCED));
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
+    createItemSyncInternal(action.getMenuManager());
+    createItemSyncExternal(action.getMenuManager());
     return result;
   }
   
@@ -1127,21 +1177,21 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSyncExternal(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_LinkViewsExternal);
-    result.setToolTipText(Messages.ComparisonViewer_LinkViewsExternalToolTip);
-    result.setSelection(_isExternallySynced);
-    result.addSelectionListener(new SelectionAdapter() {
+  protected ActionContributionItem createItemSyncExternal(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_LinkViewsExternal, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        boolean synced = result.getSelection();
-        _isExternallySynced = synced;
+      public void run() {
+        _isExternallySynced = isChecked();
       }
-    });
+    };
+    action.setToolTipText(Messages.ComparisonViewer_LinkViewsExternalToolTip);
+    action.setChecked(_isExternallySynced);
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1150,30 +1200,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemSyncInternal(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_LinkViewsInternal);
-    result.setToolTipText(Messages.ComparisonViewer_LinkViewsInternalTooltip);
-    // Initialization
-    addPropertyChangeListener(new IPropertyChangeListener() {
+  protected ActionContributionItem createItemSyncInternal(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_LinkViewsInternal, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_SYNC_SYNTHESIS_AND_SIDES));
-          result.setEnabled(isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE));
-        }
-      }
-    });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent event_p) {
-        boolean synced = result.getSelection();
+      public void run() {
+        boolean synced = isChecked();
         EMFDiffNode input = getInput();
         if (input != null) {
           input.setUserPropertyValue(P_SYNC_SYNTHESIS_AND_SIDES, synced);
@@ -1191,7 +1226,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           }
         }
       }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_LinkViewsInternalTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_SYNC_SYNTHESIS_AND_SIDES));
+          action.setEnabled(isUserPropertyTrue(P_SHOW_SIDES_POSSIBLE));
+        }
+      }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1200,38 +1250,38 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemUseCustomIcons(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_IconsMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_IconsMenuItemTooltip);
-    // Initialization
-    addPropertyChangeListener(new IPropertyChangeListener() {
+  protected ActionContributionItem createItemUseCustomIcons(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_IconsMenuItem, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_CUSTOM_ICONS));
-        }
-      }
-    });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
+      public void run() {
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setUserPropertyValue(P_CUSTOM_ICONS, result.getSelection());
+          input.setUserPropertyValue(P_CUSTOM_ICONS, isChecked());
           _viewerSynthesisMain.refresh();
           _viewerFeatures.refresh();
           _viewerValuesLeft.refresh();
           _viewerValuesRight.refresh();
         }
       }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_IconsMenuItemTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_CUSTOM_ICONS));
+        }
+      }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1240,38 +1290,38 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemUseCustomLabels(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_LabelsMenuItem);
-    result.setToolTipText(Messages.ComparisonViewer_LabelsMenuItemTooltip);
-    // Initialization
-    addPropertyChangeListener(new IPropertyChangeListener() {
+  protected ActionContributionItem createItemUseCustomLabels(IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_LabelsMenuItem, IAction.AS_CHECK_BOX) {
       /**
-       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
-       */
-      public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_CUSTOM_LABELS));
-        }
-      }
-    });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+       * @see org.eclipse.jface.action.Action#run()
        */
       @Override
-      public void widgetSelected(SelectionEvent e_p) {
+      public void run() {
         EMFDiffNode input = getInput();
         if (input != null) {
-          input.setUserPropertyValue(P_CUSTOM_LABELS, result.getSelection());
+          input.setUserPropertyValue(P_CUSTOM_LABELS, isChecked());
           _viewerSynthesisMain.refresh();
           _viewerFeatures.refresh();
           _viewerValuesLeft.refresh();
           _viewerValuesRight.refresh();
         }
       }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_LabelsMenuItemTooltip);
+    // Initialization
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_CUSTOM_LABELS));
+        }
+      }
     });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -1280,34 +1330,35 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param context_p a non-null object
    * @return a potentially null item
    */
-  protected Item createItemUseTechnicalRepresentation(Menu context_p) {
-    final MenuItem result = new MenuItem(context_p, SWT.CHECK);
-    result.setText(Messages.ComparisonViewer_UseTechnicalRepresentation);
-    result.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
+  protected ActionContributionItem createItemUseTechnicalRepresentation(
+      IContributionManager context_p) {
+    final IAction action = new Action(
+        Messages.ComparisonViewer_UseTechnicalRepresentation, IAction.AS_CHECK_BOX) {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        EMFDiffNode node = getInput();
+        if (node != null) {
+          node.setUserPropertyValue(P_TECHNICAL_LABELS, isChecked());
+        }
+      }
+    };
+    action.setToolTipText(Messages.ComparisonViewer_UseTechnicalRepresentationTooltip);
     // Initialization
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty()) && !result.isDisposed()) {
-          result.setSelection(isUserPropertyTrue(P_CUSTOM_LABELS));
+        if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
+          action.setChecked(isUserPropertyTrue(P_TECHNICAL_LABELS));
         }
       }
     });
-    // Selection
-    result.addSelectionListener(new SelectionAdapter() {
-      /**
-       * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-       */
-      @Override
-      public void widgetSelected(SelectionEvent e_p) {
-        EMFDiffNode node = getInput();
-        if (node != null) {
-          node.setUserPropertyValue(P_TECHNICAL_LABELS, result.getSelection());
-        }
-      }
-    });
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   
@@ -2063,6 +2114,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     _sorterSynthesis = null;
     _filterUnchangedElements = null;
     _filterMoveOrigins = null;
+    if (_filterSelectionListener != null) {
+      _filterSelectionListener.dispose();
+      _filterSelectionListener = null;
+    }
   }
   
   /**
@@ -2792,13 +2847,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   
   /**
    * Create and return the menu related to the detailed representation of differences
-   * in the given tool bar
-   * @param toolbar_p a non-null tool bar
+   * in the given context
+   * @param context_p a non-null object
    * @return a potentially null menu
    */
-  protected Menu setupMenuDetails(ToolBar toolbar_p) {
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    Menu result = UIUtil.createMenuTool(_viewerFeatures.getToolbar());
+  protected IMenuManager setupMenuDetails(ToolBarManager context_p) {
+    MenuManager result = UIUtil.createMenuTool(context_p);
     // Only differences
     createItemShowDiffValues(result);
     // All values
@@ -2806,47 +2860,47 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     // All values and features
     createItemShowAllFeatures(result);
     // Technical representation
-    new MenuItem(result, SWT.SEPARATOR);
+    result.add(new Separator());
     createItemUseTechnicalRepresentation(result);
     return result;
   }
   
   /**
-   * Create and return the synthesis menu in the given tool bar
-   * @param toolbar_p a non-null tool bar
+   * Create and return the synthesis menu in the given context
+   * @param context_p a non-null object
    * @return a potentially null menu
    */
-  protected Menu setupMenuSynthesis(ToolBar toolbar_p) {
-    Menu synthesisMenu = UIUtil.createMenuTool(toolbar_p);
-    createItemRestart(synthesisMenu);
-    new MenuItem(synthesisMenu, SWT.SEPARATOR);
+  protected IMenuManager setupMenuSynthesis(ToolBarManager context_p) {
+    MenuManager result = UIUtil.createMenuTool(context_p);
+    createItemRestart(result);
+    result.add(new Separator());
     // Show all elements in synthesis
-    createItemShowUncounted(synthesisMenu);
-    createItemFilter(synthesisMenu);
-    new MenuItem(synthesisMenu, SWT.SEPARATOR);
+    createItemShowUncounted(result);
+    createItemFilter(result);
+    result.add(new Separator());
     // Common presentation features
-    createItemSync(synthesisMenu);
-    createItemSort(synthesisMenu);
+    createItemSync(result);
+    createItemSort(result);
     // UI options
-    new MenuItem(synthesisMenu, SWT.SEPARATOR);
-    setupMenuSynthesisMisc(synthesisMenu);
-    return synthesisMenu;
+    result.add(new Separator());
+    setupMenuSynthesisMisc(result);
+    return result;
   }
   
   /**
-   * Fill the menu of the synthesis viewer with miscellaneous features
-   * @param synthesisMenu_p a non-null menu
+   * Contribute miscellaneous synthesis features to the given context
+   * @param context_p a non-null object
    */
-  protected void setupMenuSynthesisMisc(Menu synthesisMenu_p) {
-    createItemUseCustomIcons(synthesisMenu_p);
-    createItemUseCustomLabels(synthesisMenu_p);
-    new MenuItem(synthesisMenu_p, SWT.SEPARATOR);
-    createItemShowSides(synthesisMenu_p);
-    createItemShowDifferenceNumbers(synthesisMenu_p);
-    createItemShowImpact(synthesisMenu_p);
-    new MenuItem(synthesisMenu_p, SWT.SEPARATOR);
-    createItemSupportUndoRedo(synthesisMenu_p);
-    createItemLogEvents(synthesisMenu_p);
+  protected void setupMenuSynthesisMisc(IContributionManager context_p) {
+    createItemUseCustomIcons(context_p);
+    createItemUseCustomLabels(context_p);
+    context_p.add(new Separator());
+    createItemShowSides(context_p);
+    createItemShowDifferenceNumbers(context_p);
+    createItemShowImpact(context_p);
+    context_p.add(new Separator());
+        createItemSupportUndoRedo(context_p);
+    createItemLogEvents(context_p);
   }
   
   /**
@@ -2861,9 +2915,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     setupToolsDetails(_viewerFeatures.getToolbar());
     setupToolsDetailsSide(_viewerValuesLeft.getToolbar(), true);
     setupToolsDetailsSide(_viewerValuesRight.getToolbar(), false);
-    // Menus
-    setupMenuSynthesis(_viewerSynthesisMain.getToolbar());
-    setupMenuDetails(_viewerFeatures.getToolbar());
     // Tool refresh on selection change
     addSelectionChangedListener(new ISelectionChangedListener() {
       /**
@@ -2880,7 +2931,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Set up the navigation tools in the given tool bar
    */
   protected void setupToolsDetails(ToolBar toolbar_p) {
-    createItemOpenDedicated(toolbar_p);
+    ToolBarManager toolbarManager = new ToolBarManager(toolbar_p);
+    createItemOpenDedicated(toolbarManager);
+    // Integrate contributions
+    IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
+    menuService.populateContributionManager(toolbarManager, LOCATION_TOOLBAR_DETAILS);
+    // Drop-down menu
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_MENU));
+    setupMenuDetails(toolbarManager);
+    toolbarManager.update(true);
   }
   
   /**
@@ -2890,9 +2949,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param onLeft_p whether the side is left or right
    */
   protected void setupToolsDetailsSide(ToolBar toolbar_p, boolean onLeft_p) {
-    createItemMerge(toolbar_p, !onLeft_p);
-    createItemIgnore(toolbar_p, onLeft_p);
-    createItemDelete(toolbar_p, onLeft_p);
+    ToolBarManager toolbarManager = new ToolBarManager(toolbar_p);
+    createItemMerge(toolbarManager, !onLeft_p);
+    createItemIgnore(toolbarManager, onLeft_p);
+    createItemDelete(toolbarManager, onLeft_p);
+    toolbarManager.update(true);
   }
   
   /**
@@ -2901,23 +2962,26 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void setupToolsSynthesis(ToolBar toolbar_p) {
     ToolBarManager toolbarManager = new ToolBarManager(toolbar_p);
-    toolbarManager.add(new Separator("consistencyGroup")); //$NON-NLS-1$
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_CONSISTENCY));
     createItemInconsistency(toolbarManager);
-    toolbarManager.add(new Separator("additionalToolbarItems")); //$NON-NLS-1$
-    // Associate ID to current location in the synthesis toolbar for contributions
+    // Next / Previous
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_NAVIGATION));
+    createItemNavigationNext(toolbarManager);
+    createItemNavigationPrevious(toolbarManager);
+    // Expand / Collapse
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_EXPANSION));
+    createItemExpand(toolbarManager);
+    createItemCollapse(toolbarManager);
+    // Filters and sync
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_FILTERING));
+    createItemFilter(toolbarManager);
+    // Integrate contributions
     IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
     menuService.populateContributionManager(toolbarManager, LOCATION_TOOLBAR_SYNTHESIS);
-    // Next / Previous
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    createItemNavigationNext(toolbar_p);
-    createItemNavigationPrevious(toolbar_p);
-    // Expand / Collapse
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    createItemExpand(toolbar_p);
-    createItemCollapse(toolbar_p);
-    // Filters and sync
-    new ToolItem(toolbar_p, SWT.SEPARATOR);
-    createItemFilter(toolbar_p);
+    // Drop-down menu
+    toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_MENU));
+    setupMenuSynthesis(toolbarManager);
+    toolbarManager.update(true);
   }
   
   /**
@@ -2927,7 +2991,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param onLeft_p whether the side is left or right
    */
   protected void setupToolsSynthesisSide(ToolBar toolbar_p, boolean onLeft_p) {
-    createItemLock(toolbar_p, onLeft_p);
+    ToolBarManager toolbarManager = new ToolBarManager(toolbar_p);
+    createItemLock(toolbarManager, onLeft_p);
+    toolbarManager.update(true);
   }
   
   /**
@@ -2980,73 +3046,75 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /**
    * A selection listener common to all "filter" items.
    */
-  protected class FilterSelectionListener extends SelectionAdapter {
-    /** The non-null, potentially empty set of tool/menu items that show/hide the
+  protected class FilterSelectionListener implements IDisposable {
+    /** The non-null, potentially empty set of action contributions that show/hide the
      * non-modal filter dialog */
-    protected final Set<Item> _filterItems;
-    /** The filter dialog lastly opened */
+    protected final Set<ActionContributionItem> _filterItems;
+    /** The potentially null filter dialog lastly opened */
     protected CategoryDialog _lastDialog;
     /**
      * Constructor
      */
     public FilterSelectionListener() {
       _lastDialog = null;
-      _filterItems = new HashSet<Item>();
+      _filterItems = new HashSet<ActionContributionItem>();
     }
     /**
      * Register the given item as being a "filter" item
-     * @param item_p a non-null tool/menu item
+     * @param item_p a non-null action contribution item
      */
-    public void addItem(Item item_p) {
+    public void addItem(ActionContributionItem item_p) {
       _filterItems.add(item_p);
-      itemAddSelectionListener(item_p, this);
-      itemAddDisposeListener(item_p, new DisposeListener() {
-        /**
-         * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-         */
-        public void widgetDisposed(DisposeEvent e_p) {
-          if (_lastDialog != null && !_lastDialog.getShell().isDisposed())
+    }
+    /**
+     * @see org.eclipse.emf.edit.provider.IDisposable#dispose()
+     */
+    public void dispose() {
+      if (_lastDialog != null && !_lastDialog.getShell().isDisposed()) {
+        _lastDialog.close();
+      }
+    }
+    /**
+     * Handle the given event
+     * @param event_p a potentially null event
+     */
+    public void runWithEvent(Event event_p) {
+      Widget widget = event_p.widget;
+      if (widget instanceof MenuItem || widget instanceof ToolItem) {
+        boolean selected = UIUtil.itemGetSelection((Item)widget);
+        if (selected) {
+          // Just selected
+          _lastDialog = new CategoryDialog(getShell(), getInput());
+          _lastDialog.open();
+          _lastDialog.getShell().addDisposeListener(new DisposeListener() {
+            /**
+             * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
+             */
+            public void widgetDisposed(DisposeEvent e_p) {
+              // Toggle tool item when closing
+              _lastDialog = null;
+              setSelectionForAll(false);
+            }
+          });
+        } else {
+          // Not selected any longer
+          if (_lastDialog != null)
             _lastDialog.close();
         }
-      });
+        setSelectionForAll(selected);
+      }
     }
     /**
      * Set the selection state of all related items
      * @param selected_p the new selection state
      */
     protected void setSelectionForAll(boolean selected_p) {
-      for (Item item : _filterItems) {
-        if (!item.isDisposed() && itemGetSelection(item) != selected_p)
-          itemSetSelection(item, selected_p);
+      for (ActionContributionItem item : _filterItems) {
+        IAction action = item.getAction();
+        if (action != null && action.isChecked() != selected_p) {
+          action.setChecked(selected_p);
+        }
       }
-    }
-    /**
-     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
-     */
-    @Override
-    public void widgetSelected(SelectionEvent event_p) {
-      final Item item = (Item)event_p.getSource();
-      boolean selected = itemGetSelection(item);
-      if (selected) {
-        // Just selected
-        _lastDialog = new CategoryDialog(getShell(), getInput());
-        _lastDialog.open();
-        _lastDialog.getShell().addDisposeListener(new DisposeListener() {
-          /**
-           * @see org.eclipse.swt.events.DisposeListener#widgetDisposed(org.eclipse.swt.events.DisposeEvent)
-           */
-          public void widgetDisposed(DisposeEvent e_p) {
-            // Toggle tool item when closing
-            _lastDialog = null;
-            setSelectionForAll(false);
-          }
-        });
-      } else {
-        // Not selected any longer
-        if (_lastDialog != null)
-          _lastDialog.close();
-      }
-      setSelectionForAll(selected);
     }
   }
   
