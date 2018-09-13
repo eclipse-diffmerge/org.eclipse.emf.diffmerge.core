@@ -216,7 +216,8 @@ IUserPropertyOwner {
          * @see org.eclipse.core.commands.operations.IOperationHistoryListener#historyNotification(org.eclipse.core.commands.operations.OperationHistoryEvent)
          */
         public void historyNotification(OperationHistoryEvent event_p) {
-          if (event_p.getOperation().hasContext(getUndoContext())) {
+          IUndoContext undoContext = getUndoContext();
+          if (undoContext != null && event_p.getOperation().hasContext(undoContext)) {
             switch (event_p.getEventType()) {
             case OperationHistoryEvent.OPERATION_ADDED:
             case OperationHistoryEvent.REDONE:
