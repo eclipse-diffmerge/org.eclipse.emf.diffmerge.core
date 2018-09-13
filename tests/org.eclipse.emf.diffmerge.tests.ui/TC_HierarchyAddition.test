@@ -39,7 +39,7 @@ with [get-window "Merge Operation"] {
 }
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (5)/Element B (4)/Element G (2)/Element H"
-    get-button "Copy to the right" | click
+    get-button "Transfer changes to the right" | click
 }
 with [get-window "Merge Operation"] {
     get-group "Implied changes" | get-tree | select "Element G/Addition into Element B  (via 'manyContent')"

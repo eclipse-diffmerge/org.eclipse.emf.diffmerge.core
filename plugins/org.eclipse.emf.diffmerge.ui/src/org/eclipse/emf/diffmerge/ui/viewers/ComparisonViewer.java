@@ -96,6 +96,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -367,6 +368,108 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Create and return the "accept" action
+   * @return a potentially null action
+   */
+  protected DirectedAction createActionAccept() {
+    final DirectedAction result = new DirectedAction() {
+      /**
+       * @see org.eclipse.jface.action.Action#getImageDescriptor()
+       */
+      @Override
+      public ImageDescriptor getImageDescriptor() {
+        return isLeftToRight()?
+            EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(ImageID.CHECKIN_ACTION):
+              EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(ImageID.CHECKOUT_ACTION);
+      }
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        merge(!isLeftToRight(), true);
+      }
+    };
+    result.setText(Messages.ComparisonViewer_AcceptAction_Text);
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        boolean leftToRight = result.isLeftToRight();
+        if (!leftToRight && PROPERTY_ACTIVATION_MERGE_TO_LEFT.equals(event_p.getProperty()) ||
+            leftToRight && PROPERTY_ACTIVATION_MERGE_TO_RIGHT.equals(event_p.getProperty())) {
+          Object newValue = event_p.getNewValue();
+          if (newValue instanceof Boolean) {
+            result.setEnabled(((Boolean)newValue).booleanValue());
+          }
+        }
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create and return the "accept deletion" action
+   * @return a potentially null action
+   */
+  protected DirectedAction createActionAcceptDeletion() {
+    final DirectedAction result = new DirectedAction() {
+      /**
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run() {
+        merge(!isLeftToRight(), false);
+      }
+    };
+    result.setText(Messages.ComparisonViewer_DeleteAction_Text);
+    result.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(ImageID.DELETE));
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        boolean leftToRight = result.isLeftToRight();
+        if (!leftToRight && PROPERTY_ACTIVATION_DELETE_LEFT.equals(event_p.getProperty()) ||
+            leftToRight && PROPERTY_ACTIVATION_DELETE_RIGHT.equals(event_p.getProperty())) {
+          Object newValue = event_p.getNewValue();
+          if (newValue instanceof Boolean) {
+            result.setEnabled(((Boolean)newValue).booleanValue());
+          }
+        }
+      }
+    });
+    return result;
+  }
+  
+  /**
+   * Create and return the "ignore" action
+   * @return a potentially null action
+   */
+  protected DirectedAction createActionIgnore() {
+    final IgnoreAction result = new IgnoreAction();
+    addPropertyChangeListener(new IPropertyChangeListener() {
+      /**
+       * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
+       */
+      public void propertyChange(PropertyChangeEvent event_p) {
+        Object newValue = event_p.getNewValue();
+        if (newValue instanceof Boolean) {
+          boolean boolValue = ((Boolean)newValue).booleanValue();
+          String property = event_p.getProperty();
+          if (PROPERTY_ACTIVATION_IGNORE_LEFT.equals(property)) {
+            result.setActiveLeft(boolValue);
+          } else if (PROPERTY_ACTIVATION_IGNORE_RIGHT.equals(property)) {
+            result.setActiveRight(boolValue);
+          }
+        }
+      }
+    });
+    return result;
+  }
+  
+    /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#createControls(org.eclipse.swt.widgets.Composite)
    */
   @Override
@@ -2325,8 +2428,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       IgnoreChoicesDialog choicesDialog =
           new IgnoreChoicesDialog(getShell(), Messages.ComparisonViewer_IgnoreCommandName, choices_p);
       choicesDialog.open();
-      if (choices_p.isProceed())
+      if (choices_p.isProceed()) {
         getInput().setUserPropertyValue(P_DEFAULT_COVER_CHILDREN, choices_p.isCoverChildren());
+      }
     }
   }
   
@@ -2551,7 +2655,31 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected void populateContextMenu(MenuManager menuManager_p,
       Viewer viewer_p, ISelectionProvider selectionProvider_p) {
-    // Nothing by default
+    if (_viewerSynthesisMain != null &&
+        viewer_p != _viewerSynthesisMain.getInnerViewer()) {
+      return;
+  }
+    // Action definitions
+    final DirectedAction acceptAction = createActionAccept();
+    final DirectedAction acceptDeletionAction = createActionAcceptDeletion();
+    final DirectedAction ignoreAction = createActionIgnore();
+    // Menu population
+    menuManager_p.addMenuListener(new IMenuListener() {
+      /**
+       * @see org.eclipse.jface.action.IMenuListener#menuAboutToShow(org.eclipse.jface.action.IMenuManager)
+       */
+      public void menuAboutToShow(IMenuManager manager_p) {
+        if (acceptAction != null && acceptAction.isEnabled()) {
+          manager_p.add(acceptAction);
+        }
+        if (acceptDeletionAction != null && acceptDeletionAction.isEnabled()) {
+          manager_p.add(acceptDeletionAction);
+        }
+        if (ignoreAction != null && ignoreAction.isEnabled()) {
+          manager_p.add(ignoreAction);
+        }
+      }
+    });
   }
   
   /**
@@ -3115,6 +3243,108 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           action.setChecked(selected_p);
         }
       }
+    }
+  }
+  
+  /**
+   * An action that is enabled only if there is an identified merge target side.
+   */
+  protected class DirectedAction extends Action {
+    /**
+     * Return the target role of the merge, if defined
+     * @return a potentially null role
+     */
+    protected Role getTargetRole() {
+      Role result = null;
+      EMFDiffNode input = getInput();
+      if (input != null) {
+        boolean leftEditable = input.isEditable(true);
+        boolean rightEditable = input.isEditable(false);
+        if (leftEditable && !rightEditable) {
+          result = input.getRoleForSide(true);
+        } else if (!leftEditable && rightEditable) {
+          result = input.getRoleForSide(false);
+        }
+      }
+      return result;
+    }
+    /**
+     * Return whether this action is applicable in the current context
+     * independently of the current selection
+     */
+    public boolean isApplicable() {
+      return getTargetRole() != null;
+    }
+    /**
+     * @see org.eclipse.jface.action.Action#isEnabled()
+     */
+    @Override
+    public boolean isEnabled() {
+      return isApplicable() && super.isEnabled();
+    }
+    /**
+     * Return whether the target role of the merge corresponds to the
+     * right-hand side. If there is no target role the result is undefined.
+     */
+    public boolean isLeftToRight() {
+      boolean result = false;
+      EMFDiffNode input = getInput();
+      if (input != null) {
+        result = getTargetRole() == input.getRoleForSide(false);
+      }
+      return result;
+    }
+  }
+  
+  /**
+   * The "ignore" action.
+   */
+  protected class IgnoreAction extends DirectedAction {
+    /** Whether the left-hand side ignore is active */
+    private boolean _activeLeft = false;
+    /** Whether the right-hand side ignore is active */
+    private boolean _activeRight = false;
+    /**
+     * Constructor
+     */
+    public IgnoreAction() {
+      setText(Messages.ComparisonViewer_IgnoreAction_Text);
+      setImageDescriptor(
+          ComparisonViewer.this.getImageDescriptor(ImageID.CHECKED));
+    }
+    /**
+     * @see org.eclipse.jface.action.Action#run()
+     */
+    @Override
+    public void run() {
+      if (_activeLeft) {
+        ignore(true);
+      }
+      if (_activeRight) {
+        ignore(false);
+      }
+    }
+    /**
+     * Set whether the left-hand side ignore is active
+     * @param activeLeft_p whether it is active
+     */
+    public void setActiveLeft(boolean activeLeft_p) {
+      _activeLeft = activeLeft_p;
+      update();
+    }
+    /**
+     * Set whether the right-hand side ignore is active
+     * @param activeRight_p whether it is active
+     */
+    public void setActiveRight(boolean activeRight_p) {
+      _activeRight = activeRight_p;
+      update();
+    }
+    /**
+     * Update the state for complete consistency
+     */
+    protected void update() {
+      setEnabled(_activeLeft || _activeRight);
     }
   }
   

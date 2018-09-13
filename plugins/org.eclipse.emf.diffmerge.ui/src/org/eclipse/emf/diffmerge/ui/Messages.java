@@ -62,11 +62,13 @@ public class Messages extends NLS {
   public static String ComparisonSetupWizardPage_Title;
   public static String ComparisonTreeViewer_MatchIDTooltip;
   public static String ComparisonTreeViewer_NoMatchID;
+  public static String ComparisonViewer_AcceptAction_Text;
   public static String ComparisonViewer_CollapseTooltip;
   public static String ComparisonViewer_CountAddLeftMenuItem;
   public static String ComparisonViewer_CountAddRightMenuItem;
   public static String ComparisonViewer_CountMovesMenuItem;
   public static String ComparisonViewer_CountProperMenuItem;
+  public static String ComparisonViewer_DeleteAction_Text;
   public static String ComparisonViewer_DeleteLeftTooltip;
   public static String ComparisonViewer_DeleteRightTooltip;
   public static String ComparisonViewer_Details;
@@ -80,6 +82,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_FilterToolTip;
   public static String ComparisonViewer_IconsMenuItem;
   public static String ComparisonViewer_IconsMenuItemTooltip;
+  public static String ComparisonViewer_IgnoreAction_Text;
   public static String ComparisonViewer_IgnoreCommandName;
   public static String ComparisonViewer_IgnoreLeftTooltip;
   public static String ComparisonViewer_IgnoreRightTooltip;
@@ -205,7 +208,6 @@ public class Messages extends NLS {
   public static String EMFDiffMergeLabelProvider_ValueDeletion;
   public static String EMFDiffMergeUIPlugin_Label;
   public static String DefaultComparisonMethodFactory_Label;
-  public static String DirectedComparisonViewer_Ignore;
   public static String EnhancedComparisonTreeViewer_DefaultHeader;
   public static String EnhancedFeaturesViewer_DetailsWithSelection;
   public static String EObjectScopeDefinition_LabelInResource;

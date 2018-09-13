@@ -20,7 +20,7 @@ compare-examples-for-impact-analysis
 
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Element ROOT (3)"
-    get-button "Copy to the right" | click
+    get-button "Transfer changes to the right" | click
 }
 get-window "Merge Operation" | get-button OK | click
 get-window "Merge Operation" | get-button OK | click

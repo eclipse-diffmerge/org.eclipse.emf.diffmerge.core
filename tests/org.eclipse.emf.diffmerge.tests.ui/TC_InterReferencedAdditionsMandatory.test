@@ -34,7 +34,7 @@ get-editor "Compare ('Ex1' - 'Ex2')" | get-tree | get-property itemCount | equal
 /* Merge some of changes */
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (5)/Referencing Node RN4"
-    get-button "Copy to the right" | click
+    get-button "Transfer changes to the right" | click
 }
 check-changes "Required"	"Referencing Node RN4/Addition into Root  \\(via 'content'\\)"
 check-changes "Implied"		"Node N1/Addition into Root  \\(via 'content'\\)"

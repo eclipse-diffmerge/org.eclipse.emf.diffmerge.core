@@ -61,7 +61,7 @@ public class IgnoreChoiceData {
   }
   
   /**
-   * Return whether differences on children must be covered
+   * Return whether only differences on one side are concerned
    */
   public boolean isSideExclusive() {
     return _sideExclusive;
@@ -82,7 +82,7 @@ public class IgnoreChoiceData {
   }
   
   /**
-   * Set whether differences on children must be covered
+   * Set whether only differences on one side are concerned
    */
   public void setSideExclusive(boolean newValue_p) {
     _sideExclusive = newValue_p;

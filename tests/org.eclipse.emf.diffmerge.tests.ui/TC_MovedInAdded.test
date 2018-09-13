@@ -21,7 +21,7 @@ compare-examples-for-impact-analysis
 /* Merge changes */
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (3)/Element A (2)"
-    get-button "Copy to the right" | click
+    get-button "Transfer changes to the right" | click
 }
 with [get-window "Merge Operation"] {
     get-button "Include differences in children" | uncheck
@@ -38,7 +38,7 @@ with [get-editor "Compare ('Ex1' - 'Ex2')"] {
 }
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-table -after [get-label "Details of the Element"] -index 1 | select 1
-    get-button "Copy to the right" | click
+    get-button "Transfer changes to the right" | click
 }
 get-window "Merge Operation" | get-button OK | click
 
