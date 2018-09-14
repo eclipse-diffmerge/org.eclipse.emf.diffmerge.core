@@ -36,6 +36,15 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createHeaderContent(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
+  protected void createHeaderContent(Composite parent_p) {
+    super.createHeaderContent(parent_p);
+    setHeaderText(getDefaultHeaderText());
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createImageLabel(org.eclipse.swt.widgets.Composite)
    */
   @Override
@@ -58,7 +67,6 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
   protected Label createTextLabel(Composite parent_p) {
     Label result = super.createTextLabel(parent_p);
     result.setFont(UIUtil.getBold(result.getFont()));
-    result.setText(getDefaultHeaderText());
     return result;
   }
   

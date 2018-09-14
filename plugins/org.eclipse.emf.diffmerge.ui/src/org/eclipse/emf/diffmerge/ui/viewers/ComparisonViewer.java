@@ -1666,11 +1666,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         if (PROPERTY_FILTERING.equals(event_p.getProperty())) {
           Boolean filtered = (Boolean)event_p.getNewValue();
           if (filtered != null) {
-            StringBuilder builder = new StringBuilder();
-            builder.append(result.getDefaultHeaderText());
-            if (filtered.booleanValue())
-              builder.append(Messages.ComparisonViewer_Filtered);
-            result.getTextLabel().setText(builder.toString());
+            String newHeader = result.getDefaultHeaderText() +
+                (filtered.booleanValue()? Messages.ComparisonViewer_Filtered: ""); //$NON-NLS-1$
+            result.setHeaderText(newHeader);
           }
         }
       }
@@ -2658,7 +2656,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (_viewerSynthesisMain != null &&
         viewer_p != _viewerSynthesisMain.getInnerViewer()) {
       return;
-  }
+    }
     // Action definitions
     final DirectedAction acceptAction = createActionAccept();
     final DirectedAction acceptDeletionAction = createActionAcceptDeletion();

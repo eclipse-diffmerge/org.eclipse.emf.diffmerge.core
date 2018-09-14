@@ -170,6 +170,19 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
   }
   
   /**
+   * Return the text of the header, if any
+   * @return a potentially null string
+   */
+  public String getHeaderText() {
+    String result = null;
+    Label headerLabel = getTextLabel();
+    if (headerLabel != null && !headerLabel.isDisposed()) {
+      result = headerLabel.getText();
+    }
+    return result;
+  }
+  
+  /**
    * Return the control that holds the header image for this viewer, if any
    * @return a potentially null control
    */
@@ -249,6 +262,21 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
   @Override
   public void removeSelectionChangedListener(ISelectionChangedListener listener_p) {
     getInnerViewer().removeSelectionChangedListener(listener_p);
+  }
+  
+  /**
+   * Set the text of the header, if any
+   * @param text_p a potentially null string
+   * @return whether the operation succeeded
+   */
+  public boolean setHeaderText(String text_p) {
+    boolean result = false;
+    Label headerLabel = getTextLabel();
+    if (headerLabel != null && !headerLabel.isDisposed()) {
+      headerLabel.setText(text_p);
+      result = true;
+    }
+    return result;
   }
   
   /**
