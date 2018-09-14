@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.sirius.business.api.helper.SiriusUtil;
+import org.eclipse.sirius.business.api.query.DRepresentationQuery;
 import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
 import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.viewpoint.DAnalysis;
@@ -118,8 +119,9 @@ public class SiriusScope extends GMFScope {
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     boolean isDescriptorToRepresentation =
         reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE;
-    if (isDescriptorToRepresentation)
+    if (isDescriptorToRepresentation) {
       add(value_p);
+    }
     boolean result = super.add(source_p, reference_p, value_p);
     if (result && isDescriptorToRepresentation) {
       DRepresentationDescriptor descriptor = (DRepresentationDescriptor)source_p;
@@ -135,9 +137,17 @@ public class SiriusScope extends GMFScope {
   @Override
   public EObject getContainer(EObject element_p) {
     EObject result;
-    if (element_p instanceof DRepresentation) {
+    if (element_p instanceof DRepresentation && super.getContainer(element_p) == null) {
       DRepresentation representation = (DRepresentation)element_p;
-      result = _idToDescriptor.get(representation.getUid());
+      String repID = representation.getUid();
+      result = _idToDescriptor.get(repID);
+      if (result == null) {
+        DRepresentationQuery rep2descQuery = new DRepresentationQuery((DRepresentation)element_p);
+        result = rep2descQuery.getRepresentationDescriptor();
+        if (result != null) {
+          _idToDescriptor.put(repID, (DRepresentationDescriptor)result);
+        }
+      }
     } else {
       result = super.getContainer(element_p);
     }
@@ -152,7 +162,7 @@ public class SiriusScope extends GMFScope {
     EReference result;
     if (element_p instanceof DRepresentation) {
       result = getContainer(element_p) instanceof DRepresentationDescriptor?
-          SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE: null;
+          SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE: super.getContainment(element_p);
     } else {
       result = super.getContainment(element_p);
     }
@@ -169,8 +179,9 @@ public class SiriusScope extends GMFScope {
     Iterator<EObject> it = result.iterator();
     while (it.hasNext()) {
       EObject current = it.next();
-      if (current instanceof DRepresentation && getContainer(current) != null)
+      if (current instanceof DRepresentation && getContainer(current) != null) {
         it.remove();
+      }
     }
     return Collections.unmodifiableList(result);
   }
@@ -225,8 +236,9 @@ public class SiriusScope extends GMFScope {
     ResourceDescriptor rDescriptor = descriptor_p.getRepPath();
     if (rDescriptor != null) {
       URI uri = rDescriptor.getResourceURI();
-      if (uri != null)
+      if (uri != null) {
         result = uri.fragment();
+      }
     }
     return result;
   }
@@ -283,8 +295,9 @@ public class SiriusScope extends GMFScope {
     if (element_p instanceof DRepresentationDescriptor) {
       DRepresentationDescriptor descriptor = (DRepresentationDescriptor)element_p;
       String uid = getReferencedUID(descriptor);
-      if (uid != null)
+      if (uid != null) {
         _idToDescriptor.put(uid, descriptor);
+      }
     }
   }
   
@@ -296,11 +309,13 @@ public class SiriusScope extends GMFScope {
     boolean isDescriptorToRepresentation =
         reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE;
     String uid = null;
-    if (isDescriptorToRepresentation)
+    if (isDescriptorToRepresentation) {
       uid = getReferencedUID((DRepresentationDescriptor)source_p);
+    }
     boolean result =  super.remove(source_p, reference_p, value_p);
-    if (result && isDescriptorToRepresentation)
+    if (result && isDescriptorToRepresentation) {
       _idToDescriptor.remove(uid);
+    }
     return result;
   }
   
