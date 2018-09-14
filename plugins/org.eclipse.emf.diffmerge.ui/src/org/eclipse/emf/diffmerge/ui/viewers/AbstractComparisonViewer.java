@@ -278,13 +278,15 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       try {
         if (getInput().isModified(true)) {
           IModelScope leftScope = comparison.getScope(getInput().getRoleForSide(true));
-          if (leftScope instanceof IPersistentModelScope.Editable)
+          if (leftScope instanceof IPersistentModelScope.Editable) {
             ((IPersistentModelScope.Editable)leftScope).save();
+          }
         }
         if (getInput().isModified(false)) {
           IModelScope rightScope = comparison.getScope(getInput().getRoleForSide(false));
-          if (rightScope instanceof IPersistentModelScope.Editable)
+          if (rightScope instanceof IPersistentModelScope.Editable) {
             ((IPersistentModelScope.Editable)rightScope).save();
+          }
         }
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
         didSave();
@@ -301,10 +303,12 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   @SuppressWarnings({ "rawtypes", "unchecked" }) // Compatibility with old versions of Eclipse
   public Object  getAdapter(Class adapter_p) {
     Object result = null;
-    if (INavigatable.class.equals(adapter_p))
+    if (INavigatable.class.equals(adapter_p)) {
       result = getNavigatable();
-    if (result == null)
+    }
+    if (result == null) {
       result = Platform.getAdapterManager().getAdapter(this, adapter_p);
+    }
     return result;
   }
   
@@ -373,8 +377,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
           }
           if (result == null && impactedScope instanceof IPersistentModelScope) {
             Resource resource = ((IPersistentModelScope)impactedScope).getHoldingResource();
-            if (resource != null)
+            if (resource != null) {
               result = TransactionUtil.getEditingDomain(resource);
+            }
           }
         }
       }
@@ -463,8 +468,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     try {
       IWorkbenchPage page = getPage();
       IWorkbenchSite site = page.getActivePart().getSite();
-      if (site instanceof IWorkbenchPartSite)
+      if (site instanceof IWorkbenchPartSite) {
         result = (IWorkbenchPartSite)site;
+      }
     } catch (Exception e) {
       // Just proceed
     }
@@ -660,12 +666,15 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * Refresh the tools of the viewer
    */
   protected void refreshTools() {
-    if (_undoAction != null)
+    if (_undoAction != null) {
       _undoAction.update();
-    if (_redoAction != null)
+    }
+    if (_redoAction != null) {
       _redoAction.update();
-    if (_actionBars != null)
+    }
+    if (_actionBars != null) {
       _actionBars.updateActionBars();
+    }
   }
   
   /**
@@ -674,8 +683,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   protected void registerCategories(EMFDiffNode node_p) {
     IDifferenceCategoryProvider provider = getCategoryProvider();
-    if (provider != null)
+    if (provider != null) {
       provider.provideCategories(node_p);
+    }
   }
   
   /**
@@ -686,8 +696,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   protected void registerNavigatable(Control control_p, INavigatable navigatable_p) {
     _navigatable = navigatable_p;
-    if (_navigatable != null)
+    if (_navigatable != null) {
       control_p.setData(INavigatable.NAVIGATOR_PROPERTY, _navigatable);
+    }
   }
   
   /**
@@ -711,8 +722,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * viewer be set afterwards.
    * @param provider_p a potentially null object
    */
-  public void setCategoryProvider(
-      IDifferenceCategoryProvider provider_p) {
+  public void setCategoryProvider(IDifferenceCategoryProvider provider_p) {
     _categoryProvider = provider_p;
   }
   
@@ -785,8 +795,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
        */
       @Override
       public void update() {
-        if (getEditingDomain() != null)
+        if (getEditingDomain() != null) {
           super.update();
+        }
       }
     };
     _undoAction.setImageDescriptor(getImageDescriptor(ImageID.UNDO));
@@ -804,8 +815,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
        */
       @Override
       public void update() {
-        if (getEditingDomain() != null)
+        if (getEditingDomain() != null) {
           super.update();
+        }
       }
     };
     _redoAction.setImageDescriptor(getImageDescriptor(ImageID.REDO));
@@ -829,10 +841,11 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
         public void run() {
           final CommandStack stack = editingDomain.getCommandStack();
           final ComparisonSelection lastActionSelection = getUIComparison().getLastActionSelection();
-          if (undo_p && stack.canUndo())
+          if (undo_p && stack.canUndo()) {
             stack.undo();
-          else if (!undo_p && stack.canRedo())
+          } else if (!undo_p && stack.canRedo()) {
             stack.redo();
+          }
           EMFDiffNode input = getInput();
           if (input != null && !input.isReactive()) {
             input.updateDifferenceNumbers();

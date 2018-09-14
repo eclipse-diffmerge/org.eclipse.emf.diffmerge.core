@@ -735,8 +735,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         refreshTools();
       }
     };
-    action.setImageDescriptor(openLockImage);
     action.setToolTipText(unlockedTooltip);
+    action.setImageDescriptor(openLockImage);
     addPropertyChangeListener(new IPropertyChangeListener() {
       /**
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
@@ -1183,7 +1183,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       }
     };
-    action.setChecked(true);
+    action.setChecked(false);
     action.setToolTipText(Messages.ComparisonViewer_ShowUncountedMenuItemTooltip);
     ActionContributionItem result = new ActionContributionItem(action);
     context_p.add(result);
