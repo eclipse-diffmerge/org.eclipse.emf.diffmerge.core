@@ -61,8 +61,9 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   public Color getDifferenceColor(DifferenceColorKind colorKind_p) {
     int colorCode = SWT.COLOR_BLACK;
     Integer colorCodeI = _differenceColors.get(colorKind_p);
-    if (colorCodeI != null)
+    if (colorCodeI != null) {
       colorCode = colorCodeI.intValue();
+    }
     return UIUtil.getColor(colorCode);
   }
   
@@ -87,6 +88,8 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
           result = DifferenceColorKind.LEFT; break;
         case FROM_RIGHT_ADD: case FROM_LEFT_DEL:
           result = DifferenceColorKind.RIGHT; break;
+        case COUNTED:
+          result = DifferenceColorKind.NONE; break;
         default:
           result = DifferenceColorKind.DEFAULT; break;
       }
@@ -101,6 +104,9 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   public Font getFont(Object object_p, Font base_p, DifferenceKind diffKind_p,
       Role side_p, EMFDiffNode node_p) {
     Font result = super.getFont(object_p, base_p, diffKind_p, side_p, node_p);
+    if (result != null && diffKind_p == DifferenceKind.COUNTED) {
+      result = UIUtil.getItalic(result);
+    }
     if (result != null && diffKind_p != null && !diffKind_p.isNeutral()) {
       result = UIUtil.getBold(result);
     }
