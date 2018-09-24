@@ -1268,10 +1268,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final MenuDropDownAction action = new MenuDropDownAction();
     action.setText(Messages.ComparisonViewer_LinkViews);
     action.setImageDescriptor(getImageDescriptor(ImageID.SYNCED));
-    ActionContributionItem result = new ActionContributionItem(action);
-    context_p.add(result);
     createItemSyncInternal(action.getMenuManager());
     createItemSyncExternal(action.getMenuManager());
+    ActionContributionItem result = new ActionContributionItem(action);
+    context_p.add(result);
     return result;
   }
   

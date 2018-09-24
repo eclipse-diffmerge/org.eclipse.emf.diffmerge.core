@@ -405,7 +405,11 @@ public final class UIUtil {
      * @see org.eclipse.jface.action.IMenuCreator#getMenu(org.eclipse.swt.widgets.Menu)
      */
     public Menu getMenu(Menu parent_p) {
-      _menuManager.fill(parent_p, -1);
+      Menu existingMenu = _menuManager.getMenu();
+      if (existingMenu == null || existingMenu.isDisposed()) {
+        Menu containerMenu = new Menu(parent_p); // Not to be shown
+        _menuManager.fill(containerMenu, -1); // Contribution mechanism will issue copy items
+      }
       return _menuManager.getMenu();
     }
     /**
