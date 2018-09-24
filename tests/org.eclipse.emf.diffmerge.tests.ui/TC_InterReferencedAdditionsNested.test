@@ -21,7 +21,7 @@ compare-examples-for-impact-analysis
 /* Cancel merging */
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (4)/Element E4 (1)/Element E2"
-    get-button "Delete on the left" | click
+    get-button "Apply deletion on the left" | click
 }
 check-changes "Required"	"Element E2/Deletion"
 check-changes "Implied"		"Element E1/Reference 'singleRef': deletion of Element E2"

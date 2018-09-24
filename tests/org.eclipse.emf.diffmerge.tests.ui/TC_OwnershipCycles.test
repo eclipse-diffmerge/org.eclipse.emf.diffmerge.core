@@ -31,7 +31,7 @@ with [get-editor "Compare ('Ex1' - 'Ex2')"] {
 }
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-table -after [get-label "Details of the Element"] -index 2 | select "Element 8 (via Many Content)"
-    get-button "Transfer changes to the left" | click
+    get-button "Apply changes to the left" | click
 }
 with [get-window "Merge Operation"] {
     get-group "Implied changes" | get-tree | select "Element 3"

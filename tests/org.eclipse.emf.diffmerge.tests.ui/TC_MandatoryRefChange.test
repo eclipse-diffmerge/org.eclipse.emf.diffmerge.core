@@ -22,7 +22,7 @@ compare-examples-for-impact-analysis
 with [get-editor "Compare ('Ex1' - 'Ex2')"] {
     get-tree | select "Root (3)/Node C (1)"
     get-table -after [get-label "Details of the Node"] -index 2 | select "Edge Z (in Root)"
-    get-button "Delete on the right" | click
+    get-button "Apply deletion on the right" | click
 }
 check-changes "Required"	"Node C/Reference 'incoming': deletion of Edge Z"
 check-changes "Implied"		"Edge Z/Reference 'target': addition of Node B"
