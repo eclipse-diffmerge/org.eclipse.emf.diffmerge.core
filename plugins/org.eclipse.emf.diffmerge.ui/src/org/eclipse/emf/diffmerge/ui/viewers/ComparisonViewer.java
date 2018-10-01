@@ -2667,14 +2667,21 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        * @see org.eclipse.jface.action.IMenuListener#menuAboutToShow(org.eclipse.jface.action.IMenuManager)
        */
       public void menuAboutToShow(IMenuManager manager_p) {
+        boolean atLeastOne = false;
         if (acceptAction != null && acceptAction.isEnabled()) {
           manager_p.add(acceptAction);
+          atLeastOne = true;
         }
         if (acceptDeletionAction != null && acceptDeletionAction.isEnabled()) {
           manager_p.add(acceptDeletionAction);
+          atLeastOne = true;
         }
         if (ignoreAction != null && ignoreAction.isEnabled()) {
           manager_p.add(ignoreAction);
+          atLeastOne = true;
+        }
+        if (atLeastOne) {
+          manager_p.add(new Separator());
         }
       }
     });

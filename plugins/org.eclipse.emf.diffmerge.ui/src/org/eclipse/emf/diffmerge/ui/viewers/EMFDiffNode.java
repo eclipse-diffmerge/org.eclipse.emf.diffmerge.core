@@ -368,7 +368,14 @@ IUserPropertyOwner {
     IUndoContext result = null;
     if (isReactive()) {
       Collection<IUndoContext> contexts = new HashSet<IUndoContext>();
+      // isReactive() implies that the editing domain is non-null and its command stack is a
+      // IWorkspaceCommandStack, which implies that the editing domain is a TransactionalEditingDomain
       TransactionalEditingDomain tDomain = (TransactionalEditingDomain)getEditingDomain();
+      IWorkspaceCommandStack cmdStack = (IWorkspaceCommandStack)tDomain.getCommandStack();
+      IUndoContext defaultContext = cmdStack.getDefaultUndoContext();
+      if (defaultContext != null) {
+        contexts.add(defaultContext);
+      }
       Resource uiResource = getUIComparison().eResource();
       if (uiResource != null) {
         contexts.add(new ResourceUndoContext(tDomain, uiResource));
