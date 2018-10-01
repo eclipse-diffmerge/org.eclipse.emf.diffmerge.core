@@ -134,7 +134,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
       try {
         conflicting = GitHelper.INSTANCE.isConflicting(revision_p);
         if (conflicting)
-          result = URI.createPlatformResourceURI(revision_p.getURI().toString(), true);
+          result = URI.createPlatformResourceURI(revision_p.getURI().toString(), false);
         else
           result = URI.createURI(
               GitHelper.INSTANCE.getSchemeIndex() + GitHelper.INSTANCE.getSchemeSeparator() +

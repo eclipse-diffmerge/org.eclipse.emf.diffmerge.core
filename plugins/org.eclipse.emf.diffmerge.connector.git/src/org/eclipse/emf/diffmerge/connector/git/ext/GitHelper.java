@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.egit.core.Activator;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.egit.ui.internal.revision.LocalFileRevision;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -97,10 +98,10 @@ public final class GitHelper {
    */
   public Repository getRepository(IFileRevision revision_p) {
     if (revision_p != null) {
-      IPath revisionPath = new Path(revision_p.getURI().toString());
-      if (!revisionPath.isAbsolute())
+      IPath revisionPath = toPath(revision_p);
+      if (revisionPath != null && !revisionPath.isAbsolute()) {
         return getRepository(revisionPath);
-      else if (revision_p instanceof LocalFileRevision) {
+      } else if (revision_p instanceof LocalFileRevision) {
         IFile file = ((LocalFileRevision)revision_p).getFile();
         return getRepository(file.getFullPath());
       }
@@ -166,10 +167,10 @@ public final class GitHelper {
    */
   public boolean isConflicting(Repository repository_p,
       IFileRevision revision_p) throws NoWorkTreeException, IOException {
-    IPath revisionPath = new Path(revision_p.getURI().toString());
-    if (!revisionPath.isAbsolute())
+    IPath revisionPath = toPath(revision_p);
+    if (!revisionPath.isAbsolute()) {
       return isConflicting(repository_p, revisionPath.toString());
-    else if (revision_p instanceof LocalFileRevision) {
+    } else if (revision_p instanceof LocalFileRevision) {
       IFile file = ((LocalFileRevision)revision_p).getFile();
       return isConflicting(repository_p, file.getFullPath().makeRelative().toString());
     }
@@ -189,6 +190,21 @@ public final class GitHelper {
   public boolean isConflicting(Repository repository_p, String path_p)
       throws NoWorkTreeException, IOException {
     return repository_p.readDirCache().getEntry(path_p).getStage() > 0;
+  }
+  
+  /**
+   * Return an Eclipse path for the given file revision
+   * @param revision_p a non-null file revision
+   * @return a potentially null path
+   */
+  public IPath toPath(IFileRevision revision_p) {
+    IPath result = null;
+    java.net.URI uri = revision_p.getURI();
+    if (uri != null) {
+      String uriString = URI.decode(uri.toString());
+      result = new Path(uriString);
+    }
+    return result;
   }
   
 }

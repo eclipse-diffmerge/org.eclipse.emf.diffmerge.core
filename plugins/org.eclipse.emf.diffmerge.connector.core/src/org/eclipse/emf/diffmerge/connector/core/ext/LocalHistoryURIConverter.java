@@ -51,7 +51,7 @@ implements ITimestampProvider {
    */
 	public LocalHistoryURIConverter(long timestamp_p, String basePath_p) {
     _timestamp = timestamp_p;
-    _basePath = basePath_p;
+    _basePath = URI.decode(basePath_p);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ implements ITimestampProvider {
     if (uri_p.isPlatform()) {
       fullPath = new Path(uri_p.toPlatformString(true));
     } else {
-      fullPath = new Path(_basePath).append(uri_p.toString());
+      fullPath = new Path(_basePath).append(URI.decode(uri_p.toString()));
     }
     IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(fullPath);
     if (targetFile != null && targetFile.exists()) {

@@ -167,7 +167,11 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
    * @return a non-null string
    */
   protected String getURIPathRepresentation(URI uri_p) {
-    return uri_p.devicePath();
+    String result = uri_p.devicePath();
+    if (result != null) {
+      result = URI.decode(result);
+    }
+    return result;
   }
   
   /**
