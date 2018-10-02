@@ -491,6 +491,7 @@ public class ComparisonSelectionImpl extends EObjectImpl
       _concernedElements.clear();
     if (_differences != null)
       _differences.clear();
+    diffNode = null;
     selectedMatchAndFeature = null;
     if (selectedMatches != null)
       selectedMatches.clear();

@@ -2205,7 +2205,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   @Override
   protected void handleDispose() {
     super.handleDispose();
-    _lastUserSelection = null;
+    if (_lastUserSelection != null) {
+      _lastUserSelection.dispose();
+      _lastUserSelection = null;
+    }
     _viewerSynthesisLeft = null;
     _viewerSynthesisRight = null;
     _viewerValuesLeft = null;
