@@ -76,8 +76,9 @@ public class EMFDiffMergePlugin extends Plugin {
    * @param message_p a non-null warning message
    */
   public void log(int severity_p, String message_p) {
-    if (_verbose)
+    if (_verbose) {
       getLog().log(new Status(severity_p, getPluginId(), message_p));
+    }
   }
   
   /**

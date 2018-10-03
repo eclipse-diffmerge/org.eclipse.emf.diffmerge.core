@@ -19,11 +19,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.provider.IDisposable;
 
 
 /**
@@ -41,6 +49,120 @@ public final class ModelsUtil {
      * @param element_p a non-null element
      */
     boolean accepts(EObject element_p);
+  }
+  
+  
+  /**
+   * A stateless object that is in charge of disposing of resources taking various concerns
+   * into account.
+   */
+  public static class Unloader {
+    /** The default instance: singleton with default behavior */
+    private static Unloader __default = null;
+    /**
+     * Return the singleton with default behavior
+     * @return a non-null object
+     */
+    public static Unloader getDefault() {
+      if (__default == null) {
+        __default = new Unloader();
+      }
+      return __default;
+    }
+    /**
+     * Constructor
+     */
+    protected Unloader() {
+      // Stateless
+    }
+    /**
+     * Remove certain adapters in the given resources in the perspective of unloading them.
+     * Transactional concerns: not handled.
+     * @param resources_p a non-null set
+     * @return whether the operation succeeded for all resources
+     */
+    public boolean unloadAdapters(Iterable<? extends Resource> resources_p) {
+      boolean result = true;
+      for (Resource resource : resources_p) {
+        boolean success = unloadAdapters(resource);
+        result = result && success;
+      }
+      return result;
+    }
+    /**
+     * Remove certain adapters in the given resource in the perspective of unloading it.
+     * Transactional concerns: not handled.
+     * @param resource_p a potentially null resource
+     * @return whether the operation succeeded
+     */
+    public boolean unloadAdapters(Resource resource_p) {
+      if (resource_p != null) {
+        for (Adapter adapter : new ArrayList<Adapter>(resource_p.eAdapters())) {
+          if (adapter instanceof ECrossReferenceAdapter) {
+            resource_p.eAdapters().remove(adapter);
+          }
+        }
+      }
+      return true;
+    }
+    /**
+     * Unload the given resources and remove them from their resource set if any.
+     * Transactional concerns: not handled.
+     * @param resources_p a non-null set
+     * @return whether the operation succeeded for all resources
+     */
+    public boolean unloadResources(Iterable<? extends Resource> resources_p) {
+      boolean result = true;
+      for (Resource resource : resources_p) {
+        boolean success = unloadResource(resource);
+        result = result && success;
+      }
+      return result;
+    }
+    /**
+     * Unload the given resource and remove it from its resource set if any.
+     * Transactional concerns: not handled.
+     * @param resource_p a potentially null resource
+     * @return whether the operation succeeded
+     */
+    public boolean unloadResource(Resource resource_p) {
+      return unloadResource(resource_p, false);
+    }
+    /**
+     * Unload the given resource and remove it from its resource set if any.
+     * Transactional concerns: not handled.
+     * @param resource_p a potentially null resource
+     * @param checkRoots_p whether roots should be checked for disposal if applicable
+     * @return whether the operation succeeded
+     */
+    public boolean unloadResource(Resource resource_p, boolean checkRoots_p) {
+      boolean result = true;
+      if (resource_p != null) {
+        try {
+          ResourceSet rs = resource_p.getResourceSet();
+          if (resource_p.isLoaded()) {// Actually loaded, not just assumed as such
+            if (checkRoots_p) {
+              // Disposing roots
+              for (EObject root : resource_p.getContents()) {
+                if (root instanceof IDisposable) {
+                  ((IDisposable)root).dispose();
+                }
+              }
+            }
+            // Actually unloading
+            resource_p.unload();
+          }
+          if (rs != null) {
+            rs.getResources().remove(resource_p);
+          }
+        } catch (Exception e) {
+          EMFDiffMergePlugin.getDefault().getLog().log(new Status(
+              IStatus.ERROR, EMFDiffMergePlugin.getDefault().getPluginId(), e.getMessage()));
+          result = false;
+        }
+      }
+      return result;
+    }
   }
   
   

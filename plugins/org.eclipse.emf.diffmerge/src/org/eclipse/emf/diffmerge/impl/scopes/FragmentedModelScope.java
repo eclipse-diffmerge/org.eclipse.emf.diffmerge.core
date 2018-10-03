@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
@@ -33,11 +32,11 @@ import org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
+import org.eclipse.emf.diffmerge.util.ModelsUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -605,19 +604,15 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#unload()
    */
   public List<Resource> unload() {
-    for (Resource loadedResource : _loadedResources) {
-      for (Adapter adapter : new ArrayList<Adapter>(loadedResource.eAdapters())) {
-        if (adapter instanceof ECrossReferenceAdapter)
-          loadedResource.eAdapters().remove(adapter);
-      }
-    }
+    ModelsUtil.Unloader.getDefault().unloadAdapters(_loadedResources);
     for (Resource loadedResource : _loadedResources) {
       unloadResource(loadedResource);
     }
     List<Resource> result = new ArrayList<Resource>(_loadedResources);
     _loadedResources.clear();
-    if (!result.isEmpty())
+    if (!result.isEmpty()) {
       _state = ScopeState.UNLOADED;
+    }
     return result;
   }
   
@@ -626,14 +621,7 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    * @param resource_p a non-null resource
    */
   protected void unloadResource(Resource resource_p) {
-    try {
-      if (resource_p.isLoaded()) // Actually loaded, not just assumed as such
-        resource_p.unload();
-      _resourceSet.getResources().remove(resource_p);
-    } catch (Exception e) {
-      // Proceed
-      e.printStackTrace();
-    }
+    ModelsUtil.Unloader.getDefault().unloadResource(resource_p);
   }
   
   

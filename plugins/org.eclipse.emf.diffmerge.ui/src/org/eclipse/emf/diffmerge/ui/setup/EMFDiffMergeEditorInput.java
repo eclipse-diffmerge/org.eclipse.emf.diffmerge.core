@@ -20,7 +20,6 @@ import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.ICompareNavigator;
 import org.eclipse.compare.INavigatable;
-import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
@@ -39,9 +38,9 @@ import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
 import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
+import org.eclipse.emf.diffmerge.ui.util.MiscUtil.ExtendedUnloader;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.PackageNotFoundException;
@@ -50,9 +49,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
-import org.eclipse.emf.transaction.util.TransactionUtil;
-import org.eclipse.emf.workspace.ResourceUndoContext;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -73,7 +69,6 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -242,6 +237,7 @@ implements IEditingDomainProvider {
    */
   protected void disposeResources() {
     final EditingDomain domain = getEditingDomain();
+    final ExtendedUnloader unloader = ExtendedUnloader.getDefault();
     final Set<Resource> unloaded = new HashSet<Resource>();
     MiscUtil.executeAndForget(domain, new Runnable() {
       /**
@@ -249,14 +245,7 @@ implements IEditingDomainProvider {
        */
       public void run() {
         if (_comparisonResource != null) {
-          for (EObject root : _comparisonResource.getContents()) {
-            if (root instanceof UIComparison) {
-              UIComparison uiComparison = (UIComparison)root;
-              uiComparison.dispose();
-            }
-          }
-          _comparisonResource.unload();
-          domain.getResourceSet().getResources().remove(_comparisonResource);
+          unloader.unloadResource(_comparisonResource, true);
           unloaded.add(_comparisonResource);
         }
         if (_leftScope instanceof IPersistentModelScope)
@@ -267,23 +256,10 @@ implements IEditingDomainProvider {
           unloaded.addAll(((IPersistentModelScope)_ancestorScope).unload());
       }
     });
-    if (domain != null)
+    if (domain != null) {
       domain.getCommandStack().flush();
-    if (domain instanceof TransactionalEditingDomain) {
-      TransactionalEditingDomain tDomain = (TransactionalEditingDomain)domain;
-      IOperationHistory opHistory =
-          PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-      for (Resource resource : unloaded) {
-        TransactionUtil.disconnectFromEditingDomain(resource);
-        // Cleaning up Eclipse operation history
-        try {
-          ResourceUndoContext context = new ResourceUndoContext(tDomain, resource);
-          opHistory.dispose(context, true, true, false);
-        } catch (Exception e) {
-          // Workbench being disposed: proceed
-        }
-      }
     }
+    unloader.disconnectResources(domain, unloaded);
   }
   
   /**
