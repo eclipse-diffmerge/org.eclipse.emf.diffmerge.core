@@ -673,7 +673,13 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       _redoAction.update();
     }
     if (_actionBars != null) {
-      _actionBars.updateActionBars();
+      try {
+        _actionBars.updateActionBars();
+      } catch (NullPointerException e) {
+        // E4 bug when setInput is called on an already open editor:
+        // NPE at org.eclipse.e4.ui.workbench.renderers.swt.HandledContributionItem.canExecuteItem
+        // Give up and proceed.
+      }
     }
   }
   

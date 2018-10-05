@@ -469,7 +469,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     return result;
   }
   
-    /**
+  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#createControls(org.eclipse.swt.widgets.Composite)
    */
   @Override
