@@ -91,10 +91,7 @@ implements IComparisonConfigurator.Provider {
       IComparisonMethodFactory factory_p) {
     super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
     _configurators = new ArrayList<IComparisonConfigurator>(createConfigurators());
-    if (__lastComparisonMethodType != null &&
-        __lastComparisonMethodType.isAssignableFrom(getClass())) {
-      update(__lastComparisonConfiguration);
-    }
+    initialize();
   }
   
   /**
@@ -165,6 +162,14 @@ implements IComparisonConfigurator.Provider {
   }
   
   /**
+   * Return the configurator to be applied by default if any
+   * @return a potentially null configurator
+   */
+  public IComparisonConfigurator getDefaultConfigurator() {
+    return CONFIGURATOR_VERSIONS;
+  }
+  
+  /**
    * Return a shell if available
    * @return a potentially null shell (always null if current thread is not the UI thread)
    */
@@ -176,6 +181,21 @@ implements IComparisonConfigurator.Provider {
       result = null;
     }
     return result;
+  }
+  
+  /**
+   * Initialize this comparison method
+   */
+  protected void initialize() {
+    if (__lastComparisonMethodType != null &&
+        __lastComparisonMethodType.isAssignableFrom(getClass())) {
+      update(__lastComparisonConfiguration);
+    } else {
+      IComparisonConfigurator defaultConfigurator = getDefaultConfigurator();
+      if (defaultConfigurator != null) {
+        defaultConfigurator.apply(this);
+      }
+    }
   }
   
   /**
