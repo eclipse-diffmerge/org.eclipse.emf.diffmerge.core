@@ -59,7 +59,7 @@ public class GitLikeDiffLabelDecorator extends DiffLabelDecorator {
     Color result;
     if (!(object_p instanceof IModelScope) &&
         (diffKind_p == DifferenceKind.COUNTED || diffKind_p == DifferenceKind.NONE)) {
-      result = UIUtil.getColor(SWT.COLOR_GRAY);
+      result = UIUtil.getColor(SWT.COLOR_DARK_GRAY);
     } else {
       result = super.getForeground(object_p, base_p, diffKind_p, side_p, node_p);
     }
