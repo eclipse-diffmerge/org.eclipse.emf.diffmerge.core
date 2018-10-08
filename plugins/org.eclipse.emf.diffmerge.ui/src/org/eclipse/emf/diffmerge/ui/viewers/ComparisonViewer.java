@@ -90,6 +90,8 @@ import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.IDisposable;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -2815,60 +2817,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     final EMFDiffNode input = getInput();
     IEditorInput rawEditorInput = input == null? null: input.getEditorInput();
     if (input != null && rawEditorInput instanceof EMFDiffMergeEditorInput) {
-      final EMFDiffMergeEditorInput editorInput = (EMFDiffMergeEditorInput)rawEditorInput;
+      EMFDiffMergeEditorInput editorInput = (EMFDiffMergeEditorInput)rawEditorInput;
       IComparisonMethod origMethod = editorInput.getComparisonMethod();
-      final IModelScopeDefinition origTrgScopeDef =
+      IModelScopeDefinition originalTargetScopeDef =
           origMethod.getModelScopeDefinition(Role.TARGET);
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
       boolean confirmed = manager.updateEditorInputWithUI(getShell(), editorInput);
       if (confirmed) {
-        final IComparisonMethod method = editorInput.getComparisonMethod();
-        method.setVerbose(false);
-        Job job = new Job(Messages.ComparisonViewer_RestartInProgress) {
-          /**
-           * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-           */
-          @Override
-          protected IStatus run(final IProgressMonitor monitor_p) {
-            MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
-              /**
-               * @see java.lang.Runnable#run()
-               */
-              public void run() {
-                boolean sidesSwapped =
-                    method.getModelScopeDefinition(Role.TARGET) != origTrgScopeDef;
-                input.getUIComparison().clear();
-                if (sidesSwapped) {
-                  input.setLeftRole(input.getRoleForSide(false));
-                  input.getActualComparison().swapScopes();
-                }
-                input.setReferenceRole(method.getTwoWayReferenceRole());
-                input.setDrivingRole(method.getTwoWayReferenceRole());
-                boolean leftEditable = method.getModelScopeDefinition(
-                    input.getRoleForSide(true)).isEditable();
-                boolean rightEditable = method.getModelScopeDefinition(
-                    input.getRoleForSide(false)).isEditable();
-                input.setEditionPossible(leftEditable, true);
-                input.setEditionPossible(rightEditable, false);
-                input.getActualComparison().compute(
-                    method.getMatchPolicy(), method.getDiffPolicy(),
-                    method.getMergePolicy(), monitor_p);
-                input.getCategoryManager().update();
-              }
-            });
-            Display.getDefault().syncExec(new Runnable() {
-              /**
-               * @see java.lang.Runnable#run()
-               */
-              public void run() {
-                firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
-                refresh();
-              }
-            });
-            editorInput.checkInconsistency(input.getActualComparison());
-            return Status.OK_STATUS;
-          }
-        };
+        IModelScopeDefinition newTargetScopeDef =
+            editorInput.getComparisonMethod().getModelScopeDefinition(Role.TARGET);
+        boolean sidesSwapped = newTargetScopeDef != originalTargetScopeDef;
+        Job job = new RestartJob(editorInput, sidesSwapped);
         job.setUser(true);
         job.schedule();
       }
@@ -3353,6 +3312,92 @@ public class ComparisonViewer extends AbstractComparisonViewer {
      */
     protected void update() {
       setEnabled(_activeLeft || _activeRight);
+    }
+  }
+  
+  /**
+   * The job that executes the non-interactive part of "comparison restart".
+   */
+  protected class RestartJob extends Job {
+    /** The non-null updated editor input */
+    protected final EMFDiffMergeEditorInput _editorInput;
+    /** Whether sides have been swapped during editor input update */
+    protected final boolean _sidesSwapped;
+    /**
+     * Constructor
+     * @param editorInput_p the non-null updated editor input
+     * @param sidesSwapped_p whether sides have been swapped during editor input update
+     */
+    protected RestartJob(EMFDiffMergeEditorInput editorInput_p, boolean sidesSwapped_p) {
+      super(Messages.ComparisonViewer_RestartInProgress);
+      _editorInput = editorInput_p;
+      _sidesSwapped = sidesSwapped_p;
+    }
+    /**
+     * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+     */
+    @Override
+    protected IStatus run(final IProgressMonitor monitor_p) {
+      final EMFDiffNode diffNode = _editorInput.getCompareResult();
+      final boolean editionPossibleLeft = diffNode.isEditionPossible(true);
+      final boolean editionPossibleRight = diffNode.isEditionPossible(false);
+      Display.getDefault().syncExec(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          diffNode.setEditionPossible(false, true);
+          diffNode.setEditionPossible(false, false);
+          refreshTools();
+        }
+      });
+      Resource comparisonResource = diffNode.getUIComparison().eResource();
+      ResourceSet rs = comparisonResource == null? null: comparisonResource.getResourceSet();
+      if (rs != null) {
+        rs.getResources().remove(comparisonResource);
+      }
+      MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          IComparisonMethod newMethod = _editorInput.getComparisonMethod();
+          newMethod.setVerbose(false);
+          diffNode.getUIComparison().clear();
+          if (_sidesSwapped) {
+            diffNode.setLeftRole(diffNode.getRoleForSide(false));
+            diffNode.getActualComparison().swapScopes();
+          }
+          diffNode.setReferenceRole(newMethod.getTwoWayReferenceRole());
+          diffNode.setDrivingRole(newMethod.getTwoWayReferenceRole());
+          boolean leftEditable = newMethod.getModelScopeDefinition(
+              diffNode.getRoleForSide(true)).isEditable();
+          boolean rightEditable = newMethod.getModelScopeDefinition(
+              diffNode.getRoleForSide(false)).isEditable();
+          diffNode.setEditionPossible(leftEditable, true);
+          diffNode.setEditionPossible(rightEditable, false);
+          diffNode.getActualComparison().compute(
+              newMethod.getMatchPolicy(), newMethod.getDiffPolicy(),
+              newMethod.getMergePolicy(), monitor_p);
+          diffNode.getCategoryManager().update();
+        }
+      });
+      if (rs != null) {
+        rs.getResources().add(comparisonResource);
+      }
+      Display.getDefault().syncExec(new Runnable() {
+        /**
+         * @see java.lang.Runnable#run()
+         */
+        public void run() {
+          diffNode.setEditionPossible(editionPossibleLeft, true);
+          diffNode.setEditionPossible(editionPossibleRight, false);
+          firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
+          refresh();
+        }
+      });
+      _editorInput.checkInconsistency(diffNode.getActualComparison());
+      return Status.OK_STATUS;
     }
   }
   
