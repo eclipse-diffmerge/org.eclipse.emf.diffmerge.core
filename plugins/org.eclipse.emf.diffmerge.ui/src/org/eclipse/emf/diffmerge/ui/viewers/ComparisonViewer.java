@@ -79,7 +79,6 @@ import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.DifferenceKind;
 import org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator;
 import org.eclipse.emf.diffmerge.ui.util.InconsistencyDialog;
-import org.eclipse.emf.diffmerge.ui.util.MiscUtil;
 import org.eclipse.emf.diffmerge.ui.util.SymmetricMatchComparer;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil.MenuDropDownAction;
@@ -3337,8 +3336,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
      * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
      */
     @Override
-    protected IStatus run(final IProgressMonitor monitor_p) {
+    protected IStatus run(IProgressMonitor monitor_p) {
       final EMFDiffNode diffNode = _editorInput.getCompareResult();
+      // Set GUI to read-only mode
       final boolean editionPossibleLeft = diffNode.isEditionPossible(true);
       final boolean editionPossibleRight = diffNode.isEditionPossible(false);
       Display.getDefault().syncExec(new Runnable() {
@@ -3351,40 +3351,19 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           refreshTools();
         }
       });
+      // Isolate from resource set to avoid unwanted interactions with listeners
       Resource comparisonResource = diffNode.getUIComparison().eResource();
       ResourceSet rs = comparisonResource == null? null: comparisonResource.getResourceSet();
       if (rs != null) {
         rs.getResources().remove(comparisonResource);
       }
-      MiscUtil.executeAndForget(getEditingDomain(), new Runnable() {
-        /**
-         * @see java.lang.Runnable#run()
-         */
-        public void run() {
-          IComparisonMethod newMethod = _editorInput.getComparisonMethod();
-          newMethod.setVerbose(false);
-          diffNode.getUIComparison().clear();
-          if (_sidesSwapped) {
-            diffNode.setLeftRole(diffNode.getRoleForSide(false));
-            diffNode.getActualComparison().swapScopes();
-          }
-          diffNode.setReferenceRole(newMethod.getTwoWayReferenceRole());
-          diffNode.setDrivingRole(newMethod.getTwoWayReferenceRole());
-          boolean leftEditable = newMethod.getModelScopeDefinition(
-              diffNode.getRoleForSide(true)).isEditable();
-          boolean rightEditable = newMethod.getModelScopeDefinition(
-              diffNode.getRoleForSide(false)).isEditable();
-          diffNode.setEditionPossible(leftEditable, true);
-          diffNode.setEditionPossible(rightEditable, false);
-          diffNode.getActualComparison().compute(
-              newMethod.getMatchPolicy(), newMethod.getDiffPolicy(),
-              newMethod.getMergePolicy(), monitor_p);
-          diffNode.getCategoryManager().update();
-        }
-      });
+      // Main behavior
+      restart(monitor_p);
+      // Re-integrate in resource set
       if (rs != null) {
         rs.getResources().add(comparisonResource);
       }
+      // Dismiss GUI read-only mode and refresh
       Display.getDefault().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
@@ -3396,8 +3375,35 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           refresh();
         }
       });
+      // Display inconsistency warning message if needed
       _editorInput.checkInconsistency(diffNode.getActualComparison());
       return Status.OK_STATUS;
+    }
+    /**
+     * The main restart behavior
+     * @param monitor_p a non-null progress monitor
+     */
+    protected void restart(IProgressMonitor monitor_p) {
+      IComparisonMethod newMethod = _editorInput.getComparisonMethod();
+      newMethod.setVerbose(false);
+      EMFDiffNode diffNode = _editorInput.getCompareResult();
+      diffNode.getUIComparison().clear();
+      if (_sidesSwapped) {
+        diffNode.setLeftRole(diffNode.getRoleForSide(false));
+        diffNode.getActualComparison().swapScopes();
+      }
+      diffNode.setReferenceRole(newMethod.getTwoWayReferenceRole());
+      diffNode.setDrivingRole(newMethod.getTwoWayReferenceRole());
+      boolean leftEditable = newMethod.getModelScopeDefinition(
+          diffNode.getRoleForSide(true)).isEditable();
+      boolean rightEditable = newMethod.getModelScopeDefinition(
+          diffNode.getRoleForSide(false)).isEditable();
+      diffNode.setEditionPossible(leftEditable, true);
+      diffNode.setEditionPossible(rightEditable, false);
+      diffNode.getActualComparison().compute(
+          newMethod.getMatchPolicy(), newMethod.getDiffPolicy(),
+          newMethod.getMergePolicy(), monitor_p);
+      diffNode.getCategoryManager().update();
     }
   }
   
