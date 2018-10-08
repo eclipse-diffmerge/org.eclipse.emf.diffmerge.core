@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.diffmerge.api.IComparison;
+import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -65,6 +66,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
@@ -91,7 +93,10 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   /** The non-null set of property change listeners */
   private final Set<IPropertyChangeListener> _changeListeners;
   
-  /** The main control of the viewer */
+  /** The non-null shell to which the control of the viewer belongs */
+  private Shell _shell;
+  
+  /** The (non-null after initialization and before disposal) main control of the viewer */
   private Composite _control;
   
   /** Whether the selection is provided outside the viewer */
@@ -126,6 +131,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    */
   public AbstractComparisonViewer(Composite parent_p, IActionBars actionBars_p) {
     _actionBars = actionBars_p;
+    _shell = parent_p.getShell();
     _changeListeners = new HashSet<IPropertyChangeListener>(1);
     _input = null;
     _isExternallySynced = true;
@@ -350,6 +356,14 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
+   * Return the driving role for this viewer
+   * @return a role which is assumed non-null after setInput(Object) has been invoked
+   */
+  protected Role getDrivingRole() {
+    return getInput() == null? null: getInput().getDrivingRole();
+  }
+  
+  /**
    * Return the editing domain for this viewer
    * @return an editing domain which may be non-null after setInput(Object) has been invoked
    */
@@ -452,29 +466,40 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
   }
   
   /**
-   * Return the shell of this viewer. Must only be called from the UI thread.
+   * Return the shell of this viewer
    * @return a non-null shell
    */
   protected Shell getShell() {
-    return getControl().getShell();
+    return _shell;
   }
   
   /**
-   * Return the workbench part site of this viewer, if any
+   * Return the workbench part site of this viewer, if any,
+   * assuming the current thread is the UI thread
    * @return a potentially null site
    */
   protected IWorkbenchPartSite getSite() {
     IWorkbenchPartSite result = null;
-    try {
-      IWorkbenchPage page = getPage();
-      IWorkbenchSite site = page.getActivePart().getSite();
-      if (site instanceof IWorkbenchPartSite) {
-        result = (IWorkbenchPartSite)site;
+    if (isInWorkbenchWindow()) {
+      try {
+        IWorkbenchPage page = getPage();
+        IWorkbenchSite site = page.getActivePart().getSite();
+        if (site instanceof IWorkbenchPartSite) {
+          result = (IWorkbenchPartSite)site;
+        }
+      } catch (Exception e) {
+        // Just proceed
       }
-    } catch (Exception e) {
-      // Just proceed
     }
     return result;
+  }
+  
+  /**
+   * Return the target role of the merge, if defined
+   * @return a potentially null role
+   */
+  protected Role getTargetRole() {
+    return getInput() == null? null: getInput().getTargetRole();
   }
   
   /**
@@ -551,6 +576,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     }
     _changeListeners.clear();
     _input = null;
+    _shell = null;
     _control = null;
     _lastCommandBeforeSave = null;
     _undoAction = null;
@@ -633,6 +659,32 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       });
     }
     firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, input_p, oldInput_p);
+  }
+  
+  /**
+   * Return whether the given selection provider must be considered as internal to this viewer
+   * @param provider_p a potentially null object
+   */
+  protected boolean isInternalSelectionProvider(ISelectionProvider provider_p) {
+    // Redefine if there are sub-viewers
+    return provider_p == this || provider_p == getMultiViewerSelectionProvider();
+  }
+  
+  /**
+   * Return whether the viewer belongs to a workbench window,
+   * assuming the current thread is the UI thread
+   */
+  protected boolean isInWorkbenchWindow() {
+    Shell ownShell = getShell();
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    if (workbench != null && !workbench.isClosing()) {
+      for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
+        if (ownShell == window.getShell()) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
   
   /**
@@ -752,12 +804,12 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
     if (site != null) {
       _selectionBridgeToOutside = new SelectionBridge() {
         /**
-         * @see org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge#notifyListeners()
+         * @see org.eclipse.emf.diffmerge.ui.viewers.SelectionBridge#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)
          */
         @Override
-        protected void notifyListeners() {
-          if (_isExternallySynced) {
-            super.notifyListeners();
+        public void selectionChanged(SelectionChangedEvent event_p) {
+          if (_isExternallySynced && isInternalSelectionProvider(event_p.getSelectionProvider())) {
+            super.selectionChanged(event_p);
           }
         }
       };

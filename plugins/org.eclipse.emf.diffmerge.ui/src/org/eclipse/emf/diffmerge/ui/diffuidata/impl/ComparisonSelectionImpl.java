@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -21,11 +22,14 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.diffmerge.api.IComparison;
+import org.eclipse.emf.diffmerge.api.IMapping;
 import org.eclipse.emf.diffmerge.api.IMatch;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
@@ -36,6 +40,7 @@ import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UidiffdataPackage;
+import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -46,6 +51,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 
 /**
@@ -102,19 +109,19 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * The (initially null) set of differences to merge according to this selection
    * @generated NOT
    */
-  private EList<EMergeableDifference> _differences;
+  protected EList<EMergeableDifference> _differences;
 
   /**
    * The (initially null) set of elements concerned with differences to merge
    * @generated NOT
    */
-  private EList<EObject> _concernedElements;
+  protected EList<EObject> _concernedElements;
 
   /**
    * The optional role for resolving ambiguities in selected full matches
    * @generated NOT
    */
-  private Role _preferredSide;
+  protected Role _preferredSide;
 
   /**
    * The cached value of the '{@link #getSelectedMatchAndFeature() <em>Selected Match And Feature</em>}' containment reference.
@@ -185,10 +192,11 @@ public class ComparisonSelectionImpl extends EObjectImpl
         Iterator<?> it = collection.iterator();
         while (it.hasNext()) {
           Object current = it.next();
-          if (current instanceof EValuePresence)
+          if (current instanceof EValuePresence) {
             presences.add((EValuePresence) current);
-          else if (current instanceof EMatch)
+          } else if (current instanceof EMatch) {
             matches.add((EMatch) current);
+          }
         }
         if (!presences.isEmpty()) {
           getSelectedValuePresences().addAll(presences);
@@ -373,8 +381,9 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @generated NOT
    */
   public EList<EMergeableDifference> asDifferencesToMerge() {
-    if (_differences == null)
+    if (_differences == null) {
       _differences = getDifferencesToMerge();
+    }
     return ECollections.unmodifiableEList(_differences);
   }
 
@@ -389,10 +398,11 @@ public class ComparisonSelectionImpl extends EObjectImpl
     } else {
       EValuePresence presence = asValuePresence();
       if (presence != null) {
-        if (representAsOwnership(presence))
+        if (representAsOwnership(presence)) {
           result = EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature();
-        else
+        } else {
           result = presence.getFeature();
+        }
       }
     }
     return result;
@@ -419,10 +429,11 @@ public class ComparisonSelectionImpl extends EObjectImpl
       result = getSelectedMatchAndFeature().getMatch();
     } else if (!getSelectedValuePresences().isEmpty()) {
       EValuePresence presence = asValuePresence();
-      if (representAsOwnership(presence))
+      if (representAsOwnership(presence)) {
         result = (EMatch) ((IReferenceValuePresence) presence).getValueMatch();
-      else
+      } else {
         result = presence.getElementMatch();
+      }
     }
     return result;
   }
@@ -439,15 +450,17 @@ public class ComparisonSelectionImpl extends EObjectImpl
       result = new FOrderedSet<EMatch>();
       for (EValuePresence valuePresence : getSelectedValuePresences()) {
         EMatch match = valuePresence.getElementMatch();
-        if (match != null)
+        if (match != null) {
           result.add(match);
+        }
       }
     } else if (getSelectedMatchAndFeature() != null
         || getSelectedTreePath() != null) {
       result = new BasicEList<EMatch>(1);
       EMatch match = asMatch();
-      if (match != null)
+      if (match != null) {
         result.add(match);
+      }
     }
     return ECollections.unmodifiableEList(result);
   }
@@ -458,8 +471,9 @@ public class ComparisonSelectionImpl extends EObjectImpl
    */
   public TreePath asMatchPath() {
     TreePath result = null;
-    if (!getSelectedTreePath().isEmpty())
+    if (!getSelectedTreePath().isEmpty()) {
       result = new TreePath(getSelectedTreePath().toArray());
+    }
     return result;
   }
 
@@ -477,8 +491,9 @@ public class ComparisonSelectionImpl extends EObjectImpl
    */
   public EValuePresence asValuePresence() {
     EValuePresence result = null;
-    if (!getSelectedValuePresences().isEmpty())
+    if (!getSelectedValuePresences().isEmpty()) {
       result = getSelectedValuePresences().get(0);
+    }
     return result;
   }
 
@@ -487,18 +502,23 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @generated NOT
    */
   public void dispose() {
-    if (_concernedElements != null)
+    if (_concernedElements != null) {
       _concernedElements.clear();
-    if (_differences != null)
+    }
+    if (_differences != null) {
       _differences.clear();
+    }
     diffNode = null;
     selectedMatchAndFeature = null;
-    if (selectedMatches != null)
+    if (selectedMatches != null) {
       selectedMatches.clear();
-    if (selectedTreePath != null)
+    }
+    if (selectedTreePath != null) {
       selectedTreePath.clear();
-    if (selectedValuePresences != null)
+    }
+    if (selectedValuePresences != null) {
       selectedValuePresences.clear();
+    }
   }
 
   /**
@@ -506,10 +526,10 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @return a non-null, potentially empty collection
    * @generated NOT
    */
-  private EList<EObject> getConcernedElements() {
+  protected EList<EObject> getConcernedElements() {
     EList<EObject> result = new FOrderedSet<EObject>();
     List<EMatch> matches = asMatches();
-    if (matches.isEmpty() || _preferredSide == null) {
+    if (matches.isEmpty()) {
       for (EMergeableDifference difference : asDifferencesToMerge()) {
         if (difference instanceof IElementRelativePresence) {
           IElementRelativePresence elementDifference = (IElementRelativePresence) difference;
@@ -521,29 +541,32 @@ public class ComparisonSelectionImpl extends EObjectImpl
         }
       }
     } else {
+      Role firstSide = getPreferredSide();
       for (EMatch match : matches) {
-        EObject element = match.get(_preferredSide);
-        if (element != null)
+        EObject element = match.get(firstSide);
+        if (element != null) {
           result.add(element);
+        }
       }
       if (result.isEmpty()) {
         for (EMatch match : matches) {
-          EObject element = match.get(_preferredSide.opposite());
-          if (element != null)
+          EObject element = match.get(firstSide.opposite());
+          if (element != null) {
             result.add(element);
+          }
         }
       }
     }
     return result;
   }
-
+  
   /**
    * Return the differences to merge according to this selection
    * @return a non-null, potentially empty collection
    * @generated NOT
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  private EList<EMergeableDifference> getDifferencesToMerge() {
+  protected EList<EMergeableDifference> getDifferencesToMerge() {
     EList<EMergeableDifference> result = new FArrayList<EMergeableDifference>();
     if (!asValuePresences().isEmpty()) {
       result.addAll(asValuePresences());
@@ -561,12 +584,13 @@ public class ComparisonSelectionImpl extends EObjectImpl
         EStructuralFeature feature = asFeature();
         if (match != null && feature != null) {
           // All differences of a given feature on a given match
-          if (feature instanceof EAttribute)
+          if (feature instanceof EAttribute) {
             result.addAll((Collection) match
                 .getAttributeDifferences((EAttribute) feature));
-          else
+          } else {
             result.addAll((Collection) match
                 .getReferenceDifferences((EReference) feature));
+          }
         } else if (match != null) {
           // All differences on a given match
           result.addAll((Collection) match.getAllDifferences());
@@ -584,16 +608,29 @@ public class ComparisonSelectionImpl extends EObjectImpl
     List<EObject> list = toList();
     return list.isEmpty() ? null : list.get(0);
   }
-
+  
+  /**
+   * Return the preferred role when interpreting matches as elements
+   * @return a non-null role
+   * @generated NOT
+   */
+  protected Role getPreferredSide() {
+    Role firstSide = _preferredSide;
+    if (firstSide == null) {
+      firstSide = getDiffNode().getTargetRole();
+    }
+    if (firstSide == null) {
+      firstSide = getDiffNode().getDrivingRole();
+    }
+    return firstSide;
+  }
+  
   /**
    * @see org.eclipse.jface.viewers.ISelection#isEmpty()
    * @generated NOT
    */
   public boolean isEmpty() {
-    return getSelectedMatches().isEmpty()
-        && getSelectedMatchAndFeature() == null
-        && getSelectedTreePath().isEmpty()
-        && getSelectedValuePresences().isEmpty();
+    return toList().isEmpty();
   }
 
   /**
@@ -610,7 +647,7 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @param difference_p a potentially null difference
    * @generated NOT
    */
-  private boolean representAsOwnership(IDifference difference_p) {
+  protected boolean representAsOwnership(IDifference difference_p) {
     boolean result = false;
     if (difference_p instanceof IReferenceValuePresence) {
       IReferenceValuePresence presence = (IReferenceValuePresence) difference_p;
@@ -640,9 +677,91 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @generated NOT
    */
   public List<EObject> toList() {
-    if (_concernedElements == null)
+    if (_concernedElements == null) {
       _concernedElements = getConcernedElements();
+    }
     return ECollections.unmodifiableEList(_concernedElements);
+  }
+
+  /**
+   * Return a variant of the given element-based selection as a
+   * list of matches through the given diff node
+   * @param selection_p a non-null, potentially empty selection
+   * @param diffNode_p a non-null diff node
+   * @return a non-null, potentially empty selection
+   */
+  public static List<EMatch> selectionToMatches(
+      IStructuredSelection selection_p, EMFDiffNode diffNode_p) {
+    return selectionToMatches(selection_p, diffNode_p, diffNode_p.getDrivingRole());
+  }
+  
+  /**
+   * Return a variant of the given element-based selection as a
+   * list of matches. Elements from the given side are converted
+   * to their corresponding matches through the given diff node.
+   * Other elements are converted from the opposite side if possible.
+   * @param selection_p a non-null, potentially empty selection
+   * @param diffNode_p a non-null diff node
+   * @param role_p a non-null role
+   * @return a non-null, potentially empty selection
+   */
+  public static List<EMatch> selectionToMatches(
+      IStructuredSelection selection_p, EMFDiffNode diffNode_p, Role role_p) {
+    List<EMatch> result = new FArrayList<EMatch>();
+    IComparison comparison = diffNode_p.getActualComparison();
+    if (comparison != null) {
+      IMapping mapping = comparison.getMapping();
+      for (Object selected : selection_p.toArray()) {
+        if (selected instanceof EObject) {
+          EObject selectedElement = (EObject)selected;
+          IMatch match = mapping.getMatchFor(selectedElement, role_p);
+          if (match == null) {
+            match = mapping.getMatchFor(selectedElement, role_p.opposite());
+          }
+          if (match instanceof EMatch) {
+            result.add((EMatch)match);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Return a variant of the given element-based selection as a match-based
+   * tree path. The first element of the selection is converted to its
+   * corresponding match and parent matches according to the scope hierarchy
+   * through the given diff node. Other elements are ignored.
+   * @param selection_p a non-null selection
+   * @param diffNode_p a non-null diff node
+   * @return a non-null, potentially empty selection
+   */
+  public static TreePath selectionToTreePath(
+      IStructuredSelection selection_p, EMFDiffNode diffNode_p) {
+    TreePath result = null;
+    if (!selection_p.isEmpty()) {
+      Role role = diffNode_p.getDrivingRole(); // Necessarily
+      IStructuredSelection singletonSelection = selection_p.size() == 1? selection_p:
+        new StructuredSelection(selection_p.getFirstElement());
+      List<EMatch> convertedSelection =
+          selectionToMatches(singletonSelection, diffNode_p, role);
+      if (!convertedSelection.isEmpty()) {
+        IMatch selectedMatch = convertedSelection.get(0);
+        IComparison comparison = diffNode_p.getActualComparison();
+        IFeaturedModelScope scope = comparison.getScope(role);
+        IMapping mapping = comparison.getMapping();
+        LinkedList<IMatch> treePathContents = new LinkedList<IMatch>();
+        IMatch treeNode = selectedMatch;
+        while (treeNode != null) {
+          treePathContents.addFirst(treeNode);
+          EObject element = treeNode.get(role);
+          EObject parent = (element == null)? null: scope.getContainer(element);
+          treeNode = (parent == null)? null: mapping.getMatchFor(parent, role);
+        }
+        result = UIUtil.toTreePath(treePathContents);
+      }
+    }
+    return result;
   }
 
 } //ComparisonSelectionImpl

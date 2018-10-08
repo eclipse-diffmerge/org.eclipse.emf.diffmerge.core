@@ -15,6 +15,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl.selectionToMatches;
+import static org.eclipse.emf.diffmerge.ui.diffuidata.impl.ComparisonSelectionImpl.selectionToTreePath;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_ICONS;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_LABELS;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_DEFAULT_COVER_CHILDREN;
@@ -212,6 +214,34 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   /** The name of the "open in dedicated viewer activation" property */
   public static final String PROPERTY_ACTIVATION_OPEN_DEDICATED = "PROPERTY_ACTIVATION_OPEN_DEDICATED"; //$NON-NLS-1$
   
+  /** An object that symbolizes unknown selection providers */
+  protected static final ISelectionProvider UNKNOWN_SELECTION_PROVIDER = new ISelectionProvider() {
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#setSelection(org.eclipse.jface.viewers.ISelection)
+     */
+    public void setSelection(ISelection selection_p) {
+      // Nothing
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+     */
+    public void removeSelectionChangedListener(ISelectionChangedListener listener_p) {
+      // Nothing
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#getSelection()
+     */
+    public ISelection getSelection() {
+      return null;
+    }
+    /**
+     * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+     */
+    public void addSelectionChangedListener(ISelectionChangedListener listener_p) {
+      // Nothing
+    }
+  };
+  
   /** The synthesis model tree viewer */
   protected EnhancedComparisonTreeViewer _viewerSynthesisMain;
   
@@ -307,35 +337,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     for (IMatch child : getInput().getCategoryManager().getChildrenForMerge(match_p)) {
       addDifferencesToMergeRec(toMerge_p, child, destination_p, incrementalMode_p);
     }
-  }
-  
-  /**
-   * Convert the given structured selection to a comparison selection
-   * @param selection_p a non-null selection
-   * @return a non-null comparison selection
-   */
-  protected ComparisonSelection asComparisonSelection(IStructuredSelection selection_p) {
-    Collection<IMatch> matches = new ArrayList<IMatch>();
-    EMFDiffNode input = getInput();
-    if (input != null) {
-      EComparison comparison = getComparison();
-      if (comparison != null) {
-        Role mainRole = input.getDrivingRole();
-        for (Object selected : selection_p.toArray()) {
-          if (selected instanceof EObject) {
-            EObject selectedElement = (EObject)selected;
-            IMatch match = comparison.getMapping().getMatchFor(selectedElement, mainRole);
-            if (match == null)
-              match = comparison.getMapping().getMatchFor(
-                  selectedElement, mainRole.opposite());
-            if (match != null)
-              matches.add(match);
-          }
-        }
-      }
-    }
-    ComparisonSelection result = new ComparisonSelectionImpl(matches, null, input);
-    return result;
   }
   
   /**
@@ -1293,7 +1294,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       }
     };
     action.setToolTipText(Messages.ComparisonViewer_LinkViewsExternalToolTip);
-    action.setChecked(_isExternallySynced);
+    boolean isInWorkbenchWindow = isInWorkbenchWindow();
+    action.setChecked(_isExternallySynced && isInWorkbenchWindow);
+    action.setEnabled(isInWorkbenchWindow);
     ActionContributionItem result = new ActionContributionItem(action);
     context_p.add(result);
     return result;
@@ -1580,8 +1583,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         IStructuredSelection selection = result.getSelection();
         if (selection.size() == 1) {
           MatchAndFeature maf = (MatchAndFeature)selection.getFirstElement();
-          setSelection(new ComparisonSelectionImpl(
-              maf, getDrivingRole(), getInput()), true, result.getInnerViewer());
+          setSelection(
+              new ComparisonSelectionImpl(maf, getTargetRole(), getInput()),
+              true, result.getInnerViewer());
         }
       }
     });
@@ -1683,8 +1687,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent event_p) {
         IStructuredSelection selection = result.getSelection();
         if (!selection.isEmpty())
-          setSelection(new ComparisonSelectionImpl(
-              selection.toList(), getDrivingRole(), getInput()), true, result.getInnerViewer());
+          setSelection(
+              new ComparisonSelectionImpl(selection.toList(), getTargetRole(), getInput()),
+              true, result.getInnerViewer());
       }
     });
     // Global selection change: update local selection
@@ -1708,8 +1713,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
               newSelection = new TreeSelection(path);
             } else {
               IMatch match = selection.asMatch();
-              if (match != null)
+              if (match != null) {
                 newSelection = new StructuredSelection(match);
+              }
             }
           }
           result.setSelection(newSelection, true);
@@ -1737,13 +1743,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public void widgetSelected(SelectionEvent event_p) {
-        if (isLeftRightSynced()) {
+        if (isLeftRightSynced() && getInput() != null) {
+          EMFDiffNode input = getInput();
           IStructuredSelection selection = result.getSelection();
           Role sideRole = getInput().getRoleForSide(isLeftSide_p);
-          IStructuredSelection synthesisSelection = getSelectionAsSynthesis(selection, isLeftSide_p);
+          List<EMatch> synthesisSelection = selectionToMatches(selection, input, sideRole);
           if (!synthesisSelection.isEmpty())
-            setSelection(new ComparisonSelectionImpl(
-                synthesisSelection.toList(), sideRole, getInput()), true, result.getInnerViewer());
+            setSelection(
+                new ComparisonSelectionImpl(synthesisSelection, sideRole, getInput()),
+                true, result.getInnerViewer());
         }
       }
     });
@@ -1816,8 +1824,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         IStructuredSelection selection = result.getSelection();
         if (!selection.isEmpty()) {
           if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
-            setSelection(new ComparisonSelectionImpl(
-                selection.toList(), getInput().getRoleForSide(isLeftSide_p), getInput()), true, result.getInnerViewer());
+            setSelection(
+                new ComparisonSelectionImpl(
+                    selection.toList(), getInput().getRoleForSide(isLeftSide_p), getInput()),
+                true, result.getInnerViewer());
             // One element selected: show it in scope viewer
             if (selection.size() == 1) {
               EObject selectedElement = (EObject)selection.getFirstElement();
@@ -2035,14 +2045,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
-   * Return the driving role for this viewer
-   * @return a role which is assumed non-null after setInput(Object) has been invoked
-   */
-  public Role getDrivingRole() {
-    return getInput() == null? null: getInput().getDrivingRole();
-  }
-  
-  /**
    * Return the inner viewer for the features of elements with differences
    * @return a viewer which is non-null if this viewer has been properly initialized
    */
@@ -2134,35 +2136,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           EObject element = ((IMatch)selected).get(role);
           if (element != null)
             result.add(element);
-        }
-      }
-    }
-    return new StructuredSelection(result);
-  }
-  
-  /**
-   * Return a variant of the given element-based selection as a
-   * match-based selection. Elements from the given side are converted to
-   * their corresponding matches. Other elements are ignored.
-   * @param selection_p a non-null selection
-   * @param onLeft_p whether the original side is left or right
-   * @return a non-null, potentially empty selection
-   */
-  protected IStructuredSelection getSelectionAsSynthesis(
-      IStructuredSelection selection_p, boolean onLeft_p) {
-    List<IMatch> result = new FArrayList<IMatch>();
-    EMFDiffNode input = getInput();
-    if (input != null) {
-      IComparison comparison = input.getActualComparison();
-      if (comparison != null) {
-        Role role = input.getRoleForSide(onLeft_p);
-        for (Object selected : selection_p.toArray()) {
-          if (selected instanceof EObject) {
-            IMatch match = comparison.getMapping().getMatchFor(
-                (EObject)selected, role);
-            if (match != null)
-              result.add(match);
-          }
         }
       }
     }
@@ -2407,6 +2380,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer#isInternalSelectionProvider(org.eclipse.jface.viewers.ISelectionProvider)
+   */
+  @Override
+  protected boolean isInternalSelectionProvider(ISelectionProvider provider_p) {
+    return super.isInternalSelectionProvider(provider_p) ||
+        getInnerViewers().contains(provider_p);
+  }
+  
+  /**
    * Return whether the left/right model viewers must be synchronized with the synthesis viewer
    * and can actually be visible
    */
@@ -2612,7 +2594,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     TreePath newPath = next_p? treeViewer.getNextUserDifference(origin_p):
       treeViewer.getPreviousUserDifference(origin_p);
     if (newPath != null) {
-      setSelection(new ComparisonSelectionImpl(newPath, getDrivingRole(), getInput()), true);
+      setSelection(
+          new ComparisonSelectionImpl(newPath, getTargetRole(), getInput()),
+          true, true);
     }
     return newPath == null;
   }
@@ -2871,7 +2855,17 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   @Override
   public void setSelection(ISelection selection_p, boolean reveal_p) {
-    setSelection(selection_p, reveal_p, this);
+    setSelection(selection_p, reveal_p, false);
+  }
+  
+  /**
+   * Set the selection of this viewer
+   * @param selection_p a potentially null selection
+   * @param reveal_p whether the select objects must be revealed
+   * @param propagate_p whether to propagate to outside viewers if possible
+   */
+  public void setSelection(ISelection selection_p, boolean reveal_p, boolean propagate_p) {
+    setSelection(selection_p, reveal_p, propagate_p? this: UNKNOWN_SELECTION_PROVIDER);
   }
   
   /**
@@ -2879,19 +2873,45 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @see Viewer#setSelection(ISelection, boolean)
    * @param selection_p a potentially null selection
    * @param reveal_p whether the selected elements must be revealed
-   * @param source_p the potentially null source of the setting
+   * @param source_p the non-null source of the setting
    */
-  protected void setSelection(ISelection selection_p, boolean reveal_p, Viewer source_p) {
+  protected void setSelection(ISelection selection_p, boolean reveal_p,
+      ISelectionProvider source_p) {
     ComparisonSelection newSelection;
-    if (selection_p instanceof ComparisonSelection &&
-        (source_p == this || getInnerViewers().contains(source_p)))
-      newSelection = (ComparisonSelection)selection_p; // Local selection
-    else if (selection_p instanceof IStructuredSelection)
-      newSelection = asComparisonSelection((IStructuredSelection)selection_p); // External selection
-    else
-      newSelection = new ComparisonSelectionImpl(null, null, getInput()); // Invalid selection
-    _lastUserSelection = newSelection;
-    fireSelectionChanged(new SelectionChangedEvent(source_p, getSelection()));
+    EMFDiffNode input = getInput();
+    if (input != null) {
+      if (selection_p instanceof ComparisonSelection &&
+          ((ComparisonSelection)selection_p).getDiffNode() == input) {
+        newSelection = (ComparisonSelection)selection_p; // Local selection
+      } else if (selection_p instanceof IStructuredSelection) {
+        List<EMatch> converted = selectionToMatches((IStructuredSelection)selection_p, input);
+        newSelection = new ComparisonSelectionImpl(converted, null, input); // External selection
+      } else {
+        newSelection = new ComparisonSelectionImpl(null, null, input); // Invalid selection
+      }
+      _lastUserSelection = newSelection;
+      fireSelectionChanged(new SelectionChangedEvent(source_p, getSelection()));
+    }
+  }
+  
+  /**
+   * Set the first element of the given selection as a tree path selection if
+   * possible, in order to guarantee that it will be revealed by the GUI
+   * @param selection_p a potentially null selection
+   */
+  public void setTreeSelection(ISelection selection_p) {
+    EMFDiffNode input = getInput();
+    if (input != null) {
+      ISelection newSelection;
+      TreePath treePath = (selection_p instanceof IStructuredSelection)?
+          selectionToTreePath((IStructuredSelection)selection_p, input): null;
+      if (treePath != null) {
+        newSelection = new ComparisonSelectionImpl(treePath, input.getDrivingRole(), input);
+      } else {
+        newSelection = selection_p;
+      }
+      setSelection(newSelection);
+    }
   }
   
   /**
@@ -3216,24 +3236,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * An action that is enabled only if there is an identified merge target side.
    */
   protected class DirectedAction extends Action {
-    /**
-     * Return the target role of the merge, if defined
-     * @return a potentially null role
-     */
-    protected Role getTargetRole() {
-      Role result = null;
-      EMFDiffNode input = getInput();
-      if (input != null) {
-        boolean leftEditable = input.isEditable(true);
-        boolean rightEditable = input.isEditable(false);
-        if (leftEditable && !rightEditable) {
-          result = input.getRoleForSide(true);
-        } else if (!leftEditable && rightEditable) {
-          result = input.getRoleForSide(false);
-        }
-      }
-      return result;
-    }
     /**
      * Return whether this action is applicable in the current context
      * independently of the current selection

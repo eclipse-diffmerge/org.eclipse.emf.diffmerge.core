@@ -293,8 +293,9 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
    */
   @Override
   public void setSelection(ISelection selection_p, boolean reveal_p) {
-    if (!_innerViewer.getControl().isDisposed())
+    if (!_innerViewer.getControl().isDisposed()) {
       _innerViewer.setSelection(selection_p, reveal_p);
+    }
   }
   
 }

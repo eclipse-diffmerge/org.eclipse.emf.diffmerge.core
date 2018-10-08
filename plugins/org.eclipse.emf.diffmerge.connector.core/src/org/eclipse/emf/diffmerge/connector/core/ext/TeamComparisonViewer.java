@@ -120,8 +120,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
       if (page != null) {
         IEditorPart editor = page.getActiveEditor();
-        if (editor != null)
+        if (editor != null) {
           page.closeEditor(editor, false);
+        }
       }
     }
   }
@@ -202,8 +203,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
         result = new EMFDiffMergeEditorInput(method);
       }
     }
-    if (result == null)
+    if (result == null) {
       result = manager_p.createEditorInputWithUI(getShell(), setup);
+    }
     return result;
   }
   
@@ -219,10 +221,11 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
   protected ComparisonSetup createSetup(ComparisonSetupManager manager_p,
       Object left_p, Object right_p, Object ancestor_p) {
     Object actualAncestor;
-    if (right_p != null && right_p.equals(ancestor_p))
+    if (right_p != null && right_p.equals(ancestor_p)) {
       actualAncestor = null; // Use a two-way reference role instead
-    else
+    } else {
       actualAncestor = ancestor_p;
+    }
     ComparisonSetup setup = manager_p.createComparisonSetup(left_p, right_p, actualAncestor);
     if (setup != null) {
       configureOrientation(setup);
@@ -242,8 +245,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * @see org.eclipse.compare.contentmergeviewer.IFlushable#flush(org.eclipse.core.runtime.IProgressMonitor)
    */
   public void flush(IProgressMonitor monitor_p) {
-    if (_innerViewer != null)
+    if (_innerViewer != null) {
       _innerViewer.flush(monitor_p);
+    }
   }
   
   /**
@@ -270,8 +274,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     Role result = setup_p.getLeftRole();
     if (_configuration != null) {
       Object mirrored = _configuration.getProperty(CC_MIRRORED_PROPERTY);
-      if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue())
+      if (mirrored instanceof Boolean && ((Boolean)mirrored).booleanValue()) {
         result = result.opposite();
+      }
     }
     return result;
   }
@@ -302,8 +307,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
         if (_configuration != null) {
           // Register container for action bars
           ICompareContainer compareContainer = _configuration.getContainer();
-          if (compareContainer != null)
+          if (compareContainer != null) {
             editorInput.setContainer(compareContainer);
+          }
         }
         try {
           // Compute comparison
@@ -331,8 +337,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       // Success: remove previous viewer, create new viewer and set the input
       if (_innerViewer != null) {
         Control innerControl = _innerViewer.getControl();
-        if (innerControl != null && !innerControl.isDisposed())
+        if (innerControl != null && !innerControl.isDisposed()) {
           innerControl.dispose();
+        }
       }
       Control contents = editorInput_p.createContents(_control);
       GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -415,8 +422,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    */
   @Override
   public void refresh() {
-    if (_innerViewer != null)
+    if (_innerViewer != null) {
       _innerViewer.refresh();
+    }
   }
   
   /**
@@ -431,8 +439,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
        */
       protected INavigatable getDelegate() {
         INavigatable navResult = null;
-        if (_innerViewer != null)
+        if (_innerViewer != null) {
           navResult = _innerViewer.getNavigatable();
+        }
         return navResult;
       }
       /**
@@ -447,8 +456,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       public boolean hasChange(int changeFlag_p) {
         boolean result = false;
         INavigatable delegate = getDelegate();
-        if (delegate != null)
+        if (delegate != null) {
           result = delegate.hasChange(changeFlag_p);
+        }
         return result;
       }
       /**
@@ -457,8 +467,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       public boolean openSelectedChange() {
         boolean result = false;
         INavigatable delegate = getDelegate();
-        if (delegate != null)
+        if (delegate != null) {
           result = delegate.openSelectedChange();
+        }
         return result;
       }
       /**
@@ -467,8 +478,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
       public boolean selectChange(int changeFlag_p) {
         boolean result = false;
         INavigatable delegate = getDelegate();
-        if (delegate != null)
+        if (delegate != null) {
           result = delegate.selectChange(changeFlag_p);
+        }
         return result;
       }
     };
@@ -493,13 +505,15 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    */
   @Override
   public void setInput(Object input_p) {
-    if (input_p == _input)
+    if (input_p == _input) {
       return;
+    }
     _input = input_p;
     if (input_p instanceof EMFDiffNode || input_p == null) {
       // Can be directly handled by inner viewer
-      if (_innerViewer != null)
+      if (_innerViewer != null) {
         _innerViewer.setInput(input_p);
+      }
     } else if (input_p instanceof ICompareInput) {
       handleCompareInput((ICompareInput)input_p);
     }
@@ -510,8 +524,9 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    */
   @Override
   public void setSelection(ISelection selection_p, boolean reveal_p) {
-    if (_innerViewer != null)
+    if (_innerViewer != null) {
       _innerViewer.setSelection(selection_p, reveal_p);
+    }
   }
   
 }

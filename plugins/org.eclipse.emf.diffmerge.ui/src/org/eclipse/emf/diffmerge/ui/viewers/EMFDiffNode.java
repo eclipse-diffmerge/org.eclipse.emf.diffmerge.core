@@ -161,7 +161,6 @@ IUserPropertyOwner {
     _editingDomain = domain_p;
     _editorInput = null;
     _leftRole = leftRole_p;
-    _drivingRole = _leftRole;
     _twoWayReferenceRole = null;
     _categoryManager = new CategoryManager(this);
     _isTargetEditionPossible = (leftRole_p == Role.TARGET)? isLeftEditionPossible_p:
@@ -172,6 +171,7 @@ IUserPropertyOwner {
     _isReferenceEditable = true;
     _isTargetModified = false;
     _isReferenceModified = false;
+    _drivingRole = getTargetRole() != null? getTargetRole(): _leftRole;
     _domainChangeListener = (domain_p == null)? null: createDomainListener(domain_p);
     _userPropertyOwnerDelegate = new UserPropertyOwner();
   }
@@ -349,6 +349,22 @@ IUserPropertyOwner {
     EComparison comparison = getActualComparison();
     return comparison != null?
         comparison.getScope(getRoleForSide(left_p)): null;
+  }
+  
+  /**
+   * Return the target role of the merge, if defined
+   * @return a potentially null role
+   */
+  public Role getTargetRole() {
+    Role result = null;
+    boolean leftEditable = isEditable(true);
+    boolean rightEditable = isEditable(false);
+    if (leftEditable && !rightEditable) {
+      result = getRoleForSide(true);
+    } else if (!leftEditable && rightEditable) {
+      result = getRoleForSide(false);
+    }
+    return result;
   }
   
   /**
