@@ -340,6 +340,24 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Convert the given structured selection to a comparison selection by
+   * navigating from elements to matches
+   * @param selection_p a non-null selection
+   * @return a non-null comparison selection
+   */
+  protected ComparisonSelection asComparisonSelection(IStructuredSelection selection_p) {
+    EMFDiffNode input = getInput();
+    Collection<EMatch> matches;
+    if (input != null) {
+      matches = selectionToMatches(selection_p, input);
+    } else {
+      matches = Collections.emptyList();
+    }
+    ComparisonSelection result = new ComparisonSelectionImpl(matches, null, input);
+    return result;
+  }
+  
+  /**
    * Return whether the given situation allows adding to the left
    * @param originKind_p a non-null kind
    */
@@ -2884,8 +2902,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           ((ComparisonSelection)selection_p).getDiffNode() == input) {
         newSelection = (ComparisonSelection)selection_p; // Local selection
       } else if (selection_p instanceof IStructuredSelection) {
-        List<EMatch> converted = selectionToMatches((IStructuredSelection)selection_p, input);
-        newSelection = new ComparisonSelectionImpl(converted, null, input); // External selection
+        newSelection = asComparisonSelection((IStructuredSelection)selection_p);
       } else {
         newSelection = new ComparisonSelectionImpl(null, null, input); // Invalid selection
       }
