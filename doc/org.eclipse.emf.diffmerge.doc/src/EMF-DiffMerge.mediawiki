@@ -24,7 +24,7 @@ It can also be used on model-based diagrams (GMF files, or Sirius *.aird files f
 Whenever the menu item is clicked, a '''setup dialog''' involving the selected files is shown.
 
 
-[[Image:Images/Model-DiffMerge_html_m4bef3dd1.png|600px]]
+[[Image:Images/SetupTwoWays.png|600px]]
 
  
 * The ''''up-and-down-arrows'''' button on the right can be used to swap the position of models - left or right - in the tool, for convenience.
@@ -32,7 +32,7 @@ Whenever the menu item is clicked, a '''setup dialog''' involving the selected f
  
 * The ''''Modifiable'''' check boxes allow defining which model(s) can be modified. If a check box is unselected, it will not be possible to carry out merge actions which would modify the corresponding model. This is a way to protect a model against accidental changes due to a wrong usage of the tool.
  
-* The ''''Merge direction'''' radio buttons specify the direction of the merge, i.e., which model is the source of changes and to which model the changes can be applied. These radio buttons have an impact on the 'Modifiable' check boxes. If no direction is chosen, then the comparison is represented in a symmetric way and both models can be modified by default.
+* The ''''Merge direction'''' radio buttons specify the direction of the merge, i.e., which model is the source of changes and to which model the changes can be applied. These radio buttons have an impact on the 'Modifiable' check boxes. If 'Any' is chosen, then the comparison is represented in a symmetric way and both models can be modified.
  
 * The ''''Comparison method'''' combo box allows selecting the way models are compared. A default, configurable comparison method that is suitable, e.g., for version control is available. Other methods can be added via extensions of the diff/merge tool.
 
@@ -40,7 +40,7 @@ Whenever the menu item is clicked, a '''setup dialog''' involving the selected f
 If the user selects three files, the comparison proposes to compare two files taking into account a third common ancestor as illustrated below.
 
  
-[[Image:Images/Model-DiffMerge_html_m260feba7.png|600px]]
+[[Image:Images/SetupThreeWays.png|600px]]
 
  
 <br> 
@@ -178,7 +178,7 @@ Once the 'Finish' button has been clicked in the setup dialog, a few additional 
 The comparison editor presents the differences which have been computed.
 
 
-[[Image:Images/Model-DiffMerge_html_69cae476.png|700px]]
+[[Image:Images/Overview.png|700px]]
 
 
 The editor is composed of two horizontal areas intersecting with three vertical areas or columns.
@@ -188,13 +188,15 @@ The editor is composed of two horizontal areas intersecting with three vertical 
 === Vertical Areas === 
 
 
-[[Image:Images/Model-DiffMerge_html_m4b50cf8c.png|700px]]
+[[Image:Images/VerticalSections.png|700px]]
 
 
 The middle column represents the contents of the '''left model''' while the right column represents the contents of the '''right model'''. Each side is associated to a color: by default, '''dark red''' for the left model and '''blue''' for the right model. This color code is also used in other dialogs of the diff/merge tool in order to prevent any ambiguity.
 
+Elements that directly carry differences, either in their properties or because they have no match, are in '''bold'''. The elements in their hierarchy are in '''italics''' unless they directly carry differences.
 
-When hovering on the top of any of these columns, the complete path to the model is displayed as a tool tip if the window is too narrow.
+
+When hovering on the top of either of the columns, the complete path to the model is displayed as a tool tip if the window is too narrow.
 
  
 [[Image:Images/Model-DiffMerge_html_m1961c198.png]]
@@ -212,7 +214,7 @@ The three columns are synchronized: clicking an element in the Synthesis section
 === Horizontal Areas === 
 
  
-[[Image:Images/Model-DiffMerge_html_ma5d5753.png|700px]]
+[[Image:Images/HorizontalSections.png|700px]]
 
  
 The two horizontal areas correspond to two different levels of detail. The upper area focuses on which model elements are present and where. The lower area is the '''Details section''': it shows the properties (attributes and references) of the model element that is selected in the upper area.
@@ -268,7 +270,7 @@ Additional features are available via a click on the triangle-shaped button.
 
 * ''''Log changes to models'''': when active, all modifications made to the models are logged in an 	HTML file. This file is named 'ModelComparisonLog.htm' and is at the same location as the usual '.log' file in the '.metadata' sub-folder of the current workspace folder. If the current workspace folder is unknown, right-click a 	project that has been created from scratch, click the 'Properties' 	menu item and look for the 'Location' line in the 	'Resource' category.
  
-'''Important notice''': the last three features ('show merge impact', 'support undo/redo', 'log changes to models') have a cost in performance. Merging differences typically takes longer and requires more memory if they are enabled. It may thus be relevant to disable them when performing large merges. Note that undo/redo is the most expensive feature and logging the least expensive.
+'''Important notice''': the last three features ('show merge impact', 'support undo/redo', 'log changes to models') have a cost in performance. Merging differences typically takes longer and requires more memory if they are enabled. It may thus be relevant to disable them when performing large merges.
 
 
 <br>
@@ -297,14 +299,15 @@ Note that the 'Difference Categories' dialog is not modal, so differences can be
 
 If there are chances that differences that are visible with default settings are filtered out due to the selected category modes, the ''''[filtered]'''' mention appears in the header of the Synthesis section (figure below). It is a warning that even though the GUI may not show any difference, the work for difference resolution may not be finished. Just click the 'Reset' button then the 'OK' or 'Apply' button to make remaining differences visible.
 
-[[Image:Images/FilteredWarning.png]]
+[[Image:Images/FilteredWarning.png|300px]]
 
 
 <br>
 === Details Section === 
 
-The properties of the element selected in the Synthesis section are visible in the Details section (lower area). This section is subdivided into a '''Property section''' that represents the properties themselves and two '''Value sections''' that represent the values of the selected property in the model that corresponds to their column.
+The properties of the element selected in the Synthesis section are visible in the Details section (lower area). This section is subdivided into a '''Property section''' (left column) that represents the properties themselves and two '''Value sections''' (middle and right columns) that represent the values of the selected property in the model that corresponds to the column.
 
+[[Image:Images/Details.png|600px]]
 
 A click on the triangle-shaped button in the Property section brings a few options.
 
@@ -323,14 +326,25 @@ A click on the triangle-shaped button in the Property section brings a few optio
 <br>
 === Difference Handling Buttons === 
 
-The buttons below are shown in the lower area near the Value sections. Their purpose is to decide what to do with differences.
+The purpose of the difference handling buttons is to decide what to do with differences, that is, how the compared models are being merged.
 
-[[Image:Images/Model-DiffMerge_html_7eb489c7.png]]
+* [[Image:Images/dedicated.png|18x18px]] The ''''Open in dedicated editor'''' button is enabled for textual properties only. It opens an editor that is dedicated to fine-grained textual merge (this can also be achieved by double-clicking the text in the Value sections). When the OK button of this editor is pushed, the changes done by the user are marked as accepted. If needed, they can be refined later by un-filtering the 'Ignored differences' category (see corresponding subsection above).
 
- 
-In other words, those buttons control how the compared models are being merged. They are grouped into two symmetrical groups, one group for each model. The buttons in the groups are automatically enabled and disabled according to the current selection.
+The up/down arrow buttons in the editor navigate between differences while the left/right buttons apply changes. Copy/paste and direct edition are also supported.
 
-* [[Image:Images/Model-DiffMerge_html_5b0468f9.png]] The ''''Copy to the right/left'''' buttons: given an element or a value which is present in one model and not in the other, clicking this button copies the element or value and stores it in the model where it is missing.
+[[Image:Images/DedicatedText2Way.png|800px]]
+
+In a three-way comparison, the text of the ancestor can also be shown thanks to the ''''Show Ancestor Pane'''' button (leftmost one in the tool bar).
+
+[[Image:Images/DedicatedText3Way.png|800px]]
+
+Textual properties set apart, the general-purpose buttons for difference handling are visible in the Value sections.
+
+[[Image:Images/MergeButtons.png]]
+
+They are grouped into two symmetrical groups, one group for each model. The buttons in the groups are automatically enabled and disabled according to the current selection.
+
+* [[Image:Images/Model-DiffMerge_html_5b0468f9.png]] The ''''Apply to the right/left'''' buttons: given an element or a value which is present in one model and not in the other, clicking this button copies the element or value and stores it in the model where it is missing.
 
 * [[Image:Images/Model-DiffMerge_html_m7a3a1b12.png]] The ''''Delete on the left/right'''' buttons: given an element or value which is present in one model and 	not in the other, clicking this button deletes the element or value 	in the model where it is present.
 
@@ -353,7 +367,7 @@ Similarly to the 'Copy' buttons, the 'Ignore' buttons may trigger a dedicated di
 
 
 <br>
-=== Textual Comparison ===
+=== Fully Textual Comparison ===
 
 While the recommended comparison method for model and diagram files is using the Diff/Merge tool, 
 it may sometimes be useful to compare model and diagram files textually. 
