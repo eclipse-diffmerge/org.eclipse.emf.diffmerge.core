@@ -305,6 +305,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   }
   
   /**
+   * Return whether tool bars can be contributed by extension point in the given
+   * viewer
+   */
+  protected boolean acceptToolBarAdditions(Viewer viewer_p) {
+    return true;
+  }
+  
+  /**
    * Add differences to merge on the given match to the given list according
    * to the given criteria
    * @param toMerge_p a non-null, modifiable list
@@ -3107,8 +3115,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_FILTERING));
     createItemFilter(toolbarManager);
     // Integrate contributions
-    IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
-    menuService.populateContributionManager(toolbarManager, LOCATION_TOOLBAR_SYNTHESIS);
+    if (acceptToolBarAdditions(_viewerSynthesisMain)) {
+      IMenuService menuService = PlatformUI.getWorkbench().getService(IMenuService.class);
+      menuService.populateContributionManager(toolbarManager, LOCATION_TOOLBAR_SYNTHESIS);
+    }
     // Drop-down menu
     toolbarManager.add(new Separator(LOCATION_TOOLBAR_GROUP_MENU));
     setupMenuSynthesis(toolbarManager);
