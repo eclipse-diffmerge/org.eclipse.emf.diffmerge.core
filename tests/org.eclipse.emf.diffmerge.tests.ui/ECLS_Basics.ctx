@@ -5,8 +5,8 @@ Element-Name: ECLS_Basics
 Element-Type: context
 Element-Version: 2.0
 Id: _LGfR4OMCEeatZLxI8McVXQ
-Runtime-Version: 2.3.0.201805302312
-Save-Time: 8/28/18 11:28 AM
+Runtime-Version: 2.3.0.201806262310
+Save-Time: 1/11/19 11:46 AM
 
 ------=_.ecl.context-718f04b4-ed39-33e3-af62-0995e4561998
 Content-Type: text/ecl
@@ -71,8 +71,8 @@ proc "check-image-dec" [val element] [val imageDec] {
 }
 
 proc "check-persistency" {
-	get-button "Save (M1+S)" | click
 	get-editor "Compare ('Ex1' - 'Ex2')" | close
+	get-window "Save Resource" | get-button Save | click
 	
 	check-model-validity "Ex1"
 	check-model-validity "Ex2"
