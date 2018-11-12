@@ -14,5 +14,6 @@ location "http://download.eclipse.org/releases/photon" {
 	org.eclipse.egit.feature.group lazy
 	org.eclipse.emf.sdk.feature.group lazy
 	org.eclipse.emf.transaction.sdk.feature.group lazy
+	org.eclipse.emf.validation.sdk.feature.group lazy
 	org.eclipse.sirius.specifier.feature.group lazy
 }
