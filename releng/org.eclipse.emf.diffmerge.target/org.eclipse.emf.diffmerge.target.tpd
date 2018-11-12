@@ -11,6 +11,8 @@ location "http://download.eclipse.org/cbi/updates/license/" {
 }
 
 location "http://download.eclipse.org/releases/photon" {
+	org.eclipse.draw2d.feature.group lazy
+	org.eclipse.gef lazy
 	org.eclipse.jgit.feature.group lazy
 	org.eclipse.egit.feature.group lazy
 	org.eclipse.emf.sdk.feature.group lazy
