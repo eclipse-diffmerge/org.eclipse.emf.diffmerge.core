@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Javadoc for DiffMerge Core
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.core.javadoc
-Bundle-Version: 0.10.0.qualifier
+Bundle-Version: 0.10.1.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

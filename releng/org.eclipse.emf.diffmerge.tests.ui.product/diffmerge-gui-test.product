@@ -27,7 +27,7 @@
    </plugins>
 
    <features>
-      <feature id="org.eclipse.emf.diffmerge.feature" version="0.10.0.qualifier"/>
+      <feature id="org.eclipse.emf.diffmerge.feature" version="0.10.1.qualifier"/>
       <feature id="org.eclipse.emf"/>
       <feature id="org.eclipse.platform"/>
       <feature id="org.eclipse.jdt"/>
@@ -62,7 +62,7 @@
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.emf.ecore.edit"/>
       <feature id="org.eclipse.e4.rcp"/>
-      <feature id="org.eclipse.emf.diffmerge.tests.feature" version="0.10.0.qualifier"/>
+      <feature id="org.eclipse.emf.diffmerge.tests.feature" version="0.10.1.qualifier"/>
    </features>
 
    <configurations>
