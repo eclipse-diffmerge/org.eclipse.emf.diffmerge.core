@@ -13,6 +13,7 @@ location "http://download.eclipse.org/cbi/updates/license/" {
 location "http://download.eclipse.org/releases/photon" {
 	org.eclipse.ecf.core.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.feature.feature.group lazy
+	org.eclipse.ecf.core.ssl.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.ssl.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group lazy
