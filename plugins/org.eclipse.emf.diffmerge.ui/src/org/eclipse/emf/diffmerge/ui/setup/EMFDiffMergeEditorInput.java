@@ -75,6 +75,7 @@ import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -788,8 +789,17 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput {
     public void dispose() {
       super.dispose();
       // Unregister properties view as selection listener
-      ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
-      service.removeSelectionListener(this);
+      IWorkbenchWindow window = null;
+      IWorkbenchSite site = getSite();
+      if (site != null) {
+        window = site.getWorkbenchWindow();
+      } else {
+        window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+      }
+      if (window != null) {
+        ISelectionService service = window.getSelectionService();
+        service.removeSelectionListener(this);
+      }
     }
     /**
      * Return the Properties view if already opened
