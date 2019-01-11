@@ -752,12 +752,15 @@ implements IEditingDomainProvider {
    * A slightly enhanced property sheet page for model elements.
    */
   protected static class PropertySheetPage extends ExtendedPropertySheetPage {
+    /** The (initially null) selection service this page is registered to */
+    protected ISelectionService _selectionService;
     /**
      * Constructor
      * @param editingDomain_p a non-null editing domain for the elements
      */
     protected PropertySheetPage(AdapterFactoryEditingDomain editingDomain_p) {
       super(editingDomain_p);
+      _selectionService = null;
     }
     /**
      * @see org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage#dispose()
@@ -765,9 +768,11 @@ implements IEditingDomainProvider {
     @Override
     public void dispose() {
       super.dispose();
-      // Unregister properties view as selection listener
-      ISelectionService service = getSite().getWorkbenchWindow().getSelectionService();
-      service.removeSelectionListener(this);
+      if (_selectionService != null) {
+        // Unregister properties page as selection listener
+        _selectionService.removeSelectionListener(this);
+        _selectionService = null;
+      }
     }
     /**
      * Return the Properties view if already opened
@@ -797,8 +802,10 @@ implements IEditingDomainProvider {
     public void init(IPageSite pageSite_p) {
       super.init(pageSite_p);
       // Register as selection listener
-      ISelectionService service = pageSite_p.getWorkbenchWindow().getSelectionService();
-      service.addSelectionListener(this);
+      _selectionService = pageSite_p.getWorkbenchWindow().getSelectionService();
+      if (_selectionService != null) {
+        _selectionService.addSelectionListener(this);
+      }
     }
     /**
      * @see org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage#selectionChanged(org.eclipse.ui.IWorkbenchPart, org.eclipse.jface.viewers.ISelection)
