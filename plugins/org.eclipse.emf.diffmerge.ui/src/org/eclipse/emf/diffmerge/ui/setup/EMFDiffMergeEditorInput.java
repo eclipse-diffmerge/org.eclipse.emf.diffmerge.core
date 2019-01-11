@@ -339,7 +339,8 @@ implements IEditingDomainProvider {
             if (shell != null) {
               shell.getDisplay().asyncExec(new Runnable() {
                 public void run() {
-                  if (_propertySheetPage != null && !_propertySheetPage.getControl().isDisposed())
+                  if (_propertySheetPage != null && _propertySheetPage.getControl() != null &&
+                      !_propertySheetPage.getControl().isDisposed())
                     _propertySheetPage.refresh();
                 }
               });

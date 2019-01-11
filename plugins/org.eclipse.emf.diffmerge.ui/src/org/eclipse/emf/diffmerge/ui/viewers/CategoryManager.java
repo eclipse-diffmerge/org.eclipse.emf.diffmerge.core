@@ -101,7 +101,7 @@ public class CategoryManager {
   public boolean addCategories(IDifferenceCategorySet categorySet_p) {
     boolean result = true;
     for (IDifferenceCategoryItem categoryItem : categorySet_p.getChildren()) {
-      result = result && addCategoryItem(categoryItem);
+      result = addCategoryItem(categoryItem) && result;
     }
     return result;
   }
@@ -547,10 +547,10 @@ public class CategoryManager {
     if (increment_p > 0) {
       incrementDifferenceNumbers(match_p, increment_p);
       EMatch current = _node.getContainerOf(match_p);
-        while (current != null) {
-          incrementDifferenceNumbers(current, increment_p);
-          current = _node.getContainerOf(current);
-        }
+      while (current != null) {
+        incrementDifferenceNumbers(current, increment_p);
+        current = _node.getContainerOf(current);
+      }
     }
   }
   

@@ -14,7 +14,7 @@ package org.eclipse.emf.diffmerge.gmf;
 import java.util.Set;
 
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,7 +29,7 @@ import org.eclipse.gmf.runtime.notation.View;
  * A merge policy for GMF elements.
  * @author Olivier Constant
  */
-public class GMFMergePolicy extends DefaultMergePolicy {
+public class GMFMergePolicy extends ConfigurableMergePolicy {
   
   /** Whether graphical elements must be merged when semantic elements are merged */
   private boolean _graphicalFromSemantic;

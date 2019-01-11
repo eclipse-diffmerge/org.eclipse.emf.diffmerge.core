@@ -58,6 +58,24 @@ public enum DifferenceKind {
   }
   
   /**
+   * Return whether the receiver is a non-conflicting modification, i.e.,
+   * neither an addition nor a deletion
+   */
+  public boolean isModification() {
+    boolean result;
+    switch (this) {
+      case FROM_LEFT:
+      case FROM_RIGHT:
+      case FROM_BOTH:
+      case MODIFIED:
+        result = true; break;
+      default:
+        result = false; break;
+    }
+    return result;
+  }
+  
+  /**
    * Return whether the receiver is a pure deletion
    */
   public boolean isDeletion() {
@@ -96,7 +114,7 @@ public enum DifferenceKind {
   }
   
   /**
-   * Return whether the receiver is not concerned by any side
+   * Return whether the receiver is not directly concerned by differences
    */
   public boolean isNeutral() {
     return this == COUNTED || this == NONE;

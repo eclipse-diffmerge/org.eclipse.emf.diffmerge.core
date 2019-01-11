@@ -3296,9 +3296,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected class IgnoreAction extends DirectedAction {
     /** Whether the left-hand side ignore is active */
-    private boolean _activeLeft = false;
+    protected boolean _activeLeft = false;
     /** Whether the right-hand side ignore is active */
-    private boolean _activeRight = false;
+    protected boolean _activeRight = false;
     /**
      * Constructor
      */
