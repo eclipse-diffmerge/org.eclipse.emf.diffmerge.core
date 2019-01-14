@@ -18,7 +18,9 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 
@@ -131,7 +133,14 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    */
   protected void updateHeaderImage(Label headerImageWidget_p,
       EMFDiffNode input_p, IModelScope scope_p) {
-    headerImageWidget_p.setImage(getHeaderLabelProvider().getImage(scope_p));
+    Image image = getHeaderLabelProvider().getImage(scope_p);
+    if (image != headerImageWidget_p.getImage()) {
+      headerImageWidget_p.setImage(image);
+      Control mainControl = getControl();
+      if (mainControl instanceof Composite) {
+        ((Composite)mainControl).layout();
+      }
+    }
   }
   
   /**

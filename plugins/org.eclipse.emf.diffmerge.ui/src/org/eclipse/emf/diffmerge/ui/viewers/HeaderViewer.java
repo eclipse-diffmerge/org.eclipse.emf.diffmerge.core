@@ -129,7 +129,6 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
    */
   protected Label createImageLabel(Composite parent_p) {
     Label result = new Label(parent_p, SWT.NONE);
-    result.setBackground(UIUtil.getColor(SWT.COLOR_WHITE));
     return result;
   }
   
