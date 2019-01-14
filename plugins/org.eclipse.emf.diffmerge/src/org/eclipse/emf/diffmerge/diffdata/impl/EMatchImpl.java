@@ -803,7 +803,7 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
     if (eIsProxy())
       return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (matchID: "); //$NON-NLS-1$
     result.append(matchID);
     result.append(')');

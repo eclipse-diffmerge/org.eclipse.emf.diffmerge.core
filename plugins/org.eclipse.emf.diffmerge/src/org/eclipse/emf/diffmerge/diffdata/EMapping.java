@@ -45,7 +45,7 @@ public interface EMapping extends EIdentified, Editable {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Contents</em>' containment reference list.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping_ModifiableContents()
-   * @model containment="true" changeable="false"
+   * @model containment="true"
    * @generated
    */
   EList<EMatch> getModifiableContents();

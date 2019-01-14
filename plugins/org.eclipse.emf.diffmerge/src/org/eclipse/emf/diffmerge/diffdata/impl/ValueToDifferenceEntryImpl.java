@@ -230,7 +230,7 @@ public class ValueToDifferenceEntryImpl extends EObjectImpl
     if (eIsProxy())
       return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (key: "); //$NON-NLS-1$
     result.append(key);
     result.append(')');

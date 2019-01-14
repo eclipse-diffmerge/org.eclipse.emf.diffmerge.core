@@ -308,7 +308,7 @@ public class DiffdataPackageImpl extends EPackageImpl
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link DiffdataPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -324,10 +324,10 @@ public class DiffdataPackageImpl extends EPackageImpl
           .getEPackage(DiffdataPackage.eNS_URI);
 
     // Obtain or create and register package
-    DiffdataPackageImpl theDiffdataPackage = (DiffdataPackageImpl) (EPackage.Registry.INSTANCE
-        .get(eNS_URI) instanceof DiffdataPackageImpl
-            ? EPackage.Registry.INSTANCE.get(eNS_URI)
-            : new DiffdataPackageImpl());
+    Object registeredDiffdataPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    DiffdataPackageImpl theDiffdataPackage = registeredDiffdataPackage instanceof DiffdataPackageImpl
+        ? (DiffdataPackageImpl) registeredDiffdataPackage
+        : new DiffdataPackageImpl();
 
     isInited = true;
 
@@ -1350,7 +1350,7 @@ public class DiffdataPackageImpl extends EPackageImpl
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEMapping_ModifiableContents(), this.getEMatch(), null,
         "modifiableContents", null, 0, -1, EMapping.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEMapping_ReferenceCompletedMatches(), this.getIMatch(),
         null, "referenceCompletedMatches", null, 0, -1, EMapping.class, //$NON-NLS-1$

@@ -223,6 +223,10 @@ public class EMappingImpl extends EIdentifiedImpl implements EMapping {
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
+    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+      getModifiableContents().clear();
+      getModifiableContents().addAll((Collection<? extends EMatch>) newValue);
+      return;
     case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
       getReferenceCompletedMatches()
@@ -245,6 +249,9 @@ public class EMappingImpl extends EIdentifiedImpl implements EMapping {
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
+    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+      getModifiableContents().clear();
+      return;
     case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
       return;

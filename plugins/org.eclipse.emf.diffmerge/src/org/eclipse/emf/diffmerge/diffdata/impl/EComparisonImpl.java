@@ -617,7 +617,7 @@ public class EComparisonImpl extends EIdentifiedImpl implements EComparison {
     if (eIsProxy())
       return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (ancestorScope: "); //$NON-NLS-1$
     result.append(ancestorScope);
     result.append(", referenceScope: "); //$NON-NLS-1$
@@ -1039,7 +1039,7 @@ public class EComparisonImpl extends EIdentifiedImpl implements EComparison {
         presenceRole_p, isOrder_p);
     return result;
   }
-	
+
   /**
    * @see org.eclipse.emf.diffmerge.api.IComparison.Editable#swapScopes()
    * @generated NOT

@@ -640,7 +640,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
     if (eIsProxy())
       return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (alignedWithAncestor: "); //$NON-NLS-1$
     result.append(alignedWithAncestor);
     result.append(", conflicting: "); //$NON-NLS-1$
