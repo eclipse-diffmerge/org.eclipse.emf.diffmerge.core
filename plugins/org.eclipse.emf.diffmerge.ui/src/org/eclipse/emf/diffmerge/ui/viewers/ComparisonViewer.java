@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2018 Thales Global Services S.A.S and others.
+ * Copyright (c) 2010-2019 Thales Global Services S.A.S and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,7 +11,8 @@
  *    Stephane Bouchet (Intel Corporation) - Bug #442492 : hide number of differences in the UI
  *    Stephane Bouchet (Intel Corporation) - Bug #489274 : added API viewers creation methods
  *    Jeremy Aubry (Obeo) - Bug #500417 : Cannot call a merge with a given selection programmatically
- *    Stephane Bouchet (Intel Corporation) - Bug # : added external editor for text differences
+ *    Stephane Bouchet (Intel Corporation) - Bug #516234 : Improve text comparison by using an external text viewer
+ *    Philippe Dul (Thales Global Services S.A.S) - Bug #543737 : Disable redraw on expandAll
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
@@ -604,7 +605,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
            * @see java.lang.Runnable#run()
            */
           public void run() {
-            _viewerSynthesisMain.getInnerViewer().expandAll();
+            ComparisonTreeViewer synthesisViewer = _viewerSynthesisMain.getInnerViewer();
+            try {
+              synthesisViewer.getControl().setRedraw(false);
+              synthesisViewer.expandAll();
+            } finally {
+              synthesisViewer.getControl().setRedraw(true);
+            }
           }
         });
       }
