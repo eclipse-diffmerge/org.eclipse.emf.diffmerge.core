@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.diffmerge.generic.EMFDiffMergePlugin;
+import org.eclipse.emf.diffmerge.generic.EMFDiffMergeGenericPlugin;
 import org.eclipse.emf.diffmerge.generic.Messages;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
@@ -368,7 +368,7 @@ implements IConfigurablePolicy {
    */
   protected String getLabel(EObject element_p, IModelScope scope_p) {
     String result = null;
-    AdapterFactory adapterFactory = EMFDiffMergePlugin.getDefault().getAdapterFactory();
+    AdapterFactory adapterFactory = EMFDiffMergeGenericPlugin.getDefault().getAdapterFactory();
     Adapter adapter = adapterFactory.adapt(element_p, IItemLabelProvider.class);
     if (adapter instanceof IItemLabelProvider)
       result = ((IItemLabelProvider)adapter).getText(element_p);

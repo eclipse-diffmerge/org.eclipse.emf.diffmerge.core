@@ -23,10 +23,10 @@ import org.osgi.framework.BundleContext;
  * The activator class for this plug-in.
  * @author Olivier Constant
  */
-public class EMFDiffMergePlugin extends Plugin {
+public class EMFDiffMergeGenericPlugin extends Plugin {
   
 	/** The shared instance */
-	private static EMFDiffMergePlugin __plugin;
+	private static EMFDiffMergeGenericPlugin __plugin;
 	
 	/** Whether this plug-in is verbose */
 	private boolean _verbose;
@@ -38,7 +38,7 @@ public class EMFDiffMergePlugin extends Plugin {
 	/**
 	 * Constructor
 	 */
-	public EMFDiffMergePlugin() {
+	public EMFDiffMergeGenericPlugin() {
 	  _verbose = false;
 	  _adapterFactory = null;
 	}
@@ -58,7 +58,7 @@ public class EMFDiffMergePlugin extends Plugin {
    * Return the shared instance of the activator
    * @return a non-null instance
    */
-  public static EMFDiffMergePlugin getDefault() {
+  public static EMFDiffMergeGenericPlugin getDefault() {
     return __plugin;
   }
   

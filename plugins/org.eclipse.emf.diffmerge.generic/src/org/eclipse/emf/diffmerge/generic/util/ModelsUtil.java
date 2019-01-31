@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.diffmerge.generic.EMFDiffMergePlugin;
+import org.eclipse.emf.diffmerge.generic.EMFDiffMergeGenericPlugin;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -156,8 +156,8 @@ public final class ModelsUtil {
             rs.getResources().remove(resource_p);
           }
         } catch (Exception e) {
-          EMFDiffMergePlugin.getDefault().getLog().log(new Status(
-              IStatus.ERROR, EMFDiffMergePlugin.getDefault().getPluginId(), e.getMessage()));
+          EMFDiffMergeGenericPlugin.getDefault().getLog().log(new Status(
+              IStatus.ERROR, EMFDiffMergeGenericPlugin.getDefault().getPluginId(), e.getMessage()));
           result = false;
         }
       }
