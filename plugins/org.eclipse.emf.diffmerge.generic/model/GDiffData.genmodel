@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.generic/src" modelPluginID="org.eclipse.emf.diffmerge.generic"
+    modelName="GDiffData" editPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.provider.GenericDiffDataEditPlugin"
+    editorPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.presentation.GenericDiffDataEditorPlugin"
+    nonNLSMarkers="true" codeFormatting="true" testSuiteClass="org.eclipse.emf.diffmerge.generic.gdiffdata.tests.GenericDiffDataAllTests"
+    importerID="org.eclipse.emf.importer.ecore" suppressUnsettable="true" complianceLevel="5.0"
+    copyrightFields="false" runtimeVersion="2.6" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+  <foreignModel>GDiffData.ecore</foreignModel>
+  <genPackages prefix="Gdiffdata" basePackage="org.eclipse.emf.diffmerge.generic"
+      disposableProviderFactory="true" fileExtensions="gdiffdata" ecorePackage="GDiffData.ecore#/">
+    <genDataTypes ecoreDataType="GDiffData.ecore#//IEditableModelScope"/>
+    <genDataTypes ecoreDataType="GDiffData.ecore#//IMatchPolicy"/>
+    <genDataTypes ecoreDataType="GDiffData.ecore#//IDiffPolicy"/>
+    <genDataTypes ecoreDataType="GDiffData.ecore#//IMergePolicy"/>
+    <genDataTypes ecoreDataType="GDiffData.ecore#//Role"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//EIdentified">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EIdentified/id"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EComparison">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/ancestorScope"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/referenceScope"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/targetScope"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/lastMatchPolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/lastDiffPolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/lastMergePolicy"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EComparison/mapping"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EMapping">
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/modifiableContents"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/referenceCompletedMatches"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/targetCompletedMatches"/>
+      <genOperations ecoreOperation="GDiffData.ecore#//EMapping/getComparison"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EMatch">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMatch/matchID"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/ancestor"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/reference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/modifiableRelatedDifferences"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/modifiableAttributeMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/modifiableReferenceMap"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/elementPresenceDifference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/referenceOwnershipDifference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/targetOwnershipDifference"/>
+      <genOperations ecoreOperation="GDiffData.ecore#//EMatch/getMapping"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//EMergeableDifference">
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EMergeableDifference/comparison"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/alignedWithAncestor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/conflicting"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/ignored"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/mergeDestination"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/possibleMergeDestinations"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMergeableDifference/explicitDependenciesForTarget"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMergeableDifference/explicitDependenciesForReference"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMergeableDifference/implicitDependenciesForTarget"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMergeableDifference/implicitDependenciesForReference"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//EElementRelativePresence">
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EElementRelativePresence/elementMatch"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EElementRelativePresence/presenceRole"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EElementPresence">
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EElementPresence/ownerMatch"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//EValuePresence">
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EValuePresence/feature"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EValuePresence/order"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EAttributeValuePresence">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EAttributeValuePresence/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//EReferenceValuePresence">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EReferenceValuePresence/value"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EReferenceValuePresence/valueMatch"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//AttributeToValueToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//AttributeToValueToDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//AttributeToValueToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//ValueToDifferenceEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//ValueToDifferenceEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//ValueToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//ReferenceToElementToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//ReferenceToElementToDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//ReferenceToElementToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="GDiffData.ecore#//ElementToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//ElementToDifferenceEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//ElementToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IComparison"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableComparison"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IMapping"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMapping"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IMatch"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMatch"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IMergeableDifference"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMergeableDifference"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IElementRelativePresence"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IElementPresence"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IValuePresence"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IAttributeValuePresence"/>
+    <genClasses image="false" ecoreClass="GDiffData.ecore#//IReferenceValuePresence"/>
+  </genPackages>
+</genmodel:GenModel>
