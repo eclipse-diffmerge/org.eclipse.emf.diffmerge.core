@@ -21,10 +21,8 @@ Export-Package: org.eclipse.emf.diffmerge.generic,
  org.eclipse.emf.diffmerge.generic.impl.scopes,
  org.eclipse.emf.diffmerge.generic.util
 Require-Bundle: org.eclipse.emf.diffmerge.structures;visibility:=reexport,
- org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;visibility:=reexport,
- org.eclipse.emf.edit
+ org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
 Automatic-Module-Name: org.eclipse.emf.diffmerge.generic

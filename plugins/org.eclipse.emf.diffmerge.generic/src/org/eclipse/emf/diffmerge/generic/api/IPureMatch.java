@@ -11,15 +11,17 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-
 
 /**
- * A match between model elements that play different roles in a comparison.
+ * A match between data elements that play different roles in a comparison.
+ * 
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IPureMatch {
+public interface IPureMatch<E, A, R> {
   
   /**
    * Return whether the receiver involves an element that plays the given role
@@ -38,13 +40,13 @@ public interface IPureMatch {
    * @param role_p a non-null role
    * @return the element, or null if none
    */
-  EObject get(Role role_p);
+  E get(Role role_p);
   
   /**
    * Return the mapping which owns this match
    * @return a non-null mapping
    */
-  IMapping getMapping();
+  IMapping<E, A, R> getMapping();
   
   /**
    * Return the match ID that corresponds to this match, if available
@@ -65,12 +67,6 @@ public interface IPureMatch {
   int hashCode();
   
   /**
-   * Return whether the receiver maps an element belonging to the given resource.
-   * @param resource_p a potentially null resource
-   */
-  boolean involves(Resource resource_p);
-  
-  /**
    * Return whether the TARGET or REFERENCE role is not covered by this match.
    * Class invariant: isPartial() == getUncoveredRole() != null
    */
@@ -89,7 +85,7 @@ public interface IPureMatch {
    * @param target_p a potentially null element playing the TARGET role
    * @param reference_p a potentially null element playing the REFERENCE role
    */
-  boolean maps(EObject target_p, EObject reference_p);
+  boolean maps(E target_p, E reference_p);
   
   /**
    * Return whether this match corresponds to the given elements.
@@ -97,14 +93,14 @@ public interface IPureMatch {
    * @param reference_p a potentially null element playing the REFERENCE role
    * @param ancestor_p a potentially null element playing the ANCESTOR role
    */
-  boolean maps(EObject target_p, EObject reference_p, EObject ancestor_p);
+  boolean maps(E target_p, E reference_p, E ancestor_p);
   
   
   /**
    * A match with editing features.
    * All concrete classes implementing IPureMatch must also implement this interface.
    */
-  interface Editable extends IPureMatch {
+  interface Editable<E, A, R> extends IPureMatch<E, A, R> {
     /**
      * Reset this match with the given target, reference and ancestor elements
      * Precondition: at least one of the elements is not null
@@ -112,14 +108,14 @@ public interface IPureMatch {
      * @param reference_p the optional element on the REFERENCE side
      * @param ancestor_p the optional element on the ANCESTOR side
      */
-    void reset(EObject target_p, EObject reference_p, EObject ancestor_p);
+    void reset(E target_p, E reference_p, E ancestor_p);
     
     /**
      * Set the given role to the given element
      * @param role_p a non-null role
      * @param element_p a potentially null element
      */
-    void set(Role role_p, EObject element_p);
+    void set(Role role_p, E element_p);
     
     /**
      * Set the match ID that corresponds to this match

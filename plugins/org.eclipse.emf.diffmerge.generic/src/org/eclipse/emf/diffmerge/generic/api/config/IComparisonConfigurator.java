@@ -15,9 +15,14 @@ import java.util.List;
 
 /**
  * A configurator for comparisons.
+ *
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IComparisonConfigurator extends IConfigurationElement {
+public interface IComparisonConfigurator<E, A, R> extends IConfigurationElement {
   
   /**
    * Change the given configuration so that it complies with this configurator
@@ -25,25 +30,25 @@ public interface IComparisonConfigurator extends IConfigurationElement {
    * @param configuration_p a non-null configuration
    * @return whether the operation fully succeeded
    */
-  boolean apply(IComparisonConfiguration configuration_p);
+  boolean apply(IComparisonConfiguration<E, A, R> configuration_p);
   
   /**
    * Return whether the given configuration complies with this configurator,
    * i.e., applying the configurator would not make any change to the configuration
    * @param configuration_p a non-null configuration
    */
-  boolean isCompliant(IComparisonConfiguration configuration_p);
+  boolean isCompliant(IComparisonConfiguration<E, A, R> configuration_p);
   
   
   /**
    * A provider for comparison configurators.
    */
-  public interface Provider {
+  public interface Provider<E, A, R> {
     /**
      * Return the provided configurators
      * @return a non-null, potentially empty ordered set
      */
-    List<IComparisonConfigurator> getConfigurators();
+    List<IComparisonConfigurator<E, A, R>> getConfigurators();
   }
   
 }

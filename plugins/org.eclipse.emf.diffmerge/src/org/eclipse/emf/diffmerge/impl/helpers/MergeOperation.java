@@ -96,7 +96,7 @@ public class MergeOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#getOperationName()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#getOperationName()
    */
   public String getOperationName() {
     return Messages.MergeOperation_Name;
@@ -121,7 +121,7 @@ public class MergeOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#run()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#run()
    */
   public IStatus run() {
     getMonitor().worked(1);

@@ -20,9 +20,14 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
  * @see IElementPresence
  * @see IAttributeValuePresence
  * @see IReferenceValuePresence
+ *
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IDifference {
+public interface IDifference<E, A, R> {
   
   /**
    * Return whether this difference can be merged to the given role,
@@ -35,7 +40,7 @@ public interface IDifference {
    * Return the comparison to which this difference belongs
    * @return a non-null comparison
    */
-  IComparison getComparison();
+  IComparison<E, A, R> getComparison();
   
   /**
    * Return the role into which this difference has been merged, if any.
@@ -72,7 +77,7 @@ public interface IDifference {
    * A difference with editing features.
    * All concrete classes implementing IDifference must also implement this interface.
    */
-  interface Editable extends IDifference {
+  interface Editable<E, A, R> extends IDifference<E, A, R> {
     /**
      * Specify that this difference is not present in the common ancestor
      * in a three-way comparison

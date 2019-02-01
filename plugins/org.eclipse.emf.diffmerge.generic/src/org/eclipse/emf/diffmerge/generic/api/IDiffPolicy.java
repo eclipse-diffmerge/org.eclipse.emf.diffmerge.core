@@ -11,18 +11,18 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-
 
 /**
  * A policy that alters the construction of differences between model scopes
  * in a comparison.
+ * 
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IDiffPolicy {
+public interface IDiffPolicy<E, A, R> {
   
   /**
    * Return whether the given attribute values must be considered equal
@@ -30,7 +30,7 @@ public interface IDiffPolicy {
    * @param value2_p the second non-null attribute value
    * @param attribute_p the non-null attribute concerned
    */
-  boolean considerEqual(Object value1_p, Object value2_p, EAttribute attribute_p);
+  boolean considerEqual(Object value1_p, Object value2_p, A attribute_p);
   
   /**
    * Return whether the given out-of-scope value must be considered equal to the
@@ -39,34 +39,35 @@ public interface IDiffPolicy {
    * @param candidateValue_p the non-null other value
    * @param reference_p the non-null reference concerned
    */
-  boolean considerEqualOutOfScope(EObject outOfScopeValue_p, EObject candidateValue_p,
-      EReference reference_p);
+  boolean considerEqualOutOfScope(E outOfScopeValue_p, E candidateValue_p,
+      R reference_p);
   
   /**
-   * Return whether the given feature must be considered as ordered
-   * @param feature_p a structural feature within this scope
-   *        (null stands for model root containment)
+   * Return whether the given attribute must be considered as ordered
+   * @param attribute_p a non-null attribute within this scope
    */
-  boolean considerOrdered(EStructuralFeature feature_p);
+  boolean considerOrderedAttribute(A attribute_p);
   
   /**
-   * Return whether the given attribute or reference must be covered by
-   * the difference detection algorithm.
-   * Precondition: if feature_p instanceof EReference then
-   *  !((EReference)feature_p).isContainment() && !((EReference)feature_p).isContainer()
-   * In other terms, this method is never called for containment or container
-   * references. This is because those are implicitly determined by the elements
-   * that are present in the compared model scopes.
-   * @param feature_p a non-null reference or attribute
+   * Return whether the given reference must be considered as ordered
+   * @param reference_p a reference within this scope
+   *        (null stands for root containment)
    */
-  boolean coverFeature(EStructuralFeature feature_p);
+  boolean considerOrderedReference(R reference_p);
+  
+  /**
+   * Return whether the given attribute must be covered by the difference
+   * detection algorithm
+   * @param attribute_p a non-null attribute
+   */
+  boolean coverAttribute(A attribute_p);
   
   /**
    * Return whether the given match must be covered by the difference detection
    * algorithm
    * @param match_p a non-null match
    */
-  boolean coverMatch(IMatch match_p);
+  boolean coverMatch(IMatch<E, A, R> match_p);
   
   /**
    * Return whether the given element, even though it is outside the TARGET and
@@ -79,7 +80,19 @@ public interface IDiffPolicy {
    * @param value_p a non-null element
    * @param reference_p a non-null reference
    */
-  boolean coverOutOfScopeValue(EObject value_p, EReference reference_p);
+  boolean coverOutOfScopeValue(E value_p, R reference_p);
+  
+  /**
+   * Return whether the given reference must be covered by the difference
+   * detection algorithm.
+   * Precondition: 
+   *  !reference_p.isContainment() && !reference_p.isContainer()
+   * In other terms, this method is never called for containment or container
+   * references. This is because those are implicitly determined by the elements
+   * that are present in the compared model scopes.
+   * @param reference_p a non-null reference
+   */
+  boolean coverReference(R reference_p);
   
   /**
    * Return whether the given value is significant for the given attribute.
@@ -87,6 +100,6 @@ public interface IDiffPolicy {
    * @param value_p a non-null attribute value
    * @param attribute_p a non-null attribute
    */
-  boolean coverValue(Object value_p, EAttribute attribute_p);
+  boolean coverValue(Object value_p, A attribute_p);
   
 }

@@ -11,29 +11,32 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api.diff;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
-
 
 /**
  * A difference which is due to the unmatched presence of a value on some feature
  * in a given comparison role.
+ *
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IValuePresence extends IElementRelativeDifference,
-IPresenceDifference, IMergeableDifference {
+public interface IValuePresence<E, A, R> extends IElementRelativeDifference<E, A, R>,
+IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
   
   /**
    * Return the feature holding the value
    * @return a non-null feature
    */
-  EStructuralFeature getFeature();
+  Object getFeature();
   
   /**
    * Return the difference, if any, which is symmetrical to this one. 
    * @see IValuePresence#isSymmetricalTo(IValuePresence)
    * @return a potentially null value presence (always null if upper bound is not 1 and !isOrder())
    */
-  IValuePresence getSymmetrical();
+  IValuePresence<E, A, R> getSymmetrical();
   
   /**
    * Return the non-null value being held
@@ -56,6 +59,6 @@ IPresenceDifference, IMergeableDifference {
    * If the feature is many and !isOrder(), then false is always returned.
    * @param peer_p a non-null value presence
    */
-  boolean isSymmetricalTo(IValuePresence peer_p);
+  boolean isSymmetricalTo(IValuePresence<E, A, R> peer_p);
   
 }

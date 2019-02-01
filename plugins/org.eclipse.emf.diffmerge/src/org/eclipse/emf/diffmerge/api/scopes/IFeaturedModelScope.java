@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.api.scopes;
 
 import java.util.List;
 
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -23,7 +24,8 @@ import org.eclipse.emf.ecore.EReference;
  * reference and containment.
  * @author Olivier Constant
  */
-public interface IFeaturedModelScope extends IModelScope {
+public interface IFeaturedModelScope extends IModelScope,
+ITreeDataScope<EObject, EAttribute, EReference> {
   
   /**
    * Return the values which are held by the given element via the given attribute.
@@ -49,20 +51,33 @@ public interface IFeaturedModelScope extends IModelScope {
   List<EObject> get(EObject source_p, EReference reference_p);
   
   /**
-   * Return the containment reference through which the given element is
-   * being contained, if any. Result must be consistent with getContainer(EObject).
-   * Postcondition: result == null || isContainment(result)
-   * Postcondition: (result == null) == (getContainer(element_p) == null)
-   * @param element_p a non-null element
-   * @return a potentially null containment reference
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributes(java.lang.Object)
    */
-  EReference getContainment(EObject element_p);
+  default Iterable<EAttribute> getAttributes(EObject element_p) {
+    return element_p.eClass().getEAllAttributes();
+  }
   
   /**
-   * Return whether the given reference must be considered as a containment.
-   * Result must be consistent with getContainment(EObject).
-   * @param reference_p a non-null reference
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributeValues(java.lang.Object, java.lang.Object)
+   * Here to avoid API breakage.
    */
-  boolean isContainment(EReference reference_p);
+  default Iterable<?> getAttributeValues(EObject element_p, EAttribute attribute_p) {
+    return get(element_p, attribute_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferences(java.lang.Object)
+   */
+  default Iterable<EReference> getReferences(EObject element_p) {
+    return element_p.eClass().getEAllReferences();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferenceValues(java.lang.Object, java.lang.Object)
+   * Here to avoid API breakage.
+   */
+  default Iterable<EObject> getReferenceValues(EObject element_p, EReference reference_p) {
+    return get(element_p, reference_p);
+  }
   
 }

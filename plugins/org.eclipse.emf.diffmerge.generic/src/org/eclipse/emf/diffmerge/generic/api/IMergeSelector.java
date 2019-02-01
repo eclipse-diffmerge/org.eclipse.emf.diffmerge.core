@@ -27,6 +27,6 @@ public interface IMergeSelector {
    * @param difference_p a non-null difference
    * @return a potentially null role, where null stands for no merge
    */
-  Role getMergeDirection(IDifference difference_p);
+  Role getMergeDirection(IDifference<?, ?, ?> difference_p);
   
 }

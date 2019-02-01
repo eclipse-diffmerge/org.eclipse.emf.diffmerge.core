@@ -18,9 +18,14 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 
 /**
  * A model difference with features related to merging.
+ *
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IMergeableDifference extends IDifference {
+public interface IMergeableDifference<E, A, R> extends IDifference<E, A, R> {
   
   /**
    * Return the differences which have been marked as direcly, explicitly
@@ -29,7 +34,7 @@ public interface IMergeableDifference extends IDifference {
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @return a non-null, possibly empty, non-modifiable set
    */
-  Collection<IMergeableDifference> getDirectRequiresDependencies(Role role_p);
+  Collection<IMergeableDifference<E, A, R>> getDirectRequiresDependencies(Role role_p);
   
   /**
    * Return the differences which have been marked as directly, implicitly
@@ -37,7 +42,7 @@ public interface IMergeableDifference extends IDifference {
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @return a non-null, possibly empty, non-modifiable set
    */
-  Collection<IMergeableDifference> getDirectImpliesDependencies(Role role_p);
+  Collection<IMergeableDifference<E, A, R>> getDirectImpliesDependencies(Role role_p);
   
   /**
    * Return all the differences which are required to be explicitly merged
@@ -47,7 +52,7 @@ public interface IMergeableDifference extends IDifference {
    * @return a non-null, potentially empty, unmodifiable set which
    *         does not contain the receiver
    */
-  Collection<IMergeableDifference> getRequiresDependencies(Role role_p);
+  Collection<IMergeableDifference<E, A, R>> getRequiresDependencies(Role role_p);
   
   /**
    * Return all the differences which would be implicitly merged (due
@@ -59,7 +64,7 @@ public interface IMergeableDifference extends IDifference {
    * @return a non-null, potentially empty, unmodifiable set which
    *         does not contain the receiver
    */
-  Collection<IMergeableDifference> getImpliesDependencies(Role role_p);
+  Collection<IMergeableDifference<E, A, R>> getImpliesDependencies(Role role_p);
   
   /**
    * Merge this difference to the given role. The precise semantics of this operation
@@ -70,14 +75,15 @@ public interface IMergeableDifference extends IDifference {
    * @return a non-null, unmodifiable set of the differences which have been merged
    *         implicitly or explicitly, which contains at least this difference
    */
-  Collection<IDifference> mergeTo(Role destination_p);
+  Collection<IDifference<E, A, R>> mergeTo(Role destination_p);
   
   
   /**
    * A mergeable difference with editing features.
    * All concrete classes implementing IMergeableDifference must also implement this interface.
    */
-  interface Editable extends IMergeableDifference, IDifference.Editable {
+  interface Editable<E, A, R> extends IMergeableDifference<E, A, R>,
+  IDifference.Editable<E, A, R> {
     /**
      * Core behavior for mergeTo(Role) independently of the current state
      * of the difference (related differences, merge status, etc.)
@@ -97,7 +103,7 @@ public interface IMergeableDifference extends IDifference {
      * @param difference_p a non-null difference
      * @param role_p a non-null role which is TARGET or REFERENCE
      */
-    void markImplies(IMergeableDifference difference_p, Role role_p);
+    void markImplies(IMergeableDifference<E, A, R> difference_p, Role role_p);
     
     /**
      * Mark the given difference as directly, explicitly dependent upon
@@ -107,7 +113,7 @@ public interface IMergeableDifference extends IDifference {
      * @param difference_p a non-null difference
      * @param role_p a non-null role which is TARGET or REFERENCE
      */
-    void markRequires(IMergeableDifference difference_p, Role role_p);
+    void markRequires(IMergeableDifference<E, A, R> difference_p, Role role_p);
   }
   
 }

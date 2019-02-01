@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -24,14 +26,7 @@ import org.eclipse.emf.ecore.EObject;
  * with arbitrary boundaries. 
  * @author Olivier Constant
  */
-public interface IModelScope {
-  
-  /**
-   * Return whether the given element belongs to this scope.
-   * Operation is allowed to be computationally expensive.
-   * @param element_p a non-null element
-   */
-  boolean covers(EObject element_p);
+public interface IModelScope extends IRawTreeDataScope<EObject> {
   
   /**
    * Return an iterator over all the contents of this scope.
@@ -42,33 +37,11 @@ public interface IModelScope {
   TreeIterator<EObject> getAllContents();
   
   /**
-   * Return an iterator over all the contents of the given non-null element
-   * which are within this scope.
-   * Result must be consistent with getContents(EObject).
-   * Iterating via the result should not be expensive.
-   * @param root_p a non-null element within this scope
-   * @return a non-null iterator
-   */
-  TreeIterator<EObject> getAllContents(EObject root_p);
-  
-  /**
    * Return a set containing all the elements in this scope.
    * Operation is allowed to be computationally expensive.
    * @return a non-null, potentially empty, unmodifiable set
    */
   Set<EObject> getAllContentsAsSet();
-  
-  /**
-   * Return the element whose direct scope contents include the given element, if any.
-   * The returned element must belong to the scope.
-   * Result must be consistent with getContents(EObject).
-   * Operation should not be expensive.
-   * Postcondition:
-   *   (covers(element_p) && result == null) == getContents().contains(element_p)
-   * @param element_p a non-null element which belongs to this scope
-   * @return a potentially null element
-   */
-  EObject getContainer(EObject element_p);
   
   /**
    * Return the root elements of this scope.
@@ -78,56 +51,35 @@ public interface IModelScope {
   List<EObject> getContents();
   
   /**
-   * Return the direct contents of the given element within this scope.
-   * Operation should not be expensive.
-   * @return an unmodifiable non-null list which may become obsolete
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getContents(java.lang.Object)
    */
   List<EObject> getContents(EObject element_p);
   
   /**
-   * Return an object that characterizes or identifies this scope
-   * @return a non-null object
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getRoots()
+   * Here to avoid API breakage.
    */
-  Object getOriginator();
+  default Iterable<EObject> getRoots() {
+    return getContents();
+  }
   
   /**
-   * Return the number of elements in this scope.
-   * Operation is allowed to be computationally expensive.
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#iterator()
+   * Here to avoid API breakage.
    */
-  int size();
+  default TreeIterator<EObject> iterator() {
+    return getAllContents();
+  }
   
   
   /**
    * A model scope which has the ability to be modified.
    * @author Olivier Constant
    */
-  interface Editable extends IModelScope {
-    /**
-     * Add the given element to the scope.
-     * Whether its contents belong to the scope after execution is intentionally undefined.
-     * If the element already belongs to the scope, then the behavior of this operation is
-     * undefined.
-     * Postcondition: !result || covers(element_p)
-     * @param element_p a non-null element
-     * @return whether the operation succeeded
-     */
-    boolean add(EObject element_p);
+  interface Editable extends IModelScope, IRawDataScope.Editable<EObject> {
     
-   /**
-     * Return whether this scope is read-only, which means that modification operations have
-     * no effect and always return false
-     */
-    boolean isReadOnly();
+    // Nothing added
     
-    /**
-     * Remove the given element from this scope.
-     * Whether its contents still belong to the scope after execution is intentionally undefined.
-     * Precondition: covers(element_p)
-     * Postcondition: !result || !covers(element_p)
-     * @param element_p a non-null element within the scope
-     * @return whether the operation succeeded
-     */
-    boolean remove(EObject element_p);
   }
   
 }

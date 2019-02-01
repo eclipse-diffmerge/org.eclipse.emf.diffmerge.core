@@ -212,7 +212,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#getOperationName()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#getOperationName()
    */
   public String getOperationName() {
     return Messages.MatchBuilder_Task_Main;
@@ -253,7 +253,7 @@ public class MatchOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#run()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#run()
    * Postconditions: see MatchOperation#match()
    */
   public IStatus run() {

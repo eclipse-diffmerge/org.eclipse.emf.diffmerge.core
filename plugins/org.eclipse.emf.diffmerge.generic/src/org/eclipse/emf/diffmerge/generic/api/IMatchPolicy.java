@@ -13,16 +13,20 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 import java.util.Comparator;
 
-import org.eclipse.emf.diffmerge.generic.api.scopes.IModelScope;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 
 
 /**
  * A policy that defines how model elements from different model scopes are being
  * matched in a comparison.
+ * 
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IMatchPolicy {
+public interface IMatchPolicy<E, A, R> {
   
   /**
    * Return an object ("match ID") which uniquely discriminates the given element
@@ -34,17 +38,17 @@ public interface IMatchPolicy {
    * the match policy is considered to be non-applicable to the scope.
    * More formally:
    * Two elements E1, E2 from scopes S1, S2 will match if and only if
-   * getMatchId(E1, S1) != null && getMatchId(E1, S1).equals(getMatchId(E2, S2)).
+   * getMatchID(E1, S1) != null && getMatchID(E1, S1).equals(getMatchID(E2, S2)).
    * Precondition: scope_p.covers(element_p)
    * Class invariant (uniqueness):
    *  FOR EVERY E1, E2 IN scope_p.getAllContentsAsSet() :
-   *  E1 != E2 && getMatchId(E1, scope_p) != null IMPLIES
-   *  !getMatchId(E1, scope_p).equals(getMatchId(E2, scope_p))
+   *  E1 != E2 && getMatchID(E1, scope_p) != null IMPLIES
+   *  !getMatchID(E1, scope_p).equals(getMatchID(E2, scope_p))
    * @param element_p a non-null element
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  Object getMatchID(EObject element_p, IModelScope scope_p);
+  Object getMatchID(E element_p, IRawDataScope<E> scope_p);
   
   /**
    * Optionally return a comparator which is applicable to all objects that getMatchID

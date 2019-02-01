@@ -533,7 +533,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#getOperationName()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#getOperationName()
    */
   public String getOperationName() {
     return Messages.DiffBuilder_Task_Main;
@@ -617,7 +617,7 @@ public class DiffOperation extends AbstractExpensiveOperation {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#run()
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#run()
    */
   public IStatus run() {
     getMonitor().worked(1);

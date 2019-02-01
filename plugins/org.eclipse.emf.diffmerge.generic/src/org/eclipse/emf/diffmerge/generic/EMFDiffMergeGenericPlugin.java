@@ -11,11 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.osgi.framework.BundleContext;
 
 
@@ -28,32 +24,14 @@ public class EMFDiffMergeGenericPlugin extends Plugin {
 	/** The shared instance */
 	private static EMFDiffMergeGenericPlugin __plugin;
 	
-	/** Whether this plug-in is verbose */
-	private boolean _verbose;
-
-  /** A composed adapter factory based on the EMF Edit registry (initially null) */
-  private ComposedAdapterFactory _adapterFactory;
-	
 	
 	/**
 	 * Constructor
 	 */
 	public EMFDiffMergeGenericPlugin() {
-	  _verbose = false;
-	  _adapterFactory = null;
+	  // Nothing specific
 	}
 	
-  /**
-   * Return an adapter factory that is based on the EMF Edit registry
-   * @return a non-null object
-   */
-  public AdapterFactory getAdapterFactory() {
-    if (_adapterFactory == null)
-      _adapterFactory = new ComposedAdapterFactory(
-          ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-    return _adapterFactory;
-  }
-  
   /**
    * Return the shared instance of the activator
    * @return a non-null instance
@@ -71,25 +49,6 @@ public class EMFDiffMergeGenericPlugin extends Plugin {
   }
   
   /**
-   * Log the given message if this plug-in is in verbose mode
-   * @param severity_p a severity as defined in IStatus
-   * @param message_p a non-null warning message
-   */
-  public void log(int severity_p, String message_p) {
-    if (_verbose) {
-      getLog().log(new Status(severity_p, getPluginId(), message_p));
-    }
-  }
-  
-  /**
-   * Set whether this plug-in must be verbose
-   * @param verbose_p whether it must be verbose
-   */
-  public void setVerbose(boolean verbose_p) {
-    _verbose = verbose_p;
-  }
-  
-  /**
    * @see org.eclipse.core.runtime.Plugin#start(org.osgi.framework.BundleContext)
    */
   @Override
@@ -104,19 +63,7 @@ public class EMFDiffMergeGenericPlugin extends Plugin {
 	@Override
 	public void stop(BundleContext context_p) throws Exception {
 		__plugin = null;
-		if(_adapterFactory != null){
-		  _adapterFactory.dispose();
-		  _adapterFactory = null;
-		}
 		super.stop(context_p);
 	}
 	
-  /**
-   * Log the given warning message if this plug-in is in verbose mode
-   * @param message_p a non-null warning message
-   */
-  public void warn(String message_p) {
-    log(IStatus.WARNING, message_p);
-  }
-  
 }

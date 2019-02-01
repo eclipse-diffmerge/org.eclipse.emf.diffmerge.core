@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.emf.diffmerge.util.IExpensiveOperation;
+import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
 
 
 /**
@@ -57,7 +57,7 @@ public abstract class AbstractExpensiveOperation implements IExpensiveOperation 
   protected abstract int getWorkAmount();
   
   /**
-   * @see org.eclipse.emf.diffmerge.util.IExpensiveOperation#run(IProgressMonitor)
+   * @see org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation#run(org.eclipse.core.runtime.IProgressMonitor)
    */
   public final IStatus run(IProgressMonitor monitor_p) {
     if (monitor_p != null)

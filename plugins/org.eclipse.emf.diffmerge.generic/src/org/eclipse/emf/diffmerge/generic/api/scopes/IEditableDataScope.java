@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2018 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2019 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -11,17 +11,18 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api.scopes;
 
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-
 
 /**
- * A featured model scope which has the ability to be modified.
+ * A data scope which can be directly modified.
+ * 
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Editable {
+public interface IEditableDataScope<E, A, R> extends IDataScope<E, A, R>,
+IRawDataScope.Editable<E> {
   
   /**
    * Add the given value to the given element on the given attribute if possible,
@@ -33,7 +34,7 @@ public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Ed
    * @param value_p a non-null attribute value which is type-compatible with the attribute
    * @return whether the operation succeeded
    */
-  boolean add(EObject source_p, EAttribute attribute_p, Object value_p);
+  boolean addAttributeValue(E source_p, A attribute_p, Object value_p);
   
   /**
    * Add the given value to the given element on the given reference if possible,
@@ -47,18 +48,30 @@ public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Ed
    * @param value_p a non-null element as value which is type-compatible with the reference
    * @return whether the operation succeeded
    */
-  boolean add(EObject source_p, EReference reference_p, EObject value_p);
+  boolean addReferenceValue(E source_p, R reference_p, E value_p);
   
   /**
-   * Move the value held by the given element via the given feature at the given
+   * Move the value held by the given element via the given attribute at the given
    * position to the given new position.
    * @param source_p a non-null element
-   * @param feature_p a non-null feature
+   * @param attribute_p a non-null attribute
    * @param newPosition_p a positive int or 0
    * @param oldPosition_p an arbitrary int, where a negative value stands for the last element
    * @return the value moved or null if none
    */
-  Object move(EObject source_p, EStructuralFeature feature_p, int newPosition_p,
+  Object moveAttributeValue(E source_p, A attribute_p, int newPosition_p,
+      int oldPosition_p);
+  
+  /**
+   * Move the value held by the given element via the given reference at the given
+   * position to the given new position.
+   * @param source_p a non-null element
+   * @param reference_p a non-null reference
+   * @param newPosition_p a positive int or 0
+   * @param oldPosition_p an arbitrary int, where a negative value stands for the last element
+   * @return the value moved or null if none
+   */
+  E moveReferenceValue(E source_p, R reference_p, int newPosition_p,
       int oldPosition_p);
   
   /**
@@ -70,7 +83,7 @@ public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Ed
    * @param value_p a non-null value
    * @return whether the operation succeeded
    */
-  boolean remove(EObject source_p, EAttribute attribute_p, Object value_p);
+  boolean removeAttributeValue(E source_p, A attribute_p, Object value_p);
   
   /**
    * Remove the given value on the given reference from the given element.
@@ -81,6 +94,6 @@ public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Ed
    * @param value_p a non-null element as value
    * @return whether the operation succeeded
    */
-  boolean remove(EObject source_p, EReference reference_p, EObject value_p);
+  boolean removeReferenceValue(E source_p, R reference_p, E value_p);
   
 }
