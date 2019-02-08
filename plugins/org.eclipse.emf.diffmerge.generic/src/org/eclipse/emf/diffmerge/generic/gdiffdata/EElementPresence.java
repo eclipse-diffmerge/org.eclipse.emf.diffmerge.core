@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementPresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E, A, R&gt;"
  * @generated
  */
-public interface EElementPresence
-    extends EElementRelativePresence, IElementPresence {
+public interface EElementPresence<E, A, R>
+    extends EElementRelativePresence<E, A, R>, IElementPresence<E, A, R> {
   /**
    * Returns the value of the '<em><b>Owner Match</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -45,7 +45,7 @@ public interface EElementPresence
    * @model required="true"
    * @generated
    */
-  EMatch getOwnerMatch();
+  EMatch<E, A, R> getOwnerMatch();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}' reference.
@@ -55,6 +55,6 @@ public interface EElementPresence
    * @see #getOwnerMatch()
    * @generated
    */
-  void setOwnerMatch(EMatch value);
+  void setOwnerMatch(EMatch<E, A, R> value);
 
 } // EElementPresence

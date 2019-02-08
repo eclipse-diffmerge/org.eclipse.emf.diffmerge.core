@@ -18,14 +18,12 @@ import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -41,8 +39,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EAttributeValuePresenceImpl extends EValuePresenceImpl
-    implements EAttributeValuePresence {
+public abstract class EAttributeValuePresenceImpl<E, A, R> extends
+    EValuePresenceImpl<E, A, R> implements EAttributeValuePresence<E, A, R> {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -81,12 +79,13 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EAttributeValuePresenceImpl(EComparison comparison_p,
-      EMatch elementMatch_p, EAttribute attribute_p, Object value_p,
+  public EAttributeValuePresenceImpl(EComparison<E, A, R> comparison_p,
+      EMatch<E, A, R> elementMatch_p, A attribute_p, Object value_p,
       Role presenceRole_p, boolean isOrder_p) {
-    super(comparison_p, elementMatch_p, attribute_p, presenceRole_p, isOrder_p);
+    super(comparison_p, elementMatch_p, presenceRole_p, isOrder_p);
     setValue(value_p);
-    ((IMatch.Editable) elementMatch).addRelatedDifference(this);
+    setFeature(attribute_p);
+    ((IMatch.Editable<E, A, R>) elementMatch).addRelatedDifference(this);
   }
 
   /**
@@ -120,6 +119,12 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
       eNotify(new ENotificationImpl(this, Notification.SET,
           GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE, oldValue, value));
   }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence#setFeature(java.lang.Object)
+   * @generated NOT
+   */
+  public abstract void setFeature(A feature);
 
   /**
    * <!-- begin-user-doc -->
@@ -198,26 +203,17 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
-   * @generated NOT
-   */
-  @Override
-  public EAttribute getFeature() {
-    return (EAttribute) super.getFeature();
-  }
-
-  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getSymmetrical()
    * @generated NOT
    */
   @Override
-  public IAttributeValuePresence getSymmetrical() {
-    IAttributeValuePresence result = null;
-    if (!getFeature().isMany()) {
-      Collection<IAttributeValuePresence> candidates = getElementMatch()
+  public IAttributeValuePresence<E, A, R> getSymmetrical() {
+    IAttributeValuePresence<E, A, R> result = null;
+    if (!isManyFeature()) {
+      Collection<IAttributeValuePresence<E, A, R>> candidates = getElementMatch()
           .getAttributeDifferences(getFeature());
       assert candidates.size() <= 2; // Because !isMany()
-      for (IAttributeValuePresence candidate : candidates) {
+      for (IAttributeValuePresence<E, A, R> candidate : candidates) {
         if (candidate.getPresenceRole() == getAbsenceRole()) {
           result = candidate;
           break;
@@ -228,6 +224,24 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
           null);
     }
     return result;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#isChangeableFeature()
+   * @generated NOT
+   */
+  public boolean isChangeableFeature() {
+    return getPresenceScope().getScopePolicy()
+        .isChangeableAttribute(getFeature());
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#isManyFeature()
+   * @generated NOT
+   */
+  @Override
+  public boolean isManyFeature() {
+    return getPresenceScope().getScopePolicy().isManyAttribute(getFeature());
   }
 
   /**
@@ -253,12 +267,13 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
    */
   @Override
   protected void mergeValueAddition() {
-    IEditableModelScope absenceScope = getAbsenceScope();
-    EObject holderMatch = getMatchOfHolder();
+    IEditableTreeDataScope<E, A, R> absenceScope = getAbsenceScope();
+    E holderMatch = getMatchOfHolder();
     assert holderMatch != null; // Must be guaranteed by diff dependency handling
-    absenceScope.add(holderMatch, getFeature(), getValue());
-    IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
-    if (diffPolicy != null && diffPolicy.considerOrdered(getFeature())) {
+    absenceScope.addAttributeValue(holderMatch, getFeature(), getValue());
+    IDiffPolicy<E, A, R> diffPolicy = getComparison().getLastDiffPolicy();
+    if (diffPolicy != null
+        && diffPolicy.considerOrderedAttribute(getFeature())) {
       // TODO Implement
     }
   }
@@ -269,8 +284,8 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
    */
   @Override
   public void mergeValueRemoval() {
-    IEditableModelScope presenceScope = getPresenceScope();
-    presenceScope.remove(getHolder(), getFeature(), getValue());
+    IEditableTreeDataScope<E, A, R> presenceScope = getPresenceScope();
+    presenceScope.removeAttributeValue(getHolder(), getFeature(), getValue());
   }
 
 } //EAttributeValuePresenceImpl

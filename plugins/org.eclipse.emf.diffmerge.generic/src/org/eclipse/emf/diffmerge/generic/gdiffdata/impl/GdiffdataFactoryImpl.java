@@ -11,30 +11,17 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 
-import java.util.Map;
-
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataFactory;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
@@ -83,26 +70,6 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
   @Override
   public EObject create(EClass eClass) {
     switch (eClass.getClassifierID()) {
-    case GdiffdataPackage.ECOMPARISON:
-      return createEComparison();
-    case GdiffdataPackage.EMAPPING:
-      return createEMapping();
-    case GdiffdataPackage.EMATCH:
-      return createEMatch();
-    case GdiffdataPackage.EELEMENT_PRESENCE:
-      return createEElementPresence();
-    case GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE:
-      return createEAttributeValuePresence();
-    case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE:
-      return createEReferenceValuePresence();
-    case GdiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY:
-      return (EObject) createAttributeToValueToDifferenceEntry();
-    case GdiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY:
-      return (EObject) createValueToDifferenceEntry();
-    case GdiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY:
-      return (EObject) createReferenceToElementToDifferenceEntry();
-    case GdiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY:
-      return (EObject) createElementToDifferenceEntry();
     default:
       throw new IllegalArgumentException(
           "The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -117,8 +84,8 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
   @Override
   public Object createFromString(EDataType eDataType, String initialValue) {
     switch (eDataType.getClassifierID()) {
-    case GdiffdataPackage.IEDITABLE_MODEL_SCOPE:
-      return createIEditableModelScopeFromString(eDataType, initialValue);
+    case GdiffdataPackage.IEDITABLE_TREE_DATA_SCOPE:
+      return createIEditableTreeDataScopeFromString(eDataType, initialValue);
     case GdiffdataPackage.IMATCH_POLICY:
       return createIMatchPolicyFromString(eDataType, initialValue);
     case GdiffdataPackage.IDIFF_POLICY:
@@ -141,8 +108,8 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
   @Override
   public String convertToString(EDataType eDataType, Object instanceValue) {
     switch (eDataType.getClassifierID()) {
-    case GdiffdataPackage.IEDITABLE_MODEL_SCOPE:
-      return convertIEditableModelScopeToString(eDataType, instanceValue);
+    case GdiffdataPackage.IEDITABLE_TREE_DATA_SCOPE:
+      return convertIEditableTreeDataScopeToString(eDataType, instanceValue);
     case GdiffdataPackage.IMATCH_POLICY:
       return convertIMatchPolicyToString(eDataType, instanceValue);
     case GdiffdataPackage.IDIFF_POLICY:
@@ -162,109 +129,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison createEComparison() {
-    EComparisonImpl eComparison = new EComparisonImpl();
-    return eComparison;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EMapping createEMapping() {
-    EMappingImpl eMapping = new EMappingImpl();
-    return eMapping;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EMatch createEMatch() {
-    EMatchImpl eMatch = new EMatchImpl();
-    return eMatch;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EElementPresence createEElementPresence() {
-    EElementPresenceImpl eElementPresence = new EElementPresenceImpl();
-    return eElementPresence;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttributeValuePresence createEAttributeValuePresence() {
-    EAttributeValuePresenceImpl eAttributeValuePresence = new EAttributeValuePresenceImpl();
-    return eAttributeValuePresence;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReferenceValuePresence createEReferenceValuePresence() {
-    EReferenceValuePresenceImpl eReferenceValuePresence = new EReferenceValuePresenceImpl();
-    return eReferenceValuePresence;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> createAttributeToValueToDifferenceEntry() {
-    AttributeToValueToDifferenceEntryImpl attributeToValueToDifferenceEntry = new AttributeToValueToDifferenceEntryImpl();
-    return attributeToValueToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Map.Entry<Object, IAttributeValuePresence> createValueToDifferenceEntry() {
-    ValueToDifferenceEntryImpl valueToDifferenceEntry = new ValueToDifferenceEntryImpl();
-    return valueToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> createReferenceToElementToDifferenceEntry() {
-    ReferenceToElementToDifferenceEntryImpl referenceToElementToDifferenceEntry = new ReferenceToElementToDifferenceEntryImpl();
-    return referenceToElementToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Map.Entry<EObject, IReferenceValuePresence> createElementToDifferenceEntry() {
-    ElementToDifferenceEntryImpl elementToDifferenceEntry = new ElementToDifferenceEntryImpl();
-    return elementToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IEditableModelScope createIEditableModelScopeFromString(
+  public IEditableTreeDataScope<?, ?, ?> createIEditableTreeDataScopeFromString(
       EDataType eDataType, String initialValue) {
-    return (IEditableModelScope) super.createFromString(eDataType,
+    return (IEditableTreeDataScope<?, ?, ?>) super.createFromString(
         initialValue);
   }
 
@@ -273,9 +140,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public String convertIEditableModelScopeToString(EDataType eDataType,
+  public String convertIEditableTreeDataScopeToString(EDataType eDataType,
       Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
+    return super.convertToString(instanceValue);
   }
 
   /**
@@ -283,9 +150,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMatchPolicy createIMatchPolicyFromString(EDataType eDataType,
+  public IMatchPolicy<?, ?, ?> createIMatchPolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IMatchPolicy) super.createFromString(eDataType, initialValue);
+    return (IMatchPolicy<?, ?, ?>) super.createFromString(initialValue);
   }
 
   /**
@@ -295,7 +162,7 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    */
   public String convertIMatchPolicyToString(EDataType eDataType,
       Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
+    return super.convertToString(instanceValue);
   }
 
   /**
@@ -303,9 +170,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IDiffPolicy createIDiffPolicyFromString(EDataType eDataType,
+  public IDiffPolicy<?, ?, ?> createIDiffPolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IDiffPolicy) super.createFromString(eDataType, initialValue);
+    return (IDiffPolicy<?, ?, ?>) super.createFromString(initialValue);
   }
 
   /**
@@ -315,7 +182,7 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    */
   public String convertIDiffPolicyToString(EDataType eDataType,
       Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
+    return super.convertToString(instanceValue);
   }
 
   /**
@@ -323,9 +190,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMergePolicy createIMergePolicyFromString(EDataType eDataType,
+  public IMergePolicy<?, ?, ?> createIMergePolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IMergePolicy) super.createFromString(eDataType, initialValue);
+    return (IMergePolicy<?, ?, ?>) super.createFromString(initialValue);
   }
 
   /**
@@ -335,7 +202,7 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    */
   public String convertIMergePolicyToString(EDataType eDataType,
       Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
+    return super.convertToString(instanceValue);
   }
 
   /**

@@ -29,6 +29,14 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 public interface IMergePolicy<E, A, R> {
   
   /**
+   * Create and return a base copy of the given element, i.e., without copying the values
+   * of its attributes or references
+   * @param element_p a non-null element
+   * @return a non-null element
+   */
+  E baseCopy(E element_p);
+  
+  /**
    * Return whether a non-root element may only be present in the given scope if its ownership
    * (value in containment setting) is present
    * @param scope_p a non-null scope
@@ -46,18 +54,6 @@ public interface IMergePolicy<E, A, R> {
    * @param scope_p a non-null scope
    */
   boolean copyAttribute(A attibute_p, IDataScope<E, A, R> scope_p);
-  
-  /**
-   * Handle ID copy for the given target element from the given target scope
-   * according to the given source element from the given source scope and
-   * the given merge policy
-   * @param source_p a non-null element
-   * @param target_p a non-null element
-   * @param sourceScope_p a non-null scope
-   * @param targetScope_p a non-null scope
-   */
-  public boolean copyID(E source_p, E target_p, IDataScope<E, A, R> sourceScope_p,
-      IDataScope<E, A, R> targetScope_p);
   
   /**
    * Return whether the given reference must be copied when elements are being copied
@@ -125,7 +121,7 @@ public interface IMergePolicy<E, A, R> {
    * @return a positive integer (0 inclusive) or -1 if no position could be determined
    */
   int getDesiredValuePosition(IComparison<E, A, R> comparison_p, Role destination_p,
-      IMatch<E, A, R> source_p, R reference_p, IMatch<E, A, R> value_p);
+      IMatch<E, A, R> source_p, R reference_p, E value_p);
   
   /**
    * Return whether the given reference is essential to its owner, i.e., adding the reference owner
@@ -150,23 +146,43 @@ public interface IMergePolicy<E, A, R> {
   boolean isMandatoryForDeletion(R reference_p);
   
   /**
-   * Set the intrinsic ID of the given target element, if possible and relevant.
+   * Set the extrinsic and/or ID of the given target element, if possible and relevant.
    * This operation is called after the target element has been added to the given target
    * scope as a copy of the given source element from the given source scope.
    * Calling this operation multiple times on the same elements must have the same effect as
    * calling it once (idempotency).
-   * Examples of possible behaviors include: copying the intrinsic ID from the source element
-   * to the target element, or creating a new UUID for the target element.
+   * Examples of possible behaviors include: copying the extrinsic ID from the source element
+   * to the target element, creating a new ID for the target element, or fully delegating to
+   * the underlying storage technology.
+   * @param source_p a non-null element
+   * @param sourceScope_p a non-null scope
+   * @param target_p a non-null element
+   * @param targetScope_p a non-null scope
+   */
+  void setExtrinsicID(E source_p, IDataScope<E, A, R> sourceScope_p,
+      E target_p, IDataScope<E, A, R> targetScope_p);
+  
+  /**
+   * Set the ID of the given target element, if possible and relevant.
+   * This operation covers intrinsic (attribute-based) and extrinsic (persistence-specific) IDs.
+   * It is called after the target element has been added to the given target scope as a copy
+   * of the given source element from the given source scope.
+   * Calling this operation multiple times on the same elements must have the same effect as
+   * calling it once (idempotency).
+   * Examples of possible behaviors include: copying ID(s) from the source element to the target
+   * element, creating a new ID for the target element, or, for extrinsic IDs, fully delegating
+   * to the underlying persistence mechanism.
    * Note that if intrinsic IDs are not copied and the diff policy specifies that ID attributes
    * are covered by the diff phase, then copying an element to the given target scope will result
    * in new differences when the comparison is re-computed.
+   * @see IScopePolicy#isIDAttribute(Object)
    * @see IDiffPolicy#coverAttribute(Object)
    * @param source_p a non-null element
    * @param sourceScope_p a non-null scope
    * @param target_p a non-null element
    * @param targetScope_p a non-null scope
    */
-  void setIntrinsicID(E source_p, IDataScope<E, A, R> sourceScope_p,
-      E target_p, IDataScope<E, A, R> targetScope_p);
+  void setID(E source_p, IDataScope<E, A, R> sourceScope_p, E target_p,
+      IDataScope<E, A, R> targetScope_p);
   
 }

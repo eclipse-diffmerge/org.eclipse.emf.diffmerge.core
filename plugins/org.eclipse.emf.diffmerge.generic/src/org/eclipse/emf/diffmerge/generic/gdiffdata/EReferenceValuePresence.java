@@ -12,7 +12,6 @@
 package org.eclipse.emf.diffmerge.generic.gdiffdata;
 
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,42 +22,15 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEReferenceValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E, A, R&gt;"
  * @generated
  */
-public interface EReferenceValuePresence
-    extends EValuePresence, IReferenceValuePresence {
-
-  /**
-   * Returns the value of the '<em><b>Value</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Value</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Value</em>' reference.
-   * @see #setValue(EObject)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEReferenceValuePresence_Value()
-   * @model required="true"
-   * @generated
-   */
-  EObject getValue();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValue <em>Value</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Value</em>' reference.
-   * @see #getValue()
-   * @generated
-   */
-  void setValue(EObject value);
+public interface EReferenceValuePresence<E, A, R>
+    extends EValuePresence<E, A, R>, IReferenceValuePresence<E, A, R> {
 
   /**
    * Returns the value of the '<em><b>Value Match</b></em>' reference.
@@ -74,7 +46,7 @@ public interface EReferenceValuePresence
    * @model
    * @generated
    */
-  EMatch getValueMatch();
+  EMatch<E, A, R> getValueMatch();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}' reference.
@@ -84,6 +56,22 @@ public interface EReferenceValuePresence
    * @see #getValueMatch()
    * @generated
    */
-  void setValueMatch(EMatch value);
+  void setValueMatch(EMatch<E, A, R> value);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model featureRequired="true"
+   * @generated
+   */
+  void setFeature(R feature);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model valueRequired="true"
+   * @generated
+   */
+  void setValue(E value);
   // Nothing needed
 } // EReferenceValuePresence

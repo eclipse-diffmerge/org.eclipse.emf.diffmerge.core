@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.api.scopes;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
@@ -53,7 +54,7 @@ ITreeDataScope<EObject, EAttribute, EReference> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributes(java.lang.Object)
    */
-  default Iterable<EAttribute> getAttributes(EObject element_p) {
+  default Collection<EAttribute> getAttributes(EObject element_p) {
     return element_p.eClass().getEAllAttributes();
   }
   
@@ -61,14 +62,14 @@ ITreeDataScope<EObject, EAttribute, EReference> {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributeValues(java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default Iterable<?> getAttributeValues(EObject element_p, EAttribute attribute_p) {
+  default Collection<?> getAttributeValues(EObject element_p, EAttribute attribute_p) {
     return get(element_p, attribute_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferences(java.lang.Object)
    */
-  default Iterable<EReference> getReferences(EObject element_p) {
+  default Collection<EReference> getReferences(EObject element_p) {
     return element_p.eClass().getEAllReferences();
   }
   
@@ -76,7 +77,7 @@ ITreeDataScope<EObject, EAttribute, EReference> {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferenceValues(java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default Iterable<EObject> getReferenceValues(EObject element_p, EReference reference_p) {
+  default Collection<EObject> getReferenceValues(EObject element_p, EReference reference_p) {
     return get(element_p, reference_p);
   }
   

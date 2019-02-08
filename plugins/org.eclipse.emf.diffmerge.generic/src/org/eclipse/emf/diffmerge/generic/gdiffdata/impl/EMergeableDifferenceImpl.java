@@ -57,8 +57,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * @generated
  */
 @SuppressWarnings("boxing")
-public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
-    implements EMergeableDifference {
+public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
+    implements EMergeableDifference<E, A, R> {
   /**
    * The cached value of the '{@link #getComparison() <em>Comparison</em>}' reference.
    * <!-- begin-user-doc -->
@@ -67,7 +67,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EComparison comparison;
+  protected EComparison<E, A, R> comparison;
 
   /**
    * The default value of the '{@link #isAlignedWithAncestor() <em>Aligned With Ancestor</em>}' attribute.
@@ -167,7 +167,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMergeableDifference> explicitDependenciesForTarget;
+  protected EList<IMergeableDifference<E, A, R>> explicitDependenciesForTarget;
 
   /**
    * The cached value of the '{@link #getExplicitDependenciesForReference() <em>Explicit Dependencies For Reference</em>}' reference list.
@@ -177,7 +177,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMergeableDifference> explicitDependenciesForReference;
+  protected EList<IMergeableDifference<E, A, R>> explicitDependenciesForReference;
 
   /**
    * The cached value of the '{@link #getImplicitDependenciesForTarget() <em>Implicit Dependencies For Target</em>}' reference list.
@@ -187,7 +187,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMergeableDifference> implicitDependenciesForTarget;
+  protected EList<IMergeableDifference<E, A, R>> implicitDependenciesForTarget;
 
   /**
    * The cached value of the '{@link #getImplicitDependenciesForReference() <em>Implicit Dependencies For Reference</em>}' reference list.
@@ -197,31 +197,31 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMergeableDifference> implicitDependenciesForReference;
+  protected EList<IMergeableDifference<E, A, R>> implicitDependenciesForReference;
 
   /**
    * The set of all implicit dependencies on the TARGET side (initially null, assigned once)
    * @generated NOT
    */
-  private transient Collection<IMergeableDifference> _allImplicitDependenciesTarget;
+  private transient Collection<IMergeableDifference<E, A, R>> _allImplicitDependenciesTarget;
 
   /**
    * The set of all implicit dependencies on the REFERENCE side (initially null, assigned once)
    * @generated NOT
    */
-  private transient Collection<IMergeableDifference> _allImplicitDependenciesReference;
+  private transient Collection<IMergeableDifference<E, A, R>> _allImplicitDependenciesReference;
 
   /**
    * The set of all explicit dependencies on the TARGET side (initially null, assigned once)
    * @generated NOT
    */
-  private transient Collection<IMergeableDifference> _allExplicitDependenciesTarget;
+  private transient Collection<IMergeableDifference<E, A, R>> _allExplicitDependenciesTarget;
 
   /**
    * The set of all explicit dependencies on the REFERENCE side (initially null, assigned once)
    * @generated NOT
    */
-  private transient Collection<IMergeableDifference> _allExplicitDependenciesReference;
+  private transient Collection<IMergeableDifference<E, A, R>> _allExplicitDependenciesReference;
 
   /**
    * <!-- begin-user-doc -->
@@ -265,10 +265,11 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison getComparison() {
+  @SuppressWarnings("unchecked")
+  public EComparison<E, A, R> getComparison() {
     if (comparison != null && comparison.eIsProxy()) {
       InternalEObject oldComparison = (InternalEObject) comparison;
-      comparison = (EComparison) eResolveProxy(oldComparison);
+      comparison = (EComparison<E, A, R>) eResolveProxy(oldComparison);
       if (comparison != oldComparison) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -284,7 +285,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison basicGetComparison() {
+  public EComparison<E, A, R> basicGetComparison() {
     return comparison;
   }
 
@@ -293,8 +294,8 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setComparison(EComparison newComparison) {
-    EComparison oldComparison = comparison;
+  public void setComparison(EComparison<E, A, R> newComparison) {
+    EComparison<E, A, R> oldComparison = comparison;
     comparison = newComparison;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -413,9 +414,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMergeableDifference> getExplicitDependenciesForTarget() {
+  public EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForTarget() {
     if (explicitDependenciesForTarget == null) {
-      explicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference>(
+      explicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference<E, A, R>>(
           IMergeableDifference.class, this,
           GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET);
     }
@@ -427,9 +428,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMergeableDifference> getExplicitDependenciesForReference() {
+  public EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForReference() {
     if (explicitDependenciesForReference == null) {
-      explicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference>(
+      explicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference<E, A, R>>(
           IMergeableDifference.class, this,
           GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE);
     }
@@ -441,9 +442,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMergeableDifference> getImplicitDependenciesForTarget() {
+  public EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForTarget() {
     if (implicitDependenciesForTarget == null) {
-      implicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference>(
+      implicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference<E, A, R>>(
           IMergeableDifference.class, this,
           GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET);
     }
@@ -455,9 +456,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMergeableDifference> getImplicitDependenciesForReference() {
+  public EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForReference() {
     if (implicitDependenciesForReference == null) {
-      implicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference>(
+      implicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference<E, A, R>>(
           IMergeableDifference.class, this,
           GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE);
     }
@@ -508,7 +509,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      setComparison((EComparison) newValue);
+      setComparison((EComparison<E, A, R>) newValue);
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor((Boolean) newValue);
@@ -529,23 +530,23 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
       getExplicitDependenciesForTarget().clear();
-      getExplicitDependenciesForTarget()
-          .addAll((Collection<? extends IMergeableDifference>) newValue);
+      getExplicitDependenciesForTarget().addAll(
+          (Collection<? extends IMergeableDifference<E, A, R>>) newValue);
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getExplicitDependenciesForReference().clear();
-      getExplicitDependenciesForReference()
-          .addAll((Collection<? extends IMergeableDifference>) newValue);
+      getExplicitDependenciesForReference().addAll(
+          (Collection<? extends IMergeableDifference<E, A, R>>) newValue);
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
       getImplicitDependenciesForTarget().clear();
-      getImplicitDependenciesForTarget()
-          .addAll((Collection<? extends IMergeableDifference>) newValue);
+      getImplicitDependenciesForTarget().addAll(
+          (Collection<? extends IMergeableDifference<E, A, R>>) newValue);
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getImplicitDependenciesForReference().clear();
-      getImplicitDependenciesForReference()
-          .addAll((Collection<? extends IMergeableDifference>) newValue);
+      getImplicitDependenciesForReference().addAll(
+          (Collection<? extends IMergeableDifference<E, A, R>>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -560,7 +561,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
   public void eUnset(int featureID) {
     switch (featureID) {
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      setComparison((EComparison) null);
+      setComparison((EComparison<E, A, R>) null);
       return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor(ALIGNED_WITH_ANCESTOR_EDEFAULT);
@@ -671,7 +672,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @param destination_p a non-null role which represents the destination of the merge
    * @generated NOT
    */
-  protected void checkMerge(IMergeableDifference difference_p,
+  protected void checkMerge(IMergeableDifference<E, A, R> difference_p,
       Role destination_p) {
     if (getMergeDestination() != destination_p && !canMergeTo(destination_p))
       throw new UnsupportedOperationException(
@@ -699,10 +700,10 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference#getDirectImpliesDependencies(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final Collection<IMergeableDifference> getDirectImpliesDependencies(
+  public final Collection<IMergeableDifference<E, A, R>> getDirectImpliesDependencies(
       Role role_p) {
-    Collection<IMergeableDifference> result;
-    Collection<IMergeableDifference> obtained;
+    Collection<IMergeableDifference<E, A, R>> result;
+    Collection<IMergeableDifference<E, A, R>> obtained;
     switch (role_p) {
     case TARGET:
       obtained = getImplicitDependenciesForTarget(false);
@@ -725,10 +726,10 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference#getDirectRequiresDependencies(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final Collection<IMergeableDifference> getDirectRequiresDependencies(
+  public final Collection<IMergeableDifference<E, A, R>> getDirectRequiresDependencies(
       Role role_p) {
-    Collection<IMergeableDifference> result;
-    Collection<IMergeableDifference> obtained;
+    Collection<IMergeableDifference<E, A, R>> result;
+    Collection<IMergeableDifference<E, A, R>> obtained;
     switch (role_p) {
     case TARGET:
       obtained = getExplicitDependenciesForTarget(false);
@@ -752,7 +753,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
-  public EList<IMergeableDifference> getExplicitDependenciesForReference(
+  public EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForReference(
       boolean create_p) {
     return create_p ? getExplicitDependenciesForReference()
         : explicitDependenciesForReference;
@@ -763,7 +764,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
-  public EList<IMergeableDifference> getImplicitDependenciesForReference(
+  public EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForReference(
       boolean create_p) {
     return create_p ? getImplicitDependenciesForReference()
         : implicitDependenciesForReference;
@@ -774,7 +775,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
-  public EList<IMergeableDifference> getExplicitDependenciesForTarget(
+  public EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForTarget(
       boolean create_p) {
     return create_p ? getExplicitDependenciesForTarget()
         : explicitDependenciesForTarget;
@@ -785,7 +786,7 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @param create_p whether the result must be computed if not available yet, otherwise null may be returned
    * @generated NOT
    */
-  public EList<IMergeableDifference> getImplicitDependenciesForTarget(
+  public EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForTarget(
       boolean create_p) {
     return create_p ? getImplicitDependenciesForTarget()
         : implicitDependenciesForTarget;
@@ -795,19 +796,19 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference#getImpliesDependencies(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final Collection<IMergeableDifference> getImpliesDependencies(
+  public final Collection<IMergeableDifference<E, A, R>> getImpliesDependencies(
       Role role_p) {
-    Collection<IMergeableDifference> result = (role_p == Role.TARGET)
+    Collection<IMergeableDifference<E, A, R>> result = (role_p == Role.TARGET)
         ? _allImplicitDependenciesTarget
         : _allImplicitDependenciesReference;
     if (result == null) {
-      Collection<IMergeableDifference> required = getRequiresDependencies(
+      Collection<IMergeableDifference<E, A, R>> required = getRequiresDependencies(
           role_p);
-      Collection<IMergeableDifference> allRequired = new FArrayList<IMergeableDifference>(
+      Collection<IMergeableDifference<E, A, R>> allRequired = new FArrayList<IMergeableDifference<E, A, R>>(
           required.size() + 1, null);
       allRequired.add(this);
       allRequired.addAll(required);
-      result = new DifferenceDependencyRelation(role_p, false)
+      result = new DifferenceDependencyRelation<E, A, R>(role_p, false)
           .getTransitiveClosure(allRequired);
       if (role_p == Role.TARGET)
         _allImplicitDependenciesTarget = result;
@@ -821,13 +822,13 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference#getRequiresDependencies(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final Collection<IMergeableDifference> getRequiresDependencies(
+  public final Collection<IMergeableDifference<E, A, R>> getRequiresDependencies(
       Role role_p) {
-    Collection<IMergeableDifference> result = (role_p == Role.TARGET)
+    Collection<IMergeableDifference<E, A, R>> result = (role_p == Role.TARGET)
         ? _allExplicitDependenciesTarget
         : _allExplicitDependenciesReference;
     if (result == null) {
-      result = new DifferenceDependencyRelation(role_p, true)
+      result = new DifferenceDependencyRelation<E, A, R>(role_p, true)
           .getTransitiveClosure(this);
       if (role_p == Role.TARGET)
         _allExplicitDependenciesTarget = result;
@@ -849,33 +850,34 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference#mergeTo(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public Collection<IDifference> mergeTo(Role destination_p) {
+  public Collection<IDifference<E, A, R>> mergeTo(Role destination_p) {
     // Checking ability to merge
     checkMerge(this, destination_p);
     if (isMerged())
       return Collections.emptyList();
-    Collection<IMergeableDifference> allRequired = getRequiresDependencies(
+    Collection<IMergeableDifference<E, A, R>> allRequired = getRequiresDependencies(
         destination_p);
-    for (IMergeableDifference required : allRequired)
+    for (IMergeableDifference<E, A, R> required : allRequired)
       checkMerge(required, destination_p);
     // Core behavior
     markAsMergedIn(destination_p);
-    Collection<IDifference> result = new HashSet<IDifference>();
-    for (IMergeableDifference required : allRequired) {
+    Collection<IDifference<E, A, R>> result = new HashSet<IDifference<E, A, R>>();
+    for (IMergeableDifference<E, A, R> required : allRequired) {
       if (!required.isMerged()) {
-        ((IMergeableDifference.Editable) required)
+        ((IMergeableDifference.Editable<E, A, R>) required)
             .markAsMergedIn(destination_p);
-        ((IMergeableDifference.Editable) required).doMergeIn(destination_p);
+        ((IMergeableDifference.Editable<E, A, R>) required)
+            .doMergeIn(destination_p);
         result.add(required);
       }
     }
     doMergeIn(destination_p);
     result.add(this);
     // Mark implicit dependencies as merged
-    for (IMergeableDifference implicit : getImpliesDependencies(
+    for (IMergeableDifference<E, A, R> implicit : getImpliesDependencies(
         destination_p)) {
       if (!implicit.isMerged()) {
-        ((IMergeableDifference.Editable) implicit)
+        ((IMergeableDifference.Editable<E, A, R>) implicit)
             .markAsMergedIn(destination_p);
         result.add(implicit);
       }
@@ -915,9 +917,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable#markImplies(org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final void markImplies(IMergeableDifference difference_p,
+  public final void markImplies(IMergeableDifference<E, A, R> difference_p,
       Role role_p) {
-    Collection<IMergeableDifference> toChange;
+    Collection<IMergeableDifference<E, A, R>> toChange;
     switch (role_p) {
     case TARGET:
       toChange = getImplicitDependenciesForTarget(true);
@@ -933,9 +935,9 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable#markRequires(org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public final void markRequires(IMergeableDifference difference_p,
+  public final void markRequires(IMergeableDifference<E, A, R> difference_p,
       Role role_p) {
-    Collection<IMergeableDifference> toChange;
+    Collection<IMergeableDifference<E, A, R>> toChange;
     switch (role_p) {
     case TARGET:
       toChange = getExplicitDependenciesForTarget(true);
@@ -953,8 +955,8 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
    * This class can be used to compute the transitive closure of inter-difference dependencies.
    * @generated NOT
    */
-  protected static class DifferenceDependencyRelation
-      extends AbstractEndorelation<IMergeableDifference> {
+  protected static class DifferenceDependencyRelation<E, A, R>
+      extends AbstractEndorelation<IMergeableDifference<E, A, R>> {
 
     /** The non-null role for dependency computation */
     private final Role _role;
@@ -976,14 +978,14 @@ public abstract class EMergeableDifferenceImpl extends EIdentifiedImpl
     /**
      * @see org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation#get(java.lang.Object)
      */
-    public Collection<IMergeableDifference> get(
-        IMergeableDifference element_p) {
-      Collection<IMergeableDifference> result;
+    public Collection<IMergeableDifference<E, A, R>> get(
+        IMergeableDifference<E, A, R> element_p) {
+      Collection<IMergeableDifference<E, A, R>> result;
       if (_isExplicit) {
-        result = new FHashSet<IMergeableDifference>(
+        result = new FHashSet<IMergeableDifference<E, A, R>>(
             element_p.getDirectRequiresDependencies(_role),
             IEqualityTester.BY_REFERENCE);
-        for (IMergeableDifference implicit : element_p
+        for (IMergeableDifference<E, A, R> implicit : element_p
             .getDirectImpliesDependencies(_role)) {
           result.addAll(implicit.getDirectRequiresDependencies(_role));
         }

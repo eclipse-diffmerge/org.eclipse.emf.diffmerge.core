@@ -29,18 +29,23 @@ import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 
 /**
  * An operation which merges a given set of differences in a given direction.
+ *
+ * @param <E> The type of the elements of the data scope.
+ * @param <A> The type of the attributes of the data scope.
+ * @param <R> The type of the references of the data scope.
+ * 
  * @author Olivier Constant
  */
-public class MergeOperation extends AbstractExpensiveOperation {
+public class MergeOperation<E, A, R> extends AbstractExpensiveOperation {
   
   /** The non-null comparison */
-  protected final IComparison _comparison;
+  protected final IComparison<E, A, R> _comparison;
   
   /** The optional merger, non-null iff isGlobal() */
   protected final IMergeSelector _merger;
   
   /** The non-null set of differences to merge (relevant only if !isGlobal()) */
-  protected final Collection<? extends IDifference> _toMerge;
+  protected final Collection<? extends IDifference<E, A, R>> _toMerge;
   
   /** The optional destination role (TARGET or REFERENCE), null iff isGlobal() */
   protected final Role _destinationRole;
@@ -49,7 +54,7 @@ public class MergeOperation extends AbstractExpensiveOperation {
   protected final boolean _updateReferences;
   
   /** The non-null set of differences that have actually been merged (initially empty) */
-  protected final Collection<IDifference> _actuallyMerged;
+  protected final Collection<IDifference<E, A, R>> _actuallyMerged;
   
   
   /**
@@ -59,15 +64,16 @@ public class MergeOperation extends AbstractExpensiveOperation {
    * @param destination_p a role which is TARGET or REFERENCE
    * @param updateReferences_p whether references of the elements added must be set
    */
-  public MergeOperation(IComparison comparison_p, Collection<? extends IDifference> differences_p,
-      Role destination_p, boolean updateReferences_p) {
+  public MergeOperation(IComparison<E, A, R> comparison_p,
+      Collection<? extends IDifference<E, A, R>> differences_p, Role destination_p,
+      boolean updateReferences_p) {
     super();
     _comparison = comparison_p;
     _toMerge = differences_p;
     _destinationRole = destination_p;
     _merger = null;
     _updateReferences = updateReferences_p;
-    _actuallyMerged = new FArrayList<IDifference>();
+    _actuallyMerged = new FArrayList<IDifference<E, A, R>>();
   }
   
   /**
@@ -76,7 +82,7 @@ public class MergeOperation extends AbstractExpensiveOperation {
    * @param merger_p a non-null merger
    * @param updateReferences_p whether references of the elements added must be set
    */
-  public MergeOperation(IComparison comparison_p, IMergeSelector merger_p,
+  public MergeOperation(IComparison<E, A, R> comparison_p, IMergeSelector merger_p,
       boolean updateReferences_p) {
     super();
     _comparison = comparison_p;
@@ -84,14 +90,14 @@ public class MergeOperation extends AbstractExpensiveOperation {
     _destinationRole = null;
     _merger = merger_p;
     _updateReferences = updateReferences_p;
-    _actuallyMerged = new FArrayList<IDifference>();
+    _actuallyMerged = new FArrayList<IDifference<E, A, R>>();
   }
   
   /**
    * Return the set of differences which have actually been merged
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  public Collection<IDifference> getOutput() {
+  public Collection<IDifference<E, A, R>> getOutput() {
     return Collections.unmodifiableCollection(_actuallyMerged);
   }
   
@@ -132,7 +138,7 @@ public class MergeOperation extends AbstractExpensiveOperation {
       result = runOnSet();
     if (_updateReferences && result != null && result.isOK()) {
       checkProgress();
-      IMapping.Editable mapping = (IMapping.Editable)_comparison.getMapping();
+      IMapping.Editable<E, A, R> mapping = (IMapping.Editable<E, A, R>)_comparison.getMapping();
       if (_destinationRole != null) {
         mapping.completeReferences(_destinationRole);
       } else {
@@ -149,14 +155,14 @@ public class MergeOperation extends AbstractExpensiveOperation {
    * @return a non-null status
    */
   protected IStatus runOnComparison() {
-    for (IMatch match : _comparison.getMapping().getContents()) {
-      for (IDifference difference : match.getAllDifferences()) {
+    for (IMatch<E, A, R> match : _comparison.getMapping().getContents()) {
+      for (IDifference<E, A, R> difference : match.getAllDifferences()) {
         checkProgress();
         Role mergeDirection = _merger.getMergeDirection(difference);
         if (mergeDirection != null && difference.canMergeTo(mergeDirection)) {
           try {
-            Collection<IDifference> merged =
-              ((IMergeableDifference)difference).mergeTo(mergeDirection);
+            Collection<IDifference<E, A, R>> merged =
+              ((IMergeableDifference<E, A, R>)difference).mergeTo(mergeDirection);
             _actuallyMerged.addAll(merged);
           } catch (UnsupportedOperationException e) {
             // Required differences cannot be merged: proceed
@@ -173,12 +179,12 @@ public class MergeOperation extends AbstractExpensiveOperation {
    * @return a non-null status
    */
   protected IStatus runOnSet() {
-    for (IDifference difference : _toMerge) {
+    for (IDifference<E, A, R> difference : _toMerge) {
       checkProgress();
       try {
         if (difference instanceof IMergeableDifference) {
-          Collection<IDifference> merged =
-            ((IMergeableDifference)difference).mergeTo(_destinationRole);
+          Collection<IDifference<E, A, R>> merged =
+            ((IMergeableDifference<E, A, R>)difference).mergeTo(_destinationRole);
           _actuallyMerged.addAll(merged);
         }
       } catch (UnsupportedOperationException e) {

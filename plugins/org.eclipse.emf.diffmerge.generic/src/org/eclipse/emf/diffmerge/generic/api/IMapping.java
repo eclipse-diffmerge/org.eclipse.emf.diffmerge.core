@@ -181,12 +181,6 @@ public interface IMapping<E, A, R> {
     void completeReferences(Role role_p);
     
     /**
-     * Register cross-references which are not covered by differences
-     * @param role_p a role which is TARGET or REFERENCE
-     */
-    void crossReference(Role role_p);
-    
-    /**
      * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getComparison()
      */
     IComparison.Editable<E, A, R> getComparison();

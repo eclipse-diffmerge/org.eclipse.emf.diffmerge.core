@@ -12,24 +12,30 @@
 package org.eclipse.emf.diffmerge.generic.gdiffdata.util;
 
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.*;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -110,7 +116,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.ECOMPARISON: {
-      EComparison eComparison = (EComparison) theEObject;
+      EComparison<?, ?, ?> eComparison = (EComparison<?, ?, ?>) theEObject;
       T result = caseEComparison(eComparison);
       if (result == null)
         result = caseEIdentified(eComparison);
@@ -121,7 +127,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EMAPPING: {
-      EMapping eMapping = (EMapping) theEObject;
+      EMapping<?, ?, ?> eMapping = (EMapping<?, ?, ?>) theEObject;
       T result = caseEMapping(eMapping);
       if (result == null)
         result = caseEIdentified(eMapping);
@@ -132,7 +138,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EMATCH: {
-      EMatch eMatch = (EMatch) theEObject;
+      EMatch<?, ?, ?> eMatch = (EMatch<?, ?, ?>) theEObject;
       T result = caseEMatch(eMatch);
       if (result == null)
         result = caseEIdentified(eMatch);
@@ -143,7 +149,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE: {
-      EMergeableDifference eMergeableDifference = (EMergeableDifference) theEObject;
+      EMergeableDifference<?, ?, ?> eMergeableDifference = (EMergeableDifference<?, ?, ?>) theEObject;
       T result = caseEMergeableDifference(eMergeableDifference);
       if (result == null)
         result = caseEIdentified(eMergeableDifference);
@@ -154,7 +160,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE: {
-      EElementRelativePresence eElementRelativePresence = (EElementRelativePresence) theEObject;
+      EElementRelativePresence<?, ?, ?> eElementRelativePresence = (EElementRelativePresence<?, ?, ?>) theEObject;
       T result = caseEElementRelativePresence(eElementRelativePresence);
       if (result == null)
         result = caseEMergeableDifference(eElementRelativePresence);
@@ -169,7 +175,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EELEMENT_PRESENCE: {
-      EElementPresence eElementPresence = (EElementPresence) theEObject;
+      EElementPresence<?, ?, ?> eElementPresence = (EElementPresence<?, ?, ?>) theEObject;
       T result = caseEElementPresence(eElementPresence);
       if (result == null)
         result = caseEElementRelativePresence(eElementPresence);
@@ -188,7 +194,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EVALUE_PRESENCE: {
-      EValuePresence eValuePresence = (EValuePresence) theEObject;
+      EValuePresence<?, ?, ?> eValuePresence = (EValuePresence<?, ?, ?>) theEObject;
       T result = caseEValuePresence(eValuePresence);
       if (result == null)
         result = caseEElementRelativePresence(eValuePresence);
@@ -207,7 +213,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE: {
-      EAttributeValuePresence eAttributeValuePresence = (EAttributeValuePresence) theEObject;
+      EAttributeValuePresence<?, ?, ?> eAttributeValuePresence = (EAttributeValuePresence<?, ?, ?>) theEObject;
       T result = caseEAttributeValuePresence(eAttributeValuePresence);
       if (result == null)
         result = caseEValuePresence(eAttributeValuePresence);
@@ -230,7 +236,7 @@ public class GdiffdataSwitch<T> {
       return result;
     }
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE: {
-      EReferenceValuePresence eReferenceValuePresence = (EReferenceValuePresence) theEObject;
+      EReferenceValuePresence<?, ?, ?> eReferenceValuePresence = (EReferenceValuePresence<?, ?, ?>) theEObject;
       T result = caseEReferenceValuePresence(eReferenceValuePresence);
       if (result == null)
         result = caseEValuePresence(eReferenceValuePresence);
@@ -252,126 +258,92 @@ public class GdiffdataSwitch<T> {
         result = defaultCase(theEObject);
       return result;
     }
-    case GdiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY: {
-      @SuppressWarnings("unchecked")
-      Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> attributeToValueToDifferenceEntry = (Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>>) theEObject;
-      T result = caseAttributeToValueToDifferenceEntry(
-          attributeToValueToDifferenceEntry);
-      if (result == null)
-        result = defaultCase(theEObject);
-      return result;
-    }
-    case GdiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY: {
-      @SuppressWarnings("unchecked")
-      Map.Entry<Object, IAttributeValuePresence> valueToDifferenceEntry = (Map.Entry<Object, IAttributeValuePresence>) theEObject;
-      T result = caseValueToDifferenceEntry(valueToDifferenceEntry);
-      if (result == null)
-        result = defaultCase(theEObject);
-      return result;
-    }
-    case GdiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY: {
-      @SuppressWarnings("unchecked")
-      Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> referenceToElementToDifferenceEntry = (Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>>) theEObject;
-      T result = caseReferenceToElementToDifferenceEntry(
-          referenceToElementToDifferenceEntry);
-      if (result == null)
-        result = defaultCase(theEObject);
-      return result;
-    }
-    case GdiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY: {
-      @SuppressWarnings("unchecked")
-      Map.Entry<EObject, IReferenceValuePresence> elementToDifferenceEntry = (Map.Entry<EObject, IReferenceValuePresence>) theEObject;
-      T result = caseElementToDifferenceEntry(elementToDifferenceEntry);
-      if (result == null)
-        result = defaultCase(theEObject);
-      return result;
-    }
     case GdiffdataPackage.ICOMPARISON: {
-      IComparison iComparison = (IComparison) theEObject;
+      IComparison<?, ?, ?> iComparison = (IComparison<?, ?, ?>) theEObject;
       T result = caseIComparison(iComparison);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IEDITABLE_COMPARISON: {
-      Editable iEditableComparison = (Editable) theEObject;
+      Editable<?, ?, ?> iEditableComparison = (Editable<?, ?, ?>) theEObject;
       T result = caseIEditableComparison(iEditableComparison);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IMAPPING: {
-      IMapping iMapping = (IMapping) theEObject;
+      IMapping<?, ?, ?> iMapping = (IMapping<?, ?, ?>) theEObject;
       T result = caseIMapping(iMapping);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IEDITABLE_MAPPING: {
-      org.eclipse.emf.diffmerge.generic.api.IMapping.Editable iEditableMapping = (org.eclipse.emf.diffmerge.generic.api.IMapping.Editable) theEObject;
+      org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<?, ?, ?> iEditableMapping = (org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<?, ?, ?>) theEObject;
       T result = caseIEditableMapping(iEditableMapping);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IMATCH: {
-      IMatch iMatch = (IMatch) theEObject;
+      IMatch<?, ?, ?> iMatch = (IMatch<?, ?, ?>) theEObject;
       T result = caseIMatch(iMatch);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IEDITABLE_MATCH: {
-      org.eclipse.emf.diffmerge.generic.api.IMatch.Editable iEditableMatch = (org.eclipse.emf.diffmerge.generic.api.IMatch.Editable) theEObject;
+      org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<?, ?, ?> iEditableMatch = (org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<?, ?, ?>) theEObject;
       T result = caseIEditableMatch(iEditableMatch);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IMERGEABLE_DIFFERENCE: {
-      IMergeableDifference iMergeableDifference = (IMergeableDifference) theEObject;
+      IMergeableDifference<?, ?, ?> iMergeableDifference = (IMergeableDifference<?, ?, ?>) theEObject;
       T result = caseIMergeableDifference(iMergeableDifference);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IEDITABLE_MERGEABLE_DIFFERENCE: {
-      org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable iEditableMergeableDifference = (org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable) theEObject;
+      org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<?, ?, ?> iEditableMergeableDifference = (org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<?, ?, ?>) theEObject;
       T result = caseIEditableMergeableDifference(iEditableMergeableDifference);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IELEMENT_RELATIVE_PRESENCE: {
-      IElementRelativePresence iElementRelativePresence = (IElementRelativePresence) theEObject;
+      IElementRelativePresence<?, ?, ?> iElementRelativePresence = (IElementRelativePresence<?, ?, ?>) theEObject;
       T result = caseIElementRelativePresence(iElementRelativePresence);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IELEMENT_PRESENCE: {
-      IElementPresence iElementPresence = (IElementPresence) theEObject;
+      IElementPresence<?, ?, ?> iElementPresence = (IElementPresence<?, ?, ?>) theEObject;
       T result = caseIElementPresence(iElementPresence);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IVALUE_PRESENCE: {
-      IValuePresence iValuePresence = (IValuePresence) theEObject;
+      IValuePresence<?, ?, ?> iValuePresence = (IValuePresence<?, ?, ?>) theEObject;
       T result = caseIValuePresence(iValuePresence);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IATTRIBUTE_VALUE_PRESENCE: {
-      IAttributeValuePresence iAttributeValuePresence = (IAttributeValuePresence) theEObject;
+      IAttributeValuePresence<?, ?, ?> iAttributeValuePresence = (IAttributeValuePresence<?, ?, ?>) theEObject;
       T result = caseIAttributeValuePresence(iAttributeValuePresence);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
     }
     case GdiffdataPackage.IREFERENCE_VALUE_PRESENCE: {
-      IReferenceValuePresence iReferenceValuePresence = (IReferenceValuePresence) theEObject;
+      IReferenceValuePresence<?, ?, ?> iReferenceValuePresence = (IReferenceValuePresence<?, ?, ?>) theEObject;
       T result = caseIReferenceValuePresence(iReferenceValuePresence);
       if (result == null)
         result = defaultCase(theEObject);
@@ -408,7 +380,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEComparison(EComparison object) {
+  public <E, A, R> T caseEComparison(EComparison<E, A, R> object) {
     return null;
   }
 
@@ -423,7 +395,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMapping(EMapping object) {
+  public <E, A, R> T caseEMapping(EMapping<E, A, R> object) {
     return null;
   }
 
@@ -438,7 +410,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMatch(EMatch object) {
+  public <E, A, R> T caseEMatch(EMatch<E, A, R> object) {
     return null;
   }
 
@@ -453,7 +425,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMergeableDifference(EMergeableDifference object) {
+  public <E, A, R> T caseEMergeableDifference(
+      EMergeableDifference<E, A, R> object) {
     return null;
   }
 
@@ -468,7 +441,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEElementRelativePresence(EElementRelativePresence object) {
+  public <E, A, R> T caseEElementRelativePresence(
+      EElementRelativePresence<E, A, R> object) {
     return null;
   }
 
@@ -483,7 +457,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEElementPresence(EElementPresence object) {
+  public <E, A, R> T caseEElementPresence(EElementPresence<E, A, R> object) {
     return null;
   }
 
@@ -498,7 +472,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEValuePresence(EValuePresence object) {
+  public <E, A, R> T caseEValuePresence(EValuePresence<E, A, R> object) {
     return null;
   }
 
@@ -513,7 +487,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEAttributeValuePresence(EAttributeValuePresence object) {
+  public <E, A, R> T caseEAttributeValuePresence(
+      EAttributeValuePresence<E, A, R> object) {
     return null;
   }
 
@@ -528,71 +503,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEReferenceValuePresence(EReferenceValuePresence object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Attribute To Value To Difference Entry</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Attribute To Value To Difference Entry</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseAttributeToValueToDifferenceEntry(
-      Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Value To Difference Entry</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Value To Difference Entry</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseValueToDifferenceEntry(
-      Map.Entry<Object, IAttributeValuePresence> object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Reference To Element To Difference Entry</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Reference To Element To Difference Entry</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseReferenceToElementToDifferenceEntry(
-      Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Element To Difference Entry</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Element To Difference Entry</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseElementToDifferenceEntry(
-      Map.Entry<EObject, IReferenceValuePresence> object) {
+  public <E, A, R> T caseEReferenceValuePresence(
+      EReferenceValuePresence<E, A, R> object) {
     return null;
   }
 
@@ -607,7 +519,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIComparison(IComparison object) {
+  public <E, A, R> T caseIComparison(IComparison<E, A, R> object) {
     return null;
   }
 
@@ -622,7 +534,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIEditableComparison(Editable object) {
+  public <E, A, R> T caseIEditableComparison(Editable<E, A, R> object) {
     return null;
   }
 
@@ -637,7 +549,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIMapping(IMapping object) {
+  public <E, A, R> T caseIMapping(IMapping<E, A, R> object) {
     return null;
   }
 
@@ -652,8 +564,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIEditableMapping(
-      org.eclipse.emf.diffmerge.generic.api.IMapping.Editable object) {
+  public <E, A, R> T caseIEditableMapping(
+      org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<E, A, R> object) {
     return null;
   }
 
@@ -668,7 +580,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIMatch(IMatch object) {
+  public <E, A, R> T caseIMatch(IMatch<E, A, R> object) {
     return null;
   }
 
@@ -683,8 +595,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIEditableMatch(
-      org.eclipse.emf.diffmerge.generic.api.IMatch.Editable object) {
+  public <E, A, R> T caseIEditableMatch(
+      org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<E, A, R> object) {
     return null;
   }
 
@@ -699,7 +611,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIMergeableDifference(IMergeableDifference object) {
+  public <E, A, R> T caseIMergeableDifference(
+      IMergeableDifference<E, A, R> object) {
     return null;
   }
 
@@ -714,8 +627,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIEditableMergeableDifference(
-      org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable object) {
+  public <E, A, R> T caseIEditableMergeableDifference(
+      org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<E, A, R> object) {
     return null;
   }
 
@@ -730,7 +643,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIElementRelativePresence(IElementRelativePresence object) {
+  public <E, A, R> T caseIElementRelativePresence(
+      IElementRelativePresence<E, A, R> object) {
     return null;
   }
 
@@ -745,7 +659,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIElementPresence(IElementPresence object) {
+  public <E, A, R> T caseIElementPresence(IElementPresence<E, A, R> object) {
     return null;
   }
 
@@ -760,7 +674,7 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIValuePresence(IValuePresence object) {
+  public <E, A, R> T caseIValuePresence(IValuePresence<E, A, R> object) {
     return null;
   }
 
@@ -775,7 +689,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIAttributeValuePresence(IAttributeValuePresence object) {
+  public <E, A, R> T caseIAttributeValuePresence(
+      IAttributeValuePresence<E, A, R> object) {
     return null;
   }
 
@@ -790,7 +705,8 @@ public class GdiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseIReferenceValuePresence(IReferenceValuePresence object) {
+  public <E, A, R> T caseIReferenceValuePresence(
+      IReferenceValuePresence<E, A, R> object) {
     return null;
   }
 

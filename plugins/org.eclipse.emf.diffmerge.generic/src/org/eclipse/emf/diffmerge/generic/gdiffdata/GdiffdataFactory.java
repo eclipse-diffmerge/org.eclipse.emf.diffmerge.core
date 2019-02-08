@@ -32,60 +32,6 @@ public interface GdiffdataFactory extends EFactory {
       .init();
 
   /**
-   * Returns a new object of class '<em>EComparison</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EComparison</em>'.
-   * @generated
-   */
-  EComparison createEComparison();
-
-  /**
-   * Returns a new object of class '<em>EMapping</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EMapping</em>'.
-   * @generated
-   */
-  EMapping createEMapping();
-
-  /**
-   * Returns a new object of class '<em>EMatch</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EMatch</em>'.
-   * @generated
-   */
-  EMatch createEMatch();
-
-  /**
-   * Returns a new object of class '<em>EElement Presence</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EElement Presence</em>'.
-   * @generated
-   */
-  EElementPresence createEElementPresence();
-
-  /**
-   * Returns a new object of class '<em>EAttribute Value Presence</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EAttribute Value Presence</em>'.
-   * @generated
-   */
-  EAttributeValuePresence createEAttributeValuePresence();
-
-  /**
-   * Returns a new object of class '<em>EReference Value Presence</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>EReference Value Presence</em>'.
-   * @generated
-   */
-  EReferenceValuePresence createEReferenceValuePresence();
-
-  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

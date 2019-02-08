@@ -28,11 +28,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementRelativePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence&lt;E, A, R&gt;"
  * @generated
  */
-public interface EElementRelativePresence
-    extends EMergeableDifference, IElementRelativePresence {
+public interface EElementRelativePresence<E, A, R>
+    extends EMergeableDifference<E, A, R>, IElementRelativePresence<E, A, R> {
   /**
    * Returns the value of the '<em><b>Element Match</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -47,7 +47,7 @@ public interface EElementRelativePresence
    * @model required="true"
    * @generated
    */
-  EMatch getElementMatch();
+  EMatch<E, A, R> getElementMatch();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getElementMatch <em>Element Match</em>}' reference.
@@ -57,7 +57,7 @@ public interface EElementRelativePresence
    * @see #getElementMatch()
    * @generated
    */
-  void setElementMatch(EMatch value);
+  void setElementMatch(EMatch<E, A, R> value);
 
   /**
    * Returns the value of the '<em><b>Presence Role</b></em>' attribute.

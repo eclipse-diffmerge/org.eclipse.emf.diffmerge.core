@@ -11,25 +11,21 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 
-import java.util.Map;
-
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataFactory;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence;
@@ -40,11 +36,16 @@ import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataFactory;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
@@ -125,34 +126,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   private EClass eReferenceValuePresenceEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass attributeToValueToDifferenceEntryEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass valueToDifferenceEntryEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass referenceToElementToDifferenceEntryEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass elementToDifferenceEntryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -250,7 +223,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  private EDataType iEditableModelScopeEDataType = null;
+  private EDataType iEditableTreeDataScopeEDataType = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -498,7 +471,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Ancestor() {
+  public EReference getEMatch_ModifiableRelatedDifferences() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(1);
   }
 
@@ -507,7 +480,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Reference() {
+  public EReference getEMatch_ElementPresenceDifference() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(2);
   }
 
@@ -516,7 +489,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_Target() {
+  public EReference getEMatch_ReferenceOwnershipDifference() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(3);
   }
 
@@ -525,53 +498,8 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEMatch_ModifiableRelatedDifferences() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getEMatch_ModifiableAttributeMap() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getEMatch_ModifiableReferenceMap() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(6);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getEMatch_ElementPresenceDifference() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(7);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getEMatch_ReferenceOwnershipDifference() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(8);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getEMatch_TargetOwnershipDifference() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(9);
+    return (EReference) eMatchEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -744,17 +672,8 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEValuePresence_Feature() {
-    return (EReference) eValuePresenceEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EAttribute getEValuePresence_Order() {
-    return (EAttribute) eValuePresenceEClass.getEStructuralFeatures().get(1);
+    return (EAttribute) eValuePresenceEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -790,135 +709,9 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getEReferenceValuePresence_Value() {
-    return (EReference) eReferenceValuePresenceEClass.getEStructuralFeatures()
-        .get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getEReferenceValuePresence_ValueMatch() {
     return (EReference) eReferenceValuePresenceEClass.getEStructuralFeatures()
-        .get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getAttributeToValueToDifferenceEntry() {
-    return attributeToValueToDifferenceEntryEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getAttributeToValueToDifferenceEntry_Key() {
-    return (EReference) attributeToValueToDifferenceEntryEClass
-        .getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getAttributeToValueToDifferenceEntry_Value() {
-    return (EReference) attributeToValueToDifferenceEntryEClass
-        .getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getValueToDifferenceEntry() {
-    return valueToDifferenceEntryEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getValueToDifferenceEntry_Key() {
-    return (EAttribute) valueToDifferenceEntryEClass.getEStructuralFeatures()
         .get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getValueToDifferenceEntry_Value() {
-    return (EReference) valueToDifferenceEntryEClass.getEStructuralFeatures()
-        .get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getReferenceToElementToDifferenceEntry() {
-    return referenceToElementToDifferenceEntryEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getReferenceToElementToDifferenceEntry_Key() {
-    return (EReference) referenceToElementToDifferenceEntryEClass
-        .getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getReferenceToElementToDifferenceEntry_Value() {
-    return (EReference) referenceToElementToDifferenceEntryEClass
-        .getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EClass getElementToDifferenceEntry() {
-    return elementToDifferenceEntryEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getElementToDifferenceEntry_Key() {
-    return (EReference) elementToDifferenceEntryEClass.getEStructuralFeatures()
-        .get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EReference getElementToDifferenceEntry_Value() {
-    return (EReference) elementToDifferenceEntryEClass.getEStructuralFeatures()
-        .get(1);
   }
 
   /**
@@ -1043,8 +836,8 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EDataType getIEditableModelScope() {
-    return iEditableModelScopeEDataType;
+  public EDataType getIEditableTreeDataScope() {
+    return iEditableTreeDataScopeEDataType;
   }
 
   /**
@@ -1131,12 +924,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
 
     eMatchEClass = createEClass(EMATCH);
     createEAttribute(eMatchEClass, EMATCH__MATCH_ID);
-    createEReference(eMatchEClass, EMATCH__ANCESTOR);
-    createEReference(eMatchEClass, EMATCH__REFERENCE);
-    createEReference(eMatchEClass, EMATCH__TARGET);
     createEReference(eMatchEClass, EMATCH__MODIFIABLE_RELATED_DIFFERENCES);
-    createEReference(eMatchEClass, EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
-    createEReference(eMatchEClass, EMATCH__MODIFIABLE_REFERENCE_MAP);
     createEReference(eMatchEClass, EMATCH__ELEMENT_PRESENCE_DIFFERENCE);
     createEReference(eMatchEClass, EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE);
     createEReference(eMatchEClass, EMATCH__TARGET_OWNERSHIP_DIFFERENCE);
@@ -1173,7 +961,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
     createEReference(eElementPresenceEClass, EELEMENT_PRESENCE__OWNER_MATCH);
 
     eValuePresenceEClass = createEClass(EVALUE_PRESENCE);
-    createEReference(eValuePresenceEClass, EVALUE_PRESENCE__FEATURE);
     createEAttribute(eValuePresenceEClass, EVALUE_PRESENCE__ORDER);
 
     eAttributeValuePresenceEClass = createEClass(EATTRIBUTE_VALUE_PRESENCE);
@@ -1182,35 +969,7 @@ public class GdiffdataPackageImpl extends EPackageImpl
 
     eReferenceValuePresenceEClass = createEClass(EREFERENCE_VALUE_PRESENCE);
     createEReference(eReferenceValuePresenceEClass,
-        EREFERENCE_VALUE_PRESENCE__VALUE);
-    createEReference(eReferenceValuePresenceEClass,
         EREFERENCE_VALUE_PRESENCE__VALUE_MATCH);
-
-    attributeToValueToDifferenceEntryEClass = createEClass(
-        ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY);
-    createEReference(attributeToValueToDifferenceEntryEClass,
-        ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(attributeToValueToDifferenceEntryEClass,
-        ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE);
-
-    valueToDifferenceEntryEClass = createEClass(VALUE_TO_DIFFERENCE_ENTRY);
-    createEAttribute(valueToDifferenceEntryEClass,
-        VALUE_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(valueToDifferenceEntryEClass,
-        VALUE_TO_DIFFERENCE_ENTRY__VALUE);
-
-    referenceToElementToDifferenceEntryEClass = createEClass(
-        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY);
-    createEReference(referenceToElementToDifferenceEntryEClass,
-        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(referenceToElementToDifferenceEntryEClass,
-        REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__VALUE);
-
-    elementToDifferenceEntryEClass = createEClass(ELEMENT_TO_DIFFERENCE_ENTRY);
-    createEReference(elementToDifferenceEntryEClass,
-        ELEMENT_TO_DIFFERENCE_ENTRY__KEY);
-    createEReference(elementToDifferenceEntryEClass,
-        ELEMENT_TO_DIFFERENCE_ENTRY__VALUE);
 
     iComparisonEClass = createEClass(ICOMPARISON);
 
@@ -1240,7 +999,8 @@ public class GdiffdataPackageImpl extends EPackageImpl
     iReferenceValuePresenceEClass = createEClass(IREFERENCE_VALUE_PRESENCE);
 
     // Create data types
-    iEditableModelScopeEDataType = createEDataType(IEDITABLE_MODEL_SCOPE);
+    iEditableTreeDataScopeEDataType = createEDataType(
+        IEDITABLE_TREE_DATA_SCOPE);
     iMatchPolicyEDataType = createEDataType(IMATCH_POLICY);
     iDiffPolicyEDataType = createEDataType(IDIFF_POLICY);
     iMergePolicyEDataType = createEDataType(IMERGE_POLICY);
@@ -1271,170 +1031,467 @@ public class GdiffdataPackageImpl extends EPackageImpl
     setNsPrefix(eNS_PREFIX);
     setNsURI(eNS_URI);
 
-    // Obtain other dependent packages
-    EcorePackage theEcorePackage = (EcorePackage) EPackage.Registry.INSTANCE
-        .getEPackage(EcorePackage.eNS_URI);
-
     // Create type parameters
+    ETypeParameter eComparisonEClass_E = addETypeParameter(eComparisonEClass,
+        "E"); //$NON-NLS-1$
+    ETypeParameter eComparisonEClass_A = addETypeParameter(eComparisonEClass,
+        "A"); //$NON-NLS-1$
+    ETypeParameter eComparisonEClass_R = addETypeParameter(eComparisonEClass,
+        "R"); //$NON-NLS-1$
+    ETypeParameter eMappingEClass_E = addETypeParameter(eMappingEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMappingEClass_A = addETypeParameter(eMappingEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eMappingEClass_R = addETypeParameter(eMappingEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eMatchEClass_E = addETypeParameter(eMatchEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMatchEClass_A = addETypeParameter(eMatchEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eMatchEClass_R = addETypeParameter(eMatchEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eMergeableDifferenceEClass_E = addETypeParameter(
+        eMergeableDifferenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMergeableDifferenceEClass_A = addETypeParameter(
+        eMergeableDifferenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eMergeableDifferenceEClass_R = addETypeParameter(
+        eMergeableDifferenceEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eElementRelativePresenceEClass_E = addETypeParameter(
+        eElementRelativePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eElementRelativePresenceEClass_A = addETypeParameter(
+        eElementRelativePresenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eElementRelativePresenceEClass_R = addETypeParameter(
+        eElementRelativePresenceEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eElementPresenceEClass_E = addETypeParameter(
+        eElementPresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eElementPresenceEClass_A = addETypeParameter(
+        eElementPresenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eElementPresenceEClass_R = addETypeParameter(
+        eElementPresenceEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eValuePresenceEClass_E = addETypeParameter(
+        eValuePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eValuePresenceEClass_A = addETypeParameter(
+        eValuePresenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eValuePresenceEClass_R = addETypeParameter(
+        eValuePresenceEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eAttributeValuePresenceEClass_E = addETypeParameter(
+        eAttributeValuePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eAttributeValuePresenceEClass_A = addETypeParameter(
+        eAttributeValuePresenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eAttributeValuePresenceEClass_R = addETypeParameter(
+        eAttributeValuePresenceEClass, "R"); //$NON-NLS-1$
+    ETypeParameter eReferenceValuePresenceEClass_E = addETypeParameter(
+        eReferenceValuePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eReferenceValuePresenceEClass_A = addETypeParameter(
+        eReferenceValuePresenceEClass, "A"); //$NON-NLS-1$
+    ETypeParameter eReferenceValuePresenceEClass_R = addETypeParameter(
+        eReferenceValuePresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iComparisonEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iComparisonEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iComparisonEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iEditableComparisonEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iEditableComparisonEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iEditableComparisonEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iMappingEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iMappingEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iMappingEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iEditableMappingEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iEditableMappingEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iEditableMappingEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iMatchEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iMatchEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iMatchEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iEditableMatchEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iEditableMatchEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iEditableMatchEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iMergeableDifferenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iMergeableDifferenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iMergeableDifferenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iEditableMergeableDifferenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iEditableMergeableDifferenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iEditableMergeableDifferenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iElementRelativePresenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iElementRelativePresenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iElementRelativePresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iElementPresenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iElementPresenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iElementPresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iValuePresenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iValuePresenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iValuePresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iAttributeValuePresenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iAttributeValuePresenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iAttributeValuePresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iReferenceValuePresenceEClass, "E"); //$NON-NLS-1$
+    addETypeParameter(iReferenceValuePresenceEClass, "A"); //$NON-NLS-1$
+    addETypeParameter(iReferenceValuePresenceEClass, "R"); //$NON-NLS-1$
+    addETypeParameter(iEditableTreeDataScopeEDataType, "E"); //$NON-NLS-1$
+    addETypeParameter(iEditableTreeDataScopeEDataType, "A"); //$NON-NLS-1$
+    addETypeParameter(iEditableTreeDataScopeEDataType, "R"); //$NON-NLS-1$
+    addETypeParameter(iMatchPolicyEDataType, "E"); //$NON-NLS-1$
+    addETypeParameter(iMatchPolicyEDataType, "A"); //$NON-NLS-1$
+    addETypeParameter(iMatchPolicyEDataType, "R"); //$NON-NLS-1$
+    addETypeParameter(iDiffPolicyEDataType, "E"); //$NON-NLS-1$
+    addETypeParameter(iDiffPolicyEDataType, "A"); //$NON-NLS-1$
+    addETypeParameter(iDiffPolicyEDataType, "R"); //$NON-NLS-1$
+    addETypeParameter(iMergePolicyEDataType, "E"); //$NON-NLS-1$
+    addETypeParameter(iMergePolicyEDataType, "A"); //$NON-NLS-1$
+    addETypeParameter(iMergePolicyEDataType, "R"); //$NON-NLS-1$
 
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    eComparisonEClass.getESuperTypes().add(this.getEIdentified());
-    eComparisonEClass.getESuperTypes().add(this.getIEditableComparison());
-    eMappingEClass.getESuperTypes().add(this.getEIdentified());
-    eMappingEClass.getESuperTypes().add(this.getIEditableMapping());
-    eMatchEClass.getESuperTypes().add(this.getEIdentified());
-    eMatchEClass.getESuperTypes().add(this.getIEditableMatch());
-    eMergeableDifferenceEClass.getESuperTypes().add(this.getEIdentified());
-    eMergeableDifferenceEClass.getESuperTypes()
-        .add(this.getIEditableMergeableDifference());
-    eElementRelativePresenceEClass.getESuperTypes()
-        .add(this.getEMergeableDifference());
-    eElementRelativePresenceEClass.getESuperTypes()
-        .add(this.getIElementRelativePresence());
-    eElementPresenceEClass.getESuperTypes()
-        .add(this.getEElementRelativePresence());
-    eElementPresenceEClass.getESuperTypes().add(this.getIElementPresence());
-    eValuePresenceEClass.getESuperTypes()
-        .add(this.getEElementRelativePresence());
-    eValuePresenceEClass.getESuperTypes().add(this.getIValuePresence());
-    eAttributeValuePresenceEClass.getESuperTypes()
-        .add(this.getEValuePresence());
-    eAttributeValuePresenceEClass.getESuperTypes()
-        .add(this.getIAttributeValuePresence());
-    eReferenceValuePresenceEClass.getESuperTypes()
-        .add(this.getEValuePresence());
-    eReferenceValuePresenceEClass.getESuperTypes()
-        .add(this.getIReferenceValuePresence());
+    EGenericType g1 = createEGenericType(this.getEIdentified());
+    eComparisonEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIEditableComparison());
+    EGenericType g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    eComparisonEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEIdentified());
+    eMappingEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIEditableMapping());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    eMappingEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEIdentified());
+    eMatchEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIEditableMatch());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    eMatchEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEIdentified());
+    eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIEditableMergeableDifference());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEMergeableDifference());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIElementRelativePresence());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEElementRelativePresence());
+    g2 = createEGenericType(eElementPresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eElementPresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIElementPresence());
+    g2 = createEGenericType(eElementPresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eElementPresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEElementRelativePresence());
+    g2 = createEGenericType(eValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eValuePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIValuePresence());
+    g2 = createEGenericType(eValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eValuePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEValuePresence());
+    g2 = createEGenericType(eAttributeValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eAttributeValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eAttributeValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIAttributeValuePresence());
+    g2 = createEGenericType(eAttributeValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eAttributeValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eAttributeValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEValuePresence());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eReferenceValuePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getIReferenceValuePresence());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    eReferenceValuePresenceEClass.getEGenericSuperTypes().add(g1);
 
     // Initialize classes and features; add operations and parameters
     initEClass(eIdentifiedEClass, EIdentified.class, "EIdentified", IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEIdentified_Id(), theEcorePackage.getEString(), "id", //$NON-NLS-1$
-        null, 0, 1, EIdentified.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
+    initEAttribute(getEIdentified_Id(), ecorePackage.getEString(), "id", null, //$NON-NLS-1$
+        0, 1, EIdentified.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(eComparisonEClass, EComparison.class, "EComparison", //$NON-NLS-1$
-        !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEComparison_AncestorScope(),
-        this.getIEditableModelScope(), "ancestorScope", null, 0, 1, //$NON-NLS-1$
-        EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEComparison_ReferenceScope(),
-        this.getIEditableModelScope(), "referenceScope", null, 1, 1, //$NON-NLS-1$
-        EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEComparison_TargetScope(), this.getIEditableModelScope(),
-        "targetScope", null, 1, 1, EComparison.class, IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEComparison_LastMatchPolicy(), this.getIMatchPolicy(),
-        "lastMatchPolicy", null, 0, 1, EComparison.class, IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEComparison_LastDiffPolicy(), this.getIDiffPolicy(),
-        "lastDiffPolicy", null, 0, 1, EComparison.class, IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEComparison_LastMergePolicy(), this.getIMergePolicy(),
-        "lastMergePolicy", null, 0, 1, EComparison.class, IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getEComparison_Mapping(), this.getEMapping(), null,
-        "mapping", null, 1, 1, EComparison.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(eMappingEClass, EMapping.class, "EMapping", !IS_ABSTRACT, //$NON-NLS-1$
+    initEClass(eComparisonEClass, EComparison.class, "EComparison", IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEMapping_ModifiableContents(), this.getEMatch(), null,
+    g1 = createEGenericType(this.getIEditableTreeDataScope());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_AncestorScope(), g1, "ancestorScope", null, 0, //$NON-NLS-1$
+        1, EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIEditableTreeDataScope());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_ReferenceScope(), g1, "referenceScope", null, //$NON-NLS-1$
+        1, 1, EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIEditableTreeDataScope());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_TargetScope(), g1, "targetScope", null, 1, 1, //$NON-NLS-1$
+        EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMatchPolicy());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_LastMatchPolicy(), g1, "lastMatchPolicy", //$NON-NLS-1$
+        null, 0, 1, EComparison.class, IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
+    g1 = createEGenericType(this.getIDiffPolicy());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_LastDiffPolicy(), g1, "lastDiffPolicy", null, //$NON-NLS-1$
+        0, 1, EComparison.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMergePolicy());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEAttribute(getEComparison_LastMergePolicy(), g1, "lastMergePolicy", //$NON-NLS-1$
+        null, 0, 1, EComparison.class, IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
+    g1 = createEGenericType(this.getEMapping());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eComparisonEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEComparison_Mapping(), g1, null, "mapping", null, 1, 1, //$NON-NLS-1$
+        EComparison.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+        !IS_DERIVED, IS_ORDERED);
+
+    initEClass(eMappingEClass, EMapping.class, "EMapping", IS_ABSTRACT, //$NON-NLS-1$
+        !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMapping_ModifiableContents(), g1, null,
         "modifiableContents", null, 0, -1, EMapping.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMapping_ReferenceCompletedMatches(), this.getIMatch(),
-        null, "referenceCompletedMatches", null, 0, -1, EMapping.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-        !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
-    initEReference(getEMapping_TargetCompletedMatches(), this.getIMatch(), null,
+    g1 = createEGenericType(this.getIMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMapping_ReferenceCompletedMatches(), g1, null,
+        "referenceCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+        !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMapping_TargetCompletedMatches(), g1, null,
         "targetCompletedMatches", null, 0, -1, EMapping.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    addEOperation(eMappingEClass, this.getEComparison(), "getComparison", 0, 1, //$NON-NLS-1$
+    EOperation op = addEOperation(eMappingEClass, null, "getComparison", 0, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEComparison());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
-    initEClass(eMatchEClass, EMatch.class, "EMatch", !IS_ABSTRACT, //$NON-NLS-1$
-        !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEMatch_MatchID(), theEcorePackage.getEJavaObject(),
+    initEClass(eMatchEClass, EMatch.class, "EMatch", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEMatch_MatchID(), ecorePackage.getEJavaObject(),
         "matchID", null, 0, 1, EMatch.class, IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEReference(getEMatch_Ancestor(), ecorePackage.getEObject(), null,
-        "ancestor", null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_Reference(), ecorePackage.getEObject(), null,
-        "reference", null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_Target(), ecorePackage.getEObject(), null,
-        "target", null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_ModifiableRelatedDifferences(),
-        this.getEMergeableDifference(), null, "modifiableRelatedDifferences", //$NON-NLS-1$
-        null, 0, -1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_ModifiableAttributeMap(),
-        this.getAttributeToValueToDifferenceEntry(), null,
-        "modifiableAttributeMap", null, 0, -1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+    g1 = createEGenericType(this.getEMergeableDifference());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMatch_ModifiableRelatedDifferences(), g1, null,
+        "modifiableRelatedDifferences", null, 0, -1, EMatch.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+        !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
+    g1 = createEGenericType(this.getIElementPresence());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMatch_ElementPresenceDifference(), g1, null,
+        "elementPresenceDifference", null, 0, 1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_ModifiableReferenceMap(),
-        this.getReferenceToElementToDifferenceEntry(), null,
-        "modifiableReferenceMap", null, 0, -1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
+    g1 = createEGenericType(this.getIReferenceValuePresence());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMatch_ReferenceOwnershipDifference(), g1, null,
+        "referenceOwnershipDifference", null, 0, 1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_ElementPresenceDifference(),
-        this.getIElementPresence(), null, "elementPresenceDifference", null, 0, //$NON-NLS-1$
-        1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_ReferenceOwnershipDifference(),
-        this.getIReferenceValuePresence(), null, "referenceOwnershipDifference", //$NON-NLS-1$
-        null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMatch_TargetOwnershipDifference(),
-        this.getIReferenceValuePresence(), null, "targetOwnershipDifference", //$NON-NLS-1$
-        null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIReferenceValuePresence());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMatch_TargetOwnershipDifference(), g1, null,
+        "targetOwnershipDifference", null, 0, 1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+        !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    addEOperation(eMatchEClass, this.getEMapping(), "getMapping", 0, 1, //$NON-NLS-1$
-        IS_UNIQUE, IS_ORDERED);
+    op = addEOperation(eMatchEClass, null, "getAncestor", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEOperation(op, g1);
+
+    op = addEOperation(eMatchEClass, null, "getReference", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEOperation(op, g1);
+
+    op = addEOperation(eMatchEClass, null, "getTarget", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEOperation(op, g1);
+
+    op = addEOperation(eMatchEClass, null, "setAncestor", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    addEParameter(op, g1, "e", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+    op = addEOperation(eMatchEClass, null, "setReference", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    addEParameter(op, g1, "e", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+    op = addEOperation(eMatchEClass, null, "setTarget", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    addEParameter(op, g1, "e", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     initEClass(eMergeableDifferenceEClass, EMergeableDifference.class,
         "EMergeableDifference", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEMergeableDifference_Comparison(), this.getEComparison(),
-        null, "comparison", null, 1, 1, EMergeableDifference.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getEComparison());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMergeableDifference_Comparison(), g1, null, "comparison", //$NON-NLS-1$
+        null, 1, 1, EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_AlignedWithAncestor(),
-        theEcorePackage.getEBoolean(), "alignedWithAncestor", "true", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
+        ecorePackage.getEBoolean(), "alignedWithAncestor", "true", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_Conflicting(),
-        theEcorePackage.getEBoolean(), "conflicting", "false", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
+        ecorePackage.getEBoolean(), "conflicting", "false", 1, 1, //$NON-NLS-1$//$NON-NLS-2$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_Ignored(),
-        theEcorePackage.getEBoolean(), "ignored", null, 1, 1, //$NON-NLS-1$
+        ecorePackage.getEBoolean(), "ignored", null, 1, 1, //$NON-NLS-1$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEMergeableDifference_MergeDestination(), this.getRole(),
@@ -1445,25 +1502,51 @@ public class GdiffdataPackageImpl extends EPackageImpl
         this.getRole(), "possibleMergeDestinations", null, 0, -1, //$NON-NLS-1$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMergeableDifference_ExplicitDependenciesForTarget(),
-        this.getIMergeableDifference(), null, "explicitDependenciesForTarget", //$NON-NLS-1$
-        null, 0, -1, EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMergeableDifference_ExplicitDependenciesForReference(),
-        this.getIMergeableDifference(), null,
-        "explicitDependenciesForReference", null, 0, -1, //$NON-NLS-1$
+    g1 = createEGenericType(this.getIMergeableDifference());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMergeableDifference_ExplicitDependenciesForTarget(), g1,
+        null, "explicitDependenciesForTarget", null, 0, -1, //$NON-NLS-1$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
-    initEReference(getEMergeableDifference_ImplicitDependenciesForTarget(),
-        this.getIMergeableDifference(), null, "implicitDependenciesForTarget", //$NON-NLS-1$
-        null, 0, -1, EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMergeableDifference());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMergeableDifference_ExplicitDependenciesForReference(),
+        g1, null, "explicitDependenciesForReference", null, 0, -1, //$NON-NLS-1$
+        EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+        !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMergeableDifference());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEMergeableDifference_ImplicitDependenciesForTarget(), g1,
+        null, "implicitDependenciesForTarget", null, 0, -1, //$NON-NLS-1$
+        EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+        !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getIMergeableDifference());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMergeableDifferenceEClass_R);
+    g1.getETypeArguments().add(g2);
     initEReference(getEMergeableDifference_ImplicitDependenciesForReference(),
-        this.getIMergeableDifference(), null,
-        "implicitDependenciesForReference", null, 0, -1, //$NON-NLS-1$
+        g1, null, "implicitDependenciesForReference", null, 0, -1, //$NON-NLS-1$
         EMergeableDifference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
@@ -1471,8 +1554,15 @@ public class GdiffdataPackageImpl extends EPackageImpl
     initEClass(eElementRelativePresenceEClass, EElementRelativePresence.class,
         "EElementRelativePresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEElementRelativePresence_ElementMatch(), this.getEMatch(),
-        null, "elementMatch", null, 1, 1, EElementRelativePresence.class, //$NON-NLS-1$
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementRelativePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEElementRelativePresence_ElementMatch(), g1, null,
+        "elementMatch", null, 1, 1, EElementRelativePresence.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
         IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEElementRelativePresence_PresenceRole(), this.getRole(),
@@ -1481,100 +1571,65 @@ public class GdiffdataPackageImpl extends EPackageImpl
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eElementPresenceEClass, EElementPresence.class,
-        "EElementPresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        "EElementPresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEElementPresence_OwnerMatch(), this.getEMatch(), null,
-        "ownerMatch", null, 1, 1, EElementPresence.class, !IS_TRANSIENT, //$NON-NLS-1$
-        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-        !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eElementPresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eElementPresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEElementPresence_OwnerMatch(), g1, null, "ownerMatch", //$NON-NLS-1$
+        null, 1, 1, EElementPresence.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(eValuePresenceEClass, EValuePresence.class, "EValuePresence", //$NON-NLS-1$
         IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEValuePresence_Feature(),
-        theEcorePackage.getEStructuralFeature(), null, "feature", null, 1, 1, //$NON-NLS-1$
-        EValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEValuePresence_Order(), theEcorePackage.getEBoolean(),
+    initEAttribute(getEValuePresence_Order(), ecorePackage.getEBoolean(),
         "order", "false", 1, 1, EValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$//$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
 
     initEClass(eAttributeValuePresenceEClass, EAttributeValuePresence.class,
-        "EAttributeValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        "EAttributeValuePresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getEAttributeValuePresence_Value(),
-        theEcorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
+        ecorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
         EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
+    op = addEOperation(eAttributeValuePresenceEClass, null, "setFeature", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(eAttributeValuePresenceEClass_A);
+    addEParameter(op, g1, "feature", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
-        "EReferenceValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        "EReferenceValuePresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getEReferenceValuePresence_Value(),
-        theEcorePackage.getEObject(), null, "value", null, 1, 1, //$NON-NLS-1$
-        EReferenceValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getEReferenceValuePresence_ValueMatch(), this.getEMatch(),
-        null, "valueMatch", null, 0, 1, EReferenceValuePresence.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eReferenceValuePresenceEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEReference(getEReferenceValuePresence_ValueMatch(), g1, null,
+        "valueMatch", null, 0, 1, EReferenceValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+        !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(attributeToValueToDifferenceEntryEClass, Map.Entry.class,
-        "AttributeToValueToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-        !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getAttributeToValueToDifferenceEntry_Key(),
-        theEcorePackage.getEAttribute(), null, "key", null, 1, 1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getAttributeToValueToDifferenceEntry_Value(),
-        this.getValueToDifferenceEntry(), null, "value", null, 0, -1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
+    op = addEOperation(eReferenceValuePresenceEClass, null, "setFeature", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(eReferenceValuePresenceEClass_R);
+    addEParameter(op, g1, "feature", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(valueToDifferenceEntryEClass, Map.Entry.class,
-        "ValueToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-        !IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getValueToDifferenceEntry_Key(),
-        theEcorePackage.getEJavaObject(), "key", null, 1, 1, Map.Entry.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getValueToDifferenceEntry_Value(),
-        this.getIAttributeValuePresence(), null, "value", null, 1, 1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-
-    initEClass(referenceToElementToDifferenceEntryEClass, Map.Entry.class,
-        "ReferenceToElementToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-        !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getReferenceToElementToDifferenceEntry_Key(),
-        theEcorePackage.getEReference(), null, "key", null, 1, 1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-    initEReference(getReferenceToElementToDifferenceEntry_Value(),
-        this.getElementToDifferenceEntry(), null, "value", null, 0, -1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
-
-    initEClass(elementToDifferenceEntryEClass, Map.Entry.class,
-        "ElementToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-        !IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getElementToDifferenceEntry_Key(),
-        theEcorePackage.getEObject(), null, "key", null, 1, 1, Map.Entry.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-        IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getElementToDifferenceEntry_Value(),
-        this.getIReferenceValuePresence(), null, "value", null, 1, 1, //$NON-NLS-1$
-        Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-        !IS_DERIVED, IS_ORDERED);
+    op = addEOperation(eReferenceValuePresenceEClass, null, "setValue", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(eReferenceValuePresenceEClass_E);
+    addEParameter(op, g1, "value", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     initEClass(iComparisonEClass, IComparison.class, "IComparison", IS_ABSTRACT, //$NON-NLS-1$
         IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1627,8 +1682,9 @@ public class GdiffdataPackageImpl extends EPackageImpl
         !IS_GENERATED_INSTANCE_CLASS);
 
     // Initialize data types
-    initEDataType(iEditableModelScopeEDataType, IEditableModelScope.class,
-        "IEditableModelScope", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEDataType(iEditableTreeDataScopeEDataType, IEditableTreeDataScope.class,
+        "IEditableTreeDataScope", IS_SERIALIZABLE, //$NON-NLS-1$
+        !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(iMatchPolicyEDataType, IMatchPolicy.class, "IMatchPolicy", //$NON-NLS-1$
         IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
     initEDataType(iDiffPolicyEDataType, IDiffPolicy.class, "IDiffPolicy", //$NON-NLS-1$

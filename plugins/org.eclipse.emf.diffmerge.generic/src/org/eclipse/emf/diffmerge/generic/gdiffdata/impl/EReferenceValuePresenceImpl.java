@@ -19,19 +19,15 @@ import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
-import org.eclipse.emf.diffmerge.generic.impl.helpers.BidirectionalComparisonCopier;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -43,24 +39,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getValueMatch <em>Value Match</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EReferenceValuePresenceImpl extends EValuePresenceImpl
-    implements EReferenceValuePresence {
-  /**
-   * The cached value of the '{@link #getValue() <em>Value</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getValue()
-   * @generated
-   * @ordered
-   */
-  protected EObject value;
-
+public abstract class EReferenceValuePresenceImpl<E, A, R> extends
+    EValuePresenceImpl<E, A, R> implements EReferenceValuePresence<E, A, R> {
   /**
    * The cached value of the '{@link #getValueMatch() <em>Value Match</em>}' reference.
    * <!-- begin-user-doc -->
@@ -69,7 +54,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @generated
    * @ordered
    */
-  protected EMatch valueMatch;
+  protected EMatch<E, A, R> valueMatch;
 
   /**
    * <!-- begin-user-doc -->
@@ -91,15 +76,16 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EReferenceValuePresenceImpl(EComparison comparison_p,
-      EMatch elementMatch_p, EReference reference_p, EObject value_p,
-      EMatch valueMatch_p, Role presenceRole_p, boolean isOrder_p) {
-    super(comparison_p, elementMatch_p, reference_p, presenceRole_p, isOrder_p);
+  public EReferenceValuePresenceImpl(EComparison<E, A, R> comparison_p,
+      EMatch<E, A, R> elementMatch_p, R reference_p, E value_p,
+      EMatch<E, A, R> valueMatch_p, Role presenceRole_p, boolean isOrder_p) {
+    super(comparison_p, elementMatch_p, presenceRole_p, isOrder_p);
     assert valueMatch_p != null || value_p != null;
     setValueMatch(valueMatch_p);
     setValue((value_p != null) ? value_p : valueMatch_p.get(presenceRole_p));
-    assert value != null;
-    ((IMatch.Editable) elementMatch).addRelatedDifference(this);
+    assert getValue() != null;
+    setFeature(reference_p);
+    ((IMatch.Editable<E, A, R>) elementMatch).addRelatedDifference(this);
   }
 
   /**
@@ -117,60 +103,11 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EObject getValue() {
-    if (value != null && value.eIsProxy()) {
-      InternalEObject oldValue = (InternalEObject) value;
-      value = eResolveProxy(oldValue);
-      if (value != oldValue) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE, oldValue,
-              value));
-      }
-    }
-    return value;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
-   * @generated NOT
-   */
-  @Override
-  public EReference getFeature() {
-    return (EReference) super.getFeature();
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EObject basicGetValue() {
-    return value;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setValue(EObject newValue) {
-    EObject oldValue = value;
-    value = newValue;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE, oldValue, value));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EMatch getValueMatch() {
+  @SuppressWarnings("unchecked")
+  public EMatch<E, A, R> getValueMatch() {
     if (valueMatch != null && valueMatch.eIsProxy()) {
       InternalEObject oldValueMatch = (InternalEObject) valueMatch;
-      valueMatch = (EMatch) eResolveProxy(oldValueMatch);
+      valueMatch = (EMatch<E, A, R>) eResolveProxy(oldValueMatch);
       if (valueMatch != oldValueMatch) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -186,7 +123,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch basicGetValueMatch() {
+  public EMatch<E, A, R> basicGetValueMatch() {
     return valueMatch;
   }
 
@@ -195,14 +132,26 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValueMatch(EMatch newValueMatch) {
-    EMatch oldValueMatch = valueMatch;
+  public void setValueMatch(EMatch<E, A, R> newValueMatch) {
+    EMatch<E, A, R> oldValueMatch = valueMatch;
     valueMatch = newValueMatch;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
           GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH,
           oldValueMatch, valueMatch));
   }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#setFeature(java.lang.Object)
+   * @generated NOT
+   */
+  public abstract void setFeature(R feature);
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#setValue(java.lang.Object)
+   * @generated NOT
+   */
+  public abstract void setValue(E value);
 
   /**
    * <!-- begin-user-doc -->
@@ -212,10 +161,6 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      if (resolve)
-        return getValue();
-      return basicGetValue();
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
       if (resolve)
         return getValueMatch();
@@ -229,14 +174,12 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      setValue((EObject) newValue);
-      return;
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch) newValue);
+      setValueMatch((EMatch<E, A, R>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -250,11 +193,8 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      setValue((EObject) null);
-      return;
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch) null);
+      setValueMatch((EMatch<E, A, R>) null);
       return;
     }
     super.eUnset(featureID);
@@ -268,8 +208,6 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      return value != null;
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
       return valueMatch != null;
     }
@@ -280,11 +218,12 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence#getOpposite()
    * @generated NOT
    */
-  public IReferenceValuePresence getOpposite() {
-    IReferenceValuePresence result = null;
-    EReference opposite = getFeature().getEOpposite();
+  public IReferenceValuePresence<E, A, R> getOpposite() {
+    IReferenceValuePresence<E, A, R> result = null;
+    R opposite = getPresenceScope().getScopePolicy()
+        .getOppositeReference(getFeature());
     if (opposite != null) {
-      IMatch valueMatch = getValueMatch();
+      IMatch<E, A, R> valueMatch = getValueMatch();
       if (valueMatch != null) {
         result = valueMatch.getReferenceValueDifference(opposite,
             getElementMatch().get(getPresenceRole()));
@@ -298,21 +237,21 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @generated NOT
    */
   @Override
-  public IReferenceValuePresence getSymmetrical() {
-    IReferenceValuePresence result = null;
-    if (!getFeature().isMany()) {
-      Collection<IReferenceValuePresence> candidates = getElementMatch()
+  public IReferenceValuePresence<E, A, R> getSymmetrical() {
+    IReferenceValuePresence<E, A, R> result = null;
+    if (!isManyFeature()) {
+      Collection<IReferenceValuePresence<E, A, R>> candidates = getElementMatch()
           .getReferenceDifferences(getFeature());
       assert candidates.size() <= 2; // Because !isMany()
-      for (IReferenceValuePresence candidate : candidates) {
+      for (IReferenceValuePresence<E, A, R> candidate : candidates) {
         if (candidate.getPresenceRole() == getAbsenceRole()) {
           result = candidate;
           break;
         }
       }
     } else if (isOrder()) {
-      result = (IReferenceValuePresence) getElementMatch()
-          .getOrderDifference(getFeature(), getAbsenceRole());
+      result = getElementMatch().getReferenceOrderDifference(getFeature(),
+          getAbsenceRole());
     }
     return result;
   }
@@ -321,9 +260,9 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence#getSymmetricalOwnership()
    * @generated NOT
    */
-  public IReferenceValuePresence getSymmetricalOwnership() {
-    IReferenceValuePresence result = null;
-    IMatch valueMatch = getValueMatch();
+  public IReferenceValuePresence<E, A, R> getSymmetricalOwnership() {
+    IReferenceValuePresence<E, A, R> result = null;
+    IMatch<E, A, R> valueMatch = getValueMatch();
     if (valueMatch != null)
       result = valueMatch.getOwnershipDifference(getAbsenceRole());
     return result;
@@ -335,13 +274,10 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    */
   protected boolean hasStrongerOpposite() {
     boolean result = false;
-    EStructuralFeature ownfeature = getFeature();
-    if (ownfeature instanceof EReference) {
-      EReference ref = (EReference) ownfeature;
-      if (ref.isMany()) {
-        EReference opposite = ref.getEOpposite();
-        result = opposite != null && !opposite.isMany();
-      }
+    if (isManyFeature()) {
+      IScopePolicy<E, A, R> scopePolicy = getPresenceScope().getScopePolicy();
+      R opposite = scopePolicy.getOppositeReference(getFeature());
+      result = opposite != null && !scopePolicy.isManyReference(opposite);
     }
     return result;
   }
@@ -351,27 +287,39 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @generated NOT
    */
   public boolean isContainment() {
-    boolean result;
-    EReference feature = getFeature();
-    IComparison comparison = getComparison();
-    if (comparison != null) {
-      IFeaturedModelScope scope = comparison.getScope(getPresenceRole());
-      result = scope.isContainment(feature);
-    } else {
-      result = feature.isContainment();
-    }
+    IEditableTreeDataScope<E, A, R> scope = getPresenceScope();
+    boolean result = scope.isContainment(getFeature());
     return result;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#isManyFeature()
+   * @generated NOT
+   */
+  @Override
+  public boolean isManyFeature() {
+    return getPresenceScope().getScopePolicy().isManyReference(getFeature());
   }
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence#isOppositeOf(org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence)
    * @generated NOT
    */
-  public boolean isOppositeOf(IReferenceValuePresence peer_p) {
+  public boolean isOppositeOf(IReferenceValuePresence<E, A, R> peer_p) {
     return getPresenceRole() == peer_p.getPresenceRole()
-        && getFeature().getEOpposite() == peer_p.getFeature()
+        && getPresenceScope().getScopePolicy()
+            .getOppositeReference(getFeature()) == peer_p.getFeature()
         && getElementMatch() == peer_p.getValueMatch()
         && getValueMatch() == peer_p.getElementMatch();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#isChangeableFeature()
+   * @generated NOT
+   */
+  public boolean isChangeableFeature() {
+    return getPresenceScope().getScopePolicy()
+        .isChangeableReference(getFeature());
   }
 
   /**
@@ -394,7 +342,8 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence#isSymmetricalOwnershipTo(org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence)
    * @generated NOT
    */
-  public boolean isSymmetricalOwnershipTo(IReferenceValuePresence peer_p) {
+  public boolean isSymmetricalOwnershipTo(
+      IReferenceValuePresence<E, A, R> peer_p) {
     return getAbsenceRole() == peer_p.getPresenceRole() && isOwnership()
         && peer_p.isOwnership() && getValueMatch() != null
         && getValueMatch() == peer_p.getValueMatch();
@@ -414,37 +363,37 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    */
   @Override
   protected void mergeOrder() {
-    EObject sourceHolder = getHolder();
-    EObject destinationHolder = getMatchOfHolder();
-    EReference reference = getFeature();
+    E sourceHolder = getHolder();
+    E destinationHolder = getMatchOfHolder();
+    R reference = getFeature();
     assert sourceHolder != null && destinationHolder != null; // Otherwise order change would not have been detected
     assert getFeature() != null; // Order merge does not cover root containment at this time
-    IEditableModelScope absenceScope = getAbsenceScope();
-    IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
+    IEditableTreeDataScope<E, A, R> absenceScope = getAbsenceScope();
+    IMergePolicy<E, A, R> mergePolicy = getComparison().getLastMergePolicy();
     Role destination = getAbsenceRole();
-    IMatch holderMatch = getElementMatch();
-    IComparison owningComparison = getComparison();
-    List<EObject> sourceValues = getPresenceScope().get(sourceHolder,
+    IMatch<E, A, R> holderMatch = getElementMatch();
+    IComparison<E, A, R> owningComparison = getComparison();
+    List<E> sourceValues = getPresenceScope().getReferenceValues(sourceHolder,
         reference);
     for (int i = sourceValues.size() - 1; i >= 0; i--) {
-      EObject sourceValue = sourceValues.get(i);
-      IMatch valueMatch = owningComparison.getMapping().getMatchFor(sourceValue,
-          destination.opposite());
+      E sourceValue = sourceValues.get(i);
+      IMatch<E, A, R> valueMatch = owningComparison.getMapping()
+          .getMatchFor(sourceValue, destination.opposite());
       boolean coverValue = valueMatch != null
           || getFeature() != null && getComparison().getLastDiffPolicy()
               .coverOutOfScopeValue(sourceValue, getFeature());
       if (coverValue) {
-        EObject destinationValue = valueMatch != null
-            ? valueMatch.get(destination)
+        E destinationValue = valueMatch != null ? valueMatch.get(destination)
             : sourceValue;
         if (destinationValue != null) {
           int index = mergePolicy.getDesiredValuePosition(owningComparison,
               destination, holderMatch, reference, sourceValue);
           if (index >= 0) {
-            List<EObject> updatedDestinationValues = absenceScope
-                .get(destinationHolder, reference);
+            List<E> updatedDestinationValues = absenceScope
+                .getReferenceValues(destinationHolder, reference);
             int oldIndex = updatedDestinationValues.indexOf(destinationValue);
-            absenceScope.move(destinationHolder, reference, index, oldIndex);
+            absenceScope.moveReferenceValue(destinationHolder, reference, index,
+                oldIndex);
           }
         }
       }
@@ -457,10 +406,10 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    */
   @Override
   protected void mergeValueAddition() {
-    IEditableModelScope absenceScope = getAbsenceScope();
-    EObject destinationHolder = getMatchOfHolder();
-    IMatch valueMatch = getValueMatch();
-    EObject destinationValue;
+    IEditableTreeDataScope<E, A, R> absenceScope = getAbsenceScope();
+    E destinationHolder = getMatchOfHolder();
+    IMatch<E, A, R> valueMatch = getValueMatch();
+    E destinationValue;
     boolean cloned;
     if (valueMatch == null) {
       // Out of scope
@@ -477,23 +426,25 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
     }
     // Assertions are assumed to be enforced by diff dependency handling
     assert destinationHolder != null && destinationValue != null;
-    boolean actuallyAdded = absenceScope.add(destinationHolder, getFeature(),
-        destinationValue);
+    boolean actuallyAdded = absenceScope.addReferenceValue(destinationHolder,
+        getFeature(), destinationValue);
     // Order handling
-    IDiffPolicy diffPolicy = getComparison().getLastDiffPolicy();
-    IMergePolicy mergePolicy = getComparison().getLastMergePolicy();
+    IDiffPolicy<E, A, R> diffPolicy = getComparison().getLastDiffPolicy();
+    IMergePolicy<E, A, R> mergePolicy = getComparison().getLastMergePolicy();
     if (diffPolicy != null && actuallyAdded
-        && diffPolicy.considerOrdered(getFeature())) {
+        && diffPolicy.considerOrderedReference(getFeature())) {
       // Move added value if required
       int index = mergePolicy.getDesiredValuePosition(getComparison(),
           getAbsenceRole(), getElementMatch(), getFeature(), getValue());
-      if (index >= 0)
-        absenceScope.move(destinationHolder, getFeature(), index, -1);
+      if (index >= 0) {
+        absenceScope.moveReferenceValue(destinationHolder, getFeature(), index,
+            -1);
+      }
     }
     // ID enforcement
-    if (cloned && actuallyAdded)
-      BidirectionalComparisonCopier.handleIDCopy(getValue(), getPresenceScope(),
-          destinationValue, getAbsenceScope(), mergePolicy);
+    if (cloned && actuallyAdded) {
+      mergePolicy.setID(getValue(), getPresenceScope(), destinationValue, getAbsenceScope());
+    }
   }
 
   /**
@@ -504,7 +455,8 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   protected final void mergeValueRemoval() {
     if (isOutOfScope()) {
       // Out of scope
-      getPresenceScope().remove(getHolder(), getFeature(), getValue());
+      getPresenceScope().removeReferenceValue(getHolder(), getFeature(),
+          getValue());
     } else {
       // Within scope
       mergeValueRemovalWithinScope();
@@ -517,25 +469,23 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @generated NOT
    */
   protected void mergeValueRemovalWithinScope() {
-    IEditableModelScope presenceScope = getPresenceScope();
+    IEditableTreeDataScope<E, A, R> presenceScope = getPresenceScope();
     if (getSymmetrical() == null
         && !(hasStrongerOpposite() && !getValueMatch().isPartial())) {
-      EObject valueElement = getValue();
-      if (getFeature() != null)
-        presenceScope.remove(getHolder(), getFeature(), valueElement);
-      else
+      E valueElement = getValue();
+      if (getFeature() != null) {
+        presenceScope.removeReferenceValue(getHolder(), getFeature(),
+            valueElement);
+      } else {
         presenceScope.remove(valueElement);
+      }
       if (isOwnership()) {
         // Value has been removed from its containment: delete element
-        for (EStructuralFeature.Setting setting : getComparison().getMapping()
-            .getCrossReferences(valueElement, getPresenceRole())) {
-          presenceScope.remove(setting.getEObject(),
-              (EReference) setting.getEStructuralFeature(), valueElement);
-        }
+        removeDependencies(valueElement, presenceScope);
         if (!getComparison().getLastMergePolicy()
             .bindPresenceToOwnership(presenceScope)) {
           // Re-integrate direct children in scope
-          for (EObject child : presenceScope.getContents(valueElement)) {
+          for (E child : presenceScope.getContents(valueElement)) {
             presenceScope.add(child);
           }
         }
@@ -544,5 +494,14 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
     // Otherwise, we know this difference will be merged implicitly because of dependencies
     // since a required difference implies this difference
   }
+
+  /**
+   * Remove dependencies to the given element after its removal from the given scope
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope
+   * @generated NOT
+   */
+  protected abstract void removeDependencies(E element_p,
+      IEditableTreeDataScope<E, A, R> scope_p);
 
 } //EReferenceValuePresenceImpl

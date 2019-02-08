@@ -11,28 +11,31 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.gdiffdata.util;
 
-import java.util.Map;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.*;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -95,141 +98,127 @@ public class GdiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public Adapter caseEComparison(EComparison object) {
+    public <E, A, R> Adapter caseEComparison(EComparison<E, A, R> object) {
       return createEComparisonAdapter();
     }
 
     @Override
-    public Adapter caseEMapping(EMapping object) {
+    public <E, A, R> Adapter caseEMapping(EMapping<E, A, R> object) {
       return createEMappingAdapter();
     }
 
     @Override
-    public Adapter caseEMatch(EMatch object) {
+    public <E, A, R> Adapter caseEMatch(EMatch<E, A, R> object) {
       return createEMatchAdapter();
     }
 
     @Override
-    public Adapter caseEMergeableDifference(EMergeableDifference object) {
+    public <E, A, R> Adapter caseEMergeableDifference(
+        EMergeableDifference<E, A, R> object) {
       return createEMergeableDifferenceAdapter();
     }
 
     @Override
-    public Adapter caseEElementRelativePresence(
-        EElementRelativePresence object) {
+    public <E, A, R> Adapter caseEElementRelativePresence(
+        EElementRelativePresence<E, A, R> object) {
       return createEElementRelativePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEElementPresence(EElementPresence object) {
+    public <E, A, R> Adapter caseEElementPresence(
+        EElementPresence<E, A, R> object) {
       return createEElementPresenceAdapter();
     }
 
     @Override
-    public Adapter caseEValuePresence(EValuePresence object) {
+    public <E, A, R> Adapter caseEValuePresence(
+        EValuePresence<E, A, R> object) {
       return createEValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEAttributeValuePresence(EAttributeValuePresence object) {
+    public <E, A, R> Adapter caseEAttributeValuePresence(
+        EAttributeValuePresence<E, A, R> object) {
       return createEAttributeValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEReferenceValuePresence(EReferenceValuePresence object) {
+    public <E, A, R> Adapter caseEReferenceValuePresence(
+        EReferenceValuePresence<E, A, R> object) {
       return createEReferenceValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseAttributeToValueToDifferenceEntry(
-        Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> object) {
-      return createAttributeToValueToDifferenceEntryAdapter();
-    }
-
-    @Override
-    public Adapter caseValueToDifferenceEntry(
-        Map.Entry<Object, IAttributeValuePresence> object) {
-      return createValueToDifferenceEntryAdapter();
-    }
-
-    @Override
-    public Adapter caseReferenceToElementToDifferenceEntry(
-        Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> object) {
-      return createReferenceToElementToDifferenceEntryAdapter();
-    }
-
-    @Override
-    public Adapter caseElementToDifferenceEntry(
-        Map.Entry<EObject, IReferenceValuePresence> object) {
-      return createElementToDifferenceEntryAdapter();
-    }
-
-    @Override
-    public Adapter caseIComparison(IComparison object) {
+    public <E, A, R> Adapter caseIComparison(IComparison<E, A, R> object) {
       return createIComparisonAdapter();
     }
 
     @Override
-    public Adapter caseIEditableComparison(Editable object) {
+    public <E, A, R> Adapter caseIEditableComparison(Editable<E, A, R> object) {
       return createIEditableComparisonAdapter();
     }
 
     @Override
-    public Adapter caseIMapping(IMapping object) {
+    public <E, A, R> Adapter caseIMapping(IMapping<E, A, R> object) {
       return createIMappingAdapter();
     }
 
     @Override
-    public Adapter caseIEditableMapping(
-        org.eclipse.emf.diffmerge.generic.api.IMapping.Editable object) {
+    public <E, A, R> Adapter caseIEditableMapping(
+        org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<E, A, R> object) {
       return createIEditableMappingAdapter();
     }
 
     @Override
-    public Adapter caseIMatch(IMatch object) {
+    public <E, A, R> Adapter caseIMatch(IMatch<E, A, R> object) {
       return createIMatchAdapter();
     }
 
     @Override
-    public Adapter caseIEditableMatch(
-        org.eclipse.emf.diffmerge.generic.api.IMatch.Editable object) {
+    public <E, A, R> Adapter caseIEditableMatch(
+        org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<E, A, R> object) {
       return createIEditableMatchAdapter();
     }
 
     @Override
-    public Adapter caseIMergeableDifference(IMergeableDifference object) {
+    public <E, A, R> Adapter caseIMergeableDifference(
+        IMergeableDifference<E, A, R> object) {
       return createIMergeableDifferenceAdapter();
     }
 
     @Override
-    public Adapter caseIEditableMergeableDifference(
-        org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable object) {
+    public <E, A, R> Adapter caseIEditableMergeableDifference(
+        org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<E, A, R> object) {
       return createIEditableMergeableDifferenceAdapter();
     }
 
     @Override
-    public Adapter caseIElementRelativePresence(
-        IElementRelativePresence object) {
+    public <E, A, R> Adapter caseIElementRelativePresence(
+        IElementRelativePresence<E, A, R> object) {
       return createIElementRelativePresenceAdapter();
     }
 
     @Override
-    public Adapter caseIElementPresence(IElementPresence object) {
+    public <E, A, R> Adapter caseIElementPresence(
+        IElementPresence<E, A, R> object) {
       return createIElementPresenceAdapter();
     }
 
     @Override
-    public Adapter caseIValuePresence(IValuePresence object) {
+    public <E, A, R> Adapter caseIValuePresence(
+        IValuePresence<E, A, R> object) {
       return createIValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseIAttributeValuePresence(IAttributeValuePresence object) {
+    public <E, A, R> Adapter caseIAttributeValuePresence(
+        IAttributeValuePresence<E, A, R> object) {
       return createIAttributeValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseIReferenceValuePresence(IReferenceValuePresence object) {
+    public <E, A, R> Adapter caseIReferenceValuePresence(
+        IReferenceValuePresence<E, A, R> object) {
       return createIReferenceValuePresenceAdapter();
     }
 
@@ -389,62 +378,6 @@ public class GdiffdataAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public Adapter createEReferenceValuePresenceAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Attribute To Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see java.util.Map.Entry
-   * @generated
-   */
-  public Adapter createAttributeToValueToDifferenceEntryAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see java.util.Map.Entry
-   * @generated
-   */
-  public Adapter createValueToDifferenceEntryAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Reference To Element To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see java.util.Map.Entry
-   * @generated
-   */
-  public Adapter createReferenceToElementToDifferenceEntryAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Element To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see java.util.Map.Entry
-   * @generated
-   */
-  public Adapter createElementToDifferenceEntryAdapter() {
     return null;
   }
 

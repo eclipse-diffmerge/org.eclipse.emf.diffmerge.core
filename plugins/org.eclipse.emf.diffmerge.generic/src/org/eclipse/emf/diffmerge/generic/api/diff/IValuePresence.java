@@ -45,6 +45,17 @@ IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
   Object getValue();
   
   /**
+   * Return whether the feature of this difference tolerates that its values be changed
+   */
+  boolean isChangeableFeature();
+  
+  /**
+   * Return whether the feature of this difference tolerates more than one value on the
+   * same element
+   */
+  boolean isManyFeature();
+  
+  /**
    * Return whether the unmatched presence is solely due to a different ordering.
    * If true, then [getFeature() == null || getFeature().isMany()] and
    * getSymmetrical() returns the opposite ordering difference.

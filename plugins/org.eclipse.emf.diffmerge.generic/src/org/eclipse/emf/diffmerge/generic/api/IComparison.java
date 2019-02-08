@@ -22,7 +22,8 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 
 /**
@@ -181,7 +182,7 @@ public interface IComparison<E, A, R> {
    * @param role_p a non-null role
    * @return a scope which is non-null iff the given role is covered by this comparison
    */
-  IDataScope<E, A, R> getScope(Role role_p);
+  ITreeDataScope<E, A, R> getScope(Role role_p);
   
   /**
    * Return whether there are differences which have not been merged.
@@ -255,7 +256,7 @@ public interface IComparison<E, A, R> {
     /**
      * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getScope(org.eclipse.emf.diffmerge.generic.api.Role)
      */
-    IEditableDataScope<E, A, R> getScope(Role role_p);
+    IEditableTreeDataScope<E, A, R> getScope(Role role_p);
     
     /**
      * Create and return an attribute value presence with the given characteristics

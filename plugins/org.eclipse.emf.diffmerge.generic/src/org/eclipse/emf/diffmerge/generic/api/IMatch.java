@@ -59,6 +59,14 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
       A attribute_p, Object value_p);
   
   /**
+   * Return the order difference on the given attribute in the given role, if any
+   * @param attribute_p a non-null attribute
+   * @param role_p a non-null role which is TARGET or REFERENCE
+   * @return a potentially null value presence such that isOrder()
+   */
+  IAttributeValuePresence<E, A, R> getAttributeOrderDifference(A attribute_p, Role role_p);
+  
+  /**
    * Return the set of attributes for which differences exist.
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
@@ -116,6 +124,14 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
       E value_p);
   
   /**
+   * Return the order difference on the given reference in the given role, if any
+   * @param reference_p a non-null reference
+   * @param role_p a non-null role which is TARGET or REFERENCE
+   * @return a potentially null value presence such that isOrder()
+   */
+  IReferenceValuePresence<E, A, R> getReferenceOrderDifference(R reference_p, Role role_p);
+  
+  /**
    * Return the set of references for which differences exist.
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
@@ -155,6 +171,11 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
      *                   the reference is a containment and the value is this match
      */
     void addOwnershipDifference(IReferenceValuePresence<E, A, R> presence_p);
+    
+    /**
+     * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch#getMapping()
+     */
+    IMapping.Editable<E, A, R> getMapping();
   }
   
 }

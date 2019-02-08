@@ -102,7 +102,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableComparison()
    * @generated
    */
-  int IEDITABLE_COMPARISON = 15;
+  int IEDITABLE_COMPARISON = 11;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl <em>EComparison</em>}' class.
@@ -203,7 +203,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMapping()
    * @generated
    */
-  int IEDITABLE_MAPPING = 17;
+  int IEDITABLE_MAPPING = 13;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl <em>EMapping</em>}' class.
@@ -268,7 +268,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMatch()
    * @generated
    */
-  int IEDITABLE_MATCH = 19;
+  int IEDITABLE_MATCH = 15;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl <em>EMatch</em>}' class.
@@ -299,58 +299,13 @@ public interface GdiffdataPackage extends EPackage {
   int EMATCH__MATCH_ID = EIDENTIFIED_FEATURE_COUNT + 0;
 
   /**
-   * The feature id for the '<em><b>Ancestor</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__ANCESTOR = EIDENTIFIED_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Reference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__REFERENCE = EIDENTIFIED_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Target</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__TARGET = EIDENTIFIED_FEATURE_COUNT + 3;
-
-  /**
    * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = EIDENTIFIED_FEATURE_COUNT + 4;
-
-  /**
-   * The feature id for the '<em><b>Modifiable Attribute Map</b></em>' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = EIDENTIFIED_FEATURE_COUNT + 5;
-
-  /**
-   * The feature id for the '<em><b>Modifiable Reference Map</b></em>' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__MODIFIABLE_REFERENCE_MAP = EIDENTIFIED_FEATURE_COUNT + 6;
+  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = EIDENTIFIED_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
@@ -359,7 +314,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 7;
+  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
@@ -368,7 +323,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 8;
+  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
@@ -377,7 +332,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 9;
+  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>EMatch</em>' class.
@@ -386,7 +341,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 10;
+  int EMATCH_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 5;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable <em>IEditable Mergeable Difference</em>}' class.
@@ -396,7 +351,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMergeableDifference()
    * @generated
    */
-  int IEDITABLE_MERGEABLE_DIFFERENCE = 21;
+  int IEDITABLE_MERGEABLE_DIFFERENCE = 17;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl <em>EMergeable Difference</em>}' class.
@@ -936,22 +891,13 @@ public interface GdiffdataPackage extends EPackage {
   int EVALUE_PRESENCE__PRESENCE_ROLE = EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
 
   /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__FEATURE = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ORDER = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT + 1;
+  int EVALUE_PRESENCE__ORDER = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT + 0;
 
   /**
    * The number of structural features of the '<em>EValue Presence</em>' class.
@@ -961,7 +907,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EVALUE_PRESENCE_FEATURE_COUNT = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
-      + 2;
+      + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
@@ -1089,15 +1035,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
-
-  /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__FEATURE = EVALUE_PRESENCE__FEATURE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -1255,15 +1192,6 @@ public interface GdiffdataPackage extends EPackage {
   int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__FEATURE = EVALUE_PRESENCE__FEATURE;
-
-  /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1273,15 +1201,6 @@ public interface GdiffdataPackage extends EPackage {
   int EREFERENCE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Value Match</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1289,7 +1208,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = EVALUE_PRESENCE_FEATURE_COUNT
-      + 1;
+      + 0;
 
   /**
    * The number of structural features of the '<em>EReference Value Presence</em>' class.
@@ -1299,155 +1218,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
-      + 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.AttributeToValueToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getAttributeToValueToDifferenceEntry()
-   * @generated
-   */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = 10;
-
-  /**
-   * The feature id for the '<em><b>Key</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY = 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE = 1;
-
-  /**
-   * The number of structural features of the '<em>Attribute To Value To Difference Entry</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ValueToDifferenceEntryImpl <em>Value To Difference Entry</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ValueToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getValueToDifferenceEntry()
-   * @generated
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY = 11;
-
-  /**
-   * The feature id for the '<em><b>Key</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY__KEY = 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY__VALUE = 1;
-
-  /**
-   * The number of structural features of the '<em>Value To Difference Entry</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ReferenceToElementToDifferenceEntryImpl <em>Reference To Element To Difference Entry</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ReferenceToElementToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getReferenceToElementToDifferenceEntry()
-   * @generated
-   */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = 12;
-
-  /**
-   * The feature id for the '<em><b>Key</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__KEY = 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__VALUE = 1;
-
-  /**
-   * The number of structural features of the '<em>Reference To Element To Difference Entry</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ElementToDifferenceEntryImpl <em>Element To Difference Entry</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ElementToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getElementToDifferenceEntry()
-   * @generated
-   */
-  int ELEMENT_TO_DIFFERENCE_ENTRY = 13;
-
-  /**
-   * The feature id for the '<em><b>Key</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ELEMENT_TO_DIFFERENCE_ENTRY__KEY = 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ELEMENT_TO_DIFFERENCE_ENTRY__VALUE = 1;
-
-  /**
-   * The number of structural features of the '<em>Element To Difference Entry</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ELEMENT_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
+      + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}' class.
@@ -1457,7 +1228,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIComparison()
    * @generated
    */
-  int ICOMPARISON = 14;
+  int ICOMPARISON = 10;
 
   /**
    * The number of structural features of the '<em>IComparison</em>' class.
@@ -1485,7 +1256,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMapping()
    * @generated
    */
-  int IMAPPING = 16;
+  int IMAPPING = 12;
 
   /**
    * The number of structural features of the '<em>IMapping</em>' class.
@@ -1513,7 +1284,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMatch()
    * @generated
    */
-  int IMATCH = 18;
+  int IMATCH = 14;
 
   /**
    * The number of structural features of the '<em>IMatch</em>' class.
@@ -1541,7 +1312,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMergeableDifference()
    * @generated
    */
-  int IMERGEABLE_DIFFERENCE = 20;
+  int IMERGEABLE_DIFFERENCE = 16;
 
   /**
    * The number of structural features of the '<em>IMergeable Difference</em>' class.
@@ -1569,7 +1340,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIElementRelativePresence()
    * @generated
    */
-  int IELEMENT_RELATIVE_PRESENCE = 22;
+  int IELEMENT_RELATIVE_PRESENCE = 18;
 
   /**
    * The number of structural features of the '<em>IElement Relative Presence</em>' class.
@@ -1588,7 +1359,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIElementPresence()
    * @generated
    */
-  int IELEMENT_PRESENCE = 23;
+  int IELEMENT_PRESENCE = 19;
 
   /**
    * The number of structural features of the '<em>IElement Presence</em>' class.
@@ -1607,7 +1378,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIValuePresence()
    * @generated
    */
-  int IVALUE_PRESENCE = 24;
+  int IVALUE_PRESENCE = 20;
 
   /**
    * The number of structural features of the '<em>IValue Presence</em>' class.
@@ -1626,7 +1397,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIAttributeValuePresence()
    * @generated
    */
-  int IATTRIBUTE_VALUE_PRESENCE = 25;
+  int IATTRIBUTE_VALUE_PRESENCE = 21;
 
   /**
    * The number of structural features of the '<em>IAttribute Value Presence</em>' class.
@@ -1645,7 +1416,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIReferenceValuePresence()
    * @generated
    */
-  int IREFERENCE_VALUE_PRESENCE = 26;
+  int IREFERENCE_VALUE_PRESENCE = 22;
 
   /**
    * The number of structural features of the '<em>IReference Value Presence</em>' class.
@@ -1657,14 +1428,14 @@ public interface GdiffdataPackage extends EPackage {
   int IREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = 0;
 
   /**
-   * The meta object id for the '<em>IEditable Model Scope</em>' data type.
+   * The meta object id for the '<em>IEditable Tree Data Scope</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableModelScope()
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableTreeDataScope()
    * @generated
    */
-  int IEDITABLE_MODEL_SCOPE = 27;
+  int IEDITABLE_TREE_DATA_SCOPE = 23;
 
   /**
    * The meta object id for the '<em>IMatch Policy</em>' data type.
@@ -1674,7 +1445,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMatchPolicy()
    * @generated
    */
-  int IMATCH_POLICY = 28;
+  int IMATCH_POLICY = 24;
 
   /**
    * The meta object id for the '<em>IDiff Policy</em>' data type.
@@ -1684,7 +1455,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIDiffPolicy()
    * @generated
    */
-  int IDIFF_POLICY = 29;
+  int IDIFF_POLICY = 25;
 
   /**
    * The meta object id for the '<em>IMerge Policy</em>' data type.
@@ -1694,7 +1465,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMergePolicy()
    * @generated
    */
-  int IMERGE_POLICY = 30;
+  int IMERGE_POLICY = 26;
 
   /**
    * The meta object id for the '<em>Role</em>' data type.
@@ -1704,7 +1475,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getRole()
    * @generated
    */
-  int ROLE = 31;
+  int ROLE = 27;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified <em>EIdentified</em>}'.
@@ -1879,39 +1650,6 @@ public interface GdiffdataPackage extends EPackage {
   EAttribute getEMatch_MatchID();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getAncestor <em>Ancestor</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Ancestor</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getAncestor()
-   * @see #getEMatch()
-   * @generated
-   */
-  EReference getEMatch_Ancestor();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReference <em>Reference</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Reference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReference()
-   * @see #getEMatch()
-   * @generated
-   */
-  EReference getEMatch_Reference();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTarget <em>Target</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Target</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTarget()
-   * @see #getEMatch()
-   * @generated
-   */
-  EReference getEMatch_Target();
-
-  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1921,28 +1659,6 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    */
   EReference getEMatch_ModifiableRelatedDifferences();
-
-  /**
-   * Returns the meta object for the map '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the map '<em>Modifiable Attribute Map</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableAttributeMap()
-   * @see #getEMatch()
-   * @generated
-   */
-  EReference getEMatch_ModifiableAttributeMap();
-
-  /**
-   * Returns the meta object for the map '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableReferenceMap <em>Modifiable Reference Map</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the map '<em>Modifiable Reference Map</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableReferenceMap()
-   * @see #getEMatch()
-   * @generated
-   */
-  EReference getEMatch_ModifiableReferenceMap();
 
   /**
    * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}'.
@@ -2161,17 +1877,6 @@ public interface GdiffdataPackage extends EPackage {
   EClass getEValuePresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#getFeature <em>Feature</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Feature</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#getFeature()
-   * @see #getEValuePresence()
-   * @generated
-   */
-  EReference getEValuePresence_Feature();
-
-  /**
    * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#isOrder <em>Order</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2214,17 +1919,6 @@ public interface GdiffdataPackage extends EPackage {
   EClass getEReferenceValuePresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Value</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValue()
-   * @see #getEReferenceValuePresence()
-   * @generated
-   */
-  EReference getEReferenceValuePresence_Value();
-
-  /**
    * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2236,148 +1930,12 @@ public interface GdiffdataPackage extends EPackage {
   EReference getEReferenceValuePresence_ValueMatch();
 
   /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute To Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Attribute To Value To Difference Entry</em>'.
-   * @see java.util.Map.Entry
-   * @model keyType="org.eclipse.emf.ecore.EAttribute" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.generic.gdiffdata.ValueToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&gt;"
-   * @generated
-   */
-  EClass getAttributeToValueToDifferenceEntry();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Key</em>'.
-   * @see java.util.Map.Entry
-   * @see #getAttributeToValueToDifferenceEntry()
-   * @generated
-   */
-  EReference getAttributeToValueToDifferenceEntry_Key();
-
-  /**
-   * Returns the meta object for the map '{@link java.util.Map.Entry <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the map '<em>Value</em>'.
-   * @see java.util.Map.Entry
-   * @see #getAttributeToValueToDifferenceEntry()
-   * @generated
-   */
-  EReference getAttributeToValueToDifferenceEntry_Value();
-
-  /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Value To Difference Entry</em>'.
-   * @see java.util.Map.Entry
-   * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence" valueRequired="true"
-   * @generated
-   */
-  EClass getValueToDifferenceEntry();
-
-  /**
-   * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Key</em>'.
-   * @see java.util.Map.Entry
-   * @see #getValueToDifferenceEntry()
-   * @generated
-   */
-  EAttribute getValueToDifferenceEntry_Key();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Value</em>'.
-   * @see java.util.Map.Entry
-   * @see #getValueToDifferenceEntry()
-   * @generated
-   */
-  EReference getValueToDifferenceEntry_Value();
-
-  /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Reference To Element To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Reference To Element To Difference Entry</em>'.
-   * @see java.util.Map.Entry
-   * @model keyType="org.eclipse.emf.ecore.EReference" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.generic.gdiffdata.ElementToDifferenceEntry&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&gt;"
-   * @generated
-   */
-  EClass getReferenceToElementToDifferenceEntry();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Key</em>'.
-   * @see java.util.Map.Entry
-   * @see #getReferenceToElementToDifferenceEntry()
-   * @generated
-   */
-  EReference getReferenceToElementToDifferenceEntry_Key();
-
-  /**
-   * Returns the meta object for the map '{@link java.util.Map.Entry <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the map '<em>Value</em>'.
-   * @see java.util.Map.Entry
-   * @see #getReferenceToElementToDifferenceEntry()
-   * @generated
-   */
-  EReference getReferenceToElementToDifferenceEntry_Value();
-
-  /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Element To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Element To Difference Entry</em>'.
-   * @see java.util.Map.Entry
-   * @model keyType="org.eclipse.emf.ecore.EObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence" valueRequired="true"
-   * @generated
-   */
-  EClass getElementToDifferenceEntry();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Key</em>'.
-   * @see java.util.Map.Entry
-   * @see #getElementToDifferenceEntry()
-   * @generated
-   */
-  EReference getElementToDifferenceEntry_Key();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Value</em>'.
-   * @see java.util.Map.Entry
-   * @see #getElementToDifferenceEntry()
-   * @generated
-   */
-  EReference getElementToDifferenceEntry_Value();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IComparison</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison" typeParameters="E A R"
    * @generated
    */
   EClass getIComparison();
@@ -2388,7 +1946,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Comparison</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison.Editable"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison.Editable" typeParameters="E A R"
    * @generated
    */
   EClass getIEditableComparison();
@@ -2399,7 +1957,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMapping</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping" typeParameters="E A R"
    * @generated
    */
   EClass getIMapping();
@@ -2410,7 +1968,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Mapping</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping.Editable"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping.Editable" typeParameters="E A R"
    * @generated
    */
   EClass getIEditableMapping();
@@ -2421,7 +1979,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMatch</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch" typeParameters="E A R"
    * @generated
    */
   EClass getIMatch();
@@ -2432,7 +1990,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Match</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch.Editable"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch.Editable" typeParameters="E A R"
    * @generated
    */
   EClass getIEditableMatch();
@@ -2443,7 +2001,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMergeable Difference</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference" typeParameters="E A R"
    * @generated
    */
   EClass getIMergeableDifference();
@@ -2454,7 +2012,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Mergeable Difference</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable" typeParameters="E A R"
    * @generated
    */
   EClass getIEditableMergeableDifference();
@@ -2465,7 +2023,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IElement Relative Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence" typeParameters="E A R"
    * @generated
    */
   EClass getIElementRelativePresence();
@@ -2476,7 +2034,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IElement Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence" typeParameters="E A R"
    * @generated
    */
   EClass getIElementPresence();
@@ -2487,7 +2045,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IValue Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence" typeParameters="E A R"
    * @generated
    */
   EClass getIValuePresence();
@@ -2498,7 +2056,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IAttribute Value Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence" typeParameters="E A R"
    * @generated
    */
   EClass getIAttributeValuePresence();
@@ -2509,21 +2067,21 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IReference Value Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence" typeParameters="E A R"
    * @generated
    */
   EClass getIReferenceValuePresence();
 
   /**
-   * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope <em>IEditable Model Scope</em>}'.
+   * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope <em>IEditable Tree Data Scope</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for data type '<em>IEditable Model Scope</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope"
+   * @return the meta object for data type '<em>IEditable Tree Data Scope</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope" typeParameters="E A R"
    * @generated
    */
-  EDataType getIEditableModelScope();
+  EDataType getIEditableTreeDataScope();
 
   /**
    * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.generic.api.IMatchPolicy <em>IMatch Policy</em>}'.
@@ -2531,7 +2089,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IMatch Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatchPolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatchPolicy"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatchPolicy" typeParameters="E A R"
    * @generated
    */
   EDataType getIMatchPolicy();
@@ -2542,7 +2100,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IDiff Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IDiffPolicy"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IDiffPolicy" typeParameters="E A R"
    * @generated
    */
   EDataType getIDiffPolicy();
@@ -2553,7 +2111,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IMerge Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMergePolicy"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMergePolicy" typeParameters="E A R"
    * @generated
    */
   EDataType getIMergePolicy();
@@ -2737,30 +2295,6 @@ public interface GdiffdataPackage extends EPackage {
     EAttribute EMATCH__MATCH_ID = eINSTANCE.getEMatch_MatchID();
 
     /**
-     * The meta object literal for the '<em><b>Ancestor</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMATCH__ANCESTOR = eINSTANCE.getEMatch_Ancestor();
-
-    /**
-     * The meta object literal for the '<em><b>Reference</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMATCH__REFERENCE = eINSTANCE.getEMatch_Reference();
-
-    /**
-     * The meta object literal for the '<em><b>Target</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMATCH__TARGET = eINSTANCE.getEMatch_Target();
-
-    /**
      * The meta object literal for the '<em><b>Modifiable Related Differences</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2768,24 +2302,6 @@ public interface GdiffdataPackage extends EPackage {
      */
     EReference EMATCH__MODIFIABLE_RELATED_DIFFERENCES = eINSTANCE
         .getEMatch_ModifiableRelatedDifferences();
-
-    /**
-     * The meta object literal for the '<em><b>Modifiable Attribute Map</b></em>' map feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMATCH__MODIFIABLE_ATTRIBUTE_MAP = eINSTANCE
-        .getEMatch_ModifiableAttributeMap();
-
-    /**
-     * The meta object literal for the '<em><b>Modifiable Reference Map</b></em>' map feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMATCH__MODIFIABLE_REFERENCE_MAP = eINSTANCE
-        .getEMatch_ModifiableReferenceMap();
 
     /**
      * The meta object literal for the '<em><b>Element Presence Difference</b></em>' reference feature.
@@ -2972,14 +2488,6 @@ public interface GdiffdataPackage extends EPackage {
     EClass EVALUE_PRESENCE = eINSTANCE.getEValuePresence();
 
     /**
-     * The meta object literal for the '<em><b>Feature</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EVALUE_PRESENCE__FEATURE = eINSTANCE.getEValuePresence_Feature();
-
-    /**
      * The meta object literal for the '<em><b>Order</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3017,15 +2525,6 @@ public interface GdiffdataPackage extends EPackage {
     EClass EREFERENCE_VALUE_PRESENCE = eINSTANCE.getEReferenceValuePresence();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EREFERENCE_VALUE_PRESENCE__VALUE = eINSTANCE
-        .getEReferenceValuePresence_Value();
-
-    /**
      * The meta object literal for the '<em><b>Value Match</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3033,121 +2532,6 @@ public interface GdiffdataPackage extends EPackage {
      */
     EReference EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = eINSTANCE
         .getEReferenceValuePresence_ValueMatch();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.AttributeToValueToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getAttributeToValueToDifferenceEntry()
-     * @generated
-     */
-    EClass ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = eINSTANCE
-        .getAttributeToValueToDifferenceEntry();
-
-    /**
-     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getAttributeToValueToDifferenceEntry_Key();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' map feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getAttributeToValueToDifferenceEntry_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ValueToDifferenceEntryImpl <em>Value To Difference Entry</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ValueToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getValueToDifferenceEntry()
-     * @generated
-     */
-    EClass VALUE_TO_DIFFERENCE_ENTRY = eINSTANCE.getValueToDifferenceEntry();
-
-    /**
-     * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VALUE_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getValueToDifferenceEntry_Key();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VALUE_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getValueToDifferenceEntry_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ReferenceToElementToDifferenceEntryImpl <em>Reference To Element To Difference Entry</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ReferenceToElementToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getReferenceToElementToDifferenceEntry()
-     * @generated
-     */
-    EClass REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = eINSTANCE
-        .getReferenceToElementToDifferenceEntry();
-
-    /**
-     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getReferenceToElementToDifferenceEntry_Key();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' map feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getReferenceToElementToDifferenceEntry_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ElementToDifferenceEntryImpl <em>Element To Difference Entry</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.ElementToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getElementToDifferenceEntry()
-     * @generated
-     */
-    EClass ELEMENT_TO_DIFFERENCE_ENTRY = eINSTANCE
-        .getElementToDifferenceEntry();
-
-    /**
-     * The meta object literal for the '<em><b>Key</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ELEMENT_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getElementToDifferenceEntry_Key();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ELEMENT_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getElementToDifferenceEntry_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}' class.
@@ -3281,14 +2665,14 @@ public interface GdiffdataPackage extends EPackage {
     EClass IREFERENCE_VALUE_PRESENCE = eINSTANCE.getIReferenceValuePresence();
 
     /**
-     * The meta object literal for the '<em>IEditable Model Scope</em>' data type.
+     * The meta object literal for the '<em>IEditable Tree Data Scope</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableModelScope
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableModelScope()
+     * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableTreeDataScope()
      * @generated
      */
-    EDataType IEDITABLE_MODEL_SCOPE = eINSTANCE.getIEditableModelScope();
+    EDataType IEDITABLE_TREE_DATA_SCOPE = eINSTANCE.getIEditableTreeDataScope();
 
     /**
      * The meta object literal for the '<em>IMatch Policy</em>' data type.
