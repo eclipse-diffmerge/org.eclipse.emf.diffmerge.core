@@ -27,5 +27,4 @@
             class="org.eclipse.emf.diffmerge.generic.gdiffdata.util.GdiffdataResourceFactoryImpl"/>
    </extension>
 
-null
 </plugin>
