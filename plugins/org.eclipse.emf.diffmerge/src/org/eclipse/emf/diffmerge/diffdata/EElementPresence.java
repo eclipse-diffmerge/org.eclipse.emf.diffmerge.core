@@ -11,50 +11,21 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EElement Presence</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}</li>
- * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence org.eclipse.emf.diffmerge.diffdata.IElementPresence"
+ * @model
  * @generated
  */
-public interface EElementPresence
-    extends EElementRelativePresence, IElementPresence {
-  /**
-   * Returns the value of the '<em><b>Owner Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Owner Match</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Owner Match</em>' reference.
-   * @see #setOwnerMatch(EMatch)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence_OwnerMatch()
-   * @model required="true"
-   * @generated
-   */
-  EMatch getOwnerMatch();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Owner Match</em>' reference.
-   * @see #getOwnerMatch()
-   * @generated
-   */
-  void setOwnerMatch(EMatch value);
-
+public interface EElementPresence extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference> {
+  // Nothing needed
 } // EElementPresence

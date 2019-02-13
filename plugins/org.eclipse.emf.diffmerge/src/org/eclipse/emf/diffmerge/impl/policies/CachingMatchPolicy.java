@@ -15,8 +15,7 @@ import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -43,10 +42,11 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public Object getMatchID(EObject element_p, IModelScope scope_p) {
+  public Object getMatchID(EObject element_p,
+      ITreeDataScope<EObject> scope_p) {
     Object result = null;
     if (!useCache()) {
       result = getUncachedMatchID(element_p, scope_p);
@@ -62,7 +62,8 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  protected Object getMatchIDThroughCache(EObject element_p, IModelScope scope_p) {
+  protected Object getMatchIDThroughCache(EObject element_p,
+      ITreeDataScope<EObject> scope_p) {
     Object result;
     WeakReference<Object> cachedRef = _matchCache.get(element_p);
     Object cachedValue = (cachedRef == null)? null: cachedRef.get();
@@ -84,7 +85,8 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  protected abstract Object getUncachedMatchID(EObject element_p, IModelScope scope_p);
+  protected abstract Object getUncachedMatchID(EObject element_p,
+      ITreeDataScope<EObject> scope_p);
   
   /**
    * Return whether the cache must be used

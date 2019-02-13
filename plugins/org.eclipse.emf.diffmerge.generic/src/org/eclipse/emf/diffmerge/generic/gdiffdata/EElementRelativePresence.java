@@ -28,11 +28,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementRelativePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence&lt;E&gt;"
  * @generated
  */
 public interface EElementRelativePresence<E, A, R>
-    extends EMergeableDifference<E, A, R>, IElementRelativePresence<E, A, R> {
+    extends EMergeableDifference<E, A, R>, IElementRelativePresence<E> {
   /**
    * Returns the value of the '<em><b>Element Match</b></em>' reference.
    * <!-- begin-user-doc -->

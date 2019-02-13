@@ -15,14 +15,12 @@ package org.eclipse.emf.diffmerge.generic.api.diff;
 /**
  * A difference which is relative to some unmatched presence on at most one element per role.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IElementRelativePresence<E, A, R>
-extends IElementRelativeDifference<E, A, R>, IPresenceDifference<E, A, R> {
+public interface IElementRelativePresence<E>
+extends IElementRelativeDifference<E>, IPresenceDifference<E> {
   
   // Nothing specific
   

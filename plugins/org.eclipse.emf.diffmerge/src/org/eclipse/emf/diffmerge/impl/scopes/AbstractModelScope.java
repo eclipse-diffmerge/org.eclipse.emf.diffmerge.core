@@ -22,6 +22,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
@@ -188,7 +189,7 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContents(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getContents(java.lang.Object)
    */
   public List<EObject> getContents(EObject element_p) {
     return element_p.eContents();
@@ -218,10 +219,17 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#isContainment(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getScopePolicy()
    */
-  public boolean isContainment(EReference reference_p) {
-    return reference_p.isContainment();
+  public IScopePolicy<EObject> getScopePolicy() {
+    return ModelScopePolicy.getInstance();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope#isContainment(java.lang.Object)
+   */
+  public boolean isContainment(Object reference_p) {
+    return getScopePolicy().isContainerReference(reference_p);
   }
   
   /**

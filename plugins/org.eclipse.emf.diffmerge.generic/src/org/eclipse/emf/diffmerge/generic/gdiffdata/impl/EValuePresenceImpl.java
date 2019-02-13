@@ -259,13 +259,13 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getSymmetrical()
    * @generated NOT
    */
-  public abstract IValuePresence<E, A, R> getSymmetrical();
+  public abstract IValuePresence<E> getSymmetrical();
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#isSymmetricalTo(org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence)
    * @generated NOT
    */
-  public boolean isSymmetricalTo(IValuePresence<E, A, R> peer_p) {
+  public boolean isSymmetricalTo(IValuePresence<E> peer_p) {
     return getAbsenceRole() == peer_p.getPresenceRole()
         && getFeature() == peer_p.getFeature()
         && (isOrder() && peer_p.isOrder() || !isManyFeature())

@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.api.scopes;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
@@ -26,7 +25,7 @@ import org.eclipse.emf.ecore.EReference;
  * @author Olivier Constant
  */
 public interface IFeaturedModelScope extends IModelScope,
-ITreeDataScope<EObject, EAttribute, EReference> {
+ITreeDataScope<EObject> {
   
   /**
    * Return the values which are held by the given element via the given attribute.
@@ -54,7 +53,7 @@ ITreeDataScope<EObject, EAttribute, EReference> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributes(java.lang.Object)
    */
-  default Collection<EAttribute> getAttributes(EObject element_p) {
+  default List<EAttribute> getAttributes(EObject element_p) {
     return element_p.eClass().getEAllAttributes();
   }
   
@@ -62,14 +61,14 @@ ITreeDataScope<EObject, EAttribute, EReference> {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributeValues(java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default Collection<?> getAttributeValues(EObject element_p, EAttribute attribute_p) {
-    return get(element_p, attribute_p);
+  default List<?> getAttributeValues(EObject element_p, Object attribute_p) {
+    return get(element_p, (EAttribute)attribute_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferences(java.lang.Object)
    */
-  default Collection<EReference> getReferences(EObject element_p) {
+  default List<EReference> getReferences(EObject element_p) {
     return element_p.eClass().getEAllReferences();
   }
   
@@ -77,8 +76,8 @@ ITreeDataScope<EObject, EAttribute, EReference> {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferenceValues(java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default Collection<EObject> getReferenceValues(EObject element_p, EReference reference_p) {
-    return get(element_p, reference_p);
+  default List<EObject> getReferenceValues(EObject element_p, Object reference_p) {
+    return get(element_p, (EReference)reference_p);
   }
   
 }

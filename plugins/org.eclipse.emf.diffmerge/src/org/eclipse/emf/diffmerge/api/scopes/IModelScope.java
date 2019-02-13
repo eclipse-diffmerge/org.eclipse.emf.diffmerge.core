@@ -51,15 +51,10 @@ public interface IModelScope extends IRawTreeDataScope<EObject> {
   List<EObject> getContents();
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getContents(java.lang.Object)
-   */
-  List<EObject> getContents(EObject element_p);
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getRoots()
    * Here to avoid API breakage.
    */
-  default Iterable<EObject> getRoots() {
+  default List<EObject> getRoots() {
     return getContents();
   }
   

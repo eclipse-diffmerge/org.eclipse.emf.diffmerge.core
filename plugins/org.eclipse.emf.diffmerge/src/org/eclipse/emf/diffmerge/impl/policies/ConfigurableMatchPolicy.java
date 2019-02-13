@@ -25,10 +25,10 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.Messages;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
+import org.eclipse.emf.diffmerge.generic.impl.policies.AbstractConfigurationElement;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
@@ -172,7 +172,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void addConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.add(listener_p);
@@ -233,13 +233,10 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope
    * @return a potentially null reference
    */
-  protected EObject getContainer(EObject element_p, IModelScope scope_p) {
+  protected EObject getContainer(EObject element_p, ITreeDataScope<EObject> scope_p) {
     EObject result;
     if (isScopeOnly()) {
-      if (scope_p instanceof IFeaturedModelScope)
-        result = ((IFeaturedModelScope)scope_p).getContainer(element_p);
-      else
-        result = null;
+      result = scope_p.getContainer(element_p);
     } else {
       result = element_p.eContainer();
     }
@@ -256,7 +253,7 @@ implements IConfigurablePolicy {
    * @return a potentially null object
    */
   protected String getContainerRelativeID(EObject element_p,
-      IModelScope scope_p, String qualifier_p, String separator_p) {
+      ITreeDataScope<EObject> scope_p, String qualifier_p, String separator_p) {
     String result = null;
     EObject container = getContainer(element_p, scope_p);
     if (container != null) {
@@ -279,13 +276,10 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope
    * @return a potentially null reference
    */
-  protected EReference getContainment(EObject element_p, IModelScope scope_p) {
+  protected EReference getContainment(EObject element_p, ITreeDataScope<EObject> scope_p) {
     EReference result;
     if (isScopeOnly()) {
-      if (scope_p instanceof IFeaturedModelScope)
-        result = ((IFeaturedModelScope)scope_p).getContainment(element_p);
-      else
-        result = null;
+      result = (EReference)scope_p.getContainment(element_p);
     } else {
       result = element_p.eContainmentFeature();
     }
@@ -298,7 +292,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers container_p
    * @return a non-null, potentially empty, unmodifiable list
    */
-  protected List<EObject> getContents(EObject container_p, IModelScope scope_p) {
+  protected List<EObject> getContents(EObject container_p, ITreeDataScope<EObject> scope_p) {
     List<EObject> result;
     if (isScopeOnly()) {
       result = scope_p.getContents(container_p);
@@ -319,14 +313,10 @@ implements IConfigurablePolicy {
    */
   @SuppressWarnings("unchecked")
   protected List<EObject> getContents(EObject container_p,
-      EReference containment_p, IModelScope scope_p) {
+      EReference containment_p, ITreeDataScope<EObject> scope_p) {
     List<EObject> result;
     if (isScopeOnly()) {
-      if (scope_p instanceof IFeaturedModelScope) {
-        result = ((IFeaturedModelScope)scope_p).get(container_p, containment_p);
-      } else {
-        result = Collections.emptyList();
-      }
+      result = scope_p.getReferenceValues(container_p, containment_p);
     } else {
       Object rawContents = container_p.eGet(containment_p);
       if (rawContents instanceof List<?>) {
@@ -349,10 +339,10 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getExtrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getExtrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getExtrinsicID(EObject element_p, IModelScope scope_p) {
+  protected String getExtrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     Comparable<?> superID = super.getExtrinsicID(element_p, scope_p);
     if (superID instanceof String)
@@ -366,7 +356,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers the element
    * @return a potentially null object
    */
-  protected String getLabel(EObject element_p, IModelScope scope_p) {
+  protected String getLabel(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     AdapterFactory adapterFactory = EMFDiffMergePlugin.getDefault().getAdapterFactory();
     Adapter adapter = adapterFactory.adapt(element_p, IItemLabelProvider.class);
@@ -376,10 +366,10 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public String getMatchID(EObject element_p, IModelScope scope_p) {
+  public String getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     return (String)super.getMatchID(element_p, scope_p);
   }
   
@@ -391,7 +381,7 @@ implements IConfigurablePolicy {
    * @param criterion_p a non-null criterion
    * @return a potentially null object
    */
-  protected String getMatchID(EObject element_p, IModelScope scope_p,
+  protected String getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p,
       MatchCriterionKind criterion_p) {
     String result;
     switch (criterion_p) {
@@ -415,7 +405,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers the element
    * @return a potentially null object
    */
-  protected String getName(EObject element_p, IModelScope scope_p) {
+  protected String getName(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (element_p instanceof ENamedElement)
       result = ((ENamedElement)element_p).getName();
@@ -462,7 +452,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope
    * @return a potentially null string
    */
-  protected String getQualifiedName(EObject element_p, IModelScope scope_p) {
+  protected String getQualifiedName(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     String name = getUnqualifiedName(element_p, scope_p);
     if (isSignificant(name))
@@ -477,7 +467,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers the element
    * @return a potentially null object
    */
-  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
+  protected String getSemanticID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     return null;
   }
   
@@ -502,13 +492,13 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a non-null, potentially empty, unmodifiable collection that contains element_p
    */
-  protected List<EObject> getSiblings(EObject element_p, IModelScope scope_p) {
+  protected List<EObject> getSiblings(EObject element_p, ITreeDataScope<EObject> scope_p) {
     List<EObject> result;
     EReference containment = getContainment(element_p, scope_p);
     if (containment == null) {
       Resource resource = element_p.eResource();
       if (isScopeOnly() || resource == null) {
-        result = scope_p.getContents();
+        result = scope_p.getRoots();
       } else {
         result = resource.getContents();
       }
@@ -528,7 +518,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a non-null object
    */
-  protected Object getStructuralType(EObject element_p, IModelScope scope_p) {
+  protected Object getStructuralType(EObject element_p, ITreeDataScope<EObject> scope_p) {
     return element_p.eClass();
   }
   
@@ -538,7 +528,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a non-null string
    */
-  protected String getStructuralTypeQualifier(EObject element_p, IModelScope scope_p) {
+  protected String getStructuralTypeQualifier(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Object type = getStructuralType(element_p, scope_p);
     String result;
     if (type instanceof EClass)
@@ -555,7 +545,7 @@ implements IConfigurablePolicy {
    * @param checkContainment_p whether the containment reference must be checked for its discriminating nature
    * @return a potentially null object
    */
-  protected String getStructureBasedContainmentID(EObject element_p, IModelScope scope_p,
+  protected String getStructureBasedContainmentID(EObject element_p, ITreeDataScope<EObject> scope_p,
       boolean checkContainment_p) {
     String result = null;
     String lastIDPart = getStructureBasedContainmentQualifier(element_p, scope_p, checkContainment_p);
@@ -572,7 +562,7 @@ implements IConfigurablePolicy {
    * @param checkContainment_p whether the containment reference must be checked for its discriminating nature
    * @return a potentially null object
    */
-  protected String getStructureBasedContainmentQualifier(EObject element_p, IModelScope scope_p,
+  protected String getStructureBasedContainmentQualifier(EObject element_p, ITreeDataScope<EObject> scope_p,
       boolean checkContainment_p) {
     String result = null;
     EReference containment = getContainment(element_p, scope_p);
@@ -590,7 +580,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers the element
    * @return a potentially null object
    */
-  protected String getStructureBasedID(EObject element_p, IModelScope scope_p) {
+  protected String getStructureBasedID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     EReference containment = getContainment(element_p, scope_p);
     if (containment == null && useFineGrainedCriterion(CRITERION_STRUCTURE_ROOTS)) {
@@ -610,7 +600,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a potentially null object
    */
-  protected String getStructureBasedRootQualifier(EObject element_p, IModelScope scope_p) {
+  protected String getStructureBasedRootQualifier(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (isUniqueSiblingOfItsType(element_p, scope_p))
       result = getQualificationSeparatorStructure() + getStructuralTypeQualifier(element_p, scope_p);
@@ -618,10 +608,10 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getUncachedMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getUncachedMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getUncachedMatchID(EObject element_p, IModelScope scope_p) {
+  protected String getUncachedMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     for (MatchCriterionKind criterion : MatchCriterionKind.values()) {
       if (useCriterion(criterion)) {
@@ -639,7 +629,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope
    * @return a potentially null string
    */
-  protected String getUnqualifiedName(EObject element_p, IModelScope scope_p) {
+  protected String getUnqualifiedName(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result;
     if (useFineGrainedCriterion(CRITERION_QNAMES_LABELS))
       result = getLabel(element_p, scope_p);
@@ -671,7 +661,7 @@ implements IConfigurablePolicy {
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p
    */
-  protected boolean isInDiscriminatingContainment(EObject element_p, IModelScope scope_p) {
+  protected boolean isInDiscriminatingContainment(EObject element_p, ITreeDataScope<EObject> scope_p) {
     EReference containment = getContainment(element_p, scope_p);
     return containment != null && isDiscriminatingContainment(element_p, containment);
   }
@@ -715,7 +705,7 @@ implements IConfigurablePolicy {
    * @param scope_p a non-null scope that covers element_p
    */
   protected boolean isUniqueOfItsTypeAmong(EObject element_p,
-      Collection<? extends EObject> collection_p, IModelScope scope_p) {
+      Collection<? extends EObject> collection_p, ITreeDataScope<EObject> scope_p) {
     Iterator<? extends EObject> it = collection_p.iterator();
     boolean result = false;
     Object type = getStructuralType(element_p, scope_p);
@@ -740,13 +730,13 @@ implements IConfigurablePolicy {
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p
    */
-  protected boolean isUniqueSiblingOfItsType(EObject element_p, IModelScope scope_p) {
+  protected boolean isUniqueSiblingOfItsType(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Collection<EObject> siblings = getSiblings(element_p, scope_p);
     return isUniqueOfItsTypeAmong(element_p, siblings, scope_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.remove(listener_p);
@@ -817,8 +807,9 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy)
    */
+  @SuppressWarnings("rawtypes")
   public boolean update(IConfigurablePolicy policy_p) {
     boolean result = false;
     if (policy_p instanceof IMatchPolicy) {

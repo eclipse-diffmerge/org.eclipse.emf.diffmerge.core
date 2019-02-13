@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEReferenceValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
  * @generated
  */
 public interface EReferenceValuePresence<E, A, R>
-    extends EValuePresence<E, A, R>, IReferenceValuePresence<E, A, R> {
+    extends EValuePresence<E, A, R>, IReferenceValuePresence<E> {
 
   /**
    * Returns the value of the '<em><b>Value Match</b></em>' reference.

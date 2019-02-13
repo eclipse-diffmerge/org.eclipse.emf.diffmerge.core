@@ -14,16 +14,20 @@ package org.eclipse.emf.diffmerge.impl.policies;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
@@ -32,85 +36,118 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
  * Conformity to references of multiplicity [1] is enforced by default.
  * @author Olivier Constant
  */
-public class DefaultMergePolicy implements IMergePolicy {
+public class DefaultMergePolicy implements IMergePolicy<EObject> {
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#bindPresenceToOwnership(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#baseCopy(java.lang.Object)
    */
-  public boolean bindPresenceToOwnership(IFeaturedModelScope scope_p) {
+  public EObject baseCopy(EObject element_p) {
+    EClass eClass = element_p.eClass();
+    EObject result = eClass.getEPackage().getEFactoryInstance().create(eClass);
+    if (element_p.eIsProxy()) {
+      URI proxyURI = ((InternalEObject)element_p).eProxyURI();
+      ((InternalEObject)result).eSetProxyURI(proxyURI);
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#bindPresenceToOwnership(org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   */
+  public boolean bindPresenceToOwnership(
+      ITreeDataScope<EObject> scope_p) {
     return true;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyExtrinsicIDs(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * Return whether the extrinsic IDs of elements must be preserved when elements
+   * are copied from the given source scope to the given target scope, if applicable
+   * @param sourceScope_p a non-null scope
+   * @param targetScope_p a non-null scope
    */
-  public boolean copyExtrinsicIDs(IFeaturedModelScope sourceScope_p,
-      IFeaturedModelScope targetScope_p) {
+  protected boolean copyExtrinsicIDs(ITreeDataScope<EObject> sourceScope_p,
+      ITreeDataScope<EObject> targetScope_p) {
     return true;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#copyAttribute(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p) {
+  public boolean copyAttribute(Object attribute_p, ITreeDataScope<EObject> scope_p) {
+    return copyFeature((EStructuralFeature)attribute_p);
+  }
+  
+  /**
+   * Return whether the given feature must be copied when elements are being copied
+   */
+  protected boolean copyFeature(EStructuralFeature feature_p) {
     return !feature_p.isDerived() && feature_p.isChangeable() &&
-      !FeatureMapUtil.isFeatureMap(feature_p);
+        !FeatureMapUtil.isFeatureMap(feature_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#copyOutOfScopeCrossReferences(org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#copyOutOfScopeCrossReferences(org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   public boolean copyOutOfScopeCrossReferences(
-      IFeaturedModelScope sourceScope_p, IFeaturedModelScope targetScope_p) {
+      ITreeDataScope<EObject> sourceScope_p, ITreeDataScope<EObject> targetScope_p) {
     return true;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#copyReference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public Set<EObject> getAdditionGroup(EObject element_p, IFeaturedModelScope scope_p) {
+  public boolean copyReference(Object reference_p, ITreeDataScope<EObject> scope_p) {
+    return copyFeature((EStructuralFeature)reference_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#getAdditionGroup(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   */
+  public Set<EObject> getAdditionGroup(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
       if (reference.isChangeable() && !reference.isContainer() &&
           (!scope_p.isContainment(reference) || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForAddition(reference))
-        result.addAll(scope_p.get(element_p, reference));
+        result.addAll(scope_p.getReferenceValues(element_p, reference));
     }
     return result;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getDeletionGroup(EObject, IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#getDeletionGroup(Object, ITreeDataScope)
    */
   public Set<EObject> getDeletionGroup(EObject element_p,
-      IFeaturedModelScope scope_p) {
+      ITreeDataScope<EObject> scope_p) {
     Set<EObject> result = new FHashSet<EObject>();
     for (EReference reference : element_p.eClass().getEAllReferences()) {
       if (reference.isChangeable() && !reference.isContainer() &&
           (!scope_p.isContainment(reference) || !bindPresenceToOwnership(scope_p)) &&
           isMandatoryForDeletion(reference))
-        result.addAll(scope_p.get(element_p, reference));
+        result.addAll(scope_p.getReferenceValues(element_p, reference));
     }
     return result;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#getDesiredValuePosition(org.eclipse.emf.diffmerge.api.IComparison, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.IMatch, org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#getDesiredValuePosition(org.eclipse.emf.diffmerge.generic.api.IComparison, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.generic.api.IMatch, java.lang.Object, java.lang.Object)
    */
-  public int getDesiredValuePosition(IComparison comparison_p, Role destination_p,
-      IMatch source_p, EReference reference_p, EObject sourceValue_p) {
+  public int getDesiredValuePosition(IComparison<EObject> comparison_p,
+      Role destination_p, IMatch<EObject> source_p,
+      Object reference_p, EObject sourceValue_p) {
     EObject sourceHolder = source_p.get(destination_p.opposite());
     EObject destinationHolder = source_p.get(destination_p);
     if (sourceHolder != null && destinationHolder != null && sourceValue_p != null) {
-      List<EObject> sourceValues = comparison_p.getScope(destination_p.opposite()).get(
-          sourceHolder, reference_p);
-      List<EObject> destinationValues = comparison_p.getScope(destination_p).get(
+      IDataScope<EObject> sourceScope = comparison_p.getScope(destination_p.opposite());
+      IDataScope<EObject> destinationScope = comparison_p.getScope(destination_p);
+      List<EObject> sourceValues = sourceScope.getReferenceValues(sourceHolder, reference_p);
+      List<EObject> destinationValues = destinationScope.getReferenceValues(
           destinationHolder, reference_p);
       // Priority is given to the successor
       int start = sourceValues.indexOf(sourceValue_p) + 1;
       for (int i = start; i < sourceValues.size(); i++) {
         EObject nextSourceElement = sourceValues.get(i);
-        IMatch nextMatch = comparison_p.getMapping().getMatchFor(
+        IMatch<EObject> nextMatch = comparison_p.getMapping().getMatchFor(
             nextSourceElement, destination_p.opposite());
         if (nextMatch != null) { // Should be true since scope must be complete
           EObject nextDestinationElement = nextMatch.get(destination_p);
@@ -131,22 +168,24 @@ public class DefaultMergePolicy implements IMergePolicy {
    * @param scope_p a non-null scope to which the element is being added by copy
    * @return a potentially null string
    */
-  protected String getNewIntrinsicID(EObject element_p, IFeaturedModelScope scope_p) {
+  protected String getNewIntrinsicID(EObject element_p,
+      IDataScope<EObject> scope_p) {
     return null;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#isMandatoryForAddition(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#isMandatoryForAddition(java.lang.Object)
    */
-  public boolean isMandatoryForAddition(EReference reference_p) {
+  public boolean isMandatoryForAddition(Object reference_p) {
     return isSingleMandatory(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#isMandatoryForDeletion(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#isMandatoryForDeletion(java.lang.Object)
    */
-  public boolean isMandatoryForDeletion(EReference reference_p) {
-    EReference opposite = reference_p.getEOpposite();
+  public boolean isMandatoryForDeletion(Object reference_p) {
+    EReference reference = (EReference)reference_p;
+    Object opposite = reference.getEOpposite();
     return opposite != null && isSingleMandatory(opposite);
   }
   
@@ -154,8 +193,9 @@ public class DefaultMergePolicy implements IMergePolicy {
    * Return whether the given reference is of multiplicity [1]
    * @param reference_p a non-null reference
    */
-  protected boolean isSingleMandatory(EReference reference_p) {
-    return !reference_p.isMany() && reference_p.getLowerBound() > 0;
+  protected boolean isSingleMandatory(Object reference_p) {
+    EReference reference = (EReference)reference_p;
+    return !reference.isMany() && reference.getLowerBound() > 0;
   }
   
   /**
@@ -164,16 +204,17 @@ public class DefaultMergePolicy implements IMergePolicy {
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which the element is being added by copy
    */
-  protected boolean requiresNewIntrinsicID(EObject element_p, IFeaturedModelScope scope_p) {
+  protected boolean requiresNewIntrinsicID(EObject element_p,
+      IDataScope<EObject> scope_p) {
     // By default, intrinsic IDs are copied like other attributes
     return false;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.IMergePolicy#setIntrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope, org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy#setID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public void setIntrinsicID(EObject source_p, IFeaturedModelScope sourceScope_p,
-      EObject target_p, IFeaturedModelScope targetScope_p) {
+  public void setID(EObject source_p, ITreeDataScope<EObject> sourceScope_p,
+      EObject target_p, ITreeDataScope<EObject> targetScope_p) {
     // By default (requiresNewIntrinsicID == false), intrinsic IDs are copied like other attributes
     if (requiresNewIntrinsicID(target_p, targetScope_p)) {
       String newID = getNewIntrinsicID(target_p, targetScope_p);

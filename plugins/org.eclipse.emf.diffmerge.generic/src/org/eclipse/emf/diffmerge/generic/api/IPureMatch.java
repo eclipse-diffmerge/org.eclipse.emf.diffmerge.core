@@ -15,13 +15,11 @@ package org.eclipse.emf.diffmerge.generic.api;
 /**
  * A match between data elements that play different roles in a comparison.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IPureMatch<E, A, R> {
+public interface IPureMatch<E> {
   
   /**
    * Return whether the receiver involves an element that plays the given role
@@ -46,7 +44,7 @@ public interface IPureMatch<E, A, R> {
    * Return the mapping which owns this match
    * @return a non-null mapping
    */
-  IMapping<E, A, R> getMapping();
+  IMapping<E> getMapping();
   
   /**
    * Return the match ID that corresponds to this match, if available
@@ -100,7 +98,7 @@ public interface IPureMatch<E, A, R> {
    * A match with editing features.
    * All concrete classes implementing IPureMatch must also implement this interface.
    */
-  interface Editable<E, A, R> extends IPureMatch<E, A, R> {
+  interface Editable<E> extends IPureMatch<E> {
     /**
      * Reset this match with the given target, reference and ancestor elements
      * Precondition: at least one of the elements is not null

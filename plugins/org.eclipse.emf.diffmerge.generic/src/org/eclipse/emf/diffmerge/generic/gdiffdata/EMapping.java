@@ -30,10 +30,10 @@ import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E&gt;"
  * @generated
  */
-public interface EMapping<E, A, R> extends EIdentified, Editable<E, A, R> {
+public interface EMapping<E, A, R> extends EIdentified, Editable<E> {
   /**
    * Returns the value of the '<em><b>Modifiable Contents</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch}<code>&lt;E, A, R&gt;</code>.
@@ -52,7 +52,7 @@ public interface EMapping<E, A, R> extends EIdentified, Editable<E, A, R> {
 
   /**
    * Returns the value of the '<em><b>Reference Completed Matches</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Reference Completed Matches</em>' reference list isn't clear,
@@ -61,14 +61,14 @@ public interface EMapping<E, A, R> extends EIdentified, Editable<E, A, R> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Completed Matches</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping_ReferenceCompletedMatches()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E, A, R&gt;" resolveProxies="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E&gt;" resolveProxies="false"
    * @generated
    */
-  EList<IMatch<E, A, R>> getReferenceCompletedMatches();
+  EList<IMatch<E>> getReferenceCompletedMatches();
 
   /**
    * Returns the value of the '<em><b>Target Completed Matches</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Target Completed Matches</em>' reference list isn't clear,
@@ -77,10 +77,10 @@ public interface EMapping<E, A, R> extends EIdentified, Editable<E, A, R> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Completed Matches</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping_TargetCompletedMatches()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E, A, R&gt;" resolveProxies="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E&gt;" resolveProxies="false"
    * @generated
    */
-  EList<IMatch<E, A, R>> getTargetCompletedMatches();
+  EList<IMatch<E>> getTargetCompletedMatches();
 
   /**
    * <!-- begin-user-doc -->

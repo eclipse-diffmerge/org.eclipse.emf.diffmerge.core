@@ -20,25 +20,22 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 
 
-
 /**
  * A match between elements which also contains differences between those elements.
  * @see IPureMatch
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
+public interface IMatch<E> extends IPureMatch<E> {
   
   /**
    * Return all differences which depend on this match (container differences included).
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  List<IDifference<E, A, R>> getAllDifferences();
+  List<IDifference<E>> getAllDifferences();
   
   /**
    * Return the attribute differences associated to the given attribute.
@@ -46,8 +43,8 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param attribute_p a non-null attribute
    * @return a non-null, possibly empty, unmodifiable collection
    */
-  Collection<IAttributeValuePresence<E, A, R>> getAttributeDifferences(
-      A attribute_p);
+  Collection<IAttributeValuePresence<E>> getAttributeDifferences(
+      Object attribute_p);
   
   /**
    * Return the attribute differences associated to the given attribute
@@ -55,8 +52,8 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param value_p a non-null object
    * @return a possibly null attribute value presence
    */
-  IAttributeValuePresence<E, A, R> getAttributeValueDifference(
-      A attribute_p, Object value_p);
+  IAttributeValuePresence<E> getAttributeValueDifference(
+      Object attribute_p, Object value_p);
   
   /**
    * Return the order difference on the given attribute in the given role, if any
@@ -64,14 +61,14 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @return a potentially null value presence such that isOrder()
    */
-  IAttributeValuePresence<E, A, R> getAttributeOrderDifference(A attribute_p, Role role_p);
+  IAttributeValuePresence<E> getAttributeOrderDifference(Object attribute_p, Role role_p);
   
   /**
    * Return the set of attributes for which differences exist.
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  Collection<A> getAttributesWithDifferences();
+  Collection<Object> getAttributesWithDifferences();
   
   /**
    * Return the difference corresponding to the presence of an unmatched
@@ -80,7 +77,7 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    *  isPartial() || getElementPresenceDifference() == null
    * @return a potentially null difference
    */
-  IElementPresence<E, A, R> getElementPresenceDifference();
+  IElementPresence<E> getElementPresenceDifference();
   
   /**
    * Return the number of differences which are not related to the containment
@@ -94,7 +91,7 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @return a potentially null reference value presence
    */
-  IReferenceValuePresence<E, A, R> getOwnershipDifference(Role role_p);
+  IReferenceValuePresence<E> getOwnershipDifference(Role role_p);
   
   /**
    * Return the presence differences in the given role which are related to this match.
@@ -102,7 +99,7 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param role_p a non-null role
    * @return an unmodifiable non-null collection of differences
    */
-  Collection<IDifference<E, A, R>> getPresenceDifferencesIn(Role role_p);
+  Collection<IDifference<E>> getPresenceDifferencesIn(Role role_p);
   
   /**
    * Return the reference differences associated to the given reference.
@@ -110,8 +107,8 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param reference_p a non-null reference
    * @return a non-null, possibly empty, unmodifiable collection
    */
-  Collection<IReferenceValuePresence<E, A, R>> getReferenceDifferences(
-      R reference_p);
+  Collection<IReferenceValuePresence<E>> getReferenceDifferences(
+      Object reference_p);
   
   /**
    * Return the reference difference that represents the referencing of the given
@@ -120,7 +117,7 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param value_p a non-null element
    * @return a possibly null reference value presence
    */
-  IReferenceValuePresence<E, A, R> getReferenceValueDifference(R reference_p,
+  IReferenceValuePresence<E> getReferenceValueDifference(Object reference_p,
       E value_p);
   
   /**
@@ -129,14 +126,14 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * @param role_p a non-null role which is TARGET or REFERENCE
    * @return a potentially null value presence such that isOrder()
    */
-  IReferenceValuePresence<E, A, R> getReferenceOrderDifference(R reference_p, Role role_p);
+  IReferenceValuePresence<E> getReferenceOrderDifference(Object reference_p, Role role_p);
   
   /**
    * Return the set of references for which differences exist.
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  Collection<R> getReferencesWithDifferences();
+  Collection<Object> getReferencesWithDifferences();
   
   /**
    * Return the differences whose origin is this match
@@ -144,7 +141,7 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * The resulting collection may become obsolete if differences are later added.
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  List<IDifference<E, A, R>> getRelatedDifferences();
+  List<IDifference<E>> getRelatedDifferences();
   
   /**
    * Return whether this match corresponds to an element which has been moved
@@ -157,25 +154,24 @@ public interface IMatch<E, A, R> extends IPureMatch<E, A, R> {
    * A match with editing features.
    * All concrete classes implementing IMatch must also implement this interface.
    */
-  interface Editable<E, A, R> extends IMatch<E, A, R>,
-  IPureMatch.Editable<E, A, R> {
+  interface Editable<E> extends IMatch<E>, IPureMatch.Editable<E> {
     /**
      * Add the given difference to the differences related to this match
      * @param difference_p a non-null difference
      */
-    void addRelatedDifference(IDifference<E, A, R> difference_p);
+    void addRelatedDifference(IDifference<E> difference_p);
     
     /**
      * Register the given difference as an ownership difference on this match
      * @param presence_p a non-null reference value presence which is such that
      *                   the reference is a containment and the value is this match
      */
-    void addOwnershipDifference(IReferenceValuePresence<E, A, R> presence_p);
+    void addOwnershipDifference(IReferenceValuePresence<E> presence_p);
     
     /**
      * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch#getMapping()
      */
-    IMapping.Editable<E, A, R> getMapping();
+    IMapping.Editable<E> getMapping();
   }
   
 }

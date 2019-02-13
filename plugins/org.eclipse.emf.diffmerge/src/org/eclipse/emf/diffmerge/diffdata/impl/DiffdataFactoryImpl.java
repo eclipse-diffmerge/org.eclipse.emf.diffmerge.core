@@ -13,14 +13,8 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataFactory;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
@@ -31,7 +25,6 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -101,59 +94,13 @@ public class DiffdataFactoryImpl extends EFactoryImpl
       return (EObject) createValueToDifferenceEntry();
     case DiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY:
       return (EObject) createReferenceToElementToDifferenceEntry();
+    case DiffdataPackage.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY:
+      return (EObject) createReferenceToOrderDifferenceEntry();
     case DiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY:
       return (EObject) createElementToDifferenceEntry();
     default:
       throw new IllegalArgumentException(
           "The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public Object createFromString(EDataType eDataType, String initialValue) {
-    switch (eDataType.getClassifierID()) {
-    case DiffdataPackage.IEDITABLE_MODEL_SCOPE:
-      return createIEditableModelScopeFromString(eDataType, initialValue);
-    case DiffdataPackage.IMATCH_POLICY:
-      return createIMatchPolicyFromString(eDataType, initialValue);
-    case DiffdataPackage.IDIFF_POLICY:
-      return createIDiffPolicyFromString(eDataType, initialValue);
-    case DiffdataPackage.IMERGE_POLICY:
-      return createIMergePolicyFromString(eDataType, initialValue);
-    case DiffdataPackage.ROLE:
-      return createRoleFromString(eDataType, initialValue);
-    default:
-      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
-          + "' is not a valid classifier"); //$NON-NLS-1$
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String convertToString(EDataType eDataType, Object instanceValue) {
-    switch (eDataType.getClassifierID()) {
-    case DiffdataPackage.IEDITABLE_MODEL_SCOPE:
-      return convertIEditableModelScopeToString(eDataType, instanceValue);
-    case DiffdataPackage.IMATCH_POLICY:
-      return convertIMatchPolicyToString(eDataType, instanceValue);
-    case DiffdataPackage.IDIFF_POLICY:
-      return convertIDiffPolicyToString(eDataType, instanceValue);
-    case DiffdataPackage.IMERGE_POLICY:
-      return convertIMergePolicyToString(eDataType, instanceValue);
-    case DiffdataPackage.ROLE:
-      return convertRoleToString(eDataType, instanceValue);
-    default:
-      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
-          + "' is not a valid classifier"); //$NON-NLS-1$
     }
   }
 
@@ -222,7 +169,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> createAttributeToValueToDifferenceEntry() {
+  public Map.Entry<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> createAttributeToValueToDifferenceEntry() {
     AttributeToValueToDifferenceEntryImpl attributeToValueToDifferenceEntry = new AttributeToValueToDifferenceEntryImpl();
     return attributeToValueToDifferenceEntry;
   }
@@ -232,7 +179,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, IAttributeValuePresence> createValueToDifferenceEntry() {
+  public Map.Entry<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> createValueToDifferenceEntry() {
     ValueToDifferenceEntryImpl valueToDifferenceEntry = new ValueToDifferenceEntryImpl();
     return valueToDifferenceEntry;
   }
@@ -242,7 +189,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EReference, EMap<EObject, IReferenceValuePresence>> createReferenceToElementToDifferenceEntry() {
+  public Map.Entry<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> createReferenceToElementToDifferenceEntry() {
     ReferenceToElementToDifferenceEntryImpl referenceToElementToDifferenceEntry = new ReferenceToElementToDifferenceEntryImpl();
     return referenceToElementToDifferenceEntry;
   }
@@ -252,108 +199,19 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EObject, IReferenceValuePresence> createElementToDifferenceEntry() {
+  public Map.Entry<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> createReferenceToOrderDifferenceEntry() {
+    ReferenceToOrderDifferenceEntryImpl referenceToOrderDifferenceEntry = new ReferenceToOrderDifferenceEntryImpl();
+    return referenceToOrderDifferenceEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Map.Entry<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>> createElementToDifferenceEntry() {
     ElementToDifferenceEntryImpl elementToDifferenceEntry = new ElementToDifferenceEntryImpl();
     return elementToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IEditableModelScope createIEditableModelScopeFromString(
-      EDataType eDataType, String initialValue) {
-    return (IEditableModelScope) super.createFromString(eDataType,
-        initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertIEditableModelScopeToString(EDataType eDataType,
-      Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IMatchPolicy createIMatchPolicyFromString(EDataType eDataType,
-      String initialValue) {
-    return (IMatchPolicy) super.createFromString(eDataType, initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertIMatchPolicyToString(EDataType eDataType,
-      Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IDiffPolicy createIDiffPolicyFromString(EDataType eDataType,
-      String initialValue) {
-    return (IDiffPolicy) super.createFromString(eDataType, initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertIDiffPolicyToString(EDataType eDataType,
-      Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IMergePolicy createIMergePolicyFromString(EDataType eDataType,
-      String initialValue) {
-    return (IMergePolicy) super.createFromString(eDataType, initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertIMergePolicyToString(EDataType eDataType,
-      Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Role createRoleFromString(EDataType eDataType, String initialValue) {
-    return (Role) super.createFromString(eDataType, initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertRoleToString(EDataType eDataType, Object instanceValue) {
-    return super.convertToString(eDataType, instanceValue);
   }
 
   /**

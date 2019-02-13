@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 
+
 /**
  * A high-level, technology-agnostic definition of a scope of data.
  * Data is assumed to be structured as a set of elements that conforms to some schema.
@@ -33,20 +34,18 @@ import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
  * of a data scope. The order in returned iterables is considered to be part of the
  * observable state. All returned iterables are assumed to not contain null values.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IDataScope<E, A, R> extends IRawDataScope<E> {
+public interface IDataScope<E> extends IRawDataScope<E> {
   
   /**
    * Return the set of attributes which are applicable to the given element.
    * @param element_p a non-null element
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<A> getAttributes(E element_p);
+  List<?> getAttributes(E element_p);
   
   /**
    * Return the values of the given element w.r.t. the give attribute/
@@ -54,14 +53,14 @@ public interface IDataScope<E, A, R> extends IRawDataScope<E> {
    * @param attribute_p a non-null attribute which belongs to getAttributes(element_p)
    * @return a non-null, potentially empty, unmodifiable ordered bag
    */
-  List<?> getAttributeValues(E element_p, A attribute_p);
+  List<?> getAttributeValues(E element_p, Object attribute_p);
   
   /**
    * Return the set of references which are applicable to the given element.
    * @param element_p a non-null element which belongs to getReferences(element_p)
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<R> getReferences(E element_p);
+  List<?> getReferences(E element_p);
   
   /**
    * Return the values of the given element w.r.t. the given reference.
@@ -69,12 +68,12 @@ public interface IDataScope<E, A, R> extends IRawDataScope<E> {
    * @param reference_p a non-null reference
    * @return a non-null, potentially empty, unmodifiable ordered bag
    */
-  List<E> getReferenceValues(E element_p, R reference_p);
+  List<E> getReferenceValues(E element_p, Object reference_p);
   
   /**
    * Return the policy that universally governs data of this scope
    * @return a non-null object
    */
-  IScopePolicy<E, A, R> getScopePolicy();
+  IScopePolicy<E> getScopePolicy();
   
 }

@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.api.IMapping;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -22,38 +21,22 @@ import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>EElement Presence</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * The following features are implemented:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EElementPresenceImpl#getOwnerMatch <em>Owner Match</em>}</li>
- * </ul>
  *
  * @generated
  */
-public class EElementPresenceImpl extends EElementRelativePresenceImpl
+public class EElementPresenceImpl extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<EObject, EAttribute, EReference>
     implements EElementPresence {
-  /**
-   * The cached value of the '{@link #getOwnerMatch() <em>Owner Match</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getOwnerMatch()
-   * @generated
-   * @ordered
-   */
-  protected EMatch ownerMatch;
-
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -85,108 +68,6 @@ public class EElementPresenceImpl extends EElementRelativePresenceImpl
   @Override
   protected EClass eStaticClass() {
     return DiffdataPackage.Literals.EELEMENT_PRESENCE;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EMatch getOwnerMatch() {
-    if (ownerMatch != null && ownerMatch.eIsProxy()) {
-      InternalEObject oldOwnerMatch = (InternalEObject) ownerMatch;
-      ownerMatch = (EMatch) eResolveProxy(oldOwnerMatch);
-      if (ownerMatch != oldOwnerMatch) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH, oldOwnerMatch,
-              ownerMatch));
-      }
-    }
-    return ownerMatch;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EMatch basicGetOwnerMatch() {
-    return ownerMatch;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOwnerMatch(EMatch newOwnerMatch) {
-    EMatch oldOwnerMatch = ownerMatch;
-    ownerMatch = newOwnerMatch;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH, oldOwnerMatch,
-          ownerMatch));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType) {
-    switch (featureID) {
-    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-      if (resolve)
-        return getOwnerMatch();
-      return basicGetOwnerMatch();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void eSet(int featureID, Object newValue) {
-    switch (featureID) {
-    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-      setOwnerMatch((EMatch) newValue);
-      return;
-    }
-    super.eSet(featureID, newValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void eUnset(int featureID) {
-    switch (featureID) {
-    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-      setOwnerMatch((EMatch) null);
-      return;
-    }
-    super.eUnset(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public boolean eIsSet(int featureID) {
-    switch (featureID) {
-    case DiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH:
-      return ownerMatch != null;
-    }
-    return super.eIsSet(featureID);
   }
 
   /**

@@ -15,23 +15,16 @@ package org.eclipse.emf.diffmerge.generic.api.diff;
 /**
  * A difference which represents the unmatched presence of an attribute value.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IAttributeValuePresence<E, A, R> extends IValuePresence<E, A, R> {
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getFeature()
-   */
-  A getFeature();
+public interface IAttributeValuePresence<E> extends IValuePresence<E> {
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getSymmetrical()
    */
-  IAttributeValuePresence<E, A, R> getSymmetrical();
+  IAttributeValuePresence<E> getSymmetrical();
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getValue()

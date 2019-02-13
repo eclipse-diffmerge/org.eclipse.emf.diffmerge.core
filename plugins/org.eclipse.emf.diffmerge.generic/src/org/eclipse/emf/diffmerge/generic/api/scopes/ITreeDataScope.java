@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api.scopes;
 
+
 /**
  * An IDataScope whose elements are organized as a forest (a set of disjoint trees).
  * A subset of the references are assumed to be 'containment' references, which means
@@ -25,13 +26,11 @@ package org.eclipse.emf.diffmerge.generic.api.scopes;
  * All methods in this interface are assumed to have no impact on the observable state
  * of a data scope.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface ITreeDataScope<E, A, R> extends IDataScope<E, A, R>,
+public interface ITreeDataScope<E> extends IDataScope<E>,
 IRawTreeDataScope<E> {
   
   /**
@@ -43,12 +42,12 @@ IRawTreeDataScope<E> {
    * @param element_p a non-null element
    * @return a potentially null reference
    */
-  R getContainment(E element_p);
+  Object getContainment(E element_p);
   
   /**
    * Return whether the given reference is a containment
    * @param reference_p a non-null reference that belongs to the schema of this scope
    */
-  boolean isContainment(R reference_p);
+  boolean isContainment(Object reference_p);
   
 }

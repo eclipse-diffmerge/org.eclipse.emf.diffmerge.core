@@ -85,7 +85,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
     super(comparison_p, elementMatch_p, presenceRole_p, isOrder_p);
     setValue(value_p);
     setFeature(attribute_p);
-    ((IMatch.Editable<E, A, R>) elementMatch).addRelatedDifference(this);
+    ((IMatch.Editable<E>) elementMatch).addRelatedDifference(this);
   }
 
   /**
@@ -207,13 +207,13 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   @Override
-  public IAttributeValuePresence<E, A, R> getSymmetrical() {
-    IAttributeValuePresence<E, A, R> result = null;
+  public IAttributeValuePresence<E> getSymmetrical() {
+    IAttributeValuePresence<E> result = null;
     if (!isManyFeature()) {
-      Collection<IAttributeValuePresence<E, A, R>> candidates = getElementMatch()
+      Collection<IAttributeValuePresence<E>> candidates = getElementMatch()
           .getAttributeDifferences(getFeature());
       assert candidates.size() <= 2; // Because !isMany()
-      for (IAttributeValuePresence<E, A, R> candidate : candidates) {
+      for (IAttributeValuePresence<E> candidate : candidates) {
         if (candidate.getPresenceRole() == getAbsenceRole()) {
           result = candidate;
           break;
@@ -267,11 +267,11 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    */
   @Override
   protected void mergeValueAddition() {
-    IEditableTreeDataScope<E, A, R> absenceScope = getAbsenceScope();
+    IEditableTreeDataScope<E> absenceScope = getAbsenceScope();
     E holderMatch = getMatchOfHolder();
     assert holderMatch != null; // Must be guaranteed by diff dependency handling
     absenceScope.addAttributeValue(holderMatch, getFeature(), getValue());
-    IDiffPolicy<E, A, R> diffPolicy = getComparison().getLastDiffPolicy();
+    IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
     if (diffPolicy != null
         && diffPolicy.considerOrderedAttribute(getFeature())) {
       // TODO Implement
@@ -284,7 +284,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    */
   @Override
   public void mergeValueRemoval() {
-    IEditableTreeDataScope<E, A, R> presenceScope = getPresenceScope();
+    IEditableTreeDataScope<E> presenceScope = getPresenceScope();
     presenceScope.removeAttributeValue(getHolder(), getFeature(), getValue());
   }
 

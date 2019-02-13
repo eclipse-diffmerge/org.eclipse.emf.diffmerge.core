@@ -23,7 +23,7 @@ import java.util.Iterator;
  * of a raw data scope. The order in returned iterables is considered to be part of the
  * observable state. All returned iterables are assumed to not contain null values.
  * 
- * @param <E> The type of the elements of the data scope.
+ * @param <E> The type of the elements of data scopes.
  * 
  * @author Olivier Constant
  */

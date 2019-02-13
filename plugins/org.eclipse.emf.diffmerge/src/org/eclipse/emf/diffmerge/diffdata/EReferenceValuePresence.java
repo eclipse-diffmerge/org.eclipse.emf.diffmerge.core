@@ -11,8 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,15 +25,14 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EValuePresence org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence"
+ * @model
  * @generated
  */
-public interface EReferenceValuePresence
-    extends EValuePresence, IReferenceValuePresence {
+public interface EReferenceValuePresence extends EValuePresence,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<EObject, EAttribute, EReference> {
 
   /**
    * Returns the value of the '<em><b>Value</b></em>' reference.
@@ -59,31 +59,5 @@ public interface EReferenceValuePresence
    * @generated
    */
   void setValue(EObject value);
-
-  /**
-   * Returns the value of the '<em><b>Value Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Value Match</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Value Match</em>' reference.
-   * @see #setValueMatch(EMatch)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_ValueMatch()
-   * @model
-   * @generated
-   */
-  EMatch getValueMatch();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Value Match</em>' reference.
-   * @see #getValueMatch()
-   * @generated
-   */
-  void setValueMatch(EMatch value);
   // Nothing needed
 } // EReferenceValuePresence

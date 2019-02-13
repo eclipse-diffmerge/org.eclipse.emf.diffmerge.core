@@ -33,10 +33,10 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E&gt;"
  * @generated
  */
-public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
+public interface EMatch<E, A, R> extends EIdentified, Editable<E> {
   /**
    * Returns the value of the '<em><b>Match ID</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -138,10 +138,10 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @return the value of the '<em>Element Presence Difference</em>' reference.
    * @see #setElementPresenceDifference(IElementPresence)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_ElementPresenceDifference()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E&gt;"
    * @generated
    */
-  IElementPresence<E, A, R> getElementPresenceDifference();
+  IElementPresence<E> getElementPresenceDifference();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}' reference.
@@ -151,7 +151,7 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @see #getElementPresenceDifference()
    * @generated
    */
-  void setElementPresenceDifference(IElementPresence<E, A, R> value);
+  void setElementPresenceDifference(IElementPresence<E> value);
 
   /**
    * Returns the value of the '<em><b>Reference Ownership Difference</b></em>' reference.
@@ -164,10 +164,10 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @return the value of the '<em>Reference Ownership Difference</em>' reference.
    * @see #setReferenceOwnershipDifference(IReferenceValuePresence)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_ReferenceOwnershipDifference()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
    * @generated
    */
-  IReferenceValuePresence<E, A, R> getReferenceOwnershipDifference();
+  IReferenceValuePresence<E> getReferenceOwnershipDifference();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}' reference.
@@ -177,7 +177,7 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @see #getReferenceOwnershipDifference()
    * @generated
    */
-  void setReferenceOwnershipDifference(IReferenceValuePresence<E, A, R> value);
+  void setReferenceOwnershipDifference(IReferenceValuePresence<E> value);
 
   /**
    * Returns the value of the '<em><b>Target Ownership Difference</b></em>' reference.
@@ -190,10 +190,10 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @return the value of the '<em>Target Ownership Difference</em>' reference.
    * @see #setTargetOwnershipDifference(IReferenceValuePresence)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_TargetOwnershipDifference()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
    * @generated
    */
-  IReferenceValuePresence<E, A, R> getTargetOwnershipDifference();
+  IReferenceValuePresence<E> getTargetOwnershipDifference();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}' reference.
@@ -203,6 +203,6 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E, A, R> {
    * @see #getTargetOwnershipDifference()
    * @generated
    */
-  void setTargetOwnershipDifference(IReferenceValuePresence<E, A, R> value);
+  void setTargetOwnershipDifference(IReferenceValuePresence<E> value);
 
 } // EMatch

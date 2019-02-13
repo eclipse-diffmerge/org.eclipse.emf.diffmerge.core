@@ -84,7 +84,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IEditableTreeDataScope<E, A, R> ancestorScope;
+  protected IEditableTreeDataScope<E> ancestorScope;
 
   /**
    * The cached value of the '{@link #getReferenceScope() <em>Reference Scope</em>}' attribute.
@@ -94,7 +94,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IEditableTreeDataScope<E, A, R> referenceScope;
+  protected IEditableTreeDataScope<E> referenceScope;
 
   /**
    * The cached value of the '{@link #getTargetScope() <em>Target Scope</em>}' attribute.
@@ -104,7 +104,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IEditableTreeDataScope<E, A, R> targetScope;
+  protected IEditableTreeDataScope<E> targetScope;
 
   /**
    * The cached value of the '{@link #getLastMatchPolicy() <em>Last Match Policy</em>}' attribute.
@@ -114,7 +114,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IMatchPolicy<E, A, R> lastMatchPolicy;
+  protected IMatchPolicy<E> lastMatchPolicy;
 
   /**
    * The cached value of the '{@link #getLastDiffPolicy() <em>Last Diff Policy</em>}' attribute.
@@ -124,7 +124,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IDiffPolicy<E, A, R> lastDiffPolicy;
+  protected IDiffPolicy<E> lastDiffPolicy;
 
   /**
    * The cached value of the '{@link #getLastMergePolicy() <em>Last Merge Policy</em>}' attribute.
@@ -134,7 +134,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected IMergePolicy<E, A, R> lastMergePolicy;
+  protected IMergePolicy<E> lastMergePolicy;
 
   /**
    * The cached value of the '{@link #getMapping() <em>Mapping</em>}' containment reference.
@@ -172,8 +172,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<E, A, R> targetScope_p,
-      IEditableTreeDataScope<E, A, R> referenceScope_p) {
+  public EComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
+      IEditableTreeDataScope<E> referenceScope_p) {
     this(targetScope_p, referenceScope_p, null);
   }
 
@@ -184,9 +184,9 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<E, A, R> targetScope_p,
-      IEditableTreeDataScope<E, A, R> referenceScope_p,
-      IEditableTreeDataScope<E, A, R> ancestorScope_p) {
+  public EComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
+      IEditableTreeDataScope<E> referenceScope_p,
+      IEditableTreeDataScope<E> ancestorScope_p) {
     this();
     setTargetScope(targetScope_p);
     setReferenceScope(referenceScope_p);
@@ -209,7 +209,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IEditableTreeDataScope<E, A, R> getAncestorScope() {
+  public IEditableTreeDataScope<E> getAncestorScope() {
     return ancestorScope;
   }
 
@@ -218,9 +218,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setAncestorScope(
-      IEditableTreeDataScope<E, A, R> newAncestorScope) {
-    IEditableTreeDataScope<E, A, R> oldAncestorScope = ancestorScope;
+  public void setAncestorScope(IEditableTreeDataScope<E> newAncestorScope) {
+    IEditableTreeDataScope<E> oldAncestorScope = ancestorScope;
     ancestorScope = newAncestorScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -233,7 +232,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IEditableTreeDataScope<E, A, R> getReferenceScope() {
+  public IEditableTreeDataScope<E> getReferenceScope() {
     return referenceScope;
   }
 
@@ -242,9 +241,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setReferenceScope(
-      IEditableTreeDataScope<E, A, R> newReferenceScope) {
-    IEditableTreeDataScope<E, A, R> oldReferenceScope = referenceScope;
+  public void setReferenceScope(IEditableTreeDataScope<E> newReferenceScope) {
+    IEditableTreeDataScope<E> oldReferenceScope = referenceScope;
     referenceScope = newReferenceScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -257,7 +255,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IEditableTreeDataScope<E, A, R> getTargetScope() {
+  public IEditableTreeDataScope<E> getTargetScope() {
     return targetScope;
   }
 
@@ -266,8 +264,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTargetScope(IEditableTreeDataScope<E, A, R> newTargetScope) {
-    IEditableTreeDataScope<E, A, R> oldTargetScope = targetScope;
+  public void setTargetScope(IEditableTreeDataScope<E> newTargetScope) {
+    IEditableTreeDataScope<E> oldTargetScope = targetScope;
     targetScope = newTargetScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -280,7 +278,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMatchPolicy<E, A, R> getLastMatchPolicy() {
+  public IMatchPolicy<E> getLastMatchPolicy() {
     return lastMatchPolicy;
   }
 
@@ -289,8 +287,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLastMatchPolicy(IMatchPolicy<E, A, R> newLastMatchPolicy) {
-    IMatchPolicy<E, A, R> oldLastMatchPolicy = lastMatchPolicy;
+  public void setLastMatchPolicy(IMatchPolicy<E> newLastMatchPolicy) {
+    IMatchPolicy<E> oldLastMatchPolicy = lastMatchPolicy;
     lastMatchPolicy = newLastMatchPolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -303,7 +301,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IDiffPolicy<E, A, R> getLastDiffPolicy() {
+  public IDiffPolicy<E> getLastDiffPolicy() {
     return lastDiffPolicy;
   }
 
@@ -312,8 +310,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLastDiffPolicy(IDiffPolicy<E, A, R> newLastDiffPolicy) {
-    IDiffPolicy<E, A, R> oldLastDiffPolicy = lastDiffPolicy;
+  public void setLastDiffPolicy(IDiffPolicy<E> newLastDiffPolicy) {
+    IDiffPolicy<E> oldLastDiffPolicy = lastDiffPolicy;
     lastDiffPolicy = newLastDiffPolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -326,7 +324,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMergePolicy<E, A, R> getLastMergePolicy() {
+  public IMergePolicy<E> getLastMergePolicy() {
     return lastMergePolicy;
   }
 
@@ -335,8 +333,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setLastMergePolicy(IMergePolicy<E, A, R> newLastMergePolicy) {
-    IMergePolicy<E, A, R> oldLastMergePolicy = lastMergePolicy;
+  public void setLastMergePolicy(IMergePolicy<E> newLastMergePolicy) {
+    IMergePolicy<E> oldLastMergePolicy = lastMergePolicy;
     lastMergePolicy = newLastMergePolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -451,22 +449,22 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
-      setAncestorScope((IEditableTreeDataScope<E, A, R>) newValue);
+      setAncestorScope((IEditableTreeDataScope<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
-      setReferenceScope((IEditableTreeDataScope<E, A, R>) newValue);
+      setReferenceScope((IEditableTreeDataScope<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
-      setTargetScope((IEditableTreeDataScope<E, A, R>) newValue);
+      setTargetScope((IEditableTreeDataScope<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
-      setLastMatchPolicy((IMatchPolicy<E, A, R>) newValue);
+      setLastMatchPolicy((IMatchPolicy<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
-      setLastDiffPolicy((IDiffPolicy<E, A, R>) newValue);
+      setLastDiffPolicy((IDiffPolicy<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
-      setLastMergePolicy((IMergePolicy<E, A, R>) newValue);
+      setLastMergePolicy((IMergePolicy<E>) newValue);
       return;
     case GdiffdataPackage.ECOMPARISON__MAPPING:
       setMapping((EMapping<E, A, R>) newValue);
@@ -484,22 +482,22 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   public void eUnset(int featureID) {
     switch (featureID) {
     case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
-      setAncestorScope((IEditableTreeDataScope<E, A, R>) null);
+      setAncestorScope((IEditableTreeDataScope<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
-      setReferenceScope((IEditableTreeDataScope<E, A, R>) null);
+      setReferenceScope((IEditableTreeDataScope<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
-      setTargetScope((IEditableTreeDataScope<E, A, R>) null);
+      setTargetScope((IEditableTreeDataScope<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
-      setLastMatchPolicy((IMatchPolicy<E, A, R>) null);
+      setLastMatchPolicy((IMatchPolicy<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
-      setLastDiffPolicy((IDiffPolicy<E, A, R>) null);
+      setLastDiffPolicy((IDiffPolicy<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
-      setLastMergePolicy((IMergePolicy<E, A, R>) null);
+      setLastMergePolicy((IMergePolicy<E>) null);
       return;
     case GdiffdataPackage.ECOMPARISON__MAPPING:
       setMapping((EMapping<E, A, R>) null);
@@ -566,7 +564,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   public void clear() {
-    ((IMapping.Editable<E, A, R>) getMapping()).clear();
+    ((IMapping.Editable<E>) getMapping()).clear();
     setLastMatchPolicy(null);
     setLastDiffPolicy(null);
     setLastMergePolicy(null);
@@ -579,8 +577,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#compute(org.eclipse.emf.diffmerge.generic.api.IMatchPolicy, org.eclipse.emf.diffmerge.generic.api.IDiffPolicy, org.eclipse.emf.diffmerge.generic.api.IMergePolicy, org.eclipse.core.runtime.IProgressMonitor)
    * @generated NOT
    */
-  public IStatus compute(IMatchPolicy<E, A, R> matchPolicy_p,
-      IDiffPolicy<E, A, R> diffPolicy_p, IMergePolicy<E, A, R> mergePolicy_p,
+  public IStatus compute(IMatchPolicy<E> matchPolicy_p,
+      IDiffPolicy<E> diffPolicy_p, IMergePolicy<E> mergePolicy_p,
       IProgressMonitor monitor_p) {
     // Monitor
     IProgressMonitor nonNullMonitor = monitor_p != null ? monitor_p
@@ -610,7 +608,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null status of the execution
    * @generated NOT
    */
-  protected IStatus computeMatch(IMatchPolicy<E, A, R> matchPolicy_p,
+  protected IStatus computeMatch(IMatchPolicy<E> matchPolicy_p,
       IProgressMonitor monitor_p) {
     IExpensiveOperation matchOperation = getMatchOperation(matchPolicy_p,
         _duplicateIDs);
@@ -626,8 +624,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null status of the execution
    * @generated NOT
    */
-  protected IStatus computeDiff(IDiffPolicy<E, A, R> diffPolicy_p,
-      IMergePolicy<E, A, R> mergePolicy_p, IProgressMonitor monitor_p) {
+  protected IStatus computeDiff(IDiffPolicy<E> diffPolicy_p,
+      IMergePolicy<E> mergePolicy_p, IProgressMonitor monitor_p) {
     IExpensiveOperation diffOperation = getDiffOperation(diffPolicy_p,
         mergePolicy_p);
     IStatus result = diffOperation.run(monitor_p);
@@ -639,16 +637,16 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   @SuppressWarnings("serial")
-  public TreeIterator<IMatch<E, A, R>> getAllContents(final Role role_p) {
-    return new AbstractTreeIterator<IMatch<E, A, R>>(this, false) {
+  public TreeIterator<IMatch<E>> getAllContents(final Role role_p) {
+    return new AbstractTreeIterator<IMatch<E>>(this, false) {
       /**
        * @see org.eclipse.emf.common.util.AbstractTreeIterator#getChildren(Object)
        */
       @SuppressWarnings({ "rawtypes", "unchecked" })
       @Override
-      protected Iterator<? extends IMatch<E, A, R>> getChildren(
+      protected Iterator<? extends IMatch<E>> getChildren(
           Object object_p) {
-        Iterator<? extends IMatch<E, A, R>> result;
+        Iterator<? extends IMatch<E>> result;
         if (object_p instanceof IComparison) {
           result = ((IComparison) object_p).getContents(role_p).iterator();
         } else {
@@ -663,11 +661,11 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getContainerOf(org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public IMatch<E, A, R> getContainerOf(IMatch<E, A, R> match_p, Role role_p) {
-    IMatch<E, A, R> result = null;
+  public IMatch<E> getContainerOf(IMatch<E> match_p, Role role_p) {
+    IMatch<E> result = null;
     E child = match_p.get(role_p);
     if (child != null) {
-      ITreeDataScope<E, A, R> scope = getScope(role_p);
+      ITreeDataScope<E> scope = getScope(role_p);
       E container = scope.getContainer(child);
       if (container != null) {
         result = getMapping().getMatchFor(container, role_p);
@@ -680,12 +678,12 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getContents()
    * @generated NOT
    */
-  public List<IMatch<E, A, R>> getContents() {
-    List<IMatch<E, A, R>> targetMatches = getContents(Role.TARGET);
-    List<IMatch<E, A, R>> referenceMatches = getContents(Role.REFERENCE);
-    List<IMatch<E, A, R>> result = new FArrayList<IMatch<E, A, R>>(
+  public List<IMatch<E>> getContents() {
+    List<IMatch<E>> targetMatches = getContents(Role.TARGET);
+    List<IMatch<E>> referenceMatches = getContents(Role.REFERENCE);
+    List<IMatch<E>> result = new FArrayList<IMatch<E>>(
         referenceMatches, null);
-    for (IMatch<E, A, R> targetMatch : targetMatches) {
+    for (IMatch<E> targetMatch : targetMatches) {
       if (!result.contains(targetMatch))
         result.add(targetMatch);
     }
@@ -696,13 +694,13 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getContents(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public List<IMatch<E, A, R>> getContents(Role role_p) {
-    List<IMatch<E, A, R>> result = new FArrayList<IMatch<E, A, R>>();
+  public List<IMatch<E>> getContents(Role role_p) {
+    List<IMatch<E>> result = new FArrayList<IMatch<E>>();
     // Defining 'contents': list of elements whose matches must be retrieved
     Iterable<E> contents = getScope(role_p).getRoots();
     // Retrieving matches
     for (E child : contents) {
-      IMatch<E, A, R> childMatch = getMapping().getMatchFor(child, role_p);
+      IMatch<E> childMatch = getMapping().getMatchFor(child, role_p);
       if (childMatch != null)
         result.add(childMatch);
     }
@@ -713,13 +711,13 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getContentsOf(org.eclipse.emf.diffmerge.generic.api.IMatch)
    * @generated NOT
    */
-  public List<IMatch<E, A, R>> getContentsOf(IMatch<E, A, R> match_p) {
-    List<IMatch<E, A, R>> targetMatches = getContentsOf(match_p, Role.TARGET);
-    List<IMatch<E, A, R>> referenceMatches = getContentsOf(match_p,
+  public List<IMatch<E>> getContentsOf(IMatch<E> match_p) {
+    List<IMatch<E>> targetMatches = getContentsOf(match_p, Role.TARGET);
+    List<IMatch<E>> referenceMatches = getContentsOf(match_p,
         Role.REFERENCE);
-    List<IMatch<E, A, R>> result = new FOrderedSet<IMatch<E, A, R>>(
+    List<IMatch<E>> result = new FOrderedSet<IMatch<E>>(
         referenceMatches, null);
-    for (IMatch<E, A, R> targetMatch : targetMatches) {
+    for (IMatch<E> targetMatch : targetMatches) {
       result.add(targetMatch);
     }
     return Collections.unmodifiableList(result);
@@ -729,20 +727,20 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getContentsOf(org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public List<IMatch<E, A, R>> getContentsOf(IMatch<E, A, R> match_p,
+  public List<IMatch<E>> getContentsOf(IMatch<E> match_p,
       Role role_p) {
-    List<IMatch<E, A, R>> result = new FArrayList<IMatch<E, A, R>>();
+    List<IMatch<E>> result = new FArrayList<IMatch<E>>();
     // Defining 'contents': list of elements whose matches must be retrieved
     Iterable<E> contents = null;
     E container = match_p.get(role_p);
     if (container != null) {
-      ITreeDataScope<E, A, R> scope = getScope(role_p);
+      ITreeDataScope<E> scope = getScope(role_p);
       contents = scope.getContents(container);
     }
     // Retrieving matches
     if (contents != null) {
       for (E child : contents) {
-        IMatch<E, A, R> childMatch = getMapping().getMatchFor(child, role_p);
+        IMatch<E> childMatch = getMapping().getMatchFor(child, role_p);
         if (childMatch != null)
           result.add(childMatch);
       }
@@ -755,31 +753,31 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IDiffPolicy<E, A, R> getDefaultDiffPolicy();
+  protected abstract IDiffPolicy<E> getDefaultDiffPolicy();
 
   /**
    * Return a default match policy
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IMatchPolicy<E, A, R> getDefaultMatchPolicy();
+  protected abstract IMatchPolicy<E> getDefaultMatchPolicy();
 
   /**
    * Return a default merge policy
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IMergePolicy<E, A, R> getDefaultMergePolicy();
+  protected abstract IMergePolicy<E> getDefaultMergePolicy();
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getDifferences(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public List<IDifference<E, A, R>> getDifferences(Role role_p) {
-    List<IDifference<E, A, R>> result = new FArrayList<IDifference<E, A, R>>();
-    Iterator<IMatch<E, A, R>> it = getAllContents(role_p);
+  public List<IDifference<E>> getDifferences(Role role_p) {
+    List<IDifference<E>> result = new FArrayList<IDifference<E>>();
+    Iterator<IMatch<E>> it = getAllContents(role_p);
     while (it.hasNext()) {
-      IMatch<E, A, R> current = it.next();
+      IMatch<E> current = it.next();
       result.addAll(current.getPresenceDifferencesIn(role_p));
     }
     return result;
@@ -793,8 +791,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected IExpensiveOperation getDiffOperation(
-      IDiffPolicy<E, A, R> diffPolicy_p, IMergePolicy<E, A, R> mergePolicy_p) {
-    return new DiffOperation<E, A, R>(this, diffPolicy_p, mergePolicy_p);
+      IDiffPolicy<E> diffPolicy_p, IMergePolicy<E> mergePolicy_p) {
+    return new DiffOperation<E>(this, diffPolicy_p, mergePolicy_p);
   }
 
   /**
@@ -813,8 +811,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected IExpensiveOperation getMatchOperation(
-      IMatchPolicy<E, A, R> policy_p, Map<Role, Set<Object>> duplicateIDs_p) {
-    return new MatchOperation<E, A, R>(this, policy_p, duplicateIDs_p);
+      IMatchPolicy<E> policy_p, Map<Role, Set<Object>> duplicateIDs_p) {
+    return new MatchOperation<E>(this, policy_p, duplicateIDs_p);
   }
 
   /**
@@ -823,7 +821,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    */
   public int getNbDifferences() {
     int result = 0;
-    for (IMatch<E, A, R> match : getMapping().getContents()) {
+    for (IMatch<E> match : getMapping().getContents()) {
       result += match.getRelatedDifferences().size();
     }
     return result;
@@ -835,7 +833,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    */
   public int getNbNoContainmentDifferences() {
     int result = 0;
-    for (IMatch<E, A, R> match : getMapping().getContents()) {
+    for (IMatch<E> match : getMapping().getContents()) {
       result += match.getNbNoContainmentDifferences();
     }
     return result;
@@ -845,11 +843,11 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getRemainingDifferences()
    * @generated NOT
    */
-  public Collection<IDifference<E, A, R>> getRemainingDifferences() {
-    Collection<IDifference<E, A, R>> result = new FHashSet<IDifference<E, A, R>>(
+  public Collection<IDifference<E>> getRemainingDifferences() {
+    Collection<IDifference<E>> result = new FHashSet<IDifference<E>>(
         IEqualityTester.BY_EQUALS);
-    for (IMatch<E, A, R> match : getMapping().getContents()) {
-      for (IDifference<E, A, R> difference : match.getAllDifferences()) {
+    for (IMatch<E> match : getMapping().getContents()) {
+      for (IDifference<E> difference : match.getAllDifferences()) {
         if (!difference.isMerged())
           result.add(difference);
       }
@@ -861,8 +859,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#getScope(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public IEditableTreeDataScope<E, A, R> getScope(Role role_p) {
-    IEditableTreeDataScope<E, A, R> result;
+  public IEditableTreeDataScope<E> getScope(Role role_p) {
+    IEditableTreeDataScope<E> result;
     switch (role_p) {
     case TARGET:
       result = getTargetScope();
@@ -881,8 +879,8 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   public boolean hasRemainingDifferences() {
-    for (IMatch<E, A, R> match : getMapping().getContents()) {
-      for (IDifference<E, A, R> difference : match.getAllDifferences()) {
+    for (IMatch<E> match : getMapping().getContents()) {
+      for (IDifference<E> difference : match.getAllDifferences()) {
         if (!difference.isMerged())
           return true;
       }
@@ -914,13 +912,13 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#merge(org.eclipse.emf.diffmerge.generic.api.Role, boolean, org.eclipse.core.runtime.IProgressMonitor)
    * @generated not
    */
-  public Collection<IDifference<E, A, R>> merge(final Role destination_p,
+  public Collection<IDifference<E>> merge(final Role destination_p,
       boolean updateReferences_p, IProgressMonitor monitor_p) {
-    Collection<IDifference<E, A, R>> result = merge(new IMergeSelector() {
+    Collection<IDifference<E>> result = merge(new IMergeSelector<E>() {
       /**
        * @see org.eclipse.emf.diffmerge.generic.api.IMergeSelector#getMergeDirection(org.eclipse.emf.diffmerge.generic.api.diff.IDifference)
        */
-      public Role getMergeDirection(IDifference<?, ?, ?> difference_p) {
+      public Role getMergeDirection(IDifference<E> difference_p) {
         return destination_p;
       }
     }, updateReferences_p, monitor_p);
@@ -931,11 +929,11 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#merge(java.util.Collection, org.eclipse.emf.diffmerge.generic.api.Role, boolean, org.eclipse.core.runtime.IProgressMonitor)
    * @generated NOT
    */
-  public Collection<IDifference<E, A, R>> merge(
-      Collection<? extends IDifference<E, A, R>> differences_p,
+  public Collection<IDifference<E>> merge(
+      Collection<? extends IDifference<E>> differences_p,
       Role destination_p, boolean updateReferences_p,
       IProgressMonitor monitor_p) {
-    MergeOperation<E, A, R> operation = new MergeOperation<E, A, R>(this,
+    MergeOperation<E> operation = new MergeOperation<E>(this,
         differences_p, destination_p, updateReferences_p);
     operation.run(monitor_p);
     return operation.getOutput();
@@ -945,9 +943,9 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#merge(org.eclipse.emf.diffmerge.generic.api.IMergeSelector, boolean, org.eclipse.core.runtime.IProgressMonitor)
    * @generated NOT
    */
-  public Collection<IDifference<E, A, R>> merge(IMergeSelector merger_p,
+  public Collection<IDifference<E>> merge(IMergeSelector<E> merger_p,
       boolean updateReferences_p, IProgressMonitor monitor_p) {
-    MergeOperation<E, A, R> operation = new MergeOperation<E, A, R>(this,
+    MergeOperation<E> operation = new MergeOperation<E>(this,
         merger_p, updateReferences_p);
     operation.run(monitor_p);
     return operation.getOutput();
@@ -967,7 +965,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   public boolean swapScopes() {
     boolean isEmpty = getMapping().isEmpty();
     if (isEmpty) {
-      IEditableTreeDataScope<E, A, R> formerTarget = targetScope;
+      IEditableTreeDataScope<E> formerTarget = targetScope;
       targetScope = referenceScope;
       referenceScope = formerTarget;
     }

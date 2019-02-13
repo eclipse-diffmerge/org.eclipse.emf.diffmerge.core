@@ -19,30 +19,25 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 /**
  * A bidirectional immutable copier for a given mapping.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public class BidirectionalComparisonCopier<E, A, R> {
+public class BidirectionalComparisonCopier<E> {
   
   /** The non-null copier from REFERENCE to TARGET */
-  protected final UnidirectionalComparisonCopier<E, A, R> _referenceToTargetCopier;
+  protected final UnidirectionalComparisonCopier<E> _referenceToTargetCopier;
   
   /** The non-null copier from TARGET to REFERENCE */
-  protected final UnidirectionalComparisonCopier<E, A, R> _targetToReferenceCopier;
+  protected final UnidirectionalComparisonCopier<E> _targetToReferenceCopier;
   
   
   /**
    * Constructor
-   * @param targetCopier_p a non-null copier for the TARGET side
-   * @param referenceCopier_p a non-null copier for the REFERENCE side
    */
-  public BidirectionalComparisonCopier(UnidirectionalComparisonCopier<E, A, R> targetCopier_p,
-      UnidirectionalComparisonCopier<E, A, R> referenceCopier_p) {
-    _targetToReferenceCopier = targetCopier_p;
-    _referenceToTargetCopier = referenceCopier_p;
+  public BidirectionalComparisonCopier() {
+    _referenceToTargetCopier = new UnidirectionalComparisonCopier<E>(Role.REFERENCE);
+    _targetToReferenceCopier = new UnidirectionalComparisonCopier<E>(Role.TARGET);
   }
   
   
@@ -55,10 +50,10 @@ public class BidirectionalComparisonCopier<E, A, R> {
    * @param partialMatch_p a non-null partial match
    * @return a non-null element which is a clone of the element in partialMatch_p
    */
-  public E completeMatch(IMapping.Editable<E, A, R> mapping_p, IMatch<E, A, R> partialMatch_p) {
+  public E completeMatch(IMapping.Editable<E> mapping_p, IMatch<E> partialMatch_p) {
     assert partialMatch_p.isPartial();
     Role sourceRole = partialMatch_p.getUncoveredRole().opposite();
-    UnidirectionalComparisonCopier<E, A, R> involvedCopier =
+    UnidirectionalComparisonCopier<E> involvedCopier =
       (sourceRole == Role.REFERENCE)? _referenceToTargetCopier:
         _targetToReferenceCopier;
     E result = involvedCopier.completeMatch(
@@ -71,8 +66,8 @@ public class BidirectionalComparisonCopier<E, A, R> {
    * @param mapping_p a non-null mapping
    * @param role_p a role which is TARGET or REFERENCE
    */
-  public void completeReferences(IMapping.Editable<E, A, R> mapping_p, Role role_p) {
-    UnidirectionalComparisonCopier<E, A, R> involvedCopier =
+  public void completeReferences(IMapping.Editable<E> mapping_p, Role role_p) {
+    UnidirectionalComparisonCopier<E> involvedCopier =
       (role_p == Role.TARGET)? _referenceToTargetCopier:
         _targetToReferenceCopier;
     involvedCopier.completeReferences(mapping_p.getComparison());

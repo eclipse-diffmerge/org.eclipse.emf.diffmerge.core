@@ -49,7 +49,6 @@ import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -61,41 +60,19 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getMatchID <em>Match ID</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getElementPresenceDifference <em>Element Presence Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getTargetOwnershipDifference <em>Target Ownership Difference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EMatchImpl extends EIdentifiedImpl implements EMatch {
-
-  /**
-   * The default value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMatchID()
-   * @generated
-   * @ordered
-   */
-  protected static final Object MATCH_ID_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getMatchID()
-   * @generated
-   * @ordered
-   */
-  protected Object matchID = MATCH_ID_EDEFAULT;
+public class EMatchImpl extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference>
+    implements EMatch {
 
   /**
    * A constant key representing order in the TARGET side in (reference, value presence) maps
@@ -154,16 +131,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   protected EObject target;
 
   /**
-   * The cached value of the '{@link #getModifiableRelatedDifferences() <em>Modifiable Related Differences</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getModifiableRelatedDifferences()
-   * @generated
-   * @ordered
-   */
-  protected EList<EMergeableDifference> modifiableRelatedDifferences;
-
-  /**
    * The cached value of the '{@link #getModifiableAttributeMap() <em>Modifiable Attribute Map</em>}' map.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -171,7 +138,7 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
    * @generated
    * @ordered
    */
-  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence>> modifiableAttributeMap;
+  protected EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> modifiableAttributeMap;
 
   /**
    * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
@@ -181,37 +148,17 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
    * @generated
    * @ordered
    */
-  protected EMap<EReference, EMap<EObject, IReferenceValuePresence>> modifiableReferenceMap;
+  protected EMap<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> modifiableReferenceMap;
 
   /**
-   * The cached value of the '{@link #getElementPresenceDifference() <em>Element Presence Difference</em>}' reference.
+   * The cached value of the '{@link #getModifiableOrderReferenceMap() <em>Modifiable Order Reference Map</em>}' map.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getElementPresenceDifference()
+   * @see #getModifiableOrderReferenceMap()
    * @generated
    * @ordered
    */
-  protected IElementPresence elementPresenceDifference;
-
-  /**
-   * The cached value of the '{@link #getReferenceOwnershipDifference() <em>Reference Ownership Difference</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getReferenceOwnershipDifference()
-   * @generated
-   * @ordered
-   */
-  protected IReferenceValuePresence referenceOwnershipDifference;
-
-  /**
-   * The cached value of the '{@link #getTargetOwnershipDifference() <em>Target Ownership Difference</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTargetOwnershipDifference()
-   * @generated
-   * @ordered
-   */
-  protected IReferenceValuePresence targetOwnershipDifference;
+  protected EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> modifiableOrderReferenceMap;
 
   /**
    * <!-- begin-user-doc -->
@@ -245,28 +192,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   @Override
   protected EClass eStaticClass() {
     return DiffdataPackage.Literals.EMATCH;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Object getMatchID() {
-    return matchID;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setMatchID(Object newMatchID) {
-    Object oldMatchID = matchID;
-    matchID = newMatchID;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EMATCH__MATCH_ID, oldMatchID, matchID));
   }
 
   /**
@@ -390,20 +315,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<EMergeableDifference> getModifiableRelatedDifferences() {
-    if (modifiableRelatedDifferences == null) {
-      modifiableRelatedDifferences = new EObjectContainmentEList<EMergeableDifference>(
-          EMergeableDifference.class, this,
-          DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES);
-    }
-    return modifiableRelatedDifferences;
-  }
-
-  /**
    * @see EMatch#getMapping()
    * @generated NOT
    */
@@ -420,9 +331,9 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<EAttribute, EMap<Object, IAttributeValuePresence>> getModifiableAttributeMap() {
+  public EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> getModifiableAttributeMap() {
     if (modifiableAttributeMap == null) {
-      modifiableAttributeMap = new EcoreEMap<EAttribute, EMap<Object, IAttributeValuePresence>>(
+      modifiableAttributeMap = new EcoreEMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>>(
           DiffdataPackage.Literals.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY,
           AttributeToValueToDifferenceEntryImpl.class, this,
           DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
@@ -468,134 +379,14 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
    * <!-- end-user-doc -->
    * @generated
    */
-  public IElementPresence getElementPresenceDifference() {
-    if (elementPresenceDifference != null
-        && ((EObject) elementPresenceDifference).eIsProxy()) {
-      InternalEObject oldElementPresenceDifference = (InternalEObject) elementPresenceDifference;
-      elementPresenceDifference = (IElementPresence) eResolveProxy(
-          oldElementPresenceDifference);
-      if (elementPresenceDifference != oldElementPresenceDifference) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE,
-              oldElementPresenceDifference, elementPresenceDifference));
-      }
+  public EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap() {
+    if (modifiableOrderReferenceMap == null) {
+      modifiableOrderReferenceMap = new EcoreEMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>>(
+          DiffdataPackage.Literals.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY,
+          ReferenceToOrderDifferenceEntryImpl.class, this,
+          DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
     }
-    return elementPresenceDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IElementPresence basicGetElementPresenceDifference() {
-    return elementPresenceDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setElementPresenceDifference(
-      IElementPresence newElementPresenceDifference) {
-    IElementPresence oldElementPresenceDifference = elementPresenceDifference;
-    elementPresenceDifference = newElementPresenceDifference;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE,
-          oldElementPresenceDifference, elementPresenceDifference));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IReferenceValuePresence getReferenceOwnershipDifference() {
-    if (referenceOwnershipDifference != null
-        && ((EObject) referenceOwnershipDifference).eIsProxy()) {
-      InternalEObject oldReferenceOwnershipDifference = (InternalEObject) referenceOwnershipDifference;
-      referenceOwnershipDifference = (IReferenceValuePresence) eResolveProxy(
-          oldReferenceOwnershipDifference);
-      if (referenceOwnershipDifference != oldReferenceOwnershipDifference) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE,
-              oldReferenceOwnershipDifference, referenceOwnershipDifference));
-      }
-    }
-    return referenceOwnershipDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IReferenceValuePresence basicGetReferenceOwnershipDifference() {
-    return referenceOwnershipDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setReferenceOwnershipDifference(
-      IReferenceValuePresence newReferenceOwnershipDifference) {
-    IReferenceValuePresence oldReferenceOwnershipDifference = referenceOwnershipDifference;
-    referenceOwnershipDifference = newReferenceOwnershipDifference;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE,
-          oldReferenceOwnershipDifference, referenceOwnershipDifference));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IReferenceValuePresence getTargetOwnershipDifference() {
-    if (targetOwnershipDifference != null
-        && ((EObject) targetOwnershipDifference).eIsProxy()) {
-      InternalEObject oldTargetOwnershipDifference = (InternalEObject) targetOwnershipDifference;
-      targetOwnershipDifference = (IReferenceValuePresence) eResolveProxy(
-          oldTargetOwnershipDifference);
-      if (targetOwnershipDifference != oldTargetOwnershipDifference) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE,
-              oldTargetOwnershipDifference, targetOwnershipDifference));
-      }
-    }
-    return targetOwnershipDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public IReferenceValuePresence basicGetTargetOwnershipDifference() {
-    return targetOwnershipDifference;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setTargetOwnershipDifference(
-      IReferenceValuePresence newTargetOwnershipDifference) {
-    IReferenceValuePresence oldTargetOwnershipDifference = targetOwnershipDifference;
-    targetOwnershipDifference = newTargetOwnershipDifference;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE,
-          oldTargetOwnershipDifference, targetOwnershipDifference));
+    return modifiableOrderReferenceMap;
   }
 
   /**
@@ -607,14 +398,14 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   public NotificationChain eInverseRemove(InternalEObject otherEnd,
       int featureID, NotificationChain msgs) {
     switch (featureID) {
-    case DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
-      return ((InternalEList<?>) getModifiableRelatedDifferences())
-          .basicRemove(otherEnd, msgs);
     case DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       return ((InternalEList<?>) getModifiableAttributeMap())
           .basicRemove(otherEnd, msgs);
     case DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
       return ((InternalEList<?>) getModifiableReferenceMap())
+          .basicRemove(otherEnd, msgs);
+    case DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      return ((InternalEList<?>) getModifiableOrderReferenceMap())
           .basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -628,8 +419,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case DiffdataPackage.EMATCH__MATCH_ID:
-      return getMatchID();
     case DiffdataPackage.EMATCH__ANCESTOR:
       if (resolve)
         return getAncestor();
@@ -642,8 +431,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
       if (resolve)
         return getTarget();
       return basicGetTarget();
-    case DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
-      return getModifiableRelatedDifferences();
     case DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       if (coreType)
         return getModifiableAttributeMap();
@@ -654,18 +441,11 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
         return getModifiableReferenceMap();
       else
         return getModifiableReferenceMap().map();
-    case DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE:
-      if (resolve)
-        return getElementPresenceDifference();
-      return basicGetElementPresenceDifference();
-    case DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE:
-      if (resolve)
-        return getReferenceOwnershipDifference();
-      return basicGetReferenceOwnershipDifference();
-    case DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE:
-      if (resolve)
-        return getTargetOwnershipDifference();
-      return basicGetTargetOwnershipDifference();
+    case DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      if (coreType)
+        return getModifiableOrderReferenceMap();
+      else
+        return getModifiableOrderReferenceMap().map();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -679,9 +459,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case DiffdataPackage.EMATCH__MATCH_ID:
-      setMatchID(newValue);
-      return;
     case DiffdataPackage.EMATCH__ANCESTOR:
       setAncestor((EObject) newValue);
       return;
@@ -691,25 +468,15 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
     case DiffdataPackage.EMATCH__TARGET:
       setTarget((EObject) newValue);
       return;
-    case DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
-      getModifiableRelatedDifferences().clear();
-      getModifiableRelatedDifferences()
-          .addAll((Collection<? extends EMergeableDifference>) newValue);
-      return;
     case DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       ((EStructuralFeature.Setting) getModifiableAttributeMap()).set(newValue);
       return;
     case DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
       ((EStructuralFeature.Setting) getModifiableReferenceMap()).set(newValue);
       return;
-    case DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE:
-      setElementPresenceDifference((IElementPresence) newValue);
-      return;
-    case DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE:
-      setReferenceOwnershipDifference((IReferenceValuePresence) newValue);
-      return;
-    case DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE:
-      setTargetOwnershipDifference((IReferenceValuePresence) newValue);
+    case DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      ((EStructuralFeature.Setting) getModifiableOrderReferenceMap())
+          .set(newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -723,9 +490,6 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case DiffdataPackage.EMATCH__MATCH_ID:
-      setMatchID(MATCH_ID_EDEFAULT);
-      return;
     case DiffdataPackage.EMATCH__ANCESTOR:
       setAncestor((EObject) null);
       return;
@@ -735,23 +499,14 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
     case DiffdataPackage.EMATCH__TARGET:
       setTarget((EObject) null);
       return;
-    case DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
-      getModifiableRelatedDifferences().clear();
-      return;
     case DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       getModifiableAttributeMap().clear();
       return;
     case DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
       getModifiableReferenceMap().clear();
       return;
-    case DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE:
-      setElementPresenceDifference((IElementPresence) null);
-      return;
-    case DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE:
-      setReferenceOwnershipDifference((IReferenceValuePresence) null);
-      return;
-    case DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE:
-      setTargetOwnershipDifference((IReferenceValuePresence) null);
+    case DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      getModifiableOrderReferenceMap().clear();
       return;
     }
     super.eUnset(featureID);
@@ -765,49 +520,23 @@ public class EMatchImpl extends EIdentifiedImpl implements EMatch {
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case DiffdataPackage.EMATCH__MATCH_ID:
-      return MATCH_ID_EDEFAULT == null ? matchID != null
-          : !MATCH_ID_EDEFAULT.equals(matchID);
     case DiffdataPackage.EMATCH__ANCESTOR:
       return ancestor != null;
     case DiffdataPackage.EMATCH__REFERENCE:
       return reference != null;
     case DiffdataPackage.EMATCH__TARGET:
       return target != null;
-    case DiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
-      return modifiableRelatedDifferences != null
-          && !modifiableRelatedDifferences.isEmpty();
     case DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       return modifiableAttributeMap != null
           && !modifiableAttributeMap.isEmpty();
     case DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
       return modifiableReferenceMap != null
           && !modifiableReferenceMap.isEmpty();
-    case DiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE:
-      return elementPresenceDifference != null;
-    case DiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE:
-      return referenceOwnershipDifference != null;
-    case DiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE:
-      return targetOwnershipDifference != null;
+    case DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      return modifiableOrderReferenceMap != null
+          && !modifiableOrderReferenceMap.isEmpty();
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString() {
-    if (eIsProxy())
-      return super.toString();
-
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (matchID: "); //$NON-NLS-1$
-    result.append(matchID);
-    result.append(')');
-    return result.toString();
   }
 
   /**

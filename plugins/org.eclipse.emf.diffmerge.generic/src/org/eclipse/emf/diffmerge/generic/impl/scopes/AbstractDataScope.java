@@ -16,10 +16,13 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 
 /**
  * A partial implementation of IDataScope.
+ * 
+ * @param <E> The type of data elements.
+ * 
  * @author Olivier Constant
  */
-public abstract class AbstractDataScope<ELEMENT, ATTRIBUTE, REFERENCE>
-implements IDataScope<ELEMENT, ATTRIBUTE, REFERENCE> {
+public abstract class AbstractDataScope<E>
+implements IDataScope<E> {
   
   /** A potentially null object that identifies the origin of the scope */
   private Object _originator;
@@ -35,9 +38,9 @@ implements IDataScope<ELEMENT, ATTRIBUTE, REFERENCE> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#covers(java.lang.Object)
    */
-  public boolean covers(ELEMENT element_p) {
+  public boolean covers(E element_p) {
     // Operator == is used for element identification
-    for (ELEMENT current : this) {
+    for (E current : this) {
       if (current == element_p)
         return true;
     }
@@ -74,7 +77,7 @@ implements IDataScope<ELEMENT, ATTRIBUTE, REFERENCE> {
    */
   public int size() {
     int result = 0;
-    for (@SuppressWarnings("unused") ELEMENT element : this) {
+    for (@SuppressWarnings("unused") E element : this) {
       result++;
     }
     return result;

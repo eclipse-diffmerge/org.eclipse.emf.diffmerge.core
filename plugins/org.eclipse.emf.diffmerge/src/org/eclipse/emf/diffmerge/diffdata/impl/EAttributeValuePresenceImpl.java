@@ -14,15 +14,15 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -126,6 +126,17 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  public void setFeature(EAttribute feature) {
+    // TODO: implement this method
+    // Ensure that you remove @generated or mark it @generated NOT
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
@@ -178,6 +189,56 @@ public class EAttributeValuePresenceImpl extends EValuePresenceImpl
           : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eBaseStructuralFeatureID(int derivedFeatureID,
+      Class<?> baseClass) {
+    if (baseClass == org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence.class) {
+      switch (derivedFeatureID) {
+      default:
+        return -1;
+      }
+    }
+    if (baseClass == org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence.class) {
+      switch (derivedFeatureID) {
+      case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+        return org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE;
+      default:
+        return -1;
+      }
+    }
+    return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eDerivedStructuralFeatureID(int baseFeatureID,
+      Class<?> baseClass) {
+    if (baseClass == org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence.class) {
+      switch (baseFeatureID) {
+      default:
+        return -1;
+      }
+    }
+    if (baseClass == org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence.class) {
+      switch (baseFeatureID) {
+      case org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+        return DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE;
+      default:
+        return -1;
+      }
+    }
+    return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
   }
 
   /**

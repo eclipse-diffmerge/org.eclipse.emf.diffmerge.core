@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementPresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E&gt;"
  * @generated
  */
 public interface EElementPresence<E, A, R>
-    extends EElementRelativePresence<E, A, R>, IElementPresence<E, A, R> {
+    extends EElementRelativePresence<E, A, R>, IElementPresence<E> {
   /**
    * Returns the value of the '<em><b>Owner Match</b></em>' reference.
    * <!-- begin-user-doc -->

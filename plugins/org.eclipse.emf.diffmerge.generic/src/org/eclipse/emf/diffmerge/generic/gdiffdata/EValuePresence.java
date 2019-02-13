@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;E&gt;"
  * @generated
  */
 public interface EValuePresence<E, A, R>
-    extends EElementRelativePresence<E, A, R>, IValuePresence<E, A, R> {
+    extends EElementRelativePresence<E, A, R>, IValuePresence<E> {
   /**
    * Returns the value of the '<em><b>Order</b></em>' attribute.
    * The default value is <code>"false"</code>.

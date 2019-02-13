@@ -11,18 +11,17 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api.scopes;
 
+
 /**
  * An IDataScope whose elements are organized as a forest and that can be directly
  * modified/
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IEditableTreeDataScope<E, A, R> extends ITreeDataScope<E, A, R>,
-IEditableDataScope<E, A, R> {
+public interface IEditableTreeDataScope<E> extends ITreeDataScope<E>,
+IEditableDataScope<E> {
   
   // Nothing added
   

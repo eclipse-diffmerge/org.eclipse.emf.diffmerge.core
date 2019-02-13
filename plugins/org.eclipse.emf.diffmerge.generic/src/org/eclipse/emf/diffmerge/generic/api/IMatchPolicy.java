@@ -13,20 +13,18 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 import java.util.Comparator;
 
-import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 
 /**
- * A policy that defines how model elements from different model scopes are being
+ * A policy that defines how model elements from different data scopes are being
  * matched in a comparison.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IMatchPolicy<E, A, R> {
+public interface IMatchPolicy<E> {
   
   /**
    * Return an object ("match ID") which uniquely discriminates the given element
@@ -48,7 +46,7 @@ public interface IMatchPolicy<E, A, R> {
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  Object getMatchID(E element_p, IRawDataScope<E> scope_p);
+  Object getMatchID(E element_p, ITreeDataScope<E> scope_p);
   
   /**
    * Optionally return a comparator which is applicable to all objects that getMatchID

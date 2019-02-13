@@ -11,51 +11,21 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EAttribute Value Presence</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getValue <em>Value</em>}</li>
- * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEAttributeValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EValuePresence org.eclipse.emf.diffmerge.diffdata.IAttributeValuePresence"
+ * @model
  * @generated
  */
-public interface EAttributeValuePresence
-    extends EValuePresence, IAttributeValuePresence {
-
-  /**
-   * Returns the value of the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Value</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(Object)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEAttributeValuePresence_Value()
-   * @model required="true"
-   * @generated
-   */
-  Object getValue();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getValue <em>Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Value</em>' attribute.
-   * @see #getValue()
-   * @generated
-   */
-  void setValue(Object value);
+public interface EAttributeValuePresence extends EValuePresence,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<EObject, EAttribute, EReference> {
   // Nothing needed
 } // EAttributeValuePresence

@@ -72,7 +72,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMatch<E, A, R>> referenceCompletedMatches;
+  protected EList<IMatch<E>> referenceCompletedMatches;
 
   /**
    * The cached value of the '{@link #getTargetCompletedMatches() <em>Target Completed Matches</em>}' reference list.
@@ -82,13 +82,13 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<IMatch<E, A, R>> targetCompletedMatches;
+  protected EList<IMatch<E>> targetCompletedMatches;
 
   /**
    * A non-null, stateless copier for completing partial matches
    * @generated NOT
    */
-  private final BidirectionalComparisonCopier<E, A, R> _copier;
+  private final BidirectionalComparisonCopier<E> _copier;
 
   /**
    * <!-- begin-user-doc -->
@@ -97,7 +97,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   protected EMappingImpl() {
     super();
-    _copier = newBidirectionalComparisonCopier();
+    _copier = new BidirectionalComparisonCopier<E>();
   }
 
   /**
@@ -128,11 +128,10 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMatch<E, A, R>> getReferenceCompletedMatches() {
+  public EList<IMatch<E>> getReferenceCompletedMatches() {
     if (referenceCompletedMatches == null) {
-      referenceCompletedMatches = new EObjectEList<IMatch<E, A, R>>(
-          IMatch.class, this,
-          GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES);
+      referenceCompletedMatches = new EObjectEList<IMatch<E>>(IMatch.class,
+          this, GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES);
     }
     return referenceCompletedMatches;
   }
@@ -142,10 +141,10 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IMatch<E, A, R>> getTargetCompletedMatches() {
+  public EList<IMatch<E>> getTargetCompletedMatches() {
     if (targetCompletedMatches == null) {
-      targetCompletedMatches = new EObjectEList<IMatch<E, A, R>>(IMatch.class,
-          this, GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
+      targetCompletedMatches = new EObjectEList<IMatch<E>>(IMatch.class, this,
+          GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
     }
     return targetCompletedMatches;
   }
@@ -201,12 +200,12 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
     case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
       getReferenceCompletedMatches()
-          .addAll((Collection<? extends IMatch<E, A, R>>) newValue);
+          .addAll((Collection<? extends IMatch<E>>) newValue);
       return;
     case GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
       getTargetCompletedMatches().clear();
       getTargetCompletedMatches()
-          .addAll((Collection<? extends IMatch<E, A, R>>) newValue);
+          .addAll((Collection<? extends IMatch<E>>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -267,7 +266,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#completeMatch(org.eclipse.emf.diffmerge.generic.api.IMatch)
    * @generated NOT
    */
-  public E completeMatch(IMatch<E, A, R> partialMatch_p) {
+  public E completeMatch(IMatch<E> partialMatch_p) {
     return _copier.completeMatch(this, partialMatch_p);
   }
 
@@ -291,7 +290,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getCompletedMatches(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public Collection<IMatch<E, A, R>> getCompletedMatches(
+  public Collection<IMatch<E>> getCompletedMatches(
       Role destinationRole_p) {
     return Collections.unmodifiableCollection(
         getModifiableCompletedMatches(destinationRole_p));
@@ -315,16 +314,16 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getContents()
    * @generated NOT
    */
-  public Collection<IMatch<E, A, R>> getContents() {
+  public Collection<IMatch<E>> getContents() {
     return Collections
-        .<IMatch<E, A, R>> unmodifiableCollection(getModifiableContents());
+        .<IMatch<E>> unmodifiableCollection(getModifiableContents());
   }
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#getModifiableCompletedMatches(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public Collection<IMatch<E, A, R>> getModifiableCompletedMatches(
+  public Collection<IMatch<E>> getModifiableCompletedMatches(
       Role destinationRole_p) {
     return Role.TARGET == destinationRole_p ? getTargetCompletedMatches()
         : getReferenceCompletedMatches();
@@ -336,7 +335,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   public int getNbFullMatches() {
     int result = 0;
-    for (IMatch<E, A, R> match : getContents())
+    for (IMatch<E> match : getContents())
       if (!match.isPartial())
         result++;
     return result;
@@ -348,7 +347,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   public int getNbPartialMatches(Role covered_p) {
     int result = 0;
-    for (IMatch<E, A, R> match : getContents())
+    for (IMatch<E> match : getContents())
       if (match.isPartial()
           && (covered_p == null || match.coversRole(covered_p)))
         result++;
@@ -389,12 +388,13 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#map(Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public IMatch.Editable<E, A, R> map(E element_p, Role role_p) {
+  public IMatch.Editable<E> map(E element_p, Role role_p) {
     assert element_p != null && role_p != null;
-    IMatch<E, A, R> previous = getMatchFor(element_p, role_p);
+    IMatch<E> previous = getMatchFor(element_p, role_p);
     // Enforce consistency by removing previous match if any
     if (previous != null)
       getModifiableContents().remove(previous);
+    @SuppressWarnings("unchecked")
     EMatch<E, A, R> result = (EMatch<E, A, R>) getComparison().newMatch(
         (Role.TARGET == role_p ? element_p : null),
         (Role.REFERENCE == role_p ? element_p : null),
@@ -411,7 +411,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public boolean mapIncrementally(E element1_p, Role role1_p, E element2_p,
       Role role2_p) {
     assert role1_p != null && role2_p != null && role1_p != role2_p;
-    IMatch<E, A, R> newMatch = null;
+    IMatch<E> newMatch = null;
     boolean result = false;
     Map<Role, E> elements = new HashMap<Role, E>(3);
     elements.put(role1_p, element1_p);
@@ -429,7 +429,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
     }
     // Checking existing match in role2_p
     if (element2_p != null) {
-      IMatch<E, A, R> found = getMatchFor(element2_p, role2_p);
+      IMatch<E> found = getMatchFor(element2_p, role2_p);
       if (found != null) {
         E foundElement1 = found.get(role1_p);
         result = result || foundElement1 != null && foundElement1 != element1_p;
@@ -483,21 +483,14 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public boolean maps(E element1_p, Role role1_p, E element2_p, Role role2_p) {
     boolean result = false;
     if (element1_p != null) {
-      IMatch<E, A, R> fromElement1 = getMatchFor(element1_p, role1_p);
+      IMatch<E> fromElement1 = getMatchFor(element1_p, role1_p);
       result = fromElement1 != null && fromElement1.get(role2_p) == element2_p;
     } else if (element2_p != null) {
-      IMatch<E, A, R> fromElement2 = getMatchFor(element2_p, role2_p);
+      IMatch<E> fromElement2 = getMatchFor(element2_p, role2_p);
       result = fromElement2 != null && fromElement2.get(role1_p) == element1_p;
     }
     return result;
   }
-
-  /**
-   * Create and return an appropriate comparison copier for the mapping
-   * @return a non-null object
-   * @generated NOT
-   */
-  protected abstract BidirectionalComparisonCopier<E, A, R> newBidirectionalComparisonCopier();
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping#size()
@@ -526,7 +519,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   public EMap<E, E> toMap(Role keyRole_p, Role valueRole_p) {
     EMap<E, E> result = new FHashMap<E, E>();
-    for (IMatch<E, A, R> match : getContents()) {
+    for (IMatch<E> match : getContents()) {
       E key = match.get(keyRole_p);
       if (key != null) {
         result.put(key, match.get(valueRole_p));

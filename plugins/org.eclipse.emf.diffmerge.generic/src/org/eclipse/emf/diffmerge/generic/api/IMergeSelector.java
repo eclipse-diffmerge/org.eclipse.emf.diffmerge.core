@@ -17,9 +17,12 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 /**
  * A decision maker about merging differences.
  * @see IComparison#merge(IMergeSelector, boolean, org.eclipse.core.runtime.IProgressMonitor)
+ *
+ * @param <E> The type of data elements.
+ * 
  * @author Olivier Constant
  */
-public interface IMergeSelector {
+public interface IMergeSelector<E> {
   
   /**
    * Return the role into which the given difference must be merged, if any.
@@ -27,6 +30,6 @@ public interface IMergeSelector {
    * @param difference_p a non-null difference
    * @return a potentially null role, where null stands for no merge
    */
-  Role getMergeDirection(IDifference<?, ?, ?> difference_p);
+  Role getMergeDirection(IDifference<E> difference_p);
   
 }

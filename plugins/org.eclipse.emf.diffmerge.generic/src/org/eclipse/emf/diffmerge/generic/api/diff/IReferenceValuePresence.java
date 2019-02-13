@@ -19,29 +19,22 @@ import org.eclipse.emf.diffmerge.generic.api.IMatch;
  * A difference which represents the unmatched presence of a reference value
  * (an element being referenced).
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IReferenceValuePresence<E, A, R> extends IValuePresence<E, A, R> {
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getFeature()
-   */
-  R getFeature();
+public interface IReferenceValuePresence<E> extends IValuePresence<E> {
   
   /**
    * Return the difference corresponding to the opposite side of the same link, if any
    * @return a potentially null reference value presence
    */
-  IReferenceValuePresence<E, A, R> getOpposite();
+  IReferenceValuePresence<E> getOpposite();
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getSymmetrical()
    */
-  IReferenceValuePresence<E, A, R> getSymmetrical();
+  IReferenceValuePresence<E> getSymmetrical();
   
   /**
    * Return the difference, if any, which is the symmetrical ownership
@@ -51,7 +44,7 @@ public interface IReferenceValuePresence<E, A, R> extends IValuePresence<E, A, R
    *                      isSymmetricalOwnershipTo(getSymmetricalOwnership())
    * @return a potentially null reference value presence
    */
-  IReferenceValuePresence<E, A, R> getSymmetricalOwnership();
+  IReferenceValuePresence<E> getSymmetricalOwnership();
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence#getValue()
@@ -64,7 +57,7 @@ public interface IReferenceValuePresence<E, A, R> extends IValuePresence<E, A, R
    *  isOutOfScope() || getValueMatch().get(getPresenceRole()) == getValue()
    * @return a match that is non-null if and only if the value is in the presence scope
    */
-  IMatch<E, A, R> getValueMatch();
+  IMatch<E> getValueMatch();
   
   /**
    * Return whether the reference of this value presence represents a containment,
@@ -77,7 +70,7 @@ public interface IReferenceValuePresence<E, A, R> extends IValuePresence<E, A, R
    * the same link as this difference on the opposite reference
    * @param peer_p a non-null reference value presence
    */
-  boolean isOppositeOf(IReferenceValuePresence<E, A, R> peer_p);
+  boolean isOppositeOf(IReferenceValuePresence<E> peer_p);
   
   /**
    * Return whether the value is outside the presence scope.
@@ -102,6 +95,6 @@ public interface IReferenceValuePresence<E, A, R> extends IValuePresence<E, A, R
    * Postcondition: !result || isOwnership()
    * @param peer_p a non-null reference value presence
    */
-  boolean isSymmetricalOwnershipTo(IReferenceValuePresence<E, A, R> peer_p);
+  boolean isSymmetricalOwnershipTo(IReferenceValuePresence<E> peer_p);
   
 }

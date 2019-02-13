@@ -13,7 +13,7 @@ package org.eclipse.emf.diffmerge.impl.policies;
 
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -43,10 +43,10 @@ public class MapBasedMatchPolicy extends DefaultMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public Object getMatchID(EObject element_p, IModelScope scope_p) {
+  public Object getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Object mapped = _mapping.get(element_p);
     EObject idProvider = mapped instanceof EObject? (EObject)mapped: element_p;
     return super.getMatchID(idProvider, scope_p);

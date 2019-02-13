@@ -13,11 +13,6 @@ package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.IMatch.Editable;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -31,49 +26,20 @@ import org.eclipse.emf.ecore.EReference;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getTarget <em>Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch()
- * @model superTypes="org.eclipse.emf.diffmerge.diffdata.EIdentified org.eclipse.emf.diffmerge.diffdata.IEditableMatch"
+ * @model
  * @generated
  */
-public interface EMatch extends EIdentified, Editable {
-  /**
-   * Returns the value of the '<em><b>Match ID</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Match ID</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Match ID</em>' attribute.
-   * @see #setMatchID(Object)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_MatchID()
-   * @model transient="true"
-   * @generated
-   */
-  Object getMatchID();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getMatchID <em>Match ID</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Match ID</em>' attribute.
-   * @see #getMatchID()
-   * @generated
-   */
-  void setMatchID(Object value);
-
+public interface EMatch extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> {
   /**
    * <!-- begin-user-doc -->
    * <p>
@@ -165,25 +131,9 @@ public interface EMatch extends EIdentified, Editable {
   void setTarget(EObject value);
 
   /**
-   * Returns the value of the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference}.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Modifiable Related Differences</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Modifiable Related Differences</em>' containment reference list.
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableRelatedDifferences()
-   * @model containment="true"
-   * @generated
-   */
-  EList<EMergeableDifference> getModifiableRelatedDifferences();
-
-  /**
    * Returns the value of the '<em><b>Modifiable Attribute Map</b></em>' map.
    * The key is of type {@link org.eclipse.emf.ecore.EAttribute},
-   * and the value is of type list of {@link java.util.Map.Entry<java.lang.Object, org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence>},
+   * and the value is of type list of {@link java.util.Map.Entry<java.lang.Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<org.eclipse.emf.ecore.EObject>>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Attribute Map</em>' map isn't clear,
@@ -196,12 +146,12 @@ public interface EMatch extends EIdentified, Editable {
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EAttribute, EMap<Object, IAttributeValuePresence>> getModifiableAttributeMap();
+  EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> getModifiableAttributeMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Reference Map</b></em>' map.
    * The key is of type {@link org.eclipse.emf.ecore.EReference},
-   * and the value is of type list of {@link java.util.Map.Entry<org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence>},
+   * and the value is of type list of {@link java.util.Map.Entry<org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<org.eclipse.emf.ecore.EObject>>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Reference Map</em>' map isn't clear,
@@ -214,84 +164,24 @@ public interface EMatch extends EIdentified, Editable {
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EReference, EMap<EObject, IReferenceValuePresence>> getModifiableReferenceMap();
+  EMap<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableReferenceMap();
 
   /**
-   * Returns the value of the '<em><b>Element Presence Difference</b></em>' reference.
+   * Returns the value of the '<em><b>Modifiable Order Reference Map</b></em>' map.
+   * The key is of type {@link org.eclipse.emf.ecore.EReference},
+   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<org.eclipse.emf.ecore.EObject>},
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Element Presence Difference</em>' reference isn't clear,
+   * If the meaning of the '<em>Modifiable Order Reference Map</em>' map isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Element Presence Difference</em>' reference.
-   * @see #setElementPresenceDifference(IElementPresence)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ElementPresenceDifference()
-   * @model type="org.eclipse.emf.diffmerge.diffdata.IElementPresence"
+   * @return the value of the '<em>Modifiable Order Reference Map</em>' map.
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableOrderReferenceMap()
+   * @model mapType="org.eclipse.emf.diffmerge.diffdata.ReferenceToOrderDifferenceEntry&lt;org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;&gt;"
    * @generated
    */
-  IElementPresence getElementPresenceDifference();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Element Presence Difference</em>' reference.
-   * @see #getElementPresenceDifference()
-   * @generated
-   */
-  void setElementPresenceDifference(IElementPresence value);
-
-  /**
-   * Returns the value of the '<em><b>Reference Ownership Difference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Reference Ownership Difference</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Reference Ownership Difference</em>' reference.
-   * @see #setReferenceOwnershipDifference(IReferenceValuePresence)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ReferenceOwnershipDifference()
-   * @model type="org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence"
-   * @generated
-   */
-  IReferenceValuePresence getReferenceOwnershipDifference();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Reference Ownership Difference</em>' reference.
-   * @see #getReferenceOwnershipDifference()
-   * @generated
-   */
-  void setReferenceOwnershipDifference(IReferenceValuePresence value);
-
-  /**
-   * Returns the value of the '<em><b>Target Ownership Difference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Target Ownership Difference</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Target Ownership Difference</em>' reference.
-   * @see #setTargetOwnershipDifference(IReferenceValuePresence)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_TargetOwnershipDifference()
-   * @model type="org.eclipse.emf.diffmerge.diffdata.IReferenceValuePresence"
-   * @generated
-   */
-  IReferenceValuePresence getTargetOwnershipDifference();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Target Ownership Difference</em>' reference.
-   * @see #getTargetOwnershipDifference()
-   * @generated
-   */
-  void setTargetOwnershipDifference(IReferenceValuePresence value);
+  @SuppressWarnings("javadoc")
+  EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap();
 
 } // EMatch

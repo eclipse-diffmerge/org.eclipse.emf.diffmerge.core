@@ -14,8 +14,7 @@ package org.eclipse.emf.diffmerge.impl.policies;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 
@@ -51,7 +50,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void addConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.add(listener_p);
@@ -65,28 +64,29 @@ implements IConfigurablePolicy {
     // Override in subclasses if the configurable state is extended or modified
     return new ConfigurableDiffPolicy(this);
   }
-  
+ 
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrdered(org.eclipse.emf.ecore.EStructuralFeature)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrderedFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override
-  public final boolean considerOrdered(EStructuralFeature feature_p) {
+  public boolean considerOrderedFeature(EStructuralFeature feature_p) {
     boolean result;
-    if (_ignoreOrders)
+    if (_ignoreOrders) {
       result = false;
-    else
+    } else {
       result = doConsiderOrdered(feature_p);
+    }
     return result;
   }
   
   /**
    * Return whether the given feature must be considered as ordered, independently of the
    * "ignore orders" flag
-   * @see IDiffPolicy#considerOrdered(EStructuralFeature)
+   * @see DefaultDiffPolicy#considerOrderedFeature(EStructuralFeature)
    * @param feature_p a non-null feature
    */
   protected boolean doConsiderOrdered(EStructuralFeature feature_p) {
-    return super.considerOrdered(feature_p);
+    return super.considerOrderedFeature(feature_p);
   }
   
   /**
@@ -107,7 +107,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.remove(listener_p);
@@ -123,7 +123,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy)
    */
   public boolean update(IConfigurablePolicy policy_p) {
     boolean result = false;

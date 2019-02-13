@@ -18,8 +18,10 @@ import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -33,12 +35,12 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#getFeature <em>Feature</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl#isOrder <em>Order</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
+public abstract class EValuePresenceImpl extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl<EObject, EAttribute, EReference>
     implements EValuePresence {
   /**
    * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
@@ -49,26 +51,6 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
    * @ordered
    */
   protected EStructuralFeature feature;
-
-  /**
-   * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrder()
-   * @generated
-   * @ordered
-   */
-  protected static final boolean ORDER_EDEFAULT = false;
-
-  /**
-   * The cached value of the '{@link #isOrder() <em>Order</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #isOrder()
-   * @generated
-   * @ordered
-   */
-  protected boolean order = ORDER_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -150,28 +132,6 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public boolean isOrder() {
-    return order;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setOrder(boolean newOrder) {
-    boolean oldOrder = order;
-    order = newOrder;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.EVALUE_PRESENCE__ORDER, oldOrder, order));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   @SuppressWarnings("boxing")
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -180,8 +140,6 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
       if (resolve)
         return getFeature();
       return basicGetFeature();
-    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-      return isOrder();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -196,9 +154,6 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
     switch (featureID) {
     case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
       setFeature((EStructuralFeature) newValue);
-      return;
-    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-      setOrder(((Boolean) newValue).booleanValue());
       return;
     }
     super.eSet(featureID, newValue);
@@ -215,9 +170,6 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
     case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
       setFeature((EStructuralFeature) null);
       return;
-    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-      setOrder(ORDER_EDEFAULT);
-      return;
     }
     super.eUnset(featureID);
   }
@@ -232,27 +184,8 @@ public abstract class EValuePresenceImpl extends EElementRelativePresenceImpl
     switch (featureID) {
     case DiffdataPackage.EVALUE_PRESENCE__FEATURE:
       return feature != null;
-    case DiffdataPackage.EVALUE_PRESENCE__ORDER:
-      return order != ORDER_EDEFAULT;
     }
     return super.eIsSet(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString() {
-    if (eIsProxy())
-      return super.toString();
-
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (order: "); //$NON-NLS-1$
-    result.append(order);
-    result.append(')');
-    return result.toString();
   }
 
   /**

@@ -15,7 +15,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -43,7 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
     implements
-    BasicEMap.Entry<EAttribute, EMap<Object, IAttributeValuePresence>> {
+    BasicEMap.Entry<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> {
   /**
    * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
    * <!-- begin-user-doc -->
@@ -62,7 +61,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EMap<Object, IAttributeValuePresence> value;
+  protected EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -130,9 +129,9 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence> getTypedValue() {
+  public EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> getTypedValue() {
     if (value == null) {
-      value = new EcoreEMap<Object, IAttributeValuePresence>(
+      value = new EcoreEMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>(
           DiffdataPackage.Literals.VALUE_TO_DIFFERENCE_ENTRY,
           ValueToDifferenceEntryImpl.class, this,
           DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE);
@@ -280,7 +279,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence> getValue() {
+  public EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> getValue() {
     return getTypedValue();
   }
 
@@ -289,9 +288,9 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence> setValue(
-      EMap<Object, IAttributeValuePresence> value) {
-    EMap<Object, IAttributeValuePresence> oldValue = getValue();
+  public EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> setValue(
+      EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> value) {
+    EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> oldValue = getValue();
     getTypedValue().clear();
     getTypedValue().addAll(value);
     return oldValue;
@@ -303,10 +302,10 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<EAttribute, EMap<Object, IAttributeValuePresence>> getEMap() {
+  public EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<EAttribute, EMap<Object, IAttributeValuePresence>>) container
+        : (EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>>) container
             .eGet(eContainmentFeature());
   }
 

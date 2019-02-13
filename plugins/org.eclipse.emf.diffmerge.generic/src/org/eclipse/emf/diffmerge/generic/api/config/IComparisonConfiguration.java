@@ -19,30 +19,28 @@ import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 /**
  * The configuration of a comparison.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IComparisonConfiguration<E, A, R> {
+public interface IComparisonConfiguration<E> {
   
   /**
    * Return the diff policy for the comparison
    * @return a potentially null diff policy (null is for default)
    */
-  IDiffPolicy<E, A, R> getDiffPolicy();
+  IDiffPolicy<E> getDiffPolicy();
   
   /**
    * Return the match policy for the comparison
    * @return a potentially null match policy (null is for default)
    */
-  IMatchPolicy<E, A, R> getMatchPolicy();
+  IMatchPolicy<E> getMatchPolicy();
   
   /**
    * Return the merge policy for the comparison
    * @return a potentially null merge policy (null is for default)
    */
-  IMergePolicy<E, A, R> getMergePolicy();
+  IMergePolicy<E> getMergePolicy();
   
 }

@@ -1935,7 +1935,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IComparison</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison" typeParameters="E"
    * @generated
    */
   EClass getIComparison();
@@ -1946,7 +1946,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Comparison</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison.Editable" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IComparison.Editable" typeParameters="E"
    * @generated
    */
   EClass getIEditableComparison();
@@ -1957,7 +1957,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMapping</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping" typeParameters="E"
    * @generated
    */
   EClass getIMapping();
@@ -1968,7 +1968,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Mapping</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping.Editable" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMapping.Editable" typeParameters="E"
    * @generated
    */
   EClass getIEditableMapping();
@@ -1979,7 +1979,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMatch</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch" typeParameters="E"
    * @generated
    */
   EClass getIMatch();
@@ -1990,7 +1990,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Match</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch.Editable" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatch.Editable" typeParameters="E"
    * @generated
    */
   EClass getIEditableMatch();
@@ -2001,7 +2001,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IMergeable Difference</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference" typeParameters="E"
    * @generated
    */
   EClass getIMergeableDifference();
@@ -2012,7 +2012,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IEditable Mergeable Difference</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable" typeParameters="E"
    * @generated
    */
   EClass getIEditableMergeableDifference();
@@ -2023,7 +2023,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IElement Relative Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence" typeParameters="E"
    * @generated
    */
   EClass getIElementRelativePresence();
@@ -2034,7 +2034,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IElement Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence" typeParameters="E"
    * @generated
    */
   EClass getIElementPresence();
@@ -2045,7 +2045,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IValue Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence" typeParameters="E"
    * @generated
    */
   EClass getIValuePresence();
@@ -2056,7 +2056,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IAttribute Value Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence" typeParameters="E"
    * @generated
    */
   EClass getIAttributeValuePresence();
@@ -2067,7 +2067,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>IReference Value Presence</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence" typeParameters="E"
    * @generated
    */
   EClass getIReferenceValuePresence();
@@ -2078,7 +2078,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IEditable Tree Data Scope</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope" typeParameters="E"
    * @generated
    */
   EDataType getIEditableTreeDataScope();
@@ -2089,7 +2089,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IMatch Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMatchPolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatchPolicy" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMatchPolicy" typeParameters="E"
    * @generated
    */
   EDataType getIMatchPolicy();
@@ -2100,7 +2100,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IDiff Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IDiffPolicy" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IDiffPolicy" typeParameters="E"
    * @generated
    */
   EDataType getIDiffPolicy();
@@ -2111,7 +2111,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for data type '<em>IMerge Policy</em>'.
    * @see org.eclipse.emf.diffmerge.generic.api.IMergePolicy
-   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMergePolicy" typeParameters="E A R"
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.IMergePolicy" typeParameters="E"
    * @generated
    */
   EDataType getIMergePolicy();

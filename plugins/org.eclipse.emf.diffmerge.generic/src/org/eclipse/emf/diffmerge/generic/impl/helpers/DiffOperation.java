@@ -48,22 +48,20 @@ import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 /**
  * An operation which builds differences for a comparison.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
+public class DiffOperation<E> extends AbstractExpensiveOperation {
   
   /** The non-null diff policy */
-  private final IDiffPolicy<E, A, R> _diffPolicy;
+  private final IDiffPolicy<E> _diffPolicy;
   
   /** The non-null merge policy */
-  private final IMergePolicy<E, A, R> _mergePolicy;
+  private final IMergePolicy<E> _mergePolicy;
   
   /** The non-null comparison whose differences are being built */
-  private final IComparison.Editable<E, A, R> _comparison;
+  private final IComparison.Editable<E> _comparison;
   
   /** Whether the scope on the REFERENCE side is read-only */
   protected final boolean _isReferenceScopeReadOnly;
@@ -78,8 +76,8 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param diffPolicy_p a non-null diff policy
    * @param mergePolicy_p a non-null merge policy
    */
-  public DiffOperation(IComparison.Editable<E, A, R> comparison_p, IDiffPolicy<E, A, R> diffPolicy_p,
-      IMergePolicy<E, A, R> mergePolicy_p) {
+  public DiffOperation(IComparison.Editable<E> comparison_p, IDiffPolicy<E> diffPolicy_p,
+      IMergePolicy<E> mergePolicy_p) {
     super();
     _comparison = comparison_p;
     _diffPolicy = diffPolicy_p;
@@ -98,7 +96,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param role1_p a non-null role which is TARGET or REFERENCE
    * @param role2_p a non-null role different from role1_p which is TARGET or REFERENCE
    */
-  protected void createAttributeOrderDifference(IMatch<E, A, R> elementMatch_p, A attribute_p,
+  protected void createAttributeOrderDifference(IMatch<E> elementMatch_p, Object attribute_p,
       Object value1_p, Object value2_p, Role role1_p, Role role2_p) {
     createAttributeValueDifference(
         elementMatch_p, attribute_p, value1_p, role1_p, true);
@@ -116,12 +114,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param isOrder_p whether the value presence is solely due to ordering
    * @return a non-null attribute value presence
    */
-  protected IAttributeValuePresence<E, A, R> createAttributeValueDifference(
-      IMatch<E, A, R> elementMatch_p, A attribute_p, Object value_p,
+  protected IAttributeValuePresence<E> createAttributeValueDifference(
+      IMatch<E> elementMatch_p, Object attribute_p, Object value_p,
       Role role_p, boolean isOrder_p) {
-    IAttributeValuePresence<E, A, R> result = getComparison().newAttributeValuePresence(
+    IAttributeValuePresence<E> result = getComparison().newAttributeValuePresence(
             elementMatch_p, attribute_p, value_p, role_p, isOrder_p);
-    IAttributeValuePresence<E, A, R> symmetrical = result.getSymmetrical();
+    IAttributeValuePresence<E> symmetrical = result.getSymmetrical();
     if (symmetrical != null) {
       setSymmetricalValuePresenceDependencies(result, symmetrical);
     }
@@ -135,7 +133,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Create differences based on the mapping between the model scopes compared
    */
   protected void createDifferences() {
-    for (IMatch<E, A, R> match : getMapping().getContents()) {
+    for (IMatch<E> match : getMapping().getContents()) {
       checkProgress();
       if (getDiffPolicy().coverMatch(match)) {
         createTechnicalDifferences(match);
@@ -152,8 +150,8 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param value_p a value element, which is non-null unless valueMatch_p is not null
    * @param valueMatch_p an optional match
    */
-  protected void createReferenceOrderDifference(IMatch<E, A, R> elementMatch_p,
-      R reference_p, E value_p, IMatch<E, A, R> valueMatch_p) {
+  protected void createReferenceOrderDifference(IMatch<E> elementMatch_p,
+      Object reference_p, E value_p, IMatch<E> valueMatch_p) {
     createReferenceValueDifference(elementMatch_p, reference_p, value_p,
         valueMatch_p, TARGET, true);
     createReferenceValueDifference(elementMatch_p, reference_p, value_p,
@@ -171,10 +169,10 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param isOrder_p whether the value presence is solely due to ordering
    * @return a non-null reference value presence
    */
-  protected IReferenceValuePresence<E, A, R> createReferenceValueDifference(
-      IMatch<E, A, R> elementMatch_p, R reference_p, E value_p,
-      IMatch<E, A, R> valueMatch_p, Role role_p, boolean isOrder_p) {
-    IReferenceValuePresence<E, A, R> result = getComparison().newReferenceValuePresence(
+  protected IReferenceValuePresence<E> createReferenceValueDifference(
+      IMatch<E> elementMatch_p, Object reference_p, E value_p,
+      IMatch<E> valueMatch_p, Role role_p, boolean isOrder_p) {
+    IReferenceValuePresence<E> result = getComparison().newReferenceValuePresence(
         elementMatch_p, reference_p, value_p, valueMatch_p, role_p, isOrder_p);
     setReferencedValueDependencies(result);
     if (getComparison().isThreeWay()) {
@@ -187,7 +185,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Create the technical differences corresponding to the given match
    * @param match_p a non-null match
    */
-  protected void createTechnicalDifferences(IMatch<E, A, R> match_p) {
+  protected void createTechnicalDifferences(IMatch<E> match_p) {
     assert match_p != null;
     if (match_p.isPartial()) {
       getOrCreateElementPresence(match_p);
@@ -205,14 +203,14 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectAllAttributeDifferences(IMatch<E, A, R> match_p, Role role1_p,
+  protected boolean detectAllAttributeDifferences(IMatch<E> match_p, Role role1_p,
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
-    Set<A> attributes = new HashSet<A>();
+    Set<Object> attributes = new HashSet<Object>();
     attributes.addAll(getComparison().getScope(role1_p).getAttributes(match_p.get(role1_p)));
     attributes.addAll(getComparison().getScope(role2_p).getAttributes(match_p.get(role2_p)));
-    for (A attribute : attributes) {
+    for (Object attribute : attributes) {
       if (getDiffPolicy().coverAttribute(attribute)) {
         result = detectAttributeDifferences(
             match_p, attribute, role1_p, role2_p, create_p) || result;
@@ -230,23 +228,23 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectAllReferenceDifferences(IMatch<E, A, R> match_p, Role role1_p,
+  protected boolean detectAllReferenceDifferences(IMatch<E> match_p, Role role1_p,
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
-    IScopePolicy<E, A, R> scopePolicy = getScopePolicy();
-    ITreeDataScope<E, A, R> scope1 = getComparison().getScope(role1_p);
-    ITreeDataScope<E, A, R> scope2 = getComparison().getScope(role2_p);
-    Set<R> references1 = new HashSet<R>(
+    IScopePolicy<E> scopePolicy = getScopePolicy();
+    ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
+    ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
+    Set<Object> references1 = new HashSet<Object>(
         scope1.getReferences(match_p.get(role1_p)));
-    for (R reference : references1) {
+    for (Object reference : references1) {
       if (!scopePolicy.isContainerReference(reference) &&
           getDiffPolicy().coverReference(reference)) {
         result = detectReferenceDifferences(
             match_p, reference, role1_p, role2_p, create_p) || result;
       }
     }
-    for (R reference : scope2.getReferences(match_p.get(role2_p))) {
+    for (Object reference : scope2.getReferences(match_p.get(role2_p))) {
       if (!references1.contains(reference) && !scopePolicy.isContainerReference(reference) &&
           getDiffPolicy().coverReference(reference)) {
         result = detectReferenceDifferences(
@@ -266,12 +264,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectAttributeDifferences(IMatch<E, A, R> match_p, A attribute_p,
+  protected boolean detectAttributeDifferences(IMatch<E> match_p, Object attribute_p,
       Role role1_p, Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p) && attribute_p != null;
     boolean result = false;
-    ITreeDataScope<E, A, R> scope1 = getComparison().getScope(role1_p);
-    ITreeDataScope<E, A, R> scope2 = getComparison().getScope(role2_p);
+    ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
+    ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
     E element1 = match_p.get(role1_p);
     E element2 = match_p.get(role2_p);
     List<?> values1 = scope1.getAttributeValues(element1, attribute_p);
@@ -334,7 +332,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectContentDifferences(IMatch<E, A, R> match_p, Role role1_p,
+  protected boolean detectContentDifferences(IMatch<E> match_p, Role role1_p,
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = detectAllAttributeDifferences(match_p, role1_p, role2_p, create_p);
@@ -351,12 +349,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectOwnershipDifferences(IMatch<E, A, R> match_p, Role role1_p,
+  protected boolean detectOwnershipDifferences(IMatch<E> match_p, Role role1_p,
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
     for (Role role : Arrays.asList(role1_p, role2_p)) {
-      IMatch<E, A, R> parentMatch = getComparison().getContainerOf(match_p, role);
+      IMatch<E> parentMatch = getComparison().getContainerOf(match_p, role);
       // An ownership difference needs only be created if the container
       // is unmatched, otherwise it is already handled by container refs
       if (parentMatch != null && parentMatch.isPartial(role1_p, role2_p)) {
@@ -364,7 +362,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
           return true;
         }
         E element = match_p.get(role); // Non-null because match_p is not partial
-        R containment = getComparison().getScope(role).getContainment(element);
+        Object containment = getComparison().getScope(role).getContainment(element);
         createReferenceValueDifference(parentMatch, containment, element, match_p, role, false);
         result = true;
       }
@@ -382,15 +380,15 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
-  protected boolean detectReferenceDifferences(IMatch<E, A, R> match_p, R reference_p,
+  protected boolean detectReferenceDifferences(IMatch<E> match_p, Object reference_p,
       Role role1_p, Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p) && reference_p != null;
     assert !getScopePolicy().isContainerReference(reference_p);
     boolean result = false;
-    IDiffPolicy<E, A, R> diffPolicy = getDiffPolicy();
+    IDiffPolicy<E> diffPolicy = getDiffPolicy();
     // Get reference values in different roles
-    ITreeDataScope<E, A, R> scope1 = getComparison().getScope(role1_p);
-    ITreeDataScope<E, A, R> scope2 = getComparison().getScope(role2_p);
+    ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
+    ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
     E element1 = match_p.get(role1_p);
     E element2 = match_p.get(role2_p);
     List<E> values1 = scope1.getReferenceValues(element1, reference_p);
@@ -402,7 +400,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     // Check which ones match
     for (E value1 : values1) {
       // For every value in role1_p, get its corresponding match if in scope
-      IMatch<E, A, R> valueMatch1 = getMapping().getMatchFor(value1, role1_p);
+      IMatch<E> valueMatch1 = getMapping().getMatchFor(value1, role1_p);
       // The role1_p value is covered if a match is found or it is a covered out-of-scope value
       boolean outsideScope1 = valueMatch1 == null;
       boolean coverValue1 =
@@ -454,7 +452,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     }
     // For every remaining value in role2_p, create a difference if covered
     for (E remainingValue2 : remainingValues2) {
-      IMatch<E, A, R> valueMatch2 = getMapping().getMatchFor(remainingValue2, role2_p);
+      IMatch<E> valueMatch2 = getMapping().getMatchFor(remainingValue2, role2_p);
       boolean outsideReferenceScope = valueMatch2 == null;
       boolean coverReferenceValue =
           !outsideReferenceScope && diffPolicy.coverMatch(valueMatch2) ||
@@ -482,12 +480,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param outsideScope_p whether the value is out-of-scope
    * @return a positive int or -1 if the element is not found
    */
-  protected int detectReferenceValueAmong(R reference_p, E value_p, List<E> values_p,
+  protected int detectReferenceValueAmong(Object reference_p, E value_p, List<E> values_p,
       boolean outsideScope_p) {
     int result = values_p.indexOf(value_p);
     if (result == -1 && outsideScope_p) {
       // Outside scope
-      IDiffPolicy<E, A, R> diffPolicy = getDiffPolicy();
+      IDiffPolicy<E> diffPolicy = getDiffPolicy();
       int i = -1;
       for (E candidateValue : values_p) {
         i++;
@@ -508,7 +506,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param candidates_p a non-null collection of candidate values
    * @return a non-null object
    */
-  protected ObjectAndIndex findEqualAttributeValue(A attribute_p, Object value_p,
+  protected ObjectAndIndex findEqualAttributeValue(Object attribute_p, Object value_p,
       Collection<? extends Object> candidates_p) {
     int i = 0;
     for (Object candidate : candidates_p) {
@@ -524,7 +522,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the comparison which is being built
    * @return a non-null comparison
    */
-  public IComparison.Editable<E, A, R> getComparison() {
+  public IComparison.Editable<E> getComparison() {
     return _comparison;
   }
   
@@ -532,7 +530,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the diff policy
    * @return a non-null diff policy
    */
-  protected IDiffPolicy<E, A, R> getDiffPolicy() {
+  protected IDiffPolicy<E> getDiffPolicy() {
     return _diffPolicy;
   }
   
@@ -540,14 +538,14 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the merge policy
    * @return a non-null merge policy
    */
-  protected IMergePolicy<E, A, R> getMergePolicy() {
+  protected IMergePolicy<E> getMergePolicy() {
     return _mergePolicy;
   }
   
   /**
    * Return the mapping of the comparison which is being built
    */
-  protected IMapping<E, A, R> getMapping() {
+  protected IMapping<E> getMapping() {
     return getComparison().getMapping();
   }
   
@@ -564,12 +562,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param match_p a non-null, partial match
    * @return a potentially null element presence
    */
-  protected IElementPresence<E, A, R> getOrCreateElementPresence(IMatch<E, A, R> match_p) {
+  protected IElementPresence<E> getOrCreateElementPresence(IMatch<E> match_p) {
     assert match_p != null && match_p.isPartial();
-    IElementPresence<E, A, R> result = match_p.getElementPresenceDifference();
+    IElementPresence<E> result = match_p.getElementPresenceDifference();
     if (result == null && getDiffPolicy().coverMatch(match_p)) {
       Role presenceRole = match_p.getUncoveredRole().opposite();
-      IMatch<E, A, R> ownerMatch = getComparison().getContainerOf(match_p, presenceRole);
+      IMatch<E> ownerMatch = getComparison().getContainerOf(match_p, presenceRole);
       result = getComparison().newElementPresence(match_p, ownerMatch);
       setElementPresenceDependencies(result);
       if (getComparison().isThreeWay()) {
@@ -583,7 +581,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the scope policy to use globally
    * @return a non-null object
    */
-  protected IScopePolicy<E, A, R> getScopePolicy() {
+  protected IScopePolicy<E> getScopePolicy() {
     return getComparison().getScope(TARGET).getScopePolicy();
   }
   
@@ -622,10 +620,10 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param target_p a non-null difference
    * @param role_p a non-null role
    */
-  protected void markImplies(IMergeableDifference<E, A, R> source_p,
-      IMergeableDifference<E, A, R> target_p, Role role_p) {
+  protected void markImplies(IMergeableDifference<E> source_p,
+      IMergeableDifference<E> target_p, Role role_p) {
     if (!isReadOnly(role_p)) {
-      ((IMergeableDifference.Editable<E, A, R>)source_p).markImplies(target_p, role_p);
+      ((IMergeableDifference.Editable<E>)source_p).markImplies(target_p, role_p);
     }
   }
   
@@ -636,10 +634,10 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param target_p a non-null difference
    * @param role_p a non-null role
    */
-  protected void markRequires(IMergeableDifference<E, A, R> source_p,
-      IMergeableDifference<E, A, R> target_p, Role role_p) {
+  protected void markRequires(IMergeableDifference<E> source_p,
+      IMergeableDifference<E> target_p, Role role_p) {
     if (!isReadOnly(role_p)) {
-      ((IMergeableDifference.Editable<E, A, R>)source_p).markRequires(target_p, role_p);
+      ((IMergeableDifference.Editable<E>)source_p).markRequires(target_p, role_p);
     }
   }
   
@@ -657,7 +655,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param presence_p a non-null containment value presence whose value match is non-null
    *        and not partial
    */
-  protected void setCyclicOwnershipDependencies(IReferenceValuePresence<E, A, R> presence_p) {
+  protected void setCyclicOwnershipDependencies(IReferenceValuePresence<E> presence_p) {
     // Preconditions
     assert presence_p.getValueMatch() != null;
     assert !presence_p.isOrder();
@@ -668,15 +666,15 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     final Role orderingRole = getComparison().getMapping().getOrderingRole();
     final Role oppositeRole = orderingRole.opposite();
     if (presence_p.getPresenceRole() == oppositeRole) {
-      final IComparison<E, A, R> comparison = getComparison();
-      final IMatch <E, A, R>valueMatch = presence_p.getValueMatch();
-      IMatch<E, A, R> oppositeAncestorMatch = valueMatch;
+      final IComparison<E> comparison = getComparison();
+      final IMatch <E>valueMatch = presence_p.getValueMatch();
+      IMatch<E> oppositeAncestorMatch = valueMatch;
       do {
         // Going up on the non-ordering side
         oppositeAncestorMatch = comparison.getContainerOf(oppositeAncestorMatch, oppositeRole);
         if (oppositeAncestorMatch != null && oppositeAncestorMatch.isAMove()) {
-          IReferenceValuePresence<E, A, R> cycleEnd = null;
-          IMatch<E, A, R> orderingAncestorMatch = oppositeAncestorMatch;
+          IReferenceValuePresence<E> cycleEnd = null;
+          IMatch<E> orderingAncestorMatch = oppositeAncestorMatch;
           do {
             // Going up on the ordering side
             orderingAncestorMatch =
@@ -700,13 +698,13 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Set dependencies between differences of type element presence exclusively
    * @param presence_p a non-null element presence
    */
-  protected void setElementPresenceDependencies(IElementPresence<E, A, R> presence_p) {
+  protected void setElementPresenceDependencies(IElementPresence<E> presence_p) {
     Role presenceRole = presence_p.getPresenceRole();
     if (!presence_p.isRoot()) {
-      IMatch<E, A, R> ownerMatch = presence_p.getOwnerMatch();
+      IMatch<E> ownerMatch = presence_p.getOwnerMatch();
       if (getMergePolicy().bindPresenceToOwnership(_comparison.getScope(presenceRole.opposite())) &&
           ownerMatch != null && ownerMatch.isPartial()) {
-        IElementPresence<E, A, R> ownerPresence = getOrCreateElementPresence(ownerMatch);
+        IElementPresence<E> ownerPresence = getOrCreateElementPresence(ownerMatch);
         if (ownerPresence != null) {
           // Child addition requires container addition
           markRequires(presence_p, ownerPresence, presenceRole.opposite());
@@ -719,9 +717,9 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     Collection<E> additionPeers = getMergePolicy().getAdditionGroup(
         presence_p.getElement(), getComparison().getScope(presenceRole));
     for (E peer : additionPeers) {
-      IMatch<E, A, R> peerMatch = getMapping().getMatchFor(peer, presenceRole);
+      IMatch<E> peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
-        IElementPresence<E, A, R> peerPresence = getOrCreateElementPresence(peerMatch);
+        IElementPresence<E> peerPresence = getOrCreateElementPresence(peerMatch);
         if (peerPresence != null) {
           // Element addition requires group member addition
           markRequires(presence_p, peerPresence, presenceRole.opposite());
@@ -734,9 +732,9 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     Collection<E> deletionPeers = getMergePolicy().getDeletionGroup(
         presence_p.getElement(), getComparison().getScope(presenceRole));
     for (E peer : deletionPeers) {
-      IMatch<E, A, R> peerMatch = getMapping().getMatchFor(peer, presenceRole);
+      IMatch<E> peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
-        IElementPresence<E, A, R> peerPresence = getOrCreateElementPresence(peerMatch);
+        IElementPresence<E> peerPresence = getOrCreateElementPresence(peerMatch);
         if (peerPresence != null) {
           // Element deletion requires group member deletion
           markRequires(presence_p, peerPresence, presenceRole);
@@ -752,12 +750,12 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param second_p a non-null reference value presence which is opposite to first_p
    */
   protected void setOppositeReferenceDependencies(
-      IReferenceValuePresence<E, A, R> first_p, IReferenceValuePresence<E, A, R> second_p) {
+      IReferenceValuePresence<E> first_p, IReferenceValuePresence<E> second_p) {
     assert first_p.isOppositeOf(second_p);
     // Opposite diffs are implicitly equivalent except for non-many references
     // which bring their own constraints and must therefore be merged explicitly
     Role presenceRole = first_p.getPresenceRole();
-    IScopePolicy<E, A, R> scopePolicy = getScopePolicy();
+    IScopePolicy<E> scopePolicy = getScopePolicy();
     if (scopePolicy.isManyReference(second_p.getFeature())) {
       markImplies(first_p,second_p, presenceRole);
       markImplies(first_p, second_p, presenceRole.opposite());
@@ -779,13 +777,13 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * reference value presences
    * @param presence_p a non-null ownership reference value presence
    */
-  protected void setOwnershipDependencies(IReferenceValuePresence<E, A, R> presence_p) {
+  protected void setOwnershipDependencies(IReferenceValuePresence<E> presence_p) {
     assert presence_p.isOwnership();
-    IMatch<E, A, R> valueMatch = presence_p.getValueMatch();
+    IMatch<E> valueMatch = presence_p.getValueMatch();
     // Handling dependencies: move of value
     if (valueMatch == null || !valueMatch.isPartial()) {
       // Implicit global !isMany() to containers which are implicitly symmetric
-      IReferenceValuePresence<E, A, R> symmetricalOwnership = presence_p.getSymmetricalOwnership();
+      IReferenceValuePresence<E> symmetricalOwnership = presence_p.getSymmetricalOwnership();
       if (symmetricalOwnership != null) {
         setSymmetricalOwnershipDependencies(presence_p, symmetricalOwnership);
       }
@@ -801,10 +799,10 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param referenceDiff_p a non-null reference presence to a partial match
    */
   protected void setPartialReferencedValueDependencies(
-      IReferenceValuePresence<E, A, R> referenceDiff_p) {
+      IReferenceValuePresence<E> referenceDiff_p) {
     assert referenceDiff_p.getValueMatch() != null;
     assert referenceDiff_p.getValueMatch().isPartial();
-    IElementPresence<E, A, R> presence = getOrCreateElementPresence(
+    IElementPresence<E> presence = getOrCreateElementPresence(
         referenceDiff_p.getValueMatch());
     if (presence != null) {
       Role presenceRole = referenceDiff_p.getPresenceRole();
@@ -821,7 +819,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
           markImplies(referenceDiff_p, presence, presenceRole);
         } else {
           // Not a containment or no ownership/presence coupling
-          R opposite = getScopePolicy().getOppositeReference(referenceDiff_p.getFeature());
+          Object opposite = getScopePolicy().getOppositeReference(referenceDiff_p.getFeature());
           // If reference has an eOpposite which is mandatory for addition, then ...
           if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
             // ... value presence requires ref
@@ -839,9 +837,9 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param referenceDiff_p a non-null reference presence to a partial match
    */
   protected void setPartialReferencingElementDependencies(
-      IReferenceValuePresence<E, A, R> referenceDiff_p) {
+      IReferenceValuePresence<E> referenceDiff_p) {
     assert referenceDiff_p.getElementMatch().isPartial();
-    IElementPresence<E, A, R> presence = getOrCreateElementPresence(
+    IElementPresence<E> presence = getOrCreateElementPresence(
         referenceDiff_p.getElementMatch());
     if (presence != null) {
       Role presenceRole = referenceDiff_p.getPresenceRole();
@@ -855,17 +853,17 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * Set the dependencies of a reference value presence
    * @param presence_p a non-null reference value presence
    */
-  protected void setReferencedValueDependencies(IReferenceValuePresence<E, A, R> presence_p) {
-    IMatch<E, A, R> valueMatch = presence_p.getValueMatch();
+  protected void setReferencedValueDependencies(IReferenceValuePresence<E> presence_p) {
+    IMatch<E> valueMatch = presence_p.getValueMatch();
     // Handling dependencies: links (non-container eOpposite)
     if (!presence_p.isOwnership()) {
-      IReferenceValuePresence<E, A, R> oppositeDiff = presence_p.getOpposite();
+      IReferenceValuePresence<E> oppositeDiff = presence_p.getOpposite();
       if (oppositeDiff != null) {
         setOppositeReferenceDependencies(presence_p, oppositeDiff);
       }
     }
     // Handling dependencies: symmetry (!isMany(), ordering)
-    IReferenceValuePresence<E, A, R> symmetrical = presence_p.getSymmetrical();
+    IReferenceValuePresence<E> symmetrical = presence_p.getSymmetrical();
     if (symmetrical != null) {
       setSymmetricalValuePresenceDependencies(presence_p, symmetrical);
     }
@@ -891,7 +889,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    *        symmetrical ownership to first_p
    */
   protected void setSymmetricalOwnershipDependencies(
-      IReferenceValuePresence<E, A, R> first_p, IReferenceValuePresence<E, A, R> second_p) {
+      IReferenceValuePresence<E> first_p, IReferenceValuePresence<E> second_p) {
     assert first_p.isSymmetricalOwnershipTo(second_p);
     // Symmetrical ownership presence is implicit on addition...
     markImplies(first_p, second_p, second_p.getPresenceRole());
@@ -908,7 +906,7 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param second_p a non-null value presence which is symmetrical to first_p
    */
   protected void setSymmetricalValuePresenceDependencies(
-      IValuePresence<E, A, R> first_p, IValuePresence<E, A, R> second_p) {
+      IValuePresence<E> first_p, IValuePresence<E> second_p) {
     assert first_p.isSymmetricalTo(second_p);
     // Symmetrical diffs are implicitly dependent on addition
     markImplies(first_p, second_p, second_p.getPresenceRole());
@@ -924,19 +922,19 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param presence_p a non-null element presence
    */
   @SuppressWarnings("unchecked")
-  protected void setThreeWayProperties(IElementPresence<E, A, R> presence_p) {
-    IMatch<E, A, R> elementMatch = presence_p.getElementMatch();
+  protected void setThreeWayProperties(IElementPresence<E> presence_p) {
+    IMatch<E> elementMatch = presence_p.getElementMatch();
     E ancestorElement = elementMatch.get(ANCESTOR);
     if (ancestorElement != null) {
       // Ancestor element present: try and detect differences between ANCESTOR and TARGET/REFERENCE
       boolean diffWithAncestor = detectContentDifferences(
           elementMatch, presence_p.getPresenceRole(), ANCESTOR, false);
       if (diffWithAncestor) {
-        ((IDifference.Editable<E, A, R>)presence_p).markAsConflicting(); // Deleted and changed in parallel
+        ((IDifference.Editable<E>)presence_p).markAsConflicting(); // Deleted and changed in parallel
       }
     } else {
       // Ancestor not present: presence is not aligned with ancestor
-      ((IDifference.Editable<E, A, R>)presence_p).markAsDifferentFromAncestor();
+      ((IDifference.Editable<E>)presence_p).markAsDifferentFromAncestor();
     }
   }
   
@@ -946,14 +944,14 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param presence_p a non-null attribute value presence
    */
   @SuppressWarnings("unchecked")
-  protected void setThreeWayProperties(IAttributeValuePresence<E, A, R> presence_p) {
+  protected void setThreeWayProperties(IAttributeValuePresence<E> presence_p) {
     E ancestorHolder = presence_p.getElementMatch().get(ANCESTOR);
     boolean aligned;
     if (ancestorHolder == null) {
       aligned = false;
     } else {
-      A attribute = presence_p.getFeature();
-      ITreeDataScope<E, A, R> ancestorScope = _comparison.getScope(ANCESTOR);
+      Object attribute = presence_p.getFeature();
+      ITreeDataScope<E> ancestorScope = _comparison.getScope(ANCESTOR);
       assert ancestorScope != null; // Thanks to call context
       List<?> valuesInAncestor = ancestorScope.getAttributeValues(ancestorHolder, attribute);
       if (presence_p.isOrder()) {
@@ -984,14 +982,14 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     }
     if (!aligned) {
       // Not aligned with ancestor
-      IAttributeValuePresence<E, A, R> symmetrical = presence_p.getSymmetrical();
+      IAttributeValuePresence<E> symmetrical = presence_p.getSymmetrical();
       if (symmetrical != null && !symmetrical.isAlignedWithAncestor()) {
         // Symmetrical is not aligned either: mark both as conflicting
-        ((IDifference.Editable<E, A, R>)presence_p).markAsConflicting();
-        ((IDifference.Editable<E, A, R>)symmetrical).markAsConflicting();
+        ((IDifference.Editable<E>)presence_p).markAsConflicting();
+        ((IDifference.Editable<E>)symmetrical).markAsConflicting();
       } else {
         // No symmetrical or symmetrical aligned: just mark diff as not aligned
-        ((IDifference.Editable<E, A, R>)presence_p).markAsDifferentFromAncestor();
+        ((IDifference.Editable<E>)presence_p).markAsDifferentFromAncestor();
       }
     }
   }
@@ -1002,30 +1000,30 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param presence_p a non-null reference value presence
    */
   @SuppressWarnings("unchecked")
-  protected void setThreeWayProperties(IReferenceValuePresence<E, A, R> presence_p) {
+  protected void setThreeWayProperties(IReferenceValuePresence<E> presence_p) {
     E ancestorHolder = presence_p.getElementMatch().get(ANCESTOR);
     boolean aligned; // Aligned with ancestor?
     if (ancestorHolder == null) {
       aligned = false;
     } else {
-      IMatch<E, A, R> valueMatch = presence_p.getValueMatch();
+      IMatch<E> valueMatch = presence_p.getValueMatch();
       E ancestorValue =
           valueMatch == null? null: valueMatch.get(ANCESTOR); // May be null
-      ITreeDataScope<E, A, R> ancestorScope = _comparison.getScope(ANCESTOR);
+      ITreeDataScope<E> ancestorScope = _comparison.getScope(ANCESTOR);
       assert ancestorScope != null; // Thanks to call context
       List<E> ancestorValues = new FArrayList<E>(
           ancestorScope.getReferenceValues(ancestorHolder, presence_p.getFeature()),
           IEqualityTester.BY_REFERENCE);
       if (presence_p.isOrder()) {
         // Order
-        R reference = presence_p.getFeature();
+        Object reference = presence_p.getFeature();
         Role presenceRole = presence_p.getPresenceRole();
         List<E> values = _comparison.getScope(presenceRole).getReferenceValues(
             presence_p.getElementMatch().get(presenceRole), reference);
         int maxIndex = -1;
         aligned = true;
         for (E value : values) {
-          IMatch<E, A, R> currentValueMatch = getMapping().getMatchFor(value, presenceRole);
+          IMatch<E> currentValueMatch = getMapping().getMatchFor(value, presenceRole);
           if (currentValueMatch != null) {
             E matchAncestor = currentValueMatch.get(ANCESTOR);
             //TODO handle ancestor out-of-scope value
@@ -1050,14 +1048,14 @@ public class DiffOperation<E, A, R> extends AbstractExpensiveOperation {
     }
     if (!aligned) {
       // Not aligned with ancestor
-      IReferenceValuePresence<E, A, R> symmetrical = presence_p.getSymmetrical();
+      IReferenceValuePresence<E> symmetrical = presence_p.getSymmetrical();
       if (symmetrical != null && !symmetrical.isAlignedWithAncestor()) {
         // Symmetrical is not aligned either: mark both as conflicting
-        ((IDifference.Editable<E, A, R>)presence_p).markAsConflicting();
-        ((IDifference.Editable<E, A, R>)symmetrical).markAsConflicting();
+        ((IDifference.Editable<E>)presence_p).markAsConflicting();
+        ((IDifference.Editable<E>)symmetrical).markAsConflicting();
       } else {
         // No symmetrical or symmetrical aligned: just mark diff as not aligned
-        ((IDifference.Editable<E, A, R>)presence_p).markAsDifferentFromAncestor();
+        ((IDifference.Editable<E>)presence_p).markAsDifferentFromAncestor();
       }
     }
   }

@@ -129,10 +129,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IEditableTreeDataScope<?, ?, ?> createIEditableTreeDataScopeFromString(
+  public IEditableTreeDataScope<?> createIEditableTreeDataScopeFromString(
       EDataType eDataType, String initialValue) {
-    return (IEditableTreeDataScope<?, ?, ?>) super.createFromString(
-        initialValue);
+    return (IEditableTreeDataScope<?>) super.createFromString(initialValue);
   }
 
   /**
@@ -150,9 +149,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMatchPolicy<?, ?, ?> createIMatchPolicyFromString(EDataType eDataType,
+  public IMatchPolicy<?> createIMatchPolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IMatchPolicy<?, ?, ?>) super.createFromString(initialValue);
+    return (IMatchPolicy<?>) super.createFromString(initialValue);
   }
 
   /**
@@ -170,9 +169,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IDiffPolicy<?, ?, ?> createIDiffPolicyFromString(EDataType eDataType,
+  public IDiffPolicy<?> createIDiffPolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IDiffPolicy<?, ?, ?>) super.createFromString(initialValue);
+    return (IDiffPolicy<?>) super.createFromString(initialValue);
   }
 
   /**
@@ -190,9 +189,9 @@ public class GdiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IMergePolicy<?, ?, ?> createIMergePolicyFromString(EDataType eDataType,
+  public IMergePolicy<?> createIMergePolicyFromString(EDataType eDataType,
       String initialValue) {
-    return (IMergePolicy<?, ?, ?>) super.createFromString(initialValue);
+    return (IMergePolicy<?>) super.createFromString(initialValue);
   }
 
   /**

@@ -14,7 +14,7 @@ package org.eclipse.emf.diffmerge.impl.policies;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
 
 
 /**
@@ -45,7 +45,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void addConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.add(listener_p);
@@ -71,14 +71,14 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
    */
   public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
     _listeners.remove(listener_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy)
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy)
    */
   public boolean update(IConfigurablePolicy policy_p) {
     return policy_p instanceof ConfigurableMergePolicy;

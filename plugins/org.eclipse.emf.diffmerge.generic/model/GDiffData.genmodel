@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.generic/src" modelPluginID="org.eclipse.emf.diffmerge.generic"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.generic/src" modelPluginID=""
     modelName="GDiffData" editPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.provider.GenericDiffDataEditPlugin"
     editorPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.presentation.GenericDiffDataEditorPlugin"
     nonNLSMarkers="true" codeFormatting="true" testSuiteClass="org.eclipse.emf.diffmerge.generic.gdiffdata.tests.GenericDiffDataAllTests"
-    importerID="org.eclipse.emf.importer.ecore" suppressUnsettable="true" complianceLevel="5.0"
-    copyrightFields="false" runtimeVersion="2.6" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+    importerID="org.eclipse.emf.importer.ecore" bundleManifest="false" suppressUnsettable="true"
+    complianceLevel="5.0" copyrightFields="false" runtimeVersion="2.6" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore"
+    importOrganizing="true">
   <foreignModel>GDiffData.ecore</foreignModel>
   <genPackages prefix="Gdiffdata" basePackage="org.eclipse.emf.diffmerge.generic"
       disposableProviderFactory="true" fileExtensions="gdiffdata" ecorePackage="GDiffData.ecore#/">
     <genDataTypes ecoreDataType="GDiffData.ecore#//IEditableTreeDataScope">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableTreeDataScope/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableTreeDataScope/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableTreeDataScope/R"/>
     </genDataTypes>
     <genDataTypes ecoreDataType="GDiffData.ecore#//IMatchPolicy">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatchPolicy/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatchPolicy/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatchPolicy/R"/>
     </genDataTypes>
     <genDataTypes ecoreDataType="GDiffData.ecore#//IDiffPolicy">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IDiffPolicy/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IDiffPolicy/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IDiffPolicy/R"/>
     </genDataTypes>
     <genDataTypes ecoreDataType="GDiffData.ecore#//IMergePolicy">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergePolicy/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergePolicy/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergePolicy/R"/>
     </genDataTypes>
     <genDataTypes ecoreDataType="GDiffData.ecore#//Role"/>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//EIdentified">
@@ -133,68 +126,42 @@
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IComparison">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IComparison/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IComparison/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IComparison/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableComparison">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableComparison/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableComparison/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableComparison/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IMapping">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMapping/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMapping/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMapping/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMapping">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMapping/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMapping/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMapping/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IMatch">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatch/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatch/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMatch/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMatch">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMatch/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMatch/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMatch/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IMergeableDifference">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergeableDifference/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergeableDifference/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IMergeableDifference/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IEditableMergeableDifference">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMergeableDifference/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMergeableDifference/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IEditableMergeableDifference/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IElementRelativePresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementRelativePresence/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementRelativePresence/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementRelativePresence/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IElementPresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementPresence/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementPresence/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IElementPresence/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IValuePresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IValuePresence/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IValuePresence/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IValuePresence/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IAttributeValuePresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IAttributeValuePresence/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IAttributeValuePresence/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IAttributeValuePresence/R"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//IReferenceValuePresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IReferenceValuePresence/E"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IReferenceValuePresence/A"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//IReferenceValuePresence/R"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

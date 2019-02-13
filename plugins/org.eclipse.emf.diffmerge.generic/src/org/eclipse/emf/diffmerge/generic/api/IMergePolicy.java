@@ -13,20 +13,17 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 import java.util.Collection;
 
-import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 
 /**
  * A policy that defines how merges are performed in a comparison.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IMergePolicy<E, A, R> {
+public interface IMergePolicy<E> {
   
   /**
    * Create and return a base copy of the given element, i.e., without copying the values
@@ -41,7 +38,7 @@ public interface IMergePolicy<E, A, R> {
    * (value in containment setting) is present
    * @param scope_p a non-null scope
    */
-  boolean bindPresenceToOwnership(ITreeDataScope<E, A, R> scope_p);
+  boolean bindPresenceToOwnership(ITreeDataScope<E> scope_p);
   
   /**
    * Return whether the given attribute must be copied when elements are being copied
@@ -53,7 +50,7 @@ public interface IMergePolicy<E, A, R> {
    * @param attibute_p a non-null attribute
    * @param scope_p a non-null scope
    */
-  boolean copyAttribute(A attibute_p, IDataScope<E, A, R> scope_p);
+  boolean copyAttribute(Object attibute_p, ITreeDataScope<E> scope_p);
   
   /**
    * Return whether the given reference must be copied when elements are being copied
@@ -65,17 +62,7 @@ public interface IMergePolicy<E, A, R> {
    * @param reference_p a non-null reference 
    * @param scope_p a non-null scope
    */
-  boolean copyReference(R reference_p, IDataScope<E, A, R> scope_p);
-  
-  /**
-   * Return whether the extrinsic IDs of elements must be kept when elements
-   * are copied from the given source scope to the given target scope,
-   * if applicable
-   * @param sourceScope_p a non-null scope
-   * @param targetScope_p a non-null scope
-   */
-  boolean copyExtrinsicIDs(IDataScope<E, A, R> sourceScope_p,
-      IDataScope<E, A, R> targetScope_p);
+  boolean copyReference(Object reference_p, ITreeDataScope<E> scope_p);
   
   /**
    * Return whether cross-references outside the given source scope must be copied when
@@ -83,8 +70,8 @@ public interface IMergePolicy<E, A, R> {
    * @param sourceScope_p a non-null scope
    * @param targetScope_p a non-null scope
    */
-  boolean copyOutOfScopeCrossReferences(IDataScope<E, A, R> sourceScope_p,
-      IDataScope<E, A, R> targetScope_p);
+  boolean copyOutOfScopeCrossReferences(ITreeDataScope<E> sourceScope_p,
+      ITreeDataScope<E> targetScope_p);
   
   /**
    * Return the set of elements which are essential to the given one, i.e., adding the
@@ -95,19 +82,19 @@ public interface IMergePolicy<E, A, R> {
    * @return a non-null, potentially unmodifiable and empty set of elements
    *         belonging to scope_p
    */
-  Collection<E> getAdditionGroup(E element_p, IDataScope<E, A, R> scope_p);
+  Collection<E> getAdditionGroup(E element_p, ITreeDataScope<E> scope_p);
   
   /**
    * Return the set of elements which must be deleted if the given element is being
    * deleted, in addition to those the given element is essential to as defined by
    * getAdditionGroup
-   * @see IMergePolicy#getAdditionGroup(Object, IDataScope)
+   * @see IMergePolicy#getAdditionGroup(Object, ITreeDataScope)
    * @param element_p a non-null element
    * @param scope_p a non-null scope to which element_p belongs
    * @return a non-null, potentially unmodifiable and empty set of elements
    *         belonging to scope_p
    */
-  Collection<E> getDeletionGroup(E element_p, IDataScope<E, A, R> scope_p);
+  Collection<E> getDeletionGroup(E element_p, ITreeDataScope<E> scope_p);
   
   /**
    * Return the position that the given value should have among values held by the
@@ -120,8 +107,8 @@ public interface IMergePolicy<E, A, R> {
    * @param value_p a non-null value
    * @return a positive integer (0 inclusive) or -1 if no position could be determined
    */
-  int getDesiredValuePosition(IComparison<E, A, R> comparison_p, Role destination_p,
-      IMatch<E, A, R> source_p, R reference_p, E value_p);
+  int getDesiredValuePosition(IComparison<E> comparison_p, Role destination_p,
+      IMatch<E> source_p, Object reference_p, E value_p);
   
   /**
    * Return whether the given reference is essential to its owner, i.e., adding the reference owner
@@ -133,34 +120,17 @@ public interface IMergePolicy<E, A, R> {
    * @see IMergePolicy#bindPresenceToOwnership(ITreeDataScope)
    * @param reference_p a non-null, non-derived, non-container reference
    */
-  boolean isMandatoryForAddition(R reference_p);
+  boolean isMandatoryForAddition(Object reference_p);
   
   /**
    * Return whether the given reference is mandatory for deletion, i.e., removing the owner
    * requires to remove the value(s).
    * Operation is a special case of IMergePolicy#getDeletionGroup(EObject, IFeaturedModelScope)
    * and must be consistent with that operation.
-   * @see IMergePolicy#getDeletionGroup(Object, IDataScope)
+   * @see IMergePolicy#getDeletionGroup(Object, ITreeDataScope)
    * @param reference_p a non-null, non-derived, non-container reference
    */
-  boolean isMandatoryForDeletion(R reference_p);
-  
-  /**
-   * Set the extrinsic and/or ID of the given target element, if possible and relevant.
-   * This operation is called after the target element has been added to the given target
-   * scope as a copy of the given source element from the given source scope.
-   * Calling this operation multiple times on the same elements must have the same effect as
-   * calling it once (idempotency).
-   * Examples of possible behaviors include: copying the extrinsic ID from the source element
-   * to the target element, creating a new ID for the target element, or fully delegating to
-   * the underlying storage technology.
-   * @param source_p a non-null element
-   * @param sourceScope_p a non-null scope
-   * @param target_p a non-null element
-   * @param targetScope_p a non-null scope
-   */
-  void setExtrinsicID(E source_p, IDataScope<E, A, R> sourceScope_p,
-      E target_p, IDataScope<E, A, R> targetScope_p);
+  boolean isMandatoryForDeletion(Object reference_p);
   
   /**
    * Set the ID of the given target element, if possible and relevant.
@@ -182,7 +152,7 @@ public interface IMergePolicy<E, A, R> {
    * @param target_p a non-null element
    * @param targetScope_p a non-null scope
    */
-  void setID(E source_p, IDataScope<E, A, R> sourceScope_p, E target_p,
-      IDataScope<E, A, R> targetScope_p);
+  void setID(E source_p, ITreeDataScope<E> sourceScope_p,
+      E target_p, ITreeDataScope<E> targetScope_p);
   
 }

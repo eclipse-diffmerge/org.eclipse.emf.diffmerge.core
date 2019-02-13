@@ -34,19 +34,17 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 /**
  * An operation which builds a mapping between model scopes for a comparison.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
+public class MatchOperation<E> extends AbstractExpensiveOperation {
   
   /** The non-null match policy */
-  private final IMatchPolicy<E, A, R> _policy;
+  private final IMatchPolicy<E> _policy;
   
   /** The non-null comparison whose mapping is being built */
-  private final IComparison.Editable<E, A, R> _comparison;
+  private final IComparison.Editable<E> _comparison;
   
   /** The optional map from roles to sets of duplicate match IDs */
   protected final Map<Role, Set<Object>> _duplicateIDs;
@@ -65,8 +63,8 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
    * @param duplicateIDs_p an optional map that associates each role with an empty,
    *          modifiable set of duplicate match IDs, to be filled by this operation
    */
-  public MatchOperation(IComparison.Editable<E, A, R> comparison_p,
-      IMatchPolicy<E, A, R> policy_p, Map<Role, Set<Object>> duplicateIDs_p) {
+  public MatchOperation(IComparison.Editable<E> comparison_p,
+      IMatchPolicy<E> policy_p, Map<Role, Set<Object>> duplicateIDs_p) {
     super();
     _comparison = comparison_p;
     _policy = policy_p;
@@ -106,17 +104,17 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
     } else {
       result = Collections.emptyMap();
     }
-    ITreeDataScope<E, A, R> scope = getComparison().getScope(role_p);
+    ITreeDataScope<E> scope = getComparison().getScope(role_p);
     boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       // Explore the scope, marking its elements as unmatched
       // and registering their match IDs
       Iterator<E> it = scope.iterator();
-      IMapping.Editable<E, A, R> mapping = getComparison().getMapping();
+      IMapping.Editable<E> mapping = getComparison().getMapping();
       while (it.hasNext()) {
         checkProgress();
         E current = it.next();
-        IMatch.Editable<E, A, R> match = mapping.map(current, role_p);
+        IMatch.Editable<E> match = mapping.map(current, role_p);
         if (rememberMatchIDs || fillIDMap_p) {
           Object matchID = getMatchPolicy().getMatchID(current, scope);
           if (matchID != null) {
@@ -159,11 +157,11 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
     } else {
       result = Collections.emptyMap();
     }
-    ITreeDataScope<E, A, R> scope = getComparison().getScope(role_p);
+    ITreeDataScope<E> scope = getComparison().getScope(role_p);
     boolean rememberMatchIDs = getMatchPolicy().keepMatchIDs();
     if (scope != null) {
       Iterator<E> targetIt = scope.iterator();
-      IMapping.Editable<E, A, R> mapping = getComparison().getMapping();
+      IMapping.Editable<E> mapping = getComparison().getMapping();
       while (targetIt.hasNext()) {
         checkProgress();
         E current = targetIt.next();
@@ -181,7 +179,7 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
           counterpart2 = idRegistry2_p != null? idRegistry2_p.get(matchID): null;
         }
         if (counterpart1 == null && counterpart2 == null) {
-          IMatch.Editable<E, A, R> match = mapping.map(current, role_p);
+          IMatch.Editable<E> match = mapping.map(current, role_p);
           if (rememberMatchIDs) {
             match.setMatchID(matchID);
           }
@@ -213,7 +211,7 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the match policy
    * @return a non-null match policy
    */
-  protected IMatchPolicy<E, A, R> getMatchPolicy() {
+  protected IMatchPolicy<E> getMatchPolicy() {
     return _policy;
   }
   
@@ -221,7 +219,7 @@ public class MatchOperation<E, A, R> extends AbstractExpensiveOperation {
    * Return the comparison which is being built
    * @return a non-null comparison
    */
-  public IComparison.Editable<E, A, R> getComparison() {
+  public IComparison.Editable<E> getComparison() {
     return _comparison;
   }
   

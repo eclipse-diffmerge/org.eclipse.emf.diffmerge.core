@@ -13,16 +13,14 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 
 /**
- * A policy that alters the construction of differences between model scopes
+ * A policy that alters the construction of differences between data scopes
  * in a comparison.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IDiffPolicy<E, A, R> {
+public interface IDiffPolicy<E> {
   
   /**
    * Return whether the given attribute values must be considered equal
@@ -30,7 +28,7 @@ public interface IDiffPolicy<E, A, R> {
    * @param value2_p the second non-null attribute value
    * @param attribute_p the non-null attribute concerned
    */
-  boolean considerEqual(Object value1_p, Object value2_p, A attribute_p);
+  boolean considerEqual(Object value1_p, Object value2_p, Object attribute_p);
   
   /**
    * Return whether the given out-of-scope value must be considered equal to the
@@ -40,34 +38,34 @@ public interface IDiffPolicy<E, A, R> {
    * @param reference_p the non-null reference concerned
    */
   boolean considerEqualOutOfScope(E outOfScopeValue_p, E candidateValue_p,
-      R reference_p);
+      Object reference_p);
   
   /**
    * Return whether the given attribute must be considered as ordered
    * @param attribute_p a non-null attribute within this scope
    */
-  boolean considerOrderedAttribute(A attribute_p);
+  boolean considerOrderedAttribute(Object attribute_p);
   
   /**
    * Return whether the given reference must be considered as ordered
    * @param reference_p a reference within this scope
    *        (null stands for root containment)
    */
-  boolean considerOrderedReference(R reference_p);
+  boolean considerOrderedReference(Object reference_p);
   
   /**
    * Return whether the given attribute must be covered by the difference
    * detection algorithm
    * @param attribute_p a non-null attribute
    */
-  boolean coverAttribute(A attribute_p);
+  boolean coverAttribute(Object attribute_p);
   
   /**
    * Return whether the given match must be covered by the difference detection
    * algorithm
    * @param match_p a non-null match
    */
-  boolean coverMatch(IMatch<E, A, R> match_p);
+  boolean coverMatch(IMatch<E> match_p);
   
   /**
    * Return whether the given element, even though it is outside the TARGET and
@@ -80,7 +78,7 @@ public interface IDiffPolicy<E, A, R> {
    * @param value_p a non-null element
    * @param reference_p a non-null reference
    */
-  boolean coverOutOfScopeValue(E value_p, R reference_p);
+  boolean coverOutOfScopeValue(E value_p, Object reference_p);
   
   /**
    * Return whether the given reference must be covered by the difference
@@ -92,7 +90,7 @@ public interface IDiffPolicy<E, A, R> {
    * that are present in the compared model scopes.
    * @param reference_p a non-null reference
    */
-  boolean coverReference(R reference_p);
+  boolean coverReference(Object reference_p);
   
   /**
    * Return whether the given value is significant for the given attribute.
@@ -100,6 +98,6 @@ public interface IDiffPolicy<E, A, R> {
    * @param value_p a non-null attribute value
    * @param attribute_p a non-null attribute
    */
-  boolean coverValue(Object value_p, A attribute_p);
+  boolean coverValue(Object value_p, Object attribute_p);
   
 }

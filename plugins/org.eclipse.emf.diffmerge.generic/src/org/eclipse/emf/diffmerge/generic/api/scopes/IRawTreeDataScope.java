@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api.scopes;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.TreeIterator;
 
 
@@ -26,7 +28,7 @@ import org.eclipse.emf.common.util.TreeIterator;
  * All methods in this interface are assumed to have no impact on the observable state
  * of a data set.
  * 
- * @param <E> The type of the elements of the data scope.
+ * @param <E> The type of the elements of data scopes.
  * 
  * @author Olivier Constant
  */
@@ -44,7 +46,7 @@ public interface IRawTreeDataScope<E> extends IRawDataScope<E> {
    * @param element_p a non-null element that belongs to this data scope
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  Iterable<E> getContents(E element_p);
+  List<E> getContents(E element_p);
   
   /**
    * Return the element whose children include the given element, if any.
@@ -62,7 +64,7 @@ public interface IRawTreeDataScope<E> extends IRawDataScope<E> {
    * Return the root elements of this data scope.
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  Iterable<E> getRoots();
+  List<E> getRoots();
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope#iterator()

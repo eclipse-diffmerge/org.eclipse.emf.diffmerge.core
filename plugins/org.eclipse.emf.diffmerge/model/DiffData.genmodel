@@ -1,88 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Copyright (c) 2010-2019 Thales Global Services S.A.S.
-  This program and the accompanying materials are made
-  available under the terms of the Eclipse Public License 2.0
-  which is available at https://www.eclipse.org/legal/epl-2.0/
-  
-  SPDX-License-Identifier: EPL-2.0
-  
-   Contributors:
-  Thales Global Services S.A.S - initial API and implementation
--->
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge/src" modelPluginID="org.eclipse.emf.diffmerge"
-    modelName="DiffData" nonNLSMarkers="true" codeFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    suppressUnsettable="true" complianceLevel="5.0" copyrightFields="false" runtimeVersion="2.6"
-    usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore">
+    modelName="DiffData" editPluginClass="org.eclipse.emf.diffmerge.diffdata.provider.DiffDataEditPlugin"
+    editorPluginClass="org.eclipse.emf.diffmerge.diffdata.presentation.DiffDataEditorPlugin"
+    nonNLSMarkers="true" codeFormatting="true" testSuiteClass="org.eclipse.emf.diffmerge.diffdata.tests.DiffDataAllTests"
+    importerID="org.eclipse.emf.importer.ecore" suppressUnsettable="true" complianceLevel="5.0"
+    copyrightFields="false" runtimeVersion="2.6" usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.genmodel#//gdiffdata"
+    importOrganizing="true">
   <foreignModel>DiffData.ecore</foreignModel>
   <genPackages prefix="Diffdata" basePackage="org.eclipse.emf.diffmerge" resource="Basic"
-      disposableProviderFactory="true" fileExtensions="diffdata" ecorePackage="DiffData.ecore#/">
-    <genDataTypes ecoreDataType="DiffData.ecore#//IEditableModelScope"/>
-    <genDataTypes ecoreDataType="DiffData.ecore#//IMatchPolicy"/>
-    <genDataTypes ecoreDataType="DiffData.ecore#//IDiffPolicy"/>
-    <genDataTypes ecoreDataType="DiffData.ecore#//IMergePolicy"/>
-    <genDataTypes ecoreDataType="DiffData.ecore#//Role"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//EIdentified">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EIdentified/id"/>
-    </genClasses>
+      disposableProviderFactory="true" ecorePackage="DiffData.ecore#/">
     <genClasses ecoreClass="DiffData.ecore#//EComparison">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/ancestorScope"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/referenceScope"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/targetScope"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/lastMatchPolicy"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/lastDiffPolicy"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EComparison/lastMergePolicy"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EComparison/mapping"/>
+      <genOperations ecoreOperation="DiffData.ecore#//EComparison/getMapping"/>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//EMapping">
-      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference DiffData.ecore#//EMapping/modifiableContents"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMapping/referenceCompletedMatches"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMapping/targetCompletedMatches"/>
       <genOperations ecoreOperation="DiffData.ecore#//EMapping/getComparison"/>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//EMatch">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMatch/matchID"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/ancestor"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/reference"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/target"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/modifiableRelatedDifferences"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/modifiableAttributeMap"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/modifiableReferenceMap"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/elementPresenceDifference"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/referenceOwnershipDifference"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/targetOwnershipDifference"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/modifiableOrderReferenceMap"/>
       <genOperations ecoreOperation="DiffData.ecore#//EMatch/getMapping"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//EMergeableDifference">
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffData.ecore#//EMergeableDifference/comparison"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMergeableDifference/alignedWithAncestor"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMergeableDifference/conflicting"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMergeableDifference/ignored"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMergeableDifference/mergeDestination"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EMergeableDifference/possibleMergeDestinations"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMergeableDifference/explicitDependenciesForTarget"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMergeableDifference/explicitDependenciesForReference"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMergeableDifference/implicitDependenciesForTarget"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMergeableDifference/implicitDependenciesForReference"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//EElementRelativePresence">
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffData.ecore#//EElementRelativePresence/elementMatch"/>
-      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EElementRelativePresence/presenceRole"/>
-    </genClasses>
-    <genClasses ecoreClass="DiffData.ecore#//EElementPresence">
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffData.ecore#//EElementPresence/ownerMatch"/>
-    </genClasses>
+    <genClasses ecoreClass="DiffData.ecore#//EElementPresence"/>
     <genClasses image="false" ecoreClass="DiffData.ecore#//EValuePresence">
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference DiffData.ecore#//EValuePresence/feature"/>
-      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EValuePresence/order"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EValuePresence/feature"/>
     </genClasses>
-    <genClasses ecoreClass="DiffData.ecore#//EAttributeValuePresence">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//EAttributeValuePresence/value"/>
-    </genClasses>
+    <genClasses ecoreClass="DiffData.ecore#//EAttributeValuePresence"/>
     <genClasses ecoreClass="DiffData.ecore#//EReferenceValuePresence">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EReferenceValuePresence/value"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EReferenceValuePresence/valueMatch"/>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//AttributeToValueToDifferenceEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToValueToDifferenceEntry/key"/>
@@ -96,22 +45,13 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ReferenceToElementToDifferenceEntry/key"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//ReferenceToElementToDifferenceEntry/value"/>
     </genClasses>
+    <genClasses ecoreClass="DiffData.ecore#//ReferenceToOrderDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ReferenceToOrderDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//ReferenceToOrderDifferenceEntry/value"/>
+    </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//ElementToDifferenceEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ElementToDifferenceEntry/key"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ElementToDifferenceEntry/value"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IComparison"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IEditableComparison"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IMapping"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IEditableMapping"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IMatch"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IEditableMatch"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IMergeableDifference"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IEditableMergeableDifference"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IElementRelativePresence"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IElementPresence"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IValuePresence"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IAttributeValuePresence"/>
-    <genClasses image="false" ecoreClass="DiffData.ecore#//IReferenceValuePresence"/>
   </genPackages>
 </genmodel:GenModel>

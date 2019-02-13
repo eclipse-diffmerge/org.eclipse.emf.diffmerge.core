@@ -38,11 +38,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E, A, R&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
  * @generated
  */
 public interface EMergeableDifference<E, A, R>
-    extends EIdentified, Editable<E, A, R> {
+    extends EIdentified, Editable<E> {
   /**
    * Returns the value of the '<em><b>Comparison</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -193,7 +193,7 @@ public interface EMergeableDifference<E, A, R>
 
   /**
    * Returns the value of the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Explicit Dependencies For Target</em>' reference list isn't clear,
@@ -202,14 +202,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Explicit Dependencies For Target</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ExplicitDependenciesForTarget()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
-  EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForTarget();
+  EList<IMergeableDifference<E>> getExplicitDependenciesForTarget();
 
   /**
    * Returns the value of the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Explicit Dependencies For Reference</em>' reference list isn't clear,
@@ -218,14 +218,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Explicit Dependencies For Reference</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ExplicitDependenciesForReference()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
-  EList<IMergeableDifference<E, A, R>> getExplicitDependenciesForReference();
+  EList<IMergeableDifference<E>> getExplicitDependenciesForReference();
 
   /**
    * Returns the value of the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Implicit Dependencies For Target</em>' reference list isn't clear,
@@ -234,14 +234,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Implicit Dependencies For Target</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ImplicitDependenciesForTarget()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
-  EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForTarget();
+  EList<IMergeableDifference<E>> getImplicitDependenciesForTarget();
 
   /**
    * Returns the value of the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference}<code>&lt;E&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Implicit Dependencies For Reference</em>' reference list isn't clear,
@@ -250,9 +250,9 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Implicit Dependencies For Reference</em>' reference list.
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ImplicitDependenciesForReference()
-   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E, A, R&gt;"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
-  EList<IMergeableDifference<E, A, R>> getImplicitDependenciesForReference();
+  EList<IMergeableDifference<E>> getImplicitDependenciesForReference();
 
 } // EMergeableDifference

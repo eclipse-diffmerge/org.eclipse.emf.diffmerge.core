@@ -16,14 +16,12 @@ package org.eclipse.emf.diffmerge.generic.api.diff;
  * A difference which is due to the unmatched presence of a value on some feature
  * in a given comparison role.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IValuePresence<E, A, R> extends IElementRelativeDifference<E, A, R>,
-IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
+public interface IValuePresence<E> extends IElementRelativeDifference<E>,
+IPresenceDifference<E>, IMergeableDifference<E> {
   
   /**
    * Return the feature holding the value
@@ -36,7 +34,7 @@ IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
    * @see IValuePresence#isSymmetricalTo(IValuePresence)
    * @return a potentially null value presence (always null if upper bound is not 1 and !isOrder())
    */
-  IValuePresence<E, A, R> getSymmetrical();
+  IValuePresence<E> getSymmetrical();
   
   /**
    * Return the non-null value being held
@@ -70,6 +68,6 @@ IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
    * If the feature is many and !isOrder(), then false is always returned.
    * @param peer_p a non-null value presence
    */
-  boolean isSymmetricalTo(IValuePresence<E, A, R> peer_p);
+  boolean isSymmetricalTo(IValuePresence<E> peer_p);
   
 }

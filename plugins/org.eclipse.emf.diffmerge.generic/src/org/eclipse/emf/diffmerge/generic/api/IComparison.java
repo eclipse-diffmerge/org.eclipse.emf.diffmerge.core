@@ -41,13 +41,11 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
  * @see IDifference
  * @see IComparison#isConsistent()
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IComparison<E, A, R> {
+public interface IComparison<E> {
   
   /**
    * Clear this comparison, going back to its state before compute(...) was called
@@ -63,8 +61,8 @@ public interface IComparison<E, A, R> {
    * @param monitor_p an optional progress monitor
    * @return a non-null status of the execution
    */
-  IStatus compute(IMatchPolicy<E, A, R> matchPolicy_p, IDiffPolicy<E, A, R> diffPolicy_p,
-      IMergePolicy<E, A, R> mergePolicy_p, IProgressMonitor monitor_p);
+  IStatus compute(IMatchPolicy<E> matchPolicy_p, IDiffPolicy<E> diffPolicy_p,
+      IMergePolicy<E> mergePolicy_p, IProgressMonitor monitor_p);
   
   /**
    * Return a tree iterator over matches based on getContentsOf(IMatch, Role)
@@ -72,7 +70,7 @@ public interface IComparison<E, A, R> {
    * @param role_p a non-null role
    * @return a non-null iterator
    */
-  TreeIterator<IMatch<E, A, R>> getAllContents(Role role_p);
+  TreeIterator<IMatch<E>> getAllContents(Role role_p);
   
   /**
    * Return the match for the container of the given match in the given role.
@@ -82,20 +80,20 @@ public interface IComparison<E, A, R> {
    * @param role_p a non-null role
    * @return a potentially null match
    */
-  IMatch<E, A, R> getContainerOf(IMatch<E, A, R> match_p, Role role_p);
+  IMatch<E> getContainerOf(IMatch<E> match_p, Role role_p);
   
   /**
    * Return the matches for the roots of the TARGET and REFERENCE scopes
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
-  List<IMatch<E, A, R>> getContents();
+  List<IMatch<E>> getContents();
   
   /**
    * Return the matches for the roots of the scope of the given role
    * @param role_p a non-null role
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
-  List<IMatch<E, A, R>> getContents(Role role_p);
+  List<IMatch<E>> getContents(Role role_p);
   
   /**
    * Return the matches for the contents of the given match in the TARGET and
@@ -103,7 +101,7 @@ public interface IComparison<E, A, R> {
    * @param match_p a non-null match
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
-  List<IMatch<E, A, R>> getContentsOf(IMatch<E, A, R> match_p);
+  List<IMatch<E>> getContentsOf(IMatch<E> match_p);
   
   /**
    * Return the matches for the contents of the given match in the given role
@@ -111,7 +109,7 @@ public interface IComparison<E, A, R> {
    * @param role_p a non-null role
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
-  List<IMatch<E, A, R>> getContentsOf(IMatch<E, A, R> match_p, Role role_p);
+  List<IMatch<E>> getContentsOf(IMatch<E> match_p, Role role_p);
   
   /**
    * Return all differences in the given role.
@@ -121,7 +119,7 @@ public interface IComparison<E, A, R> {
    * @return a non-null, unmodifiable list which may contain duplicates if differences
    *         are not low-level, technical differences
    */
-  List<IDifference<E, A, R>> getDifferences(Role role_p);
+  List<IDifference<E>> getDifferences(Role role_p);
   
   /**
    * Return the set of duplicate match IDs for the given role, if any.
@@ -137,25 +135,25 @@ public interface IComparison<E, A, R> {
    * Return the last diff policy used by this comparison
    * @return a possibly null diff policy (non-null if the last compute(...) succeeded)
    */
-  IDiffPolicy<E, A, R> getLastDiffPolicy();
+  IDiffPolicy<E> getLastDiffPolicy();
   
   /**
    * Return the last match policy used by this comparison
    * @return a possibly null match policy (non-null if the last compute(...) succeeded)
    */
-  IMatchPolicy<E, A, R> getLastMatchPolicy();
+  IMatchPolicy<E> getLastMatchPolicy();
   
   /**
    * Return the last merge policy used by this comparison
    * @return a possibly null merge policy (non-null if the last compute(...) succeeded)
    */
-  IMergePolicy<E, A, R> getLastMergePolicy();
+  IMergePolicy<E> getLastMergePolicy();
   
   /**
    * Return the mapping between the model scopes of this comparison
    * @return a non-null mapping
    */
-  IMapping<E, A, R> getMapping();
+  IMapping<E> getMapping();
   
   /**
    * Return the number of differences as the sum of the number of differences
@@ -175,14 +173,14 @@ public interface IComparison<E, A, R> {
    * The resulting collection may become obsolete if the comparison is reset.
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  Collection<IDifference<E, A, R>> getRemainingDifferences();
+  Collection<IDifference<E>> getRemainingDifferences();
   
   /**
    * Return the scope for the given role
    * @param role_p a non-null role
    * @return a scope which is non-null iff the given role is covered by this comparison
    */
-  ITreeDataScope<E, A, R> getScope(Role role_p);
+  ITreeDataScope<E> getScope(Role role_p);
   
   /**
    * Return whether there are differences which have not been merged.
@@ -214,7 +212,7 @@ public interface IComparison<E, A, R> {
    * @return a non-null, potentially empty, unmodifiable set of the differences
    *         which have actually been merged
    */
-  Collection<IDifference<E, A, R>> merge(Role destination_p,
+  Collection<IDifference<E>> merge(Role destination_p,
       boolean updateReferences_p, IProgressMonitor monitor_p);
   
   /**
@@ -226,8 +224,8 @@ public interface IComparison<E, A, R> {
    * @return a non-null, potentially empty, unmodifiable set of the differences
    *         which have actually been merged
    */
-  Collection<IDifference<E, A, R>> merge(
-      Collection<? extends IDifference<E, A, R>> differences_p, Role destination_p,
+  Collection<IDifference<E>> merge(
+      Collection<? extends IDifference<E>> differences_p, Role destination_p,
       boolean updateReferences_p, IProgressMonitor monitor_p);
   
   /**
@@ -239,7 +237,7 @@ public interface IComparison<E, A, R> {
    * @return a non-null, potentially empty, unmodifiable set of the differences
    *         which have actually been merged
    */
-  Collection<IDifference<E, A, R>> merge(IMergeSelector merger_p,
+  Collection<IDifference<E>> merge(IMergeSelector<E> merger_p,
       boolean updateReferences_p, IProgressMonitor monitor_p);
   
   
@@ -247,16 +245,16 @@ public interface IComparison<E, A, R> {
    * A comparison with editing features.
    * All concrete classes implementing IComparison must also implement this interface.
    */
-  interface Editable<E, A, R> extends IComparison<E, A, R> {
+  interface Editable<E> extends IComparison<E> {
     /**
      * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getMapping()
      */
-    IMapping.Editable<E, A, R> getMapping();
+    IMapping.Editable<E> getMapping();
     
     /**
      * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getScope(org.eclipse.emf.diffmerge.generic.api.Role)
      */
-    IEditableTreeDataScope<E, A, R> getScope(Role role_p);
+    IEditableTreeDataScope<E> getScope(Role role_p);
     
     /**
      * Create and return an attribute value presence with the given characteristics
@@ -267,8 +265,8 @@ public interface IComparison<E, A, R> {
      * @param isOrder_p whether the value presence is solely due to ordering
      * @return a non-null attribute value presence
      */
-    IAttributeValuePresence<E, A, R> newAttributeValuePresence(
-        IMatch<E, A, R> elementMatch_p, A attribute_p, Object value_p,
+    IAttributeValuePresence<E> newAttributeValuePresence(
+        IMatch<E> elementMatch_p, Object attribute_p, Object value_p,
         Role presenceRole_p, boolean isOrder_p);
     
     /**
@@ -277,8 +275,8 @@ public interface IComparison<E, A, R> {
      * @param ownerMatch_p a potentially null match for the owner of the element
      * @return a non-null element presence
      */
-    IElementPresence<E, A, R> newElementPresence(IMatch<E, A, R> elementMatch_p,
-        IMatch<E, A, R> ownerMatch_p);
+    IElementPresence<E> newElementPresence(IMatch<E> elementMatch_p,
+        IMatch<E> ownerMatch_p);
     
     /**
      * Create and return a match with the given characteristics
@@ -287,7 +285,7 @@ public interface IComparison<E, A, R> {
      * @param ancestorElement_p an optional element on the ANCESTOR side
      * @return a non-null match
      */
-    IMatch<E, A, R> newMatch(E targetElement_p, E referenceElement_p,
+    IMatch<E> newMatch(E targetElement_p, E referenceElement_p,
         E ancestorElement_p);
     
     /**
@@ -300,9 +298,9 @@ public interface IComparison<E, A, R> {
      * @param isOrder_p whether the value presence is solely due to ordering
      * @return a non-null reference value presence
      */
-    IReferenceValuePresence<E, A, R> newReferenceValuePresence(
-        IMatch<E, A, R> elementMatch_p, R reference_p, E value_p,
-        IMatch<E, A, R> valueMatch_p, Role presenceRole_p, boolean isOrder_p);
+    IReferenceValuePresence<E> newReferenceValuePresence(
+        IMatch<E> elementMatch_p, Object reference_p, E value_p,
+        IMatch<E> valueMatch_p, Role presenceRole_p, boolean isOrder_p);
     
     /**
      * Swap the TARGET and REFERENCE scopes.

@@ -15,19 +15,20 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
-import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.impl.helpers.BidirectionalComparisonCopier;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -43,14 +44,24 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl#getValueMatch <em>Value Match</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class EReferenceValuePresenceImpl extends EValuePresenceImpl
     implements EReferenceValuePresence {
+  /**
+   * The cached value of the '{@link #getValueMatch() <em>Value Match</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValueMatch()
+   * @generated
+   * @ordered
+   */
+  protected org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> valueMatch;
+
   /**
    * The cached value of the '{@link #getValue() <em>Value</em>}' reference.
    * <!-- begin-user-doc -->
@@ -60,16 +71,6 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * @ordered
    */
   protected EObject value;
-
-  /**
-   * The cached value of the '{@link #getValueMatch() <em>Value Match</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getValueMatch()
-   * @generated
-   * @ordered
-   */
-  protected EMatch valueMatch;
 
   /**
    * <!-- begin-user-doc -->
@@ -167,10 +168,23 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getValueMatch() {
+  public void setFeature(EReference feature) {
+    // TODO: implement this method
+    // Ensure that you remove @generated or mark it @generated NOT
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("unchecked")
+  public org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> getValueMatch() {
     if (valueMatch != null && valueMatch.eIsProxy()) {
       InternalEObject oldValueMatch = (InternalEObject) valueMatch;
-      valueMatch = (EMatch) eResolveProxy(oldValueMatch);
+      valueMatch = (org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference>) eResolveProxy(
+          oldValueMatch);
       if (valueMatch != oldValueMatch) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -186,7 +200,7 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch basicGetValueMatch() {
+  public org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> basicGetValueMatch() {
     return valueMatch;
   }
 
@@ -195,8 +209,9 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValueMatch(EMatch newValueMatch) {
-    EMatch oldValueMatch = valueMatch;
+  public void setValueMatch(
+      org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> newValueMatch) {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> oldValueMatch = valueMatch;
     valueMatch = newValueMatch;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -212,14 +227,14 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      if (resolve)
-        return getValue();
-      return basicGetValue();
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
       if (resolve)
         return getValueMatch();
       return basicGetValueMatch();
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
+      if (resolve)
+        return getValue();
+      return basicGetValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -229,14 +244,16 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
+      setValueMatch(
+          (org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference>) newValue);
+      return;
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
       setValue((EObject) newValue);
-      return;
-    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -250,11 +267,12 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
+      setValueMatch(
+          (org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference>) null);
+      return;
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
       setValue((EObject) null);
-      return;
-    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch) null);
       return;
     }
     super.eUnset(featureID);
@@ -268,12 +286,62 @@ public class EReferenceValuePresenceImpl extends EValuePresenceImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      return value != null;
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
       return valueMatch != null;
+    case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
+      return value != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eBaseStructuralFeatureID(int derivedFeatureID,
+      Class<?> baseClass) {
+    if (baseClass == org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence.class) {
+      switch (derivedFeatureID) {
+      default:
+        return -1;
+      }
+    }
+    if (baseClass == org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence.class) {
+      switch (derivedFeatureID) {
+      case DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
+        return org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH;
+      default:
+        return -1;
+      }
+    }
+    return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public int eDerivedStructuralFeatureID(int baseFeatureID,
+      Class<?> baseClass) {
+    if (baseClass == org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence.class) {
+      switch (baseFeatureID) {
+      default:
+        return -1;
+      }
+    }
+    if (baseClass == org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence.class) {
+      switch (baseFeatureID) {
+      case org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
+        return DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH;
+      default:
+        return -1;
+      }
+    }
+    return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
   }
 
   /**

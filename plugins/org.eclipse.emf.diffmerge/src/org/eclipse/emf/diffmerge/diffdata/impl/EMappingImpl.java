@@ -16,11 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ECollections;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.IMatch;
@@ -33,66 +30,27 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.impl.helpers.BidirectionalComparisonCopier;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.structures.common.FHashMap;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Setting;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EContentsEList;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.emf.ecore.util.ECrossReferenceEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>EMapping</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * The following features are implemented:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMappingImpl#getModifiableContents <em>Modifiable Contents</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMappingImpl#getReferenceCompletedMatches <em>Reference Completed Matches</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EMappingImpl#getTargetCompletedMatches <em>Target Completed Matches</em>}</li>
- * </ul>
  *
  * @generated
  */
-public class EMappingImpl extends EIdentifiedImpl implements EMapping {
-  /**
-   * The cached value of the '{@link #getModifiableContents() <em>Modifiable Contents</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getModifiableContents()
-   * @generated
-   * @ordered
-   */
-  protected EList<EMatch> modifiableContents;
-
-  /**
-   * The cached value of the '{@link #getReferenceCompletedMatches() <em>Reference Completed Matches</em>}' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getReferenceCompletedMatches()
-   * @generated
-   * @ordered
-   */
-  protected EList<IMatch> referenceCompletedMatches;
-
-  /**
-   * The cached value of the '{@link #getTargetCompletedMatches() <em>Target Completed Matches</em>}' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTargetCompletedMatches()
-   * @generated
-   * @ordered
-   */
-  protected EList<IMatch> targetCompletedMatches;
-
+public class EMappingImpl extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<EObject, EAttribute, EReference>
+    implements EMapping {
   /**
    * A non-null, stateless copier for completing partial matches
    * @generated NOT
@@ -139,147 +97,6 @@ public class EMappingImpl extends EIdentifiedImpl implements EMapping {
   @Override
   protected EClass eStaticClass() {
     return DiffdataPackage.Literals.EMAPPING;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<EMatch> getModifiableContents() {
-    if (modifiableContents == null) {
-      modifiableContents = new EObjectContainmentEList<EMatch>(EMatch.class,
-          this, DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS);
-    }
-    return modifiableContents;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<IMatch> getReferenceCompletedMatches() {
-    if (referenceCompletedMatches == null) {
-      referenceCompletedMatches = new EObjectEList<IMatch>(IMatch.class, this,
-          DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES);
-    }
-    return referenceCompletedMatches;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<IMatch> getTargetCompletedMatches() {
-    if (targetCompletedMatches == null) {
-      targetCompletedMatches = new EObjectEList<IMatch>(IMatch.class, this,
-          DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
-    }
-    return targetCompletedMatches;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd,
-      int featureID, NotificationChain msgs) {
-    switch (featureID) {
-    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
-      return ((InternalEList<?>) getModifiableContents()).basicRemove(otherEnd,
-          msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType) {
-    switch (featureID) {
-    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
-      return getModifiableContents();
-    case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
-      return getReferenceCompletedMatches();
-    case DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
-      return getTargetCompletedMatches();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void eSet(int featureID, Object newValue) {
-    switch (featureID) {
-    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
-      getModifiableContents().clear();
-      getModifiableContents().addAll((Collection<? extends EMatch>) newValue);
-      return;
-    case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
-      getReferenceCompletedMatches().clear();
-      getReferenceCompletedMatches()
-          .addAll((Collection<? extends IMatch>) newValue);
-      return;
-    case DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
-      getTargetCompletedMatches().clear();
-      getTargetCompletedMatches()
-          .addAll((Collection<? extends IMatch>) newValue);
-      return;
-    }
-    super.eSet(featureID, newValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void eUnset(int featureID) {
-    switch (featureID) {
-    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
-      getModifiableContents().clear();
-      return;
-    case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
-      getReferenceCompletedMatches().clear();
-      return;
-    case DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
-      getTargetCompletedMatches().clear();
-      return;
-    }
-    super.eUnset(featureID);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public boolean eIsSet(int featureID) {
-    switch (featureID) {
-    case DiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
-      return modifiableContents != null && !modifiableContents.isEmpty();
-    case DiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
-      return referenceCompletedMatches != null
-          && !referenceCompletedMatches.isEmpty();
-    case DiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
-      return targetCompletedMatches != null
-          && !targetCompletedMatches.isEmpty();
-    }
-    return super.eIsSet(featureID);
   }
 
   /**

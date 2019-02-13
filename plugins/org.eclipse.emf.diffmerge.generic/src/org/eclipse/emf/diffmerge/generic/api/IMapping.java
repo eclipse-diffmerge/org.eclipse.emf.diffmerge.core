@@ -18,17 +18,15 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 
 
 /**
- * A mapping between model scopes which is such that every element of either scope
+ * A mapping between data scopes which is such that every element of either scope
  * is mapped at most once.
  * A mapping is defined as a set of IMatch.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IMapping<E, A, R> {
+public interface IMapping<E> {
   
   /**
    * Return whether the given element is covered by this mapping in the given role
@@ -41,7 +39,7 @@ public interface IMapping<E, A, R> {
    * Return the comparison this mapping belongs to
    * @return a non-null comparison
    */
-  IComparison<E, A, R> getComparison();
+  IComparison<E> getComparison();
   
   /**
    * Return the formerly partial matches which have been completed
@@ -51,7 +49,7 @@ public interface IMapping<E, A, R> {
    * @param destinationRole_p a role which is TARGET or REFERENCE
    * @return a non-null, potentially empty, unmodifiable collection
    */
-  Collection<IMatch<E, A, R>> getCompletedMatches(Role destinationRole_p);
+  Collection<IMatch<E>> getCompletedMatches(Role destinationRole_p);
   
   /**
    * Return the content of this mapping.
@@ -59,7 +57,7 @@ public interface IMapping<E, A, R> {
    * matches of its children in side getOrderingRole().
    * @return a non-null, potentially empty, unmodifiable collection of matches
    */
-  Collection<IMatch<E, A, R>> getContents();
+  Collection<IMatch<E>> getContents();
   
   /**
    * Return the match for the given element playing the given role,
@@ -68,7 +66,7 @@ public interface IMapping<E, A, R> {
    * @param role_p a potentially null role
    * @return a potentially null match
    */
-  IMatch<E, A, R> getMatchFor(E element_p, Role role_p);
+  IMatch<E> getMatchFor(E element_p, Role role_p);
   
   /**
    * Return the number of non-partial matches in this mapping
@@ -157,7 +155,7 @@ public interface IMapping<E, A, R> {
    * A mapping with editing features.
    * All concrete classes implementing IMapping must also implement this interface.
    */
-  interface Editable<E, A, R> extends IMapping<E, A, R> {
+  interface Editable<E> extends IMapping<E> {
     
     /**
      * Clear this mapping
@@ -172,7 +170,7 @@ public interface IMapping<E, A, R> {
      * @param partialMatch_p a non-null match such that partialMatch_p.isPartial()
      * @return a non-null element which is a clone of the element in partialMatch_p
      */
-    E completeMatch(IMatch<E, A, R> partialMatch_p);
+    E completeMatch(IMatch<E> partialMatch_p);
     
     /**
      * Complete the references between all completed elements in the given role
@@ -183,7 +181,7 @@ public interface IMapping<E, A, R> {
     /**
      * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getComparison()
      */
-    IComparison.Editable<E, A, R> getComparison();
+    IComparison.Editable<E> getComparison();
     
     /**
      * Return a modifiable collection of the formerly partial matches
@@ -191,14 +189,14 @@ public interface IMapping<E, A, R> {
      * @param destinationRole_p a role which is TARGET or REFERENCE
      * @return a non-null, potentially empty, modifiable collection
      */
-    Collection<IMatch<E, A, R>> getModifiableCompletedMatches(Role destinationRole_p);
+    Collection<IMatch<E>> getModifiableCompletedMatches(Role destinationRole_p);
     
     /**
      * Return the content of this mapping as a modifiable collection
      * Class invariant: getModifiableContents().equals(getContents())
      * @return a non-null, potentially empty, modifiable collection of matches
      */
-    Collection<? extends IMatch<E, A, R>> getModifiableContents();
+    Collection<? extends IMatch<E>> getModifiableContents();
     
     /**
      * Map the given element from the given role to no other element.
@@ -208,7 +206,7 @@ public interface IMapping<E, A, R> {
      * @param role_p a non-null role
      * @return the non-null new match
      */
-    IMatch.Editable<E, A, R> map(E element_p, Role role_p);
+    IMatch.Editable<E> map(E element_p, Role role_p);
     
     /**
      * Map the given elements from the given roles, reusing existing matches

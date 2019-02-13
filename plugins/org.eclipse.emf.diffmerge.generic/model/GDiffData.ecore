@@ -13,45 +13,33 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestorScope" transient="true">
       <eGenericType eClassifier="#//IEditableTreeDataScope">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceScope" lowerBound="1"
         transient="true">
       <eGenericType eClassifier="#//IEditableTreeDataScope">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetScope" lowerBound="1"
         transient="true">
       <eGenericType eClassifier="#//IEditableTreeDataScope">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMatchPolicy" transient="true">
       <eGenericType eClassifier="#//IMatchPolicy">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastDiffPolicy" transient="true">
       <eGenericType eClassifier="#//IDiffPolicy">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMergePolicy" transient="true">
       <eGenericType eClassifier="#//IMergePolicy">
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
-        <eTypeArguments eTypeParameter="#//EComparison/A"/>
-        <eTypeArguments eTypeParameter="#//EComparison/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" lowerBound="1"
@@ -65,8 +53,6 @@
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
     <eGenericSuperTypes eClassifier="#//IEditableComparison">
       <eTypeArguments eTypeParameter="#//EComparison/E"/>
-      <eTypeArguments eTypeParameter="#//EComparison/A"/>
-      <eTypeArguments eTypeParameter="#//EComparison/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMapping" abstract="true">
@@ -92,23 +78,17 @@
         upperBound="-1" resolveProxies="false">
       <eGenericType eClassifier="#//IMatch">
         <eTypeArguments eTypeParameter="#//EMapping/E"/>
-        <eTypeArguments eTypeParameter="#//EMapping/A"/>
-        <eTypeArguments eTypeParameter="#//EMapping/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetCompletedMatches"
         upperBound="-1" resolveProxies="false">
       <eGenericType eClassifier="#//IMatch">
         <eTypeArguments eTypeParameter="#//EMapping/E"/>
-        <eTypeArguments eTypeParameter="#//EMapping/A"/>
-        <eTypeArguments eTypeParameter="#//EMapping/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
     <eGenericSuperTypes eClassifier="#//IEditableMapping">
       <eTypeArguments eTypeParameter="#//EMapping/E"/>
-      <eTypeArguments eTypeParameter="#//EMapping/A"/>
-      <eTypeArguments eTypeParameter="#//EMapping/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMatch" abstract="true">
@@ -152,29 +132,21 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="elementPresenceDifference">
       <eGenericType eClassifier="#//IElementPresence">
         <eTypeArguments eTypeParameter="#//EMatch/E"/>
-        <eTypeArguments eTypeParameter="#//EMatch/A"/>
-        <eTypeArguments eTypeParameter="#//EMatch/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceOwnershipDifference">
       <eGenericType eClassifier="#//IReferenceValuePresence">
         <eTypeArguments eTypeParameter="#//EMatch/E"/>
-        <eTypeArguments eTypeParameter="#//EMatch/A"/>
-        <eTypeArguments eTypeParameter="#//EMatch/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetOwnershipDifference">
       <eGenericType eClassifier="#//IReferenceValuePresence">
         <eTypeArguments eTypeParameter="#//EMatch/E"/>
-        <eTypeArguments eTypeParameter="#//EMatch/A"/>
-        <eTypeArguments eTypeParameter="#//EMatch/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
     <eGenericSuperTypes eClassifier="#//IEditableMatch">
       <eTypeArguments eTypeParameter="#//EMatch/E"/>
-      <eTypeArguments eTypeParameter="#//EMatch/A"/>
-      <eTypeArguments eTypeParameter="#//EMatch/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMergeableDifference" abstract="true">
@@ -201,39 +173,29 @@
         upperBound="-1">
       <eGenericType eClassifier="#//IMergeableDifference">
         <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="explicitDependenciesForReference"
         upperBound="-1">
       <eGenericType eClassifier="#//IMergeableDifference">
         <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="implicitDependenciesForTarget"
         upperBound="-1">
       <eGenericType eClassifier="#//IMergeableDifference">
         <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="implicitDependenciesForReference"
         upperBound="-1">
       <eGenericType eClassifier="#//IMergeableDifference">
         <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
     <eGenericSuperTypes eClassifier="#//IEditableMergeableDifference">
       <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-      <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-      <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EElementRelativePresence" abstract="true">
@@ -256,8 +218,6 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IElementRelativePresence">
       <eTypeArguments eTypeParameter="#//EElementRelativePresence/E"/>
-      <eTypeArguments eTypeParameter="#//EElementRelativePresence/A"/>
-      <eTypeArguments eTypeParameter="#//EElementRelativePresence/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EElementPresence" abstract="true">
@@ -278,8 +238,6 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IElementPresence">
       <eTypeArguments eTypeParameter="#//EElementPresence/E"/>
-      <eTypeArguments eTypeParameter="#//EElementPresence/A"/>
-      <eTypeArguments eTypeParameter="#//EElementPresence/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EValuePresence" abstract="true">
@@ -295,8 +253,6 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IValuePresence">
       <eTypeArguments eTypeParameter="#//EValuePresence/E"/>
-      <eTypeArguments eTypeParameter="#//EValuePresence/A"/>
-      <eTypeArguments eTypeParameter="#//EValuePresence/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EAttributeValuePresence" abstract="true">
@@ -316,8 +272,6 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IAttributeValuePresence">
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/E"/>
-      <eTypeArguments eTypeParameter="#//EAttributeValuePresence/A"/>
-      <eTypeArguments eTypeParameter="#//EAttributeValuePresence/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EReferenceValuePresence" abstract="true">
@@ -348,107 +302,71 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IReferenceValuePresence">
       <eTypeArguments eTypeParameter="#//EReferenceValuePresence/E"/>
-      <eTypeArguments eTypeParameter="#//EReferenceValuePresence/A"/>
-      <eTypeArguments eTypeParameter="#//EReferenceValuePresence/R"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IComparison" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IComparison"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditableComparison" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IComparison.Editable"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IMapping" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMapping"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditableMapping" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMapping.Editable"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IMatch" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMatch"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditableMatch" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMatch.Editable"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IMergeableDifference" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IEditableMergeableDifference" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IElementRelativePresence" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IElementPresence" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IValuePresence" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IAttributeValuePresence" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IReferenceValuePresence" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence"
       abstract="true" interface="true">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IEditableTreeDataScope" instanceClassName="org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IMatchPolicy" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMatchPolicy">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IDiffPolicy" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IDiffPolicy">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IMergePolicy" instanceClassName="org.eclipse.emf.diffmerge.generic.api.IMergePolicy">
     <eTypeParameters name="E"/>
-    <eTypeParameters name="A"/>
-    <eTypeParameters name="R"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Role" instanceClassName="org.eclipse.emf.diffmerge.generic.api.Role"/>
 </ecore:EPackage>

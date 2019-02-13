@@ -149,76 +149,74 @@ public class GdiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R> Adapter caseIComparison(IComparison<E, A, R> object) {
+    public <E> Adapter caseIComparison(IComparison<E> object) {
       return createIComparisonAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIEditableComparison(Editable<E, A, R> object) {
+    public <E> Adapter caseIEditableComparison(Editable<E> object) {
       return createIEditableComparisonAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIMapping(IMapping<E, A, R> object) {
+    public <E> Adapter caseIMapping(IMapping<E> object) {
       return createIMappingAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIEditableMapping(
-        org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<E, A, R> object) {
+    public <E> Adapter caseIEditableMapping(
+        org.eclipse.emf.diffmerge.generic.api.IMapping.Editable<E> object) {
       return createIEditableMappingAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIMatch(IMatch<E, A, R> object) {
+    public <E> Adapter caseIMatch(IMatch<E> object) {
       return createIMatchAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIEditableMatch(
-        org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<E, A, R> object) {
+    public <E> Adapter caseIEditableMatch(
+        org.eclipse.emf.diffmerge.generic.api.IMatch.Editable<E> object) {
       return createIEditableMatchAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIMergeableDifference(
-        IMergeableDifference<E, A, R> object) {
+    public <E> Adapter caseIMergeableDifference(
+        IMergeableDifference<E> object) {
       return createIMergeableDifferenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIEditableMergeableDifference(
-        org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<E, A, R> object) {
+    public <E> Adapter caseIEditableMergeableDifference(
+        org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable<E> object) {
       return createIEditableMergeableDifferenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIElementRelativePresence(
-        IElementRelativePresence<E, A, R> object) {
+    public <E> Adapter caseIElementRelativePresence(
+        IElementRelativePresence<E> object) {
       return createIElementRelativePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIElementPresence(
-        IElementPresence<E, A, R> object) {
+    public <E> Adapter caseIElementPresence(IElementPresence<E> object) {
       return createIElementPresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIValuePresence(
-        IValuePresence<E, A, R> object) {
+    public <E> Adapter caseIValuePresence(IValuePresence<E> object) {
       return createIValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIAttributeValuePresence(
-        IAttributeValuePresence<E, A, R> object) {
+    public <E> Adapter caseIAttributeValuePresence(
+        IAttributeValuePresence<E> object) {
       return createIAttributeValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseIReferenceValuePresence(
-        IReferenceValuePresence<E, A, R> object) {
+    public <E> Adapter caseIReferenceValuePresence(
+        IReferenceValuePresence<E> object) {
       return createIReferenceValuePresenceAdapter();
     }
 

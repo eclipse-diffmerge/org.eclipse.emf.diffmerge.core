@@ -11,7 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
@@ -24,15 +26,14 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature <em>Feature</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#isOrder <em>Order</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence org.eclipse.emf.diffmerge.diffdata.IValuePresence"
+ * @model abstract="true"
  * @generated
  */
-public interface EValuePresence
-    extends EElementRelativePresence, IValuePresence {
+public interface EValuePresence extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<EObject, EAttribute, EReference> {
   /**
    * Returns the value of the '<em><b>Feature</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -58,32 +59,5 @@ public interface EValuePresence
    * @generated
    */
   void setFeature(EStructuralFeature value);
-
-  /**
-   * Returns the value of the '<em><b>Order</b></em>' attribute.
-   * The default value is <code>"false"</code>.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Order</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Order</em>' attribute.
-   * @see #setOrder(boolean)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Order()
-   * @model default="false" required="true"
-   * @generated
-   */
-  boolean isOrder();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#isOrder <em>Order</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Order</em>' attribute.
-   * @see #isOrder()
-   * @generated
-   */
-  void setOrder(boolean value);
 
 } // EValuePresence

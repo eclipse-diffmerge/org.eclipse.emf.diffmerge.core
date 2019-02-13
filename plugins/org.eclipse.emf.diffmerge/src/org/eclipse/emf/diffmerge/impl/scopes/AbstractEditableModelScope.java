@@ -32,7 +32,7 @@ public abstract class AbstractEditableModelScope extends AbstractModelScope
 implements IEditableModelScope {
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(EObject, EAttribute, Object)
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, java.lang.Object)
    */
   public boolean add(EObject source_p, EAttribute attribute_p, Object value_p) {
     boolean result;

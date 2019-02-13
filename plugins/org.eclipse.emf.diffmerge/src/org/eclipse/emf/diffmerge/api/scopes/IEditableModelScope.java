@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @author Olivier Constant
  */
 public interface IEditableModelScope extends IFeaturedModelScope, IModelScope.Editable,
-IEditableTreeDataScope<EObject, EAttribute, EReference>{
+IEditableTreeDataScope<EObject>{
   
   /**
    * Add the given value to the given element on the given attribute if possible,
@@ -55,18 +55,16 @@ IEditableTreeDataScope<EObject, EAttribute, EReference>{
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#addAttributeValue(java.lang.Object, java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default boolean addAttributeValue(EObject source_p, EAttribute attribute_p,
-      Object value_p) {
-    return add(source_p, attribute_p, value_p);
+  default boolean addAttributeValue(EObject source_p, Object attribute_p, Object value_p) {
+    return add(source_p, (EAttribute)attribute_p, value_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#addReferenceValue(java.lang.Object, java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default boolean addReferenceValue(EObject source_p, EReference reference_p,
-      EObject value_p) {
-    return add(source_p, reference_p, value_p);
+  default boolean addReferenceValue(EObject source_p, Object reference_p, EObject value_p) {
+    return add(source_p, (EReference)reference_p, value_p);
   }
   
   /**
@@ -85,18 +83,18 @@ IEditableTreeDataScope<EObject, EAttribute, EReference>{
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#moveAttributeValue(java.lang.Object, java.lang.Object, int, int)
    * Here to avoid API breakage.
    */
-  default Object moveAttributeValue(EObject source_p, EAttribute attribute_p,
+  default Object moveAttributeValue(EObject source_p, Object attribute_p,
       int newPosition_p, int oldPosition_p) {
-    return move(source_p, attribute_p, newPosition_p, oldPosition_p);
+    return move(source_p, (EAttribute)attribute_p, newPosition_p, oldPosition_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#moveReferenceValue(java.lang.Object, java.lang.Object, int, int)
    * Here to avoid API breakage.
    */
-  default EObject moveReferenceValue(EObject source_p, EReference reference_p,
+  default EObject moveReferenceValue(EObject source_p, Object reference_p,
       int newPosition_p, int oldPosition_p) {
-    return (EObject)move(source_p, reference_p, newPosition_p, oldPosition_p);
+    return (EObject)move(source_p, (EReference)reference_p, newPosition_p, oldPosition_p);
   }
   
   /**
@@ -125,18 +123,18 @@ IEditableTreeDataScope<EObject, EAttribute, EReference>{
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#removeAttributeValue(java.lang.Object, java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default boolean removeAttributeValue(EObject source_p, EAttribute attribute_p,
+  default boolean removeAttributeValue(EObject source_p, Object attribute_p,
       Object value_p) {
-    return remove(source_p, attribute_p, value_p);
+    return remove(source_p, (EAttribute)attribute_p, value_p);
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#removeReferenceValue(java.lang.Object, java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
-  default boolean removeReferenceValue(EObject source_p, EReference reference_p,
+  default boolean removeReferenceValue(EObject source_p, Object reference_p,
       EObject value_p) {
-    return remove(source_p, reference_p, value_p);
+    return remove(source_p, (EReference)reference_p, value_p);
   }
   
 }

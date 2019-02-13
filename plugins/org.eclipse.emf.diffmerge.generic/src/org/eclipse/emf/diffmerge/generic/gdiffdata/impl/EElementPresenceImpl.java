@@ -70,7 +70,7 @@ public abstract class EElementPresenceImpl<E, A, R> extends
       EMatch<E, A, R> match_p, EMatch<E, A, R> ownerMatch_p) {
     super(comparison_p, match_p, match_p.getUncoveredRole().opposite());
     setOwnerMatch(ownerMatch_p);
-    ((IMatch.Editable<E, A, R>) elementMatch).addRelatedDifference(this);
+    ((IMatch.Editable<E>) elementMatch).addRelatedDifference(this);
   }
 
   /**
@@ -217,23 +217,23 @@ public abstract class EElementPresenceImpl<E, A, R> extends
    */
   @Override
   protected void mergeAddition() {
-    IMapping.Editable<E, A, R> mapping = getComparison().getMapping();
-    IMatch<E, A, R> eltMatch = getElementMatch();
+    IMapping.Editable<E> mapping = getComparison().getMapping();
+    IMatch<E> eltMatch = getElementMatch();
     E clone = eltMatch.isPartial() ? mapping.completeMatch(eltMatch)
         : eltMatch.get(getAbsenceRole());
     boolean addedToScope = false;
     boolean actuallyAdded = false;
-    IMergePolicy<E, A, R> mergePolicy = getComparison().getLastMergePolicy();
+    IMergePolicy<E> mergePolicy = getComparison().getLastMergePolicy();
     if (getComparison().getLastMergePolicy()
         .bindPresenceToOwnership(getAbsenceScope()) && !isRoot()) {
       E container = getOwnerMatch().get(getAbsenceRole());
       if (container != null) {
-        R containment = getPresenceScope().getContainment(getElement());
+        Object containment = getPresenceScope().getContainment(getElement());
         actuallyAdded = getAbsenceScope().addReferenceValue(container,
             containment, clone);
         addedToScope = true; // Even if !actuallyAdded
         // Order handling
-        IDiffPolicy<E, A, R> diffPolicy = getComparison().getLastDiffPolicy();
+        IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
         if (diffPolicy != null && actuallyAdded
             && diffPolicy.considerOrderedReference(containment)) {
           // Move added value if required
@@ -251,7 +251,8 @@ public abstract class EElementPresenceImpl<E, A, R> extends
       actuallyAdded = getAbsenceScope().add(clone);
     }
     if (actuallyAdded) {
-      mergePolicy.setID(getElement(), getPresenceScope(), clone, getAbsenceScope());
+      mergePolicy.setID(getElement(), getPresenceScope(), clone,
+          getAbsenceScope());
     }
   }
 
@@ -263,7 +264,7 @@ public abstract class EElementPresenceImpl<E, A, R> extends
   protected void mergeRemoval() {
     if (isRoot() || getElementMatch()
         .getOwnershipDifference(getPresenceRole()) == null) {
-      IEditableTreeDataScope<E, A, R> presenceScope = getPresenceScope();
+      IEditableTreeDataScope<E> presenceScope = getPresenceScope();
       E element = getElement();
       presenceScope.remove(element);
       removeDependencies(element, presenceScope);
@@ -277,6 +278,6 @@ public abstract class EElementPresenceImpl<E, A, R> extends
    * @generated NOT
    */
   protected abstract void removeDependencies(E element_p,
-      IEditableTreeDataScope<E, A, R> scope_p);
+      IEditableTreeDataScope<E> scope_p);
 
 } //EElementPresenceImpl

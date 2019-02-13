@@ -17,20 +17,18 @@ import org.eclipse.emf.diffmerge.generic.api.IMatch;
 /**
  * A model difference which is relative to at most one element per role.
  *
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IElementRelativeDifference<E, A, R> extends IDifference<E, A, R> {
+public interface IElementRelativeDifference<E> extends IDifference<E> {
   
   /**
    * Return the match which defines the element, or the matching elements,
    * to which this difference is relative
    * @return a match which is non-null unless it represents the model root container
    */
-  IMatch<E, A, R> getElementMatch();
+  IMatch<E> getElementMatch();
   
   /**
    * Return whether this difference, if merged, does not affect the containment tree

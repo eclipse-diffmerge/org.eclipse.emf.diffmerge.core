@@ -28,14 +28,12 @@ import org.eclipse.emf.diffmerge.generic.api.IMatch;
  *   role is getPresenceRole(), then the element is removed from its scope. The exact
  *   semantics of the removal depends on the scope.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IElementPresence<E, A, R> extends IElementRelativeDifference<E, A, R>,
-IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
+public interface IElementPresence<E> extends IElementRelativeDifference<E>,
+IPresenceDifference<E>, IMergeableDifference<E> {
   
   /**
    * Return the element whose presence is represented by this difference
@@ -47,7 +45,7 @@ IPresenceDifference<E, A, R>, IMergeableDifference<E, A, R> {
    * Return the match for the owner of the element
    * @return a potentially null match
    */
-  IMatch<E, A, R> getOwnerMatch();
+  IMatch<E> getOwnerMatch();
   
   /**
    * Return whether the element is a root in its scope.

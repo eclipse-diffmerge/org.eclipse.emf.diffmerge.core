@@ -284,8 +284,8 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * @return a non-null scope
    * @generated NOT
    */
-  protected final IEditableTreeDataScope<E, A, R> getAbsenceScope() {
-    IEditableTreeDataScope<E, A, R> result = getComparison()
+  protected final IEditableTreeDataScope<E> getAbsenceScope() {
+    IEditableTreeDataScope<E> result = getComparison()
         .getScope(getPresenceRole().opposite());
     assert result != null;
     return result;
@@ -296,8 +296,8 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * @return a non-null scope
    * @generated NOT
    */
-  protected final IEditableTreeDataScope<E, A, R> getPresenceScope() {
-    IEditableTreeDataScope<E, A, R> result = getComparison()
+  protected final IEditableTreeDataScope<E> getPresenceScope() {
+    IEditableTreeDataScope<E> result = getComparison()
         .getScope(getPresenceRole());
     assert result != null;
     return result;

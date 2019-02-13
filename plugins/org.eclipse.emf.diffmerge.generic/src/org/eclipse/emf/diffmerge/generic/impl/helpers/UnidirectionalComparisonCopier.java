@@ -27,33 +27,30 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 /**
  * A unidirectional copier from a given scope to another one.
- * The state as defined in the superclass is never modified, only behavior is reused.
  * 
- * @param <E> The type of the elements of the data scope.
- * @param <A> The type of the attributes of the data scope.
- * @param <R> The type of the references of the data scope.
+ * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public class UnidirectionalComparisonCopier<E, A, R> {
+public class UnidirectionalComparisonCopier<E> {
   
   /** The non-null role of the source for this copier */
   protected final Role _sourceRole;
   
   /** The initially null mapping this copier relies upon */
-  protected IMapping.Editable<E, A, R> _mapping;
+  protected IMapping.Editable<E> _mapping;
   
   /** The initially null source scope for this copier */
-  protected ITreeDataScope<E, A, R> _sourceScope;
+  protected ITreeDataScope<E> _sourceScope;
   
   /** The initially null target scope for this copier */
-  protected IEditableTreeDataScope<E, A, R> _destinationScope;
+  protected IEditableTreeDataScope<E> _destinationScope;
   
   /** The potentially null diff policy */
-  protected IDiffPolicy<E, A, R> _diffPolicy;
+  protected IDiffPolicy<E> _diffPolicy;
   
   /** The potentially null merge policy to apply */
-  protected IMergePolicy<E, A, R> _mergePolicy;
+  protected IMergePolicy<E> _mergePolicy;
   
   /** Whether out of scope values must be copied or ignored */
   protected boolean _copyOutOfScopeValues;
@@ -81,7 +78,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * @param comparison_p a non-null comparison
    * @return a non-null element which is a clone of the element in partialMatch_p
    */
-  public E completeMatch(IMatch<E, A, R> partialMatch_p, IComparison.Editable<E, A, R> comparison_p) {
+  public E completeMatch(IMatch<E> partialMatch_p, IComparison.Editable<E> comparison_p) {
     setComparison(comparison_p);
     assert partialMatch_p.getUncoveredRole() == _sourceRole.opposite() &&
         !getCompletedMatches().contains(partialMatch_p);
@@ -98,7 +95,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Complete the references between all completed elements
    * @param comparison_p a non-null comparison defining a behavioral context
    */
-  public void completeReferences(IComparison.Editable<E, A, R> comparison_p) {
+  public void completeReferences(IComparison.Editable<E> comparison_p) {
     setComparison(comparison_p);
     copyReferences();
   }
@@ -113,7 +110,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
   protected E copy(E element_p) {
     assert _mergePolicy != null;
     E result = _mergePolicy.baseCopy(element_p);
-    for (A attribute : _sourceScope.getAttributes(element_p)) {
+    for (Object attribute : _sourceScope.getAttributes(element_p)) {
       if (coverAttribute(attribute)) {
         copyAttribute(attribute, element_p, result);
       }
@@ -128,7 +125,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * @param element_p a non-null element
    * @param copy_p a non-null copy
    */
-  protected void copyAttribute(A attribute_p, E element_p, E copy_p) {
+  protected void copyAttribute(Object attribute_p, E element_p, E copy_p) {
     for (Object value : _sourceScope.getAttributeValues(element_p, attribute_p)) {
       _destinationScope.addAttributeValue(copy_p, attribute_p, value);
     }
@@ -138,12 +135,12 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Copy reference values between the source elements copied to the resulting copies
    */
   protected void copyReferences() {
-    for (IMatch<E, A, R> updatedMatch : getCompletedMatches()) {
+    for (IMatch<E> updatedMatch : getCompletedMatches()) {
       copyReferences(updatedMatch);
     }
     // Update of containments may have changed physical storage, which may have an impact on IDs
     if (_mergePolicy != null) {
-      for (IMatch<E, A, R> updatedMatch : getCompletedMatches()) {
+      for (IMatch<E> updatedMatch : getCompletedMatches()) {
         E source = updatedMatch.get(_sourceRole);
         E target = updatedMatch.get(_sourceRole.opposite());
         _mergePolicy.setID(source, _sourceScope, target, _destinationScope);
@@ -155,12 +152,12 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Copy the cross-references of the destination element of the given match
    * @param match_p a non-null, non-partial match
    */
-  protected void copyReferences(IMatch<E, A, R> match_p) {
+  protected void copyReferences(IMatch<E> match_p) {
     E source = match_p.get(_sourceRole);
     E destination = match_p.get(_sourceRole.opposite());
     assert source != null && destination != null;
-    for (R reference : _sourceScope.getReferences(source)) {
-      if (!_sourceScope.getScopePolicy().isContainerReference(reference) &&
+    for (Object reference : _sourceScope.getReferences(source)) {
+      if (!getScopePolicy().isContainerReference(reference) &&
           coverReference(reference)) {
         copyReference(reference, source, destination);
       }
@@ -173,13 +170,13 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * @param element_p a non-null element
    * @param copy_p a non-null copy
    */
-  protected void copyReference(R reference_p, E element_p, E copy_p) {
+  protected void copyReference(Object reference_p, E element_p, E copy_p) {
     // This implementation assumes that values need only be added
     List<E> sourceValues = _sourceScope.getReferenceValues(element_p, reference_p);
-    IScopePolicy<E, A, R> scopePolicy = _sourceScope.getScopePolicy();
-    R opposite = scopePolicy.getOppositeReference(reference_p);
+    IScopePolicy<E> scopePolicy = getScopePolicy();
+    Object opposite = scopePolicy.getOppositeReference(reference_p);
     for (E sourceValue : sourceValues) {
-      IMatch<E, A, R> valueMatch = _mapping.getMatchFor(sourceValue, _sourceRole);
+      IMatch<E> valueMatch = _mapping.getMatchFor(sourceValue, _sourceRole);
       if (valueMatch != null) {
         // Value in scope
         // If value is in copier or ref is unidirectional, it is not handled
@@ -190,7 +187,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
         if (!mustCopy) {
           // Otherwise, check if it is actually handled by a ref presence diff
           // (it may not be because the opposite ref may not be covered by the diff policy)
-          IMatch<E, A, R> holderMatch = _mapping.getMatchFor(element_p, _sourceRole);
+          IMatch<E> holderMatch = _mapping.getMatchFor(element_p, _sourceRole);
           if (holderMatch != null) {
             mustCopy =
                 holderMatch.getReferenceValueDifference(reference_p, sourceValue) == null;
@@ -217,7 +214,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Return whether the given attribute must be copied
    * @param attribute_p a non-null attribute
    */
-  protected boolean coverAttribute(A attribute_p) {
+  protected boolean coverAttribute(Object attribute_p) {
     return _mergePolicy != null && _mergePolicy.copyAttribute(attribute_p, _destinationScope);
   }
   
@@ -225,7 +222,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Return whether the given reference must be copied
    * @param reference_p a non-null reference
    */
-  protected boolean coverReference(R reference_p) {
+  protected boolean coverReference(Object reference_p) {
     return _mergePolicy != null && _mergePolicy.copyReference(reference_p, _destinationScope);
   }
   
@@ -247,7 +244,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    */
   public E get(E element_p, boolean copyOnly_p) {
     E result = null;
-    IMatch<E, A, R> match = _mapping.getMatchFor(element_p, _sourceRole);
+    IMatch<E> match = _mapping.getMatchFor(element_p, _sourceRole);
     if (match != null && (!copyOnly_p || getCompletedMatches().contains(match))) {
       result = match.get(_sourceRole.opposite());
     }
@@ -259,7 +256,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * to its opposite
    * @return a non-null, modifiable collection
    */
-  protected Collection<IMatch<E, A, R>> getCompletedMatches() {
+  protected Collection<IMatch<E>> getCompletedMatches() {
     return _mapping.getModifiableCompletedMatches(_sourceRole.opposite());
   }
   
@@ -267,7 +264,7 @@ public class UnidirectionalComparisonCopier<E, A, R> {
    * Set the comparison which defines the behavioral context of this copier
    * @param comparison_p a non-null comparison
    */
-  protected void setComparison(IComparison.Editable<E, A, R> comparison_p) {
+  protected void setComparison(IComparison.Editable<E> comparison_p) {
     _mapping = comparison_p.getMapping();
     _sourceScope = comparison_p.getScope(_sourceRole);
     _destinationScope = comparison_p.getScope(_sourceRole.opposite());
@@ -277,6 +274,14 @@ public class UnidirectionalComparisonCopier<E, A, R> {
       _copyOutOfScopeValues = _mergePolicy.copyOutOfScopeCrossReferences(
           _sourceScope, _destinationScope);
     }
+  }
+  
+  /**
+   * Return the scope policy of the source scope
+   * @return a non-null object
+   */
+  protected IScopePolicy<E> getScopePolicy() {
+    return _sourceScope.getScopePolicy();
   }
   
 }
