@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -22,11 +24,11 @@ import org.eclipse.emf.ecore.EReference;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparison()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt;"
  * @generated
  */
 public interface EComparison extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<EObject, EAttribute, EReference> {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<EObject, EAttribute, EReference, IEditableModelScope> {
   /**
    * <!-- begin-user-doc -->
    * <p>
@@ -38,5 +40,13 @@ public interface EComparison extends
    * @generated
    */
   EMapping getMapping();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model dataType="org.eclipse.emf.diffmerge.diffdata.IEditableModelScope" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  IEditableModelScope getScope(Role role);
 
 } // EComparison

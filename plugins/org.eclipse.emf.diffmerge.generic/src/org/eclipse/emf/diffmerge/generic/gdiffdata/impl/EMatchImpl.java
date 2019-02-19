@@ -34,6 +34,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativeDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
@@ -63,8 +64,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
-    implements EMatch<E, A, R> {
+public abstract class EMatchImpl<E, A, R, S> extends EIdentifiedImpl
+    implements EMatch<E, A, R, S> {
 
   /**
    * The default value of the '{@link #getMatchID() <em>Match ID</em>}' attribute.
@@ -106,7 +107,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<EMergeableDifference<E, A, R>> modifiableRelatedDifferences;
+  protected EList<EMergeableDifference<E, A, R, S>> modifiableRelatedDifferences;
 
   /**
    * The cached value of the '{@link #getElementPresenceDifference() <em>Element Presence Difference</em>}' reference.
@@ -199,9 +200,9 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<EMergeableDifference<E, A, R>> getModifiableRelatedDifferences() {
+  public EList<EMergeableDifference<E, A, R, S>> getModifiableRelatedDifferences() {
     if (modifiableRelatedDifferences == null) {
-      modifiableRelatedDifferences = new EObjectContainmentEList<EMergeableDifference<E, A, R>>(
+      modifiableRelatedDifferences = new EObjectContainmentEList<EMergeableDifference<E, A, R, S>>(
           EMergeableDifference.class, this,
           GdiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES);
     }
@@ -213,11 +214,11 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   @SuppressWarnings("unchecked")
-  public EMapping<E, A, R> getMapping() {
-    EMapping<E, A, R> result = null;
+  public EMapping<E, A, R, S> getMapping() {
+    EMapping<E, A, R, S> result = null;
     EObject container = eContainer();
     if (container instanceof EMapping) {
-      result = (EMapping<E, A, R>) container;
+      result = (EMapping<E, A, R, S>) container;
     }
     return result;
   }
@@ -257,6 +258,19 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   public abstract void setTarget(E e);
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @generated NOT
+   */
+  public EComparison<E, A, R, S> getComparison() {
+    EComparison<E, A, R, S> result = null;
+    EMapping<E, A, R, S> mapping = getMapping();
+    if (mapping != null) {
+      result = mapping.getComparison();
+    }
+    return result;
+  }
 
   /**
    * <!-- begin-user-doc -->
@@ -455,7 +469,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
     case GdiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES:
       getModifiableRelatedDifferences().clear();
       getModifiableRelatedDifferences().addAll(
-          (Collection<? extends EMergeableDifference<E, A, R>>) newValue);
+          (Collection<? extends EMergeableDifference<E, A, R, S>>) newValue);
       return;
     case GdiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE:
       setElementPresenceDifference((IElementPresence<E>) newValue);
@@ -544,6 +558,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        which is such that presence_p.getElementMatch() == this
    * @generated NOT
    */
+  @SuppressWarnings("unchecked")
   protected void addAttributeValuePresence(
       IAttributeValuePresence<E> presence_p) {
     EMap<A, EMap<Object, IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
@@ -551,7 +566,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
     EMap<Object, IAttributeValuePresence<E>> forAttribute = attributeMap
         .get(presence_p.getFeature());
     if (forAttribute == null) {
-      forAttribute = newAttributeValueToPresenceMap(presence_p.getFeature());
+      forAttribute = newAttributeValueToPresenceMap((A) presence_p.getFeature());
     }
     Object key;
     if (presence_p.isOrder()) {
@@ -568,8 +583,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch.Editable#addOwnershipDifference(org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence)
    * @generated NOT
    */
-  public void addOwnershipDifference(
-      IReferenceValuePresence<E> presence_p) {
+  public void addOwnershipDifference(IReferenceValuePresence<E> presence_p) {
     if (Role.TARGET == presence_p.getPresenceRole()) {
       setTargetOwnershipDifference(presence_p);
     } else {
@@ -584,15 +598,16 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        and isOrder() is true
    * @generated NOT
    */
+  @SuppressWarnings("unchecked")
   protected void addReferenceOrderDifference(
       IReferenceValuePresence<E> presence_p) {
     assert presence_p.getElementMatch() == this && presence_p.isOrder();
-    EMap<R, List<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
+    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
         true);
     List<IReferenceValuePresence<E>> forReference = referenceMap
         .get(presence_p.getFeature());
     if (forReference == null) {
-      forReference = newReferenceOrderDifferenceList(presence_p.getFeature());
+      forReference = newReferenceOrderDifferenceList((R) presence_p.getFeature());
     }
     forReference.add(presence_p);
   }
@@ -603,6 +618,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        which is such that presence_p.getElementMatch() == this
    * @generated NOT
    */
+  @SuppressWarnings("unchecked")
   protected void addReferenceValuePresence(
       IReferenceValuePresence<E> presence_p) {
     assert presence_p.getElementMatch() == this && !presence_p.isOrder();
@@ -611,7 +627,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
     EMap<E, IReferenceValuePresence<E>> forReference = referenceMap
         .get(presence_p.getFeature());
     if (forReference == null) {
-      forReference = newReferenceValueToPresenceMap(presence_p.getFeature());
+      forReference = newReferenceValueToPresenceMap((R) presence_p.getFeature());
     }
     E key = presence_p.getValue();
     forReference.put(key, presence_p); // key cannot be null
@@ -648,8 +664,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
           }
         }
       } else if (difference_p instanceof IAttributeValuePresence<?>) {
-        addAttributeValuePresence(
-            (IAttributeValuePresence<E>) difference_p);
+        addAttributeValuePresence((IAttributeValuePresence<E>) difference_p);
       }
     }
   }
@@ -709,8 +724,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
     if (targetOwnership != null) {
       result.add(targetOwnership);
     }
-    IDifference<E> referenceOwnership = getOwnershipDifference(
-        Role.REFERENCE);
+    IDifference<E> referenceOwnership = getOwnershipDifference(Role.REFERENCE);
     if (referenceOwnership != null) {
       result.add(referenceOwnership);
     }
@@ -805,7 +819,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @return a modifiable map which is not null if create_p
    * @generated NOT
    */
-  protected abstract EMap<R, List<IReferenceValuePresence<E>>> getModifiableOrderReferenceMap(
+  protected abstract EMap<R, EList<IReferenceValuePresence<E>>> getModifiableOrderReferenceMap(
       boolean create_p);
 
   /**
@@ -823,7 +837,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @return a modifiable collection which is not null if create_p
    * @generated NOT
    */
-  protected List<EMergeableDifference<E, A, R>> getModifiableRelatedDifferences(
+  protected List<EMergeableDifference<E, A, R, S>> getModifiableRelatedDifferences(
       boolean create_p) {
     return create_p ? getModifiableRelatedDifferences()
         : modifiableRelatedDifferences;
@@ -861,8 +875,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getPresenceDifferencesIn(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public Collection<IDifference<E>> getPresenceDifferencesIn(
-      Role role_p) {
+  public Collection<IDifference<E>> getPresenceDifferencesIn(Role role_p) {
     Collection<IDifference<E>> result = new ArrayList<IDifference<E>>();
     for (IDifference<E> difference : getRelatedDifferences()) {
       if (difference instanceof IPresenceDifference
@@ -900,7 +913,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    */
   public IReferenceValuePresence<E> getReferenceOrderDifference(
       Object reference_p, Role role_p) {
-    EMap<R, List<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
+    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
         false);
     if (referenceMap != null) {
       List<IReferenceValuePresence<E>> forReference = referenceMap
@@ -952,7 +965,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    */
   public List<IDifference<E>> getRelatedDifferences() {
     List<IDifference<E>> result;
-    List<EMergeableDifference<E, A, R>> modifiable = getModifiableRelatedDifferences(
+    List<EMergeableDifference<E, A, R, S>> modifiable = getModifiableRelatedDifferences(
         false);
     if (modifiable == null) {
       result = Collections.emptyList();
@@ -1002,8 +1015,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   public boolean isAMove() {
     boolean result = false;
     if (!isPartial() && getElementPresenceDifference() == null) {
-      IReferenceValuePresence<E> onTarget = getOwnershipDifference(
-          Role.TARGET);
+      IReferenceValuePresence<E> onTarget = getOwnershipDifference(Role.TARGET);
       IReferenceValuePresence<E> onReference = getOwnershipDifference(
           Role.REFERENCE);
       result = onTarget != null || onReference != null;
@@ -1050,7 +1062,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected abstract EMap<Object, IAttributeValuePresence<E>> newAttributeValueToPresenceMap(
-      Object attribute_p);
+      A attribute_p);
 
   /**
    * Create and return a list for storing order differences, and add it
@@ -1060,7 +1072,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected abstract List<IReferenceValuePresence<E>> newReferenceOrderDifferenceList(
-      Object reference_p);
+      R reference_p);
 
   /**
    * Create and return a map for: reference value -> difference, and add it
@@ -1070,7 +1082,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected abstract EMap<E, IReferenceValuePresence<E>> newReferenceValueToPresenceMap(
-      Object reference_p);
+      R reference_p);
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch.Editable#reset(java.lang.Object, java.lang.Object, java.lang.Object)

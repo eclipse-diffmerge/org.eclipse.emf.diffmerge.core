@@ -11,35 +11,19 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
-import static org.eclipse.emf.diffmerge.api.Role.ANCESTOR;
-import static org.eclipse.emf.diffmerge.api.Role.REFERENCE;
-import static org.eclipse.emf.diffmerge.api.Role.TARGET;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.IPureMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
-import org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference;
-import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
+import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
-import org.eclipse.emf.diffmerge.structures.common.FArrayList;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -48,7 +32,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -71,7 +54,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class EMatchImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference, IEditableModelScope>
     implements EMatch {
 
   /**
@@ -138,7 +121,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> modifiableAttributeMap;
+  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> modifiableAttributeMap;
 
   /**
    * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
@@ -148,7 +131,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> modifiableReferenceMap;
+  protected EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> modifiableReferenceMap;
 
   /**
    * The cached value of the '{@link #getModifiableOrderReferenceMap() <em>Modifiable Order Reference Map</em>}' map.
@@ -158,7 +141,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> modifiableOrderReferenceMap;
+  protected EMap<EReference, EList<IReferenceValuePresence<EObject>>> modifiableOrderReferenceMap;
 
   /**
    * <!-- begin-user-doc -->
@@ -178,10 +161,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   public EMatchImpl(EObject target_p, EObject reference_p, EObject ancestor_p) {
-    this();
-    setTarget(target_p);
-    setReference(reference_p);
-    setAncestor(ancestor_p);
+    super(target_p, reference_p, ancestor_p);
   }
 
   /**
@@ -199,6 +179,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EObject getAncestor() {
     if (ancestor != null && ancestor.eIsProxy()) {
       InternalEObject oldAncestor = (InternalEObject) ancestor;
@@ -226,6 +207,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAncestor(EObject newAncestor) {
     EObject oldAncestor = ancestor;
     ancestor = newAncestor;
@@ -239,6 +221,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EObject getReference() {
     if (reference != null && reference.eIsProxy()) {
       InternalEObject oldReference = (InternalEObject) reference;
@@ -266,6 +249,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setReference(EObject newReference) {
     EObject oldReference = reference;
     reference = newReference;
@@ -279,6 +263,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EObject getTarget() {
     if (target != null && target.eIsProxy()) {
       InternalEObject oldTarget = (InternalEObject) target;
@@ -306,6 +291,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTarget(EObject newTarget) {
     EObject oldTarget = target;
     target = newTarget;
@@ -318,12 +304,18 @@ public class EMatchImpl extends
    * @see EMatch#getMapping()
    * @generated NOT
    */
+  @Override
   public EMapping getMapping() {
-    EMapping result = null;
-    EObject container = eContainer();
-    if (container instanceof EMapping)
-      result = (EMapping) container;
-    return result;
+    return (EMapping) super.getMapping();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getComparison()
+   * @generated NOT
+   */
+  @Override
+  public EComparison getComparison() {
+    return (EComparison) super.getComparison();
   }
 
   /**
@@ -331,9 +323,9 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> getModifiableAttributeMap() {
+  public EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap() {
     if (modifiableAttributeMap == null) {
-      modifiableAttributeMap = new EcoreEMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>>(
+      modifiableAttributeMap = new EcoreEMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>(
           DiffdataPackage.Literals.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY,
           AttributeToValueToDifferenceEntryImpl.class, this,
           DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
@@ -346,9 +338,9 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public EMap<EReference, EMap<EObject, IReferenceValuePresence>> getModifiableReferenceMap() {
+  public EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> getModifiableReferenceMap() {
     if (modifiableReferenceMap == null) {
-      modifiableReferenceMap = new EcoreEMap<EReference, EMap<EObject, IReferenceValuePresence>>(
+      modifiableReferenceMap = new EcoreEMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>>(
           DiffdataPackage.Literals.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY,
           ReferenceToElementToDifferenceEntryImpl.class, this,
           DiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP) {
@@ -377,14 +369,32 @@ public class EMatchImpl extends
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  public EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap() {
+  public EMap<EReference, EList<IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap() {
     if (modifiableOrderReferenceMap == null) {
-      modifiableOrderReferenceMap = new EcoreEMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>>(
+      modifiableOrderReferenceMap = new EcoreEMap<EReference, EList<IReferenceValuePresence<EObject>>>(
           DiffdataPackage.Literals.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY,
           ReferenceToOrderDifferenceEntryImpl.class, this,
-          DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
+          DiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP) {
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForKey()
+         */
+        @Override
+        protected boolean useEqualsForKey() {
+          return false;
+        }
+
+        /**
+         * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForValue()
+         */
+        @Override
+        protected boolean useEqualsForValue() {
+          return false;
+        }
+      };
     }
     return modifiableOrderReferenceMap;
   }
@@ -455,7 +465,6 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
@@ -540,462 +549,41 @@ public class EMatchImpl extends
   }
 
   /**
-   * Register the given attribute value presence for fast retrieval
-   * @param presence_p a non-null difference representing a value presence
-   *        which is such that presence_p.getElementMatch() == this
-   * @generated NOT
-   */
-  protected void addAttributeValuePresence(IAttributeValuePresence presence_p) {
-    EMap<EAttribute, EMap<Object, IAttributeValuePresence>> attributeMap = getModifiableAttributeMap(
-        true);
-    EMap<Object, IAttributeValuePresence> forAttribute = attributeMap
-        .get(presence_p.getFeature());
-    if (forAttribute == null)
-      forAttribute = newAttributeValueToPresenceMap(presence_p.getFeature());
-    Object key;
-    if (presence_p.isOrder())
-      key = presence_p.getPresenceRole() == Role.TARGET
-          ? ATTRIBUTE_ORDER_KEY_TARGET
-          : ATTRIBUTE_ORDER_KEY_REFERENCE;
-    else
-      key = presence_p.getValue();
-    forAttribute.put(key, presence_p);
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch.Editable#addOwnershipDifference(org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence)
-   * @generated NOT
-   */
-  public void addOwnershipDifference(IReferenceValuePresence presence_p) {
-    if (Role.TARGET == presence_p.getPresenceRole())
-      setTargetOwnershipDifference(presence_p);
-    else
-      setReferenceOwnershipDifference(presence_p);
-  }
-
-  /**
-   * Register the given reference value presence for fast retrieval
-   * @param presence_p a non-null difference representing a value presence
-   *        which is such that presence_p.getElementMatch() == this
-   * @generated NOT
-   */
-  protected void addReferenceValuePresence(IReferenceValuePresence presence_p) {
-    assert presence_p.getElementMatch() == this;
-    EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap = getModifiableReferenceMap(
-        true);
-    EMap<EObject, IReferenceValuePresence> forReference = referenceMap
-        .get(presence_p.getFeature());
-    if (forReference == null)
-      forReference = newReferenceValueToPresenceMap(presence_p.getFeature());
-    EObject key;
-    if (presence_p.isOrder())
-      key = presence_p.getPresenceRole() == Role.TARGET
-          ? REFERENCE_ORDER_KEY_TARGET
-          : REFERENCE_ORDER_KEY_REFERENCE;
-    else
-      key = presence_p.getValue();
-    forReference.put(key, presence_p); // key cannot be null
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch.Editable#addRelatedDifference(org.eclipse.emf.diffmerge.api.diff.IDifference)
-   * @generated NOT
-   */
-  @SuppressWarnings("unchecked")
-  public void addRelatedDifference(IDifference difference_p) {
-    assert difference_p != null;
-    Collection<? extends IDifference> differences = getModifiableRelatedDifferences(
-        true);
-    if (!differences.contains(difference_p)) {
-      ((Collection<IDifference>) differences).add(difference_p); // Difference is supposed compatible
-      if (difference_p instanceof IElementPresence) {
-        setElementPresenceDifference((IElementPresence) difference_p);
-      } else if (difference_p instanceof IReferenceValuePresence) {
-        IReferenceValuePresence presence = (IReferenceValuePresence) difference_p;
-        addReferenceValuePresence(presence);
-        // If relevant, register implicit universal container reference on value
-        if (presence.isOwnership()) {
-          IMatch valueMatch = presence.getValueMatch();
-          if (valueMatch != null)
-            ((IMatch.Editable) valueMatch).addOwnershipDifference(presence);
-        }
-      } else if (difference_p instanceof IAttributeValuePresence) {
-        addAttributeValuePresence((IAttributeValuePresence) difference_p);
-      }
-    }
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#coversRole(org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public boolean coversRole(Role role_p) {
-    return get(role_p) != null;
-  }
-
-  /**
-   * @see Object#equals(Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableAttributeMap(boolean)
    * @generated NOT
    */
   @Override
-  public boolean equals(Object object_p) {
-    boolean result = false;
-    if (object_p instanceof IPureMatch) {
-      IPureMatch peer = (IPureMatch) object_p;
-      result = // Equality by reference of elements
-          peer == this || peer.get(TARGET) == get(TARGET)
-              && peer.get(REFERENCE) == get(REFERENCE)
-              && peer.get(ANCESTOR) == get(ANCESTOR);
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#get(org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public EObject get(Role role_p) {
-    EObject result;
-    switch (role_p) {
-    case TARGET:
-      result = getTarget();
-      break;
-    case REFERENCE:
-      result = getReference();
-      break;
-    default:
-      result = getAncestor();
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getAllDifferences()
-   * @generated NOT
-   */
-  public List<IDifference> getAllDifferences() {
-    List<IDifference> result = new FArrayList<IDifference>(
-        getRelatedDifferences(), null);
-    IDifference targetOwnership = getOwnershipDifference(Role.TARGET);
-    if (targetOwnership != null)
-      result.add(targetOwnership);
-    IDifference referenceOwnership = getOwnershipDifference(Role.REFERENCE);
-    if (referenceOwnership != null)
-      result.add(referenceOwnership);
-    return Collections.unmodifiableList(result);
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getAttributeDifferences(org.eclipse.emf.ecore.EAttribute)
-   * @generated NOT
-   */
-  public Collection<IAttributeValuePresence> getAttributeDifferences(
-      EAttribute attribute_p) {
-    Collection<IAttributeValuePresence> result = null;
-    if (getModifiableAttributeMap(false) != null) {
-      EMap<Object, IAttributeValuePresence> forAttribute = getModifiableAttributeMap(
-          false).get(attribute_p);
-      if (forAttribute != null)
-        result = Collections.unmodifiableCollection(forAttribute.values());
-    }
-    if (result == null)
-      result = Collections.emptyList();
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getAttributeValueDifference(org.eclipse.emf.ecore.EAttribute, java.lang.Object)
-   * @generated NOT
-   */
-  public IAttributeValuePresence getAttributeValueDifference(
-      EAttribute attribute_p, Object value_p) {
-    IAttributeValuePresence result = null;
-    if (getModifiableAttributeMap(false) != null) {
-      EMap<Object, IAttributeValuePresence> forAttribute = getModifiableAttributeMap(
-          false).get(attribute_p);
-      if (forAttribute != null)
-        result = forAttribute.get(value_p);
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getAttributesWithDifferences()
-   * @generated NOT
-   */
-  public Collection<EAttribute> getAttributesWithDifferences() {
-    Set<EAttribute> result;
-    if (getModifiableAttributeMap(false) == null)
-      result = Collections.emptySet();
-    else
-      result = Collections
-          .unmodifiableSet(getModifiableAttributeMap(false).keySet());
-    return result;
-  }
-
-  /**
-   * Return the double map: attribute -> value -> difference
-   * @param create_p whether the map must be created if it does not exist
-   * @return a modifiable map which is not null if create_p
-   * @generated NOT
-   */
-  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence>> getModifiableAttributeMap(
-      boolean create_p) {
+  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>
+  getModifiableAttributeMap(boolean create_p) {
     return create_p ? getModifiableAttributeMap() : modifiableAttributeMap;
   }
 
   /**
-   * Return the double map: reference -> value -> difference
-   * @param create_p whether the map must be created if it does not exist
-   * @return a modifiable map which is not null if create_p
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableOrderReferenceMap(boolean)
    * @generated NOT
    */
-  protected EMap<EReference, EMap<EObject, IReferenceValuePresence>> getModifiableReferenceMap(
-      boolean create_p) {
+  @Override
+  protected EMap<EReference, EList<IReferenceValuePresence<EObject>>>
+  getModifiableOrderReferenceMap(boolean create_p) {
+    return create_p ? getModifiableOrderReferenceMap() : modifiableOrderReferenceMap;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableReferenceMap(boolean)
+   * @generated NOT
+   */
+  @Override
+  protected EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>>
+  getModifiableReferenceMap(boolean create_p) {
     return create_p ? getModifiableReferenceMap() : modifiableReferenceMap;
   }
 
   /**
-   * Return the related differences as a modifiable collection
-   * @param create_p whether the collection must be created if it does not exist
-   * @return a modifiable collection which is not null if create_p
-   * @generated NOT
-   */
-  protected List<EMergeableDifference> getModifiableRelatedDifferences(
-      boolean create_p) {
-    return create_p ? getModifiableRelatedDifferences()
-        : modifiableRelatedDifferences;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getNbNoContainmentDifferences()
-   * @generated NOT
-   */
-  public int getNbNoContainmentDifferences() {
-    int result = 0;
-    if (!isPartial())
-      for (IDifference difference : getRelatedDifferences())
-        if (difference instanceof IElementRelativeDifference
-            && ((IElementRelativeDifference) difference)
-                .isUnrelatedToContainmentTree()
-            && !difference.isMerged())
-          result++;
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getOrderDifference(org.eclipse.emf.ecore.EStructuralFeature, org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public IValuePresence getOrderDifference(EStructuralFeature feature_p,
-      Role role_p) {
-    IValuePresence result = null;
-    if (feature_p instanceof EAttribute) {
-      EMap<EAttribute, EMap<Object, IAttributeValuePresence>> attributeMap = getModifiableAttributeMap(
-          false);
-      if (attributeMap != null) {
-        EMap<Object, IAttributeValuePresence> forAttribute = attributeMap
-            .get(feature_p);
-        if (forAttribute != null)
-          result = forAttribute
-              .get(role_p == Role.TARGET ? ATTRIBUTE_ORDER_KEY_TARGET
-                  : ATTRIBUTE_ORDER_KEY_REFERENCE);
-      }
-    } else if (feature_p instanceof EReference) {
-      EMap<EReference, EMap<EObject, IReferenceValuePresence>> referenceMap = getModifiableReferenceMap(
-          false);
-      if (referenceMap != null) {
-        EMap<EObject, IReferenceValuePresence> forReference = referenceMap
-            .get(feature_p);
-        if (forReference != null)
-          result = forReference
-              .get(role_p == Role.TARGET ? REFERENCE_ORDER_KEY_TARGET
-                  : REFERENCE_ORDER_KEY_REFERENCE);
-      }
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getOwnershipDifference(org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public IReferenceValuePresence getOwnershipDifference(Role role_p) {
-    return (Role.TARGET == role_p) ? getTargetOwnershipDifference()
-        : getReferenceOwnershipDifference();
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getPresenceDifferencesIn(org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public Collection<IDifference> getPresenceDifferencesIn(Role role_p) {
-    Collection<IDifference> result = new ArrayList<IDifference>();
-    for (IDifference difference : getRelatedDifferences()) {
-      if (difference instanceof IPresenceDifference
-          && ((IPresenceDifference) difference).getPresenceRole() == role_p)
-        result.add(difference);
-    }
-    return Collections.unmodifiableCollection(result);
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getReferenceDifferences(org.eclipse.emf.ecore.EReference)
-   * @generated NOT
-   */
-  public Collection<IReferenceValuePresence> getReferenceDifferences(
-      EReference reference_p) {
-    Collection<IReferenceValuePresence> result = null;
-    if (getModifiableReferenceMap(false) != null) {
-      EMap<EObject, IReferenceValuePresence> forReference = getModifiableReferenceMap(
-          false).get(reference_p);
-      if (forReference != null)
-        result = Collections.unmodifiableCollection(forReference.values());
-    }
-    if (result == null)
-      result = Collections.emptyList();
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getReferenceValueDifference(org.eclipse.emf.ecore.EReference, org.eclipse.emf.ecore.EObject)
-   * @generated NOT
-   */
-  public IReferenceValuePresence getReferenceValueDifference(
-      EReference reference_p, EObject value_p) {
-    IReferenceValuePresence result = null;
-    if (getModifiableReferenceMap(false) != null) {
-      EMap<EObject, IReferenceValuePresence> forReference = getModifiableReferenceMap(
-          false).get(reference_p);
-      if (forReference != null)
-        result = forReference.get(value_p);
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getReferencesWithDifferences()
-   * @generated NOT
-   */
-  public Collection<EReference> getReferencesWithDifferences() {
-    Set<EReference> result;
-    if (getModifiableReferenceMap(false) == null)
-      result = Collections.emptySet();
-    else
-      result = Collections
-          .unmodifiableSet(getModifiableReferenceMap(false).keySet());
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#getRelatedDifferences()
-   * @generated NOT
-   */
-  public List<IDifference> getRelatedDifferences() {
-    List<IDifference> result;
-    List<EMergeableDifference> modifiable = getModifiableRelatedDifferences(
-        false);
-    if (modifiable == null)
-      result = Collections.emptyList();
-    else
-      result = Collections.<IDifference> unmodifiableList(modifiable);
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#getUncoveredRole()
-   * @generated NOT
-   */
-  public Role getUncoveredRole() {
-    Role result = null;
-    if (!coversRole(TARGET))
-      result = TARGET;
-    else if (!coversRole(REFERENCE))
-      result = REFERENCE;
-    return result;
-  }
-
-  /**
-   * @see Object#hashCode()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newAttributeValueToPresenceMap(java.lang.Object)
    * @generated NOT
    */
   @Override
-  public int hashCode() {
-    int result = 0;
-    if (get(TARGET) != null)
-      result += get(TARGET).hashCode();
-    if (get(REFERENCE) != null)
-      result += get(REFERENCE).hashCode();
-    if (get(ANCESTOR) != null)
-      result += get(ANCESTOR).hashCode();
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#involves(org.eclipse.emf.ecore.resource.Resource)
-   * @generated NOT
-   */
-  public boolean involves(Resource resource_p) {
-    return get(TARGET) != null && get(TARGET).eResource() == resource_p
-        || get(REFERENCE) != null && get(REFERENCE).eResource() == resource_p
-        || get(ANCESTOR) != null && get(ANCESTOR).eResource() == resource_p;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IMatch#isAMove()
-   * @generated NOT
-   */
-  public boolean isAMove() {
-    boolean result = false;
-    if (!isPartial() && getElementPresenceDifference() == null) {
-      IReferenceValuePresence onTarget = getOwnershipDifference(Role.TARGET);
-      IReferenceValuePresence onReference = getOwnershipDifference(
-          Role.REFERENCE);
-      result = onTarget != null || onReference != null;
-    }
-    return result;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#isPartial()
-   * @generated NOT
-   */
-  public boolean isPartial() {
-    return getUncoveredRole() != null;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#isPartial(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
-   * @generated NOT
-   */
-  public boolean isPartial(Role role1_p, Role role2_p) {
-    return !coversRole(role1_p) || !coversRole(role2_p);
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#maps(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
-   * @generated NOT
-   */
-  public boolean maps(EObject target_p, EObject reference_p) {
-    return get(TARGET) == target_p && get(REFERENCE) == reference_p;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch#maps(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
-   * @generated NOT
-   */
-  public boolean maps(EObject target_p, EObject reference_p,
-      EObject ancestor_p) {
-    return maps(target_p, reference_p) && get(ANCESTOR) == ancestor_p;
-  }
-
-  /**
-   * Create and return a map for: attribute value -> difference
-   * @param attribute_p the non-null attribute
-   * @return a non-null, empty, modifiable map
-   * @generated NOT
-   */
-  protected EMap<Object, IAttributeValuePresence> newAttributeValueToPresenceMap(
+  protected EMap<Object, IAttributeValuePresence<EObject>> newAttributeValueToPresenceMap(
       EAttribute attribute_p) {
     AttributeToValueToDifferenceEntryImpl entry = new AttributeToValueToDifferenceEntryImpl();
     entry.setKey(attribute_p);
@@ -1004,45 +592,29 @@ public class EMatchImpl extends
   }
 
   /**
-   * Create and return a map for: reference value -> difference
-   * @param reference_p the non-null reference
-   * @return a non-null, empty, modifiable map
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newReferenceOrderDifferenceList(java.lang.Object)
    * @generated NOT
    */
-  protected EMap<EObject, IReferenceValuePresence> newReferenceValueToPresenceMap(
+  @Override
+  protected List<IReferenceValuePresence<EObject>> newReferenceOrderDifferenceList(
+      EReference reference_p) {
+    ReferenceToOrderDifferenceEntryImpl entry = new ReferenceToOrderDifferenceEntryImpl();
+    entry.setKey(reference_p);
+    getModifiableOrderReferenceMap(true).add(entry);
+    return entry.getValue();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newReferenceValueToPresenceMap(java.lang.Object)
+   * @generated NOT
+   */
+  @Override
+  protected EMap<EObject, IReferenceValuePresence<EObject>> newReferenceValueToPresenceMap(
       EReference reference_p) {
     ReferenceToElementToDifferenceEntryImpl entry = new ReferenceToElementToDifferenceEntryImpl();
     entry.setKey(reference_p);
     getModifiableReferenceMap(true).add(entry);
     return entry.getValue();
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch.Editable#reset(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EObject)
-   * @generated NOT
-   */
-  public void reset(EObject target_p, EObject reference_p, EObject ancestor_p) {
-    assert target_p != null || reference_p != null || ancestor_p != null;
-    set(TARGET, target_p);
-    set(REFERENCE, reference_p);
-    set(ANCESTOR, ancestor_p);
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.api.IPureMatch.Editable#set(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.ecore.EObject)
-   * @generated NOT
-   */
-  public void set(Role role_p, EObject element_p) {
-    switch (role_p) {
-    case TARGET:
-      setTarget(element_p);
-      break;
-    case REFERENCE:
-      setReference(element_p);
-      break;
-    default:
-      setAncestor(element_p);
-    }
   }
 
 } //EMatchImpl

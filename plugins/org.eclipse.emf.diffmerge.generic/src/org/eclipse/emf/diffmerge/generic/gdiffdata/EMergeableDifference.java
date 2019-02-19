@@ -25,7 +25,6 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getComparison <em>Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isIgnored <em>Ignored</em>}</li>
@@ -38,37 +37,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
  * @generated
  */
-public interface EMergeableDifference<E, A, R>
-    extends EIdentified, Editable<E> {
-  /**
-   * Returns the value of the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Comparison</em>' reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Comparison</em>' reference.
-   * @see #setComparison(EComparison)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_Comparison()
-   * @model required="true"
-   * @generated
-   */
-  EComparison<E, A, R> getComparison();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getComparison <em>Comparison</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Comparison</em>' reference.
-   * @see #getComparison()
-   * @generated
-   */
-  void setComparison(EComparison<E, A, R> value);
-
+public interface EMergeableDifference<E, A, R, S>
+    extends EIdentified, EComparisonElement<E, A, R, S>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.
    * The default value is <code>"true"</code>.

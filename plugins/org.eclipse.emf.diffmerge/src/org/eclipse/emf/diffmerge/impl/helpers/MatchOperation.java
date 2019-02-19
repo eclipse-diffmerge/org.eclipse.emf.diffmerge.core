@@ -14,13 +14,10 @@ package org.eclipse.emf.diffmerge.impl.helpers;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.diffdata.EMapping;
-import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 
 
 /**
@@ -37,10 +34,17 @@ extends org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation<EObject> {
    * @param duplicateIDs_p an optional map that associates each role with an empty,
    *          modifiable set of duplicate match IDs, to be filled by this operation
    */
-  public MatchOperation(IComparison.Editable<EObject> comparison_p,
-      IMatchPolicy<EObject> policy_p,
+  public MatchOperation(EComparison comparison_p, IMatchPolicy<EObject> policy_p,
       Map<Role, Set<Object>> duplicateIDs_p) {
     super(comparison_p, policy_p, duplicateIDs_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation#getComparison()
+   */
+  @Override
+  public EComparison getComparison() {
+    return (EComparison)super.getComparison();
   }
   
   /**
@@ -48,7 +52,7 @@ extends org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation<EObject> {
    */
   @Override
   protected void scopeCovered(Role role_p) {
-    ((EMapping)getComparison().getMapping()).crossReference(role_p);
+    getComparison().getMapping().crossReference(role_p);
   }
   
 }

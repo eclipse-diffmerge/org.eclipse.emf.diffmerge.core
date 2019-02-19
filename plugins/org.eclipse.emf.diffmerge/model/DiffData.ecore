@@ -4,19 +4,39 @@
     nsPrefix="org.eclipse.emf.diffmerge">
   <eClassifiers xsi:type="ecore:EClass" name="EComparison">
     <eOperations name="getMapping" lowerBound="1" eType="#//EMapping"/>
+    <eOperations name="getScope" eType="#//IEditableModelScope">
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EComparison">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EComparisonElement" abstract="true"
+      interface="true">
+    <eOperations name="getComparison" lowerBound="1" eType="#//EComparison"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMapping">
-    <eOperations name="getComparison" eType="#//EComparison"/>
+    <eOperations name="crossReference">
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
+    <eOperations name="getCrossReferences" upperBound="-1" eType="#//Setting">
+      <eParameters name="element" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
+    <eOperations name="getMatchFor" eType="#//EMatch">
+      <eParameters name="element" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EMapping">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMatch">
     <eOperations name="getMapping" eType="#//EMapping"/>
@@ -30,43 +50,54 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableOrderReferenceMap"
         upperBound="-1" eType="#//ReferenceToOrderDifferenceEntry" containment="true"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EMatch">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EElementPresence">
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EElementPresence">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EValuePresence" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EValuePresence" abstract="true" interface="true">
+    <eOperations name="getFeature" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EValuePresence">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EAttributeValuePresence">
-    <eGenericSuperTypes eClassifier="#//EValuePresence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EAttributeValuePresence">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EValuePresence"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EReferenceValuePresence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-    <eGenericSuperTypes eClassifier="#//EValuePresence"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EReferenceValuePresence">
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
-      <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+      <eTypeArguments eClassifier="#//IEditableModelScope"/>
     </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EValuePresence"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeToValueToDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
@@ -104,4 +135,6 @@
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Setting" instanceClassName="org.eclipse.emf.ecore.EStructuralFeature$Setting"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IEditableModelScope" instanceClassName="org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope"/>
 </ecore:EPackage>

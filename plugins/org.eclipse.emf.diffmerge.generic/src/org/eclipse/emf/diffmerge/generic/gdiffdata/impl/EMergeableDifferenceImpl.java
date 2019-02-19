@@ -21,15 +21,16 @@ import org.eclipse.emf.diffmerge.generic.Messages;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.diffmerge.structures.endo.AbstractEndorelation;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -42,7 +43,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison <em>Comparison</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isConflicting <em>Conflicting</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isIgnored <em>Ignored</em>}</li>
@@ -57,18 +57,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * @generated
  */
 @SuppressWarnings("boxing")
-public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
-    implements EMergeableDifference<E, A, R> {
-  /**
-   * The cached value of the '{@link #getComparison() <em>Comparison</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getComparison()
-   * @generated
-   * @ordered
-   */
-  protected EComparison<E, A, R> comparison;
-
+public abstract class EMergeableDifferenceImpl<E, A, R, S>
+    extends EIdentifiedImpl implements EMergeableDifference<E, A, R, S> {
   /**
    * The default value of the '{@link #isAlignedWithAncestor() <em>Aligned With Ancestor</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -261,46 +251,19 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @generated NOT
    */
   @SuppressWarnings("unchecked")
-  public EComparison<E, A, R> getComparison() {
-    if (comparison != null && comparison.eIsProxy()) {
-      InternalEObject oldComparison = (InternalEObject) comparison;
-      comparison = (EComparison<E, A, R>) eResolveProxy(oldComparison);
-      if (comparison != oldComparison) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON, oldComparison,
-              comparison));
-      }
+  public EComparison<E, A, R, S> getComparison() {
+    EComparison<E, A, R, S> result = null;
+    EObject container = eContainer();
+    if (container instanceof EComparison) {
+      result = (EComparison<E, A, R, S>) container;
+    } else if (container instanceof EComparisonElement) {
+      result = ((EComparisonElement<E, A, R, S>) container).getComparison();
     }
-    return comparison;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EComparison<E, A, R> basicGetComparison() {
-    return comparison;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setComparison(EComparison<E, A, R> newComparison) {
-    EComparison<E, A, R> oldComparison = comparison;
-    comparison = newComparison;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON, oldComparison,
-          comparison));
+    return result;
   }
 
   /**
@@ -473,10 +436,6 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      if (resolve)
-        return getComparison();
-      return basicGetComparison();
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       return isAlignedWithAncestor();
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
@@ -508,9 +467,6 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      setComparison((EComparison<E, A, R>) newValue);
-      return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor((Boolean) newValue);
       return;
@@ -560,9 +516,6 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      setComparison((EComparison<E, A, R>) null);
-      return;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor(ALIGNED_WITH_ANCESTOR_EDEFAULT);
       return;
@@ -602,8 +555,6 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__COMPARISON:
-      return comparison != null;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       return alignedWithAncestor != ALIGNED_WITH_ANCESTOR_EDEFAULT;
     case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
@@ -692,8 +643,9 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   protected final void forbidMergeTo(Role destination_p) {
-    if (destination_p != null)
+    if (destination_p != null) {
       getPossibleMergeDestinations().remove(destination_p);
+    }
   }
 
   /**
@@ -707,17 +659,19 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     switch (role_p) {
     case TARGET:
       obtained = getImplicitDependenciesForTarget(false);
-      if (obtained == null)
+      if (obtained == null) {
         result = Collections.emptyList();
-      else
+      } else {
         result = Collections.unmodifiableCollection(obtained);
+      }
       break;
     default:
       obtained = getImplicitDependenciesForReference(false);
-      if (obtained == null)
+      if (obtained == null) {
         result = Collections.emptyList();
-      else
+      } else {
         result = Collections.unmodifiableCollection(obtained);
+      }
     }
     return result;
   }
@@ -733,17 +687,19 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     switch (role_p) {
     case TARGET:
       obtained = getExplicitDependenciesForTarget(false);
-      if (obtained == null)
+      if (obtained == null) {
         result = Collections.emptyList();
-      else
+      } else {
         result = Collections.unmodifiableCollection(obtained);
+      }
       break;
     default:
       obtained = getExplicitDependenciesForReference(false);
-      if (obtained == null)
+      if (obtained == null) {
         result = Collections.emptyList();
-      else
+      } else {
         result = Collections.unmodifiableCollection(obtained);
+      }
     }
     return result;
   }
@@ -804,16 +760,17 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (result == null) {
       Collection<IMergeableDifference<E>> required = getRequiresDependencies(
           role_p);
-      Collection<IMergeableDifference<E>> allRequired =
-          new FArrayList<IMergeableDifference<E>>(required.size() + 1, null);
+      Collection<IMergeableDifference<E>> allRequired = new FArrayList<IMergeableDifference<E>>(
+          required.size() + 1, null);
       allRequired.add(this);
       allRequired.addAll(required);
       result = new DifferenceDependencyRelation<E>(role_p, false)
           .getTransitiveClosure(allRequired);
-      if (role_p == Role.TARGET)
+      if (role_p == Role.TARGET) {
         _allImplicitDependenciesTarget = result;
-      else
+      } else {
         _allImplicitDependenciesReference = result;
+      }
     }
     return result;
   }
@@ -830,10 +787,11 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (result == null) {
       result = new DifferenceDependencyRelation<E>(role_p, true)
           .getTransitiveClosure(this);
-      if (role_p == Role.TARGET)
+      if (role_p == Role.TARGET) {
         _allExplicitDependenciesTarget = result;
-      else
+      } else {
         _allExplicitDependenciesReference = result;
+      }
     }
     return result;
   }
@@ -853,12 +811,14 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   public Collection<IDifference<E>> mergeTo(Role destination_p) {
     // Checking ability to merge
     checkMerge(this, destination_p);
-    if (isMerged())
+    if (isMerged()) {
       return Collections.emptyList();
+    }
     Collection<IMergeableDifference<E>> allRequired = getRequiresDependencies(
         destination_p);
-    for (IMergeableDifference<E> required : allRequired)
+    for (IMergeableDifference<E> required : allRequired) {
       checkMerge(required, destination_p);
+    }
     // Core behavior
     markAsMergedIn(destination_p);
     Collection<IDifference<E>> result = new HashSet<IDifference<E>>();
@@ -866,8 +826,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
       if (!required.isMerged()) {
         ((IMergeableDifference.Editable<E>) required)
             .markAsMergedIn(destination_p);
-        ((IMergeableDifference.Editable<E>) required)
-            .doMergeIn(destination_p);
+        ((IMergeableDifference.Editable<E>) required).doMergeIn(destination_p);
         result.add(required);
       }
     }
@@ -927,8 +886,9 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     default:
       toChange = getImplicitDependenciesForReference(true);
     }
-    if (!toChange.contains(difference_p))
+    if (!toChange.contains(difference_p)) {
       toChange.add(difference_p);
+    }
   }
 
   /**
@@ -945,8 +905,9 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     default:
       toChange = getExplicitDependenciesForReference(true);
     }
-    if (!toChange.contains(difference_p))
+    if (!toChange.contains(difference_p)) {
       toChange.add(difference_p);
+    }
   }
 
   /**

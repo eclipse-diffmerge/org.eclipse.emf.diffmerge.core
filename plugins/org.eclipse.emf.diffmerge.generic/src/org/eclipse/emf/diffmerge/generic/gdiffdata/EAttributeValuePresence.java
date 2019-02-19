@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEAttributeValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;E&gt;"
  * @generated
  */
-public interface EAttributeValuePresence<E, A, R>
-    extends EValuePresence<E, A, R>, IAttributeValuePresence<E> {
+public interface EAttributeValuePresence<E, A, R, S>
+    extends EValuePresence<E, A, R, S>, IAttributeValuePresence<E> {
 
   /**
    * Returns the value of the '<em><b>Value</b></em>' attribute.
@@ -61,9 +61,9 @@ public interface EAttributeValuePresence<E, A, R>
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model featureRequired="true"
+   * @model attributeRequired="true"
    * @generated
    */
-  void setFeature(A feature);
+  void setAttribute(A attribute);
   // Nothing needed
 } // EAttributeValuePresence

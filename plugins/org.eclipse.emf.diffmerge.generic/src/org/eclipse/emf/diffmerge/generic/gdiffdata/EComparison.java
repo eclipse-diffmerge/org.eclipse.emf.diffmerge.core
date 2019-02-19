@@ -15,12 +15,16 @@ import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EComparison</b></em>'.
  * <!-- end-user-doc -->
+ *
+ * <!-- begin-model-doc -->
+ * A partial implementation of IComparison based on EMF.
+ * Type parameter <S> should be understood as <S extends IEditableTreeDataScope<E>>.
+ * <!-- end-model-doc -->
  *
  * <p>
  * The following features are supported:
@@ -39,7 +43,7 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
  * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableComparison&lt;E&gt;"
  * @generated
  */
-public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
+public interface EComparison<E, A, R, S> extends EIdentified, Editable<E> {
   /**
    * Returns the value of the '<em><b>Ancestor Scope</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -49,12 +53,12 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ancestor Scope</em>' attribute.
-   * @see #setAncestorScope(IEditableTreeDataScope)
+   * @see #setAncestorScope(Object)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_AncestorScope()
-   * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" transient="true"
+   * @model transient="true"
    * @generated
    */
-  IEditableTreeDataScope<E> getAncestorScope();
+  S getAncestorScope();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}' attribute.
@@ -64,7 +68,7 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * @see #getAncestorScope()
    * @generated
    */
-  void setAncestorScope(IEditableTreeDataScope<E> value);
+  void setAncestorScope(S value);
 
   /**
    * Returns the value of the '<em><b>Reference Scope</b></em>' attribute.
@@ -75,12 +79,12 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Scope</em>' attribute.
-   * @see #setReferenceScope(IEditableTreeDataScope)
+   * @see #setReferenceScope(Object)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_ReferenceScope()
-   * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" required="true" transient="true"
+   * @model required="true" transient="true"
    * @generated
    */
-  IEditableTreeDataScope<E> getReferenceScope();
+  S getReferenceScope();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getReferenceScope <em>Reference Scope</em>}' attribute.
@@ -90,7 +94,7 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * @see #getReferenceScope()
    * @generated
    */
-  void setReferenceScope(IEditableTreeDataScope<E> value);
+  void setReferenceScope(S value);
 
   /**
    * Returns the value of the '<em><b>Target Scope</b></em>' attribute.
@@ -101,12 +105,12 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Scope</em>' attribute.
-   * @see #setTargetScope(IEditableTreeDataScope)
+   * @see #setTargetScope(Object)
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_TargetScope()
-   * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" required="true" transient="true"
+   * @model required="true" transient="true"
    * @generated
    */
-  IEditableTreeDataScope<E> getTargetScope();
+  S getTargetScope();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getTargetScope <em>Target Scope</em>}' attribute.
@@ -116,7 +120,7 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * @see #getTargetScope()
    * @generated
    */
-  void setTargetScope(IEditableTreeDataScope<E> value);
+  void setTargetScope(S value);
 
   /**
    * Returns the value of the '<em><b>Last Match Policy</b></em>' attribute.
@@ -210,7 +214,7 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * @model containment="true" required="true"
    * @generated
    */
-  EMapping<E, A, R> getMapping();
+  EMapping<E, A, R, S> getMapping();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getMapping <em>Mapping</em>}' containment reference.
@@ -220,6 +224,6 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * @see #getMapping()
    * @generated
    */
-  void setMapping(EMapping<E, A, R> value);
+  void setMapping(EMapping<E, A, R, S> value);
 
 } // EComparison

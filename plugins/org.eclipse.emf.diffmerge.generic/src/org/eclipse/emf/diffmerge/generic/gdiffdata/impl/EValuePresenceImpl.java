@@ -14,7 +14,6 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
@@ -34,8 +33,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EValuePresenceImpl<E, A, R> extends
-    EElementRelativePresenceImpl<E, A, R> implements EValuePresence<E, A, R> {
+public abstract class EValuePresenceImpl<E, A, R, S>
+    extends EElementRelativePresenceImpl<E, A, R, S>
+    implements EValuePresence<E, A, R, S> {
   /**
    * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -67,15 +67,14 @@ public abstract class EValuePresenceImpl<E, A, R> extends
 
   /**
    * Constructor
-   * @param comparison_p the non-null comparison to which this difference belongs
    * @param elementMatch_p the non-null match for the element holding the value
    * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  protected EValuePresenceImpl(EComparison<E, A, R> comparison_p,
-      EMatch<E, A, R> elementMatch_p, Role presenceRole_p, boolean isOrder_p) {
-    super(comparison_p, elementMatch_p, presenceRole_p);
+  protected EValuePresenceImpl(EMatch<E, A, R, S> elementMatch_p,
+      Role presenceRole_p, boolean isOrder_p) {
+    super(elementMatch_p, presenceRole_p);
     setOrder(isOrder_p);
   }
 
@@ -110,6 +109,13 @@ public abstract class EValuePresenceImpl<E, A, R> extends
       eNotify(new ENotificationImpl(this, Notification.SET,
           GdiffdataPackage.EVALUE_PRESENCE__ORDER, oldOrder, order));
   }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  public abstract Object getFeature();
 
   /**
    * <!-- begin-user-doc -->
@@ -201,7 +207,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * Return the non-null element holding the value in the presence role
    * @generated NOT
    */
-  public final E getHolder() {
+  public E getHolder() {
     return getElementMatch().get(getPresenceRole());
   }
 
@@ -211,7 +217,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * @return a potentially null element in the getAbsenceRole() role
    * @generated NOT
    */
-  public final E getMatchOfHolder() {
+  public E getMatchOfHolder() {
     return getElementMatch().get(getAbsenceRole());
   }
 
@@ -220,11 +226,12 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   @Override
-  protected final void mergeAddition() {
-    if (isOrder())
+  protected void mergeAddition() {
+    if (isOrder()) {
       mergeOrder();
-    else
+    } else {
       mergeValueAddition();
+    }
   }
 
   /**
@@ -232,9 +239,10 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   @Override
-  protected final void mergeRemoval() {
-    if (!isOrder())
+  protected void mergeRemoval() {
+    if (!isOrder()) {
       mergeValueRemoval();
+    }
   }
 
   /**

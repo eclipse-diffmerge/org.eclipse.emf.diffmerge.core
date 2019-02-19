@@ -11,9 +11,13 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,17 +26,35 @@ import org.eclipse.emf.ecore.EReference;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
  * @generated
  */
 public interface EMapping extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<EObject, EAttribute, EReference> {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<EObject, EAttribute, EReference, IEditableModelScope>,
+    EComparisonElement {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model kind="operation"
+   * @model roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  EComparison getComparison();
+  void crossReference(Role role);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model dataType="org.eclipse.emf.diffmerge.diffdata.Setting" elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  EList<EStructuralFeature.Setting> getCrossReferences(EObject element,
+      Role role);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  EMatch getMatchFor(EObject element, Role role);
 
 } // EMapping

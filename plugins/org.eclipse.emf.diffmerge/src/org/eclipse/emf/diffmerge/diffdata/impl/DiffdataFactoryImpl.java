@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataFactory;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
@@ -23,11 +24,15 @@ import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
@@ -109,6 +114,42 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public Object createFromString(EDataType eDataType, String initialValue) {
+    switch (eDataType.getClassifierID()) {
+    case DiffdataPackage.SETTING:
+      return createSettingFromString(eDataType, initialValue);
+    case DiffdataPackage.IEDITABLE_MODEL_SCOPE:
+      return createIEditableModelScopeFromString(eDataType, initialValue);
+    default:
+      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
+          + "' is not a valid classifier"); //$NON-NLS-1$
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertToString(EDataType eDataType, Object instanceValue) {
+    switch (eDataType.getClassifierID()) {
+    case DiffdataPackage.SETTING:
+      return convertSettingToString(eDataType, instanceValue);
+    case DiffdataPackage.IEDITABLE_MODEL_SCOPE:
+      return convertIEditableModelScopeToString(eDataType, instanceValue);
+    default:
+      throw new IllegalArgumentException("The datatype '" + eDataType.getName() //$NON-NLS-1$
+          + "' is not a valid classifier"); //$NON-NLS-1$
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EComparison createEComparison() {
     EComparisonImpl eComparison = new EComparisonImpl();
     return eComparison;
@@ -169,7 +210,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> createAttributeToValueToDifferenceEntry() {
+  public Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> createAttributeToValueToDifferenceEntry() {
     AttributeToValueToDifferenceEntryImpl attributeToValueToDifferenceEntry = new AttributeToValueToDifferenceEntryImpl();
     return attributeToValueToDifferenceEntry;
   }
@@ -179,7 +220,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> createValueToDifferenceEntry() {
+  public Map.Entry<Object, IAttributeValuePresence<EObject>> createValueToDifferenceEntry() {
     ValueToDifferenceEntryImpl valueToDifferenceEntry = new ValueToDifferenceEntryImpl();
     return valueToDifferenceEntry;
   }
@@ -189,7 +230,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> createReferenceToElementToDifferenceEntry() {
+  public Map.Entry<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> createReferenceToElementToDifferenceEntry() {
     ReferenceToElementToDifferenceEntryImpl referenceToElementToDifferenceEntry = new ReferenceToElementToDifferenceEntryImpl();
     return referenceToElementToDifferenceEntry;
   }
@@ -199,7 +240,7 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> createReferenceToOrderDifferenceEntry() {
+  public Map.Entry<EReference, EList<IReferenceValuePresence<EObject>>> createReferenceToOrderDifferenceEntry() {
     ReferenceToOrderDifferenceEntryImpl referenceToOrderDifferenceEntry = new ReferenceToOrderDifferenceEntryImpl();
     return referenceToOrderDifferenceEntry;
   }
@@ -209,9 +250,51 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>> createElementToDifferenceEntry() {
+  public Map.Entry<EObject, IReferenceValuePresence<EObject>> createElementToDifferenceEntry() {
     ElementToDifferenceEntryImpl elementToDifferenceEntry = new ElementToDifferenceEntryImpl();
     return elementToDifferenceEntry;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EStructuralFeature.Setting createSettingFromString(EDataType eDataType,
+      String initialValue) {
+    return (EStructuralFeature.Setting) super.createFromString(eDataType,
+        initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertSettingToString(EDataType eDataType,
+      Object instanceValue) {
+    return super.convertToString(eDataType, instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IEditableModelScope createIEditableModelScopeFromString(
+      EDataType eDataType, String initialValue) {
+    return (IEditableModelScope) super.createFromString(eDataType,
+        initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertIEditableModelScopeToString(EDataType eDataType,
+      Object instanceValue) {
+    return super.convertToString(eDataType, instanceValue);
   }
 
   /**

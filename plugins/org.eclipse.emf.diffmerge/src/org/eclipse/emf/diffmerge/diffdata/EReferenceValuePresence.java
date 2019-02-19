@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -24,15 +25,43 @@ import org.eclipse.emf.ecore.EReference;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EValuePresence"
  * @generated
  */
-public interface EReferenceValuePresence extends EValuePresence,
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<EObject, EAttribute, EReference> {
+public interface EReferenceValuePresence extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<EObject, EAttribute, EReference, IEditableModelScope>,
+    EValuePresence {
+
+  /**
+   * Returns the value of the '<em><b>Reference</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Reference</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Reference</em>' reference.
+   * @see #setReference(EReference)
+   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence_Reference()
+   * @model required="true"
+   * @generated
+   */
+  EReference getReference();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getReference <em>Reference</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Reference</em>' reference.
+   * @see #getReference()
+   * @generated
+   */
+  void setReference(EReference value);
 
   /**
    * Returns the value of the '<em><b>Value</b></em>' reference.

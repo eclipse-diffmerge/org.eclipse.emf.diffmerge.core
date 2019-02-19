@@ -33,10 +33,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E&gt;"
  * @generated
  */
-public interface EMatch<E, A, R> extends EIdentified, Editable<E> {
+public interface EMatch<E, A, R, S>
+    extends EIdentified, EComparisonElement<E, A, R, S>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Match ID</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -113,7 +114,7 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E> {
 
   /**
    * Returns the value of the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference}<code>&lt;E, A, R, S&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Related Differences</em>' containment reference list isn't clear,
@@ -125,7 +126,7 @@ public interface EMatch<E, A, R> extends EIdentified, Editable<E> {
    * @model containment="true"
    * @generated
    */
-  EList<EMergeableDifference<E, A, R>> getModifiableRelatedDifferences();
+  EList<EMergeableDifference<E, A, R, S>> getModifiableRelatedDifferences();
 
   /**
    * Returns the value of the '<em><b>Element Presence Difference</b></em>' reference.

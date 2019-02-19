@@ -11,8 +11,10 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -82,7 +84,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__ID;
+  int ECOMPARISON__ID = GdiffdataPackage.ECOMPARISON__ID;
 
   /**
    * The feature id for the '<em><b>Ancestor Scope</b></em>' attribute.
@@ -91,7 +93,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__ANCESTOR_SCOPE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE;
+  int ECOMPARISON__ANCESTOR_SCOPE = GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE;
 
   /**
    * The feature id for the '<em><b>Reference Scope</b></em>' attribute.
@@ -100,7 +102,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__REFERENCE_SCOPE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE;
+  int ECOMPARISON__REFERENCE_SCOPE = GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE;
 
   /**
    * The feature id for the '<em><b>Target Scope</b></em>' attribute.
@@ -109,7 +111,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__TARGET_SCOPE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__TARGET_SCOPE;
+  int ECOMPARISON__TARGET_SCOPE = GdiffdataPackage.ECOMPARISON__TARGET_SCOPE;
 
   /**
    * The feature id for the '<em><b>Last Match Policy</b></em>' attribute.
@@ -118,7 +120,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_MATCH_POLICY = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY;
+  int ECOMPARISON__LAST_MATCH_POLICY = GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY;
 
   /**
    * The feature id for the '<em><b>Last Diff Policy</b></em>' attribute.
@@ -127,7 +129,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_DIFF_POLICY = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY;
+  int ECOMPARISON__LAST_DIFF_POLICY = GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY;
 
   /**
    * The feature id for the '<em><b>Last Merge Policy</b></em>' attribute.
@@ -136,7 +138,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_MERGE_POLICY = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY;
+  int ECOMPARISON__LAST_MERGE_POLICY = GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY;
 
   /**
    * The feature id for the '<em><b>Mapping</b></em>' containment reference.
@@ -145,7 +147,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__MAPPING = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON__MAPPING;
+  int ECOMPARISON__MAPPING = GdiffdataPackage.ECOMPARISON__MAPPING;
 
   /**
    * The number of structural features of the '<em>EComparison</em>' class.
@@ -154,8 +156,27 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON_FEATURE_COUNT = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.ECOMPARISON_FEATURE_COUNT
+  int ECOMPARISON_FEATURE_COUNT = GdiffdataPackage.ECOMPARISON_FEATURE_COUNT
       + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.EComparisonElement <em>EComparison Element</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.diffdata.EComparisonElement
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEComparisonElement()
+   * @generated
+   */
+  int ECOMPARISON_ELEMENT = 1;
+
+  /**
+   * The number of structural features of the '<em>EComparison Element</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECOMPARISON_ELEMENT_FEATURE_COUNT = 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EMappingImpl <em>EMapping</em>}' class.
@@ -165,7 +186,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEMapping()
    * @generated
    */
-  int EMAPPING = 1;
+  int EMAPPING = 2;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -174,7 +195,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMAPPING__ID;
+  int EMAPPING__ID = GdiffdataPackage.EMAPPING__ID;
 
   /**
    * The feature id for the '<em><b>Modifiable Contents</b></em>' containment reference list.
@@ -183,7 +204,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__MODIFIABLE_CONTENTS = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS;
+  int EMAPPING__MODIFIABLE_CONTENTS = GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS;
 
   /**
    * The feature id for the '<em><b>Reference Completed Matches</b></em>' reference list.
@@ -192,7 +213,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__REFERENCE_COMPLETED_MATCHES = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES;
+  int EMAPPING__REFERENCE_COMPLETED_MATCHES = GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES;
 
   /**
    * The feature id for the '<em><b>Target Completed Matches</b></em>' reference list.
@@ -201,7 +222,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__TARGET_COMPLETED_MATCHES = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES;
+  int EMAPPING__TARGET_COMPLETED_MATCHES = GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES;
 
   /**
    * The number of structural features of the '<em>EMapping</em>' class.
@@ -210,8 +231,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING_FEATURE_COUNT = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMAPPING_FEATURE_COUNT
-      + 0;
+  int EMAPPING_FEATURE_COUNT = GdiffdataPackage.EMAPPING_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EMatchImpl <em>EMatch</em>}' class.
@@ -221,7 +241,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEMatch()
    * @generated
    */
-  int EMATCH = 2;
+  int EMATCH = 3;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -230,7 +250,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__ID;
+  int EMATCH__ID = GdiffdataPackage.EMATCH__ID;
 
   /**
    * The feature id for the '<em><b>Match ID</b></em>' attribute.
@@ -239,7 +259,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MATCH_ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__MATCH_ID;
+  int EMATCH__MATCH_ID = GdiffdataPackage.EMATCH__MATCH_ID;
 
   /**
    * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
@@ -248,7 +268,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES;
+  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = GdiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES;
 
   /**
    * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
@@ -257,7 +277,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE;
+  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = GdiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
@@ -266,7 +286,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE;
+  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = GdiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
@@ -275,7 +295,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE;
+  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = GdiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Ancestor</b></em>' reference.
@@ -284,8 +304,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ANCESTOR = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 0;
+  int EMATCH__ANCESTOR = GdiffdataPackage.EMATCH_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Reference</b></em>' reference.
@@ -294,8 +313,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 1;
+  int EMATCH__REFERENCE = GdiffdataPackage.EMATCH_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Target</b></em>' reference.
@@ -304,8 +322,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 2;
+  int EMATCH__TARGET = GdiffdataPackage.EMATCH_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Modifiable Attribute Map</b></em>' map.
@@ -314,7 +331,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
       + 3;
 
   /**
@@ -324,7 +341,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_REFERENCE_MAP = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
       + 4;
 
   /**
@@ -334,7 +351,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
       + 5;
 
   /**
@@ -344,8 +361,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH_FEATURE_COUNT = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 6;
+  int EMATCH_FEATURE_COUNT = GdiffdataPackage.EMATCH_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EElementPresenceImpl <em>EElement Presence</em>}' class.
@@ -355,7 +371,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEElementPresence()
    * @generated
    */
-  int EELEMENT_PRESENCE = 3;
+  int EELEMENT_PRESENCE = 4;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -364,16 +380,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__COMPARISON = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__COMPARISON;
+  int EELEMENT_PRESENCE__ID = GdiffdataPackage.EELEMENT_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -382,7 +389,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -391,7 +398,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__CONFLICTING = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__CONFLICTING;
+  int EELEMENT_PRESENCE__CONFLICTING = GdiffdataPackage.EELEMENT_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -400,7 +407,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IGNORED = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__IGNORED;
+  int EELEMENT_PRESENCE__IGNORED = GdiffdataPackage.EELEMENT_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -409,7 +416,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__MERGE_DESTINATION = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__MERGE_DESTINATION;
+  int EELEMENT_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EELEMENT_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -418,7 +425,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -427,7 +434,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -436,7 +443,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -445,7 +452,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -454,7 +461,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -463,7 +470,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ELEMENT_MATCH = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__ELEMENT_MATCH;
+  int EELEMENT_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EELEMENT_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -472,7 +479,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__PRESENCE_ROLE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__PRESENCE_ROLE;
+  int EELEMENT_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EELEMENT_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Owner Match</b></em>' reference.
@@ -481,7 +488,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__OWNER_MATCH = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH;
+  int EELEMENT_PRESENCE__OWNER_MATCH = GdiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH;
 
   /**
    * The number of structural features of the '<em>EElement Presence</em>' class.
@@ -490,18 +497,18 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE_FEATURE_COUNT = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EELEMENT_PRESENCE_FEATURE_COUNT
+  int EELEMENT_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EELEMENT_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl <em>EValue Presence</em>}' class.
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence <em>EValue Presence</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl
+   * @see org.eclipse.emf.diffmerge.diffdata.EValuePresence
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEValuePresence()
    * @generated
    */
-  int EVALUE_PRESENCE = 4;
+  int EVALUE_PRESENCE = 5;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -510,16 +517,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ID = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__COMPARISON = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__COMPARISON;
+  int EVALUE_PRESENCE__ID = GdiffdataPackage.EVALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -528,7 +526,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -537,7 +535,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__CONFLICTING = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__CONFLICTING;
+  int EVALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EVALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -546,7 +544,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IGNORED = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__IGNORED;
+  int EVALUE_PRESENCE__IGNORED = GdiffdataPackage.EVALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -555,7 +553,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__MERGE_DESTINATION = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__MERGE_DESTINATION;
+  int EVALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EVALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -564,7 +562,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -573,7 +571,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -582,7 +580,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -591,7 +589,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -600,7 +598,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -609,7 +607,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ELEMENT_MATCH = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__ELEMENT_MATCH;
+  int EVALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EVALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -618,7 +616,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__PRESENCE_ROLE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__PRESENCE_ROLE;
+  int EVALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EVALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -627,17 +625,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ORDER = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE__ORDER;
-
-  /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__FEATURE = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
-      + 0;
+  int EVALUE_PRESENCE__ORDER = GdiffdataPackage.EVALUE_PRESENCE__ORDER;
 
   /**
    * The number of structural features of the '<em>EValue Presence</em>' class.
@@ -646,8 +634,8 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE_FEATURE_COUNT = org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
-      + 1;
+  int EVALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
+      + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
@@ -657,7 +645,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEAttributeValuePresence()
    * @generated
    */
-  int EATTRIBUTE_VALUE_PRESENCE = 5;
+  int EATTRIBUTE_VALUE_PRESENCE = 6;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -666,16 +654,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__COMPARISON = EVALUE_PRESENCE__COMPARISON;
+  int EATTRIBUTE_VALUE_PRESENCE__ID = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -684,7 +663,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -693,7 +672,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
+  int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -702,7 +681,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
+  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -711,7 +690,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = EVALUE_PRESENCE__MERGE_DESTINATION;
+  int EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -720,7 +699,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -729,7 +708,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -738,7 +717,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -747,7 +726,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -756,7 +735,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -765,7 +744,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = EVALUE_PRESENCE__ELEMENT_MATCH;
+  int EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -774,7 +753,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
+  int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -783,16 +762,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
-
-  /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__FEATURE = EVALUE_PRESENCE__FEATURE;
+  int EATTRIBUTE_VALUE_PRESENCE__ORDER = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ORDER;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -801,7 +771,17 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 0;
+  int EATTRIBUTE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE;
+
+  /**
+   * The feature id for the '<em><b>Attribute</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
+      + 0;
 
   /**
    * The number of structural features of the '<em>EAttribute Value Presence</em>' class.
@@ -810,7 +790,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
+  int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
       + 1;
 
   /**
@@ -821,7 +801,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEReferenceValuePresence()
    * @generated
    */
-  int EREFERENCE_VALUE_PRESENCE = 6;
+  int EREFERENCE_VALUE_PRESENCE = 7;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -830,16 +810,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__COMPARISON = EVALUE_PRESENCE__COMPARISON;
+  int EREFERENCE_VALUE_PRESENCE__ID = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -848,7 +819,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -857,7 +828,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
+  int EREFERENCE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -866,7 +837,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
+  int EREFERENCE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -875,7 +846,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = EVALUE_PRESENCE__MERGE_DESTINATION;
+  int EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -884,7 +855,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -893,7 +864,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -902,7 +873,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -911,7 +882,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -920,7 +891,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -929,7 +900,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = EVALUE_PRESENCE__ELEMENT_MATCH;
+  int EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -938,7 +909,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
+  int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -947,16 +918,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
-
-  /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__FEATURE = EVALUE_PRESENCE__FEATURE;
+  int EREFERENCE_VALUE_PRESENCE__ORDER = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ORDER;
 
   /**
    * The feature id for the '<em><b>Value Match</b></em>' reference.
@@ -965,7 +927,16 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = EVALUE_PRESENCE_FEATURE_COUNT
+  int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH;
+
+  /**
+   * The feature id for the '<em><b>Reference</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EREFERENCE_VALUE_PRESENCE__REFERENCE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -975,7 +946,8 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 1;
+  int EREFERENCE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
+      + 1;
 
   /**
    * The number of structural features of the '<em>EReference Value Presence</em>' class.
@@ -984,7 +956,7 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
+  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
       + 2;
 
   /**
@@ -995,7 +967,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getAttributeToValueToDifferenceEntry()
    * @generated
    */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = 7;
+  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = 8;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1032,7 +1004,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getValueToDifferenceEntry()
    * @generated
    */
-  int VALUE_TO_DIFFERENCE_ENTRY = 8;
+  int VALUE_TO_DIFFERENCE_ENTRY = 9;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1069,7 +1041,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getReferenceToElementToDifferenceEntry()
    * @generated
    */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = 9;
+  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = 10;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1106,7 +1078,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getReferenceToOrderDifferenceEntry()
    * @generated
    */
-  int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY = 10;
+  int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY = 11;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1143,7 +1115,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getElementToDifferenceEntry()
    * @generated
    */
-  int ELEMENT_TO_DIFFERENCE_ENTRY = 11;
+  int ELEMENT_TO_DIFFERENCE_ENTRY = 12;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1173,6 +1145,26 @@ public interface DiffdataPackage extends EPackage {
   int ELEMENT_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '<em>Setting</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.ecore.EStructuralFeature.Setting
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getSetting()
+   * @generated
+   */
+  int SETTING = 13;
+
+  /**
+   * The meta object id for the '<em>IEditable Model Scope</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getIEditableModelScope()
+   * @generated
+   */
+  int IEDITABLE_MODEL_SCOPE = 14;
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EComparison <em>EComparison</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1181,6 +1173,16 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    */
   EClass getEComparison();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EComparisonElement <em>EComparison Element</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>EComparison Element</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EComparisonElement
+   * @generated
+   */
+  EClass getEComparisonElement();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EMapping <em>EMapping</em>}'.
@@ -1289,17 +1291,6 @@ public interface DiffdataPackage extends EPackage {
   EClass getEValuePresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature <em>Feature</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Feature</em>'.
-   * @see org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature()
-   * @see #getEValuePresence()
-   * @generated
-   */
-  EReference getEValuePresence_Feature();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence <em>EAttribute Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1310,6 +1301,17 @@ public interface DiffdataPackage extends EPackage {
   EClass getEAttributeValuePresence();
 
   /**
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getAttribute <em>Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Attribute</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getAttribute()
+   * @see #getEAttributeValuePresence()
+   * @generated
+   */
+  EReference getEAttributeValuePresence_Attribute();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence <em>EReference Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1318,6 +1320,17 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    */
   EClass getEReferenceValuePresence();
+
+  /**
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getReference <em>Reference</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Reference</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getReference()
+   * @see #getEReferenceValuePresence()
+   * @generated
+   */
+  EReference getEReferenceValuePresence_Reference();
 
   /**
    * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence#getValue <em>Value</em>}'.
@@ -1501,6 +1514,28 @@ public interface DiffdataPackage extends EPackage {
   EReference getElementToDifferenceEntry_Value();
 
   /**
+   * Returns the meta object for data type '{@link org.eclipse.emf.ecore.EStructuralFeature.Setting <em>Setting</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Setting</em>'.
+   * @see org.eclipse.emf.ecore.EStructuralFeature.Setting
+   * @model instanceClass="org.eclipse.emf.ecore.EStructuralFeature$Setting"
+   * @generated
+   */
+  EDataType getSetting();
+
+  /**
+   * Returns the meta object for data type '{@link org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope <em>IEditable Model Scope</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>IEditable Model Scope</em>'.
+   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
+   * @model instanceClass="org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope"
+   * @generated
+   */
+  EDataType getIEditableModelScope();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1531,6 +1566,16 @@ public interface DiffdataPackage extends EPackage {
      * @generated
      */
     EClass ECOMPARISON = eINSTANCE.getEComparison();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.EComparisonElement <em>EComparison Element</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.emf.diffmerge.diffdata.EComparisonElement
+     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEComparisonElement()
+     * @generated
+     */
+    EClass ECOMPARISON_ELEMENT = eINSTANCE.getEComparisonElement();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EMappingImpl <em>EMapping</em>}' class.
@@ -1614,22 +1659,14 @@ public interface DiffdataPackage extends EPackage {
     EClass EELEMENT_PRESENCE = eINSTANCE.getEElementPresence();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl <em>EValue Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence <em>EValue Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.diffdata.impl.EValuePresenceImpl
+     * @see org.eclipse.emf.diffmerge.diffdata.EValuePresence
      * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getEValuePresence()
      * @generated
      */
     EClass EVALUE_PRESENCE = eINSTANCE.getEValuePresence();
-
-    /**
-     * The meta object literal for the '<em><b>Feature</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EVALUE_PRESENCE__FEATURE = eINSTANCE.getEValuePresence_Feature();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
@@ -1642,6 +1679,15 @@ public interface DiffdataPackage extends EPackage {
     EClass EATTRIBUTE_VALUE_PRESENCE = eINSTANCE.getEAttributeValuePresence();
 
     /**
+     * The meta object literal for the '<em><b>Attribute</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE = eINSTANCE
+        .getEAttributeValuePresence_Attribute();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1650,6 +1696,15 @@ public interface DiffdataPackage extends EPackage {
      * @generated
      */
     EClass EREFERENCE_VALUE_PRESENCE = eINSTANCE.getEReferenceValuePresence();
+
+    /**
+     * The meta object literal for the '<em><b>Reference</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference EREFERENCE_VALUE_PRESENCE__REFERENCE = eINSTANCE
+        .getEReferenceValuePresence_Reference();
 
     /**
      * The meta object literal for the '<em><b>Value</b></em>' reference feature.
@@ -1803,6 +1858,26 @@ public interface DiffdataPackage extends EPackage {
      */
     EReference ELEMENT_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
         .getElementToDifferenceEntry_Value();
+
+    /**
+     * The meta object literal for the '<em>Setting</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.emf.ecore.EStructuralFeature.Setting
+     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getSetting()
+     * @generated
+     */
+    EDataType SETTING = eINSTANCE.getSetting();
+
+    /**
+     * The meta object literal for the '<em>IEditable Model Scope</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope
+     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getIEditableModelScope()
+     * @generated
+     */
+    EDataType IEDITABLE_MODEL_SCOPE = eINSTANCE.getIEditableModelScope();
 
   }
 

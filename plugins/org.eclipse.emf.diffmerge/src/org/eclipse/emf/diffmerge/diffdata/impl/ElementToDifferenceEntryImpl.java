@@ -15,6 +15,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -35,8 +36,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class ElementToDifferenceEntryImpl extends EObjectImpl implements
-    BasicEMap.Entry<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>> {
+public class ElementToDifferenceEntryImpl extends EObjectImpl
+    implements BasicEMap.Entry<EObject, IReferenceValuePresence<EObject>> {
   /**
    * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
    * <!-- begin-user-doc -->
@@ -55,7 +56,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * @generated
    * @ordered
    */
-  protected org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> value;
+  protected IReferenceValuePresence<EObject> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -122,11 +123,10 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> getTypedValue() {
+  public IReferenceValuePresence<EObject> getTypedValue() {
     if (value != null && ((EObject) value).eIsProxy()) {
       InternalEObject oldValue = (InternalEObject) value;
-      value = (org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>) eResolveProxy(
-          oldValue);
+      value = (IReferenceValuePresence<EObject>) eResolveProxy(oldValue);
       if (value != oldValue) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -142,7 +142,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> basicGetTypedValue() {
+  public IReferenceValuePresence<EObject> basicGetTypedValue() {
     return value;
   }
 
@@ -151,9 +151,8 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTypedValue(
-      org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> newValue) {
-    org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> oldValue = value;
+  public void setTypedValue(IReferenceValuePresence<EObject> newValue) {
+    IReferenceValuePresence<EObject> oldValue = value;
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -193,8 +192,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
       setTypedKey((EObject) newValue);
       return;
     case DiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY__VALUE:
-      setTypedValue(
-          (org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>) newValue);
+      setTypedValue((IReferenceValuePresence<EObject>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -212,8 +210,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
       setTypedKey((EObject) null);
       return;
     case DiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY__VALUE:
-      setTypedValue(
-          (org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>) null);
+      setTypedValue((IReferenceValuePresence<EObject>) null);
       return;
     }
     super.eUnset(featureID);
@@ -287,7 +284,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> getValue() {
+  public IReferenceValuePresence<EObject> getValue() {
     return getTypedValue();
   }
 
@@ -296,9 +293,9 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
-  public org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> setValue(
-      org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> value) {
-    org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject> oldValue = getValue();
+  public IReferenceValuePresence<EObject> setValue(
+      IReferenceValuePresence<EObject> value) {
+    IReferenceValuePresence<EObject> oldValue = getValue();
     setTypedValue(value);
     return oldValue;
   }
@@ -309,10 +306,10 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl implements
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>> getEMap() {
+  public EMap<EObject, IReferenceValuePresence<EObject>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>) container
+        : (EMap<EObject, IReferenceValuePresence<EObject>>) container
             .eGet(eContainmentFeature());
   }
 

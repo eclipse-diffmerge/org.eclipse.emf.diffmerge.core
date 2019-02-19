@@ -102,7 +102,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableComparison()
    * @generated
    */
-  int IEDITABLE_COMPARISON = 11;
+  int IEDITABLE_COMPARISON = 12;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl <em>EComparison</em>}' class.
@@ -196,6 +196,25 @@ public interface GdiffdataPackage extends EPackage {
   int ECOMPARISON_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 7;
 
   /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparisonElement()
+   * @generated
+   */
+  int ECOMPARISON_ELEMENT = 2;
+
+  /**
+   * The number of structural features of the '<em>EComparison Element</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECOMPARISON_ELEMENT_FEATURE_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IMapping.Editable <em>IEditable Mapping</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -203,7 +222,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMapping()
    * @generated
    */
-  int IEDITABLE_MAPPING = 13;
+  int IEDITABLE_MAPPING = 14;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl <em>EMapping</em>}' class.
@@ -213,7 +232,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMapping()
    * @generated
    */
-  int EMAPPING = 2;
+  int EMAPPING = 3;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -268,7 +287,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMatch()
    * @generated
    */
-  int IEDITABLE_MATCH = 15;
+  int IEDITABLE_MATCH = 16;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl <em>EMatch</em>}' class.
@@ -278,7 +297,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMatch()
    * @generated
    */
-  int EMATCH = 3;
+  int EMATCH = 4;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -351,7 +370,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableMergeableDifference()
    * @generated
    */
-  int IEDITABLE_MERGEABLE_DIFFERENCE = 17;
+  int IEDITABLE_MERGEABLE_DIFFERENCE = 18;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl <em>EMergeable Difference</em>}' class.
@@ -361,7 +380,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMergeableDifference()
    * @generated
    */
-  int EMERGEABLE_DIFFERENCE = 4;
+  int EMERGEABLE_DIFFERENCE = 5;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -373,15 +392,6 @@ public interface GdiffdataPackage extends EPackage {
   int EMERGEABLE_DIFFERENCE__ID = EIDENTIFIED__ID;
 
   /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__COMPARISON = EIDENTIFIED_FEATURE_COUNT + 0;
-
-  /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -389,7 +399,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = EIDENTIFIED_FEATURE_COUNT
-      + 1;
+      + 0;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -398,7 +408,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__CONFLICTING = EIDENTIFIED_FEATURE_COUNT + 2;
+  int EMERGEABLE_DIFFERENCE__CONFLICTING = EIDENTIFIED_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -407,7 +417,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__IGNORED = EIDENTIFIED_FEATURE_COUNT + 3;
+  int EMERGEABLE_DIFFERENCE__IGNORED = EIDENTIFIED_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -416,7 +426,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = EIDENTIFIED_FEATURE_COUNT + 4;
+  int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = EIDENTIFIED_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -426,7 +436,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = EIDENTIFIED_FEATURE_COUNT
-      + 5;
+      + 4;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -436,7 +446,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EIDENTIFIED_FEATURE_COUNT
-      + 6;
+      + 5;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -446,7 +456,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EIDENTIFIED_FEATURE_COUNT
-      + 7;
+      + 6;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -456,7 +466,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EIDENTIFIED_FEATURE_COUNT
-      + 8;
+      + 7;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -466,7 +476,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EIDENTIFIED_FEATURE_COUNT
-      + 9;
+      + 8;
 
   /**
    * The number of structural features of the '<em>EMergeable Difference</em>' class.
@@ -475,7 +485,7 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 10;
+  int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 9;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl <em>EElement Relative Presence</em>}' class.
@@ -485,7 +495,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementRelativePresence()
    * @generated
    */
-  int EELEMENT_RELATIVE_PRESENCE = 5;
+  int EELEMENT_RELATIVE_PRESENCE = 6;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -495,15 +505,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EELEMENT_RELATIVE_PRESENCE__ID = EMERGEABLE_DIFFERENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__COMPARISON = EMERGEABLE_DIFFERENCE__COMPARISON;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -624,7 +625,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementPresence()
    * @generated
    */
-  int EELEMENT_PRESENCE = 6;
+  int EELEMENT_PRESENCE = 7;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -634,15 +635,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EELEMENT_PRESENCE__ID = EELEMENT_RELATIVE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__COMPARISON = EELEMENT_RELATIVE_PRESENCE__COMPARISON;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -771,7 +763,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEValuePresence()
    * @generated
    */
-  int EVALUE_PRESENCE = 7;
+  int EVALUE_PRESENCE = 8;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -781,15 +773,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EVALUE_PRESENCE__ID = EELEMENT_RELATIVE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__COMPARISON = EELEMENT_RELATIVE_PRESENCE__COMPARISON;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -917,7 +900,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEAttributeValuePresence()
    * @generated
    */
-  int EATTRIBUTE_VALUE_PRESENCE = 8;
+  int EATTRIBUTE_VALUE_PRESENCE = 9;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -927,15 +910,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EATTRIBUTE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__COMPARISON = EVALUE_PRESENCE__COMPARISON;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -1072,7 +1046,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEReferenceValuePresence()
    * @generated
    */
-  int EREFERENCE_VALUE_PRESENCE = 9;
+  int EREFERENCE_VALUE_PRESENCE = 10;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1082,15 +1056,6 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EREFERENCE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Comparison</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__COMPARISON = EVALUE_PRESENCE__COMPARISON;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -1228,7 +1193,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIComparison()
    * @generated
    */
-  int ICOMPARISON = 10;
+  int ICOMPARISON = 11;
 
   /**
    * The number of structural features of the '<em>IComparison</em>' class.
@@ -1256,7 +1221,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMapping()
    * @generated
    */
-  int IMAPPING = 12;
+  int IMAPPING = 13;
 
   /**
    * The number of structural features of the '<em>IMapping</em>' class.
@@ -1284,7 +1249,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMatch()
    * @generated
    */
-  int IMATCH = 14;
+  int IMATCH = 15;
 
   /**
    * The number of structural features of the '<em>IMatch</em>' class.
@@ -1312,7 +1277,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMergeableDifference()
    * @generated
    */
-  int IMERGEABLE_DIFFERENCE = 16;
+  int IMERGEABLE_DIFFERENCE = 17;
 
   /**
    * The number of structural features of the '<em>IMergeable Difference</em>' class.
@@ -1340,7 +1305,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIElementRelativePresence()
    * @generated
    */
-  int IELEMENT_RELATIVE_PRESENCE = 18;
+  int IELEMENT_RELATIVE_PRESENCE = 19;
 
   /**
    * The number of structural features of the '<em>IElement Relative Presence</em>' class.
@@ -1359,7 +1324,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIElementPresence()
    * @generated
    */
-  int IELEMENT_PRESENCE = 19;
+  int IELEMENT_PRESENCE = 20;
 
   /**
    * The number of structural features of the '<em>IElement Presence</em>' class.
@@ -1378,7 +1343,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIValuePresence()
    * @generated
    */
-  int IVALUE_PRESENCE = 20;
+  int IVALUE_PRESENCE = 21;
 
   /**
    * The number of structural features of the '<em>IValue Presence</em>' class.
@@ -1397,7 +1362,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIAttributeValuePresence()
    * @generated
    */
-  int IATTRIBUTE_VALUE_PRESENCE = 21;
+  int IATTRIBUTE_VALUE_PRESENCE = 22;
 
   /**
    * The number of structural features of the '<em>IAttribute Value Presence</em>' class.
@@ -1416,7 +1381,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIReferenceValuePresence()
    * @generated
    */
-  int IREFERENCE_VALUE_PRESENCE = 22;
+  int IREFERENCE_VALUE_PRESENCE = 23;
 
   /**
    * The number of structural features of the '<em>IReference Value Presence</em>' class.
@@ -1435,7 +1400,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIEditableTreeDataScope()
    * @generated
    */
-  int IEDITABLE_TREE_DATA_SCOPE = 23;
+  int IEDITABLE_TREE_DATA_SCOPE = 24;
 
   /**
    * The meta object id for the '<em>IMatch Policy</em>' data type.
@@ -1445,7 +1410,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMatchPolicy()
    * @generated
    */
-  int IMATCH_POLICY = 24;
+  int IMATCH_POLICY = 25;
 
   /**
    * The meta object id for the '<em>IDiff Policy</em>' data type.
@@ -1455,7 +1420,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIDiffPolicy()
    * @generated
    */
-  int IDIFF_POLICY = 25;
+  int IDIFF_POLICY = 26;
 
   /**
    * The meta object id for the '<em>IMerge Policy</em>' data type.
@@ -1465,7 +1430,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getIMergePolicy()
    * @generated
    */
-  int IMERGE_POLICY = 26;
+  int IMERGE_POLICY = 27;
 
   /**
    * The meta object id for the '<em>Role</em>' data type.
@@ -1475,7 +1440,7 @@ public interface GdiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getRole()
    * @generated
    */
-  int ROLE = 27;
+  int ROLE = 28;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified <em>EIdentified</em>}'.
@@ -1584,6 +1549,16 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    */
   EReference getEComparison_Mapping();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>EComparison Element</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
+   * @generated
+   */
+  EClass getEComparisonElement();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping <em>EMapping</em>}'.
@@ -1702,17 +1677,6 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    */
   EClass getEMergeableDifference();
-
-  /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getComparison <em>Comparison</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Comparison</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getComparison()
-   * @see #getEMergeableDifference()
-   * @generated
-   */
-  EReference getEMergeableDifference_Comparison();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}'.
@@ -2240,6 +2204,16 @@ public interface GdiffdataPackage extends EPackage {
     EReference ECOMPARISON__MAPPING = eINSTANCE.getEComparison_Mapping();
 
     /**
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparisonElement()
+     * @generated
+     */
+    EClass ECOMPARISON_ELEMENT = eINSTANCE.getEComparisonElement();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl <em>EMapping</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2339,15 +2313,6 @@ public interface GdiffdataPackage extends EPackage {
      * @generated
      */
     EClass EMERGEABLE_DIFFERENCE = eINSTANCE.getEMergeableDifference();
-
-    /**
-     * The meta object literal for the '<em><b>Comparison</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EMERGEABLE_DIFFERENCE__COMPARISON = eINSTANCE
-        .getEMergeableDifference_Comparison();
 
     /**
      * The meta object literal for the '<em><b>Aligned With Ancestor</b></em>' attribute feature.

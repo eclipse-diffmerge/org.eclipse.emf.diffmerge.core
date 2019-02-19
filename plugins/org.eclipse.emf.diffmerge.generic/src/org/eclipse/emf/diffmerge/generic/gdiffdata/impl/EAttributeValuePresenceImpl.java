@@ -20,7 +20,6 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
@@ -39,8 +38,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EAttributeValuePresenceImpl<E, A, R> extends
-    EValuePresenceImpl<E, A, R> implements EAttributeValuePresence<E, A, R> {
+public abstract class EAttributeValuePresenceImpl<E, A, R, S>
+    extends EValuePresenceImpl<E, A, R, S>
+    implements EAttributeValuePresence<E, A, R, S> {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -71,7 +71,6 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
 
   /**
    * Constructor
-   * @param comparison_p the non-null comparison to which this difference belongs
    * @param elementMatch_p the non-null match for the element holding the value
    * @param attribute_p the non-null attribute holding the value
    * @param value_p the non-null value held
@@ -79,12 +78,11 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EAttributeValuePresenceImpl(EComparison<E, A, R> comparison_p,
-      EMatch<E, A, R> elementMatch_p, A attribute_p, Object value_p,
-      Role presenceRole_p, boolean isOrder_p) {
-    super(comparison_p, elementMatch_p, presenceRole_p, isOrder_p);
+  public EAttributeValuePresenceImpl(EMatch<E, A, R, S> elementMatch_p,
+      A attribute_p, Object value_p, Role presenceRole_p, boolean isOrder_p) {
+    super(elementMatch_p, presenceRole_p, isOrder_p);
     setValue(value_p);
-    setFeature(attribute_p);
+    setAttribute(attribute_p);
     ((IMatch.Editable<E>) elementMatch).addRelatedDifference(this);
   }
 
@@ -121,10 +119,11 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence#setFeature(java.lang.Object)
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated NOT
    */
-  public abstract void setFeature(A feature);
+  public abstract void setAttribute(A attribute);
 
   /**
    * <!-- begin-user-doc -->

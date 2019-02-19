@@ -22,6 +22,15 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.diffdata.*;
 
+import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -87,6 +96,11 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
+    public Adapter caseEComparisonElement(EComparisonElement object) {
+      return createEComparisonElementAdapter();
+    }
+
+    @Override
     public Adapter caseEMapping(EMapping object) {
       return createEMappingAdapter();
     }
@@ -118,50 +132,54 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
 
     @Override
     public Adapter caseAttributeToValueToDifferenceEntry(
-        Map.Entry<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> object) {
+        Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> object) {
       return createAttributeToValueToDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseValueToDifferenceEntry(
-        Map.Entry<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>> object) {
+        Map.Entry<Object, IAttributeValuePresence<EObject>> object) {
       return createValueToDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseReferenceToElementToDifferenceEntry(
-        Map.Entry<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> object) {
+        Map.Entry<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> object) {
       return createReferenceToElementToDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseReferenceToOrderDifferenceEntry(
-        Map.Entry<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> object) {
+        Map.Entry<EReference, EList<IReferenceValuePresence<EObject>>> object) {
       return createReferenceToOrderDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseElementToDifferenceEntry(
-        Map.Entry<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>> object) {
+        Map.Entry<EObject, IReferenceValuePresence<EObject>> object) {
       return createElementToDifferenceEntryAdapter();
     }
 
     @Override
-    public Adapter caseEIdentified(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified object) {
+    public Adapter caseEIdentified(EIdentified object) {
       return createEIdentifiedAdapter();
     }
 
     @Override
-    public <E> Adapter caseIEditableComparison(
-        org.eclipse.emf.diffmerge.generic.api.IComparison.Editable<E> object) {
+    public <E> Adapter caseIEditableComparison(Editable<E> object) {
       return createIEditableComparisonAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EComparison(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EComparison(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, A, R, S> object) {
       return createGdiffdata_EComparisonAdapter();
+    }
+
+    @Override
+    public <E, A, R, S> Adapter caseGdiffdata_EComparisonElement(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<E, A, R, S> object) {
+      return createGdiffdata_EComparisonElementAdapter();
     }
 
     @Override
@@ -171,8 +189,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EMapping(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EMapping(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, A, R, S> object) {
       return createGdiffdata_EMappingAdapter();
     }
 
@@ -183,8 +201,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EMatch(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EMatch(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, A, R, S> object) {
       return createGdiffdata_EMatchAdapter();
     }
 
@@ -195,68 +213,66 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R> Adapter caseEMergeableDifference(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference<E, A, R> object) {
+    public <E, A, R, S> Adapter caseEMergeableDifference(
+        EMergeableDifference<E, A, R, S> object) {
       return createEMergeableDifferenceAdapter();
     }
 
     @Override
     public <E> Adapter caseIElementRelativePresence(
-        org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence<E> object) {
+        IElementRelativePresence<E> object) {
       return createIElementRelativePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseEElementRelativePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<E, A, R> object) {
+    public <E, A, R, S> Adapter caseEElementRelativePresence(
+        EElementRelativePresence<E, A, R, S> object) {
       return createEElementRelativePresenceAdapter();
     }
 
     @Override
-    public <E> Adapter caseIElementPresence(
-        org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence<E> object) {
+    public <E> Adapter caseIElementPresence(IElementPresence<E> object) {
       return createIElementPresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EElementPresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EElementPresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<E, A, R, S> object) {
       return createGdiffdata_EElementPresenceAdapter();
     }
 
     @Override
-    public <E> Adapter caseIValuePresence(
-        org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence<E> object) {
+    public <E> Adapter caseIValuePresence(IValuePresence<E> object) {
       return createIValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<E, A, R, S> object) {
       return createGdiffdata_EValuePresenceAdapter();
     }
 
     @Override
     public <E> Adapter caseIAttributeValuePresence(
-        org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<E> object) {
+        IAttributeValuePresence<E> object) {
       return createIAttributeValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EAttributeValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EAttributeValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<E, A, R, S> object) {
       return createGdiffdata_EAttributeValuePresenceAdapter();
     }
 
     @Override
     public <E> Adapter caseIReferenceValuePresence(
-        org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<E> object) {
+        IReferenceValuePresence<E> object) {
       return createIReferenceValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R> Adapter caseGdiffdata_EReferenceValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<E, A, R> object) {
+    public <E, A, R, S> Adapter caseGdiffdata_EReferenceValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<E, A, R, S> object) {
       return createGdiffdata_EReferenceValuePresenceAdapter();
     }
 
@@ -304,6 +320,20 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public Adapter createEComparisonAdapter() {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.diffdata.EComparisonElement <em>EComparison Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.emf.diffmerge.diffdata.EComparisonElement
+   * @generated
+   */
+  public Adapter createEComparisonElementAdapter() {
     return null;
   }
 
@@ -514,6 +544,20 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public Adapter createGdiffdata_EComparisonAdapter() {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
+   * @generated
+   */
+  public Adapter createGdiffdata_EComparisonElementAdapter() {
     return null;
   }
 

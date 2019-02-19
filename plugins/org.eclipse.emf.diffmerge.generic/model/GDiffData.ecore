@@ -7,25 +7,23 @@
         iD="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EComparison" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A partial implementation of IComparison based on EMF.&#xA;Type parameter &lt;S> should be understood as &lt;S extends IEditableTreeDataScope&lt;E>>."/>
+    </eAnnotations>
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestorScope" transient="true">
-      <eGenericType eClassifier="#//IEditableTreeDataScope">
-        <eTypeArguments eTypeParameter="#//EComparison/E"/>
-      </eGenericType>
+      <eGenericType eTypeParameter="#//EComparison/S"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceScope" lowerBound="1"
         transient="true">
-      <eGenericType eClassifier="#//IEditableTreeDataScope">
-        <eTypeArguments eTypeParameter="#//EComparison/E"/>
-      </eGenericType>
+      <eGenericType eTypeParameter="#//EComparison/S"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetScope" lowerBound="1"
         transient="true">
-      <eGenericType eClassifier="#//IEditableTreeDataScope">
-        <eTypeArguments eTypeParameter="#//EComparison/E"/>
-      </eGenericType>
+      <eGenericType eTypeParameter="#//EComparison/S"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMatchPolicy" transient="true">
       <eGenericType eClassifier="#//IMatchPolicy">
@@ -48,6 +46,7 @@
         <eTypeArguments eTypeParameter="#//EComparison/E"/>
         <eTypeArguments eTypeParameter="#//EComparison/A"/>
         <eTypeArguments eTypeParameter="#//EComparison/R"/>
+        <eTypeArguments eTypeParameter="#//EComparison/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
@@ -55,23 +54,33 @@
       <eTypeArguments eTypeParameter="#//EComparison/E"/>
     </eGenericSuperTypes>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EComparisonElement" abstract="true"
+      interface="true">
+    <eTypeParameters name="E"/>
+    <eTypeParameters name="A"/>
+    <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
+    <eOperations name="getComparison">
+      <eGenericType eClassifier="#//EComparison">
+        <eTypeArguments eTypeParameter="#//EComparisonElement/E"/>
+        <eTypeArguments eTypeParameter="#//EComparisonElement/A"/>
+        <eTypeArguments eTypeParameter="#//EComparisonElement/R"/>
+        <eTypeArguments eTypeParameter="#//EComparisonElement/S"/>
+      </eGenericType>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EMapping" abstract="true">
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
-    <eOperations name="getComparison">
-      <eGenericType eClassifier="#//EComparison">
-        <eTypeArguments eTypeParameter="#//EMapping/E"/>
-        <eTypeArguments eTypeParameter="#//EMapping/A"/>
-        <eTypeArguments eTypeParameter="#//EMapping/R"/>
-      </eGenericType>
-    </eOperations>
+    <eTypeParameters name="S"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         containment="true">
       <eGenericType eClassifier="#//EMatch">
         <eTypeArguments eTypeParameter="#//EMapping/E"/>
         <eTypeArguments eTypeParameter="#//EMapping/A"/>
         <eTypeArguments eTypeParameter="#//EMapping/R"/>
+        <eTypeArguments eTypeParameter="#//EMapping/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="referenceCompletedMatches"
@@ -87,6 +96,12 @@
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement">
+      <eTypeArguments eTypeParameter="#//EMapping/E"/>
+      <eTypeArguments eTypeParameter="#//EMapping/A"/>
+      <eTypeArguments eTypeParameter="#//EMapping/R"/>
+      <eTypeArguments eTypeParameter="#//EMapping/S"/>
+    </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IEditableMapping">
       <eTypeArguments eTypeParameter="#//EMapping/E"/>
     </eGenericSuperTypes>
@@ -95,6 +110,7 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
     <eOperations name="getAncestor">
       <eGenericType eTypeParameter="#//EMatch/E"/>
     </eOperations>
@@ -127,6 +143,7 @@
         <eTypeArguments eTypeParameter="#//EMatch/E"/>
         <eTypeArguments eTypeParameter="#//EMatch/A"/>
         <eTypeArguments eTypeParameter="#//EMatch/R"/>
+        <eTypeArguments eTypeParameter="#//EMatch/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elementPresenceDifference">
@@ -145,6 +162,12 @@
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement">
+      <eTypeArguments eTypeParameter="#//EMatch/E"/>
+      <eTypeArguments eTypeParameter="#//EMatch/A"/>
+      <eTypeArguments eTypeParameter="#//EMatch/R"/>
+      <eTypeArguments eTypeParameter="#//EMatch/S"/>
+    </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IEditableMatch">
       <eTypeArguments eTypeParameter="#//EMatch/E"/>
     </eGenericSuperTypes>
@@ -153,13 +176,7 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="comparison" lowerBound="1">
-      <eGenericType eClassifier="#//EComparison">
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
-        <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
-      </eGenericType>
-    </eStructuralFeatures>
+    <eTypeParameters name="S"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="alignedWithAncestor" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="conflicting" lowerBound="1"
@@ -194,6 +211,12 @@
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EIdentified"/>
+    <eGenericSuperTypes eClassifier="#//EComparisonElement">
+      <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
+      <eTypeArguments eTypeParameter="#//EMergeableDifference/A"/>
+      <eTypeArguments eTypeParameter="#//EMergeableDifference/R"/>
+      <eTypeArguments eTypeParameter="#//EMergeableDifference/S"/>
+    </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IEditableMergeableDifference">
       <eTypeArguments eTypeParameter="#//EMergeableDifference/E"/>
     </eGenericSuperTypes>
@@ -202,11 +225,13 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elementMatch" lowerBound="1">
       <eGenericType eClassifier="#//EMatch">
         <eTypeArguments eTypeParameter="#//EElementRelativePresence/E"/>
         <eTypeArguments eTypeParameter="#//EElementRelativePresence/A"/>
         <eTypeArguments eTypeParameter="#//EElementRelativePresence/R"/>
+        <eTypeArguments eTypeParameter="#//EElementRelativePresence/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="presenceRole" lowerBound="1"
@@ -215,6 +240,7 @@
       <eTypeArguments eTypeParameter="#//EElementRelativePresence/E"/>
       <eTypeArguments eTypeParameter="#//EElementRelativePresence/A"/>
       <eTypeArguments eTypeParameter="#//EElementRelativePresence/R"/>
+      <eTypeArguments eTypeParameter="#//EElementRelativePresence/S"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IElementRelativePresence">
       <eTypeArguments eTypeParameter="#//EElementRelativePresence/E"/>
@@ -224,17 +250,20 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownerMatch" lowerBound="1">
       <eGenericType eClassifier="#//EMatch">
         <eTypeArguments eTypeParameter="#//EElementPresence/E"/>
         <eTypeArguments eTypeParameter="#//EElementPresence/A"/>
         <eTypeArguments eTypeParameter="#//EElementPresence/R"/>
+        <eTypeArguments eTypeParameter="#//EElementPresence/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EElementRelativePresence">
       <eTypeArguments eTypeParameter="#//EElementPresence/E"/>
       <eTypeArguments eTypeParameter="#//EElementPresence/A"/>
       <eTypeArguments eTypeParameter="#//EElementPresence/R"/>
+      <eTypeArguments eTypeParameter="#//EElementPresence/S"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IElementPresence">
       <eTypeArguments eTypeParameter="#//EElementPresence/E"/>
@@ -244,12 +273,15 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eTypeParameters name="S"/>
+    <eOperations name="getFeature" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="order" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
     <eGenericSuperTypes eClassifier="#//EElementRelativePresence">
       <eTypeArguments eTypeParameter="#//EValuePresence/E"/>
       <eTypeArguments eTypeParameter="#//EValuePresence/A"/>
       <eTypeArguments eTypeParameter="#//EValuePresence/R"/>
+      <eTypeArguments eTypeParameter="#//EValuePresence/S"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IValuePresence">
       <eTypeArguments eTypeParameter="#//EValuePresence/E"/>
@@ -259,8 +291,9 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
-    <eOperations name="setFeature">
-      <eParameters name="feature" lowerBound="1">
+    <eTypeParameters name="S"/>
+    <eOperations name="setAttribute">
+      <eParameters name="attribute" lowerBound="1">
         <eGenericType eTypeParameter="#//EAttributeValuePresence/A"/>
       </eParameters>
     </eOperations>
@@ -269,6 +302,7 @@
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/E"/>
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/A"/>
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/R"/>
+      <eTypeArguments eTypeParameter="#//EAttributeValuePresence/S"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IAttributeValuePresence">
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/E"/>
@@ -278,8 +312,9 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
-    <eOperations name="setFeature">
-      <eParameters name="feature" lowerBound="1">
+    <eTypeParameters name="S"/>
+    <eOperations name="setReference">
+      <eParameters name="reference" lowerBound="1">
         <eGenericType eTypeParameter="#//EReferenceValuePresence/R"/>
       </eParameters>
     </eOperations>
@@ -293,12 +328,14 @@
         <eTypeArguments eTypeParameter="#//EReferenceValuePresence/E"/>
         <eTypeArguments eTypeParameter="#//EReferenceValuePresence/A"/>
         <eTypeArguments eTypeParameter="#//EReferenceValuePresence/R"/>
+        <eTypeArguments eTypeParameter="#//EReferenceValuePresence/S"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//EValuePresence">
       <eTypeArguments eTypeParameter="#//EReferenceValuePresence/E"/>
       <eTypeArguments eTypeParameter="#//EReferenceValuePresence/A"/>
       <eTypeArguments eTypeParameter="#//EReferenceValuePresence/R"/>
+      <eTypeArguments eTypeParameter="#//EReferenceValuePresence/S"/>
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//IReferenceValuePresence">
       <eTypeArguments eTypeParameter="#//EReferenceValuePresence/E"/>

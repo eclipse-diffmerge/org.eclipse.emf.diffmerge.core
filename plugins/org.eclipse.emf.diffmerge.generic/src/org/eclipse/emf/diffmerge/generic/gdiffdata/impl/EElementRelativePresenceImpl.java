@@ -14,7 +14,6 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
@@ -36,9 +35,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EElementRelativePresenceImpl<E, A, R>
-    extends EMergeableDifferenceImpl<E, A, R>
-    implements EElementRelativePresence<E, A, R> {
+public abstract class EElementRelativePresenceImpl<E, A, R, S>
+    extends EMergeableDifferenceImpl<E, A, R, S>
+    implements EElementRelativePresence<E, A, R, S> {
   /**
    * The cached value of the '{@link #getElementMatch() <em>Element Match</em>}' reference.
    * <!-- begin-user-doc -->
@@ -47,7 +46,7 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * @generated
    * @ordered
    */
-  protected EMatch<E, A, R> elementMatch;
+  protected EMatch<E, A, R, S> elementMatch;
 
   /**
    * The default value of the '{@link #getPresenceRole() <em>Presence Role</em>}' attribute.
@@ -80,15 +79,13 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
 
   /**
    * Constructor
-   * @param comparison_p the non-null comparison to which this difference belongs
    * @param match_p the non-null match to which this difference is relative
    * @param presenceRole_p the role of the presence: TARGET or REFERENCE
    * @generated NOT
    */
-  protected EElementRelativePresenceImpl(EComparison<E, A, R> comparison_p,
-      EMatch<E, A, R> match_p, Role presenceRole_p) {
+  protected EElementRelativePresenceImpl(EMatch<E, A, R, S> match_p,
+      Role presenceRole_p) {
     super(false);
-    setComparison(comparison_p);
     setElementMatch(match_p);
     setPresenceRole(presenceRole_p);
   }
@@ -109,10 +106,10 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMatch<E, A, R> getElementMatch() {
+  public EMatch<E, A, R, S> getElementMatch() {
     if (elementMatch != null && elementMatch.eIsProxy()) {
       InternalEObject oldElementMatch = (InternalEObject) elementMatch;
-      elementMatch = (EMatch<E, A, R>) eResolveProxy(oldElementMatch);
+      elementMatch = (EMatch<E, A, R, S>) eResolveProxy(oldElementMatch);
       if (elementMatch != oldElementMatch) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -128,7 +125,7 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch<E, A, R> basicGetElementMatch() {
+  public EMatch<E, A, R, S> basicGetElementMatch() {
     return elementMatch;
   }
 
@@ -137,8 +134,8 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setElementMatch(EMatch<E, A, R> newElementMatch) {
-    EMatch<E, A, R> oldElementMatch = elementMatch;
+  public void setElementMatch(EMatch<E, A, R, S> newElementMatch) {
+    EMatch<E, A, R, S> oldElementMatch = elementMatch;
     elementMatch = newElementMatch;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -197,7 +194,7 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
-      setElementMatch((EMatch<E, A, R>) newValue);
+      setElementMatch((EMatch<E, A, R, S>) newValue);
       return;
     case GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
       setPresenceRole((Role) newValue);
@@ -215,7 +212,7 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
   public void eUnset(int featureID) {
     switch (featureID) {
     case GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH:
-      setElementMatch((EMatch<E, A, R>) null);
+      setElementMatch((EMatch<E, A, R, S>) null);
       return;
     case GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE:
       setPresenceRole(PRESENCE_ROLE_EDEFAULT);

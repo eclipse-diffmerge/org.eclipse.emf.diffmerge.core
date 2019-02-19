@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -28,7 +29,6 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
 import org.eclipse.emf.diffmerge.impl.helpers.MatchOperation;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy;
@@ -47,7 +47,7 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public class EComparisonImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<EObject, EAttribute, EReference>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<EObject, EAttribute, EReference, IEditableModelScope>
     implements EComparison {
 
   /**
@@ -65,8 +65,8 @@ public class EComparisonImpl extends
    * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<EObject> targetScope_p,
-      IEditableTreeDataScope<EObject> referenceScope_p) {
+  public EComparisonImpl(IEditableModelScope targetScope_p,
+      IEditableModelScope referenceScope_p) {
     this(targetScope_p, referenceScope_p, null);
   }
 
@@ -77,9 +77,9 @@ public class EComparisonImpl extends
    * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<EObject> targetScope_p,
-      IEditableTreeDataScope<EObject> referenceScope_p,
-      IEditableTreeDataScope<EObject> ancestorScope_p) {
+  public EComparisonImpl(IEditableModelScope targetScope_p,
+      IEditableModelScope referenceScope_p,
+      IEditableModelScope ancestorScope_p) {
     super(targetScope_p, referenceScope_p, ancestorScope_p);
   }
 
@@ -94,12 +94,64 @@ public class EComparisonImpl extends
   }
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * This is specialized for the more specific type known in this context.
+   * @generated
+   */
+  @Override
+  public void setAncestorScope(IEditableModelScope newAncestorScope) {
+    super.setAncestorScope(newAncestorScope);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * This is specialized for the more specific type known in this context.
+   * @generated
+   */
+  @Override
+  public void setReferenceScope(IEditableModelScope newReferenceScope) {
+    super.setReferenceScope(newReferenceScope);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * This is specialized for the more specific type known in this context.
+   * @generated
+   */
+  @Override
+  public void setTargetScope(IEditableModelScope newTargetScope) {
+    super.setTargetScope(newTargetScope);
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMapping()
    * @generated NOT
    */
   @Override
   public EMapping getMapping() {
-    return (EMapping)super.getMapping();
+    return (EMapping) super.getMapping();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#getScope(org.eclipse.emf.diffmerge.generic.api.Role)
+   * @generated NOT
+   */
+  public IEditableModelScope getScope(Role role) {
+    IEditableModelScope result;
+    switch (role) {
+    case TARGET:
+      result = getTargetScope();
+      break;
+    case REFERENCE:
+      result = getReferenceScope();
+      break;
+    default:
+      result = getAncestorScope();
+    }
+    return result;
   }
 
   /**
@@ -107,8 +159,8 @@ public class EComparisonImpl extends
    * @generated NOT
    */
   @Override
-  protected IExpensiveOperation getMatchOperation(IMatchPolicy<EObject> policy_p,
-      Map<Role, Set<Object>> duplicateIDs_p) {
+  protected IExpensiveOperation getMatchOperation(
+      IMatchPolicy<EObject> policy_p, Map<Role, Set<Object>> duplicateIDs_p) {
     return new MatchOperation(this, policy_p, duplicateIDs_p);
   }
 
@@ -119,9 +171,9 @@ public class EComparisonImpl extends
   public IAttributeValuePresence<EObject> newAttributeValuePresence(
       IMatch<EObject> elementMatch_p, Object attribute_p, Object value_p,
       Role presenceRole_p, boolean isOrder_p) {
-    EAttributeValuePresence result = new EAttributeValuePresenceImpl(this,
-        (EMatch) elementMatch_p, (EAttribute) attribute_p, value_p, presenceRole_p,
-        isOrder_p);
+    EAttributeValuePresence result = new EAttributeValuePresenceImpl(
+        (EMatch) elementMatch_p, (EAttribute) attribute_p, value_p,
+        presenceRole_p, isOrder_p);
     return result;
   }
 
@@ -129,12 +181,12 @@ public class EComparisonImpl extends
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#newElementPresence(org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.IMatch)
    * @generated NOT
    */
-  public IElementPresence<EObject> newElementPresence(IMatch<EObject> elementMatch_p,
-      IMatch<EObject> ownerMatch_p) {
-    return new EElementPresenceImpl(this, (EMatch) elementMatch_p,
+  public IElementPresence<EObject> newElementPresence(
+      IMatch<EObject> elementMatch_p, IMatch<EObject> ownerMatch_p) {
+    return new EElementPresenceImpl((EMatch) elementMatch_p,
         (EMatch) ownerMatch_p);
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#newMapping()
    * @generated NOT
@@ -161,9 +213,9 @@ public class EComparisonImpl extends
   public IReferenceValuePresence<EObject> newReferenceValuePresence(
       IMatch<EObject> elementMatch_p, Object reference_p, EObject value_p,
       IMatch<EObject> valueMatch_p, Role presenceRole_p, boolean isOrder_p) {
-    EReferenceValuePresence result = new EReferenceValuePresenceImpl(this,
-        (EMatch) elementMatch_p, (EReference) reference_p, value_p, (EMatch) valueMatch_p,
-        presenceRole_p, isOrder_p);
+    EReferenceValuePresence result = new EReferenceValuePresenceImpl(
+        (EMatch) elementMatch_p, (EReference) reference_p, value_p,
+        (EMatch) valueMatch_p, presenceRole_p, isOrder_p);
     return result;
   }
 

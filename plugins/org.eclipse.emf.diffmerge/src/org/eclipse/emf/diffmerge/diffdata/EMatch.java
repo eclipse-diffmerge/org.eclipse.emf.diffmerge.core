@@ -13,6 +13,9 @@ package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -35,11 +38,12 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
  * @generated
  */
 public interface EMatch extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference> {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference, IEditableModelScope>,
+    EComparisonElement {
   /**
    * <!-- begin-user-doc -->
    * <p>
@@ -146,7 +150,7 @@ public interface EMatch extends
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EAttribute, EMap<Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<EObject>>> getModifiableAttributeMap();
+  EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Reference Map</b></em>' map.
@@ -164,7 +168,7 @@ public interface EMatch extends
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EReference, EMap<EObject, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableReferenceMap();
+  EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> getModifiableReferenceMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Order Reference Map</b></em>' map.
@@ -182,6 +186,6 @@ public interface EMatch extends
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EReference, EList<org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap();
+  EMap<EReference, EList<IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap();
 
 } // EMatch

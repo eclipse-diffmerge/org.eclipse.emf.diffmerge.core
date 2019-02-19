@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -22,10 +23,11 @@ import org.eclipse.emf.ecore.EReference;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence()
- * @model
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
  * @generated
  */
 public interface EElementPresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference> {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference, IEditableModelScope>,
+    EComparisonElement {
   // Nothing needed
 } // EElementPresence

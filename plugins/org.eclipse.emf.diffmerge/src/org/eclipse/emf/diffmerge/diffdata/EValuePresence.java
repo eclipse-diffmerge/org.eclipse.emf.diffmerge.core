@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -21,43 +22,24 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * A representation of the model object '<em><b>EValue Presence</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature <em>Feature</em>}</li>
- * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence()
- * @model abstract="true"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
  * @generated
  */
 public interface EValuePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<EObject, EAttribute, EReference> {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<EObject, EAttribute, EReference, IEditableModelScope>,
+    EComparisonElement {
   /**
-   * Returns the value of the '<em><b>Feature</b></em>' reference.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Feature</em>' reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Feature</em>' reference.
-   * @see #setFeature(EStructuralFeature)
-   * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence_Feature()
-   * @model required="true"
+   * @model kind="operation" required="true"
    * @generated
    */
   EStructuralFeature getFeature();
-
-  /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.diffdata.EValuePresence#getFeature <em>Feature</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Feature</em>' reference.
-   * @see #getFeature()
-   * @generated
-   */
-  void setFeature(EStructuralFeature value);
 
 } // EValuePresence
