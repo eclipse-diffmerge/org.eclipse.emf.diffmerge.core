@@ -12,11 +12,11 @@
 package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl#isAttribute <em>Attribute</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl#getMatch <em>Match</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl#getFeature <em>Feature</em>}</li>
  * </ul>
@@ -38,6 +39,26 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class MatchAndFeatureImpl extends EObjectImpl
     implements MatchAndFeature {
   /**
+   * The default value of the '{@link #isAttribute() <em>Attribute</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isAttribute()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean ATTRIBUTE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isAttribute() <em>Attribute</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isAttribute()
+   * @generated
+   * @ordered
+   */
+  protected boolean attribute = ATTRIBUTE_EDEFAULT;
+
+  /**
    * The cached value of the '{@link #getMatch() <em>Match</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -45,17 +66,27 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EMatch match;
+  protected IMatch<?> match;
 
   /**
-   * The cached value of the '{@link #getFeature() <em>Feature</em>}' reference.
+   * The default value of the '{@link #getFeature() <em>Feature</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getFeature()
    * @generated
    * @ordered
    */
-  protected EStructuralFeature feature;
+  protected static final Object FEATURE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getFeature() <em>Feature</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getFeature()
+   * @generated
+   * @ordered
+   */
+  protected Object feature = FEATURE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -72,9 +103,10 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * @param feature_p a non-null feature
    * @generated NOT
    */
-  public MatchAndFeatureImpl(EMatch match_p, EStructuralFeature feature_p) {
+  public MatchAndFeatureImpl(IMatch<?> match_p, Object feature_p, boolean isAttribute_p) {
     match = match_p;
     feature = feature_p;
+    attribute = isAttribute_p;
   }
 
   /**
@@ -92,10 +124,33 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getMatch() {
-    if (match != null && match.eIsProxy()) {
+  public boolean isAttribute() {
+    return attribute;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setAttribute(boolean newAttribute) {
+    boolean oldAttribute = attribute;
+    attribute = newAttribute;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffuidataPackage.MATCH_AND_FEATURE__ATTRIBUTE, oldAttribute,
+          attribute));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IMatch<?> getMatch() {
+    if (match != null && ((EObject) match).eIsProxy()) {
       InternalEObject oldMatch = (InternalEObject) match;
-      match = (EMatch) eResolveProxy(oldMatch);
+      match = (IMatch<?>) eResolveProxy(oldMatch);
       if (match != oldMatch) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -110,7 +165,7 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch basicGetMatch() {
+  public IMatch<?> basicGetMatch() {
     return match;
   }
 
@@ -119,17 +174,7 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EStructuralFeature getFeature() {
-    if (feature != null && feature.eIsProxy()) {
-      InternalEObject oldFeature = (InternalEObject) feature;
-      feature = (EStructuralFeature) eResolveProxy(oldFeature);
-      if (feature != oldFeature) {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffuidataPackage.MATCH_AND_FEATURE__FEATURE, oldFeature,
-              feature));
-      }
-    }
+  public Object getFeature() {
     return feature;
   }
 
@@ -138,8 +183,52 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EStructuralFeature basicGetFeature() {
-    return feature;
+  public void setFeature(Object newFeature) {
+    Object oldFeature = feature;
+    feature = newFeature;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffuidataPackage.MATCH_AND_FEATURE__FEATURE, oldFeature, feature));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+    switch (featureID) {
+    case DiffuidataPackage.MATCH_AND_FEATURE__ATTRIBUTE:
+      return isAttribute();
+    case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
+      if (resolve)
+        return getMatch();
+      return basicGetMatch();
+    case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
+      return getFeature();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public void eSet(int featureID, Object newValue) {
+    switch (featureID) {
+    case DiffuidataPackage.MATCH_AND_FEATURE__ATTRIBUTE:
+      setAttribute((Boolean) newValue);
+      return;
+    case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
+      setFeature(newValue);
+      return;
+    }
+    super.eSet(featureID, newValue);
   }
 
   /**
@@ -148,18 +237,16 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * @generated
    */
   @Override
-  public Object eGet(int featureID, boolean resolve, boolean coreType) {
+  public void eUnset(int featureID) {
     switch (featureID) {
-    case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
-      if (resolve)
-        return getMatch();
-      return basicGetMatch();
+    case DiffuidataPackage.MATCH_AND_FEATURE__ATTRIBUTE:
+      setAttribute(ATTRIBUTE_EDEFAULT);
+      return;
     case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
-      if (resolve)
-        return getFeature();
-      return basicGetFeature();
+      setFeature(FEATURE_EDEFAULT);
+      return;
     }
-    return super.eGet(featureID, resolve, coreType);
+    super.eUnset(featureID);
   }
 
   /**
@@ -170,12 +257,34 @@ public class MatchAndFeatureImpl extends EObjectImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
+    case DiffuidataPackage.MATCH_AND_FEATURE__ATTRIBUTE:
+      return attribute != ATTRIBUTE_EDEFAULT;
     case DiffuidataPackage.MATCH_AND_FEATURE__MATCH:
       return match != null;
     case DiffuidataPackage.MATCH_AND_FEATURE__FEATURE:
-      return feature != null;
+      return FEATURE_EDEFAULT == null ? feature != null
+          : !FEATURE_EDEFAULT.equals(feature);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (attribute: "); //$NON-NLS-1$
+    result.append(attribute);
+    result.append(", feature: "); //$NON-NLS-1$
+    result.append(feature);
+    result.append(')');
+    return result.toString();
   }
 
 } //MatchAndFeatureImpl

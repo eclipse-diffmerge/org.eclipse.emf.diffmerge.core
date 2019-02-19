@@ -14,21 +14,22 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
+import org.eclipse.emf.ecore.EObject;
 
 
 /**
  * Data for ConfigureComparisonDialog.
  * @author Olivier Constant
  */
-public class ComparisonConfiguration implements IComparisonConfiguration,
+public class ComparisonConfiguration implements IComparisonConfiguration<EObject>,
 IComparisonConfigurator.Provider {
   
   /** Whether IDs must be remembered */
@@ -59,7 +60,7 @@ IComparisonConfigurator.Provider {
     _diffPolicy = null;
     _mergePolicy = null;
     // Match policy
-    IMatchPolicy matchPolicy = comparisonMethod_p.getMatchPolicy();
+    IMatchPolicy<EObject> matchPolicy = comparisonMethod_p.getMatchPolicy();
     _keepMatchIDs = (matchPolicy == null)? false: matchPolicy.keepMatchIDs();
     if (matchPolicy instanceof ConfigurableMatchPolicy) {
       try {
@@ -69,7 +70,7 @@ IComparisonConfigurator.Provider {
       }
     }
     // Diff policy
-    IDiffPolicy diffPolicy = comparisonMethod_p.getDiffPolicy();
+    IDiffPolicy<EObject> diffPolicy = comparisonMethod_p.getDiffPolicy();
     if (diffPolicy instanceof ConfigurableDiffPolicy) {
       try {
         _diffPolicy = ((ConfigurableDiffPolicy)diffPolicy).clone();
@@ -78,7 +79,7 @@ IComparisonConfigurator.Provider {
       }
     }
     // Merge policy
-    IMergePolicy mergePolicy = comparisonMethod_p.getMergePolicy();
+    IMergePolicy<EObject> mergePolicy = comparisonMethod_p.getMergePolicy();
     if (mergePolicy instanceof ConfigurableMergePolicy) {
       try {
         _mergePolicy = ((ConfigurableMergePolicy)mergePolicy).clone();
@@ -105,7 +106,7 @@ IComparisonConfigurator.Provider {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator.Provider#getConfigurators()
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator.Provider#getConfigurators()
    */
   public List<IComparisonConfigurator> getConfigurators() {
     return _configurators;
@@ -128,7 +129,7 @@ IComparisonConfigurator.Provider {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration#getMergePolicy()
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration#getMergePolicy()
    */
   public ConfigurableMergePolicy getMergePolicy() {
     return _mergePolicy;

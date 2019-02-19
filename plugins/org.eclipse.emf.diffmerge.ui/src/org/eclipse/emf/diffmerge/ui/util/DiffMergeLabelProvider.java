@@ -12,21 +12,20 @@
 package org.eclipse.emf.diffmerge.ui.util;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
-import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -68,14 +67,14 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param destination_p a non-null role which is TARGET or REFERENCE
    * @return a potentially null image
    */
-  public Image getDifferenceImage(IDifference difference_p, Role destination_p) {
+  public Image getDifferenceImage(IDifference<?> difference_p, Role destination_p) {
     Image result = null;
     if (difference_p instanceof IPresenceDifference) {
       ImageID imageId;
-      if (difference_p instanceof IValuePresence && ((IValuePresence)difference_p).isOrder()) {
+      if (difference_p instanceof IValuePresence && ((IValuePresence<?>)difference_p).isOrder()) {
         imageId = ImageID.SORT;
       } else {
-        Role presenceSide = ((IPresenceDifference)difference_p).getPresenceRole();
+        Role presenceSide = ((IPresenceDifference<?>)difference_p).getPresenceRole();
         if (presenceSide == destination_p)
           imageId = ImageID.DELETE;
         else
@@ -93,23 +92,23 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param domain_p an optional editing domain for retrieving labels on deleted elements
    * @return a potentially null string
    */
-  public String getDifferenceText(IDifference difference_p, Role destination_p,
+  public String getDifferenceText(IDifference<?> difference_p, Role destination_p,
       EditingDomain domain_p) {
     String result = difference_p.toString();
     if (difference_p instanceof IPresenceDifference) {
       if (difference_p instanceof IElementPresence) {
-        Role presenceSide = ((IPresenceDifference)difference_p).getPresenceRole();
+        Role presenceSide = ((IPresenceDifference<?>)difference_p).getPresenceRole();
         boolean added = presenceSide != destination_p;
         if (added) {
           result = getElementAdditionText(
-              (IElementPresence)difference_p, destination_p, domain_p);
+              (IElementPresence<?>)difference_p, destination_p, domain_p);
         } else {
           result = getElementRemovalText(
-              (IElementPresence)difference_p, destination_p, domain_p);
+              (IElementPresence<?>)difference_p, destination_p, domain_p);
         }
       } else if (difference_p instanceof IValuePresence) {
         result = getValuePresenceText(
-            (IValuePresence)difference_p, destination_p, domain_p);
+            (IValuePresence<?>)difference_p, destination_p, domain_p);
       }
     }
     return result;
@@ -122,38 +121,40 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param domain_p an optional editing domain for retrieving labels on deleted elements
    * @return a potentially null string
    */
-  protected String getValuePresenceText(IValuePresence presence_p,
+  protected String getValuePresenceText(IValuePresence<?> presence_p,
       Role destination_p, EditingDomain domain_p) {
     String result;
     boolean added = presence_p.getPresenceRole() != destination_p;
-    EStructuralFeature feature = presence_p.getFeature();
+    Object feature = presence_p.getFeature();
     final String QUOTE = "'"; //$NON-NLS-1$
     final String SPACE = " "; //$NON-NLS-1$
-    String featureName = feature != null? QUOTE + feature.getName() + QUOTE:
+    String featureName = feature != null? QUOTE + getText(feature) + QUOTE:
       Messages.EMFDiffMergeLabelProvider_RootContainment;
     if (presence_p instanceof IReferenceValuePresence &&
-        ((IReferenceValuePresence)presence_p).isOwnership()) {
+        ((IReferenceValuePresence<?>)presence_p).isOwnership()) {
       String containerText =
         getMatchText(presence_p.getElementMatch(), destination_p, domain_p);
-      if (added)
+      if (added) {
         result = String.format(
             Messages.EMFDiffMergeLabelProvider_MoveInto, containerText, featureName);
-      else
+      } else {
         result = String.format(
             Messages.EMFDiffMergeLabelProvider_MoveFrom, containerText, featureName);
+      }
     } else {
       String featureKind = feature instanceof EAttribute?
           Messages.EMFDiffMergeLabelProvider_Attribute:
             Messages.EMFDiffMergeLabelProvider_Reference;
       String operationKind;
       if (presence_p.isOrder()) {
-        if (added)
+        if (added) {
           operationKind = Messages.EMFDiffMergeLabelProvider_OrderAdd;
-        else
+        } else {
           operationKind = Messages.EMFDiffMergeLabelProvider_OrderDel;
+        }
       } else {
-        IMatch matchValue = (presence_p instanceof IReferenceValuePresence)?
-            ((IReferenceValuePresence)presence_p).getValueMatch(): null;
+        IMatch<?> matchValue = (presence_p instanceof IReferenceValuePresence)?
+            ((IReferenceValuePresence<?>)presence_p).getValueMatch(): null;
         String valueText = (matchValue != null)?
             getMatchText(matchValue, destination_p, domain_p):
               getText(presence_p.getValue());
@@ -172,26 +173,29 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param domain_p an optional editing domain for retrieving labels on deleted elements
    * @return a potentially null string
    */
-  protected String getElementAdditionText(IElementPresence presence_p,
+  protected String getElementAdditionText(IElementPresence<?> presence_p,
       Role destination_p, EditingDomain domain_p) {
     String result;
     String featureName = null;
     String containerText = null;
-    IMatch elementMatch = presence_p.getElementMatch();
+    IMatch<?> elementMatch = presence_p.getElementMatch();
     if (elementMatch != null) {
-      IReferenceValuePresence rvp =
+      IReferenceValuePresence<?> rvp =
           elementMatch.getOwnershipDifference(presence_p.getPresenceRole());
       if (rvp != null) {
-        featureName = rvp.getFeature().getName();
+        featureName = getText(rvp.getFeature());
         containerText = getMatchText(rvp.getElementMatch(), destination_p, domain_p);
       }
     }
     if (featureName == null) {
       // Trying at lower, more technical level
-      EReference containment = presence_p.getElement().eContainmentFeature();
-      IMatch ownerMatch = presence_p.getOwnerMatch();
+      ITreeDataScope<?> scope = presence_p.getComparison().getScope(destination_p.opposite());
+      @SuppressWarnings("unchecked")
+      Object containment = (scope == null)? null:
+        ((ITreeDataScope<Object>)scope).getContainment(presence_p.getElement());
+      IMatch<?> ownerMatch = presence_p.getOwnerMatch();
       if (containment != null && ownerMatch != null) {
-        featureName = containment.getName();
+        featureName = getText(containment);
         containerText = getMatchText(ownerMatch, destination_p, domain_p);
       }
     }
@@ -211,7 +215,7 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param domain_p an optional editing domain for retrieving labels on deleted elements
    * @return a potentially null string
    */
-  protected String getElementRemovalText(IElementPresence presence_p,
+  protected String getElementRemovalText(IElementPresence<?> presence_p,
       Role destination_p, EditingDomain domain_p) {
     return Messages.EMFDiffMergeLabelProvider_Deletion;
   }
@@ -222,8 +226,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param destination_p a non-null role which is TARGET or REFERENCE
    * @return a non-null element
    */
-  protected EObject getElementToRepresent(IMatch match_p, Role destination_p) {
-    EObject result;
+  protected Object getElementToRepresent(IMatch<?> match_p, Role destination_p) {
+    Object result;
     if (match_p.getUncoveredRole() == destination_p)
       result = match_p.get(destination_p.opposite());
     else
@@ -252,9 +256,10 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param domain_p an optional editing domain for retrieving labels on deleted elements
    * @return a potentially null string
    */
-  public String getMatchText(IMatch match_p, Role destination_p, EditingDomain domain_p) {
-    EObject toRepresent = getElementToRepresent(match_p, destination_p);
-    return getText(toRepresent, domain_p);
+  public String getMatchText(IMatch<?> match_p, Role destination_p, EditingDomain domain_p) {
+    Object toRepresent = getElementToRepresent(match_p, destination_p);
+    return toRepresent instanceof EObject? getText((EObject)toRepresent, domain_p):
+      getText(toRepresent);
   }
   
   /**
@@ -263,7 +268,7 @@ public class DiffMergeLabelProvider extends LabelProvider {
    * @param destination_p a non-null role which is TARGET or REFERENCE
    * @return a potentially null image
    */
-  public Image getMatchImage(IMatch match_p, Role destination_p) {
+  public Image getMatchImage(IMatch<?> match_p, Role destination_p) {
     return getImage(getElementToRepresent(match_p, destination_p));
   }
   
@@ -274,21 +279,24 @@ public class DiffMergeLabelProvider extends LabelProvider {
   public String getText(Object element_p) {
     Object element = element_p;
     String result;
-    if (element instanceof IModelScope)
+    if (element instanceof IModelScope) {
       element = ((IModelScope)element).getOriginator();
-    if (element instanceof EObject)
-      result = UIUtil.getEMFText(element);
-    else if (element instanceof Resource)
-      result = UIUtil.simplifyURI(((Resource)element).getURI());
-    else if (element instanceof IFile)
-      result = ((IFile)element).getFullPath().toPortableString();
-    else {
-      result = super.getText(element);
-      if (element_p instanceof String)
-        result = "\"" + result + "\""; //$NON-NLS-1$ //$NON-NLS-2$
     }
-    if (result == null && element_p != null)
+    if (element instanceof EObject) {
+      result = UIUtil.getEMFText(element);
+    } else if (element instanceof Resource) {
+      result = UIUtil.simplifyURI(((Resource)element).getURI());
+    } else if (element instanceof IFile) {
+      result = ((IFile)element).getFullPath().toPortableString();
+    } else {
+      result = super.getText(element);
+      if (element_p instanceof String) {
+        result = "\"" + result + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      }
+    }
+    if (result == null && element_p != null) {
       result = element_p.toString();
+    }
     return result;
   }
   
@@ -304,11 +312,13 @@ public class DiffMergeLabelProvider extends LabelProvider {
       AdapterFactoryEditingDomain domain = (AdapterFactoryEditingDomain)domain_p;
       IItemLabelProvider provider = (IItemLabelProvider)domain.getAdapterFactory().adapt(
           element_p, IItemLabelProvider.class);
-      if (provider != null)
+      if (provider != null) {
         result = provider.getText(element_p);
+      }
     }
-    if (result == null)
+    if (result == null) {
       result = getText(element_p);
+    }
     return result;
   }
   

@@ -41,26 +41,12 @@ import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 public interface IDataScope<E> extends IRawDataScope<E> {
   
   /**
-   * Return the set of attributes which are applicable to the given element.
-   * @param element_p a non-null element
-   * @return a non-null, potentially empty, unmodifiable ordered set
-   */
-  List<?> getAttributes(E element_p);
-  
-  /**
    * Return the values of the given element w.r.t. the give attribute/
    * @param element_p a non-null element
    * @param attribute_p a non-null attribute which belongs to getAttributes(element_p)
    * @return a non-null, potentially empty, unmodifiable ordered bag
    */
   List<?> getAttributeValues(E element_p, Object attribute_p);
-  
-  /**
-   * Return the set of references which are applicable to the given element.
-   * @param element_p a non-null element which belongs to getReferences(element_p)
-   * @return a non-null, potentially empty, unmodifiable ordered set
-   */
-  List<?> getReferences(E element_p);
   
   /**
    * Return the values of the given element w.r.t. the given reference.

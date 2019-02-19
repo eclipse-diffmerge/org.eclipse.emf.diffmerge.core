@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -29,11 +28,11 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEAttributeValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EValuePresence"
+ * @model
  * @generated
  */
 public interface EAttributeValuePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<EObject, EAttribute, EReference, IEditableModelScope>,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<EObject, EAttribute, EReference>,
     EValuePresence {
 
   /**

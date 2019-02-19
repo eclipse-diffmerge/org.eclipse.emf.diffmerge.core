@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -23,11 +22,19 @@ import org.eclipse.emf.ecore.EReference;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementPresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
+ * @model
  * @generated
  */
 public interface EElementPresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference, IEditableModelScope>,
-    EComparisonElement {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference>,
+    EElementRelativePresence {
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation" required="true"
+   * @generated
+   */
+  EMatch getOwnerMatch();
   // Nothing needed
 } // EElementPresence

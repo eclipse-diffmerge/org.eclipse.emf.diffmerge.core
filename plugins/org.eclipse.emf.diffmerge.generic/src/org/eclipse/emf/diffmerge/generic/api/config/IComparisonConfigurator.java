@@ -15,12 +15,9 @@ import java.util.List;
 
 /**
  * A configurator for comparisons.
- *
- * @param <E> The type of data elements.
- * 
  * @author Olivier Constant
  */
-public interface IComparisonConfigurator<E> extends IConfigurationElement {
+public interface IComparisonConfigurator extends IConfigurationElement {
   
   /**
    * Change the given configuration so that it complies with this configurator
@@ -28,25 +25,25 @@ public interface IComparisonConfigurator<E> extends IConfigurationElement {
    * @param configuration_p a non-null configuration
    * @return whether the operation fully succeeded
    */
-  boolean apply(IComparisonConfiguration<E> configuration_p);
+  boolean apply(IComparisonConfiguration<?> configuration_p);
   
   /**
    * Return whether the given configuration complies with this configurator,
    * i.e., applying the configurator would not make any change to the configuration
    * @param configuration_p a non-null configuration
    */
-  boolean isCompliant(IComparisonConfiguration<E> configuration_p);
+  boolean isCompliant(IComparisonConfiguration<?> configuration_p);
   
   
   /**
    * A provider for comparison configurators.
    */
-  public interface Provider<E> {
+  public interface Provider {
     /**
      * Return the provided configurators
      * @return a non-null, potentially empty ordered set
      */
-    List<IComparisonConfigurator<E>> getConfigurators();
+    List<IComparisonConfigurator> getConfigurators();
   }
   
 }

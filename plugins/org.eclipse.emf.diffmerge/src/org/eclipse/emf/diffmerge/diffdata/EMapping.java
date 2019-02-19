@@ -12,7 +12,6 @@
 package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -26,11 +25,11 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMapping()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
+ * @model
  * @generated
  */
 public interface EMapping extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<EObject, EAttribute, EReference, IEditableModelScope>,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<EObject, EAttribute, EReference>,
     EComparisonElement {
   /**
    * <!-- begin-user-doc -->
@@ -56,5 +55,13 @@ public interface EMapping extends
    * @generated
    */
   EMatch getMatchFor(EObject element, Role role);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true" elementRequired="true"
+   * @generated
+   */
+  boolean removeDependencies(Role role, EObject element);
 
 } // EMapping

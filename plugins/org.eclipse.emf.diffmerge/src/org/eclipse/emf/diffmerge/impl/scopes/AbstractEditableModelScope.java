@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -143,9 +142,7 @@ implements IEditableModelScope {
    */
   protected boolean setExtrinsicID(EObject element_p, Object id_p) {
     // Default implementation only covers XML/XMI Resources
-    boolean result = false;
-    if (id_p instanceof String)
-      result = ModelImplUtil.setXMLID(element_p, (String)id_p);
+    boolean result = getScopePolicy().setID(element_p, id_p, false);
     return result;
   }
   

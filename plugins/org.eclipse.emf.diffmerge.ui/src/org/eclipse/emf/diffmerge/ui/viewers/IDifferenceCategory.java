@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 
 
 /**
@@ -37,7 +37,7 @@ public interface IDifferenceCategory extends IDifferenceCategoryItem, Cloneable 
    * @param difference_p a non-null difference
    * @param node_p a non-null diff node
    */
-  boolean covers(IDifference difference_p, EMFDiffNode node_p);
+  boolean covers(IDifference<?> difference_p, EMFDiffNode node_p);
   
   /**
    * Return an identifier for this category, which must be unique and stable at instance level

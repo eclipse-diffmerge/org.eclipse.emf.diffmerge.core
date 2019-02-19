@@ -12,7 +12,6 @@
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -39,7 +38,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class EAttributeValuePresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<EObject, EAttribute, EReference>
     implements EAttributeValuePresence {
   /**
    * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' reference.
@@ -135,6 +134,15 @@ public class EAttributeValuePresenceImpl extends
   @Override
   public EAttribute getFeature() {
     return getAttribute();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @generated NOT
+   */
+  @Override
+  public EMatch getElementMatch() {
+    return (EMatch) super.getElementMatch();
   }
 
   /**

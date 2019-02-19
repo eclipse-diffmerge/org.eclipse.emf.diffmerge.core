@@ -11,8 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -37,13 +38,13 @@ public class ConflictCategory extends AbstractDifferenceCategory {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.generic.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
-  public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
+  public boolean covers(IDifference<?> difference_p, EMFDiffNode node_p) {
     boolean result = difference_p.isConflicting();
-    if (!result && difference_p instanceof IReferenceValuePresence) {
-      IReferenceValuePresence rvp = (IReferenceValuePresence)difference_p;
-      IReferenceValuePresence peer = rvp.getSymmetricalOwnership();
+    if (!result && difference_p instanceof IReferenceValuePresence<?>) {
+      IReferenceValuePresence<?> rvp = (EReferenceValuePresence)difference_p;
+      IReferenceValuePresence<?> peer = rvp.getSymmetricalOwnership();
       result = !rvp.isAlignedWithAncestor() && peer != null && !peer.isAlignedWithAncestor();
     }
     return result;

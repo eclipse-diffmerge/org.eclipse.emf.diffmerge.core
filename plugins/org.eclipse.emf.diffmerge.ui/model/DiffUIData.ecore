@@ -4,44 +4,86 @@
     nsPrefix="org.eclipse.emf.diffmerge.ui">
   <eClassifiers xsi:type="ecore:EClass" name="UIComparison" eSuperTypes="#//IDisposable">
     <eOperations name="clear"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="actualComparison" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EComparison"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actualComparison" lowerBound="1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EComparison">
+        <eTypeArguments/>
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="lastActionSelection" eType="#//ComparisonSelection"
-        containment="true"/>
+        transient="true" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComparisonSelection" eSuperTypes="#//IStructuredSelection">
-    <eOperations name="asDifferencesToMerge" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMergeableDifference"/>
-    <eOperations name="asFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    <eOperations name="asDifferencesToMerge" upperBound="-1">
+      <eGenericType eClassifier="#//IDifference">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="asFeature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     <eOperations name="asMatchAndFeature" eType="#//MatchAndFeature"/>
-    <eOperations name="asMatch" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"/>
-    <eOperations name="asMatches" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"/>
+    <eOperations name="asMatch">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="asMatches" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
     <eOperations name="asMatchPath" eType="#//TreePath"/>
-    <eOperations name="asValuePresence" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EValuePresence"/>
-    <eOperations name="asValuePresences" upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EValuePresence"/>
+    <eOperations name="asValuePresence">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="asValuePresences" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
     <eOperations name="dispose"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="diffNode" lowerBound="1"
         eType="#//EMFDiffNode" changeable="false" transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedMatches" upperBound="-1"
-        eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"
-        changeable="false"/>
+        changeable="false">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedMatchAndFeature"
         eType="#//MatchAndFeature" changeable="false" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedTreePath" upperBound="-1"
-        eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"
-        changeable="false"/>
+        changeable="false">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedValuePresences"
-        upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EValuePresence"
-        changeable="false"/>
+        upperBound="-1" changeable="false">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatchAndFeature">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="match" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"
-        changeable="false"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"
-        changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" lowerBound="1" changeable="false">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MatchToNbEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.ecore#//EMatch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EIntegerObject"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="TreePath" instanceClassName="org.eclipse.jface.viewers.TreePath"/>
@@ -51,4 +93,8 @@
       abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EDataType" name="EMFDiffNode" instanceClassName="org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode"
       serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IDifference" instanceClassName="org.eclipse.emf.diffmerge.generic.api.diff.IDifference"
+      abstract="true" interface="true">
+    <eTypeParameters name="E"/>
+  </eClassifiers>
 </ecore:EPackage>

@@ -14,8 +14,8 @@ package org.eclipse.emf.diffmerge.ui.sirius;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -56,13 +56,13 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.generic.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
-  public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
+  public boolean covers(IDifference<?> difference_p, EMFDiffNode node_p) {
     boolean result = false;
     if (difference_p instanceof IValuePresence) {
-      IValuePresence vp = (IValuePresence)difference_p;
-      result = isSiriusTechnicalFeature(vp.getFeature());
+      IValuePresence<?> vp = (IValuePresence<?>)difference_p;
+      result = isSiriusTechnicalFeature((EStructuralFeature)vp.getFeature());
     }
     return result;
   }

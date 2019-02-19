@@ -27,9 +27,9 @@ import org.eclipse.compare.IPropertyChangeNotifier;
 import org.eclipse.compare.contentmergeviewer.IFlushable;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.connector.core.EMFDiffMergeCoreConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.core.Messages;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
@@ -193,7 +193,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
     EMFDiffMergeEditorInput result = null;
     ComparisonSetup setup = createSetup(manager_p, left_p, right_p, ancestor_p);
     if (setup != null) {
-      IComparisonMethod method = setup.getComparisonMethod();
+      IComparisonMethod<?> method = setup.getComparisonMethod();
       if (method != null) {
         if (method.isConfigurable()) {
           // Setting comparison method to gconf configuration if applicable

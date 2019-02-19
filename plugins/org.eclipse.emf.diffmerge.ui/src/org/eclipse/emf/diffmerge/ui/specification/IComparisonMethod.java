@@ -11,10 +11,10 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.specification;
 
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -29,9 +29,12 @@ import org.eclipse.ui.IActionBars;
 /**
  * A comparison method defines what and how to compare.
  * @see DefaultComparisonMethod
+ * 
+ * @param <E> The type of data elements to compare.
+ *
  * @author Olivier Constant
  */
-public interface IComparisonMethod extends IComparisonConfiguration,
+public interface IComparisonMethod<E> extends IComparisonConfiguration<E>,
 IEditingDomainProvider, IDisposable {
   
   /**
@@ -56,11 +59,11 @@ IEditingDomainProvider, IDisposable {
    * @param targetScope_p the non-null model scope playing the TARGET comparison role
    * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
    * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
-   * @see org.eclipse.emf.diffmerge.api.Role
+   * @see org.eclipse.emf.diffmerge.generic.api.Role
    * @return a non-null comparison
    */
-  EComparison createComparison(IEditableModelScope targetScope_p,
-      IEditableModelScope referenceScope_p, IEditableModelScope ancestorScope_p);
+  EComparison<E,?,?> createComparison(IEditableTreeDataScope<E> targetScope_p,
+      IEditableTreeDataScope<E> referenceScope_p, IEditableTreeDataScope<E> ancestorScope_p);
   
   /**
    * Return the editing domain in which comparison must take place, if any.
@@ -74,7 +77,7 @@ IEditingDomainProvider, IDisposable {
    * Return the factory that created this comparison method, if any and if known
    * @return a potentially null object
    */
-  IComparisonMethodFactory getFactory();
+  IComparisonMethodFactory<E> getFactory();
   
   /**
    * Return the role that corresponds to the left-hand side

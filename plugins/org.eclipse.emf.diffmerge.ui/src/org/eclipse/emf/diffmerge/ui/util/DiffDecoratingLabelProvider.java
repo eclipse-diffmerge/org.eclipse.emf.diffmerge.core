@@ -14,14 +14,15 @@ package org.eclipse.emf.diffmerge.ui.util;
 import java.util.regex.Matcher;
 
 import org.eclipse.emf.common.ui.viewer.IUndecoratingLabelProvider;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IPureMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IPureMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -29,7 +30,6 @@ import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.viewers.CategoryManager;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreePathLabelProvider;
@@ -207,20 +207,20 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
       if (node != null) {
         CategoryManager catManager = node.getCategoryManager(); // Non-null
         if (element_p instanceof IMatch &&
-            catManager.isComparisonPart((IMatch)element_p)) {
+            catManager.isComparisonPart((IMatch<?>)element_p)) {
           // Match
-          result = catManager.getDifferenceKind((IMatch)element_p);
+          result = catManager.getDifferenceKind((IMatch<?>)element_p);
         } else if (element_p instanceof MatchAndFeature &&
             catManager.isComparisonPart(((MatchAndFeature)element_p).getMatch())) {
           // MatchAndFeature
           result = catManager.getDifferenceKind((MatchAndFeature)element_p);
         } else if (element_p instanceof IDifference &&
-            catManager.isComparisonPart((IDifference)element_p)) {
+            catManager.isComparisonPart((IDifference<?>)element_p)) {
           // Difference
-          result = catManager.getDifferenceKind((IDifference)element_p);
-        } else if (element_p instanceof EObject && getSide() != null) {
+          result = catManager.getDifferenceKind((IDifference<?>)element_p);
+        } else if (getSide() != null) {
           // Element compared
-          result = catManager.getDifferenceKind((EObject)element_p, getSide());
+          result = catManager.getDifferenceKind(element_p, getSide());
         }
       }
     }
@@ -235,11 +235,11 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   protected Object doGetElementToRepresent(Object element_p) {
     Object result = element_p;
     if (element_p instanceof IMatch) {
-      result = getElementToRepresentFromMatch((IMatch)element_p);
+      result = getElementToRepresentFromMatch((IMatch<?>)element_p);
     } else if (element_p instanceof MatchAndFeature) {
       result = ((MatchAndFeature)element_p).getFeature();
     } else if (element_p instanceof IValuePresence) {
-      IValuePresence valuePresence = (IValuePresence)element_p;
+      IValuePresence<?> valuePresence = (IValuePresence<?>)element_p;
       result = getElementToRepresent(
           isFromValue(valuePresence)? valuePresence.getElementMatch():
             valuePresence.getValue());
@@ -260,6 +260,26 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
         getDifferenceKind(element_p),
         getSide(),
         getDiffNode());
+    return result;
+  }
+  
+  /**
+   * Return the container of the given element on the given side
+   * @param element_p a non-null element
+   * @param side_p a non-null role
+   * @return a potentially null object
+   */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  protected Object getContainer(Object element_p, Role side_p) {
+    Object result = null;
+    EMFDiffNode node = getDiffNode();
+    if (node != null) {
+      ITreeDataScope<?> scope =
+          node.getActualComparison().getScope(side_p);
+      if (scope != null) {
+        result = ((ITreeDataScope)scope).getContainer(element_p);
+      }
+    }
     return result;
   }
   
@@ -324,7 +344,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @param match_p a non-null match
    * @return a non-null object
    */
-  protected EObject getElementToRepresentFromMatch(IMatch match_p) {
+  protected Object getElementToRepresentFromMatch(IMatch<?> match_p) {
     Role sideRole = getSide();
     if (sideRole == null) {
       EMFDiffNode node = getDiffNode();
@@ -335,7 +355,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
     if (sideRole == null) {
       sideRole = Role.TARGET; // By default
     }
-    EObject result;
+    Object result;
     if (match_p.getUncoveredRole() == sideRole) {
       result = match_p.get(sideRole.opposite());
     } else {
@@ -394,8 +414,8 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   protected String getMatchIDText(Object element_p) {
     String result = null;
     if (element_p instanceof IPureMatch) {
-      IMatchPolicy policy = getMatchPolicy();
-      Object matchID = ((IPureMatch)element_p).getMatchID();
+      IMatchPolicy<?> policy = getMatchPolicy();
+      Object matchID = ((IPureMatch<?>)element_p).getMatchID();
       String matchIDText = null;
       if (matchID != null) {
         matchIDText = matchID.toString();
@@ -421,11 +441,11 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * Return the match policy that was used for the current comparison, if any
    * @return a potentially null match policy
    */
-  protected IMatchPolicy getMatchPolicy() {
-    IMatchPolicy result = null;
+  protected IMatchPolicy<?> getMatchPolicy() {
+    IMatchPolicy<?> result = null;
     EMFDiffNode node = getDiffNode();
     if (node != null) {
-      IComparison comparison = node.getActualComparison();
+      IComparison<?> comparison = node.getActualComparison();
       if (comparison != null) {
         result = comparison.getLastMatchPolicy();
       }
@@ -572,7 +592,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
   public StyledString getUndecoratedStyledText(Object element_p) {
     StyledString result;
     if (element_p instanceof IValuePresence) {
-      result = getUndecoratedStyledTextFromValuePresence((IValuePresence)element_p);
+      result = getUndecoratedStyledTextFromValuePresence((IValuePresence<?>)element_p);
     } else {
       Object elementToRepresent = getElementToRepresent(element_p);
       result = (elementToRepresent == element_p)?
@@ -590,11 +610,11 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @return a potentially null styled string
    */
   protected StyledString getUndecoratedStyledTextFromHolder(String valueLabel_p,
-      IValuePresence valuePresence_p) {
+      IValuePresence<?> valuePresence_p) {
     StyledString result = new StyledString(valueLabel_p);
     if (valuePresence_p instanceof IReferenceValuePresence) {
-      EObject value = ((IReferenceValuePresence)valuePresence_p).getValue();
-      EObject container = value.eContainer();
+      Object value = ((IReferenceValuePresence<?>)valuePresence_p).getValue();
+      Object container = getContainer(value, valuePresence_p.getPresenceRole());
       String containerLabel = (container == null)? null:
         getUndecoratedText(container);
       if (containerLabel != null) {
@@ -614,9 +634,9 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @return a potentially null styled string
    */
   protected StyledString getUndecoratedStyledTextFromValue(String holderLabel_p,
-      IValuePresence valuePresence_p) {
+      IValuePresence<?> valuePresence_p) {
     StyledString result = new StyledString(holderLabel_p);
-    EStructuralFeature feature = valuePresence_p.getFeature();
+    Object feature = valuePresence_p.getFeature();
     if (feature != null) {
       String featureText = getUndecoratedText(feature);
       if (featureText != null) {
@@ -634,7 +654,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @return a potentially null styled string
    */
   protected StyledString getUndecoratedStyledTextFromValuePresence(
-      IValuePresence valuePresence_p) {
+      IValuePresence<?> valuePresence_p) {
     StyledString result;
     String base = getUndecoratedText(valuePresence_p);
     result = isFromValue(valuePresence_p)?
@@ -678,7 +698,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * rather than the value
    * @param valuePresence_p a non-null object
    */
-  protected boolean isFromValue(IValuePresence valuePresence_p) {
+  protected boolean isFromValue(IValuePresence<?> valuePresence_p) {
     // Override if needed
     return false;
   }
@@ -688,7 +708,7 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @param element_p a potentially null object
    */
   protected boolean isOrderDifference(Object element_p) {
-    return element_p instanceof IValuePresence && ((IValuePresence)element_p).isOrder();
+    return element_p instanceof IValuePresence && ((IValuePresence<?>)element_p).isOrder();
   }
   
   /**

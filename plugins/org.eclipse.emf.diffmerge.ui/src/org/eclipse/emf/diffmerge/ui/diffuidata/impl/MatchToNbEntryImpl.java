@@ -14,7 +14,7 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +38,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 @SuppressWarnings("hiding")
 public class MatchToNbEntryImpl extends EObjectImpl
-    implements BasicEMap.Entry<EMatch, Integer> {
+    implements BasicEMap.Entry<IMatch<?>, Integer> {
   /**
    * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
    * <!-- begin-user-doc -->
@@ -47,7 +47,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EMatch key;
+  protected IMatch<?> key;
 
   /**
    * The default value of the '{@link #getTypedValue() <em>Value</em>}' attribute.
@@ -93,10 +93,10 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getTypedKey() {
-    if (key != null && key.eIsProxy()) {
+  public IMatch<?> getTypedKey() {
+    if (key != null && ((EObject) key).eIsProxy()) {
       InternalEObject oldKey = (InternalEObject) key;
-      key = (EMatch) eResolveProxy(oldKey);
+      key = (IMatch<?>) eResolveProxy(oldKey);
       if (key != oldKey) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -111,7 +111,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch basicGetTypedKey() {
+  public IMatch<?> basicGetTypedKey() {
     return key;
   }
 
@@ -120,8 +120,8 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTypedKey(EMatch newKey) {
-    EMatch oldKey = key;
+  public void setTypedKey(IMatch<?> newKey) {
+    IMatch<?> oldKey = key;
     key = newKey;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -177,7 +177,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-      setTypedKey((EMatch) newValue);
+      setTypedKey((IMatch<?>) newValue);
       return;
     case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
       setTypedValue((Integer) newValue);
@@ -195,7 +195,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
   public void eUnset(int featureID) {
     switch (featureID) {
     case DiffuidataPackage.MATCH_TO_NB_ENTRY__KEY:
-      setTypedKey((EMatch) null);
+      setTypedKey((IMatch<?>) null);
       return;
     case DiffuidataPackage.MATCH_TO_NB_ENTRY__VALUE:
       setTypedValue(VALUE_EDEFAULT);
@@ -272,7 +272,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getKey() {
+  public IMatch<?> getKey() {
     return getTypedKey();
   }
 
@@ -281,7 +281,7 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setKey(EMatch key) {
+  public void setKey(IMatch<?> key) {
     setTypedKey(key);
   }
 
@@ -311,10 +311,10 @@ public class MatchToNbEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<EMatch, Integer> getEMap() {
+  public EMap<IMatch<?>, Integer> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<EMatch, Integer>) container.eGet(eContainmentFeature());
+        : (EMap<IMatch<?>, Integer>) container.eGet(eContainmentFeature());
   }
 
 } //MatchToNbEntryImpl

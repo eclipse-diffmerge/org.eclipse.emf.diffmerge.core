@@ -17,15 +17,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativeDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.emf.ecore.EObject;
 
 
 /**
@@ -36,7 +36,7 @@ import org.eclipse.emf.ecore.EObject;
 public class MergeLogEvent extends AbstractLogEvent {
   
   /** The non-null, potentially empty list of differences */
-  private final List<IDifference> _diffs;
+  private final List<IDifference<?>> _diffs;
   
   /** Whether merge is to the left */
   private final boolean _mergeToLeft;
@@ -48,7 +48,7 @@ public class MergeLogEvent extends AbstractLogEvent {
    * @param diff_p the non-null difference being merged
    * @param mergeToLeft_p whether the direction of the merge event is left
    */
-  public MergeLogEvent(EMFDiffNode node_p, IDifference diff_p, boolean mergeToLeft_p) {
+  public MergeLogEvent(EMFDiffNode node_p, IDifference<?> diff_p, boolean mergeToLeft_p) {
     this(node_p, Collections.singletonList(diff_p), mergeToLeft_p);
   }
   
@@ -59,17 +59,17 @@ public class MergeLogEvent extends AbstractLogEvent {
    * @param mergeToLeft_p whether the direction of the merge event is left
    */
   public MergeLogEvent(EMFDiffNode node_p,
-      Collection<? extends IDifference> diffs_p, boolean mergeToLeft_p) {
+      Collection<? extends IDifference<?>> diffs_p, boolean mergeToLeft_p) {
     super(node_p);
     _mergeToLeft = mergeToLeft_p;
-    _diffs = new FArrayList<IDifference>(diffs_p, null);
+    _diffs = new FArrayList<IDifference<?>>(diffs_p, null);
   }
   
   /**
    * Return the difference being merged
    * @return a non-null difference
    */
-  public List<IDifference> getDifferences() {
+  public List<IDifference<?>> getDifferences() {
     return Collections.unmodifiableList(_diffs);
   }
   
@@ -82,26 +82,31 @@ public class MergeLogEvent extends AbstractLogEvent {
     EMFDiffNode node = getDiffNode();
     Role destination = node.getRoleForSide(isToLeft());
     String destinationName = isToLeft()? "Left": "Right";
-    for (IDifference difference : getDifferences()) {
+    for (IDifference<?> difference : getDifferences()) {
       builder.append(LINE_SEP);
       if (difference instanceof IElementRelativeDifference) {
-        IMatch match;
+        IMatch<?> match;
         if (difference instanceof IReferenceValuePresence &&
-            ((IReferenceValuePresence)difference).isOwnership())
-          match = ((IReferenceValuePresence)difference).getValueMatch(); // Move
-        else
-          match = ((IElementRelativeDifference)difference).getElementMatch();
+            ((IReferenceValuePresence<?>)difference).isOwnership()) {
+          match = ((IReferenceValuePresence<?>)difference).getValueMatch(); // Move
+        } else {
+          match = ((IElementRelativeDifference<?>)difference).getElementMatch();
+        }
         if (match != null) {
-          EObject location = getNonNull(match, destination);
-          String type = location.eClass().getName();
-          String name = DiffMergeLabelProvider.getInstance().getMatchText(
+          Object location = getNonNull(match, destination);
+          ITreeDataScope<?> sourceScope =
+              getDiffNode().getActualComparison().getScope(destination.opposite());
+          @SuppressWarnings({ "unchecked", "rawtypes" })
+          Object type = ((IScopePolicy)sourceScope.getScopePolicy()).getType(location);
+          String typeName = getLabelProvider().getText(type);
+          String name = getLabelProvider().getMatchText(
               match, destination, node.getEditingDomain());
-          String id = getID(location);
+          Object id = getID(location, destination.opposite());
           builder.append('[');
           builder.append(destinationName);
           builder.append(']');
           builder.append(' ');
-          builder.append(type);
+          builder.append(typeName);
           builder.append(' ');
           builder.append('\'');
           builder.append(name);
@@ -112,7 +117,7 @@ public class MergeLogEvent extends AbstractLogEvent {
           builder.append(LINE_SEP);
         }
       }
-      String msg = DiffMergeLabelProvider.getInstance().getDifferenceText(
+      String msg = getLabelProvider().getDifferenceText(
           difference, destination, node.getEditingDomain());
       DiffMergeLogger.appendAtLevel(builder, 1, msg);
     }

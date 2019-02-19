@@ -16,19 +16,17 @@ import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHN
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchAndFeatureImpl;
 import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -54,13 +52,13 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
     /** The non-null comparison context */
     private final EMFDiffNode _context;
     /** The non-null specific part */
-    private final IMatch _match;
+    private final IMatch<?> _match;
     /**
      * Constructor
      * @param context_p a non-null object
      * @param match_p a non-null object
      */
-    public FeaturesInput(EMFDiffNode context_p, IMatch match_p) {
+    public FeaturesInput(EMFDiffNode context_p, IMatch<?> match_p) {
       _context = context_p;
       _match = match_p;
     }
@@ -88,7 +86,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * Return the match
      * @return a non-null object
      */
-    public IMatch getMatch() {
+    public IMatch<?> getMatch() {
       return _match;
     }
     /**
@@ -221,22 +219,46 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
    */
   protected class ContentProvider implements IStructuredContentProvider {
     /**
-     * Return a list of all the relevant features for the given match
+     * Return a list of all the relevant attributes for the given match
      * @param match_p a non-null match
      * @return a non-null, potentially empty, modifiable list
      */
-    private List<EStructuralFeature> getAllFeatures(IMatch match_p) {
-      Role drivingRole = getInput().getContext().getDrivingRole();
-      EObject element = match_p.get(drivingRole);
-      if (element == null)
-        element = match_p.get(drivingRole.opposite());
+    protected List<Object> getAllAttributes(IMatch<?> match_p) {
+      Role elementSide = getInput().getContext().getDrivingRole();
+      Object element = match_p.get(elementSide);
+      if (element == null) {
+        elementSide = elementSide.opposite();
+        element = match_p.get(elementSide);
+      }
       assert element != null; // An IMatch may not have null elements for both roles
-      EClass eClass = element.eClass();
-      List<EStructuralFeature> result = new ArrayList<EStructuralFeature>();
-      result.addAll(eClass.getEAllAttributes());
-      for (EReference ref : eClass.getEAllReferences()) {
-        if (qualifies(ref) || match_p.getOrderDifference(ref, drivingRole) != null)
-          result.add(ref);
+      ITreeDataScope<?> sideScope =
+          getInput().getContext().getActualComparison().getScope(elementSide);
+      @SuppressWarnings({ "unchecked", "rawtypes" })
+      List<Object> result = ((IScopePolicy)sideScope.getScopePolicy()).getAttributes(element);
+      return result;
+    }
+    /**
+     * Return a list of all the relevant references for the given match
+     * @param match_p a non-null match
+     * @return a non-null, potentially empty, modifiable list
+     */
+    protected List<Object> getAllReferences(IMatch<?> match_p) {
+      Role elementSide = getInput().getContext().getDrivingRole();
+      Object element = match_p.get(elementSide);
+      if (element == null) {
+        elementSide = elementSide.opposite();
+        element = match_p.get(elementSide);
+      }
+      assert element != null; // An IMatch may not have null elements for both roles
+      ITreeDataScope<?> sideScope =
+          getInput().getContext().getActualComparison().getScope(elementSide);
+      @SuppressWarnings({ "unchecked", "rawtypes" })
+      List<Object> candidates = ((IScopePolicy)sideScope.getScopePolicy()).getReferences(element);
+      List<Object> result = new LinkedList<Object>();
+      for (Object candidate : candidates) {
+        if (qualifies(candidate) || match_p.getReferenceOrderDifference(candidate, elementSide) != null) {
+          result.add(candidate);
+        }
       }
       return result;
     }
@@ -249,22 +271,37 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       if (input != null) {
         EMFDiffNode context = input.getContext();
         Role drivingRole = context.getDrivingRole();
-        IMatch match = ((FeaturesInput)inputElement_p).getMatch();
-        List<EStructuralFeature> features;
-        if (isDifferenceAgnostic())
-          features = getAllFeatures(match);
-        else {
-          features = new ArrayList<EStructuralFeature>(match.getAttributesWithDifferences());
-          for (EReference ref : match.getReferencesWithDifferences()) {
-            if (!context.isContainment(ref) || match.getOrderDifference(ref, drivingRole) != null)
-              features.add(ref);
+        IMatch<?> match = ((FeaturesInput)inputElement_p).getMatch();
+        result = new ArrayList<MatchAndFeature>();
+        // Attributes
+        List<Object> attributes;
+        if (isDifferenceAgnostic()) {
+          attributes = getAllAttributes(match);
+        } else {
+          attributes = new ArrayList<Object>(match.getAttributesWithDifferences());
+        }
+        for (Object attribute : attributes) {
+          MatchAndFeature maf = new MatchAndFeatureImpl(match, attribute, true);
+          result.add(maf);
+        }
+        // References
+        List<Object> references;
+        if (isDifferenceAgnostic()) {
+          references = getAllReferences(match);
+        } else {
+          references = new ArrayList<Object>();
+          for (Object reference : match.getReferencesWithDifferences()) {
+            if (!context.isContainment(reference) ||
+                match.getReferenceOrderDifference(reference, drivingRole) != null) {
+              references.add(reference);
+            }
           }
         }
-        if (getInput().getContext().getCategoryManager().representAsMove(match))
-          features.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
-        result = new ArrayList<MatchAndFeature>();
-        for (EStructuralFeature feature : features) {
-          MatchAndFeature maf = new MatchAndFeatureImpl((EMatch)match, feature);
+        if (getInput().getContext().getCategoryManager().representAsMove(match)) {
+          references.add(EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature());
+        }
+        for (Object reference : references) {
+          MatchAndFeature maf = new MatchAndFeatureImpl(match, reference, false);
           result.add(maf);
         }
       }
@@ -286,9 +323,10 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * Return whether the given reference may be shown
      * @param reference_p a non-null reference
      */
-    private boolean qualifies(EReference reference_p) {
+    protected boolean qualifies(Object reference_p) {
       return isOwnershipFeature(reference_p) ||
-        !getInput().getContext().isContainment(reference_p) && !reference_p.isContainer();
+        !getInput().getContext().isContainment(reference_p) &&
+        !getInput().getContext().isContainer(reference_p);
     }
   }
   

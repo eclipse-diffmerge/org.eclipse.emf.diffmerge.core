@@ -52,8 +52,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
-    implements EMapping<E, A, R, S> {
+public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
+    implements EMapping<E, A, R> {
   /**
    * The cached value of the '{@link #getModifiableContents() <em>Modifiable Contents</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -62,7 +62,7 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<EMatch<E, A, R, S>> modifiableContents;
+  protected EList<EMatch<E, A, R>> modifiableContents;
 
   /**
    * The cached value of the '{@link #getReferenceCompletedMatches() <em>Reference Completed Matches</em>}' reference list.
@@ -115,9 +115,9 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<EMatch<E, A, R, S>> getModifiableContents() {
+  public EList<EMatch<E, A, R>> getModifiableContents() {
     if (modifiableContents == null) {
-      modifiableContents = new EObjectContainmentEList<EMatch<E, A, R, S>>(
+      modifiableContents = new EObjectContainmentEList<EMatch<E, A, R>>(
           EMatch.class, this, GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS);
     }
     return modifiableContents;
@@ -195,7 +195,7 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
     case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
       getModifiableContents().clear();
       getModifiableContents()
-          .addAll((Collection<? extends EMatch<E, A, R, S>>) newValue);
+          .addAll((Collection<? extends EMatch<E, A, R>>) newValue);
       return;
     case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
@@ -300,8 +300,8 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
    * @generated OT
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public EComparison<E, A, R, S> getComparison() {
-    EComparison<E, A, R, S> result = null;
+  public EComparison<E, A, R> getComparison() {
+    EComparison<E, A, R> result = null;
     EObject container = eContainer();
     if (container instanceof EComparison) {
       result = (EComparison) container;
@@ -394,7 +394,7 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
     if (previous != null)
       getModifiableContents().remove(previous);
     @SuppressWarnings("unchecked")
-    EMatch<E, A, R, S> result = (EMatch<E, A, R, S>) getComparison().newMatch(
+    EMatch<E, A, R> result = (EMatch<E, A, R>) getComparison().newMatch(
         (Role.TARGET == role_p ? element_p : null),
         (Role.REFERENCE == role_p ? element_p : null),
         (Role.ANCESTOR == role_p ? element_p : null));
@@ -505,7 +505,7 @@ public abstract class EMappingImpl<E, A, R, S> extends EIdentifiedImpl
    */
   public int size(Role role_p) {
     int result = 0;
-    for (EMatch<E, A, R, S> match : getModifiableContents()) {
+    for (EMatch<E, A, R> match : getModifiableContents()) {
       if (match.get(role_p) != null)
         result++;
     }

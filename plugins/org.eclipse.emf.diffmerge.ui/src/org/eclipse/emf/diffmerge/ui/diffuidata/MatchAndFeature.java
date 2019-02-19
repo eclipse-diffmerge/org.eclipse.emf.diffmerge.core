@@ -11,9 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#isAttribute <em>Attribute</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getMatch <em>Match</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getFeature <em>Feature</em>}</li>
  * </ul>
@@ -34,27 +34,64 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  */
 public interface MatchAndFeature extends EObject {
   /**
+   * Returns the value of the '<em><b>Attribute</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Attribute</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Attribute</em>' attribute.
+   * @see #setAttribute(boolean)
+   * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getMatchAndFeature_Attribute()
+   * @model required="true"
+   * @generated
+   */
+  boolean isAttribute();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#isAttribute <em>Attribute</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Attribute</em>' attribute.
+   * @see #isAttribute()
+   * @generated
+   */
+  void setAttribute(boolean value);
+
+  /**
    * Returns the value of the '<em><b>Match</b></em>' reference.
    * <!-- begin-user-doc -->
    * Returns the non-null match
    * <!-- end-user-doc -->
    * @return the value of the '<em>Match</em>' reference.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getMatchAndFeature_Match()
-   * @model required="true" changeable="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;" required="true" changeable="false"
    * @generated
    */
-  EMatch getMatch();
+  IMatch<?> getMatch();
 
   /**
-   * Returns the value of the '<em><b>Feature</b></em>' reference.
+   * Returns the value of the '<em><b>Feature</b></em>' attribute.
    * <!-- begin-user-doc -->
    * Returns the non-null feature
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Feature</em>' reference.
+   * @return the value of the '<em>Feature</em>' attribute.
+   * @see #setFeature(Object)
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getMatchAndFeature_Feature()
-   * @model required="true" changeable="false"
+   * @model required="true"
    * @generated
    */
-  EStructuralFeature getFeature();
+  Object getFeature();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getFeature <em>Feature</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Feature</em>' attribute.
+   * @see #getFeature()
+   * @generated
+   */
+  void setFeature(Object value);
 
 } // MatchAndFeature

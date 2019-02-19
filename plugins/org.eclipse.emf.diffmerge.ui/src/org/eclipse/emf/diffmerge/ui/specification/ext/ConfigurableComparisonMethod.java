@@ -25,10 +25,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.impl.policies.ComparisonConfigurator;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
@@ -38,16 +41,17 @@ import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 
 /**
- * A configurable multi-criteria comparison method.
+ * A configurable multi-criteria comparison method for EMF models.
  * @author Olivier Constant
  */
-public class ConfigurableComparisonMethod extends DefaultComparisonMethod
+public class ConfigurableComparisonMethod extends DefaultComparisonMethod<EObject>
 implements IComparisonConfigurator.Provider {
   
   /** The "transfer data between independent models" configurator */
@@ -88,7 +92,7 @@ implements IComparisonConfigurator.Provider {
    */
   public ConfigurableComparisonMethod(IModelScopeDefinition leftScopeDef_p,
       IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
-      IComparisonMethodFactory factory_p) {
+      IComparisonMethodFactory<EObject> factory_p) {
     super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
     _configurators = new ArrayList<IComparisonConfigurator>(createConfigurators());
     initialize();
@@ -120,6 +124,16 @@ implements IComparisonConfigurator.Provider {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#createComparison(org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope, org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope, org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope)
+   */
+  public EComparison<EObject, ?, ?> createComparison(
+      IEditableTreeDataScope<EObject> targetScope_p,
+      IEditableTreeDataScope<EObject> referenceScope_p,
+      IEditableTreeDataScope<EObject> ancestorScope_p) {
+    return new EComparisonImpl(targetScope_p, referenceScope_p, ancestorScope_p);
+  }
+  
+  /**
    * Create and return the ordered set of configurators for this comparison method
    * @return a non-null, potentially empty ordered set
    */
@@ -134,7 +148,7 @@ implements IComparisonConfigurator.Provider {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createDiffPolicy()
    */
   @Override
-  protected IDiffPolicy createDiffPolicy() {
+  protected IDiffPolicy<EObject> createDiffPolicy() {
     return new ConfigurableDiffPolicy();
   }
   
@@ -142,7 +156,7 @@ implements IComparisonConfigurator.Provider {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createMatchPolicy()
    */
   @Override
-  protected IMatchPolicy createMatchPolicy() {
+  protected IMatchPolicy<EObject> createMatchPolicy() {
     return new ConfigurableMatchPolicy();
   }
   
@@ -150,12 +164,12 @@ implements IComparisonConfigurator.Provider {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createMergePolicy()
    */
   @Override
-  protected IMergePolicy createMergePolicy() {
+  protected IMergePolicy<EObject> createMergePolicy() {
     return new ConfigurableMergePolicy();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator.Provider#getConfigurators()
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator.Provider#getConfigurators()
    */
   public List<IComparisonConfigurator> getConfigurators() {
     return Collections.unmodifiableList(_configurators);
@@ -213,7 +227,7 @@ implements IComparisonConfigurator.Provider {
   protected void update(ComparisonConfiguration data_p) {
     if (data_p == null) return;
     // Match policy
-    IMatchPolicy originalMatchPolicy = getMatchPolicy();
+    IMatchPolicy<EObject> originalMatchPolicy = getMatchPolicy();
     ConfigurableMatchPolicy configuredMatchPolicy = data_p.getMatchPolicy();
     if (originalMatchPolicy instanceof ConfigurableMatchPolicy &&
         configuredMatchPolicy != null) {
@@ -222,17 +236,19 @@ implements IComparisonConfigurator.Provider {
       ((DefaultMatchPolicy)originalMatchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
     }
     // Diff policy
-    IDiffPolicy originalDiffPolicy = getDiffPolicy();
+    IDiffPolicy<EObject> originalDiffPolicy = getDiffPolicy();
     ConfigurableDiffPolicy configuredDiffPolicy = data_p.getDiffPolicy();
     if (originalDiffPolicy instanceof ConfigurableDiffPolicy &&
-        configuredDiffPolicy != null)
+        configuredDiffPolicy != null) {
       ((ConfigurableDiffPolicy)originalDiffPolicy).update(configuredDiffPolicy);
+    }
     // Merge policy
-    IMergePolicy originalMergePolicy = getMergePolicy();
+    IMergePolicy<EObject> originalMergePolicy = getMergePolicy();
     ConfigurableMergePolicy configuredMergePolicy = data_p.getMergePolicy();
     if (originalMergePolicy instanceof ConfigurableMergePolicy &&
-        configuredMergePolicy != null)
+        configuredMergePolicy != null) {
       ((ConfigurableMergePolicy)originalMergePolicy).update(configuredMergePolicy);
+    }
   }
   
 }

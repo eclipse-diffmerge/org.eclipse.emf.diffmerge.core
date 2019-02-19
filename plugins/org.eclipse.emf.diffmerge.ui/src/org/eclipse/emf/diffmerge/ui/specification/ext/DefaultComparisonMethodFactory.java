@@ -14,34 +14,26 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 
 
 /**
  * A default implementation of IComparisonMethodFactory.
+ * 
+ * @param <E> The type of data elements to compare.
+ *
  * @author Olivier Constant
  */
-public class DefaultComparisonMethodFactory implements IComparisonMethodFactory {
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
-   */
-  public IComparisonMethod createComparisonMethod(
-      IModelScopeDefinition leftScopeSpec_p, IModelScopeDefinition rightScopeSpec_p,
-      IModelScopeDefinition ancestorScopeSpec_p) {
-    return new DefaultComparisonMethod(
-        leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p, this);
-  }
+public abstract class DefaultComparisonMethodFactory<E> implements IComparisonMethodFactory<E> {
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonConfiguration()
    */
-  public IComparisonConfiguration createComparisonConfiguration() {
+  public IComparisonConfiguration<E> createComparisonConfiguration() {
     return createComparisonMethod(
         EMPTY_MODEL_SCOPE_DEFINITION,
         EMPTY_MODEL_SCOPE_DEFINITION,

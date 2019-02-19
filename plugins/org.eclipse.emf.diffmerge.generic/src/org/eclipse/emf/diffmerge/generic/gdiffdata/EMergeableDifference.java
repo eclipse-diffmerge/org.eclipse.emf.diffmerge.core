@@ -37,11 +37,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
  * @generated
  */
-public interface EMergeableDifference<E, A, R, S>
-    extends EIdentified, EComparisonElement<E, A, R, S>, Editable<E> {
+public interface EMergeableDifference<E, A, R>
+    extends EIdentified, EComparisonElement<E, A, R>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.
    * The default value is <code>"true"</code>.

@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -60,7 +60,7 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    */
   protected void doRefresh() {
     EMFDiffNode input = getInput();
-    IModelScope scope = getInnerViewer().getSideScope();
+    ITreeDataScope<?> scope = getInnerViewer().getSideScope();
     Label textLabel = getTextLabel();
     if (textLabel != null) {
       updateHeaderText(textLabel, input, scope);
@@ -132,7 +132,7 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    * @param scope_p a potentially null model scope
    */
   protected void updateHeaderImage(Label headerImageWidget_p,
-      EMFDiffNode input_p, IModelScope scope_p) {
+      EMFDiffNode input_p, ITreeDataScope<?> scope_p) {
     Image image = getHeaderLabelProvider().getImage(scope_p);
     if (image != headerImageWidget_p.getImage()) {
       headerImageWidget_p.setImage(image);
@@ -151,7 +151,7 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
    * @param scope_p a potentially null model scope
    */
   protected void updateHeaderText(Label headerTextWidget_p,
-      EMFDiffNode input_p, IModelScope scope_p) {
+      EMFDiffNode input_p, ITreeDataScope<?> scope_p) {
     ILabelProvider lp = getHeaderLabelProvider();
     if (lp instanceof IColorProvider) {
       Color newColor = ((IColorProvider)lp).getForeground(scope_p);

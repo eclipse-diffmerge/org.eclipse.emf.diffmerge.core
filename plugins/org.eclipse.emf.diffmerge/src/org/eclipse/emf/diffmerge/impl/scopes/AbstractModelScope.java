@@ -19,12 +19,11 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -36,30 +35,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * A partial implementation of IFeaturedModelScope based on unbounded EMF containment.
  * @author Olivier Constant
  */
-public abstract class AbstractModelScope implements IFeaturedModelScope {
-  
-  /** A potentially null object that identifies the origin of the scope */
-  private Object _originator;
-  
+public abstract class AbstractModelScope extends AbstractDataScope<EObject>
+implements IFeaturedModelScope {
   
   /**
    * Default constructor
    */
   protected AbstractModelScope() {
-    _originator = null;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#covers(EObject)
-   */
-  public boolean covers(EObject element_p) {
-    Iterator<EObject> it = getAllContents();
-    while (it.hasNext()) {
-      EObject current = it.next();
-      if (current == element_p)
-        return true;
-    }
-    return false;
+    super();
   }
   
   /**
@@ -196,26 +179,10 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
   }
   
   /**
-   * Return an object that characterizes or identifies this scope by default
-   * @return a non-null object
-   */
-  protected Object getDefaultOriginator() {
-    return this;
-  }
-  
-  /**
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   protected Object getExtrinsicID(EObject element_p) {
-    // Default implementation only covers XML/XMI Resources
-    return ModelImplUtil.getXMLID(element_p);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getOriginator()
-   */
-  public Object getOriginator() {
-    return _originator != null? _originator: getDefaultOriginator();
+    return getScopePolicy().getID(element_p, false);
   }
   
   /**
@@ -237,29 +204,6 @@ public abstract class AbstractModelScope implements IFeaturedModelScope {
    */
   protected boolean resolveProxies() {
     return false;
-  }
-  
-  /**
-   * Set the originator of this scope.
-   * If null, then the default originator will be used.
-   * @see IEditableModelScope#getOriginator()
-   * @param originator_p a potentially null object
-   */
-  public void setOriginator(Object originator_p) {
-    _originator = originator_p;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#size()
-   */
-  public int size() {
-    int result = 0;
-    Iterator<EObject> it = getAllContents();
-    while (it.hasNext()) {
-      result++;
-      it.next();
-    }
-    return result;
   }
   
 }

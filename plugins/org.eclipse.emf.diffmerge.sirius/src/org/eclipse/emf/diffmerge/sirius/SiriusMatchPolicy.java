@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy;
 import org.eclipse.emf.diffmerge.structures.common.comparable.ComparableTreeMap;
 import org.eclipse.emf.ecore.EClass;
@@ -94,7 +94,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a potentially null object
    */
-  protected String getAnnotationEntrySemanticID(AnnotationEntry element_p, IModelScope scope_p) {
+  protected String getAnnotationEntrySemanticID(AnnotationEntry element_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (element_p.getSource() != null) {
       result = getContainerRelativeID(element_p, scope_p, element_p.getSource(), null);
@@ -118,7 +119,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers annotation_p
    * @return a potentially null string
    */
-  protected String getDAnnotationSemanticID(DAnnotation annotation_p, IModelScope scope_p) {
+  protected String getDAnnotationSemanticID(DAnnotation annotation_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (annotation_p.getSource() != null) {
       // Based on container ID and source
@@ -133,7 +135,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a potentially null object
    */
-  protected String getDViewSemanticID(DView element_p, IModelScope scope_p) {
+  protected String getDViewSemanticID(DView element_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (useFineGrainedCriterion(CRITERION_SEMANTICS_DEFAULTCONTENTS)) {
       Viewpoint vp = element_p.getViewpoint();
@@ -146,10 +149,11 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getName(EObject element_p, IModelScope scope_p) {
+  protected String getName(EObject element_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (element_p instanceof DView) {
       Viewpoint viewpoint = ((DView) element_p).getViewpoint();
@@ -178,7 +182,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @return a null or positive int, or -1 in case of failure
    */
   protected int getNoteAttachmentIndex(Connector noteAttachment_p, EObject container_p,
-      IModelScope scope_p) {
+      ITreeDataScope<EObject> scope_p) {
     int noteIndex = -1;
     String type = noteAttachment_p.getType();
     for (EObject child : getContents(container_p, scope_p)) {
@@ -204,7 +208,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers noteAttachment_p
    * @return a potentially null string
    */
-  protected String getNoteAttachmentSemanticID(Connector noteAttachment_p, IModelScope scope_p) {
+  protected String getNoteAttachmentSemanticID(Connector noteAttachment_p,
+      ITreeDataScope<EObject> scope_p) {
     Map<String, String> map = new ComparableTreeMap<String, String>();
     EObject container = getContainer(noteAttachment_p, scope_p);
     if (container != null) {
@@ -231,7 +236,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers noteAttachment_p
    * @return a potentially null string
    */
-  protected String getNoteElementSemanticID(Node noteElement_p, IModelScope scope_p) {
+  protected String getNoteElementSemanticID(Node noteElement_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     // Based on container ID and index in the containing list
     String viewType = noteElement_p.getType();
@@ -248,7 +254,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that contains note_p
    * @return a positive or null int, or -1 in case of failure
    */
-  protected int getNoteIndex(View note_p, EObject container_p, IModelScope scope_p) {
+  protected int getNoteIndex(View note_p, EObject container_p,
+      ITreeDataScope<EObject> scope_p) {
     int noteIndex = -1;
     String type = note_p.getType();
     for (EObject child : getContents(container_p, scope_p)) {
@@ -268,7 +275,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that contains note_p
    * @return a potentially null string
    */
-  protected String getNoteSemanticID(Node note_p, IModelScope scope_p) {
+  protected String getNoteSemanticID(Node note_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     // Based on container ID, view type and index in the containing list
     EObject container = getContainer(note_p, scope_p);
@@ -289,10 +296,10 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
+  protected String getSemanticID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (element_p instanceof DView) {
       // DView
@@ -331,7 +338,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return an int that is not expected to be negative
    */
-  protected int getSiblingIndex(EObject element_p, IModelScope scope_p) {
+  protected int getSiblingIndex(EObject element_p, ITreeDataScope<EObject> scope_p) {
     List<EObject> elements = getSiblings(element_p, scope_p);
     return elements.indexOf(element_p);
   }
@@ -342,7 +349,8 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
    * @param scope_p a non-null scope that covers element_p
    * @return a potentially null string
    */
-  protected String getViewpointElementSemanticID(EObject element_p, IModelScope scope_p) {
+  protected String getViewpointElementSemanticID(EObject element_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     EObject container = getContainer(element_p, scope_p);
     if (container != null) {

@@ -16,9 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfigurator;
-import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy;
-import org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrainedMatchCriterion;
@@ -446,7 +446,7 @@ public class ConfigureComparisonDialog extends Dialog {
     // Update
     final IConfigurationChangedListener updateListener = new IConfigurationChangedListener() {
       /**
-       * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+       * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
        */
       public void configurationChanged(IConfigurablePolicy notifier_p, Object property_p) {
         checkBox.setSelection(policy.isIgnoreOrders());
@@ -490,7 +490,7 @@ public class ConfigureComparisonDialog extends Dialog {
       // Update
       final IConfigurationChangedListener updateListener = new IConfigurationChangedListener() {
         /**
-         * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+         * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
          */
         public void configurationChanged(IConfigurablePolicy notifier_p, Object property_p) {
           checkBox.setSelection(_data.isKeepMatchIDs());
@@ -536,7 +536,7 @@ public class ConfigureComparisonDialog extends Dialog {
     // Update
     final IConfigurationChangedListener updateListener = new IConfigurationChangedListener() {
       /**
-       * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+       * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
        */
       public void configurationChanged(IConfigurablePolicy notifier_p, Object property_p) {
         if (ConfigurableMatchPolicy.PROPERTY_MATCH_CRITERIA == property_p ||
@@ -594,7 +594,7 @@ public class ConfigureComparisonDialog extends Dialog {
     // Update
     final IConfigurationChangedListener updateListener = new IConfigurationChangedListener() {
       /**
-       * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+       * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
        */
       public void configurationChanged(IConfigurablePolicy notifier_p, Object property_p) {
         if (ConfigurableMatchPolicy.PROPERTY_MATCH_CRITERIA == property_p ||
@@ -645,7 +645,7 @@ public class ConfigureComparisonDialog extends Dialog {
     });
     final IConfigurationChangedListener listener = new IConfigurationChangedListener() {
       /**
-       * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+       * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
        */
       public void configurationChanged(IConfigurablePolicy notifier_p,
           Object property_p) {
@@ -719,7 +719,7 @@ public class ConfigureComparisonDialog extends Dialog {
       // Update
       final IConfigurationChangedListener updateListener = new IConfigurationChangedListener() {
         /**
-         * @see org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.api.config.IConfigurablePolicy, java.lang.Object)
+         * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener#configurationChanged(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy, java.lang.Object)
          */
         public void configurationChanged(IConfigurablePolicy notifier_p, Object property_p) {
           checkBox.setSelection(policy.useCache());

@@ -11,10 +11,10 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
-import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.graphics.Image;
 
@@ -37,9 +37,9 @@ public class MoveCategory extends AbstractDifferenceCategory {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#covers(org.eclipse.emf.diffmerge.generic.api.diff.IDifference, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
-  public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
+  public boolean covers(IDifference<?> difference_p, EMFDiffNode node_p) {
     return node_p.getCategoryManager().isMove(difference_p);
   }
   

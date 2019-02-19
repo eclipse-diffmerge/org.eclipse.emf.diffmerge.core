@@ -63,7 +63,7 @@ public class ComparisonSetupManager {
   private static final String EXTENSION_POINT_PROPERTY_SCOPE = "factory"; //$NON-NLS-1$
   
   /** The registered comparison method factories (initially null) */
-  private Map<Class<?>, IComparisonMethodFactory> _comparisonFactories;
+  private Map<Class<?>, IComparisonMethodFactory<?>> _comparisonFactories;
   
   /** The registered scope factories (initially null) */
   private Map<Class<?>, IModelScopeDefinitionFactory> _scopeFactories;
@@ -133,7 +133,7 @@ public class ComparisonSetupManager {
       ComparisonSetup setup_p) {
     EMFDiffMergeEditorInput result = null;
     if (setup_p != null) {
-      IComparisonMethod method = openSetupWizard(shell_p, setup_p);
+      IComparisonMethod<?> method = openSetupWizard(shell_p, setup_p);
       if (method != null)
         result = new EMFDiffMergeEditorInput(method);
     } else {
@@ -168,7 +168,7 @@ public class ComparisonSetupManager {
             factories2.get(0).createScopeDefinition(entrypoint2_p, null, true);
         IModelScopeDefinition scopeSpec3 = factories3.isEmpty()? null:
           factories3.get(0).createScopeDefinition(entrypoint3_p, null, true);
-        List<IComparisonMethodFactory> cFactories =
+        List<IComparisonMethodFactory<?>> cFactories =
             getApplicableComparisonMethodFactories(scopeSpec1, scopeSpec2, scopeSpec3);
         if (!cFactories.isEmpty())
           result = new ComparisonSetup(scopeSpec1, scopeSpec2, scopeSpec3, cFactories);
@@ -190,7 +190,7 @@ public class ComparisonSetupManager {
    * Postcondition: _comparisonFactories != null && _scopeFactories != null
    */
   protected void discoverRegisteredComparisonContexts() {
-    _comparisonFactories = new HashMap<Class<?>, IComparisonMethodFactory>();
+    _comparisonFactories = new HashMap<Class<?>, IComparisonMethodFactory<?>>();
     _scopeFactories = new HashMap<Class<?>, IModelScopeDefinitionFactory>();
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IConfigurationElement[] config = registry.getConfigurationElementsFor(
@@ -201,7 +201,7 @@ public class ComparisonSetupManager {
         try {
           Object o = e.createExecutableExtension(EXTENSION_POINT_PROPERTY_METHOD);
           if (o instanceof IComparisonMethodFactory)
-            _comparisonFactories.put(o.getClass(), (IComparisonMethodFactory)o);
+            _comparisonFactories.put(o.getClass(), (IComparisonMethodFactory<?>)o);
         } catch (CoreException ex) {
           // Proceed
         }
@@ -225,11 +225,11 @@ public class ComparisonSetupManager {
    * @param ancestorScopeSpec_p an optional scope definition
    * @return a non-null, potentially empty, unmodifiable list
    */
-  public List<IComparisonMethodFactory> getApplicableComparisonMethodFactories(
+  public List<IComparisonMethodFactory<?>> getApplicableComparisonMethodFactories(
       IModelScopeDefinition leftScopeSpec_p, IModelScopeDefinition rightScopeSpec_p,
       IModelScopeDefinition ancestorScopeSpec_p) {
-    List<IComparisonMethodFactory> result = new ArrayList<IComparisonMethodFactory>();
-    for (IComparisonMethodFactory factory : getRegisteredComparisonMethodFactories()) {
+    List<IComparisonMethodFactory<?>> result = new ArrayList<IComparisonMethodFactory<?>>();
+    for (IComparisonMethodFactory<?> factory : getRegisteredComparisonMethodFactories()) {
       if (factory.isApplicableTo(leftScopeSpec_p, rightScopeSpec_p, ancestorScopeSpec_p))
         result.add(factory);
     }
@@ -259,10 +259,10 @@ public class ComparisonSetupManager {
    * @param id_p a non-null string
    * @return a potentially null comparison method factory
    */
-  public IComparisonMethodFactory getComparisonMethodFactory(String id_p) {
-    Collection<IComparisonMethodFactory> factories =
+  public IComparisonMethodFactory<?> getComparisonMethodFactory(String id_p) {
+    Collection<IComparisonMethodFactory<?>> factories =
         getRegisteredComparisonMethodFactories();
-    for (IComparisonMethodFactory current : factories) {
+    for (IComparisonMethodFactory<?> current : factories) {
       if (id_p.equals(current.getID()))
           return current;
     }
@@ -274,9 +274,10 @@ public class ComparisonSetupManager {
    * extension point, if any
    * @return a non-null, potentially empty list
    */
-  protected final Collection<IComparisonMethodFactory> getRegisteredComparisonMethodFactories() {
-    if (_comparisonFactories == null)
+  protected final Collection<IComparisonMethodFactory<?>> getRegisteredComparisonMethodFactories() {
+    if (_comparisonFactories == null) {
       discoverRegisteredComparisonContexts();
+    }
     return _comparisonFactories.values();
   }
   
@@ -360,8 +361,8 @@ public class ComparisonSetupManager {
    * @param setup_p a non-null setup
    * @return the resulting comparison method of the setup, or null if the user did not confirm
    */
-  protected IComparisonMethod openSetupWizard(Shell shell_p, ComparisonSetup setup_p) {
-    IComparisonMethod result = null;
+  protected IComparisonMethod<?> openSetupWizard(Shell shell_p, ComparisonSetup setup_p) {
+    IComparisonMethod<?> result = null;
     ComparisonSetupWizard wizard = new ComparisonSetupWizard(setup_p);
     WizardDialog dialog = new WizardDialog(shell_p, wizard);
     dialog.setHelpAvailable(false);
@@ -400,7 +401,7 @@ public class ComparisonSetupManager {
     boolean result = false;
     ComparisonSetup setup = new ComparisonSetup(input_p.getComparisonMethod());
     setup.setCanSwapScopeDefinitions(false);
-    IComparisonMethod method = openSetupWizard(shell_p, setup);
+    IComparisonMethod<?> method = openSetupWizard(shell_p, setup);
     if (method != null) {
       input_p.setComparisonMethod(method);
       result = true;

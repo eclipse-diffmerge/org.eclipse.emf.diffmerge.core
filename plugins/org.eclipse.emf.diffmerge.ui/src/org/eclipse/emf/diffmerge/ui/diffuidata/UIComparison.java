@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.IDisposable;
 
@@ -47,7 +47,7 @@ public interface UIComparison extends EObject, IDisposable {
    * @model required="true"
    * @generated
    */
-  EComparison getActualComparison();
+  EComparison<?, ?, ?> getActualComparison();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}' reference.
@@ -57,7 +57,7 @@ public interface UIComparison extends EObject, IDisposable {
    * @see #getActualComparison()
    * @generated
    */
-  void setActualComparison(EComparison value);
+  void setActualComparison(EComparison<?, ?, ?> value);
 
   /**
    * Returns the value of the '<em><b>Last Action Selection</b></em>' containment reference.
@@ -67,7 +67,7 @@ public interface UIComparison extends EObject, IDisposable {
    * @return the value of the '<em>Last Action Selection</em>' containment reference.
    * @see #setLastActionSelection(ComparisonSelection)
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison_LastActionSelection()
-   * @model containment="true"
+   * @model containment="true" transient="true"
    * @generated
    */
   ComparisonSelection getLastActionSelection();

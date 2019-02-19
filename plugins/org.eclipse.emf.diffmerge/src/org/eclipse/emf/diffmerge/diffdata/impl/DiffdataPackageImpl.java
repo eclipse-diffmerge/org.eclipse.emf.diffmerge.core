@@ -19,8 +19,10 @@ import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EComparisonElement;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
+import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
@@ -70,6 +72,20 @@ public class DiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   private EClass eMatchEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass eMergeableDifferenceEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass eElementRelativePresenceEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -305,6 +321,24 @@ public class DiffdataPackageImpl extends EPackageImpl
    */
   public EReference getEMatch_ModifiableOrderReferenceMap() {
     return (EReference) eMatchEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEMergeableDifference() {
+    return eMergeableDifferenceEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getEElementRelativePresence() {
+    return eElementRelativePresenceEClass;
   }
 
   /**
@@ -579,6 +613,10 @@ public class DiffdataPackageImpl extends EPackageImpl
     createEReference(eMatchEClass, EMATCH__MODIFIABLE_REFERENCE_MAP);
     createEReference(eMatchEClass, EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
 
+    eMergeableDifferenceEClass = createEClass(EMERGEABLE_DIFFERENCE);
+
+    eElementRelativePresenceEClass = createEClass(EELEMENT_RELATIVE_PRESENCE);
+
     eElementPresenceEClass = createEClass(EELEMENT_PRESENCE);
 
     eValuePresenceEClass = createEClass(EVALUE_PRESENCE);
@@ -673,17 +711,21 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
-    g1.getETypeArguments().add(g2);
     eComparisonEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMapping());
+    g1 = createEGenericType(theGdiffdataPackage.getEComparisonElement());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
+    eComparisonElementEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(theGdiffdataPackage.getEMapping());
+    g2 = createEGenericType(ecorePackage.getEObject());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEAttribute());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
     eMappingEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
@@ -695,11 +737,29 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
-    g1.getETypeArguments().add(g2);
     eMatchEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
     eMatchEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(theGdiffdataPackage.getEMergeableDifference());
+    g2 = createEGenericType(ecorePackage.getEObject());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEAttribute());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEReference());
+    g1.getETypeArguments().add(g2);
+    eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEComparisonElement());
+    eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(theGdiffdataPackage.getEElementRelativePresence());
+    g2 = createEGenericType(ecorePackage.getEObject());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEAttribute());
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(ecorePackage.getEReference());
+    g1.getETypeArguments().add(g2);
+    eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
+    g1 = createEGenericType(this.getEMergeableDifference());
+    eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEElementPresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
@@ -707,10 +767,8 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
-    g1.getETypeArguments().add(g2);
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(this.getEComparisonElement());
+    g1 = createEGenericType(this.getEElementRelativePresence());
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEValuePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
@@ -719,10 +777,8 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
-    g1.getETypeArguments().add(g2);
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(this.getEComparisonElement());
+    g1 = createEGenericType(this.getEElementRelativePresence());
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEAttributeValuePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
@@ -730,8 +786,6 @@ public class DiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEAttribute());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
-    g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
     g1.getETypeArguments().add(g2);
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEValuePresence());
@@ -742,8 +796,6 @@ public class DiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEAttribute());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEReference());
-    g1.getETypeArguments().add(g2);
-    g2 = createEGenericType(this.getIEditableModelScope());
     g1.getETypeArguments().add(g2);
     eReferenceValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEValuePresence());
@@ -756,11 +808,6 @@ public class DiffdataPackageImpl extends EPackageImpl
     addEOperation(eComparisonEClass, this.getEMapping(), "getMapping", 1, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
 
-    EOperation op = addEOperation(eComparisonEClass,
-        this.getIEditableModelScope(), "getScope", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-    addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
-        IS_ORDERED);
-
     initEClass(eComparisonElementEClass, EComparisonElement.class,
         "EComparisonElement", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
@@ -771,8 +818,8 @@ public class DiffdataPackageImpl extends EPackageImpl
     initEClass(eMappingEClass, EMapping.class, "EMapping", !IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    op = addEOperation(eMappingEClass, null, "crossReference", 0, 1, IS_UNIQUE, //$NON-NLS-1$
-        IS_ORDERED);
+    EOperation op = addEOperation(eMappingEClass, null, "crossReference", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
 
@@ -788,6 +835,13 @@ public class DiffdataPackageImpl extends EPackageImpl
     addEParameter(op, ecorePackage.getEObject(), "element", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+
+    op = addEOperation(eMappingEClass, ecorePackage.getEBoolean(),
+        "removeDependencies", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    addEParameter(op, ecorePackage.getEObject(), "element", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
 
     initEClass(eMatchEClass, EMatch.class, "EMatch", !IS_ABSTRACT, //$NON-NLS-1$
@@ -823,9 +877,23 @@ public class DiffdataPackageImpl extends EPackageImpl
     addEOperation(eMatchEClass, this.getEMapping(), "getMapping", 0, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
 
+    initEClass(eMergeableDifferenceEClass, EMergeableDifference.class,
+        "EMergeableDifference", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
+        IS_GENERATED_INSTANCE_CLASS);
+
+    initEClass(eElementRelativePresenceEClass, EElementRelativePresence.class,
+        "EElementRelativePresence", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
+        IS_GENERATED_INSTANCE_CLASS);
+
+    addEOperation(eElementRelativePresenceEClass, this.getEMatch(),
+        "getElementMatch", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
     initEClass(eElementPresenceEClass, EElementPresence.class,
         "EElementPresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
+
+    addEOperation(eElementPresenceEClass, this.getEMatch(), "getOwnerMatch", 1, //$NON-NLS-1$
+        1, IS_UNIQUE, IS_ORDERED);
 
     initEClass(eValuePresenceEClass, EValuePresence.class, "EValuePresence", //$NON-NLS-1$
         IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -855,6 +923,17 @@ public class DiffdataPackageImpl extends EPackageImpl
         EReferenceValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    addEOperation(eReferenceValuePresenceEClass,
+        this.getEReferenceValuePresence(), "getSymmetrical", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+
+    addEOperation(eReferenceValuePresenceEClass,
+        this.getEReferenceValuePresence(), "getSymmetricalOwnership", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+
+    addEOperation(eReferenceValuePresenceEClass, this.getEMatch(),
+        "getValueMatch", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     initEClass(attributeToValueToDifferenceEntryEClass, Map.Entry.class,
         "AttributeToValueToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$

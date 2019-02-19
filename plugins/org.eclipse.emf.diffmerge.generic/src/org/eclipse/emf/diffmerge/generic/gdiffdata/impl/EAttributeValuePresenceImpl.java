@@ -38,9 +38,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EAttributeValuePresenceImpl<E, A, R, S>
-    extends EValuePresenceImpl<E, A, R, S>
-    implements EAttributeValuePresence<E, A, R, S> {
+public abstract class EAttributeValuePresenceImpl<E, A, R> extends
+    EValuePresenceImpl<E, A, R> implements EAttributeValuePresence<E, A, R> {
   /**
    * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -78,7 +77,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R, S>
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EAttributeValuePresenceImpl(EMatch<E, A, R, S> elementMatch_p,
+  public EAttributeValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
       A attribute_p, Object value_p, Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p, isOrder_p);
     setValue(value_p);

@@ -202,6 +202,15 @@ public final class UIUtil {
   }
   
   /**
+   * Return a formatted variant of the given label
+   * @param label_p a non-null string
+   * @return a non-null string
+   */
+  public static String getFormattedText(String label_p) {
+    return FormattedTextProvider.getInstance().getFormattedText(label_p);
+  }
+  
+  /**
    * Return a formatted label for the type of the given element
    * @param element_p a non-null element
    * @return a non-null string
@@ -313,6 +322,14 @@ public final class UIUtil {
     public String getFeatureText(Object feature_p) {
       // Increases visibility
       return super.getFeatureText(feature_p);
+    }
+    /**
+     * Return a formatted variant of the given label
+     * @param label_p a non-null string
+     * @return a non-null string
+     */
+    public String getFormattedText(String label_p) {
+      return format(capName(label_p), ' ');
     }
     /**
      * @see org.eclipse.emf.edit.provider.ReflectiveItemProvider#getTypeText(java.lang.Object)

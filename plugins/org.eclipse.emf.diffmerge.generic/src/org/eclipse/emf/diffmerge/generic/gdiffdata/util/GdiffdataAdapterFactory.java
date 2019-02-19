@@ -99,60 +99,59 @@ public class GdiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEComparison(
-        EComparison<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEComparison(EComparison<E, A, R> object) {
       return createEComparisonAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEComparisonElement(
-        EComparisonElement<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEComparisonElement(
+        EComparisonElement<E, A, R> object) {
       return createEComparisonElementAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEMapping(EMapping<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEMapping(EMapping<E, A, R> object) {
       return createEMappingAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEMatch(EMatch<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEMatch(EMatch<E, A, R> object) {
       return createEMatchAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEMergeableDifference(
-        EMergeableDifference<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEMergeableDifference(
+        EMergeableDifference<E, A, R> object) {
       return createEMergeableDifferenceAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEElementRelativePresence(
-        EElementRelativePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEElementRelativePresence(
+        EElementRelativePresence<E, A, R> object) {
       return createEElementRelativePresenceAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEElementPresence(
-        EElementPresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEElementPresence(
+        EElementPresence<E, A, R> object) {
       return createEElementPresenceAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEValuePresence(
-        EValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEValuePresence(
+        EValuePresence<E, A, R> object) {
       return createEValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEAttributeValuePresence(
-        EAttributeValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEAttributeValuePresence(
+        EAttributeValuePresence<E, A, R> object) {
       return createEAttributeValuePresenceAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEReferenceValuePresence(
-        EReferenceValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseEReferenceValuePresence(
+        EReferenceValuePresence<E, A, R> object) {
       return createEReferenceValuePresenceAdapter();
     }
 

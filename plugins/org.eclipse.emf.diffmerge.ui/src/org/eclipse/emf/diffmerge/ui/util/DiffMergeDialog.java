@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.util;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -107,7 +107,7 @@ public class DiffMergeDialog extends Dialog {
   protected Button createOKButton(Composite parent_p) {
     Button result = createButton(
         parent_p, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-    IComparison comparison = _input.getActualComparison();
+    IComparison<?> comparison = _input.getActualComparison();
     boolean enabled = comparison != null? comparison.hasRemainingDifferences(): false;
     result.setEnabled(enabled);
     return result;

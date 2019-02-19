@@ -14,7 +14,7 @@ package org.eclipse.emf.diffmerge.ui.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -98,7 +98,7 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getFont(java.lang.Object, org.eclipse.swt.graphics.Font, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getFont(java.lang.Object, org.eclipse.swt.graphics.Font, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
   public Font getFont(Object object_p, Font base_p, DifferenceKind diffKind_p,
@@ -114,7 +114,7 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getForeground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getForeground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
   public Color getForeground(Object object_p, Color base_p,
@@ -136,7 +136,7 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getImageOverlay(java.lang.Object, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getImageOverlay(java.lang.Object, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   @Override
   protected ImageID getImageOverlay(Object object_p, DifferenceKind diffKind_p,

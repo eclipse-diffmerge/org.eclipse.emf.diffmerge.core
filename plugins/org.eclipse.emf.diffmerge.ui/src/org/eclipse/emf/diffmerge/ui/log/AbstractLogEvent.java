@@ -11,12 +11,12 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.log;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
+import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 
 
 /**
@@ -49,18 +49,31 @@ public abstract class AbstractLogEvent {
   }
   
   /**
-   * Return the business or, if not available, technical ID of the given element
+   * Return the intrinsic or, if not available, extrinsic ID of the given element
    * @param element_p a potentially null element
-   * @return a potentially null string
+   * @param side_p the role of the element
+   * @return a potentially null object
    */
-  protected String getID(EObject element_p) {
-    String result = null;
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  protected Object getID(Object element_p, Role side_p) {
+    Object result = null;
     if (element_p != null) {
-      result = EcoreUtil.getID(element_p);
-      if (result == null && element_p.eResource() instanceof XMLResource)
-        result = ((XMLResource)element_p.eResource()).getID(element_p);
+      ITreeDataScope<?> sourceScope = getDiffNode().getActualComparison().getScope(side_p);
+      IScopePolicy scopePolicy = sourceScope.getScopePolicy();
+      result = scopePolicy.getID(element_p, true);
+      if (result == null) {
+        result = scopePolicy.getID(element_p, false);
+      }
     }
     return result;
+  }
+  
+  /**
+   * Return a label provider for elements to log
+   * @return a non-null label provider
+   */
+  protected DiffMergeLabelProvider getLabelProvider() {
+    return DiffMergeLabelProvider.getInstance();
   }
   
   /**
@@ -69,10 +82,11 @@ public abstract class AbstractLogEvent {
    * @param role_p a non-null role
    * @return a non-null element
    */
-  protected EObject getNonNull(IMatch match_p, Role role_p) {
-    EObject result = match_p.get(role_p);
-    if (result == null)
+  protected Object getNonNull(IMatch<?> match_p, Role role_p) {
+    Object result = match_p.get(role_p);
+    if (result == null) {
       result = match_p.get(role_p.opposite());
+    }
     return result;
   }
   

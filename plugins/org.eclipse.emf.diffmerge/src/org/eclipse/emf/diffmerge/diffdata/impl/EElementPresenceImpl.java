@@ -11,12 +11,10 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.util.ModelsUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -30,7 +28,7 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public class EElementPresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<EObject, EAttribute, EReference>
     implements EElementPresence {
   /**
    * <!-- begin-user-doc -->
@@ -62,6 +60,24 @@ public class EElementPresenceImpl extends
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl#getOwnerMatch()
+   * @generated NOT
+   */
+  @Override
+  public EMatch getOwnerMatch() {
+    return (EMatch) super.getOwnerMatch();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @generated NOT
+   */
+  @Override
+  public EMatch getElementMatch() {
+    return (EMatch) super.getElementMatch();
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
@@ -76,7 +92,7 @@ public class EElementPresenceImpl extends
    */
   @Override
   protected void removeDependencies(EObject element_p) {
-    ModelsUtil.removeDependencies(getComparison(), getPresenceRole(),
+    getComparison().getMapping().removeDependencies(getPresenceRole(),
         element_p);
   }
 

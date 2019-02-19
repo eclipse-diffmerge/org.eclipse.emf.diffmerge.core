@@ -51,18 +51,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.Logger;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
-import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -89,9 +85,6 @@ import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
 import org.eclipse.emf.diffmerge.ui.viewers.MergeImpactViewer.ImpactInput;
 import org.eclipse.emf.diffmerge.ui.viewers.TextMergerDialog.TextDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.ValuesViewer.ValuesInput;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.provider.IDisposable;
@@ -321,12 +314,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param destination_p a non-null role which is TARGET or REFEREBCE
    * @param incrementalMode_p whether optional deletions must be skipped
    */
-  protected void addDifferencesToMerge(List<IDifference> toMerge_p, IMatch match_p,
+  protected void addDifferencesToMerge(List<IDifference<?>> toMerge_p, IMatch<?> match_p,
       Role destination_p, boolean incrementalMode_p) {
-    for (IDifference difference : match_p.getAllDifferences()) {
+    for (IDifference<?> difference : match_p.getAllDifferences()) {
       if (!getInput().getCategoryManager().isFiltered(difference)) {
         if (!incrementalMode_p || difference instanceof IPresenceDifference &&
-            ((IPresenceDifference)difference).getPresenceRole() != destination_p)
+            ((IPresenceDifference<?>)difference).getPresenceRole() != destination_p)
           toMerge_p.add(difference);
       }
     }
@@ -340,10 +333,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param destination_p a non-null role which is TARGET or REFEREBCE
    * @param incrementalMode_p whether optional deletions must be skipped
    */
-  protected void addDifferencesToMergeRec(List<IDifference> toMerge_p, IMatch match_p,
+  protected void addDifferencesToMergeRec(List<IDifference<?>> toMerge_p, IMatch<?> match_p,
       Role destination_p, boolean incrementalMode_p) {
     addDifferencesToMerge(toMerge_p, match_p, destination_p, incrementalMode_p);
-    for (IMatch child : getInput().getCategoryManager().getChildrenForMerge(match_p)) {
+    for (IMatch<?> child : getInput().getCategoryManager().getChildrenForMerge(match_p)) {
       addDifferencesToMergeRec(toMerge_p, child, destination_p, incrementalMode_p);
     }
   }
@@ -356,7 +349,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected ComparisonSelection asComparisonSelection(IStructuredSelection selection_p) {
     EMFDiffNode input = getInput();
-    Collection<EMatch> matches;
+    Collection<IMatch<?>> matches;
     if (input != null) {
       matches = selectionToMatches(selection_p, input);
     } else {
@@ -709,7 +702,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       @Override
       public void run() {
         final Shell shell = getShell();
-        final EComparison comparison = getComparison();
+        final IComparison<?> comparison = getComparison();
         if (shell != null && comparison != null) {
           shell.getDisplay().syncExec(new Runnable() {
             /**
@@ -732,7 +725,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_CURRENT_INPUT.equals(event_p.getProperty())) {
-          IComparison comparison = getComparison();
+          IComparison<?> comparison = getComparison();
           boolean enabled = comparison != null && !comparison.isConsistent();
           action.setEnabled(enabled);
           action.setToolTipText(
@@ -950,7 +943,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         ComparisonSelection selection = getSelection();
         if (isDedicatedViewerApplicable(input, selection)) {
           openDedicatedViewer(getInput(), getSelection().asMatch(),
-              (EAttribute)selection.asFeature());
+              selection.asFeature());
         }
       }
     };
@@ -1634,7 +1627,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           ComparisonSelection selection = (ComparisonSelection)rawSelection;
           if (selection.getSelectedMatches().size() <= 1) {
             // No more than one match
-            EMatch match = selection.asMatch();
+            IMatch<?> match = selection.asMatch();
             if (match != null) {
               // One match: new input
               FeaturesInput newInput = new FeaturesInput(getInput(), match);
@@ -1675,7 +1668,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           if (first instanceof MatchAndFeature) {
             MatchAndFeature maf = (MatchAndFeature)first;
             if (TextMergerDialog.isApplicableTo(maf.getFeature())) {
-              openDedicatedViewer(getInput(), maf.getMatch(), (EAttribute)maf.getFeature());
+              openDedicatedViewer(getInput(), maf.getMatch(), maf.getFeature());
             }
           }
         }
@@ -1745,7 +1738,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             if (path != null) {
               newSelection = new TreeSelection(path);
             } else {
-              IMatch match = selection.asMatch();
+              IMatch<?> match = selection.asMatch();
               if (match != null) {
                 newSelection = new StructuredSelection(match);
               }
@@ -1780,7 +1773,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           EMFDiffNode input = getInput();
           IStructuredSelection selection = result.getSelection();
           Role sideRole = getInput().getRoleForSide(isLeftSide_p);
-          List<EMatch> synthesisSelection = selectionToMatches(selection, input, sideRole);
+          List<IMatch<?>> synthesisSelection = selectionToMatches(selection, input, sideRole);
           if (!synthesisSelection.isEmpty())
             setSelection(
                 new ComparisonSelectionImpl(synthesisSelection, sideRole, getInput()),
@@ -1809,7 +1802,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             if (path != null) {
               newSelection = new TreeSelection(path);
             } else {
-              IMatch match = selection.asMatch();
+              IMatch<?> match = selection.asMatch();
               if (match != null)
                 newSelection = new StructuredSelection(match);
             }
@@ -1856,28 +1849,26 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       public void widgetSelected(SelectionEvent event_p) {
         IStructuredSelection selection = result.getSelection();
         if (!selection.isEmpty()) {
-          if (selection.getFirstElement() instanceof EObject) { // Skip attribute values
-            setSelection(
-                new ComparisonSelectionImpl(
-                    selection.toList(), getInput().getRoleForSide(isLeftSide_p), getInput()),
-                true, result.getInnerViewer());
-            // One element selected: show it in scope viewer
-            if (selection.size() == 1) {
-              EObject selectedElement = (EObject)selection.getFirstElement();
-              IMatch match;
-              if (selectedElement instanceof IMatch) {
-                match = (IMatch)selectedElement;
-              } else if (selectedElement instanceof IReferenceValuePresence) {
-                IReferenceValuePresence rvp = (IReferenceValuePresence)selectedElement;
-                boolean containment = rvp.isContainment();
-                match = containment? rvp.getElementMatch(): rvp.getValueMatch();
-              } else {
-                match = null;
-              }
-              if (match != null)
-                getModelScopeViewer(isLeftSide_p).setSelection(
-                    new StructuredSelection(match.get(getInput().getRoleForSide(isLeftSide_p))));
+          setSelection(
+              new ComparisonSelectionImpl(
+                  selection.toList(), getInput().getRoleForSide(isLeftSide_p), getInput()),
+              true, result.getInnerViewer());
+          // One element selected: show it in scope viewer
+          if (selection.size() == 1) {
+            Object selectedElement = selection.getFirstElement();
+            IMatch<?> match;
+            if (selectedElement instanceof IMatch<?>) {
+              match = (IMatch<?>)selectedElement;
+            } else if (selectedElement instanceof IReferenceValuePresence) {
+              IReferenceValuePresence<?> rvp = (IReferenceValuePresence<?>)selectedElement;
+              boolean containment = rvp.isContainment();
+              match = containment? rvp.getElementMatch(): rvp.getValueMatch();
+            } else {
+              match = null;
             }
+            if (match != null)
+              getModelScopeViewer(isLeftSide_p).setSelection(
+                  new StructuredSelection(match.get(getInput().getRoleForSide(isLeftSide_p))));
           }
         }
       }
@@ -1899,7 +1890,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             if (!newInput.equals(result.getInput()))
               result.setInput(newInput);
             // New selection
-            List<EValuePresence> values = selection.getSelectedValuePresences();
+            List<IValuePresence<?>> values = selection.getSelectedValuePresences();
             result.setSelection(new StructuredSelection(values), true);
           } else {
             // No 'match and feature' in selection
@@ -1907,13 +1898,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             ValuesInput newInput = null;
             if (selection.getSelectedMatches().size() <= 1 && getInput() != null) {
               // No more than one match
-              EMatch newMatch = selection.asMatch();
+              IMatch<?> newMatch = selection.asMatch();
               if (newMatch != null) {
                 // One match
-                EMatch currentMatch = null;
+                IMatch<?> currentMatch = null;
                 ValuesInput currentInput = result.getInput();
-                if (currentInput != null && currentInput.getMatchAndFeature() != null)
+                if (currentInput != null && currentInput.getMatchAndFeature() != null) {
                   currentMatch = currentInput.getMatchAndFeature().getMatch();
+                }
                 if (newMatch != currentMatch) {
                   // New match is different from current match
                   FeaturesInput featuresInput = new FeaturesInput(getInput(), newMatch);
@@ -1939,7 +1931,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         ValuesInput input = (ValuesInput) event.getViewer().getInput();
         MatchAndFeature maf = input.getMatchAndFeature();
         if (TextMergerDialog.isApplicableTo(maf.getFeature())) {
-          openDedicatedViewer(getInput(), maf.getMatch(), (EAttribute)maf.getFeature());
+          openDedicatedViewer(getInput(), maf.getMatch(), maf.getFeature());
         }
       }
     });
@@ -2052,9 +2044,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param incrementalMode_p whether optional deletions must be skipped
    * @return a non-null, potentially empty, unmodifiable list
    */
-  protected List<IDifference> getDifferencesToMerge(final List<EMatch> selectedMatches_p,
+  protected List<IDifference<?>> getDifferencesToMerge(final List<IMatch<?>> selectedMatches_p,
       final Role destination_p, final boolean coverChildren_p, final boolean incrementalMode_p) {
-    final List<IDifference> result = new ArrayList<IDifference>();
+    final List<IDifference<?>> result = new ArrayList<IDifference<?>>();
     IProgressService progress = PlatformUI.getWorkbench().getProgressService();
     try {
       progress.busyCursorWhile(new IRunnableWithProgress() {
@@ -2063,11 +2055,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
          */
         public void run(final IProgressMonitor monitor_p)
         throws InvocationTargetException, InterruptedException {
-          for (EMatch selectedMatch : selectedMatches_p) {
-            if (coverChildren_p)
+          for (IMatch<?> selectedMatch : selectedMatches_p) {
+            if (coverChildren_p) {
               addDifferencesToMergeRec(result, selectedMatch, destination_p, incrementalMode_p);
-            else
+            } else {
               addDifferencesToMerge(result, selectedMatch, destination_p, incrementalMode_p);
+            }
           }
         }
       });
@@ -2132,13 +2125,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param selection_p a non-null selection
    * @return a non-null, potentially empty list
    */
-  protected List<EMatch> getSelectedMatchesForInteractions(
+  protected List<IMatch<?>> getSelectedMatchesForInteractions(
       final ComparisonSelection selection_p) {
-    List<EMatch> selectedMatches = selection_p.getSelectedMatches();
+    List<IMatch<?>> selectedMatches = selection_p.getSelectedMatches();
     if (selectedMatches.isEmpty()) {
-      List<EMatch> treePath = selection_p.getSelectedTreePath();
-      if (!treePath.isEmpty())
-        selectedMatches = Collections.singletonList(treePath.get(treePath.size()-1));
+      List<IMatch<?>> treePath = selection_p.getSelectedTreePath();
+      if (!treePath.isEmpty()) {
+        selectedMatches = Collections.<IMatch<?>>singletonList(
+            treePath.get(treePath.size()-1));
+      }        
     }
     return selectedMatches;
   }
@@ -2161,14 +2156,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    */
   protected IStructuredSelection getSelectionAsSide(
       IStructuredSelection selection_p, boolean onLeft_p) {
-    List<EObject> result = new FArrayList<EObject>();
+    List<Object> result = new FArrayList<Object>();
     if (getInput() != null) {
       Role role = getInput().getRoleForSide(onLeft_p);
       for (Object selected : selection_p.toArray()) {
         if (selected instanceof IMatch) {
-          EObject element = ((IMatch)selected).get(role);
-          if (element != null)
+          Object element = ((IMatch<?>)selected).get(role);
+          if (element != null) {
             result.add(element);
+          }
         }
       }
     }
@@ -2240,14 +2236,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (selection == null) return; // Should not happen according to ignore tool activation
     EMFDiffNode input = getInput();
     if (input == null) return; // Should not happen according to ignore tool activation
-    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection);
+    List<IMatch<?>> selectedMatches = getSelectedMatchesForInteractions(selection);
       // Make choices
     IgnoreChoiceData choices = new IgnoreChoiceData(
         input.isUserPropertyTrue(P_DEFAULT_COVER_CHILDREN), false);
     makeIgnoreChoices(choices, input, selectedMatches);
     if (!choices.isProceed()) return;
     // Ignore operation is set to proceed and choices have been made
-    Collection<IDifference> toIgnore;
+    Collection<IDifference<?>> toIgnore;
     if (!selectedMatches.isEmpty()) {
       toIgnore = getDifferencesToMerge(
         selectedMatches, input.getRoleForSide(onLeft_p),
@@ -2263,7 +2259,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Ignore the given set of differences
    * @param differences_p a non-null, potentially empty set of differences
    */
-  protected void ignore(final Collection<IDifference> differences_p) {
+  protected void ignore(final Collection<IDifference<?>> differences_p) {
     final EMFDiffNode input = getInput();
     final ComparisonSelection selection = getSelection();
     if (input != null && !differences_p.isEmpty()) {
@@ -2297,7 +2293,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
        */
       @Override
       public boolean select(Viewer viewer_p, Object parentElement_p, Object element_p) {
-        EMatch match = (EMatch)element_p;
+        IMatch<?> match = (IMatch<?>)element_p;
         return getInput().getCategoryManager().getDifferenceNumber(match) > 0;
       }
     };
@@ -2326,12 +2322,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param selectedMatches a non-null, potentially empty list
    */
   protected boolean interactionsRequiredForIgnore(IgnoreChoiceData choices_p,
-      EMFDiffNode input_p, List<EMatch> selectedMatches) {
+      EMFDiffNode input_p, List<IMatch<?>> selectedMatches) {
     boolean childrenForMerge = false;
     boolean ownDifferences = false;
     // Determining whether selected matches have proper differences
     // and differences in children
-    for (EMatch selectedMatch : selectedMatches) {
+    for (IMatch<?> selectedMatch : selectedMatches) {
       ownDifferences = ownDifferences ||
           !input_p.getCategoryManager().getDifferenceKind(selectedMatch).isNeutral();
       if (childrenForMerge && ownDifferences)
@@ -2357,10 +2353,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param selectedMatches a non-null, potentially empty list
    */
   protected boolean interactionsRequiredForMerge(MergeChoiceData choices_p,
-      EMFDiffNode input_p, List<EMatch> selectedMatches) {
+      EMFDiffNode input_p, List<IMatch<?>> selectedMatches) {
     boolean result = !selectedMatches.isEmpty();
     if (result && selectedMatches.size() == 1) {
-      EMatch selectedMatch = selectedMatches.get(0);
+      IMatch<?> selectedMatch = selectedMatches.get(0);
       if (!input_p.getCategoryManager().hasChildrenForMergeFiltered(selectedMatch)) {
         DifferenceKind kind = input_p.getCategoryManager().getDifferenceKind(selectedMatch);
         result = !(kind.isAddition() || kind.isDeletion());
@@ -2396,9 +2392,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       ComparisonSelection selection_p) {
     boolean result = false;
     if (input_p != null && selection_p != null && !selection_p.isEmpty()) {
-      EStructuralFeature feature = selection_p.asFeature();
+      Object feature = selection_p.asFeature();
       if (feature == null) {
-        EMatch selectedMatch = selection_p.asMatch();
+        IMatch<?> selectedMatch = selection_p.asMatch();
         if (selectedMatch != null) {
           FeaturesInput nodeAndMatch = new FeaturesInput(input_p, selectedMatch);
           MatchAndFeature defaultMAF = getDefaultFeatureSelection(nodeAndMatch);
@@ -2439,7 +2435,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    *          been selected for merge
    */
   protected void makeIgnoreChoices(IgnoreChoiceData choices_p,
-      EMFDiffNode input_p, List<EMatch> selectedMatches_p) {
+      EMFDiffNode input_p, List<IMatch<?>> selectedMatches_p) {
     boolean requiresInteractions = interactionsRequiredForIgnore(choices_p, input_p, selectedMatches_p);
     if (requiresInteractions) {
       IgnoreChoicesDialog choicesDialog =
@@ -2461,13 +2457,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param acceptIncrementalMode_p whether the incremental mode is acceptable in this context
    */
   protected void makeMergeChoices(MergeChoiceData choices_p, EMFDiffNode input_p,
-      List<EMatch> selectedMatches_p, boolean acceptIncrementalMode_p) {
+      List<IMatch<?>> selectedMatches_p, boolean acceptIncrementalMode_p) {
     boolean requiresInteractions = interactionsRequiredForMerge(
         choices_p, input_p, selectedMatches_p);
     if (requiresInteractions) {
       // Group of differences
       boolean mayAskAboutChildren = false;
-      for (EMatch selectedMatch : selectedMatches_p) {
+      for (IMatch<?> selectedMatch : selectedMatches_p) {
         if (input_p.getCategoryManager().getDifferenceKind(selectedMatch) == DifferenceKind.COUNTED) {
           choices_p.setCoverChildren(true);
           break;
@@ -2511,7 +2507,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (selection_p == null) return; // Should not happen according to merge tool activation
     final EMFDiffNode input = getInput();
     // Define the set of selected matches
-    List<EMatch> selectedMatches = getSelectedMatchesForInteractions(selection_p);
+    List<IMatch<?>> selectedMatches = getSelectedMatchesForInteractions(selection_p);
     // Make choices
     MergeChoiceData choices = new MergeChoiceData(
         input.isUserPropertyTrue(P_DEFAULT_COVER_CHILDREN),
@@ -2521,10 +2517,10 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     if (!choices.isProceed()) return;
     // Merge is set to proceed and choices have been made
     final Role destination = input.getRoleForSide(toLeft_p);
-    final Collection<IDifference> toMerge = !selectedMatches.isEmpty()? getDifferencesToMerge(
+    final Collection<IDifference<?>> toMerge = !selectedMatches.isEmpty()? getDifferencesToMerge(
             selectedMatches, destination, choices.isCoverChildren(), choices.isIncrementalMode()):
           input.getCategoryManager().getPendingDifferencesFiltered(selection_p.asDifferencesToMerge());
-    final Collection<IDifference> merged = new ArrayList<IDifference>();
+    final Collection<IDifference<?>> merged = new ArrayList<IDifference<?>>();
     boolean done = false;
     if (!toMerge.isEmpty()) {
       // Merge is possible
@@ -2539,9 +2535,11 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           /**
            * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
            */
+          @SuppressWarnings({ "unchecked", "rawtypes" })
           public void run(IProgressMonitor monitor_p) throws InvocationTargetException,
           InterruptedException {
-            merged.addAll(getComparison().merge(toMerge, destination, true, monitor_p));
+            merged.addAll(((IComparison)getComparison()).merge(
+                toMerge, destination, true, monitor_p));
             getUIComparison().setLastActionSelection(selection_p);
           }
         }, toLeft_p);
@@ -2569,13 +2567,13 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * Apply the merge of a value defined through a dedicated viewer
    * @param node_p the non-null diff node
    * @param match_p the non-null match element concerned
-   * @param feature_p the non-null feature concerned
+   * @param attribute_p the non-null feature concerned
    * @param textDiffNode_p the non-null output of the dedicated merge operation
    */
-  protected void mergeFromDedicatedViewer(final EMFDiffNode node_p, final IMatch match_p,
-      final EAttribute feature_p, TextDiffNode textDiffNode_p) {
+  protected void mergeFromDedicatedViewer(final EMFDiffNode node_p, final IMatch<?> match_p,
+      final Object attribute_p, TextDiffNode textDiffNode_p) {
     final ComparisonSelection selection = getSelection();
-    final List<EMergeableDifference> toIgnore = selection.asDifferencesToMerge();
+    final List<IDifference<?>> toIgnore = selection.asDifferencesToMerge();
     TextCompareContent left = textDiffNode_p.getLeft();
     TextCompareContent right = textDiffNode_p.getRight();
     String leftMergedValue = left.getEditedContent();
@@ -2584,15 +2582,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       // They cannot be both non-null due to TextMergerDialog.isEditable(boolean)
       final boolean onLeft = leftMergedValue != null;
       final String newValue = onLeft? leftMergedValue: rightMergedValue;
-      final IEditableModelScope impactedScope = node_p.getScope(onLeft);
+      final IEditableTreeDataScope<?> impactedScope = node_p.getScope(onLeft);
       executeOnModel(new IRunnableWithProgress() {
         /**
          * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org.eclipse.core.runtime.IProgressMonitor)
          */
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         public void run(IProgressMonitor monitor_p)
             throws InvocationTargetException, InterruptedException {
-          EObject holder = match_p.get(node_p.getRoleForSide(onLeft));
-          impactedScope.add(holder, feature_p, newValue);
+          Object holder = match_p.get(node_p.getRoleForSide(onLeft));
+          ((IEditableTreeDataScope)impactedScope).addAttributeValue(holder, attribute_p, newValue);
           node_p.setModified(true, onLeft);
           node_p.ignore(toIgnore);
           getUIComparison().setLastActionSelection(selection);
@@ -2642,16 +2641,16 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param match_p the non-null match concerned
    * @param feature_p the potentially null feature concerned where null stands for default
    */
-  protected void openDedicatedViewer(final EMFDiffNode node_p, EMatch match_p,
-      EAttribute feature_p) {
+  protected void openDedicatedViewer(final EMFDiffNode node_p, IMatch<?> match_p,
+      Object feature_p) {
     assert feature_p == null || TextMergerDialog.isApplicableTo(feature_p);
-    EAttribute attribute = feature_p;
+    Object attribute = feature_p;
     if (attribute == null) {
       FeaturesInput nodeAndMatch = new FeaturesInput(node_p, match_p);
       MatchAndFeature defaultMAF = getDefaultFeatureSelection(nodeAndMatch);
       if (defaultMAF != null &&
           TextMergerDialog.isApplicableTo(defaultMAF.getFeature())) {
-        attribute = (EAttribute)defaultMAF.getFeature();
+        attribute = defaultMAF.getFeature();
       }
     }
     if (attribute != null) {
@@ -2736,7 +2735,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     boolean allowIgnoring = false;
     if (selection != null && input != null) {
       allowIgnoring = true;
-      IValuePresence presence = selection.asValuePresence();
+      IValuePresence<?> presence = selection.asValuePresence();
       if (presence != null && !presence.isMerged()) {
         // Value presence
         DifferenceKind kind = input.getCategoryManager().getDifferenceKind(presence);
@@ -2745,15 +2744,15 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         allowDeletion = input.getCategoryManager().isMany(presence) &&
             !input.getCategoryManager().isOwnership(presence);
       } else if (selection.asFeature() == null) {
-        List<EMatch> matches = selection.asMatches();
+        List<IMatch<?>> matches = selection.asMatches();
         if (!matches.isEmpty()) {
           // Matches selected
           if (matches.size() > 1) {
             // Several matches selected
             allowDeletion = true;
-            Iterator<EMatch> it = matches.iterator();
+            Iterator<IMatch<?>> it = matches.iterator();
             while (it.hasNext() && (!onLeft || !onRight || allowDeletion)) {
-              EMatch current = it.next();
+              IMatch<?> current = it.next();
               DifferenceKind kind = input.getCategoryManager().getDifferenceKind(current);
               if (kind.isAddition()) {
                 onLeft = onLeft || kind.isLeft(true);
@@ -2767,7 +2766,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
             allowDeletion = allowDeletion && (onLeft != onRight);
           } else {
             // Only one match selected
-            IMatch match = matches.get(0);
+            IMatch<?> match = matches.get(0);
             if (input.getCategoryManager().representAsModification(match) ||
                 input.getCategoryManager().representAsMove(match) ||
                 input.getCategoryManager().getDifferenceKind(match) == DifferenceKind.COUNTED) {
@@ -2834,7 +2833,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     IEditorInput rawEditorInput = input == null? null: input.getEditorInput();
     if (input != null && rawEditorInput instanceof EMFDiffMergeEditorInput) {
       EMFDiffMergeEditorInput editorInput = (EMFDiffMergeEditorInput)rawEditorInput;
-      IComparisonMethod origMethod = editorInput.getComparisonMethod();
+      IComparisonMethod<?> origMethod = editorInput.getComparisonMethod();
       IModelScopeDefinition originalTargetScopeDef =
           origMethod.getModelScopeDefinition(Role.TARGET);
       ComparisonSetupManager manager = EMFDiffMergeUIPlugin.getDefault().getSetupManager();
@@ -3151,7 +3150,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
    * @param input_p a non-null object
    * @return whether to proceed with merge
    */
-  protected boolean showMergeImpact(final Collection<IDifference> toMerge_p,
+  protected boolean showMergeImpact(final Collection<IDifference<?>> toMerge_p,
       final boolean toLeft_p, final EMFDiffNode input_p) {
     boolean result = true;
     final ImpactInput mergeInput = new ImpactInput(toMerge_p, toLeft_p, input_p);
@@ -3419,8 +3418,9 @@ public class ComparisonViewer extends AbstractComparisonViewer {
      * The main restart behavior
      * @param monitor_p a non-null progress monitor
      */
+    @SuppressWarnings("unchecked")
     protected void restart(IProgressMonitor monitor_p) {
-      IComparisonMethod newMethod = _editorInput.getComparisonMethod();
+      IComparisonMethod<?> newMethod = _editorInput.getComparisonMethod();
       newMethod.setVerbose(false);
       EMFDiffNode diffNode = _editorInput.getCompareResult();
       diffNode.getUIComparison().clear();

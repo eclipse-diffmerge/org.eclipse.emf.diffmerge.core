@@ -17,7 +17,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
@@ -54,7 +53,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class EMatchImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference>
     implements EMatch {
 
   /**
@@ -553,8 +552,8 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>
-  getModifiableAttributeMap(boolean create_p) {
+  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap(
+      boolean create_p) {
     return create_p ? getModifiableAttributeMap() : modifiableAttributeMap;
   }
 
@@ -563,9 +562,10 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<EReference, EList<IReferenceValuePresence<EObject>>>
-  getModifiableOrderReferenceMap(boolean create_p) {
-    return create_p ? getModifiableOrderReferenceMap() : modifiableOrderReferenceMap;
+  protected EMap<EReference, EList<IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap(
+      boolean create_p) {
+    return create_p ? getModifiableOrderReferenceMap()
+        : modifiableOrderReferenceMap;
   }
 
   /**
@@ -573,8 +573,8 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>>
-  getModifiableReferenceMap(boolean create_p) {
+  protected EMap<EReference, EMap<EObject, IReferenceValuePresence<EObject>>> getModifiableReferenceMap(
+      boolean create_p) {
     return create_p ? getModifiableReferenceMap() : modifiableReferenceMap;
   }
 

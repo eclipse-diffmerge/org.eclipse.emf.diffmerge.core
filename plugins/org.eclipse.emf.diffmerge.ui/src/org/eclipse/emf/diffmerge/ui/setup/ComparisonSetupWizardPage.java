@@ -13,7 +13,7 @@ package org.eclipse.emf.diffmerge.ui.setup;
 
 import static org.eclipse.emf.diffmerge.ui.setup.ComparisonSetup.PROPERTY_COMPARISON_METHOD;
 
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
@@ -131,7 +131,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       @Override
       public void widgetSelected(SelectionEvent e_p) {
-        IComparisonMethod method = _setup.getComparisonMethod();
+        IComparisonMethod<?> method = _setup.getComparisonMethod();
         if (method != null)
           method.configure();
       }
@@ -142,7 +142,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
        */
       public void propertyChange(PropertyChangeEvent event_p) {
         if (PROPERTY_COMPARISON_METHOD.equals(event_p.getProperty())) {
-          IComparisonMethod method = _setup.getComparisonMethod();
+          IComparisonMethod<?> method = _setup.getComparisonMethod();
           result.setEnabled(method != null && method.isConfigurable());
         }
       }
@@ -193,7 +193,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
       public String getText(Object element_p) {
         String localResult;
         if (element_p instanceof IComparisonMethodFactory) {
-          IComparisonMethodFactory factory = (IComparisonMethodFactory)element_p;
+          IComparisonMethodFactory<?> factory = (IComparisonMethodFactory<?>)element_p;
           localResult = factory.getLabel();
         } else {
           localResult = super.getText(element_p);
@@ -211,7 +211,7 @@ public class ComparisonSetupWizardPage extends WizardPage {
         if (selection instanceof IStructuredSelection) {
           Object selected = ((IStructuredSelection)selection).getFirstElement();
           if (selected instanceof IComparisonMethodFactory)
-            _setup.setSelectedFactory((IComparisonMethodFactory)selected);
+            _setup.setSelectedFactory((IComparisonMethodFactory<?>)selected);
         }
       }
     });

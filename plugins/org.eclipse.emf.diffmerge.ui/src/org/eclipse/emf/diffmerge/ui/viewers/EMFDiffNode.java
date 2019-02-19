@@ -23,15 +23,15 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IOperationHistoryListener;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.OperationHistoryEvent;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
@@ -41,8 +41,6 @@ import org.eclipse.emf.diffmerge.ui.util.CompositeUndoContext;
 import org.eclipse.emf.diffmerge.ui.util.IUserPropertyOwner;
 import org.eclipse.emf.diffmerge.ui.util.UserProperty.Identifier;
 import org.eclipse.emf.diffmerge.ui.util.UserPropertyOwner;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -113,7 +111,7 @@ IUserPropertyOwner {
    * Constructor
    * @param comparison_p a non-null comparison
    */
-  public EMFDiffNode(EComparison comparison_p) {
+  public EMFDiffNode(EComparison<?,?,?> comparison_p) {
     this(comparison_p, null);
   }
   
@@ -122,7 +120,7 @@ IUserPropertyOwner {
    * @param comparison_p a non-null comparison
    * @param domain_p the optional editing domain for undo/redo
    */
-  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p) {
+  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p) {
     this(comparison_p, domain_p, true, true);
   }
   
@@ -133,7 +131,7 @@ IUserPropertyOwner {
    * @param isLeftEditionPossible_p whether edition on the left is possible at all
    * @param isRightEditionPossible_p whether edition on the right is possible at all
    */
-  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p,
+  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
     this(comparison_p, domain_p, isLeftEditionPossible_p, isRightEditionPossible_p,
         EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
@@ -147,7 +145,7 @@ IUserPropertyOwner {
    * @param isRightEditionPossible_p whether edition on the right is possible at all
    * @param leftRole_p the non-null role on the left-hand side
    */
-  public EMFDiffNode(EComparison comparison_p, EditingDomain domain_p,
+  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p,
       Role leftRole_p) {
     super(
@@ -196,7 +194,7 @@ IUserPropertyOwner {
    * @param comparison_p a non-null comparison
    * @return a non-null UI comparison
    */
-  protected UIComparison createContents(EComparison comparison_p) {
+  protected UIComparison createContents(EComparison<?,?,?> comparison_p) {
     return new UIComparisonImpl(comparison_p);
   }
   
@@ -258,6 +256,7 @@ IUserPropertyOwner {
    * Return the model comparison of this node
    * @return a non-null comparison, unless the UI comparison has been disposed
    */
+  @SuppressWarnings("rawtypes")
   public EComparison getActualComparison() {
     return getUIComparison().getActualComparison();
   }
@@ -275,17 +274,19 @@ IUserPropertyOwner {
    * @param match_p a non-null match
    * @return a potentially null match
    */
-  protected EMatch getContainerOf(EMatch match_p) {
-    EMatch result = null;
-    IComparison comparison = getActualComparison();
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected IMatch<?> getContainerOf(IMatch<?> match_p) {
+    IMatch<?> result = null;
+    IComparison<?> comparison = getActualComparison();
     if (comparison != null) {
       Role containerSide;
       Role drivingRole = getDrivingRole();
-      if (match_p.getUncoveredRole() == drivingRole)
+      if (match_p.getUncoveredRole() == drivingRole) {
         containerSide = drivingRole.opposite();
-      else
+      } else {
         containerSide = drivingRole;
-      result = (EMatch)comparison.getContainerOf(match_p, containerSide);
+      }
+      result = comparison.getContainerOf((IMatch)match_p, containerSide);
     }
     return result;
   }
@@ -345,8 +346,8 @@ IUserPropertyOwner {
    * @param left_p whether the side is left or right
    * @return a non-null scope, unless the UI comparison has been disposed
    */
-  public IEditableModelScope getScope(boolean left_p) {
-    EComparison comparison = getActualComparison();
+  public IEditableTreeDataScope<?> getScope(boolean left_p) {
+    IComparison.Editable<?> comparison = getActualComparison();
     return comparison != null?
         comparison.getScope(getRoleForSide(left_p)): null;
   }
@@ -433,7 +434,7 @@ IUserPropertyOwner {
   @Override
   public boolean hasChildren() {
     // Is there content?
-    IComparison comparison = getActualComparison();
+    IComparison<?> comparison = getActualComparison();
     return comparison != null? comparison.hasRemainingDifferences(): false;
   }
   
@@ -461,22 +462,22 @@ IUserPropertyOwner {
    * Silently mark the given set of differences as ignored
    * @param differences_p a non-null, potentially empty collection
    */
-  public void ignore(Collection<? extends IDifference> differences_p) {
-    for (IDifference difference : differences_p) {
+  public void ignore(Collection<? extends IDifference<?>> differences_p) {
+    for (IDifference<?> difference : differences_p) {
       if (difference instanceof IDifference.Editable) {
-        ((IDifference.Editable)difference).setIgnored(true);
+        ((IDifference.Editable<?>)difference).setIgnored(true);
         // Also on symmetrical if any
         if (difference instanceof IValuePresence) {
-          IValuePresence symmetrical = ((IValuePresence)difference).getSymmetrical();
+          IValuePresence<?> symmetrical = ((IValuePresence<?>)difference).getSymmetrical();
           if (symmetrical instanceof IDifference.Editable) {
-            ((IDifference.Editable)symmetrical).setIgnored(true);
+            ((IDifference.Editable<?>)symmetrical).setIgnored(true);
           }
           // Also on symmetrical ownership if any
           if (difference instanceof IReferenceValuePresence) {
-            IReferenceValuePresence symmetricalOwnership =
-                ((IReferenceValuePresence)difference).getSymmetricalOwnership();
+            IReferenceValuePresence<?> symmetricalOwnership =
+                ((IReferenceValuePresence<?>)difference).getSymmetricalOwnership();
             if (symmetricalOwnership instanceof IDifference.Editable) {
-              ((IDifference.Editable)symmetricalOwnership).setIgnored(true);
+              ((IDifference.Editable<?>)symmetricalOwnership).setIgnored(true);
             }
           }
         }
@@ -485,20 +486,29 @@ IUserPropertyOwner {
   }
   
   /**
-   * Return whether the given structural feature must be considered as a containment
+   * Return whether the given feature must be considered as a containment
    * @param feature_p a potentially null feature
    */
-  public boolean isContainment(EStructuralFeature feature_p) {
+  public boolean isContainer(Object feature_p) {
     boolean result = false;
-    if (feature_p instanceof EReference) {
-      EReference reference = (EReference)feature_p;
-      IComparison comparison = getActualComparison();
-      if (comparison != null) {
-        IFeaturedModelScope scope = comparison.getScope(getDrivingRole());
-        result = scope.isContainment(reference);
-      } else {
-        result = reference.isContainment();
-      }
+    IComparison<?> comparison = getActualComparison();
+    if (comparison != null) {
+      ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
+      result = scope.getScopePolicy().isContainerReference(feature_p);
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether the given feature must be considered as a containment
+   * @param feature_p a potentially null feature
+   */
+  public boolean isContainment(Object feature_p) {
+    boolean result = false;
+    IComparison<?> comparison = getActualComparison();
+    if (comparison != null) {
+      ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
+      result = scope.isContainment(feature_p);
     }
     return result;
   }
@@ -548,7 +558,7 @@ IUserPropertyOwner {
    * Return whether this comparison is 3-way
    */
   public boolean isThreeWay() {
-    IComparison comparison = getActualComparison();
+    IComparison<?> comparison = getActualComparison();
     return comparison != null? comparison.isThreeWay(): false;
   }
   

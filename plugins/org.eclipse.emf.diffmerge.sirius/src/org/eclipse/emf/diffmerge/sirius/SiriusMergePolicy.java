@@ -13,10 +13,9 @@ package org.eclipse.emf.diffmerge.sirius;
 
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFMergePolicy;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.sirius.diagram.DDiagramElement;
@@ -33,14 +32,14 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
 public class SiriusMergePolicy extends GMFMergePolicy {
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override
-  public boolean copyFeature(EStructuralFeature feature_p, IFeaturedModelScope scope_p) {
+  protected boolean copyFeature(EStructuralFeature feature_p) {
     return // Replace DResentationDescriptor::repPath by ::representation
         feature_p == ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation() ||
         feature_p != ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath() &&
-        super.copyFeature(feature_p, scope_p);
+        super.copyFeature(feature_p);
   }
   
   /**
@@ -50,7 +49,7 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendDescriptorAdditionGroup(Set<EObject> group_p,
-      DRepresentationDescriptor element_p, IFeaturedModelScope scope_p) {
+      DRepresentationDescriptor element_p, ITreeDataScope<EObject> scope_p) {
     group_p.add(element_p.getRepresentation());
   }
   
@@ -62,10 +61,10 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendDRepresentationAdditionGroup(Set<EObject> group_p,
-      DRepresentation element_p, IFeaturedModelScope scope_p) {
+      DRepresentation element_p, ITreeDataScope<EObject> scope_p) {
     EObject container = scope_p.getContainer(element_p);
     if (container instanceof DView) {
-      for (EObject descriptor : scope_p.get(container,
+      for (EObject descriptor : scope_p.getReferenceValues(container,
           ViewpointPackage.Literals.DVIEW__OWNED_REPRESENTATION_DESCRIPTORS)) {
         if (descriptor instanceof DRepresentationDescriptor) {
           if (element_p.equals(((DRepresentationDescriptor) descriptor).getRepresentation())) {
@@ -88,7 +87,7 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendSiriusAdditionGroup(Set<EObject> group_p, EObject element_p,
-      IFeaturedModelScope scope_p) {
+      ITreeDataScope<EObject> scope_p) {
     // Semantic element -> DSemanticDecorators
     extendSemanticElementAdditionGroup(group_p, element_p, scope_p);
     // Sirius 4.1: Retrieve the diagram while merging the descriptor
@@ -110,7 +109,7 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendSemanticElementAdditionGroup(Set<EObject> group_p,
-      EObject element_p, IFeaturedModelScope scope_p) {
+      EObject element_p, ITreeDataScope<EObject> scope_p) {
     if (isGraphicalFromSemantic()) {
       ECrossReferenceAdapter crAdapter = ECrossReferenceAdapter.getCrossReferenceAdapter(element_p);
       if (crAdapter != null) {
@@ -125,10 +124,10 @@ public class SiriusMergePolicy extends GMFMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#getAdditionGroup(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#getAdditionGroup(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public Set<EObject> getAdditionGroup(EObject element_p, IFeaturedModelScope scope_p) {
+  public Set<EObject> getAdditionGroup(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Set<EObject> result = super.getAdditionGroup(element_p, scope_p);
     extendSiriusAdditionGroup(result, element_p, scope_p);
     return result;
@@ -141,8 +140,8 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @return a potentially null descriptor
    */
   protected DRepresentationDescriptor getDescriptor(
-      DRepresentation representation_p, IFeaturedModelScope scope_p) {
-    for (EObject root : scope_p.getContents()) {
+      DRepresentation representation_p, ITreeDataScope<EObject> scope_p) {
+    for (EObject root : scope_p.getRoots()) {
       if (root instanceof DAnalysis) {
         for (DView view : ((DAnalysis)root).getOwnedViews()) {
           for (DRepresentationDescriptor descriptor : view.getOwnedRepresentationDescriptors()) {
@@ -156,10 +155,10 @@ public class SiriusMergePolicy extends GMFMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#isSingleMandatory(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#isSingleMandatory(java.lang.Object)
    */
   @Override
-  protected boolean isSingleMandatory(EReference reference_p) {
+  protected boolean isSingleMandatory(Object reference_p) {
     return super.isSingleMandatory(reference_p) ||
         reference_p == ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target();
   }

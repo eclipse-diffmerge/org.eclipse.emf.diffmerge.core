@@ -26,14 +26,6 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 public interface IMergePolicy<E> {
   
   /**
-   * Create and return a base copy of the given element, i.e., without copying the values
-   * of its attributes or references
-   * @param element_p a non-null element
-   * @return a non-null element
-   */
-  E baseCopy(E element_p);
-  
-  /**
    * Return whether a non-root element may only be present in the given scope if its ownership
    * (value in containment setting) is present
    * @param scope_p a non-null scope

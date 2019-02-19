@@ -14,7 +14,6 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -29,6 +28,7 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
 import org.eclipse.emf.diffmerge.impl.helpers.MatchOperation;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy;
@@ -47,7 +47,7 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public class EComparisonImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<EObject, EAttribute, EReference>
     implements EComparison {
 
   /**
@@ -65,8 +65,8 @@ public class EComparisonImpl extends
    * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableModelScope targetScope_p,
-      IEditableModelScope referenceScope_p) {
+  public EComparisonImpl(IEditableTreeDataScope<EObject> targetScope_p,
+      IEditableTreeDataScope<EObject> referenceScope_p) {
     this(targetScope_p, referenceScope_p, null);
   }
 
@@ -77,9 +77,9 @@ public class EComparisonImpl extends
    * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableModelScope targetScope_p,
-      IEditableModelScope referenceScope_p,
-      IEditableModelScope ancestorScope_p) {
+  public EComparisonImpl(IEditableTreeDataScope<EObject> targetScope_p,
+      IEditableTreeDataScope<EObject> referenceScope_p,
+      IEditableTreeDataScope<EObject> ancestorScope_p) {
     super(targetScope_p, referenceScope_p, ancestorScope_p);
   }
 
@@ -94,64 +94,12 @@ public class EComparisonImpl extends
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * This is specialized for the more specific type known in this context.
-   * @generated
-   */
-  @Override
-  public void setAncestorScope(IEditableModelScope newAncestorScope) {
-    super.setAncestorScope(newAncestorScope);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * This is specialized for the more specific type known in this context.
-   * @generated
-   */
-  @Override
-  public void setReferenceScope(IEditableModelScope newReferenceScope) {
-    super.setReferenceScope(newReferenceScope);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * This is specialized for the more specific type known in this context.
-   * @generated
-   */
-  @Override
-  public void setTargetScope(IEditableModelScope newTargetScope) {
-    super.setTargetScope(newTargetScope);
-  }
-
-  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMapping()
    * @generated NOT
    */
   @Override
   public EMapping getMapping() {
     return (EMapping) super.getMapping();
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#getScope(org.eclipse.emf.diffmerge.generic.api.Role)
-   * @generated NOT
-   */
-  public IEditableModelScope getScope(Role role) {
-    IEditableModelScope result;
-    switch (role) {
-    case TARGET:
-      result = getTargetScope();
-      break;
-    case REFERENCE:
-      result = getReferenceScope();
-      break;
-    default:
-      result = getAncestorScope();
-    }
-    return result;
   }
 
   /**

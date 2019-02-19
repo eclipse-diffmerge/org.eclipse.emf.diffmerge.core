@@ -24,14 +24,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.EMapping;
-import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
@@ -435,27 +430,6 @@ public final class ModelsUtil {
     Collection<EObject> filtered = new FOrderedSet<EObject>(elements_p, null);
     filtered.remove(element_p);
     return !EcoreUtil.isAncestor(filtered, element_p);
-  }
-  
-  /**
-   * Remove dependencies (references) to the given element after its removal from the
-   * scope of the given role in the given comparison
-   * @param comparison_p a non-null comparison
-   * @param role_p TARGET or REFERENCE
-   * @param element_p a non-null element
-   * @return whether all dependencies have been successfully removed
-   */
-  public static boolean removeDependencies(
-      EComparison comparison_p, Role role_p, EObject element_p) {
-    boolean result = true;
-    EMapping mapping = comparison_p.getMapping();
-    IEditableTreeDataScope<EObject> scope = comparison_p.getScope(role_p);
-    for (EStructuralFeature.Setting setting : mapping.getCrossReferences(element_p, role_p)) {
-      boolean removed = scope.removeReferenceValue(
-          setting.getEObject(), setting.getEStructuralFeature(), element_p);
-      result = result && removed;
-    }
-    return result;
   }
   
 }

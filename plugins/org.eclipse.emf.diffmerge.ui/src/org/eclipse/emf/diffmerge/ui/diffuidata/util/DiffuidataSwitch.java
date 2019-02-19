@@ -13,9 +13,8 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.util;
 
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
-
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.ui.diffuidata.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -121,7 +120,7 @@ public class DiffuidataSwitch<T> {
     }
     case DiffuidataPackage.MATCH_TO_NB_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<EMatch, Integer> matchToNbEntry = (Map.Entry<EMatch, Integer>) theEObject;
+      Map.Entry<IMatch<?>, Integer> matchToNbEntry = (Map.Entry<IMatch<?>, Integer>) theEObject;
       T result = caseMatchToNbEntry(matchToNbEntry);
       if (result == null)
         result = defaultCase(theEObject);
@@ -137,6 +136,13 @@ public class DiffuidataSwitch<T> {
     case DiffuidataPackage.ISTRUCTURED_SELECTION: {
       IStructuredSelection iStructuredSelection = (IStructuredSelection) theEObject;
       T result = caseIStructuredSelection(iStructuredSelection);
+      if (result == null)
+        result = defaultCase(theEObject);
+      return result;
+    }
+    case DiffuidataPackage.IDIFFERENCE: {
+      IDifference<?> iDifference = (IDifference<?>) theEObject;
+      T result = caseIDifference(iDifference);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
@@ -202,7 +208,7 @@ public class DiffuidataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseMatchToNbEntry(Map.Entry<EMatch, Integer> object) {
+  public T caseMatchToNbEntry(Map.Entry<IMatch<?>, Integer> object) {
     return null;
   }
 
@@ -233,6 +239,21 @@ public class DiffuidataSwitch<T> {
    * @generated
    */
   public T caseIStructuredSelection(IStructuredSelection object) {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>IDifference</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>IDifference</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public <E> T caseIDifference(IDifference<E> object) {
     return null;
   }
 

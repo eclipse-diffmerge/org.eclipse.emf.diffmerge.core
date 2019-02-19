@@ -27,11 +27,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
@@ -279,17 +278,17 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * @see org.eclipse.compare.contentmergeviewer.IFlushable#flush(org.eclipse.core.runtime.IProgressMonitor)
    */
   public void flush(IProgressMonitor monitor_p) {
-    IComparison comparison = getComparison();
+    IComparison<?> comparison = getComparison();
     if (comparison != null) {
       try {
         if (getInput().isModified(true)) {
-          IModelScope leftScope = comparison.getScope(getInput().getRoleForSide(true));
+          ITreeDataScope<?> leftScope = comparison.getScope(getInput().getRoleForSide(true));
           if (leftScope instanceof IPersistentModelScope.Editable) {
             ((IPersistentModelScope.Editable)leftScope).save();
           }
         }
         if (getInput().isModified(false)) {
-          IModelScope rightScope = comparison.getScope(getInput().getRoleForSide(false));
+          ITreeDataScope<?> rightScope = comparison.getScope(getInput().getRoleForSide(false));
           if (rightScope instanceof IPersistentModelScope.Editable) {
             ((IPersistentModelScope.Editable)rightScope).save();
           }
@@ -330,7 +329,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * Return the comparison for this viewer
    * @return a comparison which is assumed non-null after setInput(Object) has been invoked
    */
-  protected EComparison getComparison() {
+  protected IComparison<?> getComparison() {
     UIComparison uiComparison = getUIComparison();
     return uiComparison == null? null: uiComparison.getActualComparison();
   }
@@ -382,9 +381,9 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       EMFDiffNode input = getInput();
       if (input != null) {
         // Look for possible transactional editing domain
-        IComparison comparison = input.getActualComparison();
+        IComparison<?> comparison = input.getActualComparison();
         if (comparison != null) {
-          IModelScope impactedScope = comparison.getScope(
+          ITreeDataScope<?> impactedScope = comparison.getScope(
               input.getRoleForSide(onLeft_p));
           if (impactedScope instanceof IEditingDomainProvider) {
             result = ((IEditingDomainProvider)impactedScope).getEditingDomain();
@@ -415,7 +414,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
    * @return a potentially null string
    */
   protected String getModelName(boolean onLeft_p) {
-    IModelScope scope = getComparison().getScope(getInput().getRoleForSide(onLeft_p));
+    ITreeDataScope<?> scope = getComparison().getScope(getInput().getRoleForSide(onLeft_p));
     return DiffMergeLabelProvider.getInstance().getText(scope);
   }
   

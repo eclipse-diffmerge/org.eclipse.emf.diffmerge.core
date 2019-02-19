@@ -18,12 +18,12 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -44,7 +44,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * @generated
  */
 public class EMappingImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<EObject, EAttribute, EReference>
     implements EMapping {
 
   /**
@@ -174,6 +174,26 @@ public class EMappingImpl extends
   }
 
   /**
+   * Remove dependencies (references) to the given element after its removal from the
+   * scope of the given role in the given comparison
+   * @param role_p TARGET or REFERENCE
+   * @param element_p a non-null element
+   * @return whether all dependencies have been successfully removed
+   * @generated NOT
+   */
+  public boolean removeDependencies(Role role_p, EObject element_p) {
+    boolean result = true;
+    IEditableTreeDataScope<EObject> scope = getComparison().getScope(role_p);
+    for (EStructuralFeature.Setting setting : getCrossReferences(element_p,
+        role_p)) {
+      boolean removed = scope.removeReferenceValue(setting.getEObject(),
+          setting.getEStructuralFeature(), element_p);
+      result = result && removed;
+    }
+    return result;
+  }
+
+  /**
    * A cross reference adapter for retrieving matches from model elements.
    * @generated NOT
    */
@@ -291,7 +311,7 @@ public class EMappingImpl extends
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected TreeIterator<Notifier> newContentsIterator() {
-      return (TreeIterator) getComparison().getScope(_role).getAllContents();
+      return (TreeIterator) getComparison().getScope(_role).iterator();
     }
 
     /**

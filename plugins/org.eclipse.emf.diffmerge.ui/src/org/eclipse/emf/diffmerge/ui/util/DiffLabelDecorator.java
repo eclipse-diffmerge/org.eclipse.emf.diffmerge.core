@@ -11,10 +11,12 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.util;
 
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.*;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_ICONS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_CUSTOM_LABELS;
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_SHOW_DIFFERENCE_NUMBERS;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -33,7 +35,7 @@ import org.eclipse.swt.graphics.Image;
 public class DiffLabelDecorator implements IDiffLabelDecorator {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getBackground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getBackground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public Color getBackground(Object object_p, Color base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
@@ -62,7 +64,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getFont(java.lang.Object, org.eclipse.swt.graphics.Font, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getFont(java.lang.Object, org.eclipse.swt.graphics.Font, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public Font getFont(Object object_p, Font base_p, DifferenceKind diffKind_p,
       Role side_p, EMFDiffNode node_p) {
@@ -70,7 +72,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getForeground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getForeground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public Color getForeground(Object object_p, Color base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
@@ -78,7 +80,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getImage(java.lang.Object, org.eclipse.swt.graphics.Image, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getImage(java.lang.Object, org.eclipse.swt.graphics.Image, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public Image getImage(Object object_p, Image base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
@@ -119,7 +121,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
       Role side_p, EMFDiffNode node_p) {
     int result = 0;
     if (node_p != null && object_p instanceof IMatch) {
-      result = node_p.getCategoryManager().getUIDifferenceNumber((IMatch)object_p);
+      result = node_p.getCategoryManager().getUIDifferenceNumber((IMatch<?>)object_p);
     }
     return result;
   }
@@ -205,7 +207,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getText(java.lang.Object, java.lang.CharSequence, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getText(java.lang.Object, java.lang.CharSequence, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public CharSequence getText(Object object_p, CharSequence base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
@@ -231,7 +233,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getToolTipText(java.lang.Object, java.lang.String, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   * @see org.eclipse.emf.diffmerge.ui.util.IDiffLabelDecorator#getToolTipText(java.lang.Object, java.lang.String, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */
   public String getToolTipText(Object object_p, String base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
@@ -262,7 +264,7 @@ public class DiffLabelDecorator implements IDiffLabelDecorator {
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
     return node_p != null && node_p.isUserPropertyTrue(P_CUSTOM_ICONS) &&
         !(side_p != null && object_p instanceof IMatch &&
-        node_p.getCategoryManager().isComparisonPart((IMatch)object_p));
+        node_p.getCategoryManager().isComparisonPart((IMatch<?>)object_p));
   }
   
   /**

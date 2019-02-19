@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.BasicEMap.Entry;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.structures.common.comparable.ComparableTreeMap;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -119,7 +118,8 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param scope_p a non-null scope that covers annotation_p
    * @return a potentially null string
    */
-  protected String getAnnotationSemanticID(EAnnotation annotation_p, IModelScope scope_p) {
+  protected String getAnnotationSemanticID(EAnnotation annotation_p,
+      ITreeDataScope<EObject> scope_p) {
     String result = null;
     // Based on container ID and source
     EObject container = getContainer(annotation_p, scope_p);
@@ -153,7 +153,7 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param scope_p a non-null scope that covers diagram_p
    * @return a potentially null string
    */
-  protected String getDiagramSemanticID(Diagram diagram_p, IModelScope scope_p) {
+  protected String getDiagramSemanticID(Diagram diagram_p, ITreeDataScope<EObject> scope_p) {
     // Based on represented element
     EObject representedElement = diagram_p.getElement();
     Map<String, String> map = new ComparableTreeMap<String, String>();
@@ -169,7 +169,8 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param viewType_p a potentially null view type for the element
    * @return a potentially null string
    */
-  protected String getGMFObjectSemanticID(EObject element_p, IModelScope scope_p, String viewType_p) {
+  protected String getGMFObjectSemanticID(EObject element_p, ITreeDataScope<EObject> scope_p,
+      String viewType_p) {
     String result = null;
     // Based on class name, containing feature, container ID and given view type
     EObject container = getContainer(element_p, scope_p);
@@ -196,7 +197,7 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param scope_p a non-null scope that covers entry_p
    * @return a potentially null string
    */
-  protected String getMapEntrySemanticID(EObject entry_p, IModelScope scope_p) {
+  protected String getMapEntrySemanticID(EObject entry_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     // Based on container ID, key and value
     if (entry_p instanceof Entry) {
@@ -216,10 +217,10 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getName(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getName(EObject element_p, IModelScope scope_p) {
+  protected String getName(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result;
     if (element_p instanceof Diagram)
       result = ((Diagram)element_p).getName();
@@ -229,10 +230,10 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy#getSemanticID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected String getSemanticID(EObject element_p, IModelScope scope_p) {
+  protected String getSemanticID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     if (element_p instanceof Diagram) {
       // Diagram
@@ -264,12 +265,11 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param scope_p a non-null scope that covers view_p
    * @return a potentially null element
    */
-  protected EObject getViewElement(View view_p, IModelScope scope_p) {
+  protected EObject getViewElement(View view_p, ITreeDataScope<EObject> scope_p) {
     EObject result = null;
     final EReference VIEW_TO_ELEMENT = NotationPackage.eINSTANCE.getView_Element();
-    if (view_p.eIsSet(VIEW_TO_ELEMENT) && scope_p instanceof IFeaturedModelScope) {
-      IFeaturedModelScope scope = (IFeaturedModelScope)scope_p;
-      List<EObject> values = scope.get(view_p, VIEW_TO_ELEMENT);
+    if (view_p.eIsSet(VIEW_TO_ELEMENT)) {
+      List<EObject> values = scope_p.getReferenceValues(view_p, VIEW_TO_ELEMENT);
       if (values.size() == 1)
         result = values.get(0);
     } else {
@@ -287,7 +287,7 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param viewType the view type of the view
    * @return a potentially null object
    */
-  protected String getViewElementBasedSemanticID(View view_p, IModelScope scope_p,
+  protected String getViewElementBasedSemanticID(View view_p, ITreeDataScope<EObject> scope_p,
       EObject represented_p, String viewType) {
     String result = null;
     Diagram diagram = view_p.getDiagram();
@@ -314,7 +314,7 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param scope_p a non-null scope that covers view_p
    * @return a potentially null string
    */
-  protected String getViewSemanticID(View view_p, IModelScope scope_p) {
+  protected String getViewSemanticID(View view_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
     String viewType = view_p.getType();
     if (viewType != null && !hasNoSemantics(view_p)) {
@@ -342,7 +342,7 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
    * @param viewType the view type of the view
    * @return a potentially null object
    */
-  protected String getViewTypeBasedSemanticID(View view_p, IModelScope scope_p,
+  protected String getViewTypeBasedSemanticID(View view_p, ITreeDataScope<EObject> scope_p,
       String viewType) {
     String result = null;
     EObject container = getContainer(view_p, scope_p);

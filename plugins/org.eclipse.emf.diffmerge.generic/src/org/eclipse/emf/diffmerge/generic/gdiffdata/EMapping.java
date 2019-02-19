@@ -30,14 +30,14 @@ import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E&gt;"
  * @generated
  */
-public interface EMapping<E, A, R, S>
-    extends EIdentified, EComparisonElement<E, A, R, S>, Editable<E> {
+public interface EMapping<E, A, R>
+    extends EIdentified, EComparisonElement<E, A, R>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Modifiable Contents</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch}<code>&lt;E, A, R, S&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch}<code>&lt;E, A, R&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Contents</em>' containment reference list isn't clear,
@@ -49,7 +49,7 @@ public interface EMapping<E, A, R, S>
    * @model containment="true"
    * @generated
    */
-  EList<EMatch<E, A, R, S>> getModifiableContents();
+  EList<EMatch<E, A, R>> getModifiableContents();
 
   /**
    * Returns the value of the '<em><b>Reference Completed Matches</b></em>' reference list.

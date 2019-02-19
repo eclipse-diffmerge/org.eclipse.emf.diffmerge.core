@@ -109,8 +109,9 @@ public class UnidirectionalComparisonCopier<E> {
    */
   protected E copy(E element_p) {
     assert _mergePolicy != null;
-    E result = _mergePolicy.baseCopy(element_p);
-    for (Object attribute : _sourceScope.getAttributes(element_p)) {
+    E result = _destinationScope.getScopePolicy().baseCopy(element_p);
+    IScopePolicy<E> scopePolicy = getScopePolicy();
+    for (Object attribute : scopePolicy.getAttributes(element_p)) {
       if (coverAttribute(attribute)) {
         copyAttribute(attribute, element_p, result);
       }
@@ -156,7 +157,8 @@ public class UnidirectionalComparisonCopier<E> {
     E source = match_p.get(_sourceRole);
     E destination = match_p.get(_sourceRole.opposite());
     assert source != null && destination != null;
-    for (Object reference : _sourceScope.getReferences(source)) {
+    IScopePolicy<E> scopePolicy = getScopePolicy();
+    for (Object reference : scopePolicy.getReferences(source)) {
       if (!getScopePolicy().isContainerReference(reference) &&
           coverReference(reference)) {
         copyReference(reference, source, destination);

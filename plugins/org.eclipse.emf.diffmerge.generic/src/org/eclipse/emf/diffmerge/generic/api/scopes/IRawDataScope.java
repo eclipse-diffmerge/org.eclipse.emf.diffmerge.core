@@ -38,7 +38,14 @@ public interface IRawDataScope<E> extends Iterable<E> {
    * is left to the data scope.
    * @param element_p a non-null element
    */
-  boolean covers(E element_p);
+  default boolean covers(E element_p) {
+    // Operator == is used by default for element identification
+    for (E current : this) {
+      if (current == element_p)
+        return true;
+    }
+    return false;
+  }
   
   /**
    * Optionally return an object that characterizes or identifies this data scope.
@@ -55,10 +62,14 @@ public interface IRawDataScope<E> extends Iterable<E> {
   /**
    * Return the number of elements in this data scope.
    * This operation is allowed to be computationally expensive.
-   * Class invariant: this is the number of times an iterator returned by iterator()
-   * may accept a call to next() before throwing NoSuchElementException.
    */
-  int size();
+  default int size() {
+    int result = 0;
+    for (@SuppressWarnings("unused") E element : this) {
+      result++;
+    }
+    return result;
+  }
   
   
   /**

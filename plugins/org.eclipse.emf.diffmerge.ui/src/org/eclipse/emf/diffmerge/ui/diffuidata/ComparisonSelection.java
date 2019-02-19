@@ -12,12 +12,11 @@
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
-import org.eclipse.emf.diffmerge.diffdata.EMergeableDifference;
-import org.eclipse.emf.diffmerge.diffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 
@@ -59,7 +58,7 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
 
   /**
    * Returns the value of the '<em><b>Selected Matches</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EMatch}.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;?&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Selected Matches</em>' reference list isn't clear,
@@ -68,10 +67,10 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Selected Matches</em>' reference list.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getComparisonSelection_SelectedMatches()
-   * @model changeable="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;" changeable="false"
    * @generated
    */
-  EList<EMatch> getSelectedMatches();
+  EList<IMatch<?>> getSelectedMatches();
 
   /**
    * Returns the value of the '<em><b>Selected Match And Feature</b></em>' containment reference.
@@ -86,19 +85,19 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
 
   /**
    * Returns the value of the '<em><b>Selected Tree Path</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EMatch}.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.IMatch}<code>&lt;?&gt;</code>.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the value of the '<em>Selected Tree Path</em>' reference list.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getComparisonSelection_SelectedTreePath()
-   * @model changeable="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;" changeable="false"
    * @generated
    */
-  EList<EMatch> getSelectedTreePath();
+  EList<IMatch<?>> getSelectedTreePath();
 
   /**
    * Returns the value of the '<em><b>Selected Value Presences</b></em>' reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.diffdata.EValuePresence}.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence}<code>&lt;?&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Selected Value Presences</em>' reference list isn't clear,
@@ -107,20 +106,20 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Selected Value Presences</em>' reference list.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getComparisonSelection_SelectedValuePresences()
-   * @model changeable="false"
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;?&gt;" changeable="false"
    * @generated
    */
-  EList<EValuePresence> getSelectedValuePresences();
+  EList<IValuePresence<?>> getSelectedValuePresences();
 
   /**
    * <!-- begin-user-doc -->
    * Return the set of differences to merge according to this selection
    * @return a non-null, potentially empty, unmodifiable collection
    * <!-- end-user-doc -->
-   * @model
+   * @model type="org.eclipse.emf.diffmerge.ui.diffuidata.IDifference&lt;?&gt;"
    * @generated
    */
-  EList<EMergeableDifference> asDifferencesToMerge();
+  EList<IDifference<?>> asDifferencesToMerge();
 
   /**
    * <!-- begin-user-doc -->
@@ -130,7 +129,7 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
    * @model
    * @generated
    */
-  EStructuralFeature asFeature();
+  Object asFeature();
 
   /**
    * <!-- begin-user-doc -->
@@ -145,19 +144,19 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
    * Return the content of the selection in terms of match
    * @return a potentially null match
    * <!-- end-user-doc -->
-   * @model
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;"
    * @generated
    */
-  EMatch asMatch();
+  IMatch<?> asMatch();
 
   /**
    * <!-- begin-user-doc -->
    * Return the content of the selection in terms of a set of matches
    * <!-- end-user-doc -->
-   * @model
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;"
    * @generated
    */
-  EList<EMatch> asMatches();
+  EList<IMatch<?>> asMatches();
 
   /**
    * <!-- begin-user-doc -->
@@ -172,18 +171,18 @@ public interface ComparisonSelection extends EObject, IStructuredSelection {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;?&gt;"
    * @generated
    */
-  EValuePresence asValuePresence();
+  IValuePresence<?> asValuePresence();
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model
+   * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;?&gt;"
    * @generated
    */
-  EList<EValuePresence> asValuePresences();
+  EList<IValuePresence<?>> asValuePresences();
 
   /**
    * <!-- begin-user-doc -->

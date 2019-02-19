@@ -13,7 +13,6 @@ package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
@@ -38,11 +37,11 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
+ * @model
  * @generated
  */
 public interface EMatch extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference, IEditableModelScope>,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference>,
     EComparisonElement {
   /**
    * <!-- begin-user-doc -->

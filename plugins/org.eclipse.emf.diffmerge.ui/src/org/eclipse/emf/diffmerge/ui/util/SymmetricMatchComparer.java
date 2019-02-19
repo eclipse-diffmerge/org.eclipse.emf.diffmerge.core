@@ -11,12 +11,11 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.util;
 
-import static org.eclipse.emf.diffmerge.api.Role.ANCESTOR;
-import static org.eclipse.emf.diffmerge.api.Role.REFERENCE;
-import static org.eclipse.emf.diffmerge.api.Role.TARGET;
+import static org.eclipse.emf.diffmerge.generic.api.Role.ANCESTOR;
+import static org.eclipse.emf.diffmerge.generic.api.Role.REFERENCE;
+import static org.eclipse.emf.diffmerge.generic.api.Role.TARGET;
 
-import org.eclipse.emf.diffmerge.api.IPureMatch;
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.diffmerge.generic.api.IPureMatch;
 import org.eclipse.jface.viewers.IElementComparer;
 
 
@@ -35,14 +34,14 @@ public class SymmetricMatchComparer implements IElementComparer {
   public boolean equals(Object a_p, Object b_p) {
     boolean result = a_p == b_p;
     if (!result && a_p instanceof IPureMatch && b_p instanceof IPureMatch) {
-      IPureMatch a = (IPureMatch) a_p;
-      IPureMatch b = (IPureMatch) b_p;
-      EObject aA = a.get(ANCESTOR);
-      EObject bA = b.get(ANCESTOR);
-      EObject aT = a.get(TARGET);
-      EObject bT = b.get(TARGET);
-      EObject aR = a.get(REFERENCE);
-      EObject bR = b.get(REFERENCE);
+      IPureMatch<?> a = (IPureMatch<?>) a_p;
+      IPureMatch<?> b = (IPureMatch<?>) b_p;
+      Object aA = a.get(ANCESTOR);
+      Object bA = b.get(ANCESTOR);
+      Object aT = a.get(TARGET);
+      Object bT = b.get(TARGET);
+      Object aR = a.get(REFERENCE);
+      Object bR = b.get(REFERENCE);
       result = // Equality by reference of elements, symmetrically on T/R
           aA == bA &&
           (aT == bT && aR == bR ||
@@ -58,7 +57,7 @@ public class SymmetricMatchComparer implements IElementComparer {
     int result = 0;
     if (element_p != null) {
       if (element_p instanceof IPureMatch) {
-        IPureMatch match = (IPureMatch)element_p;
+        IPureMatch<?> match = (IPureMatch<?>)element_p;
         if (match.get(TARGET) != null)
           result += match.get(TARGET).hashCode();
         if (match.get(REFERENCE) != null)

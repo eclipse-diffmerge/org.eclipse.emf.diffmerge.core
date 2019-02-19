@@ -36,18 +36,6 @@ implements IDataScope<E> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#covers(java.lang.Object)
-   */
-  public boolean covers(E element_p) {
-    // Operator == is used for element identification
-    for (E current : this) {
-      if (current == element_p)
-        return true;
-    }
-    return false;
-  }
-  
-  /**
    * Return an object that characterizes or identifies this scope by default
    * @return a non-null object
    */
@@ -70,17 +58,6 @@ implements IDataScope<E> {
    */
   public void setOriginator(Object originator_p) {
     _originator = originator_p;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#size()
-   */
-  public int size() {
-    int result = 0;
-    for (@SuppressWarnings("unused") E element : this) {
-      result++;
-    }
-    return result;
   }
   
 }

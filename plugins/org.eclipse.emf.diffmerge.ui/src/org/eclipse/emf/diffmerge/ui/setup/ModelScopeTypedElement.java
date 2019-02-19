@@ -13,11 +13,8 @@ package org.eclipse.emf.diffmerge.ui.setup;
 
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -28,14 +25,14 @@ import org.eclipse.swt.graphics.Image;
 public class ModelScopeTypedElement implements ITypedElement {
   
   /** The non-null scope being wrapped */
-  private final IModelScope _scope;
+  private final IRawDataScope<?> _scope;
   
   
   /**
    * Constructor
    * @param scope_p a non-null model scope
    */
-  public ModelScopeTypedElement(IFeaturedModelScope scope_p) {
+  public ModelScopeTypedElement(IRawDataScope<?> scope_p) {
     _scope = scope_p;
   }
   
@@ -62,13 +59,11 @@ public class ModelScopeTypedElement implements ITypedElement {
    */
   public String getType() {
     String result = ITypedElement.UNKNOWN_TYPE;
-    if (_scope instanceof IPersistentModelScope) {
-      Resource resource = ((IPersistentModelScope)_scope).getHoldingResource();
-      if (resource != null) {
-        URI uri = resource.getURI();
-        String extension = uri.fileExtension();
-        if (extension != null)
-          result = extension;
+    Object originator = _scope.getOriginator();
+    if (originator instanceof URI) {
+      String extension = ((URI)originator).fileExtension();
+      if (extension != null) {
+        result = extension;
       }
     }
     return result;

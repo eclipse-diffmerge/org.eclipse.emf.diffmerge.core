@@ -17,19 +17,20 @@ import java.util.Collections;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.ecore.EObject;
 
 
 /**
- * A contribution to the Diff/Merge UI extension point.
+ * A contribution to the Diff/Merge UI extension point for EMF models.
  * @author Olivier Constant
  */
-public class ConfigurableComparisonMethodFactory extends DefaultComparisonMethodFactory {
+public class ConfigurableComparisonMethodFactory
+extends DefaultComparisonMethodFactory<EObject> {
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
    */
-  @Override
-  public IComparisonMethod createComparisonMethod(
+  public IComparisonMethod<EObject> createComparisonMethod(
       IModelScopeDefinition leftScopeSpec_p, IModelScopeDefinition rightScopeSpec_p,
       IModelScopeDefinition ancestorScopeSpec_p) {
     return new ConfigurableComparisonMethod(

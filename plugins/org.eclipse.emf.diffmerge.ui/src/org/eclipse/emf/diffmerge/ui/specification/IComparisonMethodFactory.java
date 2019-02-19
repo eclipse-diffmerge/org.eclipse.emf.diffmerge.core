@@ -11,13 +11,16 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.specification;
 
-import org.eclipse.emf.diffmerge.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
 
 /**
  * A factory for comparison methods.
+ * 
+ * @param <E> The type of data elements to compare.
+ *
  * @author Olivier Constant
  */
-public interface IComparisonMethodFactory extends IOverridableFactory {
+public interface IComparisonMethodFactory<E> extends IOverridableFactory {
   
   /**
    * Create and return a comparison method for the given scope definitions
@@ -27,7 +30,7 @@ public interface IComparisonMethodFactory extends IOverridableFactory {
    * @return a non-null comparison method if this factory is applicable to the entry points
    *         of the given scope definitions
    */
-  IComparisonMethod createComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
+  IComparisonMethod<E> createComparisonMethod(IModelScopeDefinition leftScopeSpec_p,
       IModelScopeDefinition rightScopeSpec_p, IModelScopeDefinition ancestorScopeSpec_p);
   
   /**
@@ -35,7 +38,7 @@ public interface IComparisonMethodFactory extends IOverridableFactory {
    * comparison methods this factory can create
    * @return a non-null configuration
    */
-  IComparisonConfiguration createComparisonConfiguration();
+  IComparisonConfiguration<E> createComparisonConfiguration();
   
   /**
    * Return a unique ID for this factory

@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -48,13 +48,13 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
           DiagramPackage.eINSTANCE.getEdgeTarget_OutgoingEdges());
   
   /** The set of features that can be ignored */
-  private static final Collection<EStructuralFeature> UNSIGNIFICANT_FEATURES =
+  private static final Collection<EStructuralFeature> UNSIGNIFICANT_REFERENCES =
       Arrays.<EStructuralFeature>asList(
           ViewpointPackage.eINSTANCE.getDRepresentation_UiState(),
           DiagramPackage.eINSTANCE.getDDiagram_HiddenElements());
   
   /** The set of features that cannot be ignored even through they are peculiar */
-  private static final Collection<EStructuralFeature> SIGNIFICANT_FEATURES =
+  private static final Collection<EStructuralFeature> SIGNIFICANT_REFERENCES =
       Arrays.<EStructuralFeature>asList(
           ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation());
   
@@ -73,11 +73,11 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, org.eclipse.emf.ecore.EAttribute)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object)
    */
   @Override
   public boolean considerEqual(Object value1_p, Object value2_p,
-      EAttribute attribute_p) {
+      Object attribute_p) {
     boolean result = super.considerEqual(value1_p, value2_p, attribute_p);
     if (!result && ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources() == attribute_p) {
       result = equalResourceDescriptors(
@@ -91,19 +91,19 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverFeature(org.eclipse.emf.ecore.EStructuralFeature)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverReference(java.lang.Object)
    */
   @Override
-  public boolean coverFeature(EStructuralFeature feature_p) {
-    return SIGNIFICANT_FEATURES.contains(feature_p) ||
-        !UNSIGNIFICANT_FEATURES.contains(feature_p) && super.coverFeature(feature_p);
+  public boolean coverReference(Object reference_p) {
+    return SIGNIFICANT_REFERENCES.contains(reference_p) ||
+        !UNSIGNIFICANT_REFERENCES.contains(reference_p) && super.coverReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.api.IMatch)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.generic.api.IMatch)
    */
   @Override
-  public boolean coverMatch(IMatch match_p) {
+  public boolean coverMatch(IMatch<EObject> match_p) {
     boolean result = super.coverMatch(match_p);
     if (result && match_p.isPartial()) {
       // Ignore certain transient elements (OK because no cross-ref)
@@ -116,16 +116,17 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverValue(java.lang.Object, org.eclipse.emf.ecore.EAttribute)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverValue(java.lang.Object, java.lang.Object)
    */
   @Override
-  public boolean coverValue(Object value_p, EAttribute attribute_p) {
+  public boolean coverValue(Object value_p, Object attribute_p) {
     boolean result;
     if (IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p)
-        && ((String) value_p).length() == 0)
+        && ((String) value_p).length() == 0) {
       result = false;
-    else
+    } else {
       result = super.coverValue(value_p, attribute_p);
+    }
     return result;
   }
   

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.generic/src" modelPluginID=""
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.generic/src" modelPluginID="org.eclipse.emf.diffmerge.generic"
     modelName="GDiffData" editPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.provider.GenericDiffDataEditPlugin"
     editorPluginClass="org.eclipse.emf.diffmerge.generic.gdiffdata.presentation.GenericDiffDataEditorPlugin"
     nonNLSMarkers="true" codeFormatting="true" testSuiteClass="org.eclipse.emf.diffmerge.generic.gdiffdata.tests.GenericDiffDataAllTests"
@@ -30,7 +30,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparison/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparison/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparison/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparison/S"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/ancestorScope"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/referenceScope"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EComparison/targetScope"/>
@@ -43,14 +42,12 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparisonElement/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparisonElement/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparisonElement/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EComparisonElement/S"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EComparisonElement/getComparison"/>
     </genClasses>
     <genClasses ecoreClass="GDiffData.ecore#//EMapping">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMapping/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMapping/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMapping/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMapping/S"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/modifiableContents"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/referenceCompletedMatches"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/targetCompletedMatches"/>
@@ -59,7 +56,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/S"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMatch/matchID"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/modifiableRelatedDifferences"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMatch/elementPresenceDifference"/>
@@ -82,7 +78,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMergeableDifference/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMergeableDifference/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMergeableDifference/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMergeableDifference/S"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/alignedWithAncestor"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/conflicting"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EMergeableDifference/ignored"/>
@@ -97,7 +92,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementRelativePresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementRelativePresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementRelativePresence/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementRelativePresence/S"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EElementRelativePresence/elementMatch"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EElementRelativePresence/presenceRole"/>
     </genClasses>
@@ -105,14 +99,12 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementPresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementPresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementPresence/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EElementPresence/S"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EElementPresence/ownerMatch"/>
     </genClasses>
     <genClasses image="false" ecoreClass="GDiffData.ecore#//EValuePresence">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EValuePresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EValuePresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EValuePresence/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EValuePresence/S"/>
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EValuePresence/order"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EValuePresence/getFeature"/>
     </genClasses>
@@ -120,7 +112,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/S"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EAttributeValuePresence/value"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EAttributeValuePresence/setAttribute">
         <genParameters ecoreParameter="GDiffData.ecore#//EAttributeValuePresence/setAttribute/attribute"/>
@@ -130,7 +121,6 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EReferenceValuePresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EReferenceValuePresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EReferenceValuePresence/R"/>
-      <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EReferenceValuePresence/S"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EReferenceValuePresence/valueMatch"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EReferenceValuePresence/setReference">
         <genParameters ecoreParameter="GDiffData.ecore#//EReferenceValuePresence/setReference/reference"/>

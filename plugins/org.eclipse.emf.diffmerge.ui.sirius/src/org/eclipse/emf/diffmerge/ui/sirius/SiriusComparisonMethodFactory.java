@@ -17,6 +17,7 @@ import java.util.Collections;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
+import org.eclipse.emf.ecore.EObject;
 
 
 /**
@@ -28,7 +29,7 @@ public class SiriusComparisonMethodFactory extends GMFComparisonMethodFactory {
    * @see org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory#createComparisonMethod(org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition, org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition)
    */
   @Override
-  public IComparisonMethod createComparisonMethod(
+  public IComparisonMethod<EObject> createComparisonMethod(
       IModelScopeDefinition leftScopeSpec,
       IModelScopeDefinition rightScopeSpec,
       IModelScopeDefinition ancestorScopeSpec) {

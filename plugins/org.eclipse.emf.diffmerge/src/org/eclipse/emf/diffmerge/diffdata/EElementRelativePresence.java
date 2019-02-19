@@ -8,22 +8,23 @@ import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison Element</b></em>'.
+ * A representation of the model object '<em><b>EElement Relative Presence</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEComparisonElement()
+ * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEElementRelativePresence()
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface EComparisonElement extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<EObject, EAttribute, EReference> {
+public interface EElementRelativePresence extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<EObject, EAttribute, EReference>,
+    EMergeableDifference {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation" required="true"
    * @generated
    */
-  EComparison getComparison();
+  EMatch getElementMatch();
 
-} // EComparisonElement
+} // EElementRelativePresence

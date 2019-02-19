@@ -51,25 +51,11 @@ ITreeDataScope<EObject> {
   List<EObject> get(EObject source_p, EReference reference_p);
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributes(java.lang.Object)
-   */
-  default List<EAttribute> getAttributes(EObject element_p) {
-    return element_p.eClass().getEAllAttributes();
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getAttributeValues(java.lang.Object, java.lang.Object)
    * Here to avoid API breakage.
    */
   default List<?> getAttributeValues(EObject element_p, Object attribute_p) {
     return get(element_p, (EAttribute)attribute_p);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getReferences(java.lang.Object)
-   */
-  default List<EReference> getReferences(EObject element_p) {
-    return element_p.eClass().getEAllReferences();
   }
   
   /**

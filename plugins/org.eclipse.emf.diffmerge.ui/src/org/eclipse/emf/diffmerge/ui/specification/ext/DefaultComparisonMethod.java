@@ -14,20 +14,23 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 
 
 /**
- * A default implementation of IComparisonMethod aimed at being sub-classed
- * and used in the setup GUI.
+ * A default implementation of IComparisonMethod.
+ * It is aimed at being sub-classed and used in the setup GUI.
+ * 
+ * @param <E> The type of data elements to compare.
+ *
  * @author Olivier Constant
  */
-public class DefaultComparisonMethod extends AbstractComparisonMethod {
+public abstract class DefaultComparisonMethod<E> extends AbstractComparisonMethod<E> {
   
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
@@ -36,13 +39,13 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   private Role _twoWayReferenceRole;
   
   /** The (potentially null) match policy */
-  protected IMatchPolicy _matchPolicy;
+  protected IMatchPolicy<E> _matchPolicy;
   
   /** The (potentially null) diff policy */
-  protected IDiffPolicy _diffPolicy;
+  protected IDiffPolicy<E> _diffPolicy;
   
   /** The (potentially null) merge policy */
-  protected IMergePolicy _mergePolicy;
+  protected IMergePolicy<E> _mergePolicy;
   
   
   /**
@@ -54,7 +57,7 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
    */
   public DefaultComparisonMethod(IModelScopeDefinition leftScopeDef_p,
       IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
-      IComparisonMethodFactory factory_p) {
+      IComparisonMethodFactory<E> factory_p) {
     super();
     Role leftRole = getLeftRole();
     _factory = factory_p;
@@ -72,7 +75,7 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
    * Create and return the diff policy
    * @return a potentially null diff policy
    */
-  protected IDiffPolicy createDiffPolicy() {
+  protected IDiffPolicy<E> createDiffPolicy() {
     // Override for custom policy
     return null;
   }
@@ -81,7 +84,7 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
    * Create and return the match policy
    * @return a potentially null match policy
    */
-  protected IMatchPolicy createMatchPolicy() {
+  protected IMatchPolicy<E> createMatchPolicy() {
     // Override for custom policy
     return null;
   }
@@ -90,13 +93,13 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
    * Create and return the merge policy
    * @return a potentially null merge policy
    */
-  protected IMergePolicy createMergePolicy() {
+  protected IMergePolicy<E> createMergePolicy() {
     // Override for custom policy
     return null;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getModelScopeDefinition(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getModelScopeDefinition(org.eclipse.emf.diffmerge.generic.api.Role)
    */
   public IModelScopeDefinition getModelScopeDefinition(Role role_p) {
     return _roleToScopeDefinition.get(role_p);
@@ -105,21 +108,21 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getDiffPolicy()
    */
-  public IDiffPolicy getDiffPolicy() {
+  public IDiffPolicy<E> getDiffPolicy() {
     return _diffPolicy;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMatchPolicy()
    */
-  public IMatchPolicy getMatchPolicy() {
+  public IMatchPolicy<E> getMatchPolicy() {
     return _matchPolicy;
   }
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getMergePolicy()
    */
-  public IMergePolicy getMergePolicy() {
+  public IMergePolicy<E> getMergePolicy() {
     return _mergePolicy;
   }
   
@@ -131,15 +134,16 @@ public class DefaultComparisonMethod extends AbstractComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.generic.api.Role)
    */
   public void setTwoWayReferenceRole(Role role_p) {
-    if (!isThreeWay())
+    if (!isThreeWay()) {
       _twoWayReferenceRole = role_p;
+    }
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#swapScopeDefinitions(org.eclipse.emf.diffmerge.api.Role, org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#swapScopeDefinitions(org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.generic.api.Role)
    */
   public boolean swapScopeDefinitions(Role role1_p, Role role2_p) {
     boolean result = false;

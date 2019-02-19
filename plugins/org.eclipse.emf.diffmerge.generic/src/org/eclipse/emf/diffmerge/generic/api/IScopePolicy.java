@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api;
 
+import java.util.List;
 
 /**
  * A policy related to the data technology underlying data scopes.
@@ -27,6 +28,30 @@ package org.eclipse.emf.diffmerge.generic.api;
 public interface IScopePolicy<E> {
   
   /**
+   * Create and return a base copy of the given element, i.e., without copying the values
+   * of its attributes or references
+   * @param element_p a non-null element
+   * @return a non-null element
+   */
+  E baseCopy(E element_p);
+  
+  /**
+   * Return the set of attributes which are applicable to the given element.
+   * @param element_p a non-null element
+   * @return a non-null, potentially empty, unmodifiable ordered set
+   */
+  List<?> getAttributes(E element_p);
+  
+  /**
+   * Return the ID of the given element, if any
+   * @param element_p a non-null element
+   * @param intrinsic_p whether an intrinsic (attribute-based) ID must be returned,
+   *          or extrinsic (dependent on the persistence layer)
+   * @return a potentially null object
+   */
+  Object getID(E element_p, boolean intrinsic_p);
+  
+  /**
    * Return the opposite of the given reference, if any.
    * Opposite references manifest bidirectional links between elements and are
    * thus assumed to be automatically kept in sync by the data technology.
@@ -34,6 +59,20 @@ public interface IScopePolicy<E> {
    * @return a potentially null reference
    */
   Object getOppositeReference(Object reference_p);
+  
+  /**
+   * Return the set of references which are applicable to the given element.
+   * @param element_p a non-null element which belongs to getReferences(element_p)
+   * @return a non-null, potentially empty, unmodifiable ordered set
+   */
+  List<?> getReferences(E element_p);
+  
+  /**
+   * Return an object that represents the type of the given element
+   * @param element_p a non-null element
+   * @return a non-null type
+   */
+  Object getType(E element_p);
   
   /**
    * Return whether the given reference is the opposite of a containment.
@@ -68,6 +107,13 @@ public interface IScopePolicy<E> {
   boolean isChangeableReference(Object reference_p);
   
   /**
+   * Return whether the given attribute stores intrinsic IDs, that is,
+   * IDs for the owning elements that are unique within the data scope.
+   * @param attribute_p a non-null attribute
+   */
+  boolean isIDAttribute(Object attribute_p);
+  
+  /**
    * Return whether the given attribute tolerates more than one value on the
    * same element
    * @param attribute_p a non-null attribute
@@ -82,12 +128,25 @@ public interface IScopePolicy<E> {
   boolean isManyReference(Object reference_p);
   
   /**
-   * Return whether the given attribute stores intrinsic IDs, that is,
-   * IDs for the owning elements that are unique within the data scope.
+   * Return whether the given attribute tolerates zero value
    * @param attribute_p a non-null attribute
-   * Class invariant: an ID attribute cannot accept several values, i.e.,
-   *  !isID(a) || !isManyAttribute(a)
    */
-  boolean isIDAttribute(Object attribute_p);
+  boolean isOptionalAttribute(Object attribute_p);
+  
+  /**
+   * Return whether the given reference tolerates zero value
+   * @param reference_p a non-null reference
+   */
+  boolean isOptionalReference(Object reference_p);
+  
+  /**
+   * Set the ID of the given element
+   * @param element_p a non-null element
+   * @param id_p a potentially null object
+   * @param intrinsic_p whether the intrinsic (attribute-based) or extrinsic
+   *          (dependent on the persistence layer) ID is concerned
+   * @return a potentially null object
+   */
+  boolean setID(E element_p, Object id_p, boolean intrinsic_p);
   
 }

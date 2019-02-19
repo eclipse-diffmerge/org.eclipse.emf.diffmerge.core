@@ -15,10 +15,9 @@ import static org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger.LINE_SEP;
 
 import java.util.Date;
 
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
-import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -86,8 +85,8 @@ public class CompareLogEvent extends AbstractLogEvent {
   protected String getSideLabel(boolean left_p) {
     EMFDiffNode node = getDiffNode();
     Role sideRole = node.getRoleForSide(left_p);
-    IFeaturedModelScope sideScope = node.getActualComparison().getScope(sideRole);
-    return DiffMergeLabelProvider.getInstance().getText(sideScope);
+    ITreeDataScope<?> sideScope = node.getActualComparison().getScope(sideRole);
+    return getLabelProvider().getText(sideScope);
   }
   
 }

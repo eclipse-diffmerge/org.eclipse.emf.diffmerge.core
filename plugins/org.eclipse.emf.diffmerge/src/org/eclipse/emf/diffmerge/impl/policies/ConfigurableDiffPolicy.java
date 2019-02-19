@@ -69,7 +69,7 @@ implements IConfigurablePolicy {
    * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrderedFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override
-  public boolean considerOrderedFeature(EStructuralFeature feature_p) {
+  protected boolean considerOrderedFeature(EStructuralFeature feature_p) {
     boolean result;
     if (_ignoreOrders) {
       result = false;

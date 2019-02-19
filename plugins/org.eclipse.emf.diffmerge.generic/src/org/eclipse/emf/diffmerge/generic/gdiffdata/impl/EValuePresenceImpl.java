@@ -33,9 +33,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EValuePresenceImpl<E, A, R, S>
-    extends EElementRelativePresenceImpl<E, A, R, S>
-    implements EValuePresence<E, A, R, S> {
+public abstract class EValuePresenceImpl<E, A, R> extends
+    EElementRelativePresenceImpl<E, A, R> implements EValuePresence<E, A, R> {
   /**
    * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -72,7 +71,7 @@ public abstract class EValuePresenceImpl<E, A, R, S>
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  protected EValuePresenceImpl(EMatch<E, A, R, S> elementMatch_p,
+  protected EValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
       Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p);
     setOrder(isOrder_p);

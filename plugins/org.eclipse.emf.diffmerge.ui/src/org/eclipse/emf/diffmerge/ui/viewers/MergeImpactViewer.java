@@ -20,14 +20,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IDifference;
-import org.eclipse.emf.diffmerge.api.diff.IElementRelativeDifference;
-import org.eclipse.emf.diffmerge.api.diff.IMergeableDifference;
-import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.impl.helpers.AbstractExpensiveOperation;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativeDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.impl.helpers.AbstractExpensiveOperation;
 import org.eclipse.emf.diffmerge.structures.common.FHashMap;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -73,16 +73,16 @@ public class MergeImpactViewer extends Viewer {
     private final EMFDiffNode _context_p;
     
     /** The non-null, unmodifiable, potentially empty set of differences to merge */
-    private final Collection<IDifference> _toMerge;
+    private final Collection<IDifference<?>> _toMerge;
     
     /** Whether this input has processed its internal data */
     private boolean _isComputed;
     
     /** The non-null map from matches to differences to merge implicitly */
-    protected final EMap<IMatch, Collection<IDifference>> _implicitImpact;
+    protected final EMap<IMatch<?>, Collection<IDifference<?>>> _implicitImpact;
     
     /** The non-null map from matches to differences to merge explicitly */
-    protected final EMap<IMatch, Collection<IDifference>> _explicitImpact;
+    protected final EMap<IMatch<?>, Collection<IDifference<?>>> _explicitImpact;
     
     /**
      * The operation that computes the internal data of the input
@@ -98,16 +98,16 @@ public class MergeImpactViewer extends Viewer {
        * @see AbstractExpensiveOperation#run()
        */
       public IStatus run() {
-        Collection<IDifference> toMerge = getDifferencesToMerge();
-        for (IDifference anyToMerge : toMerge) {
+        Collection<IDifference<?>> toMerge = getDifferencesToMerge();
+        for (IDifference<?> anyToMerge : toMerge) {
           if (anyToMerge instanceof IMergeableDifference) {
-            IMergeableDifference difference = (IMergeableDifference)anyToMerge;
+            IMergeableDifference<?> difference = (IMergeableDifference<?>)anyToMerge;
             registerDifference(difference, true);
-            for (IDifference required : difference.getRequiresDependencies(getDestination())) {
+            for (IDifference<?> required : difference.getRequiresDependencies(getDestination())) {
               if (!required.isMerged() && !toMerge.contains(required))
                 registerDifference(required, false);
             }
-            for (IDifference implied : difference.getImpliesDependencies(getDestination())) {
+            for (IDifference<?> implied : difference.getImpliesDependencies(getDestination())) {
               if (!implied.isMerged() && !toMerge.contains(implied))
                 registerDifference(implied, false);
             }
@@ -129,25 +129,27 @@ public class MergeImpactViewer extends Viewer {
        * @param difference_p a non-null difference
        * @param explicit_p whether its merge is explicit or implicit
        */
-      protected void registerDifference(IDifference difference_p, boolean explicit_p) {
+      protected void registerDifference(IDifference<?> difference_p, boolean explicit_p) {
         // Getting relevant match
-        IMatch match = null;
+        IMatch<?> match = null;
         if (difference_p instanceof IElementRelativeDifference) {
-          IElementRelativeDifference elementDifference = (IElementRelativeDifference)difference_p;
+          IElementRelativeDifference<?> elementDifference = (IElementRelativeDifference<?>)difference_p;
           if (elementDifference instanceof IReferenceValuePresence) {
-            IReferenceValuePresence presence = (IReferenceValuePresence)elementDifference;
-            if (presence.isOwnership())
+            IReferenceValuePresence<?> presence = (IReferenceValuePresence<?>)elementDifference;
+            if (presence.isOwnership()) {
               match = presence.getValueMatch(); // Move
+            }
           }
-          if (match == null)
+          if (match == null) {
             match = elementDifference.getElementMatch();
+          }
         }
         // Registering difference on match
         if (match != null) {
-          EMap<IMatch, Collection<IDifference>> map = explicit_p? _explicitImpact: _implicitImpact;
-          Collection<IDifference> differences = map.get(match);
+          EMap<IMatch<?>, Collection<IDifference<?>>> map = explicit_p? _explicitImpact: _implicitImpact;
+          Collection<IDifference<?>> differences = map.get(match);
           if (differences == null) {
-            differences = new FHashSet<IDifference>();
+            differences = new FHashSet<IDifference<?>>();
             map.put(match, differences);
           }
           differences.add(difference_p);
@@ -161,14 +163,14 @@ public class MergeImpactViewer extends Viewer {
      * @param toLeft_p whether modifications occur on the left-hand side or the right-hand side
      * @param context_p the non-null comparison context
      */
-    public ImpactInput(Collection<? extends IDifference> toMerge_p, boolean toLeft_p,
+    public ImpactInput(Collection<? extends IDifference<?>> toMerge_p, boolean toLeft_p,
         EMFDiffNode context_p) {
-      _toMerge = new FHashSet<IDifference>(toMerge_p, null);
+      _toMerge = new FHashSet<IDifference<?>>(toMerge_p, null);
       _sideIsLeft = toLeft_p;
       _context_p = context_p;
       _isComputed = false;
-      _explicitImpact = new FHashMap<IMatch, Collection<IDifference>>();
-      _implicitImpact = new FHashMap<IMatch, Collection<IDifference>>();
+      _explicitImpact = new FHashMap<IMatch<?>, Collection<IDifference<?>>>();
+      _implicitImpact = new FHashMap<IMatch<?>, Collection<IDifference<?>>>();
     }
     
     /**
@@ -201,7 +203,7 @@ public class MergeImpactViewer extends Viewer {
      * Return the set of differences to merge
      * @return a non-null, unmodifiable, potentially empty set
      */
-    public Collection<IDifference> getDifferencesToMerge() {
+    public Collection<IDifference<?>> getDifferencesToMerge() {
       return _toMerge;
     }
     
@@ -210,7 +212,7 @@ public class MergeImpactViewer extends Viewer {
      * @param explicit_p whether the differences are those to merge explicitly or implicitly
      * @return a non-null, potentially empty, unmodifiable map
      */
-    public EMap<IMatch, Collection<IDifference>> getImpact(boolean explicit_p) {
+    public EMap<IMatch<?>, Collection<IDifference<?>>> getImpact(boolean explicit_p) {
       return ECollections.unmodifiableEMap(explicit_p? _explicitImpact: _implicitImpact);
     }
     
@@ -336,11 +338,11 @@ public class MergeImpactViewer extends Viewer {
    * opposite changes
    * @param difference_p a non-null difference
    */
-  protected boolean isConflicting(IDifference difference_p) {
+  protected boolean isConflicting(IDifference<?> difference_p) {
     boolean result = false;
     if (getInput() != null && getInput().isThreeWay()) {
       if (difference_p instanceof IPresenceDifference) {
-        IPresenceDifference presence = (IPresenceDifference)difference_p;
+        IPresenceDifference<?> presence = (IPresenceDifference<?>)difference_p;
         result = !presence.isAlignedWithAncestor() &&
           presence.getPresenceRole() == getInput().getDestination();
       }
@@ -352,17 +354,17 @@ public class MergeImpactViewer extends Viewer {
    * Return whether the given match is concerned with conflicting differences
    * @param match_p a non-null match
    */
-  protected boolean isConflicting(IMatch match_p) {
+  protected boolean isConflicting(IMatch<?> match_p) {
     Object[] upperChildren = ((ITreeContentProvider)_upperViewer.getContentProvider()).getChildren(match_p);
     for (Object child : upperChildren) {
       if (child instanceof IDifference &&
-          isConflicting((IDifference)child))
+          isConflicting((IDifference<?>)child))
         return true;
     }
     Object[] lowerChildren = ((ITreeContentProvider)_lowerViewer.getContentProvider()).getChildren(match_p);
     for (Object child : lowerChildren) {
       if (child instanceof IDifference &&
-          isConflicting((IDifference)child))
+          isConflicting((IDifference<?>)child))
         return true;
     }
     return false;
@@ -457,11 +459,11 @@ public class MergeImpactViewer extends Viewer {
     public Object[] getChildren(Object parentElement_p) {
       Object[] result = new Object[] {};
       if (parentElement_p instanceof IMatch) {
-        Collection<IDifference> subDifferences = getImpact().get(parentElement_p);
+        Collection<IDifference<?>> subDifferences = getImpact().get(parentElement_p);
         if (subDifferences != null) {
-          List<IDifference> filteredDifferences = new ArrayList<IDifference>(
+          List<IDifference<?>> filteredDifferences = new ArrayList<IDifference<?>>(
               subDifferences.size());
-          for (IDifference difference : subDifferences) {
+          for (IDifference<?> difference : subDifferences) {
             if (!isMoveOfAdded(difference))
               filteredDifferences.add(difference);
           }
@@ -476,12 +478,12 @@ public class MergeImpactViewer extends Viewer {
      * which has also been added
      * @param difference_p a non-null difference
      */
-    private boolean isMoveOfAdded(IDifference difference_p) {
+    private boolean isMoveOfAdded(IDifference<?> difference_p) {
       boolean result = false;
       if (difference_p instanceof IReferenceValuePresence) {
-        IReferenceValuePresence valuePresence = (IReferenceValuePresence)difference_p;
+        IReferenceValuePresence<?> valuePresence = (IReferenceValuePresence<?>)difference_p;
         if (valuePresence.isOwnership()) {
-          IMatch valueMatch = valuePresence.getValueMatch();
+          IMatch<?> valueMatch = valuePresence.getValueMatch();
           result = valueMatch != null && valueMatch.getElementPresenceDifference() != null;
         }
       }
@@ -504,10 +506,11 @@ public class MergeImpactViewer extends Viewer {
      * Return the relevant impact map
      * @return a non-null impact map
      */
-    private EMap<IMatch, Collection<IDifference>> getImpact() {
-      EMap<IMatch, Collection<IDifference>> result = ECollections.emptyEMap();
-      if (_input != null)
+    private EMap<IMatch<?>, Collection<IDifference<?>>> getImpact() {
+      EMap<IMatch<?>, Collection<IDifference<?>>> result = ECollections.emptyEMap();
+      if (_input != null) {
         result = _input.getImpact(_isOnExplicit);
+      }
       return result;
     }
     
@@ -561,7 +564,7 @@ public class MergeImpactViewer extends Viewer {
     @Override
     public Color getForeground(Object element_p) {
       DifferenceColorKind result;
-      if (element_p instanceof IDifference && isConflicting((IDifference)element_p))
+      if (element_p instanceof IDifference && isConflicting((IDifference<?>)element_p))
         result = DifferenceColorKind.CONFLICT;
       else
         result = getInput().isOnTheLeft()? DifferenceColorKind.LEFT:
@@ -576,12 +579,12 @@ public class MergeImpactViewer extends Viewer {
     public Image getImage(Object element_p) {
       Image result = null;
       if (element_p instanceof IMatch) {
-        IMatch match = (IMatch)element_p;
+        IMatch<?> match = (IMatch<?>)element_p;
         result = getDelegate().getMatchImage(match, getInput().getDestination());
         if (result != null && isConflicting(match))
           result = _resourceManager.getOverlayVersion(result, ImageID.CONFLICT_STAT);
       } else if (element_p instanceof IDifference) {
-        IDifference difference = (IDifference)element_p;
+        IDifference<?> difference = (IDifference<?>)element_p;
         Role destination = getInput().getDestination();
         result = getDelegate().getDifferenceImage(difference, destination);
         if (isConflicting(difference)) {
@@ -600,11 +603,11 @@ public class MergeImpactViewer extends Viewer {
     public String getText(Object element_p) {
       String result = null;
       if (element_p instanceof IMatch) {
-        IMatch match = (IMatch)element_p;
+        IMatch<?> match = (IMatch<?>)element_p;
         result = getDelegate().getMatchText(match, getInput().getDestination(), null);
       } else if (element_p instanceof IDifference) {
         Role destination = getInput().getDestination();
-        result = getDelegate().getDifferenceText((IDifference)element_p, destination, null);
+        result = getDelegate().getDifferenceText((IDifference<?>)element_p, destination, null);
       } else {
         result = getDelegate().getText(element_p);
       }

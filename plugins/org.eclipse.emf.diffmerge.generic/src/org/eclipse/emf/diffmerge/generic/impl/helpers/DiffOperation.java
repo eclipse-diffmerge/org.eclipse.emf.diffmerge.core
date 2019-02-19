@@ -208,8 +208,10 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
     Set<Object> attributes = new HashSet<Object>();
-    attributes.addAll(getComparison().getScope(role1_p).getAttributes(match_p.get(role1_p)));
-    attributes.addAll(getComparison().getScope(role2_p).getAttributes(match_p.get(role2_p)));
+    IScopePolicy<E> scopePolicy1 = getComparison().getScope(role1_p).getScopePolicy();
+    IScopePolicy<E> scopePolicy2 = getComparison().getScope(role2_p).getScopePolicy();
+    attributes.addAll(scopePolicy1.getAttributes(match_p.get(role1_p)));
+    attributes.addAll(scopePolicy2.getAttributes(match_p.get(role2_p)));
     for (Object attribute : attributes) {
       if (getDiffPolicy().coverAttribute(attribute)) {
         result = detectAttributeDifferences(
@@ -236,7 +238,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
     ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
     Set<Object> references1 = new HashSet<Object>(
-        scope1.getReferences(match_p.get(role1_p)));
+        scope1.getScopePolicy().getReferences(match_p.get(role1_p)));
     for (Object reference : references1) {
       if (!scopePolicy.isContainerReference(reference) &&
           getDiffPolicy().coverReference(reference)) {
@@ -244,7 +246,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
             match_p, reference, role1_p, role2_p, create_p) || result;
       }
     }
-    for (Object reference : scope2.getReferences(match_p.get(role2_p))) {
+    for (Object reference : scope2.getScopePolicy().getReferences(match_p.get(role2_p))) {
       if (!references1.contains(reference) && !scopePolicy.isContainerReference(reference) &&
           getDiffPolicy().coverReference(reference)) {
         result = detectReferenceDifferences(

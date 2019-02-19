@@ -12,13 +12,11 @@
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.diffmerge.util.ModelsUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -41,7 +39,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class EReferenceValuePresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl<EObject, EAttribute, EReference, IEditableModelScope>
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl<EObject, EAttribute, EReference>
     implements EReferenceValuePresence {
   /**
    * The cached value of the '{@link #getReference() <em>Reference</em>}' reference.
@@ -171,6 +169,15 @@ public class EReferenceValuePresenceImpl extends
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @generated NOT
+   */
+  @Override
+  public EMatch getElementMatch() {
+    return (EMatch) super.getElementMatch();
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
@@ -200,6 +207,33 @@ public class EReferenceValuePresenceImpl extends
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
           DiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE, oldValue, value));
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getSymmetrical()
+   * @generated NOT
+   */
+  @Override
+  public EReferenceValuePresence getSymmetrical() {
+    return (EReferenceValuePresence) super.getSymmetrical();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getSymmetricalOwnership()
+   * @generated NOT
+   */
+  @Override
+  public EReferenceValuePresence getSymmetricalOwnership() {
+    return (EReferenceValuePresence) super.getSymmetricalOwnership();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getValueMatch()
+   * @generated NOT
+   */
+  @Override
+  public EMatch getValueMatch() {
+    return (EMatch) super.getValueMatch();
   }
 
   /**
@@ -280,7 +314,7 @@ public class EReferenceValuePresenceImpl extends
    */
   @Override
   protected void removeDependencies(EObject element_p) {
-    ModelsUtil.removeDependencies(getComparison(), getPresenceRole(),
+    getComparison().getMapping().removeDependencies(getPresenceRole(),
         element_p);
   }
 

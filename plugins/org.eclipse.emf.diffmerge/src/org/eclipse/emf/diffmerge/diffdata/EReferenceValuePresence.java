@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -30,11 +29,11 @@ import org.eclipse.emf.ecore.EReference;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEReferenceValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EValuePresence"
+ * @model
  * @generated
  */
 public interface EReferenceValuePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<EObject, EAttribute, EReference, IEditableModelScope>,
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<EObject, EAttribute, EReference>,
     EValuePresence {
 
   /**
@@ -88,5 +87,29 @@ public interface EReferenceValuePresence extends
    * @generated
    */
   void setValue(EObject value);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation"
+   * @generated
+   */
+  EReferenceValuePresence getSymmetrical();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation"
+   * @generated
+   */
+  EReferenceValuePresence getSymmetricalOwnership();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation"
+   * @generated
+   */
+  EMatch getValueMatch();
   // Nothing needed
 } // EReferenceValuePresence

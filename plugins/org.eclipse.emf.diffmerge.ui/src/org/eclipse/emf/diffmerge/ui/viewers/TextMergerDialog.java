@@ -12,8 +12,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import static org.eclipse.emf.diffmerge.api.Role.ANCESTOR;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -25,16 +23,14 @@ import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.Differencer;
 import org.eclipse.compare.structuremergeviewer.ICompareInput;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IContributionManagerOverrides;
@@ -133,10 +129,10 @@ public class TextMergerDialog extends MessageDialog {
   protected final EMFDiffNode _diffNode;
   
   /** The non-null match concerned */
-  protected final IMatch _match;
+  protected final IMatch<?> _match;
   
-  /** The non-null feature concerned */
-  protected final EAttribute _feature;
+  /** The non-null attribute concerned */
+  protected final Object _feature;
   
   /** The non-null label provider */
   protected final ILabelProvider _labelProvider = DiffMergeLabelProvider.getInstance();
@@ -159,7 +155,7 @@ public class TextMergerDialog extends MessageDialog {
    * @param feature_p the non-null attribute concerned
    */
   public TextMergerDialog(Shell shell_p, EMFDiffNode diffNode_p,
-      IMatch match_p, EAttribute feature_p) {
+      IMatch<?> match_p, Object feature_p) {
     super(shell_p, null, null, null, 0,
         new String[] {
             IDialogConstants.OK_LABEL,
@@ -203,7 +199,7 @@ public class TextMergerDialog extends MessageDialog {
     CompareConfiguration result = new CompareConfiguration();
     result.setProperty(UIUtil.CC_MIRRORED_PROPERTY, Boolean.FALSE);
     if (_diffNode.isThreeWay()) {
-      result.setAncestorLabel(_labelProvider.getText(getScope(ANCESTOR)));
+      result.setAncestorLabel(_labelProvider.getText(getScope(Role.ANCESTOR)));
     }
     result.setLeftLabel(_labelProvider.getText(getScope(true)));
     result.setLeftEditable(_diffNode.isEditable(true));
@@ -341,9 +337,10 @@ public class TextMergerDialog extends MessageDialog {
    * Return the difference related to the current state
    * @return an attribute value presence which may have a symmetrical, or null if none
    */
-  protected IAttributeValuePresence getDifference() {
-    IAttributeValuePresence result = null;
-    Collection<IAttributeValuePresence> allDiffs = _match.getAttributeDifferences(_feature);
+  protected IAttributeValuePresence<?> getDifference() {
+    IAttributeValuePresence<?> result = null;
+    Collection<? extends IAttributeValuePresence<?>> allDiffs =
+        _match.getAttributeDifferences(_feature);
     // Size is between 0 and 2 since the upper bound is 1 according to method isApplicableTo
     if (!allDiffs.isEmpty()) {
       result = allDiffs.iterator().next();
@@ -364,7 +361,7 @@ public class TextMergerDialog extends MessageDialog {
    * @param left_p whether the side is left or right
    * @return a non-null model scope
    */
-  protected IFeaturedModelScope getScope(boolean left_p) {
+  protected ITreeDataScope<?> getScope(boolean left_p) {
     return getScope(_diffNode.getRoleForSide(left_p));
   }
   
@@ -373,7 +370,7 @@ public class TextMergerDialog extends MessageDialog {
    * @param role_p a non-null role
    * @return a model scope that is non-null except for the ancestor role on a two-way comparison
    */
-  protected IFeaturedModelScope getScope(Role role_p) {
+  protected ITreeDataScope<?> getScope(Role role_p) {
     return _diffNode.getActualComparison().getScope(role_p);
   }
   
@@ -409,12 +406,13 @@ public class TextMergerDialog extends MessageDialog {
    */
   protected String getValue(Role role_p) {
     String result = null;
-    IFeaturedModelScope scope = getScope(role_p);
+    @SuppressWarnings("unchecked")
+    ITreeDataScope<Object> scope = (ITreeDataScope<Object>)getScope(role_p);
     if (scope != null) {
       result = ""; // Default //$NON-NLS-1$
-      EObject element = _match.get(role_p);
+      Object element = _match.get(role_p);
       if (element != null) {
-        List<Object> rawValue = scope.get(element, _feature); // Current value in case of previous text merge
+        List<?> rawValue = scope.getAttributeValues(element, _feature); // Current value in case of previous text merge
         if (rawValue.size() == 1) { // Value is present
           result = (String)rawValue.get(0);
         }
@@ -435,10 +433,10 @@ public class TextMergerDialog extends MessageDialog {
    * Return whether text merge is applicable to the given structural feature
    * @param feature_p a potentially null feature
    */
-  public static boolean isApplicableTo(EStructuralFeature feature_p) {
+  public static boolean isApplicableTo(Object feature_p) {
     return feature_p instanceof EAttribute &&
-        feature_p.getUpperBound() == 1 &&
-        String.class.equals(feature_p.getEType().getInstanceClass());
+        ((EAttribute)feature_p).getUpperBound() == 1 &&
+        String.class.equals(((EAttribute)feature_p).getEType().getInstanceClass());
   }
   
   /**
@@ -447,7 +445,8 @@ public class TextMergerDialog extends MessageDialog {
    */
   protected boolean isEditable(boolean left_p) {
     // Forbid double edition: editable only if this side is the only editable one
-    return !_match.isPartial() && _diffNode.isEditable(left_p) && !_diffNode.isEditable(!left_p);
+    return !_match.isPartial() && _diffNode.isEditable(left_p) &&
+        !_diffNode.isEditable(!left_p);
   }
   
   /**

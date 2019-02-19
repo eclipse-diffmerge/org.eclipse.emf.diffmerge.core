@@ -13,8 +13,9 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
@@ -98,15 +100,25 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
    * @return a potentially null string
    */
   protected String getContextualText(FeaturesInput input_p) {
-    EObject element = getDrivingElement(input_p);
+    Object element = getDrivingElement(input_p);
     boolean useTechnicalLabels =
         input_p.getContext().isUserPropertyTrue(P_TECHNICAL_LABELS);
     String formattedTypeText;
-    if (useTechnicalLabels) {
-      EClass type = element.eClass();
-      formattedTypeText = type.getEPackage().getName() + '.' + type.getName();
+    if (element instanceof EObject) {
+      if (useTechnicalLabels) {
+        EClass type = ((EObject)element).eClass();
+        formattedTypeText = type.getEPackage().getName() + '.' + type.getName();
+      } else {
+        formattedTypeText = UIUtil.getFormattedTypeText((EObject)element);
+      }
     } else {
-      formattedTypeText = UIUtil.getFormattedTypeText(element);
+      EMFDiffNode node = input_p.getContext();
+      IScopePolicy<?> scopePolicy =
+          node.getActualComparison().getScope(node.getDrivingRole()).getScopePolicy();
+      @SuppressWarnings({ "rawtypes", "unchecked" })
+      Object type = ((IScopePolicy)scopePolicy).getType(element);
+      ILabelProvider labelProvider = getLabelProvider();
+      formattedTypeText = labelProvider.getText(type);
     }
     String result = String.format(
         Messages.EnhancedFeaturesViewer_DetailsWithSelection, formattedTypeText);
@@ -126,12 +138,13 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
    * @param input_p a non-null input
    * @return a non-null element
    */
-  protected EObject getDrivingElement(FeaturesInput input_p) {
-    IMatch match = input_p.getMatch();
+  protected Object getDrivingElement(FeaturesInput input_p) {
+    IMatch<?> match = input_p.getMatch();
     Role drivingRole = input_p.getContext().getDrivingRole();
-    EObject element = match.get(drivingRole);
-    if (element == null)
+    Object element = match.get(drivingRole);
+    if (element == null) {
       element = match.get(drivingRole.opposite());
+    }
     return element;
   }
   

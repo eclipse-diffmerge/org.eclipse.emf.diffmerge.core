@@ -26,11 +26,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEReferenceValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R, S&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
  * @generated
  */
-public interface EReferenceValuePresence<E, A, R, S>
-    extends EValuePresence<E, A, R, S>, IReferenceValuePresence<E> {
+public interface EReferenceValuePresence<E, A, R>
+    extends EValuePresence<E, A, R>, IReferenceValuePresence<E> {
 
   /**
    * Returns the value of the '<em><b>Value Match</b></em>' reference.
@@ -46,7 +46,7 @@ public interface EReferenceValuePresence<E, A, R, S>
    * @model
    * @generated
    */
-  EMatch<E, A, R, S> getValueMatch();
+  EMatch<E, A, R> getValueMatch();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}' reference.
@@ -56,7 +56,7 @@ public interface EReferenceValuePresence<E, A, R, S>
    * @see #getValueMatch()
    * @generated
    */
-  void setValueMatch(EMatch<E, A, R, S> value);
+  void setValueMatch(EMatch<E, A, R> value);
 
   /**
    * <!-- begin-user-doc -->

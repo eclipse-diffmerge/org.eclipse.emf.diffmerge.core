@@ -13,25 +13,22 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.diff.IAttributeValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
-import org.eclipse.emf.diffmerge.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
 import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
-import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -232,10 +229,11 @@ IDifferenceRelatedViewer {
   protected boolean isOwnership(Object object_p) {
     boolean result = false;
     Object object = object_p;
-    if (object instanceof ValuesInput)
+    if (object instanceof ValuesInput) {
       object = ((ValuesInput)object).getMatchAndFeature();
+    }
     if (object instanceof MatchAndFeature) {
-      EStructuralFeature feature = ((MatchAndFeature)object).getFeature();
+      Object feature = ((MatchAndFeature)object).getFeature();
       result = EMFDiffMergeUIPlugin.getDefault().getOwnershipFeature().equals(feature);
     }
     return result;
@@ -260,6 +258,7 @@ IDifferenceRelatedViewer {
     /**
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object[] getElements(Object inputElement_p) {
       Collection<Object> result = new ArrayList<Object>();
       ValuesInput valuesInput = (ValuesInput)inputElement_p;
@@ -267,42 +266,46 @@ IDifferenceRelatedViewer {
         MatchAndFeature maf = valuesInput.getMatchAndFeature();
         if (isOwnership(maf)) {
           // Ownership
-          IReferenceValuePresence ownership = maf.getMatch().getOwnershipDifference(getSideRole());
+          IReferenceValuePresence<?> ownership = maf.getMatch().getOwnershipDifference(getSideRole());
           if (ownership != null)
             result.add(ownership);
         } else {
           // Order
-          IValuePresence orderDifference = maf.getMatch().getOrderDifference(
-              maf.getFeature(), getSideRole());
-          if (orderDifference != null)
+          IValuePresence<?> orderDifference = maf.isAttribute()?
+              maf.getMatch().getAttributeOrderDifference(maf.getFeature(), getSideRole()):
+                maf.getMatch().getReferenceOrderDifference(maf.getFeature(), getSideRole());
+          if (orderDifference != null) {
             result.add(orderDifference);
+          }
           // Only show values if no containment
           if (!valuesInput.isContainment()) {
             if (isDifferenceAgnostic()) {
               // All feature values
-              IMatch match = maf.getMatch();
-              EObject source = match.get(getSideRole());
+              IMatch<?> match = maf.getMatch();
+              Object source = match.get(getSideRole());
               if (source != null) {
-                IComparison comparison = getInput() == null? null:
+                IComparison<?> comparison = getInput() == null? null:
                   getInput().getContext().getActualComparison();
                 if (comparison != null) {
-                  if (maf.getFeature() instanceof EAttribute) {
-                    EAttribute attribute = (EAttribute)maf.getFeature();
-                    List<Object> values = comparison.getScope(getSideRole()).get(source, attribute);
+                  ITreeDataScope<?> sideScope = comparison.getScope(getSideRole());
+                  if (maf.isAttribute()) {
+                    Object attribute = maf.getFeature();
+                    List<?> values = ((ITreeDataScope)sideScope).getAttributeValues(source, attribute);
                     for (Object value : values) {
-                      IAttributeValuePresence presence =
+                      IAttributeValuePresence<?> presence =
                           match.getAttributeValueDifference(attribute, value);
-                      if (presence != null)
+                      if (presence != null) {
                         result.add(presence);
-                      else
+                      } else {
                         result.add(value);
+                      }
                     }
                   } else {
-                    EReference reference = (EReference)maf.getFeature();
-                    List<EObject> values = comparison.getScope(getSideRole()).get(source, reference);
-                    for (EObject value : values) {
-                      IReferenceValuePresence presence =
-                          match.getReferenceValueDifference(reference, value);
+                    Object reference = maf.getFeature();
+                    List<?> values = ((ITreeDataScope)sideScope).getReferenceValues(source, reference);
+                    for (Object value : values) {
+                      IReferenceValuePresence<?> presence =
+                          ((IMatch)match).getReferenceValueDifference(reference, value);
                       if (presence != null)
                         result.add(presence);
                       else
@@ -313,12 +316,13 @@ IDifferenceRelatedViewer {
               }
             } else {
               // Only differences
-              Collection<? extends IValuePresence> bothSides;
-              if (maf.getFeature() instanceof EAttribute)
-                bothSides = maf.getMatch().getAttributeDifferences((EAttribute)maf.getFeature());
-              else
-                bothSides = maf.getMatch().getReferenceDifferences((EReference)maf.getFeature());
-              for (IValuePresence presence : bothSides) {
+              Collection<? extends IValuePresence<?>> bothSides;
+              if (maf.isAttribute()) {
+                bothSides = maf.getMatch().getAttributeDifferences(maf.getFeature());
+              } else {
+                bothSides = maf.getMatch().getReferenceDifferences(maf.getFeature());
+              }
+              for (IValuePresence<?> presence : bothSides) {
                 if (!presence.isOrder() && presence.getPresenceRole() == getSideRole() &&
                     presence.getMergeDestination() != getSideRole() ||
                     !presence.isOrder() && presence.getPresenceRole() == getSideRole().opposite() &&
@@ -388,10 +392,10 @@ IDifferenceRelatedViewer {
       return result;
     }
     /**
-     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.api.diff.IValuePresence)
+     * @see org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider#isFromValue(org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence)
      */
     @Override
-    protected boolean isFromValue(IValuePresence valuePresence_p) {
+    protected boolean isFromValue(IValuePresence<?> valuePresence_p) {
       return isOwnership(getInput());
     }
     /**

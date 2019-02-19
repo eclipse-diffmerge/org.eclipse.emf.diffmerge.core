@@ -11,10 +11,15 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
+import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
+import org.eclipse.jface.viewers.ContentViewer;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
@@ -202,6 +207,25 @@ public abstract class HeaderViewer<V extends Viewer> extends Viewer {
   @Override
   public Object getInput() {
     return getInnerViewer().getInput();
+  }
+  
+  /**
+   * Return a label provider for the viewer
+   * @return a non-null label provider
+   */
+  protected ILabelProvider getLabelProvider() {
+    ILabelProvider labelProvider = null;
+    Viewer innerViewer = getInnerViewer();
+    if (innerViewer instanceof ContentViewer) {
+      IBaseLabelProvider baseLP = ((ContentViewer)innerViewer).getLabelProvider();
+      if (baseLP instanceof LabelProvider) {
+        labelProvider = (LabelProvider)baseLP;
+      }
+    }
+    if (labelProvider == null) {
+      labelProvider = DiffMergeLabelProvider.getInstance();
+    }
+    return labelProvider;
   }
   
   /**

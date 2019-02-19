@@ -13,10 +13,9 @@ package org.eclipse.emf.diffmerge.gmf;
 
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.gmf.runtime.notation.Edge;
@@ -43,10 +42,10 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#isSingleMandatory(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#isSingleMandatory(java.lang.Object)
    */
   @Override
-  protected boolean isSingleMandatory(EReference reference_p) {
+  protected boolean isSingleMandatory(Object reference_p) {
     return super.isSingleMandatory(reference_p) ||
         reference_p == NotationPackage.eINSTANCE.getView_Element();
   }
@@ -59,7 +58,7 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendGMFAdditionGroup(Set<EObject> group_p, EObject element_p,
-      IFeaturedModelScope scope_p) {
+      ITreeDataScope<EObject> scope_p) {
     // Node -> Node content
     if (element_p instanceof Node) {
       Node elementNode = (Node)element_p;
@@ -91,7 +90,7 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
    * @param scope_p a non-null scope
    */
   protected void extendGMFAdditionGroupSemanticTarget(Set<EObject> group_p, EObject element_p,
-      IFeaturedModelScope scope_p) {
+      ITreeDataScope<EObject> scope_p) {
     ECrossReferenceAdapter crAdapter = ECrossReferenceAdapter.getCrossReferenceAdapter(element_p);
     if (crAdapter != null) {
       for (EStructuralFeature.Setting setting : crAdapter.getNonNavigableInverseReferences(element_p, false)) {
@@ -102,10 +101,10 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#getAdditionGroup(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#getAdditionGroup(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public Set<EObject> getAdditionGroup(EObject element_p, IFeaturedModelScope scope_p) {
+  public Set<EObject> getAdditionGroup(EObject element_p, ITreeDataScope<EObject> scope_p) {
     Set<EObject> result = super.getAdditionGroup(element_p, scope_p);
     extendGMFAdditionGroup(result, element_p, scope_p);
     return result;

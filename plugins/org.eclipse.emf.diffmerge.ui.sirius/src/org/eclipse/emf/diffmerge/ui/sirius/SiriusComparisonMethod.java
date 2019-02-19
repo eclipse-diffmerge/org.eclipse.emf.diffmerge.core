@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.sirius.SiriusDiffPolicy;
 import org.eclipse.emf.diffmerge.sirius.SiriusMatchPolicy;
 import org.eclipse.emf.diffmerge.sirius.SiriusMergePolicy;
@@ -30,6 +30,7 @@ import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryProvider;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -59,7 +60,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
    */
   public SiriusComparisonMethod(IModelScopeDefinition leftScopeDef_p,
       IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
-      IComparisonMethodFactory factory_p) {
+      IComparisonMethodFactory<EObject> factory_p) {
     super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
     _roleToSession = new HashMap<Role, Session>(3);
   }
@@ -134,7 +135,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod#createDiffPolicy()
    */
   @Override
-  protected IDiffPolicy createDiffPolicy() {
+  protected IDiffPolicy<EObject> createDiffPolicy() {
     return new SiriusDiffPolicy();
   }
   
@@ -142,7 +143,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod#createMatchPolicy()
    */
   @Override
-  protected IMatchPolicy createMatchPolicy() {
+  protected IMatchPolicy<EObject> createMatchPolicy() {
     return new SiriusMatchPolicy();
   }
   
@@ -150,7 +151,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethod#createMergePolicy()
    */
   @Override
-  protected IMergePolicy createMergePolicy() {
+  protected IMergePolicy<EObject> createMergePolicy() {
     return new SiriusMergePolicy();
   }
   
@@ -182,7 +183,7 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.ext.AbstractComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.generic.api.Role)
    */
   @Override
   public ResourceSet getResourceSet(Role role_p) {

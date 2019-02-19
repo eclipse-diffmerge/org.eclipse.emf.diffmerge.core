@@ -12,8 +12,7 @@
 package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
 import java.util.Map;
-
-import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.ui.diffuidata.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -149,7 +148,7 @@ public class DiffuidataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EMatch, Integer> createMatchToNbEntry() {
+  public Map.Entry<IMatch<?>, Integer> createMatchToNbEntry() {
     MatchToNbEntryImpl matchToNbEntry = new MatchToNbEntryImpl();
     return matchToNbEntry;
   }

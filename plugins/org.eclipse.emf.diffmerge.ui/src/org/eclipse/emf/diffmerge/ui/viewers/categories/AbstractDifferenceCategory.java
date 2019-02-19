@@ -13,8 +13,8 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import java.util.Set;
 
-import org.eclipse.emf.diffmerge.api.IMatch;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
@@ -82,7 +82,7 @@ implements IDifferenceCategory {
    * @param match_p a non-null match
    * @return a non-null, potentially empty set
    */
-  protected Set<EObject> getElements(IMatch match_p) {
+  protected Set<EObject> getElements(EMatch match_p) {
     Set<EObject> result = new FOrderedSet<EObject>();
     for (Role role : Role.values()) {
       EObject element = match_p.get(role);

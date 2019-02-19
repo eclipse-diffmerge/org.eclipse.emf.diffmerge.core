@@ -223,9 +223,10 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
     boolean result = super.add(source_p, reference_p, value_p);
     if (wasRoot && reference_p.isContainment()) // Intentionally not isContainment(reference_p)
       oldResource.getContents().remove(value_p); // Not automatically handled
-    if (formerId != null)
+    if (formerId != null) {
       // In case resource has changed, thus changing the extrinsic ID
       setExtrinsicID(value_p, formerId);
+    }
     return result;
   }
   

@@ -111,6 +111,18 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
+    public Adapter caseEMergeableDifference(
+        org.eclipse.emf.diffmerge.diffdata.EMergeableDifference object) {
+      return createEMergeableDifferenceAdapter();
+    }
+
+    @Override
+    public Adapter caseEElementRelativePresence(
+        org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence object) {
+      return createEElementRelativePresenceAdapter();
+    }
+
+    @Override
     public Adapter caseEElementPresence(EElementPresence object) {
       return createEElementPresenceAdapter();
     }
@@ -171,14 +183,14 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EComparison(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EComparison(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, A, R> object) {
       return createGdiffdata_EComparisonAdapter();
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EComparisonElement(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EComparisonElement(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<E, A, R> object) {
       return createGdiffdata_EComparisonElementAdapter();
     }
 
@@ -189,8 +201,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EMapping(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EMapping(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, A, R> object) {
       return createGdiffdata_EMappingAdapter();
     }
 
@@ -201,8 +213,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EMatch(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EMatch(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, A, R> object) {
       return createGdiffdata_EMatchAdapter();
     }
 
@@ -213,9 +225,9 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEMergeableDifference(
-        EMergeableDifference<E, A, R, S> object) {
-      return createEMergeableDifferenceAdapter();
+    public <E, A, R> Adapter caseGdiffdata_EMergeableDifference(
+        EMergeableDifference<E, A, R> object) {
+      return createGdiffdata_EMergeableDifferenceAdapter();
     }
 
     @Override
@@ -225,9 +237,9 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseEElementRelativePresence(
-        EElementRelativePresence<E, A, R, S> object) {
-      return createEElementRelativePresenceAdapter();
+    public <E, A, R> Adapter caseGdiffdata_EElementRelativePresence(
+        EElementRelativePresence<E, A, R> object) {
+      return createGdiffdata_EElementRelativePresenceAdapter();
     }
 
     @Override
@@ -236,8 +248,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EElementPresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EElementPresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<E, A, R> object) {
       return createGdiffdata_EElementPresenceAdapter();
     }
 
@@ -247,8 +259,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<E, A, R> object) {
       return createGdiffdata_EValuePresenceAdapter();
     }
 
@@ -259,8 +271,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EAttributeValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EAttributeValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<E, A, R> object) {
       return createGdiffdata_EAttributeValuePresenceAdapter();
     }
 
@@ -271,8 +283,8 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public <E, A, R, S> Adapter caseGdiffdata_EReferenceValuePresence(
-        org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<E, A, R, S> object) {
+    public <E, A, R> Adapter caseGdiffdata_EReferenceValuePresence(
+        org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence<E, A, R> object) {
       return createGdiffdata_EReferenceValuePresenceAdapter();
     }
 
@@ -366,13 +378,13 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference <em>EMergeable Difference</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.diffdata.EMergeableDifference <em>EMergeable Difference</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference
+   * @see org.eclipse.emf.diffmerge.diffdata.EMergeableDifference
    * @generated
    */
   public Adapter createEMergeableDifferenceAdapter() {
@@ -380,13 +392,13 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence <em>EElement Relative Presence</em>}'.
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence <em>EElement Relative Presence</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
    * <!-- end-user-doc -->
    * @return the new adapter.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence
+   * @see org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence
    * @generated
    */
   public Adapter createEElementRelativePresenceAdapter() {
@@ -632,6 +644,20 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference <em>EMergeable Difference</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference
+   * @generated
+   */
+  public Adapter createGdiffdata_EMergeableDifferenceAdapter() {
+    return null;
+  }
+
+  /**
    * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence <em>IElement Relative Presence</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -642,6 +668,20 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @generated
    */
   public Adapter createIElementRelativePresenceAdapter() {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence <em>EElement Relative Presence</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence
+   * @generated
+   */
+  public Adapter createGdiffdata_EElementRelativePresenceAdapter() {
     return null;
   }
 

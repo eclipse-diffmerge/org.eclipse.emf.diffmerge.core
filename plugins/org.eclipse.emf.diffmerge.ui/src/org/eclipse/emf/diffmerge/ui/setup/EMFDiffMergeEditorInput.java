@@ -26,11 +26,14 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -83,19 +86,19 @@ public class EMFDiffMergeEditorInput extends CompareEditorInput
 implements IEditingDomainProvider {
   
   /** The non-null (unless disposed) comparison method **/
-  protected IComparisonMethod _comparisonMethod;
+  protected IComparisonMethod<?> _comparisonMethod;
   
   /** The initially null resource that holds the comparison */
   protected Resource _comparisonResource;
   
   /** The left comparison scope (initially null) **/
-  protected IEditableModelScope _leftScope;
+  protected IEditableTreeDataScope<?> _leftScope;
   
   /** The right comparison scope (initially null) **/
-  protected IEditableModelScope _rightScope;
+  protected IEditableTreeDataScope<?> _rightScope;
   
   /** The ancestor comparison scope (initially null) **/
-  protected IEditableModelScope _ancestorScope;
+  protected IEditableTreeDataScope<?> _ancestorScope;
   
   /** The initially null viewer */
   protected AbstractComparisonViewer _viewer;
@@ -120,7 +123,7 @@ implements IEditingDomainProvider {
    * Constructor
    * @param method_p a non-null comparison method
    */
-  public EMFDiffMergeEditorInput(IComparisonMethod method_p) {
+  public EMFDiffMergeEditorInput(IComparisonMethod<?> method_p) {
     super(new CompareConfiguration());
     _comparisonMethod = method_p;
     _leftScope = null;
@@ -146,9 +149,10 @@ implements IEditingDomainProvider {
    * is not consistent
    * @param comparison_p a potentially null comparison
    */
-  public void checkInconsistency(IComparison comparison_p) {
-    if (comparison_p != null && !comparison_p.isConsistent())
+  public void checkInconsistency(IComparison<?> comparison_p) {
+    if (comparison_p != null && !comparison_p.isConsistent()) {
       handleInconsistency(comparison_p);
+    }
   }
   
   /**
@@ -248,12 +252,15 @@ implements IEditingDomainProvider {
           unloader.unloadResource(_comparisonResource, true);
           unloaded.add(_comparisonResource);
         }
-        if (_leftScope instanceof IPersistentModelScope)
+        if (_leftScope instanceof IPersistentModelScope) {
           unloaded.addAll(((IPersistentModelScope)_leftScope).unload());
-        if (_rightScope instanceof IPersistentModelScope)
+        }
+        if (_rightScope instanceof IPersistentModelScope) {
           unloaded.addAll(((IPersistentModelScope)_rightScope).unload());
-        if (_ancestorScope instanceof IPersistentModelScope)
+        }
+        if (_ancestorScope instanceof IPersistentModelScope) {
           unloaded.addAll(((IPersistentModelScope)_ancestorScope).unload());
+        }
       }
     });
     if (domain != null) {
@@ -290,7 +297,7 @@ implements IEditingDomainProvider {
    * Return the comparison method of this editor input
    * @return a non-null (unless the receiver is disposed) comparison method
    */
-  public IComparisonMethod getComparisonMethod() {
+  public IComparisonMethod<?> getComparisonMethod() {
     return _comparisonMethod;
   }
   
@@ -492,11 +499,12 @@ implements IEditingDomainProvider {
    * Create and return the comparison
    * @return a non-null comparison
    */
-  protected EComparison initializeComparison() {
+  protected EComparison<?,?,?> initializeComparison() {
     boolean leftIsTarget = getLeftRole() == Role.TARGET;
-    IEditableModelScope targetScope = leftIsTarget? _leftScope: _rightScope;
-    IEditableModelScope referenceScope = leftIsTarget? _rightScope: _leftScope;
-    EComparison result = _comparisonMethod.createComparison(
+    IEditableTreeDataScope<?> targetScope = leftIsTarget? _leftScope: _rightScope;
+    IEditableTreeDataScope<?> referenceScope = leftIsTarget? _rightScope: _leftScope;
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // OK because of checked applicability to the scopes
+    EComparison<?,?,?> result = ((IComparisonMethod)_comparisonMethod).createComparison(
         targetScope, referenceScope, _ancestorScope);
     return result;
   }
@@ -506,7 +514,7 @@ implements IEditingDomainProvider {
    * @param comparison_p a non-null comparison
    * @return a non-null diff node
    */
-  protected EMFDiffNode initializeDiffNode(EComparison comparison_p) {
+  protected EMFDiffNode initializeDiffNode(EComparison<?,?,?> comparison_p) {
     ResourceSet resourceSet = (getEditingDomain() != null)? getEditingDomain().getResourceSet(): null;
     if (resourceSet != null) {
       URI defaultURI = URI.createPlatformResourceURI("comparison/comparison", true); //$NON-NLS-1$
@@ -605,6 +613,7 @@ implements IEditingDomainProvider {
   /**
    * @see org.eclipse.compare.CompareEditorInput#prepareInput(org.eclipse.core.runtime.IProgressMonitor)
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @Override
   protected Object prepareInput(IProgressMonitor monitor_p) throws
       InvocationTargetException, InterruptedException {
@@ -618,15 +627,19 @@ implements IEditingDomainProvider {
     try {
       if (!scopesReady)
         loadScopes(monitor.newChild(1));
-      EComparison comparison = initializeComparison();
-      comparison.compute(_comparisonMethod.getMatchPolicy(), _comparisonMethod.getDiffPolicy(),
-          _comparisonMethod.getMergePolicy(), monitor.newChild(scopesReady? 2: 1));
+      EComparison<?,?,?> comparison = initializeComparison();
+      comparison.compute(
+          (IMatchPolicy)_comparisonMethod.getMatchPolicy(),
+          (IDiffPolicy)_comparisonMethod.getDiffPolicy(),
+          (IMergePolicy)_comparisonMethod.getMergePolicy(),
+          monitor.newChild(scopesReady? 2: 1));
       checkInconsistency(comparison);
       _foundDifferences = comparison.hasRemainingDifferences();
-      if (_foundDifferences)
+      if (_foundDifferences) {
         result = initializeDiffNode(comparison);
-      else
+      } else {
         handleDispose();
+      }
     } catch (OperationCanceledException e) {
       // No user feedback is needed
       handleDispose();
@@ -644,7 +657,7 @@ implements IEditingDomainProvider {
    * @see IComparison#isConsistent()
    * @param comparison_p a non-null inconsistent comparison
    */
-  protected void handleInconsistency(final IComparison comparison_p) {
+  protected void handleInconsistency(final IComparison<?> comparison_p) {
     final Shell shell = getShell();
     if (shell != null) {
       final int[] pressed = new int[1];
@@ -711,7 +724,7 @@ implements IEditingDomainProvider {
    * Update the comparison method
    * @param comparisonMethod_p a non-null comparison method
    */
-  public void setComparisonMethod(IComparisonMethod comparisonMethod_p) {
+  public void setComparisonMethod(IComparisonMethod<?> comparisonMethod_p) {
     EditingDomain domain = getEditingDomain();
     if (domain != null) {
       // Reuse editing domain

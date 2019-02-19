@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -24,12 +23,12 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  *
  * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEValuePresence()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.ecore.EReference, org.eclipse.emf.diffmerge.diffdata.IEditableModelScope&gt; org.eclipse.emf.diffmerge.diffdata.EComparisonElement"
+ * @model interface="true" abstract="true"
  * @generated
  */
 public interface EValuePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<EObject, EAttribute, EReference, IEditableModelScope>,
-    EComparisonElement {
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence<EObject, EAttribute, EReference>,
+    EElementRelativePresence {
   /**
    * <!-- begin-user-doc -->
    * <p>

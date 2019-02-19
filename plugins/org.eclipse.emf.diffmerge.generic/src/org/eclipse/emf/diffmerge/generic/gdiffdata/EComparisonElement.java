@@ -14,13 +14,13 @@ import org.eclipse.emf.ecore.EObject;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface EComparisonElement<E, A, R, S> extends EObject {
+public interface EComparisonElement<E, A, R> extends EObject {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation"
    * @generated
    */
-  EComparison<E, A, R, S> getComparison();
+  EComparison<E, A, R> getComparison();
 
 } // EComparisonElement

@@ -11,10 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffDecoratingLabelProvider;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -95,7 +94,7 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
    * Return the model scope represented by this viewer
    * @return a scope which is assumed non-null after setInput(Object) has been invoked
    */
-  public IModelScope getSideScope() {
+  public ITreeDataScope<?> getSideScope() {
     return getInput() == null? null:
       getInput().getActualComparison().getScope(
           getSideRole());
@@ -124,12 +123,12 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object[] getChildren(Object parentElement_p) {
-      EObject container = (EObject)parentElement_p;
       Object[] result;
-      IModelScope scope = getSideScope();
+      ITreeDataScope<?> scope = getSideScope();
       if (scope != null) {
-        result = scope.getContents(container).toArray();
+        result = ((ITreeDataScope)scope).getContents(parentElement_p).toArray();
       } else {
         result = new Object[0];
       }
@@ -139,11 +138,12 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
+    @SuppressWarnings("rawtypes")
     public Object[] getElements(Object inputElement_p) {
       Object[] result;
-      IModelScope scope = getSideScope();
+      ITreeDataScope<?> scope = getSideScope();
       if (scope != null) {
-        result = scope.getContents().toArray();
+        result = ((ITreeDataScope)scope).getRoots().toArray();
       } else {
         result = new Object[0];
       }
@@ -153,11 +153,12 @@ public class ComparisonSideViewer extends TreeViewer implements IComparisonSideV
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public Object getParent(Object element_p) {
       Object result = null;
-      IModelScope scope = getSideScope();
+      ITreeDataScope<?> scope = getSideScope();
       if (scope != null) {
-        result = scope.getContainer((EObject)element_p);
+        result = ((ITreeDataScope)scope).getContainer(element_p);
       }
       return result;
     }

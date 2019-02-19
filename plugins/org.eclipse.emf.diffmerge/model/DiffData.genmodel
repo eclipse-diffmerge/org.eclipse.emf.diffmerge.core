@@ -14,9 +14,6 @@
     <genDataTypes ecoreDataType="DiffData.ecore#//IEditableModelScope"/>
     <genClasses ecoreClass="DiffData.ecore#//EComparison">
       <genOperations ecoreOperation="DiffData.ecore#//EComparison/getMapping"/>
-      <genOperations ecoreOperation="DiffData.ecore#//EComparison/getScope">
-        <genParameters ecoreParameter="DiffData.ecore#//EComparison/getScope/role"/>
-      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="DiffData.ecore#//EComparisonElement">
       <genOperations ecoreOperation="DiffData.ecore#//EComparisonElement/getComparison"/>
@@ -33,6 +30,10 @@
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/element"/>
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/role"/>
       </genOperations>
+      <genOperations ecoreOperation="DiffData.ecore#//EMapping/removeDependencies">
+        <genParameters ecoreParameter="DiffData.ecore#//EMapping/removeDependencies/role"/>
+        <genParameters ecoreParameter="DiffData.ecore#//EMapping/removeDependencies/element"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//EMatch">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/ancestor"/>
@@ -43,7 +44,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/modifiableOrderReferenceMap"/>
       <genOperations ecoreOperation="DiffData.ecore#//EMatch/getMapping"/>
     </genClasses>
-    <genClasses ecoreClass="DiffData.ecore#//EElementPresence"/>
+    <genClasses image="false" ecoreClass="DiffData.ecore#//EMergeableDifference"/>
+    <genClasses image="false" ecoreClass="DiffData.ecore#//EElementRelativePresence">
+      <genOperations ecoreOperation="DiffData.ecore#//EElementRelativePresence/getElementMatch"/>
+    </genClasses>
+    <genClasses ecoreClass="DiffData.ecore#//EElementPresence">
+      <genOperations ecoreOperation="DiffData.ecore#//EElementPresence/getOwnerMatch"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="DiffData.ecore#//EValuePresence">
       <genOperations ecoreOperation="DiffData.ecore#//EValuePresence/getFeature"/>
     </genClasses>
@@ -53,6 +60,9 @@
     <genClasses ecoreClass="DiffData.ecore#//EReferenceValuePresence">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EReferenceValuePresence/reference"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EReferenceValuePresence/value"/>
+      <genOperations ecoreOperation="DiffData.ecore#//EReferenceValuePresence/getSymmetrical"/>
+      <genOperations ecoreOperation="DiffData.ecore#//EReferenceValuePresence/getSymmetricalOwnership"/>
+      <genOperations ecoreOperation="DiffData.ecore#//EReferenceValuePresence/getValueMatch"/>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//AttributeToValueToDifferenceEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToValueToDifferenceEntry/key"/>

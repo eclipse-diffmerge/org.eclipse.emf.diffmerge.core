@@ -43,9 +43,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public abstract class EReferenceValuePresenceImpl<E, A, R, S>
-    extends EValuePresenceImpl<E, A, R, S>
-    implements EReferenceValuePresence<E, A, R, S> {
+public abstract class EReferenceValuePresenceImpl<E, A, R> extends
+    EValuePresenceImpl<E, A, R> implements EReferenceValuePresence<E, A, R> {
   /**
    * The cached value of the '{@link #getValueMatch() <em>Value Match</em>}' reference.
    * <!-- begin-user-doc -->
@@ -54,7 +53,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
    * @generated
    * @ordered
    */
-  protected EMatch<E, A, R, S> valueMatch;
+  protected EMatch<E, A, R> valueMatch;
 
   /**
    * <!-- begin-user-doc -->
@@ -75,8 +74,8 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EReferenceValuePresenceImpl(EMatch<E, A, R, S> elementMatch_p,
-      R reference_p, E value_p, EMatch<E, A, R, S> valueMatch_p,
+  public EReferenceValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
+      R reference_p, E value_p, EMatch<E, A, R> valueMatch_p,
       Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p, isOrder_p);
     assert valueMatch_p != null || value_p != null;
@@ -103,10 +102,10 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMatch<E, A, R, S> getValueMatch() {
+  public EMatch<E, A, R> getValueMatch() {
     if (valueMatch != null && valueMatch.eIsProxy()) {
       InternalEObject oldValueMatch = (InternalEObject) valueMatch;
-      valueMatch = (EMatch<E, A, R, S>) eResolveProxy(oldValueMatch);
+      valueMatch = (EMatch<E, A, R>) eResolveProxy(oldValueMatch);
       if (valueMatch != oldValueMatch) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -122,7 +121,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch<E, A, R, S> basicGetValueMatch() {
+  public EMatch<E, A, R> basicGetValueMatch() {
     return valueMatch;
   }
 
@@ -131,8 +130,8 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValueMatch(EMatch<E, A, R, S> newValueMatch) {
-    EMatch<E, A, R, S> oldValueMatch = valueMatch;
+  public void setValueMatch(EMatch<E, A, R> newValueMatch) {
+    EMatch<E, A, R> oldValueMatch = valueMatch;
     valueMatch = newValueMatch;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -179,7 +178,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch<E, A, R, S>) newValue);
+      setValueMatch((EMatch<E, A, R>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -194,7 +193,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R, S>
   public void eUnset(int featureID) {
     switch (featureID) {
     case GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH:
-      setValueMatch((EMatch<E, A, R, S>) null);
+      setValueMatch((EMatch<E, A, R>) null);
       return;
     }
     super.eUnset(featureID);

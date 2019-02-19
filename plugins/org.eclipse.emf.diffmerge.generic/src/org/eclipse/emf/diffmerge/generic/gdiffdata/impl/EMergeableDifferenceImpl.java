@@ -57,8 +57,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * @generated
  */
 @SuppressWarnings("boxing")
-public abstract class EMergeableDifferenceImpl<E, A, R, S>
-    extends EIdentifiedImpl implements EMergeableDifference<E, A, R, S> {
+public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
+    implements EMergeableDifference<E, A, R> {
   /**
    * The default value of the '{@link #isAlignedWithAncestor() <em>Aligned With Ancestor</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -255,13 +255,13 @@ public abstract class EMergeableDifferenceImpl<E, A, R, S>
    * @generated NOT
    */
   @SuppressWarnings("unchecked")
-  public EComparison<E, A, R, S> getComparison() {
-    EComparison<E, A, R, S> result = null;
+  public EComparison<E, A, R> getComparison() {
+    EComparison<E, A, R> result = null;
     EObject container = eContainer();
     if (container instanceof EComparison) {
-      result = (EComparison<E, A, R, S>) container;
+      result = (EComparison<E, A, R>) container;
     } else if (container instanceof EComparisonElement) {
-      result = ((EComparisonElement<E, A, R, S>) container).getComparison();
+      result = ((EComparisonElement<E, A, R>) container).getComparison();
     }
     return result;
   }

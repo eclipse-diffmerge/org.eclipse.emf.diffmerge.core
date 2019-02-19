@@ -17,10 +17,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.diffmerge.api.Role;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
-import org.eclipse.emf.diffmerge.diffdata.EComparison;
-import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.setup.AbstractComparisonSetup;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
@@ -48,13 +45,16 @@ import org.eclipse.ui.IActionBars;
 
 /**
  * A base implementation of IComparisonMethod.
+ * 
+ * @param <E> The type of data elements to compare.
+ *
  * @author Olivier Constant
  */
-public abstract class AbstractComparisonMethod extends AbstractComparisonSetup
-implements IComparisonMethod {
+public abstract class AbstractComparisonMethod<E> extends AbstractComparisonSetup
+implements IComparisonMethod<E> {
   
   /** The optional factory that created this comparison method */
-  protected IComparisonMethodFactory _factory;
+  protected IComparisonMethodFactory<E> _factory;
   
   /** Whether the comparison method has been fully initialized */
   private boolean _initialized;
@@ -115,14 +115,6 @@ implements IComparisonMethod {
    */
   public void configure() {
     // Override for configurable comparison methods
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#createComparison(org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope, org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope, org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope)
-   */
-  public EComparison createComparison(IEditableModelScope targetScope_p,
-      IEditableModelScope referenceScope_p, IEditableModelScope ancestorScope_p) {
-    return new EComparisonImpl(targetScope_p, referenceScope_p, ancestorScope_p);
   }
   
   /**
@@ -273,12 +265,12 @@ implements IComparisonMethod {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getFactory()
    */
-  public IComparisonMethodFactory getFactory() {
+  public IComparisonMethodFactory<E> getFactory() {
     return _factory;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#getResourceSet(org.eclipse.emf.diffmerge.generic.api.Role)
    */
   public ResourceSet getResourceSet(Role role_p) {
     return null;

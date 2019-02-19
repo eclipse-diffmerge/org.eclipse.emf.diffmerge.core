@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.compare.IPropertyChangeNotifier;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
@@ -58,7 +58,7 @@ implements IPropertyChangeNotifier {
     "ComparisonSetup.Property.ComparisonMethod"; //$NON-NLS-1$
   
   /** The initially null lastly used comparison method factory */
-  protected static IComparisonMethodFactory __lastComparisonMethodFactory = null;
+  protected static IComparisonMethodFactory<?> __lastComparisonMethodFactory = null;
   
   /** The map from roles to the corresponding scope definitions */
   private final Map<Role, IModelScopeDefinition> _roleToScopeDefinition;
@@ -73,16 +73,16 @@ implements IPropertyChangeNotifier {
   private boolean _canChangeTargetSide;
   
   /** The non-null, non-empty list of applicable method factories */ 
-  private final List<IComparisonMethodFactory> _compatibleMethodFactories;
+  private final List<IComparisonMethodFactory<?>> _compatibleMethodFactories;
   
   /** The potentially null selected factory (among the compatible factories) */ 
-  private IComparisonMethodFactory _selectedFactory;
+  private IComparisonMethodFactory<?> _selectedFactory;
   
   /** The potentially null target side of the merge */
   protected Side _targetSide;
   
   /** The potentially null comparison method */ 
-  protected IComparisonMethod _comparisonMethod;
+  protected IComparisonMethod<?> _comparisonMethod;
   
   /** A non-null set of listeners on this object */
   protected final Set<IPropertyChangeListener> _listeners;
@@ -92,7 +92,7 @@ implements IPropertyChangeNotifier {
    * Constructor
    * @param method_p a non-null pre-selected and configured comparison method
    */
-  public ComparisonSetup(IComparisonMethod method_p) {
+  public ComparisonSetup(IComparisonMethod<?> method_p) {
     this(
         method_p.getModelScopeDefinition(method_p.getLeftRole()),
         method_p.getModelScopeDefinition(method_p.getLeftRole().opposite()),
@@ -122,7 +122,7 @@ implements IPropertyChangeNotifier {
    * @param compatibleFactories_p a non-null, non-empty list
    */
   public ComparisonSetup(IModelScopeDefinition scopeSpec1_p, IModelScopeDefinition scopeSpec2_p,
-      IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory> compatibleFactories_p) {
+      IModelScopeDefinition scopeSpec3_p, List<IComparisonMethodFactory<?>> compatibleFactories_p) {
     this();
     Role leftRole = getLeftRole();
     _roleToScopeDefinition.put(leftRole, scopeSpec1_p);
@@ -137,7 +137,7 @@ implements IPropertyChangeNotifier {
   protected ComparisonSetup() {
     super();
     _comparisonMethod = null;
-    _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory>();
+    _compatibleMethodFactories = new ArrayList<IComparisonMethodFactory<?>>();
     _canChangeTargetSide = true;
     _canSwapScopeDefinitions = true;
     _twoWayReferenceRole = null;
@@ -219,7 +219,7 @@ implements IPropertyChangeNotifier {
    * scope definitions
    * @return a non-null, non-empty list
    */
-  public List<IComparisonMethodFactory> getApplicableComparisonMethodFactories() {
+  public List<IComparisonMethodFactory<?>> getApplicableComparisonMethodFactories() {
     return Collections.unmodifiableList(_compatibleMethodFactories);
   }
   
@@ -227,7 +227,7 @@ implements IPropertyChangeNotifier {
    * Return the comparison method created by the selected factory, if any
    * @return a potentially null object
    */
-  public IComparisonMethod getComparisonMethod() {
+  public IComparisonMethod<?> getComparisonMethod() {
     return _comparisonMethod;
   }
   
@@ -264,7 +264,7 @@ implements IPropertyChangeNotifier {
    * Return the selected factory among the compatible ones
    * @return a potentially null factory
    */
-  public IComparisonMethodFactory getSelectedFactory() {
+  public IComparisonMethodFactory<?> getSelectedFactory() {
     return _selectedFactory;
   }
   
@@ -314,7 +314,7 @@ implements IPropertyChangeNotifier {
    */
   public void performFinish(boolean remember_p) {
     if (_comparisonMethod != null) {
-      IComparisonMethodFactory selectedFactory = getSelectedFactory();
+      IComparisonMethodFactory<?> selectedFactory = getSelectedFactory();
       if (remember_p && selectedFactory != null)
         __lastComparisonMethodFactory = selectedFactory;
       _comparisonMethod.setDirected(getTargetSide() != null);
@@ -357,7 +357,7 @@ implements IPropertyChangeNotifier {
    * Set the selected method factory and consequently update the comparison method
    * @param selectedFactory_p a factory which is null or belongs to getCompatibleFactories()
    */
-  public void setSelectedFactory(IComparisonMethodFactory selectedFactory_p) {
+  public void setSelectedFactory(IComparisonMethodFactory<?> selectedFactory_p) {
     _selectedFactory = selectedFactory_p;
     if (_selectedFactory != null) {
       Role leftRole = getLeftRole();
@@ -415,11 +415,12 @@ implements IPropertyChangeNotifier {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.api.Role)
+   * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#setTwoWayReferenceRole(org.eclipse.emf.diffmerge.generic.api.Role)
    */
   public void setTwoWayReferenceRole(Role role_p) {
-    if (!isThreeWay())
+    if (!isThreeWay()) {
       _twoWayReferenceRole = role_p;
+    }
   }
   
   /**

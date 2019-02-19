@@ -42,8 +42,9 @@ public final class ModelImplUtil {
    */
   public static String getIntrinsicID(EObject element_p) {
     String result = null;
-    if (element_p != null)
+    if (element_p != null) {
       result = EcoreUtil.getID(element_p);
+    }
     return result;
   }
   
@@ -54,8 +55,9 @@ public final class ModelImplUtil {
    */
   public static String getXMLID(EObject element_p) {
     String result = null;
-    if (element_p != null && element_p.eResource() instanceof XMLResource)
+    if (element_p != null && element_p.eResource() instanceof XMLResource) {
       result = ((XMLResource)element_p.eResource()).getID(element_p);
+    }
     return result;
   }
   

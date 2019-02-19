@@ -21,7 +21,6 @@ import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
 import org.eclipse.emf.diffmerge.generic.impl.policies.AbstractConfigurationElement;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrainedMatchCriterion;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.MatchCriterionKind;
-import org.eclipse.emf.ecore.EObject;
 
 
 /**
@@ -29,7 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  * @author Olivier Constant
  */
 public class ComparisonConfigurator extends AbstractConfigurationElement
-implements IComparisonConfigurator<EObject> {
+implements IComparisonConfigurator {
   
   /** The non-null, potentially empty set of selected criteria */
   protected final Collection<MatchCriterionKind> _selectedCriteria;
@@ -58,11 +57,12 @@ implements IComparisonConfigurator<EObject> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator#apply(org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration)
    */
-  public boolean apply(IComparisonConfiguration<EObject> configuration_p) {
+  public boolean apply(IComparisonConfiguration<?> configuration_p) {
     boolean result = true;
-    IMatchPolicy<EObject> matchPolicy = configuration_p.getMatchPolicy();
-    if (matchPolicy instanceof ConfigurableMatchPolicy)
+    IMatchPolicy<?> matchPolicy = configuration_p.getMatchPolicy();
+    if (matchPolicy instanceof ConfigurableMatchPolicy) {
       result = applyMatchCriteria((ConfigurableMatchPolicy)matchPolicy);
+    }
     return result;
   }
   
@@ -101,8 +101,8 @@ implements IComparisonConfigurator<EObject> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator#isCompliant(org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration)
    */
-  public boolean isCompliant(IComparisonConfiguration<EObject> configuration_p) {
-    IMatchPolicy<EObject> rawMatchPolicy = configuration_p.getMatchPolicy();
+  public boolean isCompliant(IComparisonConfiguration<?> configuration_p) {
+    IMatchPolicy<?> rawMatchPolicy = configuration_p.getMatchPolicy();
     if (!(rawMatchPolicy instanceof ConfigurableMatchPolicy)) {
       return false;
     }

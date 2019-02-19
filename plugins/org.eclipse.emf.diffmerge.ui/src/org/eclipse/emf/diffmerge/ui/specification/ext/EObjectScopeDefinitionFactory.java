@@ -29,8 +29,9 @@ public class EObjectScopeDefinitionFactory extends AbstractScopeDefinitionFactor
   public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
     IModelScopeDefinition result = null;
-    if (entrypoint_p instanceof EObject)
+    if (entrypoint_p instanceof EObject) {
       result = new EObjectScopeDefinition((EObject)entrypoint_p, label_p, editable_p);
+    }
     return result;
   }
   

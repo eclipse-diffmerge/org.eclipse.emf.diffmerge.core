@@ -11,15 +11,16 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.gmf;
 
-import org.eclipse.emf.diffmerge.api.IDiffPolicy;
-import org.eclipse.emf.diffmerge.api.IMatchPolicy;
-import org.eclipse.emf.diffmerge.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
 import org.eclipse.emf.diffmerge.gmf.GMFMergePolicy;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ILabelProvider;
 
 
@@ -38,7 +39,7 @@ public class GMFComparisonMethod extends ConfigurableComparisonMethod {
    */
   public GMFComparisonMethod(IModelScopeDefinition leftScopeDef_p,
       IModelScopeDefinition rightScopeDef_p, IModelScopeDefinition ancestorScopeDef_p,
-      IComparisonMethodFactory factory_p) {
+      IComparisonMethodFactory<EObject> factory_p) {
     super(leftScopeDef_p, rightScopeDef_p, ancestorScopeDef_p, factory_p);
   }
   
@@ -46,7 +47,7 @@ public class GMFComparisonMethod extends ConfigurableComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createDiffPolicy()
    */
   @Override
-  protected IDiffPolicy createDiffPolicy() {
+  protected IDiffPolicy<EObject> createDiffPolicy() {
     return new GMFDiffPolicy();
   }
   
@@ -54,7 +55,7 @@ public class GMFComparisonMethod extends ConfigurableComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.ConfigurableComparisonMethod#createMatchPolicy()
    */
   @Override
-  protected IMatchPolicy createMatchPolicy() {
+  protected IMatchPolicy<EObject> createMatchPolicy() {
     return new DefaultMatchPolicy();
   }
   
@@ -62,7 +63,7 @@ public class GMFComparisonMethod extends ConfigurableComparisonMethod {
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod#createMergePolicy()
    */
   @Override
-  protected IMergePolicy createMergePolicy() {
+  protected IMergePolicy<EObject> createMergePolicy() {
     return new GMFMergePolicy();
   }
   

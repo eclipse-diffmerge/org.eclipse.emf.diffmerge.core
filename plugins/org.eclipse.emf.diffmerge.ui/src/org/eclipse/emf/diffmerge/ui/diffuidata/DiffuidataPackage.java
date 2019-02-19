@@ -222,22 +222,31 @@ public interface DiffuidataPackage extends EPackage {
   int MATCH_AND_FEATURE = 2;
 
   /**
+   * The feature id for the '<em><b>Attribute</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MATCH_AND_FEATURE__ATTRIBUTE = 0;
+
+  /**
    * The feature id for the '<em><b>Match</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MATCH_AND_FEATURE__MATCH = 0;
+  int MATCH_AND_FEATURE__MATCH = 1;
 
   /**
-   * The feature id for the '<em><b>Feature</b></em>' reference.
+   * The feature id for the '<em><b>Feature</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MATCH_AND_FEATURE__FEATURE = 1;
+  int MATCH_AND_FEATURE__FEATURE = 2;
 
   /**
    * The number of structural features of the '<em>Match And Feature</em>' class.
@@ -246,7 +255,7 @@ public interface DiffuidataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int MATCH_AND_FEATURE_FEATURE_COUNT = 2;
+  int MATCH_AND_FEATURE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.impl.MatchToNbEntryImpl <em>Match To Nb Entry</em>}' class.
@@ -286,6 +295,25 @@ public interface DiffuidataPackage extends EPackage {
   int MATCH_TO_NB_ENTRY_FEATURE_COUNT = 2;
 
   /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.diff.IDifference <em>IDifference</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.api.diff.IDifference
+   * @see org.eclipse.emf.diffmerge.ui.diffuidata.impl.DiffuidataPackageImpl#getIDifference()
+   * @generated
+   */
+  int IDIFFERENCE = 6;
+
+  /**
+   * The number of structural features of the '<em>IDifference</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IDIFFERENCE_FEATURE_COUNT = 0;
+
+  /**
    * The meta object id for the '<em>Tree Path</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -293,7 +321,7 @@ public interface DiffuidataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.impl.DiffuidataPackageImpl#getTreePath()
    * @generated
    */
-  int TREE_PATH = 6;
+  int TREE_PATH = 7;
 
   /**
    * The meta object id for the '<em>EMF Diff Node</em>' data type.
@@ -303,7 +331,7 @@ public interface DiffuidataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.impl.DiffuidataPackageImpl#getEMFDiffNode()
    * @generated
    */
-  int EMF_DIFF_NODE = 7;
+  int EMF_DIFF_NODE = 8;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison <em>UI Comparison</em>}'.
@@ -413,6 +441,17 @@ public interface DiffuidataPackage extends EPackage {
   EClass getMatchAndFeature();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#isAttribute <em>Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Attribute</em>'.
+   * @see org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#isAttribute()
+   * @see #getMatchAndFeature()
+   * @generated
+   */
+  EAttribute getMatchAndFeature_Attribute();
+
+  /**
    * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getMatch <em>Match</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -424,15 +463,15 @@ public interface DiffuidataPackage extends EPackage {
   EReference getMatchAndFeature_Match();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getFeature <em>Feature</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getFeature <em>Feature</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Feature</em>'.
+   * @return the meta object for the attribute '<em>Feature</em>'.
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature#getFeature()
    * @see #getMatchAndFeature()
    * @generated
    */
-  EReference getMatchAndFeature_Feature();
+  EAttribute getMatchAndFeature_Feature();
 
   /**
    * Returns the meta object for class '{@link java.util.Map.Entry <em>Match To Nb Entry</em>}'.
@@ -440,7 +479,7 @@ public interface DiffuidataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>Match To Nb Entry</em>'.
    * @see java.util.Map.Entry
-   * @model keyType="org.eclipse.emf.diffmerge.diffdata.EMatch" keyRequired="true"
+   * @model keyType="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;?&gt;" keyRequired="true"
    *        valueDataType="org.eclipse.emf.ecore.EIntegerObject" valueRequired="true"
    * @generated
    */
@@ -489,6 +528,17 @@ public interface DiffuidataPackage extends EPackage {
    * @generated
    */
   EClass getIStructuredSelection();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.api.diff.IDifference <em>IDifference</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>IDifference</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.api.diff.IDifference
+   * @model instanceClass="org.eclipse.emf.diffmerge.generic.api.diff.IDifference" typeParameters="E"
+   * @generated
+   */
+  EClass getIDifference();
 
   /**
    * Returns the meta object for data type '{@link org.eclipse.jface.viewers.TreePath <em>Tree Path</em>}'.
@@ -628,6 +678,15 @@ public interface DiffuidataPackage extends EPackage {
     EClass MATCH_AND_FEATURE = eINSTANCE.getMatchAndFeature();
 
     /**
+     * The meta object literal for the '<em><b>Attribute</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MATCH_AND_FEATURE__ATTRIBUTE = eINSTANCE
+        .getMatchAndFeature_Attribute();
+
+    /**
      * The meta object literal for the '<em><b>Match</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -636,12 +695,12 @@ public interface DiffuidataPackage extends EPackage {
     EReference MATCH_AND_FEATURE__MATCH = eINSTANCE.getMatchAndFeature_Match();
 
     /**
-     * The meta object literal for the '<em><b>Feature</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Feature</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference MATCH_AND_FEATURE__FEATURE = eINSTANCE
+    EAttribute MATCH_AND_FEATURE__FEATURE = eINSTANCE
         .getMatchAndFeature_Feature();
 
     /**
@@ -689,6 +748,16 @@ public interface DiffuidataPackage extends EPackage {
      * @generated
      */
     EClass ISTRUCTURED_SELECTION = eINSTANCE.getIStructuredSelection();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.api.diff.IDifference <em>IDifference</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.emf.diffmerge.generic.api.diff.IDifference
+     * @see org.eclipse.emf.diffmerge.ui.diffuidata.impl.DiffuidataPackageImpl#getIDifference()
+     * @generated
+     */
+    EClass IDIFFERENCE = eINSTANCE.getIDifference();
 
     /**
      * The meta object literal for the '<em>Tree Path</em>' data type.

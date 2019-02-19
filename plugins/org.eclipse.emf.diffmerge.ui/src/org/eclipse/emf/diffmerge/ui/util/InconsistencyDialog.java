@@ -13,8 +13,8 @@ package org.eclipse.emf.diffmerge.ui.util;
 
 import java.util.Collection;
 
-import org.eclipse.emf.diffmerge.api.IComparison;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -55,14 +55,14 @@ import org.eclipse.ui.PlatformUI;
 public class InconsistencyDialog extends MessageDialog {
   
   /** The non-null comparison */
-  protected final IComparison _comparison;
+  protected final IComparison<?> _comparison;
   
   /**
    * Constructor
    * @param shell_p a non-null shell
    * @param comparison_p a non-null comparison
    */
-  public InconsistencyDialog(Shell shell_p, IComparison comparison_p) {
+  public InconsistencyDialog(Shell shell_p, IComparison<?> comparison_p) {
     super(shell_p, EMFDiffMergeUIPlugin.LABEL, null,
         Messages.InconsistencyDialog_DuplicateIDs,
         MessageDialog.WARNING,

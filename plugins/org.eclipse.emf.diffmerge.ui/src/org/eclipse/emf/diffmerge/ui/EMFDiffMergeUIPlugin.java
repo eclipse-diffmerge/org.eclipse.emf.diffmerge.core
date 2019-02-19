@@ -22,7 +22,7 @@ import org.eclipse.compare.CompareUI;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.Logger;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
-import org.eclipse.emf.diffmerge.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.ui.log.DiffMergeLogger;
 import org.eclipse.emf.diffmerge.ui.setup.ComparisonSetupManager;
 import org.eclipse.emf.ecore.EReference;

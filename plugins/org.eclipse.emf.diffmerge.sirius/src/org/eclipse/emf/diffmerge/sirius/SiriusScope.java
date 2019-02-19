@@ -244,10 +244,10 @@ public class SiriusScope extends GMFScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#isContainment(org.eclipse.emf.ecore.EReference)
+   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#isContainment(java.lang.Object)
    */
   @Override
-  public boolean isContainment(EReference reference_p) {
+  public boolean isContainment(Object reference_p) {
     return
         reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE ||
         super.isContainment(reference_p);

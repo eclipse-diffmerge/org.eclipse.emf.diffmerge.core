@@ -29,8 +29,9 @@ public class ResourceScopeDefinitionFactory extends AbstractScopeDefinitionFacto
   public IModelScopeDefinition createScopeDefinition(Object entrypoint_p, String label_p,
       boolean editable_p) {
     IModelScopeDefinition result = null;
-    if (entrypoint_p instanceof Resource)
+    if (entrypoint_p instanceof Resource) {
       result = new ResourceScopeDefinition((Resource)entrypoint_p, label_p, editable_p);
+    }
     return result;
   }
   
