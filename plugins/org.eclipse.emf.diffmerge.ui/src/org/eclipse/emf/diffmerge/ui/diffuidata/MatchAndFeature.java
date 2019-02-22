@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A simple data structure that aggregates an IMatch and an EStructuralFeature.
+ * A simple data structure that aggregates an IMatch and an attribute or reference.
  * <!-- end-user-doc -->
  *
  * <p>

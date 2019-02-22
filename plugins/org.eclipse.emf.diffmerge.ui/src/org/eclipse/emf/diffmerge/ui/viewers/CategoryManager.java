@@ -265,22 +265,26 @@ public class CategoryManager {
         boolean isMany = isMany(presence);
         if (presence.getPresenceRole() == _node.getRoleForSide(true)) {
           // Present on the left
-          if (isAlignedWithReference(presence))
+          if (isAlignedWithReference(presence)) {
             result = DifferenceKind.FROM_RIGHT_DEL;
-          else
-            if (isMany || _node.getReferenceRole() != null)
+          } else {
+            if (isMany || _node.getReferenceRole() != null) {
               result = DifferenceKind.FROM_LEFT_ADD;
-            else
+            } else {
               result = DifferenceKind.MODIFIED;
+            }
+          }
         } else {
           // Present on the right
-          if (isAlignedWithReference(presence))
+          if (isAlignedWithReference(presence)) {
             result = DifferenceKind.FROM_LEFT_DEL;
-          else
-            if (isMany || _node.getReferenceRole() != null)
+          } else {
+            if (isMany || _node.getReferenceRole() != null) {
               result = DifferenceKind.FROM_RIGHT_ADD;
-            else
+            } else {
               result = DifferenceKind.MODIFIED;
+            }
+          }
         }
       }
     }
@@ -643,7 +647,7 @@ public class CategoryManager {
    * @param difference_p a non-null difference
    */
   public boolean isMany(IDifference<?> difference_p) {
-    boolean result = false;
+    boolean result = true;
     if (difference_p instanceof IValuePresence) {
       IValuePresence<?> valuePresence = (IValuePresence<?>)difference_p;
       result = !valuePresence.isOrder() && valuePresence.isManyFeature();

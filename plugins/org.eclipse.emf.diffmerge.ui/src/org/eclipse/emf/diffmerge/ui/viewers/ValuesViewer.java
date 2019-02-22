@@ -80,7 +80,8 @@ IDifferenceRelatedViewer {
         ValuesInput peer = (ValuesInput)object_p;
         result = _context == peer.getContext() &&
           _matchAndFeature.getFeature() == peer.getMatchAndFeature().getFeature() &&
-          _matchAndFeature.getMatch().equals(peer.getMatchAndFeature().getMatch());
+          _matchAndFeature.getMatch().equals(peer.getMatchAndFeature().getMatch()) &&
+          _matchAndFeature.isAttribute() == peer.getMatchAndFeature().isAttribute();
       }
       return result;
     }
@@ -110,7 +111,8 @@ IDifferenceRelatedViewer {
      * Return whether this input corresponds to a containment
      */
     public boolean isContainment() {
-      return _context.isContainment(_matchAndFeature.getFeature());
+      return !_matchAndFeature.isAttribute() &&
+          _context.isContainment(_matchAndFeature.getFeature());
     }
   }
   

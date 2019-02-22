@@ -26,6 +26,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -126,10 +127,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
     String result;
     boolean added = presence_p.getPresenceRole() != destination_p;
     Object feature = presence_p.getFeature();
-    final String QUOTE = "'"; //$NON-NLS-1$
     final String SPACE = " "; //$NON-NLS-1$
-    String featureName = feature != null? QUOTE + getText(feature) + QUOTE:
-      Messages.EMFDiffMergeLabelProvider_RootContainment;
+    String featureName = getModifiedFeatureText(feature);
     if (presence_p instanceof IReferenceValuePresence &&
         ((IReferenceValuePresence<?>)presence_p).isOwnership()) {
       String containerText =
@@ -183,7 +182,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
       IReferenceValuePresence<?> rvp =
           elementMatch.getOwnershipDifference(presence_p.getPresenceRole());
       if (rvp != null) {
-        featureName = getText(rvp.getFeature());
+        Object feature = rvp.getFeature();
+        featureName = getModifiedFeatureText(feature);
         containerText = getMatchText(rvp.getElementMatch(), destination_p, domain_p);
       }
     }
@@ -195,7 +195,7 @@ public class DiffMergeLabelProvider extends LabelProvider {
         ((ITreeDataScope<Object>)scope).getContainment(presence_p.getElement());
       IMatch<?> ownerMatch = presence_p.getOwnerMatch();
       if (containment != null && ownerMatch != null) {
-        featureName = getText(containment);
+        featureName = getModifiedFeatureText(containment);
         containerText = getMatchText(ownerMatch, destination_p, domain_p);
       }
     }
@@ -270,6 +270,23 @@ public class DiffMergeLabelProvider extends LabelProvider {
    */
   public Image getMatchImage(IMatch<?> match_p, Role destination_p) {
     return getImage(getElementToRepresent(match_p, destination_p));
+  }
+  
+  /**
+   * Return a label for the given feature in the context of a value addition
+   * @param feature_p a potentially null object
+   * @return a non-null string
+   */
+  protected String getModifiedFeatureText(Object feature_p) {
+    String result;
+    if (feature_p == null) {
+      result = Messages.EMFDiffMergeLabelProvider_RootContainment;
+    } else if (feature_p instanceof EStructuralFeature) {
+      result = ((EStructuralFeature)feature_p).getName();
+    } else {
+      result = getText(feature_p);
+    }
+    return '\'' + result + '\'';
   }
   
   /**

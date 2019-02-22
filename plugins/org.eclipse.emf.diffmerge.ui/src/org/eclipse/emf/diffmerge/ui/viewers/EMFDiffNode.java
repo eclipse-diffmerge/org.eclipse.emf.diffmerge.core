@@ -486,29 +486,29 @@ IUserPropertyOwner {
   }
   
   /**
-   * Return whether the given feature must be considered as a containment
-   * @param feature_p a potentially null feature
+   * Return whether the given reference must be considered as a containment
+   * @param reference_p a potentially null feature
    */
-  public boolean isContainer(Object feature_p) {
+  public boolean isContainer(Object reference_p) {
     boolean result = false;
     IComparison<?> comparison = getActualComparison();
     if (comparison != null) {
       ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
-      result = scope.getScopePolicy().isContainerReference(feature_p);
+      result = scope.getScopePolicy().isContainerReference(reference_p);
     }
     return result;
   }
   
   /**
-   * Return whether the given feature must be considered as a containment
-   * @param feature_p a potentially null feature
+   * Return whether the given reference must be considered as a containment
+   * @param reference_p a potentially null feature
    */
-  public boolean isContainment(Object feature_p) {
+  public boolean isContainment(Object reference_p) {
     boolean result = false;
     IComparison<?> comparison = getActualComparison();
     if (comparison != null) {
       ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
-      result = scope.isContainment(feature_p);
+      result = scope.isContainment(reference_p);
     }
     return result;
   }
