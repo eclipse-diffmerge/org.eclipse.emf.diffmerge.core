@@ -32,6 +32,7 @@
 		<module>org.eclipse.emf.diffmerge</module>
 		<module>org.eclipse.emf.diffmerge.connector.core</module>
 		<module>org.eclipse.emf.diffmerge.connector.git</module>
+		<module>org.eclipse.emf.diffmerge.generic</module>
 		<module>org.eclipse.emf.diffmerge.gmf</module>
 		<module>org.eclipse.emf.diffmerge.sirius</module>
 		<module>org.eclipse.emf.diffmerge.ui</module>

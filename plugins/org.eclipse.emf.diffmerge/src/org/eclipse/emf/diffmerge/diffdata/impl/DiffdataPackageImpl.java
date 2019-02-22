@@ -832,8 +832,8 @@ public class DiffdataPackageImpl extends EPackageImpl
 
     op = addEOperation(eMappingEClass, this.getEMatch(), "getMatchFor", 0, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
-    addEParameter(op, ecorePackage.getEObject(), "element", 1, 1, IS_UNIQUE, //$NON-NLS-1$
-        IS_ORDERED);
+    addEParameter(op, ecorePackage.getEJavaObject(), "potentialElement", 1, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
 

@@ -196,7 +196,7 @@ implements IFeaturedModelScope {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope#isContainment(java.lang.Object)
    */
   public boolean isContainment(Object reference_p) {
-    return getScopePolicy().isContainerReference(reference_p);
+    return getScopePolicy().isContainmentReference(reference_p);
   }
   
   /**

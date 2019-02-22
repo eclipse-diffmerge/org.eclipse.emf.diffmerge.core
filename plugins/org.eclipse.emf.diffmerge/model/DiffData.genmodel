@@ -27,7 +27,7 @@
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getCrossReferences/role"/>
       </genOperations>
       <genOperations ecoreOperation="DiffData.ecore#//EMapping/getMatchFor">
-        <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/element"/>
+        <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/potentialElement"/>
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/role"/>
       </genOperations>
       <genOperations ecoreOperation="DiffData.ecore#//EMapping/removeDependencies">

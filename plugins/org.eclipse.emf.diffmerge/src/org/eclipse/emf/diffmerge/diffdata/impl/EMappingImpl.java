@@ -145,9 +145,9 @@ public class EMappingImpl extends
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getMatchFor(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public EMatch getMatchFor(EObject element_p, Role role_p) {
+  public EMatch getMatchFor(Object element_p, Role role_p) {
     EMatch result = null;
-    if (role_p != null) {
+    if (role_p != null && element_p instanceof EObject) {
       EReference matchReference;
       switch (role_p) {
       case ANCESTOR:
@@ -159,14 +159,12 @@ public class EMappingImpl extends
       default:
         matchReference = DiffdataPackage.eINSTANCE.getEMatch_Target();
       }
-      if (element_p != null) {
-        Collection<Setting> settings = _matchAdapter
-            .getNonNavigableInverseReferences(element_p);
-        for (Setting setting : settings) {
-          if (setting.getEStructuralFeature() == matchReference) {
-            result = (EMatch) setting.getEObject();
-            break;
-          }
+      Collection<Setting> settings = _matchAdapter
+          .getNonNavigableInverseReferences((EObject) element_p);
+      for (Setting setting : settings) {
+        if (setting.getEStructuralFeature() == matchReference) {
+          result = (EMatch) setting.getEObject();
+          break;
         }
       }
     }

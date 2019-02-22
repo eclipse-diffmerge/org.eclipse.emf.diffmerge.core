@@ -699,13 +699,12 @@ public class ComparisonSelectionImpl extends EObjectImpl
    * @param role_p a non-null role
    * @return a non-null, potentially empty selection
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
   public static List<IMatch<?>> selectionToMatches(
       IStructuredSelection selection_p, EMFDiffNode diffNode_p, Role role_p) {
     List<IMatch<?>> result = new FArrayList<IMatch<?>>();
     IComparison<?> comparison = diffNode_p.getActualComparison();
     if (comparison != null) {
-      IMapping mapping = comparison.getMapping();
+      IMapping<?> mapping = comparison.getMapping();
       for (Object selectedElement : selection_p.toArray()) {
         IMatch<?> match = mapping.getMatchFor(selectedElement, role_p);
         if (match == null) {

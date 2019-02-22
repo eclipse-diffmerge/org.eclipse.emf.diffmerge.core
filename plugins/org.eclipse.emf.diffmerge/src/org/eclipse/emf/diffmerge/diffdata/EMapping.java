@@ -51,10 +51,10 @@ public interface EMapping extends
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @model potentialElementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  EMatch getMatchFor(EObject element, Role role);
+  EMatch getMatchFor(Object potentialElement, Role role);
 
   /**
    * <!-- begin-user-doc -->

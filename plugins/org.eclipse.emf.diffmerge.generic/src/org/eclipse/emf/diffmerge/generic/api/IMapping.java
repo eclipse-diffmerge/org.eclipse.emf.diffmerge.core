@@ -60,13 +60,13 @@ public interface IMapping<E> {
   Collection<IMatch<E>> getContents();
   
   /**
-   * Return the match for the given element playing the given role,
-   * or null if no such match exists or if any of the parameters is null
-   * @param element_p a potentially null element
+   * Return the match for the given object playing the given role,
+   * or null if no such match exists, or any of the parameters is null
+   * @param potentialElement_p a potentially null object that may be a data element
    * @param role_p a potentially null role
    * @return a potentially null match
    */
-  IMatch<E> getMatchFor(E element_p, Role role_p);
+  IMatch<E> getMatchFor(Object potentialElement_p, Role role_p);
   
   /**
    * Return the number of non-partial matches in this mapping

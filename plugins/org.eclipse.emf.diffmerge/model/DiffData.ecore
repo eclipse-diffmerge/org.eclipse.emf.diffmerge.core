@@ -28,7 +28,7 @@
       <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
     </eOperations>
     <eOperations name="getMatchFor" eType="#//EMatch">
-      <eParameters name="element" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eParameters name="potentialElement" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
     </eOperations>
     <eOperations name="removeDependencies" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

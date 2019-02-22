@@ -242,9 +242,8 @@ public class CategoryManager {
     */
   public DifferenceKind getDifferenceKind(Object element_p, Role side_p) {
     DifferenceKind result = DifferenceKind.NONE;
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    IMatch<?> match =
-        ((IComparison)_node.getActualComparison()).getMapping().getMatchFor(element_p, side_p);
+    IMatch<?> match = _node.getActualComparison().getMapping().getMatchFor(
+        element_p, side_p);
     if (match != null) {
       result = getDifferenceKind(match);
     }
