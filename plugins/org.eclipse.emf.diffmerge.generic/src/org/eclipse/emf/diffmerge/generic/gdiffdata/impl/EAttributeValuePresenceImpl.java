@@ -118,6 +118,13 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
+   * @generated NOT
+   */
+  @Override
+  public abstract A getFeature();
+
+  /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated NOT

@@ -61,6 +61,14 @@ public interface EReferenceValuePresence<E, A, R>
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @model kind="operation" required="true"
+   * @generated
+   */
+  R getFeature();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @model referenceRequired="true"
    * @generated
    */

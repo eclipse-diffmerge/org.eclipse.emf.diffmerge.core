@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
@@ -286,6 +287,14 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
         .getScope(getPresenceRole().opposite());
     assert result != null;
     return result;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @generated NOT
+   */
+  public EComparison<E, A, R> getComparison() {
+    return getElementMatch().getComparison();
   }
 
   /**

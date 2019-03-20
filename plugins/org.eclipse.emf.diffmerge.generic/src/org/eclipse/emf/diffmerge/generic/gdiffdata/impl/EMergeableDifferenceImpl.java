@@ -21,8 +21,6 @@ import org.eclipse.emf.diffmerge.generic.Messages;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
@@ -30,7 +28,6 @@ import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.diffmerge.structures.endo.AbstractEndorelation;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -248,22 +245,6 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   protected EClass eStaticClass() {
     return GdiffdataPackage.Literals.EMERGEABLE_DIFFERENCE;
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
-   * @generated NOT
-   */
-  @SuppressWarnings("unchecked")
-  public EComparison<E, A, R> getComparison() {
-    EComparison<E, A, R> result = null;
-    EObject container = eContainer();
-    if (container instanceof EComparison) {
-      result = (EComparison<E, A, R>) container;
-    } else if (container instanceof EComparisonElement) {
-      result = ((EComparisonElement<E, A, R>) container).getComparison();
-    }
-    return result;
   }
 
   /**

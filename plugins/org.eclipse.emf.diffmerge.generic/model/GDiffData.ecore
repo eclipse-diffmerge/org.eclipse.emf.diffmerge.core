@@ -277,6 +277,9 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eOperations name="getFeature" lowerBound="1">
+      <eGenericType eTypeParameter="#//EAttributeValuePresence/A"/>
+    </eOperations>
     <eOperations name="setAttribute">
       <eParameters name="attribute" lowerBound="1">
         <eGenericType eTypeParameter="#//EAttributeValuePresence/A"/>
@@ -296,6 +299,9 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eOperations name="getFeature" lowerBound="1">
+      <eGenericType eTypeParameter="#//EReferenceValuePresence/R"/>
+    </eOperations>
     <eOperations name="setReference">
       <eParameters name="reference" lowerBound="1">
         <eGenericType eTypeParameter="#//EReferenceValuePresence/R"/>

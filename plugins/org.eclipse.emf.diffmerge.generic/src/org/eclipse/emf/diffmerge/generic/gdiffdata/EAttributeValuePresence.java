@@ -61,6 +61,14 @@ public interface EAttributeValuePresence<E, A, R>
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @model kind="operation" required="true"
+   * @generated
+   */
+  A getFeature();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @model attributeRequired="true"
    * @generated
    */

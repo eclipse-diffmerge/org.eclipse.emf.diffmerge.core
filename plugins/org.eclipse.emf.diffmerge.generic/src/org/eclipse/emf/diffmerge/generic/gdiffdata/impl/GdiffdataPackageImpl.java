@@ -1504,6 +1504,11 @@ public class GdiffdataPackageImpl extends EPackageImpl
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
+    op = addEOperation(eAttributeValuePresenceEClass, null, "getFeature", 1, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(eAttributeValuePresenceEClass_A);
+    initEOperation(op, g1);
+
     op = addEOperation(eAttributeValuePresenceEClass, null, "setAttribute", 0, //$NON-NLS-1$
         1, IS_UNIQUE, IS_ORDERED);
     g1 = createEGenericType(eAttributeValuePresenceEClass_A);
@@ -1523,6 +1528,11 @@ public class GdiffdataPackageImpl extends EPackageImpl
         "valueMatch", null, 0, 1, EReferenceValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    op = addEOperation(eReferenceValuePresenceEClass, null, "getFeature", 1, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(eReferenceValuePresenceEClass_R);
+    initEOperation(op, g1);
 
     op = addEOperation(eReferenceValuePresenceEClass, null, "setReference", 0, //$NON-NLS-1$
         1, IS_UNIQUE, IS_ORDERED);
