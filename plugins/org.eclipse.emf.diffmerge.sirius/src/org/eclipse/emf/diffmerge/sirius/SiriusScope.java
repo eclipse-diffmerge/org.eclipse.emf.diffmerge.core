@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -32,6 +33,8 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.sirius.business.api.helper.SiriusUtil;
 import org.eclipse.sirius.business.api.query.DRepresentationQuery;
 import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
+import org.eclipse.sirius.business.api.session.Session;
+import org.eclipse.sirius.business.api.session.SessionManager;
 import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.viewpoint.DAnalysis;
 import org.eclipse.sirius.viewpoint.DRepresentation;
@@ -244,6 +247,38 @@ public class SiriusScope extends GMFScope {
   }
   
   /**
+   * Return a session resource of the scope, if any
+   * @return a potentially null resource
+   */
+  protected Resource getSessionResource() {
+    for (Resource candidate : getResources()) {
+      if (isSessionResource(candidate)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+  
+  /**
+   * Return the Sirius session of the editing domain of the scope, if any
+   * @return a potentially null session
+   */
+  public Session getSession() {
+    Session result = null;
+    if (getEditingDomain() != null) {
+      Resource sessionResource = getSessionResource();
+      if (sessionResource != null) {
+        Session sessionForURI = SessionManager.INSTANCE.getExistingSession(
+            sessionResource.getURI());
+        if (sessionForURI != null && sessionForURI.getSessionResource() == sessionResource) {
+          result = sessionForURI;
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#isContainment(org.eclipse.emf.ecore.EReference)
    */
   @Override
@@ -251,6 +286,23 @@ public class SiriusScope extends GMFScope {
     return
         reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE ||
         super.isContainment(reference_p);
+  }
+  
+  /**
+   * Return whether the given resource is a session resource
+   * @param resource_p a non-null resource
+   */
+  protected boolean isSessionResource(Resource resource_p) {
+    URI uri = resource_p.getURI();
+    return uri != null && isSessionResourceURI(uri);
+  }
+  
+  /**
+   * Return whether the given URI is a session resource URI
+   * @param uri_p a non-null URI
+   */
+  protected boolean isSessionResourceURI(URI uri_p) {
+    return SiriusUtil.SESSION_RESOURCE_EXTENSION.equals(uri_p.fileExtension());
   }
   
   /**
@@ -315,6 +367,22 @@ public class SiriusScope extends GMFScope {
     boolean result =  super.remove(source_p, reference_p, value_p);
     if (result && isDescriptorToRepresentation) {
       _idToDescriptor.remove(uid);
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#save()
+   */
+  @Override
+  public boolean save() throws Exception {
+    boolean result;
+    Session session = getSession();
+    if (session != null) {
+      session.save(new NullProgressMonitor());
+      result = true;
+    } else {
+      result = super.save();
     }
     return result;
   }
