@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EAttributeValuePresenceImpl#getAttribute <em>Attribute</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.EAttributeValuePresenceImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,6 +50,25 @@ public class EAttributeValuePresenceImpl extends
    * @ordered
    */
   protected EAttribute attribute;
+
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected static final Object VALUE_EDEFAULT = null;
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
+  protected Object value = VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -128,6 +148,27 @@ public class EAttributeValuePresenceImpl extends
   }
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl#setValue(java.lang.Object)
+   */
+  @Override
+  public void setValue(Object newValue) {
+    Object oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET,
+          DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE, oldValue, value));
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
    * @generated NOT
    */
@@ -166,6 +207,8 @@ public class EAttributeValuePresenceImpl extends
       if (resolve)
         return getAttribute();
       return basicGetAttribute();
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      return getValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -180,6 +223,9 @@ public class EAttributeValuePresenceImpl extends
     switch (featureID) {
     case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE:
       setAttribute((EAttribute) newValue);
+      return;
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      setValue(newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -196,6 +242,9 @@ public class EAttributeValuePresenceImpl extends
     case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE:
       setAttribute((EAttribute) null);
       return;
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      setValue(VALUE_EDEFAULT);
+      return;
     }
     super.eUnset(featureID);
   }
@@ -210,8 +259,28 @@ public class EAttributeValuePresenceImpl extends
     switch (featureID) {
     case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE:
       return attribute != null;
+    case DiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
+      return VALUE_EDEFAULT == null ? value != null
+          : !VALUE_EDEFAULT.equals(value);
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString() {
+    if (eIsProxy())
+      return super.toString();
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (value: "); //$NON-NLS-1$
+    result.append(value);
+    result.append(')');
+    return result.toString();
   }
 
 } //EAttributeValuePresenceImpl

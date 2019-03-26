@@ -383,6 +383,16 @@ public class DiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getEAttributeValuePresence_Value() {
+    return (EAttribute) eAttributeValuePresenceEClass.getEStructuralFeatures()
+        .get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getEReferenceValuePresence() {
     return eReferenceValuePresenceEClass;
   }
@@ -624,6 +634,8 @@ public class DiffdataPackageImpl extends EPackageImpl
     eAttributeValuePresenceEClass = createEClass(EATTRIBUTE_VALUE_PRESENCE);
     createEReference(eAttributeValuePresenceEClass,
         EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE);
+    createEAttribute(eAttributeValuePresenceEClass,
+        EATTRIBUTE_VALUE_PRESENCE__VALUE);
 
     eReferenceValuePresenceEClass = createEClass(EREFERENCE_VALUE_PRESENCE);
     createEReference(eReferenceValuePresenceEClass,
@@ -909,6 +921,11 @@ public class DiffdataPackageImpl extends EPackageImpl
         EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
         IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEAttributeValuePresence_Value(),
+        ecorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
+        EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
 
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
         "EReferenceValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$

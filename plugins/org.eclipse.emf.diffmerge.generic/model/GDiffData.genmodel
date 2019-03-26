@@ -112,10 +112,12 @@
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/E"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/A"/>
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EAttributeValuePresence/R"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GDiffData.ecore#//EAttributeValuePresence/value"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EAttributeValuePresence/getFeature"/>
       <genOperations ecoreOperation="GDiffData.ecore#//EAttributeValuePresence/setAttribute">
         <genParameters ecoreParameter="GDiffData.ecore#//EAttributeValuePresence/setAttribute/attribute"/>
+      </genOperations>
+      <genOperations ecoreOperation="GDiffData.ecore#//EAttributeValuePresence/setValue">
+        <genParameters ecoreParameter="GDiffData.ecore#//EAttributeValuePresence/setValue/value"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="GDiffData.ecore#//EReferenceValuePresence">

@@ -1004,15 +1004,6 @@ public interface DiffdataPackage extends EPackage {
   int EATTRIBUTE_VALUE_PRESENCE__ORDER = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ORDER;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE;
-
-  /**
    * The feature id for the '<em><b>Attribute</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1023,6 +1014,16 @@ public interface DiffdataPackage extends EPackage {
       + 0;
 
   /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EATTRIBUTE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
+      + 1;
+
+  /**
    * The number of structural features of the '<em>EAttribute Value Presence</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1030,7 +1031,7 @@ public interface DiffdataPackage extends EPackage {
    * @ordered
    */
   int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
-      + 1;
+      + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
@@ -1571,6 +1572,17 @@ public interface DiffdataPackage extends EPackage {
   EReference getEAttributeValuePresence_Attribute();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence#getValue()
+   * @see #getEAttributeValuePresence()
+   * @generated
+   */
+  EAttribute getEAttributeValuePresence_Value();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence <em>EReference Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1965,6 +1977,15 @@ public interface DiffdataPackage extends EPackage {
      */
     EReference EATTRIBUTE_VALUE_PRESENCE__ATTRIBUTE = eINSTANCE
         .getEAttributeValuePresence_Attribute();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EATTRIBUTE_VALUE_PRESENCE__VALUE = eINSTANCE
+        .getEAttributeValuePresence_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.

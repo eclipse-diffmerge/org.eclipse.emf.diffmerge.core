@@ -1020,15 +1020,6 @@ public interface GdiffdataPackage extends EPackage {
   int EATTRIBUTE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__VALUE = EVALUE_PRESENCE_FEATURE_COUNT + 0;
-
-  /**
    * The number of structural features of the '<em>EAttribute Value Presence</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1036,7 +1027,7 @@ public interface GdiffdataPackage extends EPackage {
    * @ordered
    */
   int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
-      + 1;
+      + 0;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
@@ -1862,17 +1853,6 @@ public interface GdiffdataPackage extends EPackage {
   EClass getEAttributeValuePresence();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence#getValue()
-   * @see #getEAttributeValuePresence()
-   * @generated
-   */
-  EAttribute getEAttributeValuePresence_Value();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence <em>EReference Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2469,15 +2449,6 @@ public interface GdiffdataPackage extends EPackage {
      * @generated
      */
     EClass EATTRIBUTE_VALUE_PRESENCE = eINSTANCE.getEAttributeValuePresence();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute EATTRIBUTE_VALUE_PRESENCE__VALUE = eINSTANCE
-        .getEAttributeValuePresence_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.

@@ -285,7 +285,9 @@
         <eGenericType eTypeParameter="#//EAttributeValuePresence/A"/>
       </eParameters>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eOperations name="setValue">
+      <eParameters name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
     <eGenericSuperTypes eClassifier="#//EValuePresence">
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/E"/>
       <eTypeArguments eTypeParameter="#//EAttributeValuePresence/A"/>

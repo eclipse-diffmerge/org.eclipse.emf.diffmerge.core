@@ -21,6 +21,7 @@ import org.eclipse.emf.diffmerge.generic.Messages;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
@@ -408,6 +409,12 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     }
     return implicitDependenciesForReference;
   }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @generated NOT
+   */
+  public abstract EComparison<E, A, R> getComparison();
 
   /**
    * <!-- begin-user-doc -->

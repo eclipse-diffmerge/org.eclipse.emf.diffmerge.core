@@ -290,9 +290,10 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
+  @Override
   public EComparison<E, A, R> getComparison() {
     return getElementMatch().getComparison();
   }

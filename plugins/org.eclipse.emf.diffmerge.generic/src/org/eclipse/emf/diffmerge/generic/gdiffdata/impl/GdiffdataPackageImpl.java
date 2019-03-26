@@ -697,16 +697,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getEAttributeValuePresence_Value() {
-    return (EAttribute) eAttributeValuePresenceEClass.getEStructuralFeatures()
-        .get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getEReferenceValuePresence() {
     return eReferenceValuePresenceEClass;
   }
@@ -971,8 +961,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
     createEAttribute(eValuePresenceEClass, EVALUE_PRESENCE__ORDER);
 
     eAttributeValuePresenceEClass = createEClass(EATTRIBUTE_VALUE_PRESENCE);
-    createEAttribute(eAttributeValuePresenceEClass,
-        EATTRIBUTE_VALUE_PRESENCE__VALUE);
 
     eReferenceValuePresenceEClass = createEClass(EREFERENCE_VALUE_PRESENCE);
     createEReference(eReferenceValuePresenceEClass,
@@ -1498,11 +1486,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
     initEClass(eAttributeValuePresenceEClass, EAttributeValuePresence.class,
         "EAttributeValuePresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getEAttributeValuePresence_Value(),
-        ecorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
-        EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
 
     op = addEOperation(eAttributeValuePresenceEClass, null, "getFeature", 1, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
@@ -1513,6 +1496,11 @@ public class GdiffdataPackageImpl extends EPackageImpl
         1, IS_UNIQUE, IS_ORDERED);
     g1 = createEGenericType(eAttributeValuePresenceEClass_A);
     addEParameter(op, g1, "attribute", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+    op = addEOperation(eAttributeValuePresenceEClass, null, "setValue", 0, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, ecorePackage.getEJavaObject(), "value", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
 
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
         "EReferenceValuePresence", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
