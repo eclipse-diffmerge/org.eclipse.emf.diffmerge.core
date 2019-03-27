@@ -46,6 +46,9 @@ import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.DiffOperation;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.MergeOperation;
+import org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy;
+import org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy;
+import org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMergePolicy;
 import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -748,21 +751,27 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IDiffPolicy<E> getDefaultDiffPolicy();
+  protected IDiffPolicy<E> getDefaultDiffPolicy() {
+    return new DefaultDiffPolicy<E>();
+  }
 
   /**
    * Return a default match policy
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IMatchPolicy<E> getDefaultMatchPolicy();
+  protected IMatchPolicy<E> getDefaultMatchPolicy() {
+    return new ConfigurableMatchPolicy<E>();
+  }
 
   /**
    * Return a default merge policy
    * @return a non-null object
    * @generated NOT
    */
-  protected abstract IMergePolicy<E> getDefaultMergePolicy();
+  protected IMergePolicy<E> getDefaultMergePolicy() {
+    return new DefaultMergePolicy<E>();
+  }
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getDifferences(org.eclipse.emf.diffmerge.generic.api.Role)

@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -73,12 +74,12 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
   public boolean considerEqual(Object value1_p, Object value2_p,
-      Object attribute_p) {
-    boolean result = super.considerEqual(value1_p, value2_p, attribute_p);
+      Object attribute_p, ITreeDataScope<EObject> scope_p) {
+    boolean result = super.considerEqual(value1_p, value2_p, attribute_p, scope_p);
     if (!result && ViewpointPackage.eINSTANCE.getDAnalysis_SemanticResources() == attribute_p) {
       result = equalResourceDescriptors(
           (ResourceDescriptor)value1_p, (ResourceDescriptor)value2_p);
@@ -91,12 +92,12 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverReference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public boolean coverReference(Object reference_p) {
+  public boolean coverReference(Object reference_p, ITreeDataScope<EObject> scope_p) {
     return SIGNIFICANT_REFERENCES.contains(reference_p) ||
-        !UNSIGNIFICANT_REFERENCES.contains(reference_p) && super.coverReference(reference_p);
+        !UNSIGNIFICANT_REFERENCES.contains(reference_p) && super.coverReference(reference_p, scope_p);
   }
   
   /**
@@ -116,16 +117,17 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverValue(java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverValue(java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public boolean coverValue(Object value_p, Object attribute_p) {
+  public boolean coverValue(Object value_p, Object attribute_p,
+      ITreeDataScope<EObject> scope_p) {
     boolean result;
     if (IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p)
         && ((String) value_p).length() == 0) {
       result = false;
     } else {
-      result = super.coverValue(value_p, attribute_p);
+      result = super.coverValue(value_p, attribute_p, scope_p);
     }
     return result;
   }

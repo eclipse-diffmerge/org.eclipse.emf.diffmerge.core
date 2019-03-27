@@ -32,14 +32,14 @@ import org.eclipse.sirius.viewpoint.ViewpointPackage;
 public class SiriusMergePolicy extends GMFMergePolicy {
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#copyFeature(org.eclipse.emf.ecore.EStructuralFeature)
+   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#copyChangeableFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override
-  protected boolean copyFeature(EStructuralFeature feature_p) {
+  protected boolean copyChangeableFeature(EStructuralFeature feature_p) {
     return // Replace DResentationDescriptor::repPath by ::representation
         feature_p == ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_Representation() ||
         feature_p != ViewpointPackage.eINSTANCE.getDRepresentationDescriptor_RepPath() &&
-        super.copyFeature(feature_p);
+        super.copyChangeableFeature(feature_p);
   }
   
   /**
@@ -155,11 +155,12 @@ public class SiriusMergePolicy extends GMFMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#isSingleMandatory(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.gmf.GMFMergePolicy#isSingleMandatory(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected boolean isSingleMandatory(Object reference_p) {
-    return super.isSingleMandatory(reference_p) ||
+  protected boolean isSingleMandatory(Object reference_p,
+      ITreeDataScope<EObject> scope_p) {
+    return super.isSingleMandatory(reference_p, scope_p) ||
         reference_p == ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target();
   }
   

@@ -42,11 +42,11 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMergePolicy#isSingleMandatory(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMergePolicy#isSingleMandatory(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  protected boolean isSingleMandatory(Object reference_p) {
-    return super.isSingleMandatory(reference_p) ||
+  protected boolean isSingleMandatory(Object reference_p, ITreeDataScope<EObject> scope_p) {
+    return super.isSingleMandatory(reference_p, scope_p) ||
         reference_p == NotationPackage.eINSTANCE.getView_Element();
   }
   
@@ -70,16 +70,19 @@ public class GMFMergePolicy extends ConfigurableMergePolicy {
           EObject childRepresentedElement = childView.getElement();
           addChild = childRepresentedElement == null || childRepresentedElement == representedElement;
         }
-        if (addChild)
+        if (addChild) {
           group_p.add(child);
+        }
       }
     }
     // Edge -> Edge content
-    if (element_p instanceof Edge)
+    if (element_p instanceof Edge) {
       group_p.addAll(element_p.eContents());
+    }
     // Semantic element -> Views
-    if (isGraphicalFromSemantic())
+    if (isGraphicalFromSemantic()) {
       extendGMFAdditionGroupSemanticTarget(group_p, element_p, scope_p);
+    }
   }
   
   /**

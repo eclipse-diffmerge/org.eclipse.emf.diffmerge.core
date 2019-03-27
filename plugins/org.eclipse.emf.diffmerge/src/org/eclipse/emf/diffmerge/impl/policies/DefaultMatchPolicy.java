@@ -11,11 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.impl.policies;
 
-import java.util.Comparator;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
-import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EObject;
@@ -26,17 +23,14 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * A default match policy based on unique IDs (intrinsic/extrinsic/URI) of model elements.
  * @author Olivier Constant
  */
-public class DefaultMatchPolicy implements IMatchPolicy<EObject> {
-  
-  /** Whether match IDs must be maintained for better traceability */
-  private boolean _keepMatchIDs;
-  
+public class DefaultMatchPolicy extends
+org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy<EObject> {
   
   /**
    * Default constructor
    */
   public DefaultMatchPolicy() {
-    _keepMatchIDs = false;
+    super();
   }
   
   /**
@@ -66,15 +60,16 @@ public class DefaultMatchPolicy implements IMatchPolicy<EObject> {
    * @param element_p a potentially null element
    * @return a potentially null String
    */
-  protected String getIntrinsicID(EObject element_p) {
+  protected String getIntrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     return ModelImplUtil.getIntrinsicID(element_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IMatchPolicy#getMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy#getMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
+  @Override
   public Object getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
-    Comparable<?> result = getIntrinsicID(element_p);
+    Comparable<?> result = getIntrinsicID(element_p, scope_p);
     if (result == null) {
       result = getExtrinsicID(element_p, scope_p);
     }
@@ -82,16 +77,6 @@ public class DefaultMatchPolicy implements IMatchPolicy<EObject> {
       result = getURIBasedMatchID(element_p);
     }
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IMatchPolicy#getMatchIDComparator()
-   */
-  public Comparator<Object> getMatchIDComparator() {
-    // Redefine (for example by returning null) if getMatchID
-    // may return objects that are not Comparable or that are
-    // incompatible sorts of Comparable.
-    return NATURAL_ORDER_COMPARATOR;
   }
   
   /**
@@ -109,22 +94,6 @@ public class DefaultMatchPolicy implements IMatchPolicy<EObject> {
         result = uri.toString();
     }
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IMatchPolicy#keepMatchIDs()
-   */
-  public boolean keepMatchIDs() {
-    return _keepMatchIDs;
-  }
-  
-  /**
-   * Set whether match ID information must be maintained for better traceability
-   * but at the price of a larger memory footprint
-   * @param keep_p whether to maintain match ID information
-   */
-  public void setKeepMatchIDs(boolean keep_p) {
-    _keepMatchIDs = keep_p;
   }
   
 }

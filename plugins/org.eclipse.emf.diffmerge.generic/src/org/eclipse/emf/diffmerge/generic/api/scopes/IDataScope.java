@@ -23,22 +23,22 @@ import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
  * partial functions over the set of elements.
  * 
  * - An attribute which is applicable to an element associates the element with a totally
- * ordered set of elementary values which can be arbitrary Java objects but cannot be
- * elements of the scope.
+ * ordered set of elementary values which can be arbitrary objects but cannot be elements
+ * of the scope.
  * 
  * - A reference which is applicable to an element associates the element with a totally
  * ordered set of elements. Elements are thus organized as a graph where each edge is
  * labeled with a reference of the schema. No particular assumption is made on the graph.
  * 
  * All methods in this interface are assumed to have no impact on the observable state
- * of a data scope. The order in returned iterables is considered to be part of the
- * observable state. All returned iterables are assumed to not contain null values.
+ * of a data scope. The order in lists is considered to be part of the observable state.
+ * All returned lists are assumed to contain no null values.
  * 
  * @param <E> The type of data elements.
  * 
  * @author Olivier Constant
  */
-public interface IDataScope<E> extends IRawDataScope<E> {
+public interface IDataScope<E> extends IRawDataScope<E>, IScopePolicy<E> {
   
   /**
    * Return the values of the given element w.r.t. the give attribute/
@@ -55,11 +55,5 @@ public interface IDataScope<E> extends IRawDataScope<E> {
    * @return a non-null, potentially empty, unmodifiable ordered bag
    */
   List<E> getReferenceValues(E element_p, Object reference_p);
-  
-  /**
-   * Return the policy that universally governs data of this scope
-   * @return a non-null object
-   */
-  IScopePolicy<E> getScopePolicy();
   
 }

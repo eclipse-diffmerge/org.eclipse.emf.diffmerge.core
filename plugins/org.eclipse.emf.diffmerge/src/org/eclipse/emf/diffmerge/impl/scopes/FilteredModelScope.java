@@ -87,7 +87,8 @@ public class FilteredModelScope extends RootedModelScope {
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     // Remember previously owned value if relevant
     EObject previouslyContainedValue = null;
-    if (!FeatureMapUtil.isMany(source_p, reference_p) && isContainment(reference_p)) {
+    if (!FeatureMapUtil.isMany(source_p, reference_p) &&
+        mIsContainmentReference(reference_p)) {
       List<EObject> values = get(source_p, reference_p);
       if (!values.isEmpty()) {
         previouslyContainedValue = values.get(0);

@@ -19,7 +19,6 @@ import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
@@ -104,19 +103,17 @@ public class UnidirectionalComparisonCopier<E> {
    * Return a (shallow) copy of the given element.
    * Precondition: this method has never been called on the same element before,
    *   except if clear() was called in the meantime.
-   * @param element_p an element belonging to the source scope
+   * @param sourceElement_p an element belonging to the source scope
    * @return a non-null copy
    */
-  protected E copy(E element_p) {
+  protected E copy(E sourceElement_p) {
     assert _mergePolicy != null;
-    E result = _destinationScope.getScopePolicy().baseCopy(element_p);
-    IScopePolicy<E> scopePolicy = getScopePolicy();
-    for (Object attribute : scopePolicy.getAttributes(element_p)) {
+    E result = _destinationScope.mNewBareElement(sourceElement_p);
+    for (Object attribute : _sourceScope.mGetAttributes(sourceElement_p)) {
       if (coverAttribute(attribute)) {
-        copyAttribute(attribute, element_p, result);
+        copyAttribute(attribute, sourceElement_p, result);
       }
     }
-    // No call to method put, so the state never changes
     return result;
   }
   
@@ -157,9 +154,8 @@ public class UnidirectionalComparisonCopier<E> {
     E source = match_p.get(_sourceRole);
     E destination = match_p.get(_sourceRole.opposite());
     assert source != null && destination != null;
-    IScopePolicy<E> scopePolicy = getScopePolicy();
-    for (Object reference : scopePolicy.getReferences(source)) {
-      if (!getScopePolicy().isContainerReference(reference) &&
+    for (Object reference : _sourceScope.mGetReferences(source)) {
+      if (!_sourceScope.mIsContainerReference(reference) &&
           coverReference(reference)) {
         copyReference(reference, source, destination);
       }
@@ -175,8 +171,7 @@ public class UnidirectionalComparisonCopier<E> {
   protected void copyReference(Object reference_p, E element_p, E copy_p) {
     // This implementation assumes that values need only be added
     List<E> sourceValues = _sourceScope.getReferenceValues(element_p, reference_p);
-    IScopePolicy<E> scopePolicy = getScopePolicy();
-    Object opposite = scopePolicy.getOppositeReference(reference_p);
+    Object opposite = _sourceScope.mGetOppositeReference(reference_p);
     for (E sourceValue : sourceValues) {
       IMatch<E> valueMatch = _mapping.getMatchFor(sourceValue, _sourceRole);
       if (valueMatch != null) {
@@ -185,7 +180,7 @@ public class UnidirectionalComparisonCopier<E> {
         // by a ref presence diff so it must be copied
         boolean mustCopy = getCompletedMatches().contains(valueMatch) ||
           // Being a containment means there is an implicit opposite
-          (opposite == null && !_sourceScope.isContainment(reference_p));
+          (opposite == null && !_sourceScope.mIsContainmentReference(reference_p));
         if (!mustCopy) {
           // Otherwise, check if it is actually handled by a ref presence diff
           // (it may not be because the opposite ref may not be covered by the diff policy)
@@ -204,8 +199,10 @@ public class UnidirectionalComparisonCopier<E> {
       } else {
         // Value out of scope: keep as is if no side effect due to bidirectionality or containment
         if (_copyOutOfScopeValues && opposite == null &&
-            !_sourceScope.isContainment(reference_p) && !scopePolicy.isContainerReference(reference_p) ||
-            _diffPolicy != null && _diffPolicy.coverOutOfScopeValue(sourceValue, reference_p)) {
+            !_sourceScope.mIsContainmentReference(reference_p) &&
+            !_sourceScope.mIsContainerReference(reference_p) ||
+            _diffPolicy != null && _diffPolicy.coverOutOfScopeValue(
+                sourceValue, reference_p, _sourceScope)) {
           _destinationScope.addReferenceValue(copy_p, reference_p, sourceValue);
         }
       }
@@ -217,7 +214,8 @@ public class UnidirectionalComparisonCopier<E> {
    * @param attribute_p a non-null attribute
    */
   protected boolean coverAttribute(Object attribute_p) {
-    return _mergePolicy != null && _mergePolicy.copyAttribute(attribute_p, _destinationScope);
+    return _mergePolicy != null && _mergePolicy.copyAttribute(
+        attribute_p, _destinationScope);
   }
   
   /**
@@ -225,7 +223,8 @@ public class UnidirectionalComparisonCopier<E> {
    * @param reference_p a non-null reference
    */
   protected boolean coverReference(Object reference_p) {
-    return _mergePolicy != null && _mergePolicy.copyReference(reference_p, _destinationScope);
+    return _mergePolicy != null && _mergePolicy.copyReference(
+        reference_p, _destinationScope);
   }
   
   /**
@@ -276,14 +275,6 @@ public class UnidirectionalComparisonCopier<E> {
       _copyOutOfScopeValues = _mergePolicy.copyOutOfScopeCrossReferences(
           _sourceScope, _destinationScope);
     }
-  }
-  
-  /**
-   * Return the scope policy of the source scope
-   * @return a non-null object
-   */
-  protected IScopePolicy<E> getScopePolicy() {
-    return _sourceScope.getScopePolicy();
   }
   
 }

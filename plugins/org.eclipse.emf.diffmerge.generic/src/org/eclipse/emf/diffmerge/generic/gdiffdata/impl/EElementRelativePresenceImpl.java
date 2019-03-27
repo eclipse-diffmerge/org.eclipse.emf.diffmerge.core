@@ -303,7 +303,7 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    * @return a non-null scope
    * @generated NOT
    */
-  protected final IEditableTreeDataScope<E> getPresenceScope() {
+  public IEditableTreeDataScope<E> getPresenceScope() {
     IEditableTreeDataScope<E> result = getComparison()
         .getScope(getPresenceRole());
     assert result != null;

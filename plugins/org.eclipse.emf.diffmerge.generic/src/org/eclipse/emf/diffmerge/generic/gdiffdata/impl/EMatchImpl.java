@@ -1076,17 +1076,6 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
       R reference_p);
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch.Editable#reset(java.lang.Object, java.lang.Object, java.lang.Object)
-   * @generated NOT
-   */
-  public void reset(E target_p, E reference_p, E ancestor_p) {
-    assert target_p != null || reference_p != null || ancestor_p != null;
-    set(TARGET, target_p);
-    set(REFERENCE, reference_p);
-    set(ANCESTOR, ancestor_p);
-  }
-
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch.Editable#set(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */

@@ -47,7 +47,7 @@ public interface GdiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/emf/diffmerge/generic/1.0.0/diffdata"; //$NON-NLS-1$
+  String eNS_URI = "http://www.eclipse.org/emf/diffmerge/generic/gdiffdata/1.0.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.

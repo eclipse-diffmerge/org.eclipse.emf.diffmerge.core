@@ -116,8 +116,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   public boolean isChangeableFeature() {
-    return getPresenceScope().getScopePolicy()
-        .isChangeableAttribute(getFeature());
+    return getPresenceScope().mIsChangeableAttribute(getFeature());
   }
 
   /**
@@ -126,7 +125,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    */
   @Override
   public boolean isManyFeature() {
-    return getPresenceScope().getScopePolicy().isManyAttribute(getFeature());
+    return getPresenceScope().mIsManyAttribute(getFeature());
   }
 
   /**
@@ -158,7 +157,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
     absenceScope.addAttributeValue(holderMatch, getFeature(), getValue());
     IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
     if (diffPolicy != null
-        && diffPolicy.considerOrderedAttribute(getFeature())) {
+        && diffPolicy.considerOrderedAttribute(getFeature(), getPresenceScope())) {
       // TODO Implement
     }
   }

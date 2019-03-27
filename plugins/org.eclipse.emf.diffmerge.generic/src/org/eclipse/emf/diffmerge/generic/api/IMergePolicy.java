@@ -38,11 +38,11 @@ public interface IMergePolicy<E> {
    * Note that if false is returned for some attributes while the diff policy specifies that
    * those attributes are covered by the diff phase, then copying an element to the given scope
    * may result in new differences when the comparison is re-computed.
-   * @see IDiffPolicy#coverAttribute(Object)
-   * @param attibute_p a non-null attribute
+   * @see IDiffPolicy#coverAttribute(Object, ITreeDataScope)
+   * @param attribute_p a non-null attribute
    * @param scope_p a non-null scope
    */
-  boolean copyAttribute(Object attibute_p, ITreeDataScope<E> scope_p);
+  boolean copyAttribute(Object attribute_p, ITreeDataScope<E> scope_p);
   
   /**
    * Return whether the given reference must be copied when elements are being copied
@@ -50,7 +50,7 @@ public interface IMergePolicy<E> {
    * Note that if false is returned for some references while the diff policy specifies that
    * those references are covered by the diff phase, then copying an element to the given scope
    * may result in new differences when the comparison is re-computed.
-   * @see IDiffPolicy#coverReference(Object)
+   * @see IDiffPolicy#coverReference(Object, ITreeDataScope)
    * @param reference_p a non-null reference 
    * @param scope_p a non-null scope
    */
@@ -96,33 +96,37 @@ public interface IMergePolicy<E> {
    * @param destination_p a non-null role which is TARGET or REFERENCE
    * @param source_p a non-null match
    * @param reference_p a non-null reference
-   * @param value_p a non-null value
+   * @param sourceValue_p a non-null value
    * @return a positive integer (0 inclusive) or -1 if no position could be determined
    */
   int getDesiredValuePosition(IComparison<E> comparison_p, Role destination_p,
-      IMatch<E> source_p, Object reference_p, E value_p);
+      IMatch<E> source_p, Object reference_p, E sourceValue_p);
   
   /**
-   * Return whether the given reference is essential to its owner, i.e., adding the reference owner
+   * Return whether the given reference is essential to given owner, i.e., adding the reference owner
    * requires to also add its reference to the values, whether the values are already present or not;
    * conversely, deleting a reference to any of the values requires to delete the reference owner.
    * Operation is a special case of IMergePolicy#getAdditionGroup(EObject, IFeaturedModelScope)
    * when the values are not present, and must be consistent with that operation.
    * If bindPresenceToOwnership(), operation is only called on cross-references.
    * @see IMergePolicy#bindPresenceToOwnership(ITreeDataScope)
+   * @param element_p a non-null element
    * @param reference_p a non-null, non-derived, non-container reference
+   * @param scope_p a non-null scope to which element_p belongs
    */
-  boolean isMandatoryForAddition(Object reference_p);
+  boolean isMandatoryForAddition(E element_p, Object reference_p, ITreeDataScope<E> scope_p);
   
   /**
-   * Return whether the given reference is mandatory for deletion, i.e., removing the owner
+   * Return whether the given reference is mandatory for deletion, i.e., removing the given owner
    * requires to remove the value(s).
    * Operation is a special case of IMergePolicy#getDeletionGroup(EObject, IFeaturedModelScope)
    * and must be consistent with that operation.
    * @see IMergePolicy#getDeletionGroup(Object, ITreeDataScope)
+   * @param element_p a non-null element
    * @param reference_p a non-null, non-derived, non-container reference
+   * @param scope_p a non-null scope to which element_p belongs
    */
-  boolean isMandatoryForDeletion(Object reference_p);
+  boolean isMandatoryForDeletion(E element_p, Object reference_p, ITreeDataScope<E> scope_p);
   
   /**
    * Set the ID of the given target element, if possible and relevant.
@@ -137,8 +141,8 @@ public interface IMergePolicy<E> {
    * Note that if intrinsic IDs are not copied and the diff policy specifies that ID attributes
    * are covered by the diff phase, then copying an element to the given target scope will result
    * in new differences when the comparison is re-computed.
-   * @see IScopePolicy#isIDAttribute(Object)
-   * @see IDiffPolicy#coverAttribute(Object)
+   * @see IScopePolicy#mIsIDAttribute(Object)
+   * @see IDiffPolicy#coverAttribute(Object, ITreeDataScope)
    * @param source_p a non-null element
    * @param sourceScope_p a non-null scope
    * @param target_p a non-null element

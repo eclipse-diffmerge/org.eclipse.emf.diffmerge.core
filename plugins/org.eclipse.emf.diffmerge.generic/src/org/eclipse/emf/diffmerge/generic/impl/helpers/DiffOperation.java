@@ -20,7 +20,7 @@ import static org.eclipse.emf.diffmerge.structures.IEqualityTester.BY_REFERENCE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +32,6 @@ import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
@@ -40,6 +39,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -84,6 +84,25 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     _mergePolicy = mergePolicy_p;
     _isReferenceScopeReadOnly = getComparison().getScope(REFERENCE).isReadOnly();
     _isTargetScopeReadOnly = getComparison().getScope(TARGET).isReadOnly();
+  }
+  
+  /**
+   * Return whether the given attribute must be covered by the difference detection algorithm
+   * @param attribute_p a non-null object
+   * @param scopeOfAttribute_p the non-null scope the attribute is from
+   */
+  protected boolean coverAttribute(Object attribute_p, ITreeDataScope<E> scopeOfAttribute_p) {
+    return getDiffPolicy().coverAttribute(attribute_p, scopeOfAttribute_p);
+  }
+  
+  /**
+   * Return whether the given reference must be covered by the difference detection algorithm
+   * @param reference_p a non-null object
+   * @param scopeOfReference_p the non-null scope the reference is from
+   */
+  protected boolean coverReference(Object reference_p, ITreeDataScope<E> scopeOfReference_p) {
+    return !scopeOfReference_p.mIsContainerReference(reference_p) &&
+        getDiffPolicy().coverReference(reference_p, scopeOfReference_p);
   }
   
   /**
@@ -207,15 +226,20 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
-    Set<Object> attributes = new HashSet<Object>();
-    IScopePolicy<E> scopePolicy1 = getComparison().getScope(role1_p).getScopePolicy();
-    IScopePolicy<E> scopePolicy2 = getComparison().getScope(role2_p).getScopePolicy();
-    attributes.addAll(scopePolicy1.getAttributes(match_p.get(role1_p)));
-    attributes.addAll(scopePolicy2.getAttributes(match_p.get(role2_p)));
-    for (Object attribute : attributes) {
-      if (getDiffPolicy().coverAttribute(attribute)) {
+    ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
+    ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
+    Set<Object> attributes1 = new LinkedHashSet<Object>(
+        scope1.mGetAttributes(match_p.get(role1_p)));
+    for (Object attribute : attributes1) {
+      if (coverAttribute(attribute, scope1)) {
         result = detectAttributeDifferences(
-            match_p, attribute, role1_p, role2_p, create_p) || result;
+            match_p, attribute, role1_p, role2_p, role1_p, create_p) || result;
+      }
+    }
+    for (Object attribute : scope2.mGetAttributes(match_p.get(role2_p))) {
+      if (!attributes1.contains(attribute) && coverAttribute(attribute, scope2)) {
+        result = detectAttributeDifferences(
+            match_p, attribute, role1_p, role2_p, role2_p, create_p) || result;
       }
     }
     return result;
@@ -234,23 +258,20 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       Role role2_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p);
     boolean result = false;
-    IScopePolicy<E> scopePolicy = getScopePolicy();
     ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
     ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
-    Set<Object> references1 = new HashSet<Object>(
-        scope1.getScopePolicy().getReferences(match_p.get(role1_p)));
+    Set<Object> references1 = new LinkedHashSet<Object>(
+        scope1.mGetReferences(match_p.get(role1_p)));
     for (Object reference : references1) {
-      if (!scopePolicy.isContainerReference(reference) &&
-          getDiffPolicy().coverReference(reference)) {
+      if (coverReference(reference, scope1)) {
         result = detectReferenceDifferences(
-            match_p, reference, role1_p, role2_p, create_p) || result;
+            match_p, reference, role1_p, role2_p, role1_p, create_p) || result;
       }
     }
-    for (Object reference : scope2.getScopePolicy().getReferences(match_p.get(role2_p))) {
-      if (!references1.contains(reference) && !scopePolicy.isContainerReference(reference) &&
-          getDiffPolicy().coverReference(reference)) {
+    for (Object reference : scope2.mGetReferences(match_p.get(role2_p))) {
+      if (!references1.contains(reference) && coverReference(reference, scope2)) {
         result = detectReferenceDifferences(
-            match_p, reference, role1_p, role2_p, create_p) || result;
+            match_p, reference, role1_p, role2_p, role2_p, create_p) || result;
       }
     }
     return result;
@@ -263,27 +284,29 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
    * @param attribute_p a non-null attribute
    * @param role1_p a non-null role
    * @param role2_p a non-null role different from role1_p
+   * @param roleOfAttribute_p the role the attribute is from, which is role1_p or role2_p
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
   protected boolean detectAttributeDifferences(IMatch<E> match_p, Object attribute_p,
-      Role role1_p, Role role2_p, boolean create_p) {
+      Role role1_p, Role role2_p, Role roleOfAttribute_p, boolean create_p) {
     assert match_p != null && !match_p.isPartial(role1_p, role2_p) && attribute_p != null;
     boolean result = false;
     ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
     ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
+    ITreeDataScope<E> scopeOfAttribute = (roleOfAttribute_p == role1_p)? scope1: scope2;
     E element1 = match_p.get(role1_p);
     E element2 = match_p.get(role2_p);
     List<?> values1 = scope1.getAttributeValues(element1, attribute_p);
     List<?> values2 = scope2.getAttributeValues(element2, attribute_p);
     List<Object> remainingValues1 = new ArrayList<Object>(values1);
     List<Object> remainingValues2 = new ArrayList<Object>(values2);
-    boolean checkOrder = getScopePolicy().isManyAttribute(attribute_p) &&
-        getDiffPolicy().considerOrderedAttribute(attribute_p);
+    boolean checkOrder = scopeOfAttribute.mIsManyAttribute(attribute_p) &&
+        getDiffPolicy().considerOrderedAttribute(attribute_p, scopeOfAttribute);
     int maxIndex = -1;
     for (Object value1 : values1) {
       ObjectAndIndex matchingValue2 =
-          findEqualAttributeValue(attribute_p, value1, remainingValues2);
+          findEqualAttributeValue(attribute_p, value1, remainingValues2, scopeOfAttribute);
       if (matchingValue2.getObject() != null) {
         if (checkOrder) {
           if (matchingValue2.getIndex() < maxIndex) {
@@ -304,7 +327,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       }
     }
     for (Object remainingValue1 : remainingValues1) {
-      if (getDiffPolicy().coverValue(remainingValue1, attribute_p)){
+      if (getDiffPolicy().coverValue(remainingValue1, attribute_p, scope1)){
         if (!create_p) {
           return true;
         }
@@ -313,7 +336,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       }
     }
     for (Object remainingValue2 : remainingValues2) {
-      if (getDiffPolicy().coverValue(remainingValue2, attribute_p)){
+      if (getDiffPolicy().coverValue(remainingValue2, attribute_p, scope2)){
         if (!create_p) {
           return true;
         }
@@ -379,25 +402,28 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
    * @param reference_p a non-null, non-container reference
    * @param role1_p a non-null role
    * @param role2_p a non-null role different from role1_p
+   * @param roleOfReference_p the role the reference is from, which is role1_p or role2_p
    * @param create_p whether differences must actually be created if the roles are TARGET and REFERENCE
    * @return whether at least one difference was detected
    */
   protected boolean detectReferenceDifferences(IMatch<E> match_p, Object reference_p,
-      Role role1_p, Role role2_p, boolean create_p) {
+      Role role1_p, Role role2_p, Role roleOfReference_p, boolean create_p) {
+    assert roleOfReference_p == role1_p || roleOfReference_p == role2_p;
     assert match_p != null && !match_p.isPartial(role1_p, role2_p) && reference_p != null;
-    assert !getScopePolicy().isContainerReference(reference_p);
+    assert !getComparison().getScope(roleOfReference_p).mIsContainerReference(reference_p);
     boolean result = false;
     IDiffPolicy<E> diffPolicy = getDiffPolicy();
     // Get reference values in different roles
     ITreeDataScope<E> scope1 = getComparison().getScope(role1_p);
     ITreeDataScope<E> scope2 = getComparison().getScope(role2_p);
+    ITreeDataScope<E> scopeOfReference = (roleOfReference_p == role1_p)? scope1: scope2;
     E element1 = match_p.get(role1_p);
     E element2 = match_p.get(role2_p);
     List<E> values1 = scope1.getReferenceValues(element1, reference_p);
     List<E> values2 = scope2.getReferenceValues(element2, reference_p);
     List<E> remainingValues2 = new FArrayList<E>(values2, BY_REFERENCE);
-    boolean checkOrder = getScopePolicy().isManyReference(reference_p) &&
-        diffPolicy.considerOrderedReference(reference_p);
+    boolean checkOrder = scopeOfReference.mIsManyReference(reference_p) &&
+        diffPolicy.considerOrderedReference(reference_p, scopeOfReference);
     int maxIndex = -1;
     // Check which ones match
     for (E value1 : values1) {
@@ -407,7 +433,8 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       boolean outsideScope1 = valueMatch1 == null;
       boolean coverValue1 =
           !outsideScope1 && diffPolicy.coverMatch(valueMatch1) ||
-          outsideScope1 && diffPolicy.coverOutOfScopeValue(value1, reference_p);
+          outsideScope1 && diffPolicy.coverOutOfScopeValue(
+              value1, reference_p, scope1);
       if (coverValue1) {
         // Check if matching value is present in scope2
         @SuppressWarnings("null") // OK due to the definition of outsideScope
@@ -417,7 +444,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
         if (!isIsolated) {
           // Check value presence and ordering
           index = detectReferenceValueAmong(
-              reference_p, matchValue2, remainingValues2, outsideScope1);
+              reference_p, matchValue2, remainingValues2, outsideScope1, scopeOfReference);
           isIsolated = index < 0;
           if (checkOrder && !isIsolated) {
             if (index < maxIndex) {
@@ -459,7 +486,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       boolean coverReferenceValue =
           !outsideReferenceScope && diffPolicy.coverMatch(valueMatch2) ||
           outsideReferenceScope && diffPolicy.coverOutOfScopeValue(
-              remainingValue2, reference_p);
+              remainingValue2, reference_p, scopeOfReference);
       if (coverReferenceValue) {
         // We have a covered unmatched presence in role2_p
         if (!create_p) {
@@ -480,10 +507,11 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
    * @param value_p a non-null element
    * @param values_p a non-null, potentially empty list
    * @param outsideScope_p whether the value is out-of-scope
+   * @param scope_p the non-null scope the values belong to
    * @return a positive int or -1 if the element is not found
    */
   protected int detectReferenceValueAmong(Object reference_p, E value_p, List<E> values_p,
-      boolean outsideScope_p) {
+      boolean outsideScope_p, ITreeDataScope<E> scope_p) {
     int result = values_p.indexOf(value_p);
     if (result == -1 && outsideScope_p) {
       // Outside scope
@@ -491,7 +519,8 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       int i = -1;
       for (E candidateValue : values_p) {
         i++;
-        if (diffPolicy.considerEqualOutOfScope(value_p, candidateValue, reference_p)) {
+        if (diffPolicy.considerEqualOutOfScope(
+            value_p, candidateValue, reference_p, scope_p)) {
           result = i;
           break;
         }
@@ -506,13 +535,14 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
    * @param attribute_p a non-null attribute
    * @param value_p a non-null value which is type-compatible with the attribute
    * @param candidates_p a non-null collection of candidate values
+   * @param scope_p the non-null scope the attribute is from
    * @return a non-null object
    */
   protected ObjectAndIndex findEqualAttributeValue(Object attribute_p, Object value_p,
-      Collection<? extends Object> candidates_p) {
+      Collection<? extends Object> candidates_p, ITreeDataScope<E> scope_p) {
     int i = 0;
     for (Object candidate : candidates_p) {
-      if (getDiffPolicy().considerEqual(value_p, candidate, attribute_p)) {
+      if (getDiffPolicy().considerEqual(value_p, candidate, attribute_p, scope_p)) {
         return new ObjectAndIndex(candidate, i);
       }
       i++;
@@ -577,14 +607,6 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       }
     }
     return result;
-  }
-  
-  /**
-   * Return the scope policy to use globally
-   * @return a non-null object
-   */
-  protected IScopePolicy<E> getScopePolicy() {
-    return getComparison().getScope(TARGET).getScopePolicy();
   }
   
   /**
@@ -717,7 +739,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     }
     // Grouped addition according to policy
     Collection<E> additionPeers = getMergePolicy().getAdditionGroup(
-        presence_p.getElement(), getComparison().getScope(presenceRole));
+        presence_p.getElement(), presence_p.getPresenceScope());
     for (E peer : additionPeers) {
       IMatch<E> peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
@@ -732,7 +754,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     }
     // Grouped deletion according to policy
     Collection<E> deletionPeers = getMergePolicy().getDeletionGroup(
-        presence_p.getElement(), getComparison().getScope(presenceRole));
+        presence_p.getElement(), presence_p.getPresenceScope());
     for (E peer : deletionPeers) {
       IMatch<E> peerMatch = getMapping().getMatchFor(peer, presenceRole);
       if (peerMatch != null && peerMatch.isPartial()) {
@@ -757,15 +779,14 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     // Opposite diffs are implicitly equivalent except for non-many references
     // which bring their own constraints and must therefore be merged explicitly
     Role presenceRole = first_p.getPresenceRole();
-    IScopePolicy<E> scopePolicy = getScopePolicy();
-    if (scopePolicy.isManyReference(second_p.getFeature())) {
+    if (second_p.getPresenceScope().mIsManyReference(second_p.getFeature())) {
       markImplies(first_p,second_p, presenceRole);
       markImplies(first_p, second_p, presenceRole.opposite());
     } else {
       markRequires(first_p, second_p, presenceRole);
       markRequires(first_p, second_p, presenceRole.opposite());
     }
-    if (scopePolicy.isManyReference(first_p.getFeature())) {
+    if (first_p.getPresenceScope().mIsManyReference(first_p.getFeature())) {
       markImplies(second_p, first_p, presenceRole);
       markImplies(second_p, first_p, presenceRole.opposite());
     } else {
@@ -814,21 +835,26 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       if (referenceDiff_p.getFeature() != null) {
         // If containment and presence requires ownership, value presence implies ref
         // and no ref implies value absence
+        IEditableTreeDataScope<E> absenceScope = _comparison.getScope(presenceRole.opposite());
         if (referenceDiff_p.isOwnership() &&
-            getMergePolicy().bindPresenceToOwnership(
-                _comparison.getScope(presenceRole.opposite()))) {
+            getMergePolicy().bindPresenceToOwnership(absenceScope)) {
           markImplies(presence, referenceDiff_p, presenceRole.opposite());
           markImplies(referenceDiff_p, presence, presenceRole);
         } else {
           // Not a containment or no ownership/presence coupling
-          Object opposite = getScopePolicy().getOppositeReference(referenceDiff_p.getFeature());
+          ITreeDataScope<E> presenceScope = referenceDiff_p.getPresenceScope();
+          Object opposite = presenceScope.mGetOppositeReference(
+              referenceDiff_p.getFeature());
           // If reference has an eOpposite which is mandatory for addition, then ...
-          if (opposite != null && getMergePolicy().isMandatoryForAddition(opposite)) {
+          if (opposite != null && getMergePolicy().isMandatoryForAddition(
+              referenceDiff_p.getElementMatch().get(presenceRole), opposite, presenceScope)) {
             // ... value presence requires ref
             markRequires(presence, referenceDiff_p, presenceRole.opposite());
             // ... and no ref requires value absence
             markRequires(referenceDiff_p, presence, presenceRole);
           }
+          // isMandatoryForDeletion does not need to be used because references from absent
+          // elements to present elements are handled implicitly when adding absent elements
         }
       }
     }
@@ -958,14 +984,14 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       List<?> valuesInAncestor = ancestorScope.getAttributeValues(ancestorHolder, attribute);
       if (presence_p.isOrder()) {
         Role presenceRole = presence_p.getPresenceRole();
-        List<?> values = _comparison.getScope(presenceRole).getAttributeValues(
+        List<?> values = presence_p.getPresenceScope().getAttributeValues(
             presence_p.getElementMatch().get(presenceRole),
             presence_p.getFeature());
         int maxIndex = -1;
         aligned = true;
         for (Object value : values) {
           ObjectAndIndex matchingAncestorValue = findEqualAttributeValue(
-              attribute, value, valuesInAncestor);
+              attribute, value, valuesInAncestor, ancestorScope);
           if (matchingAncestorValue.getObject() != null) {
             if (matchingAncestorValue.getIndex() < maxIndex) {
               // Ordering difference
@@ -978,7 +1004,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
       } else {
         // Not an order
         ObjectAndIndex equalInAncestor = findEqualAttributeValue(
-            attribute, presence_p.getValue(), valuesInAncestor);
+            attribute, presence_p.getValue(), valuesInAncestor, ancestorScope);
         aligned = equalInAncestor.getObject() != null;
       }
     }
@@ -1020,7 +1046,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
         // Order
         Object reference = presence_p.getFeature();
         Role presenceRole = presence_p.getPresenceRole();
-        List<E> values = _comparison.getScope(presenceRole).getReferenceValues(
+        List<E> values = presence_p.getPresenceScope().getReferenceValues(
             presence_p.getElementMatch().get(presenceRole), reference);
         int maxIndex = -1;
         aligned = true;
@@ -1031,7 +1057,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
             //TODO handle ancestor out-of-scope value
             if (matchAncestor != null) {
               int index = detectReferenceValueAmong(
-                  reference, matchAncestor, ancestorValues, false);
+                  reference, matchAncestor, ancestorValues, false, ancestorScope);
               if (index >= 0) {
                 if (index < maxIndex) {
                   // Ordering difference

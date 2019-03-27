@@ -222,35 +222,35 @@ public abstract class EElementPresenceImpl<E, A, R> extends
     boolean addedToScope = false;
     boolean actuallyAdded = false;
     IMergePolicy<E> mergePolicy = getComparison().getLastMergePolicy();
-    if (getComparison().getLastMergePolicy()
-        .bindPresenceToOwnership(getAbsenceScope()) && !isRoot()) {
+    IEditableTreeDataScope<E> absenceScope = getAbsenceScope();
+    if (getComparison().getLastMergePolicy().bindPresenceToOwnership(absenceScope) && !isRoot()) {
       E container = getOwnerMatch().get(getAbsenceRole());
       if (container != null) {
         Object containment = getPresenceScope().getContainment(getElement());
-        actuallyAdded = getAbsenceScope().addReferenceValue(container,
+        actuallyAdded = absenceScope.addReferenceValue(container,
             containment, clone);
         addedToScope = true; // Even if !actuallyAdded
         // Order handling
         IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
         if (diffPolicy != null && actuallyAdded
-            && diffPolicy.considerOrderedReference(containment)) {
+            && diffPolicy.considerOrderedReference(containment, absenceScope)) {
           // Move added value if required
           int index = mergePolicy.getDesiredValuePosition(getComparison(),
               getAbsenceRole(), getOwnerMatch(), containment, getElement());
-          if (index >= 0)
-            getAbsenceScope().moveReferenceValue(container, containment, index,
-                -1);
+          if (index >= 0) {
+            absenceScope.moveReferenceValue(container, containment, index, -1);
+          }
         }
       }
       // Else container will be created and ownership automatically applied by the copier,
       // if containment tree of the scope is consistent with matching
     }
     if (!addedToScope) {
-      actuallyAdded = getAbsenceScope().add(clone);
+      actuallyAdded = absenceScope.add(clone);
     }
     if (actuallyAdded) {
       mergePolicy.setID(getElement(), getPresenceScope(), clone,
-          getAbsenceScope());
+          absenceScope);
     }
   }
 

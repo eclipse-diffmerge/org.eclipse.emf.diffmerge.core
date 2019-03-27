@@ -46,6 +46,14 @@ implements IFeaturedModelScope {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope#defineScopePolicy()
+   */
+  @Override
+  protected IScopePolicy<EObject> defineScopePolicy() {
+    return ModelScopePolicy.getInstance();
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#get(org.eclipse.emf.ecore.EObject, org.eclipse.emf.ecore.EReference)
    */
   public List<EObject> get(EObject source_p, EReference reference_p) {
@@ -182,21 +190,7 @@ implements IFeaturedModelScope {
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   protected Object getExtrinsicID(EObject element_p) {
-    return getScopePolicy().getID(element_p, false);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getScopePolicy()
-   */
-  public IScopePolicy<EObject> getScopePolicy() {
-    return ModelScopePolicy.getInstance();
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope#isContainment(java.lang.Object)
-   */
-  public boolean isContainment(Object reference_p) {
-    return getScopePolicy().isContainmentReference(reference_p);
+    return getID(element_p, false);
   }
   
   /**

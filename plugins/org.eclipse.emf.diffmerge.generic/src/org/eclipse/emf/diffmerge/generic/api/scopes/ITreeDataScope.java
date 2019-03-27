@@ -44,10 +44,4 @@ IRawTreeDataScope<E> {
    */
   Object getContainment(E element_p);
   
-  /**
-   * Return whether the given reference is a containment
-   * @param reference_p a non-null reference that belongs to the schema of this scope
-   */
-  boolean isContainment(Object reference_p);
-  
 }

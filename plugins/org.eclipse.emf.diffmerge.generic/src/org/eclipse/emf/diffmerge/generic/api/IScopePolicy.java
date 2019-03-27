@@ -13,12 +13,16 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 import java.util.List;
 
+
 /**
- * A policy related to the data technology underlying data scopes.
- * It specifies structural constraints and other meta information that universally
- * apply to data scopes by default. It also provides facilities for element creation.
- * Data scopes can further customize their own behavior in order to raise their level
- * of abstraction w.r.t. their underlying technology. 
+ * A policy that handles meta and technological aspects of data scopes.
+ * It defines rules for structural constraints. It provides ID management, element
+ * creation mechanisms and other meta information.
+ * It typically reflects aspects of the underlying data technology that must be taken
+ * into account by a diff/merge engine. It is typically implemented once for a family
+ * of technologically homogeneous scopes.
+ * Methods that deal with meta aspects are prefixed with "m".
+ * Methods that deal with technical aspects are prefixed with "t".
  * 
  * @param <E> The type of data elements.
  * 
@@ -28,19 +32,11 @@ import java.util.List;
 public interface IScopePolicy<E> {
   
   /**
-   * Create and return a base copy of the given element, i.e., without copying the values
-   * of its attributes or references
-   * @param element_p a non-null element
-   * @return a non-null element
-   */
-  E baseCopy(E element_p);
-  
-  /**
    * Return the set of attributes which are applicable to the given element.
    * @param element_p a non-null element
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<?> getAttributes(E element_p);
+  List<?> mGetAttributes(E element_p);
   
   /**
    * Return the ID of the given element, if any
@@ -58,32 +54,32 @@ public interface IScopePolicy<E> {
    * @param reference_p a non-null reference
    * @return a potentially null reference
    */
-  Object getOppositeReference(Object reference_p);
+  Object mGetOppositeReference(Object reference_p);
   
   /**
    * Return the set of references which are applicable to the given element.
    * @param element_p a non-null element which belongs to getReferences(element_p)
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<?> getReferences(E element_p);
+  List<?> mGetReferences(E element_p);
   
   /**
    * Return an object that represents the type of the given element
    * @param element_p a non-null element
    * @return a non-null type
    */
-  Object getType(E element_p);
+  Object mGetType(E element_p);
   
   /**
    * Return whether the given reference is the opposite of a containment.
    * Class invariant: isContainerReference(r) ==
    *  getOppositeReference(r) != null &&
    *    isContainmentReference(getOppositeReference(r))
-   * @see IScopePolicy#isContainmentReference(Object)
-   * @see IScopePolicy#getOppositeReference(Object)
+   * @see IScopePolicy#mIsContainmentReference(Object)
+   * @see IScopePolicy#mGetOppositeReference(Object)
    * @param reference_p a non-null reference
    */
-  boolean isContainerReference(Object reference_p);
+  boolean mIsContainerReference(Object reference_p);
   
   /**
    * Return whether the given reference manifests a parent-child relationship
@@ -92,52 +88,61 @@ public interface IScopePolicy<E> {
    * elements as a result of other changes.
    * @param reference_p a non-null reference
    */
-  boolean isContainmentReference(Object reference_p);
+  boolean mIsContainmentReference(Object reference_p);
   
   /**
    * Return whether the given attribute tolerates that its values be changed
    * @param attribute_p a non-null attribute
    */
-  boolean isChangeableAttribute(Object attribute_p);
+  boolean mIsChangeableAttribute(Object attribute_p);
   
   /**
    * Return whether the given reference tolerates that its values be changed
    * @param reference_p a non-null reference
    */
-  boolean isChangeableReference(Object reference_p);
+  boolean mIsChangeableReference(Object reference_p);
   
   /**
    * Return whether the given attribute stores intrinsic IDs, that is,
    * IDs for the owning elements that are unique within the data scope.
    * @param attribute_p a non-null attribute
    */
-  boolean isIDAttribute(Object attribute_p);
+  boolean mIsIDAttribute(Object attribute_p);
   
   /**
    * Return whether the given attribute tolerates more than one value on the
    * same element
    * @param attribute_p a non-null attribute
    */
-  boolean isManyAttribute(Object attribute_p);
+  boolean mIsManyAttribute(Object attribute_p);
   
   /**
    * Return whether the given reference tolerates more than one value on the
    * same element
    * @param reference_p a non-null reference
    */
-  boolean isManyReference(Object reference_p);
+  boolean mIsManyReference(Object reference_p);
   
   /**
    * Return whether the given attribute tolerates zero value
    * @param attribute_p a non-null attribute
    */
-  boolean isOptionalAttribute(Object attribute_p);
+  boolean mIsOptionalAttribute(Object attribute_p);
   
   /**
    * Return whether the given reference tolerates zero value
    * @param reference_p a non-null reference
    */
-  boolean isOptionalReference(Object reference_p);
+  boolean mIsOptionalReference(Object reference_p);
+  
+  /**
+   * Create and return a new bare element, i.e., an element without particular values
+   * on its attributes or references, as the match of the given source element.
+   * Note that the given source element may be of any arbitrary nature.
+   * @param source_p a non-null object
+   * @return an element that cannot be null
+   */
+  E mNewBareElement(Object source_p);
   
   /**
    * Set the ID of the given element

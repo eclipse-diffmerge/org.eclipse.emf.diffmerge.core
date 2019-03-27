@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 
 
@@ -49,22 +50,9 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#baseCopy(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetAttributes(java.lang.Object)
    */
-  public EObject baseCopy(EObject element_p) {
-    EClass eClass = element_p.eClass();
-    EObject result = eClass.getEPackage().getEFactoryInstance().create(eClass);
-    if (element_p.eIsProxy()) {
-      URI proxyURI = ((InternalEObject)element_p).eProxyURI();
-      ((InternalEObject)result).eSetProxyURI(proxyURI);
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getAttributes(java.lang.Object)
-   */
-  public List<?> getAttributes(EObject element_p) {
+  public List<?> mGetAttributes(EObject element_p) {
     return element_p.eClass().getEAllAttributes();
   }
   
@@ -82,87 +70,106 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getOppositeReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetOppositeReference(java.lang.Object)
    */
-  public Object getOppositeReference(Object reference_p) {
+  public Object mGetOppositeReference(Object reference_p) {
     return ((EReference)reference_p).getEOpposite();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getReferences(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetReferences(java.lang.Object)
    */
-  public List<?> getReferences(EObject element_p) {
+  public List<?> mGetReferences(EObject element_p) {
     return element_p.eClass().getEAllReferences();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getType(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetType(java.lang.Object)
    */
-  public Object getType(EObject element_p) {
+  public Object mGetType(EObject element_p) {
     return element_p.eClass();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isContainerReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsContainerReference(java.lang.Object)
    */
-  public boolean isContainerReference(Object reference_p) {
+  public boolean mIsContainerReference(Object reference_p) {
     return ((EReference)reference_p).isContainer();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isContainmentReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsContainmentReference(java.lang.Object)
    */
-  public boolean isContainmentReference(Object reference_p) {
+  public boolean mIsContainmentReference(Object reference_p) {
     return ((EReference)reference_p).isContainment();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isChangeableAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsChangeableAttribute(java.lang.Object)
    */
-  public boolean isChangeableAttribute(Object attribute_p) {
+  public boolean mIsChangeableAttribute(Object attribute_p) {
     return ((EAttribute)attribute_p).isChangeable();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isChangeableReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsChangeableReference(java.lang.Object)
    */
-  public boolean isChangeableReference(Object reference_p) {
+  public boolean mIsChangeableReference(Object reference_p) {
     return ((EReference)reference_p).isChangeable();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isIDAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsIDAttribute(java.lang.Object)
    */
-  public boolean isIDAttribute(Object attribute_p) {
+  public boolean mIsIDAttribute(Object attribute_p) {
     return ((EAttribute)attribute_p).isID();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isManyAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyAttribute(java.lang.Object)
    */
-  public boolean isManyAttribute(Object attribute_p) {
+  public boolean mIsManyAttribute(Object attribute_p) {
     return ((EAttribute)attribute_p).isMany();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isManyReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyReference(java.lang.Object)
    */
-  public boolean isManyReference(Object reference_p) {
+  public boolean mIsManyReference(Object reference_p) {
     return ((EReference)reference_p).isMany();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isManyAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyAttribute(java.lang.Object)
    */
-  public boolean isOptionalAttribute(Object attribute_p) {
+  public boolean mIsOptionalAttribute(Object attribute_p) {
     return ((EAttribute)attribute_p).getLowerBound() == 0;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#isManyReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyReference(java.lang.Object)
    */
-  public boolean isOptionalReference(Object reference_p) {
+  public boolean mIsOptionalReference(Object reference_p) {
     return ((EReference)reference_p).getLowerBound() == 0;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mNewBareElement(java.lang.Object)
+   */
+  public EObject mNewBareElement(Object source_p) {
+    EObject result;
+    if (source_p instanceof EObject) {
+      EObject sourceElement = (EObject)source_p;
+      EClass eClass = sourceElement.eClass();
+      result = eClass.getEPackage().getEFactoryInstance().create(eClass);
+      if (sourceElement.eIsProxy()) {
+        URI proxyURI = ((InternalEObject)sourceElement).eProxyURI();
+        ((InternalEObject)result).eSetProxyURI(proxyURI);
+      }
+    } else {
+      result = EcoreFactory.eINSTANCE.createEObject();
+    }
+    return result;
   }
   
   /**

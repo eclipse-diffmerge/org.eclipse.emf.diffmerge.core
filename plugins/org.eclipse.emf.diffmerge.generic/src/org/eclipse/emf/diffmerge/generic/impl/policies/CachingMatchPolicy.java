@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2017-2018 Thales Global Services S.A.S.
+ * Copyright (c) 2017-2019 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -9,28 +9,31 @@
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
  **********************************************************************/
-package org.eclipse.emf.diffmerge.impl.policies;
+package org.eclipse.emf.diffmerge.generic.impl.policies;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
-import org.eclipse.emf.ecore.EObject;
 
 
 /**
  * A match policy that supports caching of match IDs.
+ * Caching is disabled by default. Matching is by unique IDs by default.
+ *
+ * @param <E> The type of data elements.
+ * 
  * @author Olivier Constant
  */
-public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
+public class CachingMatchPolicy<E> extends DefaultMatchPolicy<E> {
   
   /** An object that represents a null match ID, to distinguish from non-computed or
    * absent match IDs */
   protected static final Object NULL_MATCH_ID = new Object();
   
   /** The cache for match IDs */
-  protected final Map<EObject, WeakReference<Object>> _matchCache;
+  protected final Map<E, WeakReference<Object>> _matchCache;
   
   
   /**
@@ -38,15 +41,15 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    */
   public CachingMatchPolicy() {
     super();
-    _matchCache = new WeakHashMap<EObject, WeakReference<Object>>();
+    _matchCache = new WeakHashMap<E, WeakReference<Object>>();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy#getMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public Object getMatchID(EObject element_p,
-      ITreeDataScope<EObject> scope_p) {
+  public Object getMatchID(E element_p,
+      ITreeDataScope<E> scope_p) {
     Object result = null;
     if (!useCache()) {
       result = getUncachedMatchID(element_p, scope_p);
@@ -62,8 +65,8 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  protected Object getMatchIDThroughCache(EObject element_p,
-      ITreeDataScope<EObject> scope_p) {
+  protected Object getMatchIDThroughCache(E element_p,
+      ITreeDataScope<E> scope_p) {
     Object result;
     WeakReference<Object> cachedRef = _matchCache.get(element_p);
     Object cachedValue = (cachedRef == null)? null: cachedRef.get();
@@ -85,13 +88,17 @@ public abstract class CachingMatchPolicy extends DefaultMatchPolicy {
    * @param scope_p a non-null scope
    * @return a potentially null object
    */
-  protected abstract Object getUncachedMatchID(EObject element_p,
-      ITreeDataScope<EObject> scope_p);
+  protected Object getUncachedMatchID(E element_p,
+      ITreeDataScope<E> scope_p) {
+    // Override for custom match criteria
+    return super.getMatchID(element_p, scope_p);
+  }
   
   /**
    * Return whether the cache must be used
    */
   protected boolean useCache() {
+    // Override to activate cache
     return false;
   }
   

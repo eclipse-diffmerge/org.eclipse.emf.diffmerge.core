@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.generic.api.diff;
 
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 
 /**
@@ -78,14 +79,14 @@ public interface IReferenceValuePresence<E> extends IValuePresence<E> {
    *    isOutOfScope() == (getValueMatch() == null)
    * Class invariant:
    *    !isOutOfScope() || getFeature() != null
-   * @see IDiffPolicy#coverOutOfScopeValue(Object, Object)
+   * @see IDiffPolicy#coverOutOfScopeValue(Object, Object, ITreeDataScope)
    */
   boolean isOutOfScope();
   
   /**
    * Return whether this reference value presence represents an ownership,
    * i.e., it represents an arc in the containment tree.
-   * Class invariant: isOwnership() == !isOrder() && isContainment()
+   * Class invariant: isOwnership() == (!isOrder() && isContainment())
    */
   boolean isOwnership();
   

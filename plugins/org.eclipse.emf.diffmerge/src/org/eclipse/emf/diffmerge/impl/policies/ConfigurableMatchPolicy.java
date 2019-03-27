@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +25,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.diffmerge.EMFDiffMergePlugin;
 import org.eclipse.emf.diffmerge.Messages;
-import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.generic.impl.policies.AbstractConfigurationElement;
@@ -41,8 +40,8 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
  * A multi-criteria match policy that can be configured.
  * @author Olivier Constant
  */
-public class ConfigurableMatchPolicy extends CachingMatchPolicy
-implements IConfigurablePolicy {
+public class ConfigurableMatchPolicy extends
+org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy<EObject> {
   
   /**
    * A predefined set of match criteria in decreasing order of priority.
@@ -136,17 +135,11 @@ implements IConfigurablePolicy {
   public static final Object PROPERTY_FINE_GRAINED_MATCH_CRITERIA = new Object();
   
   
-  /** Whether the cache must be used */
-  private boolean _useCache;
-  
   /** The set of match criteria to use */
   private final Set<MatchCriterionKind> _selectedCriteria;
   
   /** The set of fine-grained match criteria to use */
   private final Set<FineGrainedMatchCriterion> _selectedFineGrainedCriteria;
-  
-  /** The non-null, potentially empty, modifiable set of listeners */
-  protected final Set<IConfigurationChangedListener> _listeners;
   
   
   /**
@@ -154,12 +147,10 @@ implements IConfigurablePolicy {
    */
   public ConfigurableMatchPolicy() {
     super();
-    _useCache = false;
     _selectedCriteria = new HashSet<MatchCriterionKind>(
         MatchCriterionKind.values().length);
     _selectedCriteria.addAll(getDefaultCriteria());
     _selectedFineGrainedCriteria = new HashSet<FineGrainedMatchCriterion>();
-    _listeners = new LinkedHashSet<IConfigurationChangedListener>();
   }
   
   /**
@@ -172,29 +163,12 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#addConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
-   */
-  public void addConfigurationChangedListener(IConfigurationChangedListener listener_p) {
-    _listeners.add(listener_p);
-  }
-  
-  /**
    * @see java.lang.Object#clone()
    */
   @Override
   public ConfigurableMatchPolicy clone() throws CloneNotSupportedException {
     // Override in subclasses if the configurable state is extended or modified
     return new ConfigurableMatchPolicy(this);
-  }
-  
-  /**
-   * Notify all registered listeners that the configuration changed
-   * @param property_p an optional object that describes the configuration property that changed
-   */
-  protected void fireConfigurationChanged(Object property_p) {
-    for (IConfigurationChangedListener listener : _listeners) {
-      listener.configurationChanged(this, property_p);
-    }
   }
   
   /**
@@ -339,14 +313,32 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#getExtrinsicID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   * Return the extrinsic ID of the given element from the given scope, or null if none
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope that covers the element
+   * @return a potentially null object
    */
-  @Override
   protected String getExtrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
-    Comparable<?> superID = super.getExtrinsicID(element_p, scope_p);
-    if (superID instanceof String)
-      result = (String)superID;
+    Object id = scope_p.getID(element_p, false);
+    if (id instanceof String) {
+      result = (String)id;
+    }
+    return result;
+  }
+  
+  /**
+   * Return the intrinsic ID of the given element from the given scope, or null if none
+   * @param element_p a non-null element
+   * @param scope_p a non-null scope that covers the element
+   * @return a potentially null object
+   */
+  protected String getIntrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
+    String result = null;
+    Object id = scope_p.getID(element_p, true);
+    if (id instanceof String) {
+      result = (String)id;
+    }
     return result;
   }
   
@@ -366,7 +358,16 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy#getMatchIDComparator()
+   */
+  @Override
+  public Comparator<Object> getMatchIDComparator() {
+    // OK because String is forced as ID type
+    return NATURAL_ORDER_COMPARATOR;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.CachingMatchPolicy#getMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
   public String getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
@@ -388,7 +389,7 @@ implements IConfigurablePolicy {
     case EXTRINSIC_ID:
       result = getExtrinsicID(element_p, scope_p); break;
     case INTRINSIC_ID:
-      result = getIntrinsicID(element_p); break;
+      result = getIntrinsicID(element_p, scope_p); break;
     case NAME:
       result = getQualifiedName(element_p, scope_p); break;
     case STRUCTURE:
@@ -608,7 +609,7 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#getUncachedMatchID(org.eclipse.emf.ecore.EObject, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.CachingMatchPolicy#getUncachedMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
   protected String getUncachedMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
@@ -736,13 +737,6 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#removeConfigurationChangedListener(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy.IConfigurationChangedListener)
-   */
-  public void removeConfigurationChangedListener(IConfigurationChangedListener listener_p) {
-    _listeners.remove(listener_p);
-  }
-  
-  /**
    * Set the exact set of fine-grained match criteria that must be used
    * @param criteria_p a non-null, potentially empty collection
    */
@@ -760,24 +754,6 @@ implements IConfigurablePolicy {
     _selectedCriteria.clear();
     _selectedCriteria.addAll(criteria_p);
     fireConfigurationChanged(PROPERTY_MATCH_CRITERIA);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy#setKeepMatchIDs(boolean)
-   */
-  @Override
-  public void setKeepMatchIDs(boolean keep_p) {
-    super.setKeepMatchIDs(keep_p);
-    fireConfigurationChanged(null);
-  }
-  
-  /**
-   * Set whether the cache must be used
-   * @param useCache_p whether it must be used
-   */
-  public void setUseCache(boolean useCache_p) {
-    _useCache = useCache_p;
-    fireConfigurationChanged(null);
   }
   
   /**
@@ -807,30 +783,18 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#update(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy)
-   */
-  @SuppressWarnings("rawtypes")
-  public boolean update(IConfigurablePolicy policy_p) {
-    boolean result = false;
-    if (policy_p instanceof IMatchPolicy) {
-      setKeepMatchIDs(((IMatchPolicy)policy_p).keepMatchIDs());
-      if (policy_p instanceof ConfigurableMatchPolicy) {
-        ConfigurableMatchPolicy policy = (ConfigurableMatchPolicy)policy_p;
-        setUseCache(policy.useCache());
-        setAllUsedCriteria(policy.getAllUsedCriteria());
-        setAllUsedFineGrainedCriteria(policy.getAllUsedFineGrainedCriteria());
-        result = true;
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.CachingMatchPolicy#useCache()
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy#update(org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy)
    */
   @Override
-  public boolean useCache() {
-    return _useCache;
+  public boolean update(IConfigurablePolicy policy_p) {
+    boolean result = super.update(policy_p);
+    if (result && policy_p instanceof ConfigurableMatchPolicy) {
+      ConfigurableMatchPolicy policy = (ConfigurableMatchPolicy)policy_p;
+      setAllUsedCriteria(policy.getAllUsedCriteria());
+      setAllUsedFineGrainedCriteria(policy.getAllUsedFineGrainedCriteria());
+      result = true;
+    }
+    return result;
   }
   
   /**

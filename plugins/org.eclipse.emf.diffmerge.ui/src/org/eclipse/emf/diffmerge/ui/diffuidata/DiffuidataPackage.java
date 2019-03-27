@@ -48,7 +48,7 @@ public interface DiffuidataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.eclipse.org/emf/diffmerge/ui/1.0.0/diffuidata"; //$NON-NLS-1$
+  String eNS_URI = "http://www.eclipse.org/emf/diffmerge/ui/diffuidata/1.0.0"; //$NON-NLS-1$
 
   /**
    * The package namespace name.

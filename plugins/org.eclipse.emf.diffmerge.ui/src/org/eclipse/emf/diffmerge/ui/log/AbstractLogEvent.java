@@ -12,7 +12,6 @@
 package org.eclipse.emf.diffmerge.ui.log;
 
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
@@ -58,11 +57,10 @@ public abstract class AbstractLogEvent {
   protected Object getID(Object element_p, Role side_p) {
     Object result = null;
     if (element_p != null) {
-      ITreeDataScope<?> sourceScope = getDiffNode().getActualComparison().getScope(side_p);
-      IScopePolicy scopePolicy = sourceScope.getScopePolicy();
-      result = scopePolicy.getID(element_p, true);
+      ITreeDataScope sourceScope = getDiffNode().getActualComparison().getScope(side_p);
+      result = sourceScope.getID(element_p, true);
       if (result == null) {
-        result = scopePolicy.getID(element_p, false);
+        result = sourceScope.getID(element_p, false);
       }
     }
     return result;

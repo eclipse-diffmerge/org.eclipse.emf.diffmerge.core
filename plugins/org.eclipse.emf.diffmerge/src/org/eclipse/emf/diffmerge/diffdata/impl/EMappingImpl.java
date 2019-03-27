@@ -72,8 +72,8 @@ public class EMappingImpl extends
    */
   protected EMappingImpl() {
     super();
-    _targetCrossReferencer = new ScopeCrossReferencer(Role.TARGET);
-    _referenceCrossReferencer = new ScopeCrossReferencer(Role.REFERENCE);
+    _targetCrossReferencer = new ScopeCrossReferencer(this, Role.TARGET);
+    _referenceCrossReferencer = new ScopeCrossReferencer(this, Role.REFERENCE);
     _matchAdapter = new MatchCrossReferenceAdapter();
     eAdapters().add(_matchAdapter);
   }
@@ -212,19 +212,24 @@ public class EMappingImpl extends
    * A cross-referencer for handling cross-references that are not covered by differences.
    * @generated NOT
    */
-  protected class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
+  protected static class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
     /** The serial version */
     private static final long serialVersionUID = 1L;
+
+    /** The non-null mapping this cross referencer is for */
+    protected final EMapping _mapping;
 
     /** The non-null role played by the scope to cross-reference */
     protected final Role _role;
 
     /**
      * Constructor
+     * @param mapping_p the non-null mapping this cross referencer is for
      * @param role_p a role which is TARGET or REFERENCE
      */
-    public ScopeCrossReferencer(Role role_p) {
+    public ScopeCrossReferencer(EMapping mapping_p, Role role_p) {
       super(Collections.emptyList());
+      _mapping = mapping_p;
       _role = role_p;
     }
 
@@ -243,8 +248,8 @@ public class EMappingImpl extends
     protected boolean crossReference(EObject element_p, EReference reference_p,
         EObject crossReferenced_p) {
       boolean result = false;
-      EMatch referencingMatch = getMatchFor(element_p, _role);
-      EMatch referencedMatch = getMatchFor(crossReferenced_p, _role);
+      EMatch referencingMatch = _mapping.getMatchFor(element_p, _role);
+      EMatch referencedMatch = _mapping.getMatchFor(crossReferenced_p, _role);
       // Unidirectional, modifiable cross-references between unmatched elements
       if (referencingMatch != null && referencedMatch != null) {
         result = referencingMatch.isPartial() && referencedMatch.isPartial();
@@ -309,7 +314,7 @@ public class EMappingImpl extends
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected TreeIterator<Notifier> newContentsIterator() {
-      return (TreeIterator) getComparison().getScope(_role).iterator();
+      return (TreeIterator) _mapping.getComparison().getScope(_role).iterator();
     }
 
     /**

@@ -14,8 +14,8 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.FeaturesViewer.FeaturesInput;
@@ -99,6 +99,7 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
    * @param input_p a non-null input object
    * @return a potentially null string
    */
+  @SuppressWarnings({ "rawtypes", "unchecked" })
   protected String getContextualText(FeaturesInput input_p) {
     Object element = getDrivingElement(input_p);
     boolean useTechnicalLabels =
@@ -113,10 +114,9 @@ public class EnhancedFeaturesViewer extends HeaderViewer<FeaturesViewer> {
       }
     } else {
       EMFDiffNode node = input_p.getContext();
-      IScopePolicy<?> scopePolicy =
-          node.getActualComparison().getScope(node.getDrivingRole()).getScopePolicy();
-      @SuppressWarnings({ "rawtypes", "unchecked" })
-      Object type = ((IScopePolicy)scopePolicy).getType(element);
+      IDataScope drivingScope = 
+          node.getActualComparison().getScope(node.getDrivingRole());
+      Object type = drivingScope.mGetType(element);
       ILabelProvider labelProvider = getLabelProvider();
       formattedTypeText = labelProvider.getText(type);
     }

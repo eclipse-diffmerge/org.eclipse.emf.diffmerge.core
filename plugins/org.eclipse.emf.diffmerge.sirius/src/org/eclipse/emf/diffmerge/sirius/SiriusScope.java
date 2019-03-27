@@ -244,16 +244,6 @@ public class SiriusScope extends GMFScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope#isContainment(java.lang.Object)
-   */
-  @Override
-  public boolean isContainment(Object reference_p) {
-    return
-        reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE ||
-        super.isContainment(reference_p);
-  }
-  
-  /**
    * Return whether the given element can be included in a Sirius resource
    * @param element_p a non-null element
    */
@@ -285,6 +275,16 @@ public class SiriusScope extends GMFScope {
   protected boolean isSuitableFor(Resource resource_p, EObject root_p) {
     boolean result = isSiriusResource(resource_p) == isSiriusElement(root_p);
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope#mIsContainmentReference(java.lang.Object)
+   */
+  @Override
+  public boolean mIsContainmentReference(Object reference_p) {
+    return
+        reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE ||
+        super.mIsContainmentReference(reference_p);
   }
   
   /**

@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativeDifference;
@@ -77,6 +76,7 @@ public class MergeLogEvent extends AbstractLogEvent {
    * @see org.eclipse.emf.diffmerge.ui.log.AbstractLogEvent#getRepresentation()
    */
   @Override
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public String getRepresentation() {
     StringBuilder builder = new StringBuilder();
     EMFDiffNode node = getDiffNode();
@@ -94,10 +94,9 @@ public class MergeLogEvent extends AbstractLogEvent {
         }
         if (match != null) {
           Object location = getNonNull(match, destination);
-          ITreeDataScope<?> sourceScope =
+          ITreeDataScope sourceScope =
               getDiffNode().getActualComparison().getScope(destination.opposite());
-          @SuppressWarnings({ "unchecked", "rawtypes" })
-          Object type = ((IScopePolicy)sourceScope.getScopePolicy()).getType(location);
+          Object type = sourceScope.mGetType(location);
           String typeName = getLabelProvider().getText(type);
           String name = getLabelProvider().getMatchText(
               match, destination, node.getEditingDomain());

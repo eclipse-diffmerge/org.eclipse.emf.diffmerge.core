@@ -19,9 +19,9 @@ import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence;
@@ -226,8 +226,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
    */
   public IReferenceValuePresence<E> getOpposite() {
     IReferenceValuePresence<E> result = null;
-    Object opposite = getPresenceScope().getScopePolicy()
-        .getOppositeReference(getFeature());
+    Object opposite = getPresenceScope().mGetOppositeReference(getFeature());
     if (opposite != null) {
       IMatch<E> valueMatch = getValueMatch();
       if (valueMatch != null) {
@@ -282,9 +281,9 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
   protected boolean hasStrongerOpposite() {
     boolean result = false;
     if (isManyFeature()) {
-      IScopePolicy<E> scopePolicy = getPresenceScope().getScopePolicy();
-      Object opposite = scopePolicy.getOppositeReference(getFeature());
-      result = opposite != null && !scopePolicy.isManyReference(opposite);
+      IDataScope<E> presenceScope = getPresenceScope();
+      Object opposite = presenceScope.mGetOppositeReference(getFeature());
+      result = opposite != null && !presenceScope.mIsManyReference(opposite);
     }
     return result;
   }
@@ -294,9 +293,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   public boolean isContainment() {
-    IEditableTreeDataScope<E> scope = getPresenceScope();
-    boolean result = scope.isContainment(getFeature());
-    return result;
+    return getPresenceScope().mIsContainmentReference(getFeature());
   }
 
   /**
@@ -305,7 +302,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
    */
   @Override
   public boolean isManyFeature() {
-    return getPresenceScope().getScopePolicy().isManyReference(getFeature());
+    return getPresenceScope().mIsManyReference(getFeature());
   }
 
   /**
@@ -314,8 +311,8 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
    */
   public boolean isOppositeOf(IReferenceValuePresence<E> peer_p) {
     return getPresenceRole() == peer_p.getPresenceRole()
-        && getPresenceScope().getScopePolicy()
-            .getOppositeReference(getFeature()) == peer_p.getFeature()
+        && getPresenceScope().mGetOppositeReference(getFeature()) == peer_p
+            .getFeature()
         && getElementMatch() == peer_p.getValueMatch()
         && getValueMatch() == peer_p.getElementMatch();
   }
@@ -325,8 +322,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
    * @generated NOT
    */
   public boolean isChangeableFeature() {
-    return getPresenceScope().getScopePolicy()
-        .isChangeableReference(getFeature());
+    return getPresenceScope().mIsChangeableReference(getFeature());
   }
 
   /**
@@ -375,11 +371,12 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
     assert sourceHolder != null && destinationHolder != null; // Otherwise order change would not have been detected
     assert getFeature() != null; // Order merge does not cover root containment at this time
     IEditableTreeDataScope<E> absenceScope = getAbsenceScope();
+    IEditableTreeDataScope<E> presenceScope = getPresenceScope();
     IMergePolicy<E> mergePolicy = getComparison().getLastMergePolicy();
     Role destination = getAbsenceRole();
     IMatch<E> holderMatch = getElementMatch();
     IComparison<E> owningComparison = getComparison();
-    List<E> sourceValues = getPresenceScope().getReferenceValues(sourceHolder,
+    List<E> sourceValues = presenceScope.getReferenceValues(sourceHolder,
         reference);
     for (int i = sourceValues.size() - 1; i >= 0; i--) {
       E sourceValue = sourceValues.get(i);
@@ -387,7 +384,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
           .getMatchFor(sourceValue, destination.opposite());
       boolean coverValue = valueMatch != null
           || getFeature() != null && getComparison().getLastDiffPolicy()
-              .coverOutOfScopeValue(sourceValue, getFeature());
+              .coverOutOfScopeValue(sourceValue, getFeature(), presenceScope);
       if (coverValue) {
         E destinationValue = valueMatch != null ? valueMatch.get(destination)
             : sourceValue;
@@ -413,6 +410,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
   @Override
   protected void mergeValueAddition() {
     IEditableTreeDataScope<E> absenceScope = getAbsenceScope();
+    IEditableTreeDataScope<E> presenceScope = getPresenceScope();
     E destinationHolder = getMatchOfHolder();
     IMatch<E> valueMatch = getValueMatch();
     E destinationValue;
@@ -438,7 +436,7 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
     IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
     IMergePolicy<E> mergePolicy = getComparison().getLastMergePolicy();
     if (diffPolicy != null && actuallyAdded
-        && diffPolicy.considerOrderedReference(getFeature())) {
+        && diffPolicy.considerOrderedReference(getFeature(), absenceScope)) {
       // Move added value if required
       int index = mergePolicy.getDesiredValuePosition(getComparison(),
           getAbsenceRole(), getElementMatch(), getFeature(), getValue());
@@ -449,8 +447,8 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
     }
     // ID enforcement
     if (cloned && actuallyAdded) {
-      mergePolicy.setID(getValue(), getPresenceScope(), destinationValue,
-          getAbsenceScope());
+      mergePolicy.setID(getValue(), presenceScope, destinationValue,
+          absenceScope);
     }
   }
 

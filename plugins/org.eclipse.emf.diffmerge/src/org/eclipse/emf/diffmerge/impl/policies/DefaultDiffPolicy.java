@@ -14,8 +14,7 @@ package org.eclipse.emf.diffmerge.impl.policies;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -24,24 +23,19 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 
 
 /**
- * A simple implementation of IDiffPolicy.
+ * A simple implementation of IDiffPolicy for model elements.
  * @see IDiffPolicy
  * @author Olivier Constant
  */
-public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
+public class DefaultDiffPolicy extends
+org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy<EObject> {
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#considerEqualOutOfScope(java.lang.Object, java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean considerEqual(Object value1_p, Object value2_p, Object attribute_p) {
-    return value1_p.equals(value2_p);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#considerEqualOutOfScope(java.lang.Object, java.lang.Object, java.lang.Object)
-   */
+  @Override
   public boolean considerEqualOutOfScope(EObject outOfScopeValue_p,
-      EObject candidate_p, Object reference_p) {
+      EObject candidate_p, Object reference_p, ITreeDataScope<EObject> scope_p) {
     boolean result = false;
     URI uri = EcoreUtil.getURI(outOfScopeValue_p);
     if (uri != null) {
@@ -52,9 +46,10 @@ public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#considerOrderedAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#considerOrderedAttribute(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean considerOrderedAttribute(Object attribute_p) {
+  @Override
+  public boolean considerOrderedAttribute(Object attribute_p, ITreeDataScope<EObject> scope_p) {
     return considerOrderedFeature((EStructuralFeature)attribute_p);
   }
   
@@ -67,31 +62,38 @@ public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#considerOrderedAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#considerOrderedReference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean considerOrderedReference(Object reference_p) {
+  @Override
+  public boolean considerOrderedReference(Object reference_p, ITreeDataScope<EObject> scope_p) {
     return reference_p != null && considerOrderedFeature((EStructuralFeature)reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#coverAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverAttribute(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean coverAttribute(Object attribute_p) {
-    EAttribute attribute = (EAttribute)attribute_p;
-    boolean result = !attribute.isDerived() && !FeatureMapUtil.isFeatureMap(attribute) &&
-        (coverTransientFeatures() || !attribute.isTransient()) &&
-        (coverIDAttributes() || !attribute.isID());
-    return result;
+  @Override
+  public boolean coverAttribute(Object attribute_p, ITreeDataScope<EObject> scope_p) {
+    return coverFeature((EStructuralFeature)attribute_p) &&
+        (coverIDAttributes() || !scope_p.mIsIDAttribute(attribute_p));
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#coverReference(java.lang.Object)
+   * Return whether the given feature must be covered by the difference
+   * detection algorithm
+   * @param feature_p a non-null feature
    */
-  public boolean coverReference(Object reference_p) {
-    EReference reference = (EReference)reference_p;
-    boolean result = !reference.isDerived() && !FeatureMapUtil.isFeatureMap(reference) &&
-        (coverTransientFeatures() || !reference.isTransient());
-    return result;
+  protected boolean coverFeature(EStructuralFeature feature_p) {
+    return !feature_p.isDerived() && !FeatureMapUtil.isFeatureMap(feature_p) &&
+        (coverTransientFeatures() || !feature_p.isTransient());
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverReference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
+   */
+  @Override
+  public boolean coverReference(Object reference_p, ITreeDataScope<EObject> scope_p) {
+    return coverFeature((EReference)reference_p);
   }
   
   /**
@@ -102,10 +104,11 @@ public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.generic.api.IMatch)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.generic.api.IMatch)
    */
+  @Override
   public boolean coverMatch(IMatch<EObject> match_p) {
-    boolean result = match_p.coversRole(Role.TARGET) || match_p.coversRole(Role.REFERENCE);
+    boolean result = super.coverMatch(match_p);
     if (result && !coverTransientFeatures() && match_p.isPartial()) {
       // Ignore elements owned by a transient containment
       EObject element = match_p.get(match_p.getUncoveredRole().opposite());
@@ -118,9 +121,11 @@ public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#coverOutOfScopeValue(java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverOutOfScopeValue(java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
-  public boolean coverOutOfScopeValue(EObject element_p, Object reference_p) {
+  @Override
+  public boolean coverOutOfScopeValue(EObject element_p, Object reference_p,
+      ITreeDataScope<EObject> scope_p) {
     EReference reference = (EReference)reference_p;
     return !reference.isContainment() && !reference.isContainer() &&
         !reference.isTransient() && isPluginElement(element_p);
@@ -130,13 +135,6 @@ public class DefaultDiffPolicy implements IDiffPolicy<EObject> {
    * Return whether transient (non-serialized) features must be covered
    */
   protected boolean coverTransientFeatures() {
-    return true;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDiffPolicy#coverValue(java.lang.Object, java.lang.Object)
-   */
-  public boolean coverValue(Object value_p, Object attribute_p) {
     return true;
   }
   

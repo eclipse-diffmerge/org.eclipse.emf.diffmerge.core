@@ -494,7 +494,7 @@ IUserPropertyOwner {
     IComparison<?> comparison = getActualComparison();
     if (comparison != null) {
       ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
-      result = scope.getScopePolicy().isContainerReference(reference_p);
+      result = scope.mIsContainerReference(reference_p);
     }
     return result;
   }
@@ -508,7 +508,7 @@ IUserPropertyOwner {
     IComparison<?> comparison = getActualComparison();
     if (comparison != null) {
       ITreeDataScope<?> scope = comparison.getScope(getDrivingRole());
-      result = scope.isContainment(reference_p);
+      result = scope.mIsContainmentReference(reference_p);
     }
     return result;
   }

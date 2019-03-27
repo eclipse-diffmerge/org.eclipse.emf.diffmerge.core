@@ -50,8 +50,9 @@ implements IPersistentModelScope.Editable {
    * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
    */
   public boolean add(EObject element_p) {
-    if (element_p != getRoot() && getHoldingResource() != null)
+    if (element_p != getRoot() && getHoldingResource() != null) {
       getHoldingResource().getContents().add(element_p);
+    }
     // The element does not belong to the scope after execution
     return false;
   }

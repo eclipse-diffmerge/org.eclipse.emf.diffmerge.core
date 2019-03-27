@@ -21,10 +21,6 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("javadoc")
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.messages"; //$NON-NLS-1$
-  public static String AbstractDifference_UnableToMerge;
-  public static String DiffBuilder_NoMatch;
-  public static String DiffBuilder_Task_Main;
-  public static String Comparison_Task_Main;
   public static String ConfigurableMatchPolicy_Criterion_QNames_Labels;
   public static String ConfigurableMatchPolicy_Criterion_QNames_Labels_Tooltip;
   public static String ConfigurableMatchPolicy_Criterion_Semantics_DefaultContents;
@@ -35,10 +31,6 @@ public class Messages extends NLS {
   public static String ConfigurableMatchPolicy_Criterion_Structure_UnambiguousChildren_Tooltip;
   public static String ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren;
   public static String ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren_Tooltip;
-  public static String MatchBuilder_Task_Main;
-  public static String MatchBuilder_Task_MappingIDs;
-  public static String MatchBuilder_Task_RegisteringIDs;
-  public static String MergeOperation_Name;
   static {
     // initialize resource bundle
     NLS.initializeMessages(BUNDLE_NAME, Messages.class);

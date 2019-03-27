@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
@@ -223,6 +222,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @param match_p a non-null match
      * @return a non-null, potentially empty, modifiable list
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected List<Object> getAllAttributes(IMatch<?> match_p) {
       Role elementSide = getInput().getContext().getDrivingRole();
       Object element = match_p.get(elementSide);
@@ -231,10 +231,9 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
         element = match_p.get(elementSide);
       }
       assert element != null; // An IMatch may not have null elements for both roles
-      ITreeDataScope<?> sideScope =
+      ITreeDataScope sideScope =
           getInput().getContext().getActualComparison().getScope(elementSide);
-      @SuppressWarnings({ "unchecked", "rawtypes" })
-      List<Object> result = ((IScopePolicy)sideScope.getScopePolicy()).getAttributes(element);
+      List<Object> result = sideScope.mGetAttributes(element);
       return result;
     }
     /**
@@ -242,6 +241,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @param match_p a non-null match
      * @return a non-null, potentially empty, modifiable list
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     protected List<Object> getAllReferences(IMatch<?> match_p) {
       Role elementSide = getInput().getContext().getDrivingRole();
       Object element = match_p.get(elementSide);
@@ -250,10 +250,9 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
         element = match_p.get(elementSide);
       }
       assert element != null; // An IMatch may not have null elements for both roles
-      ITreeDataScope<?> sideScope =
+      ITreeDataScope sideScope =
           getInput().getContext().getActualComparison().getScope(elementSide);
-      @SuppressWarnings({ "unchecked", "rawtypes" })
-      List<Object> candidates = ((IScopePolicy)sideScope.getScopePolicy()).getReferences(element);
+      List<Object> candidates = sideScope.mGetReferences(element);
       List<Object> result = new LinkedList<Object>();
       for (Object candidate : candidates) {
         if (qualifies(candidate) || match_p.getReferenceOrderDifference(candidate, elementSide) != null) {

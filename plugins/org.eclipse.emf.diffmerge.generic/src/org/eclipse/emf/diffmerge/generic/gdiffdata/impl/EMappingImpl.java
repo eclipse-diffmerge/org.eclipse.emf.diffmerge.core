@@ -391,8 +391,9 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
     assert element_p != null && role_p != null;
     IMatch<E> previous = getMatchFor(element_p, role_p);
     // Enforce consistency by removing previous match if any
-    if (previous != null)
+    if (previous != null) {
       getModifiableContents().remove(previous);
+    }
     @SuppressWarnings("unchecked")
     EMatch<E, A, R> result = (EMatch<E, A, R>) getComparison().newMatch(
         (Role.TARGET == role_p ? element_p : null),

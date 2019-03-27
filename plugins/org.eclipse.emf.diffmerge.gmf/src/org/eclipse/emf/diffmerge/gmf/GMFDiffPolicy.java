@@ -13,7 +13,9 @@ package org.eclipse.emf.diffmerge.gmf;
 
 import java.util.List;
 
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.gmf.runtime.notation.datatype.RelativeBendpoint;
@@ -30,11 +32,12 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
       NotationPackage.eINSTANCE.getView().getEStructuralFeature("children"); //$NON-NLS-1$
   
   /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
-  public boolean considerEqual(Object value1_p, Object value2_p, Object attribute_p) {
-    boolean result = super.considerEqual(value1_p, value2_p, attribute_p);
+  public boolean considerEqual(Object value1_p, Object value2_p, Object attribute_p,
+      ITreeDataScope<EObject> scope_p) {
+    boolean result = super.considerEqual(value1_p, value2_p, attribute_p, scope_p);
     if (!result) {
       if (NotationPackage.eINSTANCE.getRelativeBendpoints_Points().equals(attribute_p))
         result = equalPoints((List<?>)value1_p, (List<?>)value2_p);

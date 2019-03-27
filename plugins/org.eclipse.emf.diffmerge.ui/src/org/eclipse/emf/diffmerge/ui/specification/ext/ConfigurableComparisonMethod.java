@@ -30,6 +30,7 @@ import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
+import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.impl.policies.ComparisonConfigurator;
@@ -37,7 +38,6 @@ import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy.FineGrainedMatchCriterion;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMergePolicy;
-import org.eclipse.emf.diffmerge.impl.policies.DefaultMatchPolicy;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -229,25 +229,23 @@ implements IComparisonConfigurator.Provider {
     // Match policy
     IMatchPolicy<EObject> originalMatchPolicy = getMatchPolicy();
     ConfigurableMatchPolicy configuredMatchPolicy = data_p.getMatchPolicy();
-    if (originalMatchPolicy instanceof ConfigurableMatchPolicy &&
+    if (originalMatchPolicy instanceof IConfigurablePolicy &&
         configuredMatchPolicy != null) {
-      ((ConfigurableMatchPolicy)originalMatchPolicy).update(configuredMatchPolicy);
-    } else if (originalMatchPolicy instanceof DefaultMatchPolicy) {
-      ((DefaultMatchPolicy)originalMatchPolicy).setKeepMatchIDs(data_p.isKeepMatchIDs());
+      ((IConfigurablePolicy)originalMatchPolicy).update(configuredMatchPolicy);
     }
     // Diff policy
     IDiffPolicy<EObject> originalDiffPolicy = getDiffPolicy();
     ConfigurableDiffPolicy configuredDiffPolicy = data_p.getDiffPolicy();
-    if (originalDiffPolicy instanceof ConfigurableDiffPolicy &&
+    if (originalDiffPolicy instanceof IConfigurablePolicy &&
         configuredDiffPolicy != null) {
-      ((ConfigurableDiffPolicy)originalDiffPolicy).update(configuredDiffPolicy);
+      ((IConfigurablePolicy)originalDiffPolicy).update(configuredDiffPolicy);
     }
     // Merge policy
     IMergePolicy<EObject> originalMergePolicy = getMergePolicy();
     ConfigurableMergePolicy configuredMergePolicy = data_p.getMergePolicy();
-    if (originalMergePolicy instanceof ConfigurableMergePolicy &&
+    if (originalMergePolicy instanceof IConfigurablePolicy &&
         configuredMergePolicy != null) {
-      ((ConfigurableMergePolicy)originalMergePolicy).update(configuredMergePolicy);
+      ((IConfigurablePolicy)originalMergePolicy).update(configuredMergePolicy);
     }
   }
   

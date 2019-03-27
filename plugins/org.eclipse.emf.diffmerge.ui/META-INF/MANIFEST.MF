@@ -12,10 +12,11 @@ Require-Bundle: org.eclipse.compare;visibility:=reexport,
  org.eclipse.emf.ecore.edit,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.emf.workspace,
- org.eclipse.emf.diffmerge;visibility:=reexport,
- org.eclipse.emf.diffmerge.generic;visibility:=reexport
+ org.eclipse.emf.diffmerge.generic;visibility:=reexport,
+ org.eclipse.emf.diffmerge;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true

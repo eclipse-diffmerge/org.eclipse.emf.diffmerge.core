@@ -12,6 +12,7 @@
 package org.eclipse.emf.diffmerge.generic.api.diff;
 
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 
 
 /**
@@ -25,9 +26,17 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 public interface IPresenceDifference<E> extends IDifference<E> {
   
   /**
-   * Return the role in which presence is effective.
+   * Return the role in which the presence is effective
    * @return Role.TARGET or Role.REFERENCE
    */
   Role getPresenceRole();
+  
+  /**
+   * Return the data scope in which the presence is effective
+   * @return a non-null scope
+   */
+  default ITreeDataScope<E> getPresenceScope() {
+    return getComparison().getScope(getPresenceRole());
+  }
   
 }

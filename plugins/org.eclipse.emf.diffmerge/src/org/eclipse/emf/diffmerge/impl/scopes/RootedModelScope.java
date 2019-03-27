@@ -68,7 +68,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   @Override
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     boolean result = super.add(source_p, reference_p, value_p);
-    if (result && isContainment(reference_p)) {
+    if (result && mIsContainmentReference(reference_p)) {
       _roots.remove(value_p);
     }
     return result;
@@ -112,8 +112,9 @@ public class RootedModelScope extends AbstractEditableModelScope {
   public boolean remove(EObject element_p) {
     // Must be called by redefinitions in subclasses
     boolean result = super.remove(element_p);
-    if (result)
+    if (result) {
       _roots.remove(element_p);
+    }
     return result;
   }
   

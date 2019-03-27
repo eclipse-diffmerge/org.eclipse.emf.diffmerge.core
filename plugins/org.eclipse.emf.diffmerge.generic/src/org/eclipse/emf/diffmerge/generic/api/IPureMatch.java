@@ -11,6 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api;
 
+import static org.eclipse.emf.diffmerge.generic.api.Role.ANCESTOR;
+import static org.eclipse.emf.diffmerge.generic.api.Role.REFERENCE;
+import static org.eclipse.emf.diffmerge.generic.api.Role.TARGET;
 
 /**
  * A match between data elements that play different roles in a comparison.
@@ -106,7 +109,12 @@ public interface IPureMatch<E> {
      * @param reference_p the optional element on the REFERENCE side
      * @param ancestor_p the optional element on the ANCESTOR side
      */
-    void reset(E target_p, E reference_p, E ancestor_p);
+    default void reset(E target_p, E reference_p, E ancestor_p) {
+      assert target_p != null || reference_p != null || ancestor_p != null;
+      set(TARGET, target_p);
+      set(REFERENCE, reference_p);
+      set(ANCESTOR, ancestor_p);
+    }
     
     /**
      * Set the given role to the given element

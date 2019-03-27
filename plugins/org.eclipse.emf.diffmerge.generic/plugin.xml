@@ -18,7 +18,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated GDiffData -->
       <package
-            uri="http://www.eclipse.org/emf/diffmerge/generic/1.0.0/diffdata"
+            uri="http://www.eclipse.org/emf/diffmerge/generic/gdiffdata/1.0.0"
             class="org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage"
             genModel="model/GDiffData.genmodel"/>
    </extension>
