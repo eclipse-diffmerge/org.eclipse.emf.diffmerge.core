@@ -1,49 +1,47 @@
-/*********************************************************************
- * Copyright (c) 2010-2018 Thales Global Services S.A.S.
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Contributors:
- *    Thales Global Services S.A.S. - initial API and implementation
- **********************************************************************/
+/**
+ */
 package org.eclipse.emf.diffmerge.diffdata.impl;
+
+import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.BasicEMap;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
+
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-import org.eclipse.emf.ecore.util.EcoreEMap;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Attribute To Value To Difference Entry</b></em>'.
+ * An implementation of the model object '<em><b>Attribute To Difference Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl#getTypedKey <em>Key</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl#getTypedValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl#getTypedKey <em>Key</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
-    implements
-    BasicEMap.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> {
+public class AttributeToDifferenceEntryImpl extends EObjectImpl implements
+    BasicEMap.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>> {
   /**
    * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference.
    * <!-- begin-user-doc -->
@@ -55,21 +53,21 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
   protected EAttribute key;
 
   /**
-   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' map.
+   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTypedValue()
    * @generated
    * @ordered
    */
-  protected EMap<Object, IAttributeValuePresence<EObject>> value;
+  protected EList<IAttributeValuePresence<EObject>> value;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected AttributeToValueToDifferenceEntryImpl() {
+  protected AttributeToDifferenceEntryImpl() {
     super();
   }
 
@@ -80,7 +78,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    */
   @Override
   protected EClass eStaticClass() {
-    return DiffdataPackage.Literals.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY;
+    return DiffdataPackage.Literals.ATTRIBUTE_TO_DIFFERENCE_ENTRY;
   }
 
   /**
@@ -95,8 +93,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
       if (key != oldKey) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-              DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY,
-              oldKey, key));
+              DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY, oldKey, key));
       }
     }
     return key;
@@ -121,8 +118,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
     key = newKey;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY, oldKey,
-          key));
+          DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY, oldKey, key));
   }
 
   /**
@@ -130,12 +126,11 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence<EObject>> getTypedValue() {
+  public EList<IAttributeValuePresence<EObject>> getTypedValue() {
     if (value == null) {
-      value = new EcoreEMap<Object, IAttributeValuePresence<EObject>>(
-          DiffdataPackage.Literals.VALUE_TO_DIFFERENCE_ENTRY,
-          ValueToDifferenceEntryImpl.class, this,
-          DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE);
+      value = new EObjectContainmentEList<IAttributeValuePresence<EObject>>(
+          IAttributeValuePresence.class, this,
+          DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE);
     }
     return value;
   }
@@ -149,7 +144,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
   public NotificationChain eInverseRemove(InternalEObject otherEnd,
       int featureID, NotificationChain msgs) {
     switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
       return ((InternalEList<?>) getTypedValue()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -163,15 +158,12 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY:
       if (resolve)
         return getTypedKey();
       return basicGetTypedKey();
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE:
-      if (coreType)
-        return getTypedValue();
-      else
-        return getTypedValue().map();
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
+      return getTypedValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -181,14 +173,17 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY:
       setTypedKey((EAttribute) newValue);
       return;
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE:
-      ((EStructuralFeature.Setting) getTypedValue()).set(newValue);
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
+      getTypedValue().clear();
+      getTypedValue().addAll(
+          (Collection<? extends IAttributeValuePresence<EObject>>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -202,10 +197,10 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY:
       setTypedKey((EAttribute) null);
       return;
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
       getTypedValue().clear();
       return;
     }
@@ -220,9 +215,9 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY:
       return key != null;
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE:
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
       return value != null && !value.isEmpty();
     }
     return super.eIsSet(featureID);
@@ -280,7 +275,7 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence<EObject>> getValue() {
+  public EList<IAttributeValuePresence<EObject>> getValue() {
     return getTypedValue();
   }
 
@@ -289,9 +284,9 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IAttributeValuePresence<EObject>> setValue(
-      EMap<Object, IAttributeValuePresence<EObject>> value) {
-    EMap<Object, IAttributeValuePresence<EObject>> oldValue = getValue();
+  public EList<IAttributeValuePresence<EObject>> setValue(
+      EList<IAttributeValuePresence<EObject>> value) {
+    EList<IAttributeValuePresence<EObject>> oldValue = getValue();
     getTypedValue().clear();
     getTypedValue().addAll(value);
     return oldValue;
@@ -303,11 +298,11 @@ public class AttributeToValueToDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getEMap() {
+  public EMap<EAttribute, EList<IAttributeValuePresence<EObject>>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>) container
+        : (EMap<EAttribute, EList<IAttributeValuePresence<EObject>>>) container
             .eGet(eContainmentFeature());
   }
 
-} //AttributeToValueToDifferenceEntryImpl
+} //AttributeToDifferenceEntryImpl

@@ -103,7 +103,8 @@ public class MatchAndFeatureImpl extends EObjectImpl
    * @param feature_p a non-null feature
    * @generated NOT
    */
-  public MatchAndFeatureImpl(IMatch<?> match_p, Object feature_p, boolean isAttribute_p) {
+  public MatchAndFeatureImpl(IMatch<?> match_p, Object feature_p,
+      boolean isAttribute_p) {
     match = match_p;
     feature = feature_p;
     attribute = isAttribute_p;

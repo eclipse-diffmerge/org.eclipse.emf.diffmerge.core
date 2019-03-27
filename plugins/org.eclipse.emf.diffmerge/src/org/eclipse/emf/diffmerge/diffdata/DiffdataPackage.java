@@ -1200,14 +1200,14 @@ public interface DiffdataPackage extends EPackage {
       + 2;
 
   /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl <em>Attribute To Difference Entry</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getAttributeToValueToDifferenceEntry()
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl
+   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getAttributeToDifferenceEntry()
    * @generated
    */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = 10;
+  int ATTRIBUTE_TO_DIFFERENCE_ENTRY = 10;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1216,62 +1216,25 @@ public interface DiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY = 0;
+  int ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' map.
+   * The feature id for the '<em><b>Value</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE = 1;
+  int ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE = 1;
 
   /**
-   * The number of structural features of the '<em>Attribute To Value To Difference Entry</em>' class.
+   * The number of structural features of the '<em>Attribute To Difference Entry</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl <em>Value To Difference Entry</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl
-   * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getValueToDifferenceEntry()
-   * @generated
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY = 11;
-
-  /**
-   * The feature id for the '<em><b>Key</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY__KEY = 0;
-
-  /**
-   * The feature id for the '<em><b>Value</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY__VALUE = 1;
-
-  /**
-   * The number of structural features of the '<em>Value To Difference Entry</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int VALUE_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
+  int ATTRIBUTE_TO_DIFFERENCE_ENTRY_FEATURE_COUNT = 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.ReferenceToElementToDifferenceEntryImpl <em>Reference To Element To Difference Entry</em>}' class.
@@ -1281,7 +1244,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getReferenceToElementToDifferenceEntry()
    * @generated
    */
-  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = 12;
+  int REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY = 11;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1318,7 +1281,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getReferenceToOrderDifferenceEntry()
    * @generated
    */
-  int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY = 13;
+  int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY = 12;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1355,7 +1318,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getElementToDifferenceEntry()
    * @generated
    */
-  int ELEMENT_TO_DIFFERENCE_ENTRY = 14;
+  int ELEMENT_TO_DIFFERENCE_ENTRY = 13;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' reference.
@@ -1392,7 +1355,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getSetting()
    * @generated
    */
-  int SETTING = 15;
+  int SETTING = 14;
 
   /**
    * The meta object id for the '<em>IEditable Model Scope</em>' data type.
@@ -1402,7 +1365,7 @@ public interface DiffdataPackage extends EPackage {
    * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getIEditableModelScope()
    * @generated
    */
-  int IEDITABLE_MODEL_SCOPE = 16;
+  int IEDITABLE_MODEL_SCOPE = 15;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.diffdata.EComparison <em>EComparison</em>}'.
@@ -1615,16 +1578,16 @@ public interface DiffdataPackage extends EPackage {
   EReference getEReferenceValuePresence_Value();
 
   /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute To Value To Difference Entry</em>}'.
+   * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Attribute To Value To Difference Entry</em>'.
+   * @return the meta object for class '<em>Attribute To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyType="org.eclipse.emf.ecore.EAttribute" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;&gt;"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueContainment="true" valueMany="true"
    * @generated
    */
-  EClass getAttributeToValueToDifferenceEntry();
+  EClass getAttributeToDifferenceEntry();
 
   /**
    * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Key</em>}'.
@@ -1632,55 +1595,21 @@ public interface DiffdataPackage extends EPackage {
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Key</em>'.
    * @see java.util.Map.Entry
-   * @see #getAttributeToValueToDifferenceEntry()
+   * @see #getAttributeToDifferenceEntry()
    * @generated
    */
-  EReference getAttributeToValueToDifferenceEntry_Key();
+  EReference getAttributeToDifferenceEntry_Key();
 
   /**
-   * Returns the meta object for the map '{@link java.util.Map.Entry <em>Value</em>}'.
+   * Returns the meta object for the containment reference list '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the map '<em>Value</em>'.
+   * @return the meta object for the containment reference list '<em>Value</em>'.
    * @see java.util.Map.Entry
-   * @see #getAttributeToValueToDifferenceEntry()
+   * @see #getAttributeToDifferenceEntry()
    * @generated
    */
-  EReference getAttributeToValueToDifferenceEntry_Value();
-
-  /**
-   * Returns the meta object for class '{@link java.util.Map.Entry <em>Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Value To Difference Entry</em>'.
-   * @see java.util.Map.Entry
-   * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueRequired="true"
-   * @generated
-   */
-  EClass getValueToDifferenceEntry();
-
-  /**
-   * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Key</em>'.
-   * @see java.util.Map.Entry
-   * @see #getValueToDifferenceEntry()
-   * @generated
-   */
-  EAttribute getValueToDifferenceEntry_Key();
-
-  /**
-   * Returns the meta object for the reference '{@link java.util.Map.Entry <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Value</em>'.
-   * @see java.util.Map.Entry
-   * @see #getValueToDifferenceEntry()
-   * @generated
-   */
-  EReference getValueToDifferenceEntry_Value();
+  EReference getAttributeToDifferenceEntry_Value();
 
   /**
    * Returns the meta object for class '{@link java.util.Map.Entry <em>Reference To Element To Difference Entry</em>}'.
@@ -2016,15 +1945,15 @@ public interface DiffdataPackage extends EPackage {
         .getEReferenceValuePresence_Value();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl <em>Attribute To Value To Difference Entry</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl <em>Attribute To Difference Entry</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.diffdata.impl.AttributeToValueToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getAttributeToValueToDifferenceEntry()
+     * @see org.eclipse.emf.diffmerge.diffdata.impl.AttributeToDifferenceEntryImpl
+     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getAttributeToDifferenceEntry()
      * @generated
      */
-    EClass ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY = eINSTANCE
-        .getAttributeToValueToDifferenceEntry();
+    EClass ATTRIBUTE_TO_DIFFERENCE_ENTRY = eINSTANCE
+        .getAttributeToDifferenceEntry();
 
     /**
      * The meta object literal for the '<em><b>Key</b></em>' reference feature.
@@ -2032,45 +1961,17 @@ public interface DiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getAttributeToValueToDifferenceEntry_Key();
+    EReference ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
+        .getAttributeToDifferenceEntry_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' map feature.
+     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getAttributeToValueToDifferenceEntry_Value();
-
-    /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl <em>Value To Difference Entry</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.diffdata.impl.ValueToDifferenceEntryImpl
-     * @see org.eclipse.emf.diffmerge.diffdata.impl.DiffdataPackageImpl#getValueToDifferenceEntry()
-     * @generated
-     */
-    EClass VALUE_TO_DIFFERENCE_ENTRY = eINSTANCE.getValueToDifferenceEntry();
-
-    /**
-     * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute VALUE_TO_DIFFERENCE_ENTRY__KEY = eINSTANCE
-        .getValueToDifferenceEntry_Key();
-
-    /**
-     * The meta object literal for the '<em><b>Value</b></em>' reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference VALUE_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
-        .getValueToDifferenceEntry_Value();
+    EReference ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE = eINSTANCE
+        .getAttributeToDifferenceEntry_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.diffdata.impl.ReferenceToElementToDifferenceEntryImpl <em>Reference To Element To Difference Entry</em>}' class.

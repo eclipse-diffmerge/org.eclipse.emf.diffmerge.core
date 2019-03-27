@@ -749,9 +749,9 @@ public class ComparisonSelectionImpl extends EObjectImpl
           treePathContents.addFirst(treeNode);
           Object element = treeNode.get(role);
           Object parent = (element == null) ? null
-              : ((ITreeDataScope)scope).getContainer(element);
+              : ((ITreeDataScope) scope).getContainer(element);
           treeNode = (parent == null) ? null
-              : ((IMapping)mapping).getMatchFor(parent, role);
+              : ((IMapping) mapping).getMatchFor(parent, role);
         }
         result = UIUtil.toTreePath(treePathContents);
       }

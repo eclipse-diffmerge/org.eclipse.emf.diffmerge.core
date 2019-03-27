@@ -329,19 +329,10 @@ public class DiffdataSwitch<T> {
         result = defaultCase(theEObject);
       return result;
     }
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY: {
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> attributeToValueToDifferenceEntry = (Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>) theEObject;
-      T result = caseAttributeToValueToDifferenceEntry(
-          attributeToValueToDifferenceEntry);
-      if (result == null)
-        result = defaultCase(theEObject);
-      return result;
-    }
-    case DiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY: {
-      @SuppressWarnings("unchecked")
-      Map.Entry<Object, IAttributeValuePresence<EObject>> valueToDifferenceEntry = (Map.Entry<Object, IAttributeValuePresence<EObject>>) theEObject;
-      T result = caseValueToDifferenceEntry(valueToDifferenceEntry);
+      Map.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>> attributeToDifferenceEntry = (Map.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>>) theEObject;
+      T result = caseAttributeToDifferenceEntry(attributeToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
       return result;
@@ -814,34 +805,18 @@ public class DiffdataSwitch<T> {
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Attribute To Value To Difference Entry</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Attribute To Difference Entry</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Attribute To Value To Difference Entry</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Attribute To Difference Entry</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseAttributeToValueToDifferenceEntry(
-      Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> object) {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Value To Difference Entry</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Value To Difference Entry</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseValueToDifferenceEntry(
-      Map.Entry<Object, IAttributeValuePresence<EObject>> object) {
+  public T caseAttributeToDifferenceEntry(
+      Map.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>> object) {
     return null;
   }
 

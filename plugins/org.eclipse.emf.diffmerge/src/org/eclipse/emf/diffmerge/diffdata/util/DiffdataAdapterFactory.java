@@ -143,15 +143,9 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
     }
 
     @Override
-    public Adapter caseAttributeToValueToDifferenceEntry(
-        Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> object) {
-      return createAttributeToValueToDifferenceEntryAdapter();
-    }
-
-    @Override
-    public Adapter caseValueToDifferenceEntry(
-        Map.Entry<Object, IAttributeValuePresence<EObject>> object) {
-      return createValueToDifferenceEntryAdapter();
+    public Adapter caseAttributeToDifferenceEntry(
+        Map.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>> object) {
+      return createAttributeToDifferenceEntryAdapter();
     }
 
     @Override
@@ -462,7 +456,7 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Attribute To Value To Difference Entry</em>}'.
+   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Attribute To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
    * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -471,21 +465,7 @@ public class DiffdataAdapterFactory extends AdapterFactoryImpl {
    * @see java.util.Map.Entry
    * @generated
    */
-  public Adapter createAttributeToValueToDifferenceEntryAdapter() {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Value To Difference Entry</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see java.util.Map.Entry
-   * @generated
-   */
-  public Adapter createValueToDifferenceEntryAdapter() {
+  public Adapter createAttributeToDifferenceEntryAdapter() {
     return null;
   }
 

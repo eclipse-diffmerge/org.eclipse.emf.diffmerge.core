@@ -88,18 +88,6 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   protected Object matchID = MATCH_ID_EDEFAULT;
 
   /**
-   * A constant key representing order in the TARGET side in (attribute, value presence) maps
-   * @generated NOT
-   */
-  protected static final Object ATTRIBUTE_ORDER_KEY_TARGET = new Object();
-
-  /**
-   * A constant key representing order in the REFERENCE side in (attribute, value presence) maps
-   * @generated NOT
-   */
-  protected static final Object ATTRIBUTE_ORDER_KEY_REFERENCE = new Object();
-
-  /**
    * The cached value of the '{@link #getModifiableRelatedDifferences() <em>Modifiable Related Differences</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -561,23 +549,14 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   @SuppressWarnings("unchecked")
   protected void addAttributeValuePresence(
       IAttributeValuePresence<E> presence_p) {
-    EMap<A, EMap<Object, IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
+    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
         true);
-    EMap<Object, IAttributeValuePresence<E>> forAttribute = attributeMap
+    EList<IAttributeValuePresence<E>> forAttribute = attributeMap
         .get(presence_p.getFeature());
     if (forAttribute == null) {
-      forAttribute = newAttributeValueToPresenceMap(
-          (A) presence_p.getFeature());
+      forAttribute = newAttributeValuePresenceList((A) presence_p.getFeature());
     }
-    Object key;
-    if (presence_p.isOrder()) {
-      key = presence_p.getPresenceRole() == Role.TARGET
-          ? ATTRIBUTE_ORDER_KEY_TARGET
-          : ATTRIBUTE_ORDER_KEY_REFERENCE;
-    } else {
-      key = presence_p.getValue();
-    }
-    forAttribute.put(key, presence_p);
+    forAttribute.add(presence_p);
   }
 
   /**
@@ -742,10 +721,10 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
       Object attribute_p) {
     Collection<IAttributeValuePresence<E>> result = null;
     if (getModifiableAttributeMap(false) != null) {
-      EMap<Object, IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
+      EList<IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
           false).get(attribute_p);
       if (forAttribute != null) {
-        result = Collections.unmodifiableCollection(forAttribute.values());
+        result = Collections.unmodifiableCollection(forAttribute);
       }
     }
     if (result == null) {
@@ -761,15 +740,18 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   public IAttributeValuePresence<E> getAttributeOrderDifference(
       Object attribute_p, Role role_p) {
     IAttributeValuePresence<E> result = null;
-    EMap<A, EMap<Object, IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
+    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
         false);
     if (attributeMap != null) {
-      EMap<Object, IAttributeValuePresence<E>> forAttribute = attributeMap
+      List<IAttributeValuePresence<E>> forAttribute = attributeMap
           .get(attribute_p);
       if (forAttribute != null) {
-        result = forAttribute
-            .get(role_p == Role.TARGET ? ATTRIBUTE_ORDER_KEY_TARGET
-                : ATTRIBUTE_ORDER_KEY_REFERENCE);
+        for (IAttributeValuePresence<E> current : forAttribute) {
+          if (current.isOrder() && current.getPresenceRole() == role_p) {
+            result = current;
+            break;
+          }
+        }
       }
     }
     return result;
@@ -783,10 +765,15 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
       Object attribute_p, Object value_p) {
     IAttributeValuePresence<E> result = null;
     if (getModifiableAttributeMap(false) != null) {
-      EMap<Object, IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
+      List<IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
           false).get(attribute_p);
       if (forAttribute != null) {
-        result = forAttribute.get(value_p);
+        for (IAttributeValuePresence<E> current : forAttribute) {
+          if (value_p.equals(current.getValue())) {
+            result = current;
+            break;
+          }
+        }
       }
     }
     return result;
@@ -813,7 +800,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @return a modifiable map which is not null if create_p
    * @generated NOT
    */
-  protected abstract EMap<A, EMap<Object, IAttributeValuePresence<E>>> getModifiableAttributeMap(
+  protected abstract EMap<A, EList<IAttributeValuePresence<E>>> getModifiableAttributeMap(
       boolean create_p);
 
   /**
@@ -1059,12 +1046,13 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * Create and return a map for: attribute value -> difference
+   * Create and return a list for storing attribute value presences, and add it
+   * to the modifiable attribute value presence map
    * @param attribute_p the non-null attribute
    * @return a non-null, empty, modifiable map
    * @generated NOT
    */
-  protected abstract EMap<Object, IAttributeValuePresence<E>> newAttributeValueToPresenceMap(
+  protected abstract EList<IAttributeValuePresence<E>> newAttributeValuePresenceList(
       A attribute_p);
 
   /**
@@ -1074,7 +1062,7 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null, empty, modifiable map
    * @generated NOT
    */
-  protected abstract List<IReferenceValuePresence<E>> newReferenceOrderDifferenceList(
+  protected abstract EList<IReferenceValuePresence<E>> newReferenceOrderDifferenceList(
       R reference_p);
 
   /**

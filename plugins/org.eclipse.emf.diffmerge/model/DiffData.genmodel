@@ -65,13 +65,9 @@
       <genOperations ecoreOperation="DiffData.ecore#//EReferenceValuePresence/getSymmetricalOwnership"/>
       <genOperations ecoreOperation="DiffData.ecore#//EReferenceValuePresence/getValueMatch"/>
     </genClasses>
-    <genClasses ecoreClass="DiffData.ecore#//AttributeToValueToDifferenceEntry">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToValueToDifferenceEntry/key"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToValueToDifferenceEntry/value"/>
-    </genClasses>
-    <genClasses ecoreClass="DiffData.ecore#//ValueToDifferenceEntry">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DiffData.ecore#//ValueToDifferenceEntry/key"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ValueToDifferenceEntry/value"/>
+    <genClasses ecoreClass="DiffData.ecore#//AttributeToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DiffData.ecore#//AttributeToDifferenceEntry/value"/>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//ReferenceToElementToDifferenceEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//ReferenceToElementToDifferenceEntry/key"/>

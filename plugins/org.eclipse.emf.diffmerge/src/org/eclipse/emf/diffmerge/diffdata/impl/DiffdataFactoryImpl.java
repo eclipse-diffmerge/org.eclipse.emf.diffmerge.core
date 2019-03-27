@@ -93,10 +93,8 @@ public class DiffdataFactoryImpl extends EFactoryImpl
       return createEAttributeValuePresence();
     case DiffdataPackage.EREFERENCE_VALUE_PRESENCE:
       return createEReferenceValuePresence();
-    case DiffdataPackage.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY:
-      return (EObject) createAttributeToValueToDifferenceEntry();
-    case DiffdataPackage.VALUE_TO_DIFFERENCE_ENTRY:
-      return (EObject) createValueToDifferenceEntry();
+    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY:
+      return (EObject) createAttributeToDifferenceEntry();
     case DiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY:
       return (EObject) createReferenceToElementToDifferenceEntry();
     case DiffdataPackage.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY:
@@ -210,19 +208,9 @@ public class DiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> createAttributeToValueToDifferenceEntry() {
-    AttributeToValueToDifferenceEntryImpl attributeToValueToDifferenceEntry = new AttributeToValueToDifferenceEntryImpl();
-    return attributeToValueToDifferenceEntry;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Map.Entry<Object, IAttributeValuePresence<EObject>> createValueToDifferenceEntry() {
-    ValueToDifferenceEntryImpl valueToDifferenceEntry = new ValueToDifferenceEntryImpl();
-    return valueToDifferenceEntry;
+  public Map.Entry<EAttribute, EList<IAttributeValuePresence<EObject>>> createAttributeToDifferenceEntry() {
+    AttributeToDifferenceEntryImpl attributeToDifferenceEntry = new AttributeToDifferenceEntryImpl();
+    return attributeToDifferenceEntry;
   }
 
   /**

@@ -48,7 +48,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableAttributeMap"
-        upperBound="-1" eType="#//AttributeToValueToDifferenceEntry" containment="true"/>
+        upperBound="-1" eType="#//AttributeToDifferenceEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableReferenceMap"
         upperBound="-1" eType="#//ReferenceToElementToDifferenceEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableOrderReferenceMap"
@@ -122,14 +122,10 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//EValuePresence"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeToValueToDifferenceEntry" instanceClassName="java.util.Map$Entry">
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeToDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        eType="#//ValueToDifferenceEntry" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ValueToDifferenceEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1">
+        containment="true">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IAttributeValuePresence">
         <eTypeArguments eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
       </eGenericType>

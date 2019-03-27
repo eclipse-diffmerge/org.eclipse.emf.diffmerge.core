@@ -136,7 +136,7 @@ public interface EMatch extends
   /**
    * Returns the value of the '<em><b>Modifiable Attribute Map</b></em>' map.
    * The key is of type {@link org.eclipse.emf.ecore.EAttribute},
-   * and the value is of type list of {@link java.util.Map.Entry<java.lang.Object, org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<org.eclipse.emf.ecore.EObject>>},
+   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<org.eclipse.emf.ecore.EObject>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Attribute Map</em>' map isn't clear,
@@ -145,11 +145,11 @@ public interface EMatch extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Attribute Map</em>' map.
    * @see org.eclipse.emf.diffmerge.diffdata.DiffdataPackage#getEMatch_ModifiableAttributeMap()
-   * @model mapType="org.eclipse.emf.diffmerge.diffdata.AttributeToValueToDifferenceEntry&lt;org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.diffmerge.diffdata.ValueToDifferenceEntry&gt;"
+   * @model mapType="org.eclipse.emf.diffmerge.diffdata.AttributeToDifferenceEntry&lt;org.eclipse.emf.ecore.EAttribute, org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;&gt;"
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap();
+  EMap<EAttribute, EList<IAttributeValuePresence<EObject>>> getModifiableAttributeMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Reference Map</b></em>' map.

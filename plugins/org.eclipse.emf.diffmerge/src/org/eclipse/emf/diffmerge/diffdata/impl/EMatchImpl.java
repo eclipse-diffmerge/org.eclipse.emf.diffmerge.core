@@ -11,8 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
-import java.util.List;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -120,7 +118,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> modifiableAttributeMap;
+  protected EMap<EAttribute, EList<IAttributeValuePresence<EObject>>> modifiableAttributeMap;
 
   /**
    * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
@@ -322,11 +320,11 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap() {
+  public EMap<EAttribute, EList<IAttributeValuePresence<EObject>>> getModifiableAttributeMap() {
     if (modifiableAttributeMap == null) {
-      modifiableAttributeMap = new EcoreEMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>>(
-          DiffdataPackage.Literals.ATTRIBUTE_TO_VALUE_TO_DIFFERENCE_ENTRY,
-          AttributeToValueToDifferenceEntryImpl.class, this,
+      modifiableAttributeMap = new EcoreEMap<EAttribute, EList<IAttributeValuePresence<EObject>>>(
+          DiffdataPackage.Literals.ATTRIBUTE_TO_DIFFERENCE_ENTRY,
+          AttributeToDifferenceEntryImpl.class, this,
           DiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
     }
     return modifiableAttributeMap;
@@ -552,7 +550,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<EAttribute, EMap<Object, IAttributeValuePresence<EObject>>> getModifiableAttributeMap(
+  protected EMap<EAttribute, EList<IAttributeValuePresence<EObject>>> getModifiableAttributeMap(
       boolean create_p) {
     return create_p ? getModifiableAttributeMap() : modifiableAttributeMap;
   }
@@ -579,13 +577,13 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newAttributeValueToPresenceMap(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newAttributeValuePresenceList(java.lang.Object)
    * @generated NOT
    */
   @Override
-  protected EMap<Object, IAttributeValuePresence<EObject>> newAttributeValueToPresenceMap(
+  protected EList<IAttributeValuePresence<EObject>> newAttributeValuePresenceList(
       EAttribute attribute_p) {
-    AttributeToValueToDifferenceEntryImpl entry = new AttributeToValueToDifferenceEntryImpl();
+    AttributeToDifferenceEntryImpl entry = new AttributeToDifferenceEntryImpl();
     entry.setKey(attribute_p);
     getModifiableAttributeMap(true).add(entry);
     return entry.getValue();
@@ -596,7 +594,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected List<IReferenceValuePresence<EObject>> newReferenceOrderDifferenceList(
+  protected EList<IReferenceValuePresence<EObject>> newReferenceOrderDifferenceList(
       EReference reference_p) {
     ReferenceToOrderDifferenceEntryImpl entry = new ReferenceToOrderDifferenceEntryImpl();
     entry.setKey(reference_p);
