@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
 
 /**
@@ -82,5 +83,21 @@ public interface EMapping<E, A, R>
    * @generated
    */
   EList<IMatch<E>> getTargetCompletedMatches();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model required="true" sourceRequired="true" referenceRequired="true" valueRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  boolean isIgnoredReferenceValue(E source, R reference, E value, Role role);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model required="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true" elementRequired="true"
+   * @generated
+   */
+  boolean removeDependencies(Role role, E element);
 
 } // EMapping

@@ -39,15 +39,6 @@ public interface IScopePolicy<E> {
   List<?> mGetAttributes(E element_p);
   
   /**
-   * Return the ID of the given element, if any
-   * @param element_p a non-null element
-   * @param intrinsic_p whether an intrinsic (attribute-based) ID must be returned,
-   *          or extrinsic (dependent on the persistence layer)
-   * @return a potentially null object
-   */
-  Object getID(E element_p, boolean intrinsic_p);
-  
-  /**
    * Return the opposite of the given reference, if any.
    * Opposite references manifest bidirectional links between elements and are
    * thus assumed to be automatically kept in sync by the data technology.
@@ -136,13 +127,29 @@ public interface IScopePolicy<E> {
   boolean mIsOptionalReference(Object reference_p);
   
   /**
+   * Return the ID of the given element, if any
+   * @param element_p a non-null element
+   * @param intrinsic_p whether an intrinsic (attribute-based) ID must be returned,
+   *          or extrinsic (dependent on the persistence layer)
+   * @return a potentially null object
+   */
+  Object tGetID(E element_p, boolean intrinsic_p);
+  
+  /**
+   * Return whether a cross-reference value of the given reference must be explicitly
+   * deleted when the value or owner is deleted
+   * @param reference_p a non-null reference
+   */
+  boolean tIsDeletionRequired(Object reference_p);
+  
+  /**
    * Create and return a new bare element, i.e., an element without particular values
    * on its attributes or references, as the match of the given source element.
    * Note that the given source element may be of any arbitrary nature.
    * @param source_p a non-null object
    * @return an element that cannot be null
    */
-  E mNewBareElement(Object source_p);
+  E tNewBareElement(Object source_p);
   
   /**
    * Set the ID of the given element
@@ -152,6 +159,6 @@ public interface IScopePolicy<E> {
    *          (dependent on the persistence layer) ID is concerned
    * @return a potentially null object
    */
-  boolean setID(E element_p, Object id_p, boolean intrinsic_p);
+  boolean tSetID(E element_p, Object id_p, boolean intrinsic_p);
   
 }

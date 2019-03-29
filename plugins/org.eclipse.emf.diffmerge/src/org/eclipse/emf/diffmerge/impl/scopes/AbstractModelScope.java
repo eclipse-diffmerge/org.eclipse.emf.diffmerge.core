@@ -190,7 +190,7 @@ implements IFeaturedModelScope {
    * @see IPersistentModelScope#getExtrinsicID(EObject)
    */
   protected Object getExtrinsicID(EObject element_p) {
-    return getID(element_p, false);
+    return tGetID(element_p, false);
   }
   
   /**

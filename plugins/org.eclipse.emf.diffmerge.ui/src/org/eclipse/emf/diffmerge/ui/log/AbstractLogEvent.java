@@ -58,9 +58,9 @@ public abstract class AbstractLogEvent {
     Object result = null;
     if (element_p != null) {
       ITreeDataScope sourceScope = getDiffNode().getActualComparison().getScope(side_p);
-      result = sourceScope.getID(element_p, true);
+      result = sourceScope.tGetID(element_p, true);
       if (result == null) {
-        result = sourceScope.getID(element_p, false);
+        result = sourceScope.tGetID(element_p, false);
       }
     }
     return result;

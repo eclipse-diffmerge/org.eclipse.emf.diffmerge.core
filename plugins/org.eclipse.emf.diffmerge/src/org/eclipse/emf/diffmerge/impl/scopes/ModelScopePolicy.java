@@ -57,19 +57,6 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getID(java.lang.Object, boolean)
-   */
-  public Object getID(EObject element_p, boolean intrinsic_p) {
-    Object result = null;
-    if (intrinsic_p) {
-      result = ModelImplUtil.getIntrinsicID(element_p);
-    } else {
-      result = ModelImplUtil.getXMLID(element_p);
-    }
-    return result;
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetOppositeReference(java.lang.Object)
    */
   public Object mGetOppositeReference(Object reference_p) {
@@ -154,9 +141,29 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mNewBareElement(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tGetID(java.lang.Object, boolean)
    */
-  public EObject mNewBareElement(Object source_p) {
+  public Object tGetID(EObject element_p, boolean intrinsic_p) {
+    Object result = null;
+    if (intrinsic_p) {
+      result = ModelImplUtil.getIntrinsicID(element_p);
+    } else {
+      result = ModelImplUtil.getXMLID(element_p);
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsDeletionRequired(java.lang.Object)
+   */
+  public boolean tIsDeletionRequired(Object reference_p) {
+    return mIsChangeableReference(reference_p) && !((EReference)reference_p).isDerived();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tNewBareElement(java.lang.Object)
+   */
+  public EObject tNewBareElement(Object source_p) {
     EObject result;
     if (source_p instanceof EObject) {
       EObject sourceElement = (EObject)source_p;
@@ -173,9 +180,9 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#setID(java.lang.Object, java.lang.Object, boolean)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tSetID(java.lang.Object, java.lang.Object, boolean)
    */
-  public boolean setID(EObject element_p, Object id_p, boolean intrinsic_p) {
+  public boolean tSetID(EObject element_p, Object id_p, boolean intrinsic_p) {
     boolean result = false;
     String actualID = (id_p == null)? null: id_p.toString();
     if (intrinsic_p) {

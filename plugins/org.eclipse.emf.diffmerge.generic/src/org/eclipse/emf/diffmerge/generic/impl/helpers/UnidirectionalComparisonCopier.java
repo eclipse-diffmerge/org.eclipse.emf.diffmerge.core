@@ -108,7 +108,7 @@ public class UnidirectionalComparisonCopier<E> {
    */
   protected E copy(E sourceElement_p) {
     assert _mergePolicy != null;
-    E result = _destinationScope.mNewBareElement(sourceElement_p);
+    E result = _destinationScope.tNewBareElement(sourceElement_p);
     for (Object attribute : _sourceScope.mGetAttributes(sourceElement_p)) {
       if (coverAttribute(attribute)) {
         copyAttribute(attribute, sourceElement_p, result);

@@ -75,6 +75,24 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eOperations name="isIgnoredReferenceValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="source" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/E"/>
+      </eParameters>
+      <eParameters name="reference" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/R"/>
+      </eParameters>
+      <eParameters name="value" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/E"/>
+      </eParameters>
+      <eParameters name="role" lowerBound="1" eType="#//Role"/>
+    </eOperations>
+    <eOperations name="removeDependencies" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="role" lowerBound="1" eType="#//Role"/>
+      <eParameters name="element" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/E"/>
+      </eParameters>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         containment="true">
       <eGenericType eClassifier="#//EMatch">

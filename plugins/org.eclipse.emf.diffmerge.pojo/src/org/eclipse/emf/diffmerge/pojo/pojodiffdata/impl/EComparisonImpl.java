@@ -11,18 +11,12 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
-import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
-import org.eclipse.emf.diffmerge.pojo.impl.helpers.MatchOperation;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMapping;
@@ -93,16 +87,6 @@ public class EComparisonImpl extends
   @Override
   public EMapping getMapping() {
     return (EMapping) super.getMapping();
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMatchOperation(org.eclipse.emf.diffmerge.generic.api.IMatchPolicy, java.util.Map)
-   * @generated NOT
-   */
-  @Override
-  protected IExpensiveOperation getMatchOperation(IMatchPolicy<Object> policy_p,
-      Map<Role, Set<Object>> duplicateIDs_p) {
-    return new MatchOperation(this, policy_p, duplicateIDs_p);
   }
 
   /**

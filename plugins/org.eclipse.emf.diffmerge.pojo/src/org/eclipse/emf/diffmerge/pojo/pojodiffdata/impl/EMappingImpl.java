@@ -81,7 +81,6 @@ public class EMappingImpl extends
    */
   protected EMappingImpl() {
     super();
-    eAdapters().add(new MatchMapSynchronizerAdapter());
   }
 
   /**
@@ -113,6 +112,7 @@ public class EMappingImpl extends
         protected boolean useEqualsForKey() {
           return false;
         }
+
         /**
          * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForValue()
          */
@@ -144,6 +144,7 @@ public class EMappingImpl extends
         protected boolean useEqualsForKey() {
           return false;
         }
+
         /**
          * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForValue()
          */
@@ -175,6 +176,7 @@ public class EMappingImpl extends
         protected boolean useEqualsForKey() {
           return false;
         }
+
         /**
          * @see org.eclipse.emf.common.util.BasicEMap#useEqualsForValue()
          */
@@ -234,6 +236,15 @@ public class EMappingImpl extends
   @Override
   public EComparison getComparison() {
     return (EComparison) super.getComparison();
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#removeDependencies(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @generated NOT
+   */
+  @Override
+  public boolean removeDependencies(Role role_p, Object element_p) {
+    return false;
   }
 
   /**
@@ -345,7 +356,6 @@ public class EMappingImpl extends
     return super.eIsSet(featureID);
   }
 
-
   /**
    * An adapter that is in charge of synchronizing the match maps with
    * the other contents of the mapping.
@@ -359,6 +369,7 @@ public class EMappingImpl extends
     public boolean isAdapterForType(Object type_p) {
       return type_p == MatchMapSynchronizerAdapter.class;
     }
+
     /**
      * @see org.eclipse.emf.common.notify.impl.AdapterImpl#notifyChanged(org.eclipse.emf.common.notify.Notification)
      */
@@ -370,7 +381,8 @@ public class EMappingImpl extends
       Object feature = msg_p.getFeature();
       int eventType = msg_p.getEventType();
       Object notifier = msg_p.getNotifier();
-      if (feature == GdiffdataPackage.eINSTANCE.getEMapping_ModifiableContents()) {
+      if (feature == GdiffdataPackage.eINSTANCE
+          .getEMapping_ModifiableContents()) {
         EMapping mapping = (EMapping) notifier;
         if (eventType == Notification.ADD) {
           // Match addition
@@ -402,18 +414,19 @@ public class EMappingImpl extends
         EMatch match = (EMatch) notifier;
         if (eventType == Notification.SET) {
           // Match setting
-          Role concernedRole =
-              (feature == PojodiffdataPackage.eINSTANCE.getEMatch_Ancestor())?
-                  Role.ANCESTOR:
-                   (feature == PojodiffdataPackage.eINSTANCE.getEMatch_Reference())?
-                       Role.REFERENCE:
-                         (feature == PojodiffdataPackage.eINSTANCE.getEMatch_Target())?
-                             Role.TARGET: null;
+          Role concernedRole = (feature == PojodiffdataPackage.eINSTANCE
+              .getEMatch_Ancestor())
+                  ? Role.ANCESTOR
+                  : (feature == PojodiffdataPackage.eINSTANCE
+                      .getEMatch_Reference()) ? Role.REFERENCE
+                          : (feature == PojodiffdataPackage.eINSTANCE
+                              .getEMatch_Target()) ? Role.TARGET : null;
           if (concernedRole != null) {
-            EMap<Object, EMatch> matchMap = match.getMapping().getMatchMap(concernedRole);
+            EMap<Object, EMatch> matchMap = match.getMapping()
+                .getMatchMap(concernedRole);
             Object oldElement = msg_p.getOldValue();
             Object newElement = msg_p.getNewValue();
-            if (oldElement != null ) {
+            if (oldElement != null) {
               EMatch mappedMatch = matchMap.get(oldElement);
               if (mappedMatch == match) {
                 matchMap.removeKey(oldElement);

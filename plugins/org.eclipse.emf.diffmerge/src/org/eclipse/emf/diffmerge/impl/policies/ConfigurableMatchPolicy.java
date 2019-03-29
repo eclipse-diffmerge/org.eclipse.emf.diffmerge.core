@@ -320,7 +320,7 @@ org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy<EObject>
    */
   protected String getExtrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
-    Object id = scope_p.getID(element_p, false);
+    Object id = scope_p.tGetID(element_p, false);
     if (id instanceof String) {
       result = (String)id;
     }
@@ -335,7 +335,7 @@ org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy<EObject>
    */
   protected String getIntrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
     String result = null;
-    Object id = scope_p.getID(element_p, true);
+    Object id = scope_p.tGetID(element_p, true);
     if (id instanceof String) {
       result = (String)id;
     }

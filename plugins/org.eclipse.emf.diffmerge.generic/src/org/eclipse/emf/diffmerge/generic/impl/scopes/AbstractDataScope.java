@@ -59,13 +59,6 @@ implements IDataScope<E> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#getID(java.lang.Object, boolean)
-   */
-  public Object getID(E element_p, boolean intrinsic_p) {
-    return getScopePolicy().getID(element_p, intrinsic_p);
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope#getOriginator()
    */
   public Object getOriginator() {
@@ -172,20 +165,6 @@ implements IDataScope<E> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mNewBareElement(java.lang.Object)
-   */
-  public E mNewBareElement(Object source_p) {
-    return getScopePolicy().mNewBareElement(source_p);
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#setID(java.lang.Object, java.lang.Object, boolean)
-   */
-  public boolean setID(E element_p, Object id_p, boolean intrinsic_p) {
-    return getScopePolicy().setID(element_p, id_p, intrinsic_p);
-  }
-  
-  /**
    * Set the originator of this scope.
    * If null, then the default originator will be used.
    * @see IDataScope#getOriginator()
@@ -193,6 +172,34 @@ implements IDataScope<E> {
    */
   public void setOriginator(Object originator_p) {
     _originator = originator_p;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tGetID(java.lang.Object, boolean)
+   */
+  public Object tGetID(E element_p, boolean intrinsic_p) {
+    return getScopePolicy().tGetID(element_p, intrinsic_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsDeletionRequired(java.lang.Object)
+   */
+  public boolean tIsDeletionRequired(Object reference_p) {
+    return getScopePolicy().tIsDeletionRequired(reference_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tNewBareElement(java.lang.Object)
+   */
+  public E tNewBareElement(Object source_p) {
+    return getScopePolicy().tNewBareElement(source_p);
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tSetID(java.lang.Object, java.lang.Object, boolean)
+   */
+  public boolean tSetID(E element_p, Object id_p, boolean intrinsic_p) {
+    return getScopePolicy().tSetID(element_p, id_p, intrinsic_p);
   }
   
 }

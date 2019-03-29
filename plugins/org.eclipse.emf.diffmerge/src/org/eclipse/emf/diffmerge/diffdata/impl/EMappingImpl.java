@@ -24,6 +24,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMapping;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -172,13 +173,10 @@ public class EMappingImpl extends
   }
 
   /**
-   * Remove dependencies (references) to the given element after its removal from the
-   * scope of the given role in the given comparison
-   * @param role_p TARGET or REFERENCE
-   * @param element_p a non-null element
-   * @return whether all dependencies have been successfully removed
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#removeDependencies(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
+  @Override
   public boolean removeDependencies(Role role_p, EObject element_p) {
     boolean result = true;
     IEditableTreeDataScope<EObject> scope = getComparison().getScope(role_p);
@@ -212,15 +210,16 @@ public class EMappingImpl extends
    * A cross-referencer for handling cross-references that are not covered by differences.
    * @generated NOT
    */
+  @SuppressWarnings("serial")
   protected static class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
-    /** The serial version */
-    private static final long serialVersionUID = 1L;
-
     /** The non-null mapping this cross referencer is for */
     protected final EMapping _mapping;
 
     /** The non-null role played by the scope to cross-reference */
     protected final Role _role;
+
+    /** The non-null scope to cross-reference */
+    protected final ITreeDataScope<EObject> _scope;
 
     /**
      * Constructor
@@ -231,6 +230,7 @@ public class EMappingImpl extends
       super(Collections.emptyList());
       _mapping = mapping_p;
       _role = role_p;
+      _scope = mapping_p.getComparison().getScope(role_p);
     }
 
     /**
@@ -247,14 +247,8 @@ public class EMappingImpl extends
     @Override
     protected boolean crossReference(EObject element_p, EReference reference_p,
         EObject crossReferenced_p) {
-      boolean result = false;
-      EMatch referencingMatch = _mapping.getMatchFor(element_p, _role);
-      EMatch referencedMatch = _mapping.getMatchFor(crossReferenced_p, _role);
-      // Unidirectional, modifiable cross-references between unmatched elements
-      if (referencingMatch != null && referencedMatch != null) {
-        result = referencingMatch.isPartial() && referencedMatch.isPartial();
-      }
-      return result;
+      return _mapping.isIgnoredReferenceValue(
+          element_p, reference_p, crossReferenced_p, getRole());
     }
 
     /**
@@ -270,9 +264,8 @@ public class EMappingImpl extends
         @Override
         protected boolean isIncluded(EStructuralFeature feature_p) {
           return super.isIncludedEntry(feature_p)
-              && ScopeCrossReferencer.this.isIncluded((EReference) feature_p);
+              && _scope.tIsDeletionRequired(feature_p);
         }
-
         /**
          * @see org.eclipse.emf.ecore.util.EContentsEList.FeatureIteratorImpl#resolve()
          */
@@ -289,15 +282,6 @@ public class EMappingImpl extends
      */
     public Role getRole() {
       return _role;
-    }
-
-    /**
-     * Return whether the given cross-reference should be covered by this cross-referencer
-     * @param reference_p a non-null cross-reference
-     */
-    protected boolean isIncluded(EReference reference_p) {
-      // Modifiable cross-references only
-      return reference_p.isChangeable() && !reference_p.isDerived();
     }
 
     /**

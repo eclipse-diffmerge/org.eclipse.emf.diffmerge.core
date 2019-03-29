@@ -223,12 +223,13 @@ public abstract class EElementPresenceImpl<E, A, R> extends
     boolean actuallyAdded = false;
     IMergePolicy<E> mergePolicy = getComparison().getLastMergePolicy();
     IEditableTreeDataScope<E> absenceScope = getAbsenceScope();
-    if (getComparison().getLastMergePolicy().bindPresenceToOwnership(absenceScope) && !isRoot()) {
+    if (getComparison().getLastMergePolicy()
+        .bindPresenceToOwnership(absenceScope) && !isRoot()) {
       E container = getOwnerMatch().get(getAbsenceRole());
       if (container != null) {
         Object containment = getPresenceScope().getContainment(getElement());
-        actuallyAdded = absenceScope.addReferenceValue(container,
-            containment, clone);
+        actuallyAdded = absenceScope.addReferenceValue(container, containment,
+            clone);
         addedToScope = true; // Even if !actuallyAdded
         // Order handling
         IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
@@ -249,8 +250,7 @@ public abstract class EElementPresenceImpl<E, A, R> extends
       actuallyAdded = absenceScope.add(clone);
     }
     if (actuallyAdded) {
-      mergePolicy.setID(getElement(), getPresenceScope(), clone,
-          absenceScope);
+      mergePolicy.setID(getElement(), getPresenceScope(), clone, absenceScope);
     }
   }
 

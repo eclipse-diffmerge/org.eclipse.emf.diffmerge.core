@@ -51,6 +51,16 @@
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/modifiableContents"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/referenceCompletedMatches"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference GDiffData.ecore#//EMapping/targetCompletedMatches"/>
+      <genOperations ecoreOperation="GDiffData.ecore#//EMapping/isIgnoredReferenceValue">
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/source"/>
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/reference"/>
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/value"/>
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/role"/>
+      </genOperations>
+      <genOperations ecoreOperation="GDiffData.ecore#//EMapping/removeDependencies">
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/removeDependencies/role"/>
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/removeDependencies/element"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="GDiffData.ecore#//EMatch">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/E"/>

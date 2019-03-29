@@ -142,7 +142,7 @@ implements IEditableModelScope {
    */
   protected boolean setExtrinsicID(EObject element_p, Object id_p) {
     // Default implementation only covers XML/XMI Resources
-    boolean result = getScopePolicy().setID(element_p, id_p, false);
+    boolean result = getScopePolicy().tSetID(element_p, id_p, false);
     return result;
   }
   

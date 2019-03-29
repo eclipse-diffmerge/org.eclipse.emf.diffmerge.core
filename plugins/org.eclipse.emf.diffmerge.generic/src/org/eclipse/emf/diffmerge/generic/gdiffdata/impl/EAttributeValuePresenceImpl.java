@@ -156,8 +156,8 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
     assert holderMatch != null; // Must be guaranteed by diff dependency handling
     absenceScope.addAttributeValue(holderMatch, getFeature(), getValue());
     IDiffPolicy<E> diffPolicy = getComparison().getLastDiffPolicy();
-    if (diffPolicy != null
-        && diffPolicy.considerOrderedAttribute(getFeature(), getPresenceScope())) {
+    if (diffPolicy != null && diffPolicy.considerOrderedAttribute(getFeature(),
+        getPresenceScope())) {
       // TODO Implement
     }
   }

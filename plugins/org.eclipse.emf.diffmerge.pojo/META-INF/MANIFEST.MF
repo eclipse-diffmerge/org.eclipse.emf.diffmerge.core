@@ -9,7 +9,6 @@ Bundle-Activator: org.eclipse.emf.diffmerge.pojo.EMFDiffMergePOJOPlugin
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.emf.diffmerge.pojo,
- org.eclipse.emf.diffmerge.pojo.impl.helpers,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata.util

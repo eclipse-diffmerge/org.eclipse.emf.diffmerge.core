@@ -39,10 +39,10 @@ public class DefaultMatchPolicy<E> implements IMatchPolicy<E> {
    */
   public Object getMatchID(E element_p, ITreeDataScope<E> scope_p) {
     // Intrinsic ID
-    Object result = scope_p.getID(element_p, true);
+    Object result = scope_p.tGetID(element_p, true);
     if (result == null) {
       // Fall-back: extrinsic ID
-      result = scope_p.getID(element_p, false);
+      result = scope_p.tGetID(element_p, false);
     }
     return result;
   }

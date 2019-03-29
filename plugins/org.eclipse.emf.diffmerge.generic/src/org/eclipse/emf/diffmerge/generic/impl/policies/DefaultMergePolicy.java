@@ -195,13 +195,13 @@ public class DefaultMergePolicy<E> implements IMergePolicy<E> {
   public void setID(E source_p, ITreeDataScope<E> sourceScope_p,
       E target_p, ITreeDataScope<E> targetScope_p) {
     if (copyExtrinsicIDs(sourceScope_p, targetScope_p)) {
-      Object extrinsicID = sourceScope_p.getID(source_p, false);
-      targetScope_p.setID(target_p, extrinsicID, false);
+      Object extrinsicID = sourceScope_p.tGetID(source_p, false);
+      targetScope_p.tSetID(target_p, extrinsicID, false);
     }
     // By default (!requiresNewIntrinsicID()), intrinsic IDs are copied like other attributes
     if (requiresNewIntrinsicID(target_p, targetScope_p)) {
       Object newID = getNewIntrinsicID(target_p, targetScope_p);
-      targetScope_p.setID(target_p, newID, true);
+      targetScope_p.tSetID(target_p, newID, true);
     }
   }
   

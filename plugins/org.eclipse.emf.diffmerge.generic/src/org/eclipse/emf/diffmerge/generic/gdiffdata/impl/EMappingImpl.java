@@ -384,6 +384,37 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
+   * Return whether the given reference value on the given side is ignored due to
+   * being between partial matches
+   * @param source_p a non-null element
+   * @param reference_p a non-null reference
+   * @param value_p a non-null element
+   * @param role_p a non-null role
+   * @generated NOT
+   */
+  public boolean isIgnoredReferenceValue(E source_p, R reference_p, E value_p,
+      Role role_p) {
+    boolean result = false;
+    IMatch<E> referencingMatch = getMatchFor(source_p, role_p);
+    IMatch<E> referencedMatch = getMatchFor(value_p, role_p);
+    // References between unmatched elements
+    if (referencingMatch != null && referencedMatch != null) {
+      result = referencingMatch.isPartial() && referencedMatch.isPartial();
+    }
+    return result;
+  }
+
+  /**
+   * Remove dependencies (references) to the given element after its removal from the
+   * scope of the given role in the given comparison
+   * @param role TARGET or REFERENCE
+   * @param element a non-null element
+   * @return whether all dependencies have been successfully removed
+   * @generated NOT
+   */
+  public abstract boolean removeDependencies(Role role, E element);
+  
+  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#map(Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
