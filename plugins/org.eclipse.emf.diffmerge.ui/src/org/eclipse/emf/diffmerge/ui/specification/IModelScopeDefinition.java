@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.specification;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 
 
 /**
@@ -26,7 +26,7 @@ public interface IModelScopeDefinition {
    *          for the case where resource creation is needed
    * @return a scope which is null if operation failed
    */
-  IEditableModelScope createScope(Object context_p);
+  IEditableTreeDataScope<?> createScope(Object context_p);
   
   /**
    * Return the object that specifies the scope (model element, file, resource...)

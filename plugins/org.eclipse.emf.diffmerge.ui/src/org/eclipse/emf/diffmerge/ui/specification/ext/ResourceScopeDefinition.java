@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
@@ -38,7 +38,7 @@ public class ResourceScopeDefinition extends AbstractScopeDefinition {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(Object context_p) {
+  public IEditableTreeDataScope<?> createScope(Object context_p) {
     return new FragmentedModelScope(getEntrypoint(), !isEditable());
   }
   

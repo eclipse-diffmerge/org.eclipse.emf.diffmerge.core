@@ -26,7 +26,6 @@ import java.util.Set;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.structures.binary.HashBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -219,13 +218,13 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   public boolean add(EObject source_p, EReference reference_p, EObject value_p) {
     Resource oldResource = value_p.eResource();
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);
-    Object formerId = getExtrinsicID(value_p);
+    Object formerId = tGetID(value_p, false);
     boolean result = super.add(source_p, reference_p, value_p);
     if (wasRoot && reference_p.isContainment()) // Intentionally not isContainment(reference_p)
       oldResource.getContents().remove(value_p); // Not automatically handled
     if (formerId != null) {
       // In case resource has changed, thus changing the extrinsic ID
-      setExtrinsicID(value_p, formerId);
+      tSetID(value_p, formerId, false);
     }
     return result;
   }
@@ -337,15 +336,6 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    */
   public EditingDomain getEditingDomain() {
     return _editingDomain;
-  }
-  
-  /**
-   * @see IPersistentModelScope#getExtrinsicID(EObject)
-   */
-  @Override
-  public Object getExtrinsicID(EObject element_p) {
-    // Increases visibility
-    return super.getExtrinsicID(element_p);
   }
   
   /**
@@ -583,15 +573,6 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
       resource.save(options);
     }
     return true;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#setExtrinsicID(EObject, Object)
-   */
-  @Override
-  public boolean setExtrinsicID(EObject element_p, Object id_p) {
-    // Increases visibility
-    return super.setExtrinsicID(element_p, id_p);
   }
   
   /**

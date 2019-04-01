@@ -14,9 +14,9 @@ package org.eclipse.emf.diffmerge.connector.core.ext;
 
 import java.io.InputStream;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
-import org.eclipse.emf.diffmerge.impl.scopes.AbstractModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.specification.ITimestampProvider;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -60,18 +60,21 @@ ITimestampProvider {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(Object context_p) {
-    IEditableModelScope result;
-    if (_editable)
+  public IEditableTreeDataScope<?> createScope(Object context_p) {
+    IEditableTreeDataScope<?> result;
+    if (_editable) {
       result = _wrapped.createScope(context_p); // Use the same context for editable contents
-    else
+    } else {
       result = _wrapped.createScope(null); // Ignore context for a fresh resource set
-    if (result instanceof AbstractModelScope)
-      ((AbstractModelScope)result).setOriginator(_wrapped.getLabel());
+    }
+    if (result instanceof AbstractDataScope<?>) {
+      ((AbstractDataScope<?>)result).setOriginator(_wrapped.getLabel());
+    }
     if (result instanceof IPersistentModelScope) {
       IPersistentModelScope casted = (IPersistentModelScope)result;
-      if (_loadingStream != null && casted instanceof IPersistentModelScope.Editable)
+      if (_loadingStream != null && casted instanceof IPersistentModelScope.Editable) {
         ((IPersistentModelScope.Editable)casted).setStream(_loadingStream);
+      }
       Resource holdingResource = casted.getHoldingResource();
       if (holdingResource != null) {
         ResourceSet rs = holdingResource.getResourceSet();

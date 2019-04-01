@@ -12,7 +12,7 @@
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
@@ -40,16 +40,17 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(Object context_p) {
-    IEditableModelScope result = null;
+  public IEditableTreeDataScope<?> createScope(Object context_p) {
+    IEditableTreeDataScope<?> result = null;
     if (context_p instanceof EditingDomain) {
       result = createScopeOnEditingDomain((EditingDomain)context_p);
     } else if (context_p instanceof ResourceSet) {
       result = createScopeOnResourceSet((ResourceSet)context_p);
     } else if (context_p == null) {
       Object defaultContext = getDefaultContext();
-      if (defaultContext != null)
+      if (defaultContext != null) {
         result = createScope(defaultContext);
+      }
     }
     return result;
   }
@@ -59,7 +60,7 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
    * @param editingDomain_p a non-null editing domain
    * @return a non-null scope
    */
-  protected IEditableModelScope createScopeOnEditingDomain(EditingDomain editingDomain_p) {
+  protected IEditableTreeDataScope<?> createScopeOnEditingDomain(EditingDomain editingDomain_p) {
     return new FragmentedModelScope(getEntrypoint(), editingDomain_p, !isEditable());
   }
   
@@ -68,7 +69,7 @@ public class URIScopeDefinition extends AbstractScopeDefinition {
    * @param resourceSet_p a non-null resource set
    * @return a non-null scope
    */
-  protected IEditableModelScope createScopeOnResourceSet(ResourceSet resourceSet_p) {
+  protected IEditableTreeDataScope<?> createScopeOnResourceSet(ResourceSet resourceSet_p) {
     return new FragmentedModelScope(getEntrypoint(), resourceSet_p, !isEditable());
   }
   

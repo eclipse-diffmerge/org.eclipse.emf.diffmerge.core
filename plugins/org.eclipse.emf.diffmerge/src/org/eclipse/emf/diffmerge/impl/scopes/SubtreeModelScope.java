@@ -89,15 +89,6 @@ implements IPersistentModelScope.Editable {
   }
   
   /**
-   * @see IPersistentModelScope#getExtrinsicID(EObject)
-   */
-  @Override
-  public Object getExtrinsicID(EObject element_p) {
-    // Increases visibility
-    return super.getExtrinsicID(element_p);
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#getHoldingResource()
    */
   public Resource getHoldingResource() {
@@ -152,15 +143,6 @@ implements IPersistentModelScope.Editable {
       result = true;
     }
     return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#setExtrinsicID(org.eclipse.emf.ecore.EObject, java.lang.Object)
-   */
-  @Override
-  public boolean setExtrinsicID(EObject element_p, Object id_p) {
-    // Increases visibility
-    return super.setExtrinsicID(element_p, id_p);
   }
   
   /**

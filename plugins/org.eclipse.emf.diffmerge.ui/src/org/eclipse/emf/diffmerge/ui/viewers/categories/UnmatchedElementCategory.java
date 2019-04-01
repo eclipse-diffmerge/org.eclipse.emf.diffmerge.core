@@ -11,9 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
-import org.eclipse.emf.diffmerge.diffdata.EElementRelativePresence;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -46,8 +46,8 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
    */
   public boolean covers(IDifference<?> difference_p, EMFDiffNode node_p) {
     boolean result = false;
-    if (difference_p instanceof EElementRelativePresence) {
-      EElementRelativePresence presence = (EElementRelativePresence)difference_p;
+    if (difference_p instanceof IElementRelativePresence<?>) {
+      IElementRelativePresence<?> presence = (IElementRelativePresence<?>)difference_p;
       Role sideRole = node_p.getRoleForSide(isLeftSide());
       result = presence.getPresenceRole() == sideRole;
     }

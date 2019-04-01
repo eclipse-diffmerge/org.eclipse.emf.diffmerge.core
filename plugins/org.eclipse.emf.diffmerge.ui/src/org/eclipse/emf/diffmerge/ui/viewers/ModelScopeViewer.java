@@ -11,9 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.util.DiffMergeLabelProvider;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -25,8 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 
 
 /**
- * A viewer which provides a representation of a model scope.
- * Input: IModelScope ; Elements: EObject.
+ * A tree viewer which provides a representation of a tree data scope.
+ * Input: ITreeDataScope ; Elements: Object.
  * @author Olivier Constant
  */
 public class ModelScopeViewer extends TreeViewer {
@@ -55,8 +54,8 @@ public class ModelScopeViewer extends TreeViewer {
    * @see org.eclipse.jface.viewers.ContentViewer#getInput()
    */
   @Override
-  public IModelScope getInput() {
-    return (IModelScope)super.getInput();
+  public ITreeDataScope<?> getInput() {
+    return (ITreeDataScope<?>)super.getInput();
   }
   
   /**
@@ -71,34 +70,35 @@ public class ModelScopeViewer extends TreeViewer {
   /**
    * The content provider for this viewer
    */
+  @SuppressWarnings({"unchecked", "rawtypes"})
   protected class ContentProvider implements ITreeContentProvider {
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
      */
     public Object[] getChildren(Object parentElement_p) {
-      return getInput().getContents((EObject)parentElement_p).toArray();
+      return ((ITreeDataScope)getInput()).getContents(parentElement_p).toArray();
     }
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
      */
     public Object[] getElements(Object inputElement_p) {
-      return ((IModelScope)inputElement_p).getContents().toArray();
+      return ((ITreeDataScope<?>)inputElement_p).getRoots().toArray();
     }
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
      */
     public Object getParent(Object element_p) {
-      return getInput().getContainer((EObject)element_p);
+      return ((ITreeDataScope)getInput()).getContainer(element_p);
     }
     
     /**
      * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
      */
     public boolean hasChildren(Object element_p) {
-      return !getInput().getContents((EObject)element_p).isEmpty();
+      return !((ITreeDataScope)getInput()).getContents(element_p).isEmpty();
     }
     
     /**

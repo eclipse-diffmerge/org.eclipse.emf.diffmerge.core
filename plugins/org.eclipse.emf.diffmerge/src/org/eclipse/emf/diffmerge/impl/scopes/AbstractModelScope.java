@@ -20,7 +20,6 @@ import java.util.Set;
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope;
 import org.eclipse.emf.diffmerge.impl.policies.ModelScopePolicy;
@@ -185,13 +184,6 @@ implements IFeaturedModelScope {
    */
   public List<EObject> getContents(EObject element_p) {
     return element_p.eContents();
-  }
-  
-  /**
-   * @see IPersistentModelScope#getExtrinsicID(EObject)
-   */
-  protected Object getExtrinsicID(EObject element_p) {
-    return tGetID(element_p, false);
   }
   
   /**

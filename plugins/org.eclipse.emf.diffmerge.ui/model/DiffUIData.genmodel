@@ -4,7 +4,7 @@
     redirection="" modelName="DiffUIData" nonNLSMarkers="true" codeFormatting="true"
     booleanFlagsField="" importerID="org.eclipse.emf.importer.ecore" suppressUnsettable="true"
     complianceLevel="5.0" copyrightFields="false" runtimeVersion="2.6" language=""
-    usedGenPackages="platform:/plugin/org.eclipse.emf.diffmerge/model/DiffData.genmodel#//diffdata platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.genmodel#//gdiffdata"
+    usedGenPackages="platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.genmodel#//gdiffdata platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore"
     importOrganizing="true">
   <foreignModel>DiffUIData.ecore</foreignModel>
   <genPackages prefix="Diffuidata" basePackage="org.eclipse.emf.diffmerge.ui" resource="XMI"

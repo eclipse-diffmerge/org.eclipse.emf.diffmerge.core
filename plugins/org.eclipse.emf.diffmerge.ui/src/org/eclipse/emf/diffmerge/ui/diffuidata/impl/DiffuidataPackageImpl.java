@@ -12,9 +12,6 @@
 package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
 import java.util.Map;
-
-import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
-
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
@@ -163,9 +160,8 @@ public class DiffuidataPackageImpl extends EPackageImpl
     isInited = true;
 
     // Initialize simple dependencies
-    DiffdataPackage.eINSTANCE.eClass();
-    EcorePackage.eINSTANCE.eClass();
     GdiffdataPackage.eINSTANCE.eClass();
+    EcorePackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
     theDiffuidataPackage.createPackageContents();

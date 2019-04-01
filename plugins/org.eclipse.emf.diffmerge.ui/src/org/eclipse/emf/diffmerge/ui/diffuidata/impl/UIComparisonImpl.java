@@ -13,12 +13,10 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
-import org.eclipse.emf.diffmerge.ui.diffuidata.UidiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -133,27 +131,6 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   */
-  public NotificationChain basicSetActualComparison(
-      EComparison<?, ?, ?> newActualComparison, NotificationChain msgs_p) {
-    NotificationChain msgs = msgs_p;
-    IComparison<?> oldActualComparison = actualComparison;
-    actualComparison = newActualComparison;
-    if (eNotificationRequired()) {
-      ENotificationImpl notification = new ENotificationImpl(this,
-          Notification.SET, UidiffdataPackage.UI_COMPARISON__ACTUAL_COMPARISON,
-          oldActualComparison, newActualComparison);
-      if (msgs == null)
-        msgs = notification;
-      else
-        msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   public ComparisonSelection getLastActionSelection() {
@@ -173,7 +150,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
     if (eNotificationRequired()) {
       ENotificationImpl notification = new ENotificationImpl(this,
           Notification.SET,
-          UidiffdataPackage.UI_COMPARISON__LAST_ACTION_SELECTION,
+          DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION,
           oldLastActionSelection, newLastActionSelection);
       if (msgs == null)
         msgs = notification;

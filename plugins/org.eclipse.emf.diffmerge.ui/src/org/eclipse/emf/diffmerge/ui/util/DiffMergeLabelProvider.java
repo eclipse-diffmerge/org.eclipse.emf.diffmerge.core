@@ -12,7 +12,6 @@
 package org.eclipse.emf.diffmerge.ui.util;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
@@ -20,6 +19,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -241,11 +241,13 @@ public class DiffMergeLabelProvider extends LabelProvider {
   @Override
   public Image getImage(Object element_p) {
     Object element = element_p;
-    if (element instanceof IModelScope)
-      element = ((IModelScope)element).getOriginator();
+    if (element instanceof IRawDataScope<?>) {
+      element = ((IRawDataScope<?>)element).getOriginator();
+    }
     Image result = UIUtil.getEMFImage(element);
-    if (result == null)
+    if (result == null) {
       result = EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.EMPTY);
+    }
     return result;
   }
   
@@ -296,8 +298,8 @@ public class DiffMergeLabelProvider extends LabelProvider {
   public String getText(Object element_p) {
     Object element = element_p;
     String result;
-    if (element instanceof IModelScope) {
-      element = ((IModelScope)element).getOriginator();
+    if (element instanceof IRawDataScope<?>) {
+      element = ((IRawDataScope<?>)element).getOriginator();
     }
     if (element instanceof EObject) {
       result = UIUtil.getEMFText(element);

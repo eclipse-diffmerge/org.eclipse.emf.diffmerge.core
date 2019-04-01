@@ -12,7 +12,7 @@
 package org.eclipse.emf.diffmerge.ui.specification.ext;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.impl.scopes.SubtreeModelScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.AbstractScopeDefinition;
@@ -41,7 +41,7 @@ public class EObjectScopeDefinition extends AbstractScopeDefinition {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
    */
-  public IEditableModelScope createScope(Object context_p) {
+  public IEditableTreeDataScope<?> createScope(Object context_p) {
     return new SubtreeModelScope(getEntrypoint());
   }
   

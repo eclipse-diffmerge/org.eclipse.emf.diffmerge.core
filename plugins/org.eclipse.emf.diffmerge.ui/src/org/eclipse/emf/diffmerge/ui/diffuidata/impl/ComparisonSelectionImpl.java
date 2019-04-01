@@ -38,7 +38,6 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.MatchAndFeature;
-import org.eclipse.emf.diffmerge.ui.diffuidata.UidiffdataPackage;
 import org.eclipse.emf.diffmerge.ui.util.UIUtil;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.ecore.EAttribute;
@@ -257,7 +256,7 @@ public class ComparisonSelectionImpl extends EObjectImpl
     if (eNotificationRequired()) {
       ENotificationImpl notification = new ENotificationImpl(this,
           Notification.SET,
-          UidiffdataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE,
+          DiffuidataPackage.COMPARISON_SELECTION__SELECTED_MATCH_AND_FEATURE,
           oldSelectedMatchAndFeature, newSelectedMatchAndFeature);
       if (msgs == null)
         msgs = notification;

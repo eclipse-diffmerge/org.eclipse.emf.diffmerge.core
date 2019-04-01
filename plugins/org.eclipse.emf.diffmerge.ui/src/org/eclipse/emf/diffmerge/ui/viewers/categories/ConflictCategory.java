@@ -11,7 +11,6 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
-import org.eclipse.emf.diffmerge.diffdata.EReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -43,7 +42,7 @@ public class ConflictCategory extends AbstractDifferenceCategory {
   public boolean covers(IDifference<?> difference_p, EMFDiffNode node_p) {
     boolean result = difference_p.isConflicting();
     if (!result && difference_p instanceof IReferenceValuePresence<?>) {
-      IReferenceValuePresence<?> rvp = (EReferenceValuePresence)difference_p;
+      IReferenceValuePresence<?> rvp = (IReferenceValuePresence<?>)difference_p;
       IReferenceValuePresence<?> peer = rvp.getSymmetricalOwnership();
       result = !rvp.isAlignedWithAncestor() && peer != null && !peer.isAlignedWithAncestor();
     }

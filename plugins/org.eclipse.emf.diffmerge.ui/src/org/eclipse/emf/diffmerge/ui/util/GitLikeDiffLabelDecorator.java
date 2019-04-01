@@ -11,8 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.util;
 
-import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.swt.SWT;
@@ -57,7 +57,7 @@ public class GitLikeDiffLabelDecorator extends DiffLabelDecorator {
   public Color getForeground(Object object_p, Color base_p,
       DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
     Color result;
-    if (!(object_p instanceof IModelScope) &&
+    if (!(object_p instanceof IRawDataScope<?>) &&
         (diffKind_p == DifferenceKind.COUNTED || diffKind_p == DifferenceKind.NONE)) {
       result = UIUtil.getColor(SWT.COLOR_DARK_GRAY);
     } else {

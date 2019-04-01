@@ -154,8 +154,9 @@ IComparisonConfigurator.Provider {
    */
   public void setKeepMatchIDs(boolean keep_p) {
     _keepMatchIDs = keep_p;
-    if (_matchPolicy != null)
+    if (_matchPolicy != null) {
       _matchPolicy.setKeepMatchIDs(keep_p);
+    }
   }
   
   /**

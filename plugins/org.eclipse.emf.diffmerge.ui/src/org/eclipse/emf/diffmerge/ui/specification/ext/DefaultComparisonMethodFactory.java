@@ -14,8 +14,8 @@ package org.eclipse.emf.diffmerge.ui.specification.ext;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition;
@@ -77,7 +77,7 @@ public abstract class DefaultComparisonMethodFactory<E> implements IComparisonMe
     /**
      * @see org.eclipse.emf.diffmerge.ui.specification.IModelScopeDefinition#createScope(java.lang.Object)
      */
-    public IEditableModelScope createScope(Object context_p) {
+    public IEditableTreeDataScope<?> createScope(Object context_p) {
       return null;
     }
     /**

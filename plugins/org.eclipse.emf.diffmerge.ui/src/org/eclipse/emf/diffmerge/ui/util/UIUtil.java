@@ -152,16 +152,18 @@ public final class UIUtil {
     if (result == null) {
       // Try editing domain
       EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
-      if (rawEditingDomain == null)
+      if (rawEditingDomain == null) {
         rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
+      }
       if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
         AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
         IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
             element_p, IItemLabelProvider.class);
         if (provider != null) {
           Object rawImage = provider.getImage(element_p);
-          if (rawImage != null)
+          if (rawImage != null) {
             result = ExtendedImageRegistry.getInstance().getImage(rawImage);
+          }
         }
       }
     }
@@ -179,14 +181,16 @@ public final class UIUtil {
     if (result == null) {
       // Try editing domain
       EditingDomain rawEditingDomain = AdapterFactoryEditingDomain.getEditingDomainFor(element_p);
-      if (rawEditingDomain == null)
+      if (rawEditingDomain == null) {
         rawEditingDomain = TransactionUtil.getEditingDomain(element_p);
+      }
       if (rawEditingDomain instanceof AdapterFactoryEditingDomain) {
         AdapterFactoryEditingDomain editingDomain = (AdapterFactoryEditingDomain)rawEditingDomain;
         IItemLabelProvider provider = (IItemLabelProvider)editingDomain.getAdapterFactory().adapt(
             element_p, IItemLabelProvider.class);
-        if (provider != null)
+        if (provider != null) {
           result = provider.getText(element_p);
+        }
       }
     }
     return result;
@@ -273,8 +277,9 @@ public final class UIUtil {
         result = uri_p.toFileString();
 	    } else {
 	      String path = uri_p.path();
-	      if (path == null)
+	      if (path == null) {
 	        path = uri_p.toString();
+	      }
 	      result = URI.decode(path);
 	    }
 	  }
@@ -297,8 +302,9 @@ public final class UIUtil {
    */
   public static TreePath[] toTreePaths(List<? extends List<?>> paths_p) {
     List<TreePath> result = new ArrayList<TreePath>(paths_p.size());
-    for (List<?> path : paths_p)
+    for (List<?> path : paths_p) {
       result.add(toTreePath(path));
+    }
     return result.toArray(new TreePath[result.size()]);
   }
   

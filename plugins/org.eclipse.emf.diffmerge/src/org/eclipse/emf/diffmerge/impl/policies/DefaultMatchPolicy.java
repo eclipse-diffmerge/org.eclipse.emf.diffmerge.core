@@ -12,9 +12,7 @@
 package org.eclipse.emf.diffmerge.impl.policies;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -34,44 +32,13 @@ org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy<EObject> {
   }
   
   /**
-   * Return the extrinsic ID of the given element from the given scope, or null if none
-   * @param element_p a non-null element
-   * @param scope_p a non-null scope that covers the element
-   * @return a potentially null object
-   */
-  protected Comparable<?> getExtrinsicID(EObject element_p,
-      ITreeDataScope<EObject> scope_p) {
-    Comparable<?> result = null;
-    if (scope_p instanceof IPersistentModelScope) {
-      Object extrinsic = ((IPersistentModelScope)scope_p).getExtrinsicID(element_p);
-      if (extrinsic instanceof Comparable<?>) {
-        result = (Comparable<?>)extrinsic;
-      }
-    }
-    if (result == null) { // Try XML ID in a last resort
-      result = ModelImplUtil.getXMLID(element_p);
-    }
-    return result;
-  }
-  
-  /**
-   * Return the intrinsic ID of the given element as defined by its ID attribute, or null if none
-   * @see EcoreUtil#getID(EObject)
-   * @param element_p a potentially null element
-   * @return a potentially null String
-   */
-  protected String getIntrinsicID(EObject element_p, ITreeDataScope<EObject> scope_p) {
-    return ModelImplUtil.getIntrinsicID(element_p);
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultMatchPolicy#getMatchID(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
   @Override
   public Object getMatchID(EObject element_p, ITreeDataScope<EObject> scope_p) {
-    Comparable<?> result = getIntrinsicID(element_p, scope_p);
+    Object result = scope_p.tGetID(element_p, true);
     if (result == null) {
-      result = getExtrinsicID(element_p, scope_p);
+      result = scope_p.tGetID(element_p, false);
     }
     if (result == null) {
       result = getURIBasedMatchID(element_p);

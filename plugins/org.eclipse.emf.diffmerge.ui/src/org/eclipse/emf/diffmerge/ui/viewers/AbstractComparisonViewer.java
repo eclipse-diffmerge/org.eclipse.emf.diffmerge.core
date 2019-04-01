@@ -30,6 +30,7 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
@@ -283,14 +284,14 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
       try {
         if (getInput().isModified(true)) {
           ITreeDataScope<?> leftScope = comparison.getScope(getInput().getRoleForSide(true));
-          if (leftScope instanceof IPersistentModelScope.Editable) {
-            ((IPersistentModelScope.Editable)leftScope).save();
+          if (leftScope instanceof IPersistentDataScope.Editable<?>) {
+            ((IPersistentDataScope.Editable<?>)leftScope).save();
           }
         }
         if (getInput().isModified(false)) {
           ITreeDataScope<?> rightScope = comparison.getScope(getInput().getRoleForSide(false));
-          if (rightScope instanceof IPersistentModelScope.Editable) {
-            ((IPersistentModelScope.Editable)rightScope).save();
+          if (rightScope instanceof IPersistentDataScope.Editable<?>) {
+            ((IPersistentDataScope.Editable<?>)rightScope).save();
           }
         }
         firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));

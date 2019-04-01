@@ -144,12 +144,4 @@ implements IEditableModelScope {
     return result;
   }
   
-  /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#setExtrinsicID(EObject, Object)
-   */
-  protected boolean setExtrinsicID(EObject element_p, Object id_p) {
-    // Default implementation only covers XML/XMI Resources
-    return getScopePolicy().tSetID(element_p, id_p, false);
-  }
-  
 }

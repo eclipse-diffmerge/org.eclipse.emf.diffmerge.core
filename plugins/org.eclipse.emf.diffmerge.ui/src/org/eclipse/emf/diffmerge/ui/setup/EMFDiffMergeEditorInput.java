@@ -14,6 +14,8 @@ package org.eclipse.emf.diffmerge.ui.setup;
 import java.lang.reflect.InvocationTargetException;
 import java.util.EventObject;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.compare.CompareConfiguration;
@@ -26,13 +28,13 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
@@ -252,14 +254,20 @@ implements IEditingDomainProvider {
           unloader.unloadResource(_comparisonResource, true);
           unloaded.add(_comparisonResource);
         }
-        if (_leftScope instanceof IPersistentModelScope) {
-          unloaded.addAll(((IPersistentModelScope)_leftScope).unload());
+        List<Object> localUnloaded = new LinkedList<Object>();
+        if (_leftScope instanceof IPersistentDataScope<?>) {
+          localUnloaded.addAll(((IPersistentDataScope<?>)_leftScope).unload());
         }
-        if (_rightScope instanceof IPersistentModelScope) {
-          unloaded.addAll(((IPersistentModelScope)_rightScope).unload());
+        if (_rightScope instanceof IPersistentDataScope<?>) {
+          localUnloaded.addAll(((IPersistentDataScope<?>)_rightScope).unload());
         }
-        if (_ancestorScope instanceof IPersistentModelScope) {
-          unloaded.addAll(((IPersistentModelScope)_ancestorScope).unload());
+        if (_ancestorScope instanceof IPersistentDataScope<?>) {
+          localUnloaded.addAll(((IPersistentDataScope<?>)_ancestorScope).unload());
+        }
+        for (Object localUnloadedElement : localUnloaded) {
+          if (localUnloadedElement instanceof Resource) {
+            unloaded.add((Resource)localUnloadedElement);
+          }
         }
       }
     });
@@ -555,44 +563,51 @@ implements IEditingDomainProvider {
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
     Object leftLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole);
     _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(leftLoadingContext);
-    if (_leftScope == null)
+    if (_leftScope == null) {
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_LeftScopeNull);
-    if (_leftScope instanceof IPersistentModelScope) {
+    }
+    if (_leftScope instanceof IPersistentDataScope<?>) {
       try {
-        ((IPersistentModelScope)_leftScope).load();
+        ((IPersistentDataScope<?>)_leftScope).load();
       } catch (Exception e) {
         throw new WrappedException(e);
       }
     }
     loadingMonitor.worked(1);
-    if (loadingMonitor.isCanceled())
+    if (loadingMonitor.isCanceled()) {
       throw new OperationCanceledException();
+    }
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
     Object rightLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole.opposite());
-    _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(rightLoadingContext);
-    if (_rightScope == null)
+    _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(
+        rightLoadingContext);
+    if (_rightScope == null) {
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_RightScopeNull);
-    if (_rightScope instanceof IPersistentModelScope) {
+    }
+    if (_rightScope instanceof IPersistentDataScope<?>) {
       try {
-        ((IPersistentModelScope)_rightScope).load();
+        ((IPersistentDataScope<?>)_rightScope).load();
       } catch (Exception e) {
         throw new WrappedException(e);
       }
     }
     loadingMonitor.worked(1);
-    if (loadingMonitor.isCanceled())
+    if (loadingMonitor.isCanceled()) {
       throw new OperationCanceledException();
+    }
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
       Object ancestorLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(Role.ANCESTOR);
-      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(ancestorLoadingContext);
-      if (_ancestorScope == null)
+      _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(
+          ancestorLoadingContext);
+      if (_ancestorScope == null) {
         throw new RuntimeException(Messages.EMFDiffMergeEditorInput_AncestorScopeNull);
-      if (_ancestorScope instanceof IPersistentModelScope) {
+      }
+      if (_ancestorScope instanceof IPersistentDataScope<?>) {
         try {
-          ((IPersistentModelScope)_ancestorScope).load();
+          ((IPersistentDataScope<?>)_ancestorScope).load();
         } catch (Exception e) {
           throw new WrappedException(e);
         }
