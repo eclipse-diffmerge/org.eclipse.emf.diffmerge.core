@@ -159,15 +159,18 @@ implements IPropertyChangeNotifier {
    */
   protected void applyEditableRules() {
     IModelScopeDefinition targetScopeDef = _roleToScopeDefinition.get(Role.TARGET);
-    if (targetScopeDef.isEditableSettable())
+    if (targetScopeDef.isEditableSettable()) {
       targetScopeDef.setEditable(true);
+    }
     IModelScopeDefinition referenceScopeDef = _roleToScopeDefinition.get(Role.REFERENCE);
-    if (referenceScopeDef.isEditableSettable())
+    if (referenceScopeDef.isEditableSettable()) {
       referenceScopeDef.setEditable(getTargetSide() == null);
+    }
     IModelScopeDefinition ancestorScopeDef =
         _roleToScopeDefinition.get(Role.ANCESTOR);
-    if (ancestorScopeDef != null && ancestorScopeDef.isEditableSettable())
+    if (ancestorScopeDef != null && ancestorScopeDef.isEditableSettable()) {
       ancestorScopeDef.setEditable(false);
+    }
   }
   
   /**
@@ -189,8 +192,9 @@ implements IPropertyChangeNotifier {
    */
   protected void doSwapLeftRole() {
     super.swapLeftRole();
-    if (_comparisonMethod != null)
+    if (_comparisonMethod != null) {
       _comparisonMethod.swapLeftRole();
+    }
   }
   
   /**
@@ -201,8 +205,9 @@ implements IPropertyChangeNotifier {
    */
   protected boolean doSwapScopeDefinitions(Role role1_p, Role role2_p) {
     boolean result = true;
-    if (_comparisonMethod != null)
+    if (_comparisonMethod != null) {
       result = _comparisonMethod.swapScopeDefinitions(role1_p, role2_p);
+    }
     if (result) {
       IModelScopeDefinition scope1 = getScopeDefinition(role1_p);
       IModelScopeDefinition scope2 = getScopeDefinition(role2_p);
@@ -315,11 +320,13 @@ implements IPropertyChangeNotifier {
   public void performFinish(boolean remember_p) {
     if (_comparisonMethod != null) {
       IComparisonMethodFactory<?> selectedFactory = getSelectedFactory();
-      if (remember_p && selectedFactory != null)
+      if (remember_p && selectedFactory != null) {
         __lastComparisonMethodFactory = selectedFactory;
+      }
       _comparisonMethod.setDirected(getTargetSide() != null);
-      if (!isThreeWay())
+      if (!isThreeWay()) {
         _comparisonMethod.setTwoWayReferenceRole(getTwoWayReferenceRole());
+      }
     }
   }
   

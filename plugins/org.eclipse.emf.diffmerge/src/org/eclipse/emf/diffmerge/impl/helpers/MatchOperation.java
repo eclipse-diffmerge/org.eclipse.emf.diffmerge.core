@@ -52,7 +52,9 @@ extends org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation<EObject> {
    */
   @Override
   protected void scopeCovered(Role role_p) {
-    getComparison().getMapping().crossReference(role_p);
+    if (!getComparison().getScope(role_p).isReadOnly()) {
+      getComparison().getMapping().crossReference(role_p);
+    }
   }
   
 }
