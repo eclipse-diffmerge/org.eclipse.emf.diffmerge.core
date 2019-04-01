@@ -49,6 +49,15 @@ IRawDataScope.Editable<E> {
   boolean addReferenceValue(E source_p, Object reference_p, E value_p);
   
   /**
+   * Disconnect the given element from others prior to its removal.
+   * It may only called if tIsElementDisconnectionRequired() and the usage context
+   * failed to determine what connections (reference values) must be removed.
+   * @param element_p a non-null element
+   * @return whether the operation succeeded
+   */
+  boolean disconnect(E element_p);
+  
+  /**
    * Move the value held by the given element via the given attribute at the given
    * position to the given new position.
    * @param source_p a non-null element

@@ -13,9 +13,12 @@ package org.eclipse.emf.diffmerge.generic.api;
 
 import java.util.List;
 
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope;
+
 
 /**
- * A policy that handles meta and technological aspects of data scopes.
+ * A policy that handles meta or schema-related aspects as well as technological aspects
+ * of data scopes.
  * It defines rules for structural constraints. It provides ID management, element
  * creation mechanisms and other meta information.
  * It typically reflects aspects of the underlying data technology that must be taken
@@ -136,11 +139,20 @@ public interface IScopePolicy<E> {
   Object tGetID(E element_p, boolean intrinsic_p);
   
   /**
-   * Return whether a cross-reference value of the given reference must be explicitly
-   * deleted when the value or owner is deleted
+   * Return whether a value of the given cross-reference must be explicitly deleted
+   * when the value element is deleted. This operation aims at enabling the usage context
+   * to determine what connections (reference values) must be removed prior to element removals.
+   * If !tIsElementDisconnectionRequired(), then this operation has no impact.
    * @param reference_p a non-null reference
    */
-  boolean tIsDeletionRequired(Object reference_p);
+  boolean tIsDisconnectionRequired(Object reference_p);
+  
+  /**
+   * Return whether elements in a scope must be disconnected from others, in terms of
+   * reference values, prior to their removal
+   * @see IEditableDataScope#disconnect(Object)
+   */
+  boolean tIsElementDisconnectionRequired();
   
   /**
    * Create and return a new bare element, i.e., an element without particular values

@@ -113,6 +113,14 @@ public interface EMatch<E, A, R>
   void setTarget(E e);
 
   /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model kind="operation" required="true"
+   * @generated
+   */
+  EMapping<E, A, R> getMapping();
+
+  /**
    * Returns the value of the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference}<code>&lt;E, A, R&gt;</code>.
    * <!-- begin-user-doc -->

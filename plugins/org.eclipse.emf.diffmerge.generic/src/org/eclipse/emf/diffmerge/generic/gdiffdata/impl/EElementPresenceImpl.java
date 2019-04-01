@@ -264,16 +264,9 @@ public abstract class EElementPresenceImpl<E, A, R> extends
         .getOwnershipDifference(getPresenceRole()) == null) {
       IEditableTreeDataScope<E> presenceScope = getPresenceScope();
       E element = getElement();
+      getElementMatch().getMapping().disconnect(getPresenceRole(), element);
       presenceScope.remove(element);
-      removeDependencies(element);
     } // Else handled by ownership
   }
-
-  /**
-   * Remove dependencies to the given element after its removal from the presence scope
-   * @param element_p a non-null element
-   * @generated NOT
-   */
-  protected abstract void removeDependencies(E element_p);
 
 } //EElementPresenceImpl

@@ -21,7 +21,6 @@ import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EReferenceValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -215,17 +214,6 @@ public class EReferenceValuePresenceImpl extends
   @Override
   public EComparison getComparison() {
     return (EComparison) super.getComparison();
-  }
-
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#removeDependencies(java.lang.Object)
-   * @generated NOT
-   */
-  @Override
-  protected void removeDependencies(Object element_p) {
-    //    getComparison().getMapping().removeDependencies(getPresenceRole(),
-    //        element_p);
-    //TODO
   }
 
   /**

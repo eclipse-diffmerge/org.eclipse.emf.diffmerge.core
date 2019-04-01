@@ -173,11 +173,11 @@ public class EMappingImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#removeDependencies(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   @Override
-  public boolean removeDependencies(Role role_p, EObject element_p) {
+  public boolean disconnect(Role role_p, EObject element_p) {
     boolean result = true;
     IEditableTreeDataScope<EObject> scope = getComparison().getScope(role_p);
     for (EStructuralFeature.Setting setting : getCrossReferences(element_p,
@@ -265,7 +265,7 @@ public class EMappingImpl extends
         @Override
         protected boolean isIncluded(EStructuralFeature feature_p) {
           return super.isIncludedEntry(feature_p)
-              && getScope().tIsDeletionRequired(feature_p);
+              && getScope().tIsDisconnectionRequired(feature_p);
         }
 
         /**

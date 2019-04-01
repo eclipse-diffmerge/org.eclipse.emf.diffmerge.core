@@ -155,10 +155,17 @@ public class ModelScopePolicy implements IScopePolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsDeletionRequired(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsDisconnectionRequired(java.lang.Object)
    */
-  public boolean tIsDeletionRequired(Object reference_p) {
+  public boolean tIsDisconnectionRequired(Object reference_p) {
     return mIsChangeableReference(reference_p) && !((EReference)reference_p).isDerived();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsElementDisconnectionRequired()
+   */
+  public boolean tIsElementDisconnectionRequired() {
+    return true;
   }
   
   /**

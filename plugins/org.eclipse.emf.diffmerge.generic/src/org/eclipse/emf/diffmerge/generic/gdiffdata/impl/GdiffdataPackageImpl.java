@@ -1313,6 +1313,12 @@ public class GdiffdataPackageImpl extends EPackageImpl
         !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+    op = addEOperation(eMappingEClass, ecorePackage.getEBoolean(), "disconnect", //$NON-NLS-1$
+        1, 1, IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, this.getRole(), "role", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    g1 = createEGenericType(eMappingEClass_E);
+    addEParameter(op, g1, "element", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
     op = addEOperation(eMappingEClass, ecorePackage.getEBoolean(),
         "isIgnoredReferenceValue", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
     g1 = createEGenericType(eMappingEClass_E);
@@ -1322,12 +1328,6 @@ public class GdiffdataPackageImpl extends EPackageImpl
     g1 = createEGenericType(eMappingEClass_E);
     addEParameter(op, g1, "value", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
     addEParameter(op, this.getRole(), "role", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-    op = addEOperation(eMappingEClass, ecorePackage.getEBoolean(),
-        "removeDependencies", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-    addEParameter(op, this.getRole(), "role", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-    g1 = createEGenericType(eMappingEClass_E);
-    addEParameter(op, g1, "element", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
     initEClass(eMatchEClass, EMatch.class, "EMatch", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
@@ -1398,6 +1398,17 @@ public class GdiffdataPackageImpl extends EPackageImpl
         IS_ORDERED);
     g1 = createEGenericType(eMatchEClass_E);
     addEParameter(op, g1, "e", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+    op = addEOperation(eMatchEClass, null, "getMapping", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(this.getEMapping());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMatchEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eMergeableDifferenceEClass, EMergeableDifference.class,
         "EMergeableDifference", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$

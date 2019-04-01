@@ -63,6 +63,13 @@ implements IEditableModelScope {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#disconnect(java.lang.Object)
+   */
+  public boolean disconnect(EObject element_p) {
+    return false; // Not supported by default
+  }
+  
+  /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#isReadOnly()
    */
   public boolean isReadOnly() {
@@ -99,7 +106,7 @@ implements IEditableModelScope {
    */
   public boolean remove(EObject element_p) {
     // Warning: this implementation ignores cross-references from outside the scope.
-    // Override if complete deletion of the element is needed.
+    // Override this or disconnect(...) if complete deletion of the element is needed.
     EcoreUtil.remove(element_p);
     return true;
   }

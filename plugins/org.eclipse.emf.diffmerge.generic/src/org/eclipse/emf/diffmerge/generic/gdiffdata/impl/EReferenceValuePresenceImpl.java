@@ -478,33 +478,26 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
     if (getSymmetrical() == null
         && !(hasStrongerOpposite() && !getValueMatch().isPartial())) {
       E valueElement = getValue();
+      if (isOwnership()) {
+        // Value must be removed from its ownership so it is an element removal: disconnect element
+        getElementMatch().getMapping().disconnect(getPresenceRole(), valueElement);
+      }
       if (getFeature() != null) {
         presenceScope.removeReferenceValue(getHolder(), getFeature(),
             valueElement);
       } else {
         presenceScope.remove(valueElement);
       }
-      if (isOwnership()) {
-        // Value has been removed from its containment: delete element
-        removeDependencies(valueElement);
-        if (!getComparison().getLastMergePolicy()
-            .bindPresenceToOwnership(presenceScope)) {
-          // Re-integrate direct children in scope
-          for (E child : presenceScope.getContents(valueElement)) {
-            presenceScope.add(child);
-          }
+      if (isOwnership() && !getComparison().getLastMergePolicy()
+          .bindPresenceToOwnership(presenceScope)) {
+        // Re-integrate direct children in scope
+        for (E child : presenceScope.getContents(valueElement)) {
+          presenceScope.add(child);
         }
       }
     }
     // Otherwise, we know this difference will be merged implicitly because of dependencies
     // since a required difference implies this difference
   }
-
-  /**
-   * Remove dependencies to the given element after its removal from the presence scope
-   * @param element_p a non-null element
-   * @generated NOT
-   */
-  protected abstract void removeDependencies(E element_p);
 
 } //EReferenceValuePresenceImpl

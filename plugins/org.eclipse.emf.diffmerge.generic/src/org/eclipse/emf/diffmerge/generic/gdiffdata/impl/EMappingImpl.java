@@ -405,14 +405,14 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * Remove dependencies (references) to the given element after its removal from the
-   * scope of the given role in the given comparison
+   * Remove dependencies (references) to the given element for its removal from the
+   * scope of the given role
    * @param role TARGET or REFERENCE
    * @param element a non-null element
    * @return whether all dependencies have been successfully removed
    * @generated NOT
    */
-  public abstract boolean removeDependencies(Role role, E element);
+  public abstract boolean disconnect(Role role, E element);
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#map(Object, org.eclipse.emf.diffmerge.generic.api.Role)

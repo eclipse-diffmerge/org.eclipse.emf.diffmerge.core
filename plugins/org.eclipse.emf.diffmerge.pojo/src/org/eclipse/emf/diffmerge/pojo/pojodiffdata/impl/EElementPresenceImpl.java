@@ -83,15 +83,4 @@ public class EElementPresenceImpl extends
     return (EComparison) super.getComparison();
   }
 
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl#removeDependencies(java.lang.Object)
-   * @generated NOT
-   */
-  @Override
-  protected void removeDependencies(Object element_p) {
-    //    getComparison().getMapping().removeDependencies(getPresenceRole(),
-    //        element_p);
-    //TODO
-  }
-
 } //EElementPresenceImpl

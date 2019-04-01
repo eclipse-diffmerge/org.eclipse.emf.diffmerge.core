@@ -17,6 +17,7 @@ import java.util.Set;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.api.IMatchPolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope;
 import org.eclipse.emf.ecore.EObject;
 
 
@@ -52,7 +53,8 @@ extends org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation<EObject> {
    */
   @Override
   protected void scopeCovered(Role role_p) {
-    if (!getComparison().getScope(role_p).isReadOnly()) {
+    IEditableDataScope<EObject> scope = getComparison().getScope(role_p);
+    if (!scope.isReadOnly() && scope.tIsElementDisconnectionRequired()) {
       getComparison().getMapping().crossReference(role_p);
     }
   }

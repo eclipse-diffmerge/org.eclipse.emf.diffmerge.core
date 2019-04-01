@@ -75,6 +75,12 @@
     <eTypeParameters name="E"/>
     <eTypeParameters name="A"/>
     <eTypeParameters name="R"/>
+    <eOperations name="disconnect" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="role" lowerBound="1" eType="#//Role"/>
+      <eParameters name="element" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/E"/>
+      </eParameters>
+    </eOperations>
     <eOperations name="isIgnoredReferenceValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eParameters name="source" lowerBound="1">
         <eGenericType eTypeParameter="#//EMapping/E"/>
@@ -86,12 +92,6 @@
         <eGenericType eTypeParameter="#//EMapping/E"/>
       </eParameters>
       <eParameters name="role" lowerBound="1" eType="#//Role"/>
-    </eOperations>
-    <eOperations name="removeDependencies" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eParameters name="role" lowerBound="1" eType="#//Role"/>
-      <eParameters name="element" lowerBound="1">
-        <eGenericType eTypeParameter="#//EMapping/E"/>
-      </eParameters>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         containment="true">
@@ -150,6 +150,13 @@
       <eParameters name="e">
         <eGenericType eTypeParameter="#//EMatch/E"/>
       </eParameters>
+    </eOperations>
+    <eOperations name="getMapping" lowerBound="1">
+      <eGenericType eClassifier="#//EMapping">
+        <eTypeArguments eTypeParameter="#//EMatch/E"/>
+        <eTypeArguments eTypeParameter="#//EMatch/A"/>
+        <eTypeArguments eTypeParameter="#//EMatch/R"/>
+      </eGenericType>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
         transient="true"/>

@@ -87,17 +87,17 @@ public interface EMapping<E, A, R>
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model required="true" sourceRequired="true" referenceRequired="true" valueRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @model required="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true" elementRequired="true"
    * @generated
    */
-  boolean isIgnoredReferenceValue(E source, R reference, E value, Role role);
+  boolean disconnect(Role role, E element);
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model required="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true" elementRequired="true"
+   * @model required="true" sourceRequired="true" referenceRequired="true" valueRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  boolean removeDependencies(Role role, E element);
+  boolean isIgnoredReferenceValue(E source, R reference, E value, Role role);
 
 } // EMapping

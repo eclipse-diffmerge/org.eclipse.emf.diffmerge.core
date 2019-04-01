@@ -308,14 +308,4 @@ public class EReferenceValuePresenceImpl extends
     return super.eIsSet(featureID);
   }
 
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#removeDependencies(java.lang.Object)
-   * @generated NOT
-   */
-  @Override
-  protected void removeDependencies(EObject element_p) {
-    getComparison().getMapping().removeDependencies(getPresenceRole(),
-        element_p);
-  }
-
 } //EReferenceValuePresenceImpl
