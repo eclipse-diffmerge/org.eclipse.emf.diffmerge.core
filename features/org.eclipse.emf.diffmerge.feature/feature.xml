@@ -13,7 +13,7 @@
 <feature
       id="org.eclipse.emf.diffmerge.feature"
       label="%featureName"
-      version="0.11.0.qualifier"
+      version="0.12.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="0.0.0">
@@ -23,7 +23,7 @@
    </description>
 
    <copyright>
-       %copyright
+      %copyright
    </copyright>
 
    <license url="%licenseURL">
@@ -60,6 +60,20 @@
 
    <plugin
          id="org.eclipse.emf.diffmerge.structures"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.diffmerge.generic"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.diffmerge.pojo"
          download-size="0"
          install-size="0"
          version="0.0.0"
