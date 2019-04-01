@@ -126,7 +126,7 @@ implements IDataScope<E> {
    * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsContainmentReference(java.lang.Object)
    */
   public boolean mIsContainmentReference(Object reference_p) {
-    return getScopePolicy().mIsContainerReference(reference_p);
+    return getScopePolicy().mIsContainmentReference(reference_p);
   }
   
   /**

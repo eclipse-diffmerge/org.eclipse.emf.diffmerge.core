@@ -9,7 +9,7 @@
  * Contributors:
  *    Thales Global Services S.A.S. - initial API and implementation
  **********************************************************************/
-package org.eclipse.emf.diffmerge.impl.scopes;
+package org.eclipse.emf.diffmerge.impl.policies;
 
 import java.util.List;
 
@@ -25,7 +25,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 
 /**
- * A (trivial) scope policy for EMF models.
+ * A scope policy for EMF models.
+ * 
  * @author Olivier Constant
  */
 public class ModelScopePolicy implements IScopePolicy<EObject> {

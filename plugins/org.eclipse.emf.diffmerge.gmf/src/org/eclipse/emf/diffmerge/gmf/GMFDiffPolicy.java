@@ -39,11 +39,12 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
       ITreeDataScope<EObject> scope_p) {
     boolean result = super.considerEqual(value1_p, value2_p, attribute_p, scope_p);
     if (!result) {
-      if (NotationPackage.eINSTANCE.getRelativeBendpoints_Points().equals(attribute_p))
+      if (NotationPackage.eINSTANCE.getRelativeBendpoints_Points().equals(attribute_p)) {
         result = equalPoints((List<?>)value1_p, (List<?>)value2_p);
-      else if (value1_p instanceof RelativeBendpoint && value2_p instanceof RelativeBendpoint)
+      } else if (value1_p instanceof RelativeBendpoint && value2_p instanceof RelativeBendpoint) {
         result = equalRelativeBendpoint(
             (RelativeBendpoint)value1_p, (RelativeBendpoint)value2_p);
+      }
     }
     return result;
   }
@@ -79,14 +80,16 @@ public class GMFDiffPolicy extends ConfigurableDiffPolicy {
    * @param list2_p a non-null, potentially empty list
    */
   protected boolean equalPoints(List<?> list1_p, List<?> list2_p) {
-    if (list1_p.size() != list2_p.size())
+    if (list1_p.size() != list2_p.size()) {
       return false;
+    }
     for (int i=0; i<list1_p.size(); i++) {
       Object val1 = list1_p.get(i);
       Object val2 = list2_p.get(i);
       if (!equalRelativeBendpoint(
-          (RelativeBendpoint)val1, (RelativeBendpoint)val2))
+          (RelativeBendpoint)val1, (RelativeBendpoint)val2)) {
         return false;
+      }
     }
     return true;
   }

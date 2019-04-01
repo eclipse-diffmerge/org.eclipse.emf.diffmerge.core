@@ -211,15 +211,16 @@ public class EMappingImpl extends
    * @generated NOT
    */
   @SuppressWarnings("serial")
-  protected static class ScopeCrossReferencer extends EcoreUtil.CrossReferencer {
+  protected static class ScopeCrossReferencer
+      extends EcoreUtil.CrossReferencer {
     /** The non-null mapping this cross referencer is for */
     protected final EMapping _mapping;
 
     /** The non-null role played by the scope to cross-reference */
     protected final Role _role;
 
-    /** The non-null scope to cross-reference */
-    protected final ITreeDataScope<EObject> _scope;
+    /** The initially null scope to cross-reference */
+    private ITreeDataScope<EObject> _scope;
 
     /**
      * Constructor
@@ -230,7 +231,7 @@ public class EMappingImpl extends
       super(Collections.emptyList());
       _mapping = mapping_p;
       _role = role_p;
-      _scope = mapping_p.getComparison().getScope(role_p);
+      _scope = null;
     }
 
     /**
@@ -247,8 +248,8 @@ public class EMappingImpl extends
     @Override
     protected boolean crossReference(EObject element_p, EReference reference_p,
         EObject crossReferenced_p) {
-      return _mapping.isIgnoredReferenceValue(
-          element_p, reference_p, crossReferenced_p, getRole());
+      return _mapping.isIgnoredReferenceValue(element_p, reference_p,
+          crossReferenced_p, getRole());
     }
 
     /**
@@ -264,8 +265,9 @@ public class EMappingImpl extends
         @Override
         protected boolean isIncluded(EStructuralFeature feature_p) {
           return super.isIncludedEntry(feature_p)
-              && _scope.tIsDeletionRequired(feature_p);
+              && getScope().tIsDeletionRequired(feature_p);
         }
+
         /**
          * @see org.eclipse.emf.ecore.util.EContentsEList.FeatureIteratorImpl#resolve()
          */
@@ -282,6 +284,17 @@ public class EMappingImpl extends
      */
     public Role getRole() {
       return _role;
+    }
+
+    /**
+     * Return the scope to cross-reference
+     * @return a non-null scope
+     */
+    protected ITreeDataScope<EObject> getScope() {
+      if (_scope == null) {
+        _scope = _mapping.getComparison().getScope(getRole());
+      }
+      return _scope;
     }
 
     /**

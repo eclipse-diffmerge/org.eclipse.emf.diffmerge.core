@@ -92,6 +92,8 @@ public class EAttributeValuePresenceImpl extends
       EAttribute attribute_p, Object value_p, Role presenceRole_p,
       boolean isOrder_p) {
     super(elementMatch_p, attribute_p, value_p, presenceRole_p, isOrder_p);
+    setValue(value_p); // Override default value.
+    // Value must be defined in the same EClass as attribute for EMF serialization order reasons.
   }
 
   /**

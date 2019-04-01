@@ -23,6 +23,7 @@ import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope;
+import org.eclipse.emf.diffmerge.impl.policies.ModelScopePolicy;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;

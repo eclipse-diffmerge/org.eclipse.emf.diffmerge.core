@@ -413,7 +413,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @generated NOT
    */
   public abstract boolean removeDependencies(Role role, E element);
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#map(Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT

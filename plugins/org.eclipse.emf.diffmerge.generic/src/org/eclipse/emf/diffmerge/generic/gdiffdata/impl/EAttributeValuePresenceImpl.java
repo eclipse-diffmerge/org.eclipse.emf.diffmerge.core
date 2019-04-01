@@ -52,8 +52,8 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   public EAttributeValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
       A attribute_p, Object value_p, Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p, isOrder_p);
-    setValue(value_p);
     setAttribute(attribute_p);
+    setValue(value_p);
     ((IMatch.Editable<E>) elementMatch).addRelatedDifference(this);
   }
 

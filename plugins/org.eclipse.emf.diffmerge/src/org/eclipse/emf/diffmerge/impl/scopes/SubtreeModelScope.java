@@ -132,8 +132,9 @@ implements IPersistentModelScope.Editable {
   @Override
   public boolean remove(EObject element_p) {
     boolean result = false;
-    if (element_p != getRoot())
+    if (element_p != getRoot()) {
       result = super.remove(element_p);
+    }
     return result;
   }
   

@@ -1219,7 +1219,7 @@ public interface DiffdataPackage extends EPackage {
   int ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' containment reference list.
+   * The feature id for the '<em><b>Value</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1584,7 +1584,7 @@ public interface DiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Attribute To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyType="org.eclipse.emf.ecore.EAttribute" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueMany="true"
    * @generated
    */
   EClass getAttributeToDifferenceEntry();
@@ -1601,10 +1601,10 @@ public interface DiffdataPackage extends EPackage {
   EReference getAttributeToDifferenceEntry_Key();
 
   /**
-   * Returns the meta object for the containment reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Value</em>'.
+   * @return the meta object for the reference list '<em>Value</em>'.
    * @see java.util.Map.Entry
    * @see #getAttributeToDifferenceEntry()
    * @generated
@@ -1965,7 +1965,7 @@ public interface DiffdataPackage extends EPackage {
         .getAttributeToDifferenceEntry_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

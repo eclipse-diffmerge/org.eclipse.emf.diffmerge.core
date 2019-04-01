@@ -807,13 +807,6 @@ public class DiffdataPackageImpl extends EPackageImpl
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
 
-    op = addEOperation(eMappingEClass, ecorePackage.getEBoolean(),
-        "removeDependencies", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-    addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
-        IS_ORDERED);
-    addEParameter(op, ecorePackage.getEObject(), "element", 1, 1, IS_UNIQUE, //$NON-NLS-1$
-        IS_ORDERED);
-
     initEClass(eMatchEClass, EMatch.class, "EMatch", !IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getEMatch_Ancestor(), ecorePackage.getEObject(), null,
@@ -923,7 +916,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     initEReference(getAttributeToDifferenceEntry_Value(), g1, null, "value", //$NON-NLS-1$
         null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(referenceToElementToDifferenceEntryEClass, Map.Entry.class,

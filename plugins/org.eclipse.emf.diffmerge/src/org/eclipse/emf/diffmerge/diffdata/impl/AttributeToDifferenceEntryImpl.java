@@ -1,11 +1,19 @@
-/**
- */
+/*********************************************************************
+ * Copyright (c) 2019 Thales Global Services S.A.S.
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *    Thales Global Services S.A.S. - initial API and implementation
+ **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
@@ -23,8 +31,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -53,7 +60,7 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl implements
   protected EAttribute key;
 
   /**
-   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference list.
+   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTypedValue()
@@ -128,26 +135,11 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl implements
    */
   public EList<IAttributeValuePresence<EObject>> getTypedValue() {
     if (value == null) {
-      value = new EObjectContainmentEList<IAttributeValuePresence<EObject>>(
+      value = new EObjectResolvingEList<IAttributeValuePresence<EObject>>(
           IAttributeValuePresence.class, this,
           DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE);
     }
     return value;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd,
-      int featureID, NotificationChain msgs) {
-    switch (featureID) {
-    case DiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
-      return ((InternalEList<?>) getTypedValue()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**
