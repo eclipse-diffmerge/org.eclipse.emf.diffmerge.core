@@ -13,6 +13,8 @@ package org.eclipse.emf.diffmerge.generic.api.scopes;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+
 /**
  * A persistence-aware data scope.
  * 
@@ -24,10 +26,9 @@ public interface IPersistentDataScope<E> extends IRawDataScope<E> {
    * Initialize the scope by loading at least the elements that are required
    * for exploring the scope
    * Postcondition: isLoaded() if no exception is thrown
-   * @return whether the operation could be performed
-   * @throws Exception an exception indicating that the operation failed in an unexpected way
+   * @return a non-null status for the operation
    */
-  boolean load() throws Exception;
+  IStatus load();
   
   /**
    * Return whether the scope is loaded, that is, at least the elements that are required for
@@ -40,8 +41,8 @@ public interface IPersistentDataScope<E> extends IRawDataScope<E> {
    * result of calling load() and exploring the scope. Elements and persistence units
    * that were already loaded when load() was called are not unloaded.
    * A scope which has been unloaded may not be able to be loaded again.
-   * @return an optional object that describes the result of the operation as a list of
-   *          persistence units
+   * @return a non-null, potentially empty list of persistence units that reflects
+   *          the impact of the operation
    */
   List<?> unload();
   
@@ -52,10 +53,9 @@ public interface IPersistentDataScope<E> extends IRawDataScope<E> {
   interface Editable<E> extends IPersistentDataScope<E> {
     /**
      * Save the scope
-     * @return whether the operation could be performed
-     * @throws Exception an exception indicating that the operation failed in an unexpected way
+     * @return a non-null status for the operation
      */
-    boolean save() throws Exception;
+    IStatus save();
   }
   
 }

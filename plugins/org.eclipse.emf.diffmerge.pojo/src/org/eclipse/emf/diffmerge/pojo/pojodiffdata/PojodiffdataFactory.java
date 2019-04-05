@@ -38,7 +38,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EComparison</em>'.
    * @generated
    */
-  EComparison createEComparison();
+  <E extends Object> EComparison<E> createEComparison();
 
   /**
    * Returns a new object of class '<em>EMapping</em>'.
@@ -47,7 +47,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EMapping</em>'.
    * @generated
    */
-  EMapping createEMapping();
+  <E extends Object> EMapping<E> createEMapping();
 
   /**
    * Returns a new object of class '<em>EMatch</em>'.
@@ -56,7 +56,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EMatch</em>'.
    * @generated
    */
-  EMatch createEMatch();
+  <E extends Object> EMatch<E> createEMatch();
 
   /**
    * Returns a new object of class '<em>EElement Presence</em>'.
@@ -65,7 +65,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EElement Presence</em>'.
    * @generated
    */
-  EElementPresence createEElementPresence();
+  <E extends Object> EElementPresence<E> createEElementPresence();
 
   /**
    * Returns a new object of class '<em>EAttribute Value Presence</em>'.
@@ -74,7 +74,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EAttribute Value Presence</em>'.
    * @generated
    */
-  EAttributeValuePresence createEAttributeValuePresence();
+  <E extends Object> EAttributeValuePresence<E> createEAttributeValuePresence();
 
   /**
    * Returns a new object of class '<em>EReference Value Presence</em>'.
@@ -83,7 +83,7 @@ public interface PojodiffdataFactory extends EFactory {
    * @return a new object of class '<em>EReference Value Presence</em>'.
    * @generated
    */
-  EReferenceValuePresence createEReferenceValuePresence();
+  <E extends Object> EReferenceValuePresence<E> createEReferenceValuePresence();
 
   /**
    * Returns the package supported by this factory.

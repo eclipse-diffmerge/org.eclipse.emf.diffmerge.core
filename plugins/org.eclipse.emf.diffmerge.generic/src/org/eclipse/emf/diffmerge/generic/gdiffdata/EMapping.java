@@ -100,4 +100,12 @@ public interface EMapping<E, A, R>
    */
   boolean isIgnoredReferenceValue(E source, R reference, E value, Role role);
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model required="true" elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  EMatch<E, A, R> map(E element, Role role);
+
 } // EMapping

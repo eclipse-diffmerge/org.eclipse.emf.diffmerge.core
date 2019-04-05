@@ -49,7 +49,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
-    implements BasicEMap.Entry<Object, EList<IReferenceValuePresence<Object>>> {
+    implements BasicEMap.Entry<Object, EList<IReferenceValuePresence<?>>> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -78,7 +78,7 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EList<IReferenceValuePresence<Object>> value;
+  protected EList<IReferenceValuePresence<?>> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -127,9 +127,9 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IReferenceValuePresence<Object>> getTypedValue() {
+  public EList<IReferenceValuePresence<?>> getTypedValue() {
     if (value == null) {
-      value = new EObjectContainmentEList<IReferenceValuePresence<Object>>(
+      value = new EObjectContainmentEList<IReferenceValuePresence<?>>(
           IReferenceValuePresence.class, this,
           PojodiffdataPackage.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY__VALUE);
     }
@@ -181,8 +181,8 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
       return;
     case PojodiffdataPackage.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY__VALUE:
       getTypedValue().clear();
-      getTypedValue().addAll(
-          (Collection<? extends IReferenceValuePresence<Object>>) newValue);
+      getTypedValue()
+          .addAll((Collection<? extends IReferenceValuePresence<?>>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -291,7 +291,7 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IReferenceValuePresence<Object>> getValue() {
+  public EList<IReferenceValuePresence<?>> getValue() {
     return getTypedValue();
   }
 
@@ -300,9 +300,9 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IReferenceValuePresence<Object>> setValue(
-      EList<IReferenceValuePresence<Object>> value) {
-    EList<IReferenceValuePresence<Object>> oldValue = getValue();
+  public EList<IReferenceValuePresence<?>> setValue(
+      EList<IReferenceValuePresence<?>> value) {
+    EList<IReferenceValuePresence<?>> oldValue = getValue();
     getTypedValue().clear();
     getTypedValue().addAll(value);
     return oldValue;
@@ -314,10 +314,10 @@ public class ReferenceToOrderDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<Object, EList<IReferenceValuePresence<Object>>> getEMap() {
+  public EMap<Object, EList<IReferenceValuePresence<?>>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<Object, EList<IReferenceValuePresence<Object>>>) container
+        : (EMap<Object, EList<IReferenceValuePresence<?>>>) container
             .eGet(eContainmentFeature());
   }
 

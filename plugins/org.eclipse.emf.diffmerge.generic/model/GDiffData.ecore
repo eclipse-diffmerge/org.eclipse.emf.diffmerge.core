@@ -93,6 +93,17 @@
       </eParameters>
       <eParameters name="role" lowerBound="1" eType="#//Role"/>
     </eOperations>
+    <eOperations name="map" lowerBound="1">
+      <eGenericType eClassifier="#//EMatch">
+        <eTypeArguments eTypeParameter="#//EMapping/E"/>
+        <eTypeArguments eTypeParameter="#//EMapping/A"/>
+        <eTypeArguments eTypeParameter="#//EMapping/R"/>
+      </eGenericType>
+      <eParameters name="element" lowerBound="1">
+        <eGenericType eTypeParameter="#//EMapping/E"/>
+      </eParameters>
+      <eParameters name="role" lowerBound="1" eType="#//Role"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableContents" upperBound="-1"
         containment="true">
       <eGenericType eClassifier="#//EMatch">

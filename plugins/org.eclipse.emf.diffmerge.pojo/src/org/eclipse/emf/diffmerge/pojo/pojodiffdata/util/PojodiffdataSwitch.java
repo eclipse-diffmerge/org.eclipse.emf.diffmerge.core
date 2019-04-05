@@ -13,10 +13,8 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata.util;
 
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
@@ -104,7 +102,7 @@ public class PojodiffdataSwitch<T> {
   protected T doSwitch(int classifierID, EObject theEObject) {
     switch (classifierID) {
     case PojodiffdataPackage.ECOMPARISON: {
-      EComparison eComparison = (EComparison) theEObject;
+      EComparison<?> eComparison = (EComparison<?>) theEObject;
       T result = caseEComparison(eComparison);
       if (result == null)
         result = caseGdiffdata_EComparison(eComparison);
@@ -117,7 +115,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.ECOMPARISON_ELEMENT: {
-      EComparisonElement eComparisonElement = (EComparisonElement) theEObject;
+      EComparisonElement<?> eComparisonElement = (EComparisonElement<?>) theEObject;
       T result = caseEComparisonElement(eComparisonElement);
       if (result == null)
         result = caseGdiffdata_EComparisonElement(eComparisonElement);
@@ -126,7 +124,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EMAPPING: {
-      EMapping eMapping = (EMapping) theEObject;
+      EMapping<?> eMapping = (EMapping<?>) theEObject;
       T result = caseEMapping(eMapping);
       if (result == null)
         result = caseGdiffdata_EMapping(eMapping);
@@ -143,7 +141,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EMATCH: {
-      EMatch eMatch = (EMatch) theEObject;
+      EMatch<?> eMatch = (EMatch<?>) theEObject;
       T result = caseEMatch(eMatch);
       if (result == null)
         result = caseGdiffdata_EMatch(eMatch);
@@ -160,7 +158,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EMERGEABLE_DIFFERENCE: {
-      EMergeableDifference eMergeableDifference = (EMergeableDifference) theEObject;
+      EMergeableDifference<?> eMergeableDifference = (EMergeableDifference<?>) theEObject;
       T result = caseEMergeableDifference(eMergeableDifference);
       if (result == null)
         result = caseGdiffdata_EMergeableDifference(eMergeableDifference);
@@ -177,7 +175,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EELEMENT_RELATIVE_PRESENCE: {
-      EElementRelativePresence eElementRelativePresence = (EElementRelativePresence) theEObject;
+      EElementRelativePresence<?> eElementRelativePresence = (EElementRelativePresence<?>) theEObject;
       T result = caseEElementRelativePresence(eElementRelativePresence);
       if (result == null)
         result = caseGdiffdata_EElementRelativePresence(
@@ -201,7 +199,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EELEMENT_PRESENCE: {
-      EElementPresence eElementPresence = (EElementPresence) theEObject;
+      EElementPresence<?> eElementPresence = (EElementPresence<?>) theEObject;
       T result = caseEElementPresence(eElementPresence);
       if (result == null)
         result = caseGdiffdata_EElementPresence(eElementPresence);
@@ -230,7 +228,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EVALUE_PRESENCE: {
-      EValuePresence eValuePresence = (EValuePresence) theEObject;
+      EValuePresence<?> eValuePresence = (EValuePresence<?>) theEObject;
       T result = caseEValuePresence(eValuePresence);
       if (result == null)
         result = caseGdiffdata_EValuePresence(eValuePresence);
@@ -259,7 +257,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EATTRIBUTE_VALUE_PRESENCE: {
-      EAttributeValuePresence eAttributeValuePresence = (EAttributeValuePresence) theEObject;
+      EAttributeValuePresence<?> eAttributeValuePresence = (EAttributeValuePresence<?>) theEObject;
       T result = caseEAttributeValuePresence(eAttributeValuePresence);
       if (result == null)
         result = caseGdiffdata_EAttributeValuePresence(eAttributeValuePresence);
@@ -295,7 +293,7 @@ public class PojodiffdataSwitch<T> {
       return result;
     }
     case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE: {
-      EReferenceValuePresence eReferenceValuePresence = (EReferenceValuePresence) theEObject;
+      EReferenceValuePresence<?> eReferenceValuePresence = (EReferenceValuePresence<?>) theEObject;
       T result = caseEReferenceValuePresence(eReferenceValuePresence);
       if (result == null)
         result = caseGdiffdata_EReferenceValuePresence(eReferenceValuePresence);
@@ -332,7 +330,7 @@ public class PojodiffdataSwitch<T> {
     }
     case PojodiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<Object, EList<IAttributeValuePresence<Object>>> attributeToDifferenceEntry = (Map.Entry<Object, EList<IAttributeValuePresence<Object>>>) theEObject;
+      Map.Entry<Object, EList<IAttributeValuePresence<?>>> attributeToDifferenceEntry = (Map.Entry<Object, EList<IAttributeValuePresence<?>>>) theEObject;
       T result = caseAttributeToDifferenceEntry(attributeToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
@@ -340,7 +338,7 @@ public class PojodiffdataSwitch<T> {
     }
     case PojodiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>> referenceToElementToDifferenceEntry = (Map.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>>) theEObject;
+      Map.Entry<Object, EMap<Object, IReferenceValuePresence<?>>> referenceToElementToDifferenceEntry = (Map.Entry<Object, EMap<Object, IReferenceValuePresence<?>>>) theEObject;
       T result = caseReferenceToElementToDifferenceEntry(
           referenceToElementToDifferenceEntry);
       if (result == null)
@@ -349,7 +347,7 @@ public class PojodiffdataSwitch<T> {
     }
     case PojodiffdataPackage.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<Object, EList<IReferenceValuePresence<Object>>> referenceToOrderDifferenceEntry = (Map.Entry<Object, EList<IReferenceValuePresence<Object>>>) theEObject;
+      Map.Entry<Object, EList<IReferenceValuePresence<?>>> referenceToOrderDifferenceEntry = (Map.Entry<Object, EList<IReferenceValuePresence<?>>>) theEObject;
       T result = caseReferenceToOrderDifferenceEntry(
           referenceToOrderDifferenceEntry);
       if (result == null)
@@ -358,7 +356,7 @@ public class PojodiffdataSwitch<T> {
     }
     case PojodiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<Object, IReferenceValuePresence<Object>> elementToDifferenceEntry = (Map.Entry<Object, IReferenceValuePresence<Object>>) theEObject;
+      Map.Entry<Object, IReferenceValuePresence<?>> elementToDifferenceEntry = (Map.Entry<Object, IReferenceValuePresence<?>>) theEObject;
       T result = caseElementToDifferenceEntry(elementToDifferenceEntry);
       if (result == null)
         result = defaultCase(theEObject);
@@ -366,7 +364,7 @@ public class PojodiffdataSwitch<T> {
     }
     case PojodiffdataPackage.ELEMENT_TO_MATCH_ENTRY: {
       @SuppressWarnings("unchecked")
-      Map.Entry<Object, EMatch> elementToMatchEntry = (Map.Entry<Object, EMatch>) theEObject;
+      Map.Entry<Object, EMatch<?>> elementToMatchEntry = (Map.Entry<Object, EMatch<?>>) theEObject;
       T result = caseElementToMatchEntry(elementToMatchEntry);
       if (result == null)
         result = defaultCase(theEObject);
@@ -388,7 +386,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEComparison(EComparison object) {
+  public <E extends Object> T caseEComparison(EComparison<E> object) {
     return null;
   }
 
@@ -403,7 +401,8 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEComparisonElement(EComparisonElement object) {
+  public <E extends Object> T caseEComparisonElement(
+      EComparisonElement<E> object) {
     return null;
   }
 
@@ -418,7 +417,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMapping(EMapping object) {
+  public <E extends Object> T caseEMapping(EMapping<E> object) {
     return null;
   }
 
@@ -433,7 +432,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMatch(EMatch object) {
+  public <E extends Object> T caseEMatch(EMatch<E> object) {
     return null;
   }
 
@@ -448,7 +447,8 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEMergeableDifference(EMergeableDifference object) {
+  public <E extends Object> T caseEMergeableDifference(
+      EMergeableDifference<E> object) {
     return null;
   }
 
@@ -463,7 +463,8 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEElementRelativePresence(EElementRelativePresence object) {
+  public <E extends Object> T caseEElementRelativePresence(
+      EElementRelativePresence<E> object) {
     return null;
   }
 
@@ -478,7 +479,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEElementPresence(EElementPresence object) {
+  public <E extends Object> T caseEElementPresence(EElementPresence<E> object) {
     return null;
   }
 
@@ -493,7 +494,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEValuePresence(EValuePresence object) {
+  public <E extends Object> T caseEValuePresence(EValuePresence<E> object) {
     return null;
   }
 
@@ -508,7 +509,8 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEAttributeValuePresence(EAttributeValuePresence object) {
+  public <E extends Object> T caseEAttributeValuePresence(
+      EAttributeValuePresence<E> object) {
     return null;
   }
 
@@ -523,7 +525,8 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseEReferenceValuePresence(EReferenceValuePresence object) {
+  public <E extends Object> T caseEReferenceValuePresence(
+      EReferenceValuePresence<E> object) {
     return null;
   }
 
@@ -539,7 +542,7 @@ public class PojodiffdataSwitch<T> {
    * @generated
    */
   public T caseAttributeToDifferenceEntry(
-      Map.Entry<Object, EList<IAttributeValuePresence<Object>>> object) {
+      Map.Entry<Object, EList<IAttributeValuePresence<?>>> object) {
     return null;
   }
 
@@ -555,7 +558,7 @@ public class PojodiffdataSwitch<T> {
    * @generated
    */
   public T caseReferenceToElementToDifferenceEntry(
-      Map.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>> object) {
+      Map.Entry<Object, EMap<Object, IReferenceValuePresence<?>>> object) {
     return null;
   }
 
@@ -571,7 +574,7 @@ public class PojodiffdataSwitch<T> {
    * @generated
    */
   public T caseReferenceToOrderDifferenceEntry(
-      Map.Entry<Object, EList<IReferenceValuePresence<Object>>> object) {
+      Map.Entry<Object, EList<IReferenceValuePresence<?>>> object) {
     return null;
   }
 
@@ -587,7 +590,7 @@ public class PojodiffdataSwitch<T> {
    * @generated
    */
   public T caseElementToDifferenceEntry(
-      Map.Entry<Object, IReferenceValuePresence<Object>> object) {
+      Map.Entry<Object, IReferenceValuePresence<?>> object) {
     return null;
   }
 
@@ -602,7 +605,7 @@ public class PojodiffdataSwitch<T> {
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
-  public T caseElementToMatchEntry(Map.Entry<Object, EMatch> object) {
+  public T caseElementToMatchEntry(Map.Entry<Object, EMatch<?>> object) {
     return null;
   }
 

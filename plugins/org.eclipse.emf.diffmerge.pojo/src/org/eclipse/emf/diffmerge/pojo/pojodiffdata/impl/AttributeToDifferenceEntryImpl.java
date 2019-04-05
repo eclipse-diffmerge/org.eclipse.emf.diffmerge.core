@@ -49,7 +49,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class AttributeToDifferenceEntryImpl extends EObjectImpl
-    implements BasicEMap.Entry<Object, EList<IAttributeValuePresence<Object>>> {
+    implements BasicEMap.Entry<Object, EList<IAttributeValuePresence<?>>> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -78,7 +78,7 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EList<IAttributeValuePresence<Object>> value;
+  protected EList<IAttributeValuePresence<?>> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,9 +126,9 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IAttributeValuePresence<Object>> getTypedValue() {
+  public EList<IAttributeValuePresence<?>> getTypedValue() {
     if (value == null) {
-      value = new EObjectContainmentEList<IAttributeValuePresence<Object>>(
+      value = new EObjectContainmentEList<IAttributeValuePresence<?>>(
           IAttributeValuePresence.class, this,
           PojodiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE);
     }
@@ -180,8 +180,8 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
       return;
     case PojodiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
       getTypedValue().clear();
-      getTypedValue().addAll(
-          (Collection<? extends IAttributeValuePresence<Object>>) newValue);
+      getTypedValue()
+          .addAll((Collection<? extends IAttributeValuePresence<?>>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -290,7 +290,7 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IAttributeValuePresence<Object>> getValue() {
+  public EList<IAttributeValuePresence<?>> getValue() {
     return getTypedValue();
   }
 
@@ -299,9 +299,9 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<IAttributeValuePresence<Object>> setValue(
-      EList<IAttributeValuePresence<Object>> value) {
-    EList<IAttributeValuePresence<Object>> oldValue = getValue();
+  public EList<IAttributeValuePresence<?>> setValue(
+      EList<IAttributeValuePresence<?>> value) {
+    EList<IAttributeValuePresence<?>> oldValue = getValue();
     getTypedValue().clear();
     getTypedValue().addAll(value);
     return oldValue;
@@ -313,10 +313,10 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<Object, EList<IAttributeValuePresence<Object>>> getEMap() {
+  public EMap<Object, EList<IAttributeValuePresence<?>>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<Object, EList<IAttributeValuePresence<Object>>>) container
+        : (EMap<Object, EList<IAttributeValuePresence<?>>>) container
             .eGet(eContainmentFeature());
   }
 

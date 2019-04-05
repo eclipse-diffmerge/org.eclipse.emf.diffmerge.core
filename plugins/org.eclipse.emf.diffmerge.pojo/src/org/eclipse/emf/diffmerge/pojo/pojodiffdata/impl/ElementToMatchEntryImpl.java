@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 public class ElementToMatchEntryImpl extends EObjectImpl
-    implements BasicEMap.Entry<Object, EMatch> {
+    implements BasicEMap.Entry<Object, EMatch<?>> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -61,7 +61,7 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EMatch value;
+  protected EMatch<?> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -109,10 +109,10 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getTypedValue() {
+  public EMatch<?> getTypedValue() {
     if (value != null && value.eIsProxy()) {
       InternalEObject oldValue = (InternalEObject) value;
-      value = (EMatch) eResolveProxy(oldValue);
+      value = (EMatch<?>) eResolveProxy(oldValue);
       if (value != oldValue) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -128,7 +128,7 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch basicGetTypedValue() {
+  public EMatch<?> basicGetTypedValue() {
     return value;
   }
 
@@ -137,8 +137,8 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTypedValue(EMatch newValue) {
-    EMatch oldValue = value;
+  public void setTypedValue(EMatch<?> newValue) {
+    EMatch<?> oldValue = value;
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -175,7 +175,7 @@ public class ElementToMatchEntryImpl extends EObjectImpl
       setTypedKey(newValue);
       return;
     case PojodiffdataPackage.ELEMENT_TO_MATCH_ENTRY__VALUE:
-      setTypedValue((EMatch) newValue);
+      setTypedValue((EMatch<?>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -193,7 +193,7 @@ public class ElementToMatchEntryImpl extends EObjectImpl
       setTypedKey(KEY_EDEFAULT);
       return;
     case PojodiffdataPackage.ELEMENT_TO_MATCH_ENTRY__VALUE:
-      setTypedValue((EMatch) null);
+      setTypedValue((EMatch<?>) null);
       return;
     }
     super.eUnset(featureID);
@@ -284,7 +284,7 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch getValue() {
+  public EMatch<?> getValue() {
     return getTypedValue();
   }
 
@@ -293,8 +293,8 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch setValue(EMatch value) {
-    EMatch oldValue = getValue();
+  public EMatch<?> setValue(EMatch<?> value) {
+    EMatch<?> oldValue = getValue();
     setTypedValue(value);
     return oldValue;
   }
@@ -305,10 +305,10 @@ public class ElementToMatchEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<Object, EMatch> getEMap() {
+  public EMap<Object, EMatch<?>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<Object, EMatch>) container.eGet(eContainmentFeature());
+        : (EMap<Object, EMatch<?>>) container.eGet(eContainmentFeature());
   }
 
 } //ElementToMatchEntryImpl

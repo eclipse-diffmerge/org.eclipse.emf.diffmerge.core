@@ -18,17 +18,17 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEComparison()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EComparison extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<Object, Object, Object> {
+public interface EComparison<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, Object, Object> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation" required="true"
    * @generated
    */
-  EMapping getMapping();
+  EMapping<E> getMapping();
 
 } // EComparison

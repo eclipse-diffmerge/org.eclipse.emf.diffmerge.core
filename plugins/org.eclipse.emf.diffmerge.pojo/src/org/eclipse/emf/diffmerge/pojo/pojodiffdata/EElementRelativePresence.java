@@ -18,18 +18,18 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEElementRelativePresence()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EElementRelativePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<Object, Object, Object>,
-    EMergeableDifference {
+public interface EElementRelativePresence<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<E, Object, Object>,
+    EMergeableDifference<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation" required="true"
    * @generated
    */
-  EMatch getElementMatch();
+  EMatch<E> getElementMatch();
 
 } // EElementRelativePresence

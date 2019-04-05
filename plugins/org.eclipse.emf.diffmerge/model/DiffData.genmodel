@@ -30,6 +30,10 @@
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/potentialElement"/>
         <genParameters ecoreParameter="DiffData.ecore#//EMapping/getMatchFor/role"/>
       </genOperations>
+      <genOperations ecoreOperation="DiffData.ecore#//EMapping/map">
+        <genParameters ecoreParameter="DiffData.ecore#//EMapping/map/element"/>
+        <genParameters ecoreParameter="DiffData.ecore#//EMapping/map/role"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="DiffData.ecore#//EMatch">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DiffData.ecore#//EMatch/ancestor"/>

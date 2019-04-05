@@ -38,9 +38,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EReferenceValuePresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl<Object, Object, Object>
-    implements EReferenceValuePresence {
+public class EReferenceValuePresenceImpl<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl<E, Object, Object>
+    implements EReferenceValuePresence<E> {
   /**
    * The default value of the '{@link #getFeature() <em>Feature</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -62,16 +62,6 @@ public class EReferenceValuePresenceImpl extends
   protected Object feature = FEATURE_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getValue()
-   * @generated
-   * @ordered
-   */
-  protected static final Object VALUE_EDEFAULT = null;
-
-  /**
    * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -79,7 +69,7 @@ public class EReferenceValuePresenceImpl extends
    * @generated
    * @ordered
    */
-  protected Object value = VALUE_EDEFAULT;
+  protected E value;
 
   /**
    * <!-- begin-user-doc -->
@@ -100,9 +90,9 @@ public class EReferenceValuePresenceImpl extends
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EReferenceValuePresenceImpl(EMatch elementMatch_p, Object reference_p,
-      Object value_p, EMatch valueMatch_p, Role presenceRole_p,
-      boolean isOrder_p) {
+  public EReferenceValuePresenceImpl(EMatch<E> elementMatch_p,
+      Object reference_p, E value_p, EMatch<E> valueMatch_p,
+      Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, reference_p, value_p, valueMatch_p, presenceRole_p,
         isOrder_p);
   }
@@ -154,16 +144,18 @@ public class EReferenceValuePresenceImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public Object getValue() {
+  public E getValue() {
     return value;
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#setValue(java.lang.Object)
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
    */
   @Override
-  public void setValue(Object newValue) {
-    Object oldValue = value;
+  public void setValue(E newValue) {
+    E oldValue = value;
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -176,8 +168,8 @@ public class EReferenceValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EReferenceValuePresence getSymmetrical() {
-    return (EReferenceValuePresence) super.getSymmetrical();
+  public EReferenceValuePresence<E> getSymmetrical() {
+    return (EReferenceValuePresence<E>) super.getSymmetrical();
   }
 
   /**
@@ -185,8 +177,8 @@ public class EReferenceValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EReferenceValuePresence getSymmetricalOwnership() {
-    return (EReferenceValuePresence) super.getSymmetricalOwnership();
+  public EReferenceValuePresence<E> getSymmetricalOwnership() {
+    return (EReferenceValuePresence<E>) super.getSymmetricalOwnership();
   }
 
   /**
@@ -194,8 +186,8 @@ public class EReferenceValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EMatch getValueMatch() {
-    return (EMatch) super.getValueMatch();
+  public EMatch<E> getValueMatch() {
+    return (EMatch<E>) super.getValueMatch();
   }
 
   /**
@@ -203,8 +195,8 @@ public class EReferenceValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EMatch getElementMatch() {
-    return (EMatch) super.getElementMatch();
+  public EMatch<E> getElementMatch() {
+    return (EMatch<E>) super.getElementMatch();
   }
 
   /**
@@ -212,8 +204,8 @@ public class EReferenceValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EComparison getComparison() {
-    return (EComparison) super.getComparison();
+  public EComparison<E> getComparison() {
+    return (EComparison<E>) super.getComparison();
   }
 
   /**
@@ -237,6 +229,7 @@ public class EReferenceValuePresenceImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
@@ -244,7 +237,7 @@ public class EReferenceValuePresenceImpl extends
       setFeature(newValue);
       return;
     case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      setValue(newValue);
+      setValue((E) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -262,7 +255,7 @@ public class EReferenceValuePresenceImpl extends
       setFeature(FEATURE_EDEFAULT);
       return;
     case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      setValue(VALUE_EDEFAULT);
+      setValue((E) null);
       return;
     }
     super.eUnset(featureID);
@@ -280,8 +273,7 @@ public class EReferenceValuePresenceImpl extends
       return FEATURE_EDEFAULT == null ? feature != null
           : !FEATURE_EDEFAULT.equals(feature);
     case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-      return VALUE_EDEFAULT == null ? value != null
-          : !VALUE_EDEFAULT.equals(value);
+      return value != null;
     }
     return super.eIsSet(featureID);
   }
@@ -316,8 +308,6 @@ public class EReferenceValuePresenceImpl extends
       switch (derivedFeatureID) {
       case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__FEATURE:
         return PojodiffdataPackage.EVALUE_PRESENCE__FEATURE;
-      case PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE:
-        return PojodiffdataPackage.EVALUE_PRESENCE__VALUE;
       default:
         return -1;
       }
@@ -355,8 +345,6 @@ public class EReferenceValuePresenceImpl extends
       switch (baseFeatureID) {
       case PojodiffdataPackage.EVALUE_PRESENCE__FEATURE:
         return PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__FEATURE;
-      case PojodiffdataPackage.EVALUE_PRESENCE__VALUE:
-        return PojodiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE;
       default:
         return -1;
       }

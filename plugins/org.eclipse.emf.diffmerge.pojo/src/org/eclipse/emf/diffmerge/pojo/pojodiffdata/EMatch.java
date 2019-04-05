@@ -35,16 +35,16 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMatch()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EMatch extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<Object, Object, Object>,
-    EComparisonElement {
+public interface EMatch<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, Object, Object>,
+    EComparisonElement<E> {
   /**
    * Returns the value of the '<em><b>Modifiable Attribute Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<java.lang.Object>},
+   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence<?>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Attribute Map</em>' map isn't clear,
@@ -53,16 +53,16 @@ public interface EMatch extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Attribute Map</em>' map.
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMatch_ModifiableAttributeMap()
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.AttributeToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.AttributeToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;?&gt;&gt;"
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<Object, EList<IAttributeValuePresence<Object>>> getModifiableAttributeMap();
+  EMap<Object, EList<IAttributeValuePresence<?>>> getModifiableAttributeMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Reference Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type list of {@link java.util.Map.Entry<java.lang.Object, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<java.lang.Object>>},
+   * and the value is of type list of {@link java.util.Map.Entry<java.lang.Object, org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<?>>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Reference Map</em>' map isn't clear,
@@ -75,12 +75,12 @@ public interface EMatch extends
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<Object, EMap<Object, IReferenceValuePresence<Object>>> getModifiableReferenceMap();
+  EMap<Object, EMap<Object, IReferenceValuePresence<?>>> getModifiableReferenceMap();
 
   /**
    * Returns the value of the '<em><b>Modifiable Order Reference Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<java.lang.Object>},
+   * and the value is of type list of {@link org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence<?>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Order Reference Map</em>' map isn't clear,
@@ -89,11 +89,11 @@ public interface EMatch extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Order Reference Map</em>' map.
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMatch_ModifiableOrderReferenceMap()
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ReferenceToOrderDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ReferenceToOrderDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;&gt;"
    * @generated
    */
   @SuppressWarnings("javadoc")
-  EMap<Object, EList<IReferenceValuePresence<Object>>> getModifiableOrderReferenceMap();
+  EMap<Object, EList<IReferenceValuePresence<?>>> getModifiableOrderReferenceMap();
 
   /**
    * Returns the value of the '<em><b>Ancestor</b></em>' attribute.
@@ -109,7 +109,7 @@ public interface EMatch extends
    * @model
    * @generated
    */
-  Object getAncestor();
+  E getAncestor();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getAncestor <em>Ancestor</em>}' attribute.
@@ -119,7 +119,7 @@ public interface EMatch extends
    * @see #getAncestor()
    * @generated
    */
-  void setAncestor(Object value);
+  void setAncestor(E value);
 
   /**
    * Returns the value of the '<em><b>Reference</b></em>' attribute.
@@ -135,7 +135,7 @@ public interface EMatch extends
    * @model
    * @generated
    */
-  Object getReference();
+  E getReference();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getReference <em>Reference</em>}' attribute.
@@ -145,7 +145,7 @@ public interface EMatch extends
    * @see #getReference()
    * @generated
    */
-  void setReference(Object value);
+  void setReference(E value);
 
   /**
    * Returns the value of the '<em><b>Target</b></em>' attribute.
@@ -161,7 +161,7 @@ public interface EMatch extends
    * @model
    * @generated
    */
-  Object getTarget();
+  E getTarget();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getTarget <em>Target</em>}' attribute.
@@ -171,7 +171,7 @@ public interface EMatch extends
    * @see #getTarget()
    * @generated
    */
-  void setTarget(Object value);
+  void setTarget(E value);
 
   /**
    * <!-- begin-user-doc -->
@@ -179,6 +179,6 @@ public interface EMatch extends
    * @model kind="operation"
    * @generated
    */
-  EMapping getMapping();
+  EMapping<E> getMapping();
 
 } // EMatch

@@ -48,7 +48,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
     implements
-    BasicEMap.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>> {
+    BasicEMap.Entry<Object, EMap<Object, IReferenceValuePresence<?>>> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -77,7 +77,7 @@ public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected EMap<Object, IReferenceValuePresence<Object>> value;
+  protected EMap<Object, IReferenceValuePresence<?>> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -126,9 +126,9 @@ public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IReferenceValuePresence<Object>> getTypedValue() {
+  public EMap<Object, IReferenceValuePresence<?>> getTypedValue() {
     if (value == null) {
-      value = new EcoreEMap<Object, IReferenceValuePresence<Object>>(
+      value = new EcoreEMap<Object, IReferenceValuePresence<?>>(
           PojodiffdataPackage.Literals.ELEMENT_TO_DIFFERENCE_ENTRY,
           ElementToDifferenceEntryImpl.class, this,
           PojodiffdataPackage.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY__VALUE);
@@ -291,7 +291,7 @@ public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IReferenceValuePresence<Object>> getValue() {
+  public EMap<Object, IReferenceValuePresence<?>> getValue() {
     return getTypedValue();
   }
 
@@ -300,9 +300,9 @@ public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, IReferenceValuePresence<Object>> setValue(
-      EMap<Object, IReferenceValuePresence<Object>> value) {
-    EMap<Object, IReferenceValuePresence<Object>> oldValue = getValue();
+  public EMap<Object, IReferenceValuePresence<?>> setValue(
+      EMap<Object, IReferenceValuePresence<?>> value) {
+    EMap<Object, IReferenceValuePresence<?>> oldValue = getValue();
     getTypedValue().clear();
     getTypedValue().addAll(value);
     return oldValue;
@@ -314,10 +314,10 @@ public class ReferenceToElementToDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<Object, EMap<Object, IReferenceValuePresence<Object>>> getEMap() {
+  public EMap<Object, EMap<Object, IReferenceValuePresence<?>>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<Object, EMap<Object, IReferenceValuePresence<Object>>>) container
+        : (EMap<Object, EMap<Object, IReferenceValuePresence<?>>>) container
             .eGet(eContainmentFeature());
   }
 

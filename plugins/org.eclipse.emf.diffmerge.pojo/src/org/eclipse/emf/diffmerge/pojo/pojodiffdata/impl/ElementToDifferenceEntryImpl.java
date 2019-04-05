@@ -42,7 +42,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 public class ElementToDifferenceEntryImpl extends EObjectImpl
-    implements BasicEMap.Entry<Object, IReferenceValuePresence<Object>> {
+    implements BasicEMap.Entry<Object, IReferenceValuePresence<?>> {
   /**
    * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -71,7 +71,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * @generated
    * @ordered
    */
-  protected IReferenceValuePresence<Object> value;
+  protected IReferenceValuePresence<?> value;
 
   /**
    * <!-- begin-user-doc -->
@@ -119,11 +119,10 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
-  public IReferenceValuePresence<Object> getTypedValue() {
+  public IReferenceValuePresence<?> getTypedValue() {
     if (value != null && ((EObject) value).eIsProxy()) {
       InternalEObject oldValue = (InternalEObject) value;
-      value = (IReferenceValuePresence<Object>) eResolveProxy(oldValue);
+      value = (IReferenceValuePresence<?>) eResolveProxy(oldValue);
       if (value != oldValue) {
         if (eNotificationRequired())
           eNotify(new ENotificationImpl(this, Notification.RESOLVE,
@@ -139,7 +138,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IReferenceValuePresence<Object> basicGetTypedValue() {
+  public IReferenceValuePresence<?> basicGetTypedValue() {
     return value;
   }
 
@@ -148,8 +147,8 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setTypedValue(IReferenceValuePresence<Object> newValue) {
-    IReferenceValuePresence<Object> oldValue = value;
+  public void setTypedValue(IReferenceValuePresence<?> newValue) {
+    IReferenceValuePresence<?> oldValue = value;
     value = newValue;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -180,7 +179,6 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
@@ -188,7 +186,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
       setTypedKey(newValue);
       return;
     case PojodiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY__VALUE:
-      setTypedValue((IReferenceValuePresence<Object>) newValue);
+      setTypedValue((IReferenceValuePresence<?>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -206,7 +204,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
       setTypedKey(KEY_EDEFAULT);
       return;
     case PojodiffdataPackage.ELEMENT_TO_DIFFERENCE_ENTRY__VALUE:
-      setTypedValue((IReferenceValuePresence<Object>) null);
+      setTypedValue((IReferenceValuePresence<?>) null);
       return;
     }
     super.eUnset(featureID);
@@ -297,7 +295,7 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IReferenceValuePresence<Object> getValue() {
+  public IReferenceValuePresence<?> getValue() {
     return getTypedValue();
   }
 
@@ -306,9 +304,8 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public IReferenceValuePresence<Object> setValue(
-      IReferenceValuePresence<Object> value) {
-    IReferenceValuePresence<Object> oldValue = getValue();
+  public IReferenceValuePresence<?> setValue(IReferenceValuePresence<?> value) {
+    IReferenceValuePresence<?> oldValue = getValue();
     setTypedValue(value);
     return oldValue;
   }
@@ -319,10 +316,10 @@ public class ElementToDifferenceEntryImpl extends EObjectImpl
    * @generated
    */
   @SuppressWarnings("unchecked")
-  public EMap<Object, IReferenceValuePresence<Object>> getEMap() {
+  public EMap<Object, IReferenceValuePresence<?>> getEMap() {
     EObject container = eContainer();
     return container == null ? null
-        : (EMap<Object, IReferenceValuePresence<Object>>) container
+        : (EMap<Object, IReferenceValuePresence<?>>) container
             .eGet(eContainmentFeature());
   }
 

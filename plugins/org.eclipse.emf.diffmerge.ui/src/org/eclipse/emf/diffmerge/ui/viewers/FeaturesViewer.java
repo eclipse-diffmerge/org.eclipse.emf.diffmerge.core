@@ -15,6 +15,7 @@ package org.eclipse.emf.diffmerge.ui.viewers;
 import static org.eclipse.emf.diffmerge.ui.viewers.DefaultUserProperties.P_TECHNICAL_LABELS;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -223,7 +224,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @return a non-null, potentially empty, modifiable list
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected List<Object> getAllAttributes(IMatch<?> match_p) {
+    protected Collection<?> getAllAttributes(IMatch<?> match_p) {
       Role elementSide = getInput().getContext().getDrivingRole();
       Object element = match_p.get(elementSide);
       if (element == null) {
@@ -233,7 +234,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       assert element != null; // An IMatch may not have null elements for both roles
       ITreeDataScope sideScope =
           getInput().getContext().getActualComparison().getScope(elementSide);
-      List<Object> result = sideScope.mGetAttributes(element);
+      Collection<?> result = sideScope.mGetAttributes(element);
       return result;
     }
     /**
@@ -242,7 +243,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
      * @return a non-null, potentially empty, modifiable list
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected List<Object> getAllReferences(IMatch<?> match_p) {
+    protected Collection<?> getAllReferences(IMatch<?> match_p) {
       Role elementSide = getInput().getContext().getDrivingRole();
       Object element = match_p.get(elementSide);
       if (element == null) {
@@ -252,7 +253,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
       assert element != null; // An IMatch may not have null elements for both roles
       ITreeDataScope sideScope =
           getInput().getContext().getActualComparison().getScope(elementSide);
-      List<Object> candidates = sideScope.mGetReferences(element);
+      Collection<?> candidates = sideScope.mGetReferences(element);
       List<Object> result = new LinkedList<Object>();
       for (Object candidate : candidates) {
         if (qualifies(candidate) || match_p.getReferenceOrderDifference(candidate, elementSide) != null) {
@@ -273,7 +274,7 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
         IMatch<?> match = ((FeaturesInput)inputElement_p).getMatch();
         result = new ArrayList<MatchAndFeature>();
         // Attributes
-        List<Object> attributes;
+        Collection<?> attributes;
         if (isDifferenceAgnostic()) {
           attributes = getAllAttributes(match);
         } else {
@@ -286,9 +287,9 @@ public class FeaturesViewer extends TableViewer implements IDifferenceRelatedVie
         // References
         List<Object> references;
         if (isDifferenceAgnostic()) {
-          references = getAllReferences(match);
+          references = new LinkedList<Object>(getAllReferences(match));
         } else {
-          references = new ArrayList<Object>();
+          references = new LinkedList<Object>();
           for (Object reference : match.getReferencesWithDifferences()) {
             if (!context.isContainment(reference) ||
                 match.getReferenceOrderDifference(reference, drivingRole) != null) {

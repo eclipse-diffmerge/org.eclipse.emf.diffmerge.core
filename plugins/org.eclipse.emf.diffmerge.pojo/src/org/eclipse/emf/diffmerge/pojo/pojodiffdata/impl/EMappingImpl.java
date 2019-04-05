@@ -42,9 +42,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMappingImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<Object, Object, Object>
-    implements EMapping {
+public class EMappingImpl<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<E, Object, Object>
+    implements EMapping<E> {
 
   /**
    * The cached value of the '{@link #getAncestorMatchMap() <em>Ancestor Match Map</em>}' map.
@@ -54,7 +54,7 @@ public class EMappingImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EMatch> ancestorMatchMap;
+  protected EMap<Object, EMatch<?>> ancestorMatchMap;
   /**
    * The cached value of the '{@link #getReferenceMatchMap() <em>Reference Match Map</em>}' map.
    * <!-- begin-user-doc -->
@@ -63,7 +63,7 @@ public class EMappingImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EMatch> referenceMatchMap;
+  protected EMap<Object, EMatch<?>> referenceMatchMap;
   /**
    * The cached value of the '{@link #getTargetMatchMap() <em>Target Match Map</em>}' map.
    * <!-- begin-user-doc -->
@@ -72,7 +72,7 @@ public class EMappingImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EMatch> targetMatchMap;
+  protected EMap<Object, EMatch<?>> targetMatchMap;
 
   /**
    * <!-- begin-user-doc -->
@@ -99,9 +99,9 @@ public class EMappingImpl extends
    * @generated NOT
    */
   @SuppressWarnings("serial")
-  public EMap<Object, EMatch> getAncestorMatchMap() {
+  public EMap<Object, EMatch<?>> getAncestorMatchMap() {
     if (ancestorMatchMap == null) {
-      ancestorMatchMap = new EcoreEMap<Object, EMatch>(
+      ancestorMatchMap = new EcoreEMap<Object, EMatch<?>>(
           PojodiffdataPackage.Literals.ELEMENT_TO_MATCH_ENTRY,
           ElementToMatchEntryImpl.class, this,
           PojodiffdataPackage.EMAPPING__ANCESTOR_MATCH_MAP) {
@@ -131,9 +131,9 @@ public class EMappingImpl extends
    * @generated NOT
    */
   @SuppressWarnings("serial")
-  public EMap<Object, EMatch> getReferenceMatchMap() {
+  public EMap<Object, EMatch<?>> getReferenceMatchMap() {
     if (referenceMatchMap == null) {
-      referenceMatchMap = new EcoreEMap<Object, EMatch>(
+      referenceMatchMap = new EcoreEMap<Object, EMatch<?>>(
           PojodiffdataPackage.Literals.ELEMENT_TO_MATCH_ENTRY,
           ElementToMatchEntryImpl.class, this,
           PojodiffdataPackage.EMAPPING__REFERENCE_MATCH_MAP) {
@@ -163,9 +163,9 @@ public class EMappingImpl extends
    * @generated NOT
    */
   @SuppressWarnings("serial")
-  public EMap<Object, EMatch> getTargetMatchMap() {
+  public EMap<Object, EMatch<?>> getTargetMatchMap() {
     if (targetMatchMap == null) {
-      targetMatchMap = new EcoreEMap<Object, EMatch>(
+      targetMatchMap = new EcoreEMap<Object, EMatch<?>>(
           PojodiffdataPackage.Literals.ELEMENT_TO_MATCH_ENTRY,
           ElementToMatchEntryImpl.class, this,
           PojodiffdataPackage.EMAPPING__TARGET_MATCH_MAP) {
@@ -205,17 +205,18 @@ public class EMappingImpl extends
    * @see org.eclipse.emf.diffmerge.generic.api.IMapping#getMatchFor(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public EMatch getMatchFor(Object potentialElement, Role role) {
-    EMap<Object, EMatch> matchMap = getMatchMap(role);
-    return matchMap.get(potentialElement);
+  @SuppressWarnings("unchecked")
+  public EMatch<E> getMatchFor(Object potentialElement, Role role) {
+    EMap<Object, EMatch<?>> matchMap = getMatchMap(role);
+    return (EMatch<E>) matchMap.get(potentialElement);
   }
 
   /**
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMapping#getMatchMap(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public EMap<Object, EMatch> getMatchMap(Role role) {
-    EMap<Object, EMatch> result;
+  public EMap<Object, EMatch<?>> getMatchMap(Role role) {
+    EMap<Object, EMatch<?>> result;
     switch (role) {
     case REFERENCE:
       result = getReferenceMatchMap();
@@ -230,12 +231,21 @@ public class EMappingImpl extends
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @generated NOT
+   */
+  @Override
+  public EMatch<E> map(E element, Role role) {
+    return (EMatch<E>) super.map(element, role);
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#getComparison()
    * @generated NOT
    */
   @Override
-  public EComparison getComparison() {
-    return (EComparison) super.getComparison();
+  public EComparison<E> getComparison() {
+    return (EComparison<E>) super.getComparison();
   }
 
   /**
@@ -243,7 +253,7 @@ public class EMappingImpl extends
    * @generated NOT
    */
   @Override
-  public boolean disconnect(Role role_p, Object element_p) {
+  public boolean disconnect(Role role_p, E element_p) {
     // Cannot determine what to disconnect: delegate to scope
     return getComparison().getScope(role_p).disconnect(element_p);
   }
@@ -362,7 +372,7 @@ public class EMappingImpl extends
    * the other contents of the mapping.
    * @generated NOT
    */
-  protected static class MatchMapSynchronizerAdapter extends AdapterImpl {
+  protected static class MatchMapSynchronizerAdapter<E> extends AdapterImpl {
     /**
      * @see org.eclipse.emf.common.notify.impl.AdapterImpl#isAdapterForType(java.lang.Object)
      */
@@ -374,6 +384,7 @@ public class EMappingImpl extends
     /**
      * @see org.eclipse.emf.common.notify.impl.AdapterImpl#notifyChanged(org.eclipse.emf.common.notify.Notification)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void notifyChanged(Notification msg_p) {
       // Important: It is assumed that the modifiable contents of mappings are modified
@@ -384,27 +395,27 @@ public class EMappingImpl extends
       Object notifier = msg_p.getNotifier();
       if (feature == GdiffdataPackage.eINSTANCE
           .getEMapping_ModifiableContents()) {
-        EMapping mapping = (EMapping) notifier;
+        EMapping<E> mapping = (EMapping<E>) notifier;
         if (eventType == Notification.ADD) {
           // Match addition
-          EMatch addedMatch = (EMatch) msg_p.getNewValue();
+          EMatch<E> addedMatch = (EMatch<E>) msg_p.getNewValue();
           addedMatch.eAdapters().add(this);
           for (Role role : Role.values()) {
-            Object element = addedMatch.get(role);
+            E element = addedMatch.get(role);
             if (element != null) {
-              EMap<Object, EMatch> matchMap = mapping.getMatchMap(role);
+              EMap<Object, EMatch<?>> matchMap = mapping.getMatchMap(role);
               matchMap.put(element, addedMatch);
             }
           }
         } else if (eventType == Notification.REMOVE) {
           // Match removal
-          EMatch removedMatch = (EMatch) msg_p.getOldValue();
+          EMatch<E> removedMatch = (EMatch<E>) msg_p.getOldValue();
           removedMatch.eAdapters().remove(this);
           for (Role role : Role.values()) {
             Object element = removedMatch.get(role);
             if (element != null) {
-              EMap<Object, EMatch> matchMap = mapping.getMatchMap(role);
-              EMatch mappedMatch = matchMap.get(element);
+              EMap<Object, EMatch<?>> matchMap = mapping.getMatchMap(role);
+              EMatch<?> mappedMatch = matchMap.get(element);
               if (mappedMatch == removedMatch) {
                 matchMap.removeKey(element);
               }
@@ -412,7 +423,7 @@ public class EMappingImpl extends
           }
         }
       } else if (notifier instanceof EMatch) {
-        EMatch match = (EMatch) notifier;
+        EMatch<E> match = (EMatch<E>) notifier;
         if (eventType == Notification.SET) {
           // Match setting
           Role concernedRole = (feature == PojodiffdataPackage.eINSTANCE
@@ -423,12 +434,12 @@ public class EMappingImpl extends
                           : (feature == PojodiffdataPackage.eINSTANCE
                               .getEMatch_Target()) ? Role.TARGET : null;
           if (concernedRole != null) {
-            EMap<Object, EMatch> matchMap = match.getMapping()
+            EMap<Object, EMatch<?>> matchMap = match.getMapping()
                 .getMatchMap(concernedRole);
-            Object oldElement = msg_p.getOldValue();
-            Object newElement = msg_p.getNewValue();
+            E oldElement = (E) msg_p.getOldValue();
+            E newElement = (E) msg_p.getNewValue();
             if (oldElement != null) {
-              EMatch mappedMatch = matchMap.get(oldElement);
+              EMatch<?> mappedMatch = matchMap.get(oldElement);
               if (mappedMatch == match) {
                 matchMap.removeKey(oldElement);
               }

@@ -46,9 +46,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMatchImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<Object, Object, Object>
-    implements EMatch {
+public class EMatchImpl<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<E, Object, Object>
+    implements EMatch<E> {
   /**
    * The cached value of the '{@link #getModifiableAttributeMap() <em>Modifiable Attribute Map</em>}' map.
    * <!-- begin-user-doc -->
@@ -57,7 +57,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EList<IAttributeValuePresence<Object>>> modifiableAttributeMap;
+  protected EMap<Object, EList<IAttributeValuePresence<?>>> modifiableAttributeMap;
 
   /**
    * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
@@ -67,7 +67,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EMap<Object, IReferenceValuePresence<Object>>> modifiableReferenceMap;
+  protected EMap<Object, EMap<Object, IReferenceValuePresence<?>>> modifiableReferenceMap;
 
   /**
    * The cached value of the '{@link #getModifiableOrderReferenceMap() <em>Modifiable Order Reference Map</em>}' map.
@@ -77,17 +77,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected EMap<Object, EList<IReferenceValuePresence<Object>>> modifiableOrderReferenceMap;
-
-  /**
-   * The default value of the '{@link #getAncestor() <em>Ancestor</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAncestor()
-   * @generated
-   * @ordered
-   */
-  protected static final Object ANCESTOR_EDEFAULT = null;
+  protected EMap<Object, EList<IReferenceValuePresence<?>>> modifiableOrderReferenceMap;
 
   /**
    * The cached value of the '{@link #getAncestor() <em>Ancestor</em>}' attribute.
@@ -97,17 +87,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected Object ancestor = ANCESTOR_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getReference() <em>Reference</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getReference()
-   * @generated
-   * @ordered
-   */
-  protected static final Object REFERENCE_EDEFAULT = null;
+  protected E ancestor;
 
   /**
    * The cached value of the '{@link #getReference() <em>Reference</em>}' attribute.
@@ -117,17 +97,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected Object reference = REFERENCE_EDEFAULT;
-
-  /**
-   * The default value of the '{@link #getTarget() <em>Target</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getTarget()
-   * @generated
-   * @ordered
-   */
-  protected static final Object TARGET_EDEFAULT = null;
+  protected E reference;
 
   /**
    * The cached value of the '{@link #getTarget() <em>Target</em>}' attribute.
@@ -137,7 +107,7 @@ public class EMatchImpl extends
    * @generated
    * @ordered
    */
-  protected Object target = TARGET_EDEFAULT;
+  protected E target;
 
   /**
    * <!-- begin-user-doc -->
@@ -156,7 +126,7 @@ public class EMatchImpl extends
    * @param ancestor_p the optional element on the ANCESTOR side
    * @generated NOT
    */
-  public EMatchImpl(Object target_p, Object reference_p, Object ancestor_p) {
+  public EMatchImpl(E target_p, E reference_p, E ancestor_p) {
     super(target_p, reference_p, ancestor_p);
   }
 
@@ -175,9 +145,9 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, EList<IAttributeValuePresence<Object>>> getModifiableAttributeMap() {
+  public EMap<Object, EList<IAttributeValuePresence<?>>> getModifiableAttributeMap() {
     if (modifiableAttributeMap == null) {
-      modifiableAttributeMap = new EcoreEMap<Object, EList<IAttributeValuePresence<Object>>>(
+      modifiableAttributeMap = new EcoreEMap<Object, EList<IAttributeValuePresence<?>>>(
           PojodiffdataPackage.Literals.ATTRIBUTE_TO_DIFFERENCE_ENTRY,
           AttributeToDifferenceEntryImpl.class, this,
           PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
@@ -190,9 +160,9 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, EMap<Object, IReferenceValuePresence<Object>>> getModifiableReferenceMap() {
+  public EMap<Object, EMap<Object, IReferenceValuePresence<?>>> getModifiableReferenceMap() {
     if (modifiableReferenceMap == null) {
-      modifiableReferenceMap = new EcoreEMap<Object, EMap<Object, IReferenceValuePresence<Object>>>(
+      modifiableReferenceMap = new EcoreEMap<Object, EMap<Object, IReferenceValuePresence<?>>>(
           PojodiffdataPackage.Literals.REFERENCE_TO_ELEMENT_TO_DIFFERENCE_ENTRY,
           ReferenceToElementToDifferenceEntryImpl.class, this,
           PojodiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP);
@@ -205,9 +175,9 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMap<Object, EList<IReferenceValuePresence<Object>>> getModifiableOrderReferenceMap() {
+  public EMap<Object, EList<IReferenceValuePresence<?>>> getModifiableOrderReferenceMap() {
     if (modifiableOrderReferenceMap == null) {
-      modifiableOrderReferenceMap = new EcoreEMap<Object, EList<IReferenceValuePresence<Object>>>(
+      modifiableOrderReferenceMap = new EcoreEMap<Object, EList<IReferenceValuePresence<?>>>(
           PojodiffdataPackage.Literals.REFERENCE_TO_ORDER_DIFFERENCE_ENTRY,
           ReferenceToOrderDifferenceEntryImpl.class, this,
           PojodiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
@@ -221,7 +191,7 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public Object getAncestor() {
+  public E getAncestor() {
     return ancestor;
   }
 
@@ -231,8 +201,8 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public void setAncestor(Object newAncestor) {
-    Object oldAncestor = ancestor;
+  public void setAncestor(E newAncestor) {
+    E oldAncestor = ancestor;
     ancestor = newAncestor;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -245,7 +215,7 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public Object getReference() {
+  public E getReference() {
     return reference;
   }
 
@@ -255,8 +225,8 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public void setReference(Object newReference) {
-    Object oldReference = reference;
+  public void setReference(E newReference) {
+    E oldReference = reference;
     reference = newReference;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -269,7 +239,7 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public Object getTarget() {
+  public E getTarget() {
     return target;
   }
 
@@ -279,8 +249,8 @@ public class EMatchImpl extends
    * @generated
    */
   @Override
-  public void setTarget(Object newTarget) {
-    Object oldTarget = target;
+  public void setTarget(E newTarget) {
+    E oldTarget = target;
     target = newTarget;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -292,8 +262,8 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  public EMapping getMapping() {
-    return (EMapping) super.getMapping();
+  public EMapping<E> getMapping() {
+    return (EMapping<E>) super.getMapping();
   }
 
   /**
@@ -301,8 +271,8 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  public EComparison getComparison() {
-    return (EComparison) super.getComparison();
+  public EComparison<E> getComparison() {
+    return (EComparison<E>) super.getComparison();
   }
 
   /**
@@ -365,6 +335,7 @@ public class EMatchImpl extends
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
@@ -379,13 +350,13 @@ public class EMatchImpl extends
           .set(newValue);
       return;
     case PojodiffdataPackage.EMATCH__ANCESTOR:
-      setAncestor(newValue);
+      setAncestor((E) newValue);
       return;
     case PojodiffdataPackage.EMATCH__REFERENCE:
-      setReference(newValue);
+      setReference((E) newValue);
       return;
     case PojodiffdataPackage.EMATCH__TARGET:
-      setTarget(newValue);
+      setTarget((E) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -409,13 +380,13 @@ public class EMatchImpl extends
       getModifiableOrderReferenceMap().clear();
       return;
     case PojodiffdataPackage.EMATCH__ANCESTOR:
-      setAncestor(ANCESTOR_EDEFAULT);
+      setAncestor((E) null);
       return;
     case PojodiffdataPackage.EMATCH__REFERENCE:
-      setReference(REFERENCE_EDEFAULT);
+      setReference((E) null);
       return;
     case PojodiffdataPackage.EMATCH__TARGET:
-      setTarget(TARGET_EDEFAULT);
+      setTarget((E) null);
       return;
     }
     super.eUnset(featureID);
@@ -439,14 +410,11 @@ public class EMatchImpl extends
       return modifiableOrderReferenceMap != null
           && !modifiableOrderReferenceMap.isEmpty();
     case PojodiffdataPackage.EMATCH__ANCESTOR:
-      return ANCESTOR_EDEFAULT == null ? ancestor != null
-          : !ANCESTOR_EDEFAULT.equals(ancestor);
+      return ancestor != null;
     case PojodiffdataPackage.EMATCH__REFERENCE:
-      return REFERENCE_EDEFAULT == null ? reference != null
-          : !REFERENCE_EDEFAULT.equals(reference);
+      return reference != null;
     case PojodiffdataPackage.EMATCH__TARGET:
-      return TARGET_EDEFAULT == null ? target != null
-          : !TARGET_EDEFAULT.equals(target);
+      return target != null;
     }
     return super.eIsSet(featureID);
   }
@@ -477,7 +445,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<Object, EList<IAttributeValuePresence<Object>>> getModifiableAttributeMap(
+  protected EMap<Object, EList<IAttributeValuePresence<?>>> getModifiableAttributeMap(
       boolean create_p) {
     return create_p ? getModifiableAttributeMap() : modifiableAttributeMap;
   }
@@ -487,7 +455,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<Object, EList<IReferenceValuePresence<Object>>> getModifiableOrderReferenceMap(
+  protected EMap<Object, EList<IReferenceValuePresence<?>>> getModifiableOrderReferenceMap(
       boolean create_p) {
     return create_p ? getModifiableOrderReferenceMap()
         : modifiableOrderReferenceMap;
@@ -498,7 +466,7 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<Object, EMap<Object, IReferenceValuePresence<Object>>> getModifiableReferenceMap(
+  protected EMap<Object, EMap<Object, IReferenceValuePresence<?>>> getModifiableReferenceMap(
       boolean create_p) {
     return create_p ? getModifiableReferenceMap() : modifiableReferenceMap;
   }
@@ -508,12 +476,13 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EList<IAttributeValuePresence<Object>> newAttributeValuePresenceList(
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected EList<IAttributeValuePresence<E>> newAttributeValuePresenceList(
       Object attribute_p) {
     AttributeToDifferenceEntryImpl entry = new AttributeToDifferenceEntryImpl();
     entry.setKey(attribute_p);
     getModifiableAttributeMap(true).add(entry);
-    return entry.getValue();
+    return (EList) entry.getValue();
   }
 
   /**
@@ -521,12 +490,13 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EList<IReferenceValuePresence<Object>> newReferenceOrderDifferenceList(
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected EList<IReferenceValuePresence<E>> newReferenceOrderDifferenceList(
       Object reference_p) {
     ReferenceToOrderDifferenceEntryImpl entry = new ReferenceToOrderDifferenceEntryImpl();
     entry.setKey(reference_p);
     getModifiableOrderReferenceMap(true).add(entry);
-    return entry.getValue();
+    return (EList) entry.getValue();
   }
 
   /**
@@ -534,12 +504,13 @@ public class EMatchImpl extends
    * @generated NOT
    */
   @Override
-  protected EMap<Object, IReferenceValuePresence<Object>> newReferenceValueToPresenceMap(
+  @SuppressWarnings({ "rawtypes", "unchecked" })
+  protected EMap<E, IReferenceValuePresence<E>> newReferenceValueToPresenceMap(
       Object reference_p) {
     ReferenceToElementToDifferenceEntryImpl entry = new ReferenceToElementToDifferenceEntryImpl();
     entry.setKey(reference_p);
     getModifiableReferenceMap(true).add(entry);
-    return entry.getValue();
+    return (EMap) entry.getValue();
   }
 
 } //EMatchImpl

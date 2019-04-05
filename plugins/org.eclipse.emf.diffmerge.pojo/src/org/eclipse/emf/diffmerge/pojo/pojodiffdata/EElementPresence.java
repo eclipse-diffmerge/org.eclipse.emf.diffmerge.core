@@ -18,18 +18,18 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEElementPresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EElementRelativePresence"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EElementRelativePresence&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EElementPresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<Object, Object, Object>,
-    EElementRelativePresence {
+public interface EElementPresence<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<E, Object, Object>,
+    EElementRelativePresence<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation" required="true"
    * @generated
    */
-  EMatch getOwnerMatch();
+  EMatch<E> getOwnerMatch();
 
 } // EElementPresence

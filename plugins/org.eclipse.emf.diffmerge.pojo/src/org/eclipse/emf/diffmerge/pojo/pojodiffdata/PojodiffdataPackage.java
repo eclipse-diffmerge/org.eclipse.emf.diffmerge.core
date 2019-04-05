@@ -906,16 +906,6 @@ public interface PojodiffdataPackage extends EPackage {
       + 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__VALUE = GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
-      + 1;
-
-  /**
    * The number of structural features of the '<em>EValue Presence</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -923,7 +913,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @ordered
    */
   int EVALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
-      + 2;
+      + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
@@ -1624,17 +1614,6 @@ public interface PojodiffdataPackage extends EPackage {
   EAttribute getEValuePresence_Feature();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence#getValue <em>Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Value</em>'.
-   * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence#getValue()
-   * @see #getEValuePresence()
-   * @generated
-   */
-  EAttribute getEValuePresence_Value();
-
-  /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence <em>EAttribute Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1643,6 +1622,17 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    */
   EClass getEAttributeValuePresence();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence#getValue()
+   * @see #getEAttributeValuePresence()
+   * @generated
+   */
+  EAttribute getEAttributeValuePresence_Value();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EReferenceValuePresence <em>EReference Value Presence</em>}'.
@@ -1655,13 +1645,24 @@ public interface PojodiffdataPackage extends EPackage {
   EClass getEReferenceValuePresence();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EReferenceValuePresence#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.EReferenceValuePresence#getValue()
+   * @see #getEReferenceValuePresence()
+   * @generated
+   */
+  EAttribute getEReferenceValuePresence_Value();
+
+  /**
    * Returns the meta object for class '{@link java.util.Map.Entry <em>Attribute To Difference Entry</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for class '<em>Attribute To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;?&gt;" valueContainment="true" valueMany="true"
    * @generated
    */
   EClass getAttributeToDifferenceEntry();
@@ -1695,7 +1696,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Reference To Element To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueMapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+   *        valueMapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToDifferenceEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;&gt;"
    * @generated
    */
   EClass getReferenceToElementToDifferenceEntry();
@@ -1729,7 +1730,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Reference To Order Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;" valueContainment="true" valueMany="true"
    * @generated
    */
   EClass getReferenceToOrderDifferenceEntry();
@@ -1763,7 +1764,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Element To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EJavaObject&gt;" valueRequired="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;" valueRequired="true"
    * @generated
    */
   EClass getElementToDifferenceEntry();
@@ -1797,7 +1798,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Element To Match Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch" valueRequired="true"
+   *        valueType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&lt;?&gt;" valueRequired="true"
    * @generated
    */
   EClass getElementToMatchEntry();
@@ -2013,14 +2014,6 @@ public interface PojodiffdataPackage extends EPackage {
     EAttribute EVALUE_PRESENCE__FEATURE = eINSTANCE.getEValuePresence_Feature();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute EVALUE_PRESENCE__VALUE = eINSTANCE.getEValuePresence_Value();
-
-    /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2031,6 +2024,15 @@ public interface PojodiffdataPackage extends EPackage {
     EClass EATTRIBUTE_VALUE_PRESENCE = eINSTANCE.getEAttributeValuePresence();
 
     /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EATTRIBUTE_VALUE_PRESENCE__VALUE = eINSTANCE
+        .getEAttributeValuePresence_Value();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2039,6 +2041,15 @@ public interface PojodiffdataPackage extends EPackage {
      * @generated
      */
     EClass EREFERENCE_VALUE_PRESENCE = eINSTANCE.getEReferenceValuePresence();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute EREFERENCE_VALUE_PRESENCE__VALUE = eINSTANCE
+        .getEReferenceValuePresence_Value();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.AttributeToDifferenceEntryImpl <em>Attribute To Difference Entry</em>}' class.

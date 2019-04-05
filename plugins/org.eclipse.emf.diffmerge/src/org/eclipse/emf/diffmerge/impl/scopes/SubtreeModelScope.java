@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.impl.scopes;
 
+import static org.eclipse.emf.diffmerge.EMFDiffMergePlugin.getDefault;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -18,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.diffmerge.Messages;
 import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -113,8 +118,11 @@ implements IPersistentModelScope.Editable {
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
-  public boolean load() throws Exception {
-    return isLoaded(); // Load/unload life-cycle not handled
+  public IStatus load() {
+    return isLoaded()? Status.OK_STATUS:
+      getDefault().createErrorStatus(
+          // Load/unload life-cycle not handled 
+          Messages.SubtreeModelScope_NotLoaded);
   }
   
   /**
@@ -132,15 +140,22 @@ implements IPersistentModelScope.Editable {
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#save()
    */
-  public boolean save() throws IOException {
-    boolean result = false;
+  public IStatus save() {
+    IStatus result;
     Resource resource = getHoldingResource();
     if (resource != null) {
       Map<Object, Object> options = new HashMap<Object, Object>();
       options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED,
           Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
-      resource.save(options);
-      result = true;
+      try {
+        resource.save(options);
+        result = Status.OK_STATUS;
+      } catch (IOException e) {
+        result = getDefault().createErrorStatus(e);
+      }
+    } else {
+      result = getDefault().createErrorStatus(
+          Messages.FragmentedModelScope_ResourceNotDefined);
     }
     return result;
   }

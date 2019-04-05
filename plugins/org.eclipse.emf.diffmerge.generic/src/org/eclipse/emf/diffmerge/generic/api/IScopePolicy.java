@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope;
 
@@ -39,7 +39,7 @@ public interface IScopePolicy<E> {
    * @param element_p a non-null element
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<?> mGetAttributes(E element_p);
+  Collection<?> mGetAttributes(E element_p);
   
   /**
    * Return the opposite of the given reference, if any.
@@ -55,7 +55,7 @@ public interface IScopePolicy<E> {
    * @param element_p a non-null element which belongs to getReferences(element_p)
    * @return a non-null, potentially empty, unmodifiable ordered set
    */
-  List<?> mGetReferences(E element_p);
+  Collection<?> mGetReferences(E element_p);
   
   /**
    * Return an object that represents the type of the given element

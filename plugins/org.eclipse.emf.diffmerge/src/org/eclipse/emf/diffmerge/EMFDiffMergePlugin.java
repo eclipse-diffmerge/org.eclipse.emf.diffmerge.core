@@ -12,6 +12,7 @@
 package org.eclipse.emf.diffmerge;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -44,6 +45,33 @@ public class EMFDiffMergePlugin extends Plugin {
 	}
 	
   /**
+   * Create and return a multi-status with OK severity
+   * @return a non-null status
+   */
+  public MultiStatus createMultiStatus() {
+    return new MultiStatus(getPluginId(), IStatus.OK, null, null);
+  }
+  
+	/**
+	 * Create and return an error status with the given message
+	 * @param message_p a non-null string
+	 * @return a non-null status
+	 */
+	public IStatus createErrorStatus(String message_p) {
+	  return new Status(IStatus.ERROR, getPluginId(), message_p);
+	}
+	
+  /**
+   * Create and return an error status with the given throwable
+   * @param throwable_p a non-null throwable
+   * @return a non-null status
+   */
+  public IStatus createErrorStatus(Throwable throwable_p) {
+    return new Status(IStatus.ERROR, getPluginId(),
+        throwable_p.getLocalizedMessage(), throwable_p);
+  }
+  
+  /**
    * Return an adapter factory that is based on the EMF Edit registry
    * @return a non-null object
    */
@@ -71,19 +99,18 @@ public class EMFDiffMergePlugin extends Plugin {
   }
   
   /**
-   * Log the given message if this plug-in is in verbose mode
-   * @param severity_p a severity as defined in IStatus
-   * @param message_p a non-null warning message
+   * Log the given status if this plug-in is in verbose mode
+   * @param status_p a non-null status
    */
-  public void log(int severity_p, String message_p) {
+  public void log(IStatus status_p) {
     if (_verbose) {
-      getLog().log(new Status(severity_p, getPluginId(), message_p));
+      getLog().log(status_p);
     }
   }
   
   /**
-   * Set whether this plug-in must be verbose
-   * @param verbose_p whether it must be verbose
+   * Set whether calls to operation log(...) have an actual effect
+   * @param verbose_p whether they have an effect
    */
   public void setVerbose(boolean verbose_p) {
     _verbose = verbose_p;
@@ -111,12 +138,4 @@ public class EMFDiffMergePlugin extends Plugin {
 		super.stop(context_p);
 	}
 	
-  /**
-   * Log the given warning message if this plug-in is in verbose mode
-   * @param message_p a non-null warning message
-   */
-  public void warn(String message_p) {
-    log(IStatus.WARNING, message_p);
-  }
-  
 }

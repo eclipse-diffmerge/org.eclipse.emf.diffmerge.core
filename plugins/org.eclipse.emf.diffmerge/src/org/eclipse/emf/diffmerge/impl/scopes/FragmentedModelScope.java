@@ -11,6 +11,9 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.impl.scopes;
 
+import static org.eclipse.emf.diffmerge.EMFDiffMergePlugin.getDefault;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +26,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.Messages;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
 import org.eclipse.emf.diffmerge.structures.binary.HashBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation;
@@ -475,18 +482,21 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#load()
    */
-  public boolean load() throws Exception {
-    boolean result = false;
+  public IStatus load() {
+    IStatus result;
     if (_state == ScopeState.INITIALIZED || _state == ScopeState.LOADED) {
       if (_loadingStream != null) {
         result = loadFromStream(_loadingStream);
       } else {
-        result = true;
+        result = getDefault().createMultiStatus();
         for (Resource rootResource : _rootResources) {
-          result = result && loadResource(rootResource);
+          IStatus subStatus = loadResource(rootResource);
+          ((MultiStatus)result).merge(subStatus);
         }
       }
       _state = ScopeState.LOADED;
+    } else {
+      result = Status.OK_STATUS;
     }
     return result;
   }
@@ -494,15 +504,22 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   /**
    * Load the scope from the given input stream
    * @param stream_p a non-null input stream
-   * @return whether the operation could be performed
+   * @return a non-null status
    */
-  protected boolean loadFromStream(InputStream stream_p) throws Exception {
-    boolean result = false;
+  protected IStatus loadFromStream(InputStream stream_p) {
+    IStatus result;
     Resource holdingResource = getHoldingResource();
     if (holdingResource != null) {
       Map<?,?> options = getLoadOptions(holdingResource);
-      holdingResource.load(stream_p, options);
-      result = true;
+      try {
+        holdingResource.load(stream_p, options);
+        result = Status.OK_STATUS;
+      } catch (IOException e) {
+        result = getDefault().createErrorStatus(e);
+      }
+    } else {
+      result = getDefault().createErrorStatus(
+          Messages.FragmentedModelScope_ResourceNotDefined);
     }
     return result;
   }
@@ -510,13 +527,18 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   /**
    * Load the given root resource
    * @param resource_p a non-null resource
-   * @return whether the operation could be performed
-   * @throws Exception an exception indicating that the operation failed in an unexpected way
+   * @return a non-null status
    */
-  protected boolean loadResource(Resource resource_p) throws Exception {
+  protected IStatus loadResource(Resource resource_p) {
+    IStatus result;
     Map<?,?> options = getLoadOptions(resource_p);
-    resource_p.load(options);
-    return true;
+    try {
+      resource_p.load(options);
+      result = Status.OK_STATUS;
+    } catch (IOException e) {
+      result = getDefault().createErrorStatus(e);
+    }
+    return result;
   }
   
   /**
@@ -565,14 +587,19 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   /**
    * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope.Editable#save()
    */
-  public boolean save() throws Exception {
+  public IStatus save() {
     Map<Object, Object> options = new HashMap<Object, Object>();
     options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED,
         Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+    MultiStatus result = getDefault().createMultiStatus();
     for (Resource resource : getResources()) {
-      resource.save(options);
+      try {
+        resource.save(options);
+      } catch (IOException e) {
+        result.merge(getDefault().createErrorStatus(e));
+      }
     }
-    return true;
+    return result;
   }
   
   /**

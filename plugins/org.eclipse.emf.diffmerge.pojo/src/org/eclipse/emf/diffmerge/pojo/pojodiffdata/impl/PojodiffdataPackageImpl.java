@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -389,15 +390,6 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getEValuePresence_Value() {
-    return (EAttribute) eValuePresenceEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getEAttributeValuePresence() {
     return eAttributeValuePresenceEClass;
   }
@@ -407,8 +399,28 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getEAttributeValuePresence_Value() {
+    return (EAttribute) eAttributeValuePresenceEClass.getEStructuralFeatures()
+        .get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getEReferenceValuePresence() {
     return eReferenceValuePresenceEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getEReferenceValuePresence_Value() {
+    return (EAttribute) eReferenceValuePresenceEClass.getEStructuralFeatures()
+        .get(0);
   }
 
   /**
@@ -610,11 +622,14 @@ public class PojodiffdataPackageImpl extends EPackageImpl
 
     eValuePresenceEClass = createEClass(EVALUE_PRESENCE);
     createEAttribute(eValuePresenceEClass, EVALUE_PRESENCE__FEATURE);
-    createEAttribute(eValuePresenceEClass, EVALUE_PRESENCE__VALUE);
 
     eAttributeValuePresenceEClass = createEClass(EATTRIBUTE_VALUE_PRESENCE);
+    createEAttribute(eAttributeValuePresenceEClass,
+        EATTRIBUTE_VALUE_PRESENCE__VALUE);
 
     eReferenceValuePresenceEClass = createEClass(EREFERENCE_VALUE_PRESENCE);
+    createEAttribute(eReferenceValuePresenceEClass,
+        EREFERENCE_VALUE_PRESENCE__VALUE);
 
     attributeToDifferenceEntryEClass = createEClass(
         ATTRIBUTE_TO_DIFFERENCE_ENTRY);
@@ -677,12 +692,50 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         .getEPackage(GdiffdataPackage.eNS_URI);
 
     // Create type parameters
+    ETypeParameter eComparisonEClass_E = addETypeParameter(eComparisonEClass,
+        "E"); //$NON-NLS-1$
+    ETypeParameter eComparisonElementEClass_E = addETypeParameter(
+        eComparisonElementEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMappingEClass_E = addETypeParameter(eMappingEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMatchEClass_E = addETypeParameter(eMatchEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eMergeableDifferenceEClass_E = addETypeParameter(
+        eMergeableDifferenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eElementRelativePresenceEClass_E = addETypeParameter(
+        eElementRelativePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eElementPresenceEClass_E = addETypeParameter(
+        eElementPresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eValuePresenceEClass_E = addETypeParameter(
+        eValuePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eAttributeValuePresenceEClass_E = addETypeParameter(
+        eAttributeValuePresenceEClass, "E"); //$NON-NLS-1$
+    ETypeParameter eReferenceValuePresenceEClass_E = addETypeParameter(
+        eReferenceValuePresenceEClass, "E"); //$NON-NLS-1$
 
     // Set bounds for type parameters
+    EGenericType g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eComparisonEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eComparisonElementEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eMappingEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eMatchEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eMergeableDifferenceEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eElementRelativePresenceEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eElementPresenceEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eValuePresenceEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eAttributeValuePresenceEClass_E.getEBounds().add(g1);
+    g1 = createEGenericType(ecorePackage.getEJavaObject());
+    eReferenceValuePresenceEClass_E.getEBounds().add(g1);
 
     // Add supertypes to classes
-    EGenericType g1 = createEGenericType(theGdiffdataPackage.getEComparison());
-    EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g1 = createEGenericType(theGdiffdataPackage.getEComparison());
+    EGenericType g2 = createEGenericType(eComparisonEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -690,7 +743,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eComparisonEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEComparisonElement());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eComparisonElementEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -698,7 +751,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eComparisonElementEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEMapping());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eMappingEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -706,9 +759,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eMappingEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
     eMappingEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEMatch());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eMatchEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -716,9 +771,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eMatchEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
     eMatchEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEMergeableDifference());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -726,9 +783,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
+    g2 = createEGenericType(eMergeableDifferenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEElementRelativePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -736,9 +795,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEMergeableDifference());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEElementPresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eElementPresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -746,9 +807,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEElementRelativePresence());
+    g2 = createEGenericType(eElementPresenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -756,9 +819,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEElementRelativePresence());
+    g2 = createEGenericType(eValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEAttributeValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eAttributeValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -766,9 +831,11 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEValuePresence());
+    g2 = createEGenericType(eAttributeValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(theGdiffdataPackage.getEReferenceValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
@@ -776,21 +843,31 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     eReferenceValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEValuePresence());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
     eReferenceValuePresenceEClass.getEGenericSuperTypes().add(g1);
 
     // Initialize classes and features; add operations and parameters
     initEClass(eComparisonEClass, EComparison.class, "EComparison", //$NON-NLS-1$
         !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-    addEOperation(eComparisonEClass, this.getEMapping(), "getMapping", 1, 1, //$NON-NLS-1$
+    EOperation op = addEOperation(eComparisonEClass, null, "getMapping", 1, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEMapping());
+    g2 = createEGenericType(eComparisonEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eComparisonElementEClass, EComparisonElement.class,
         "EComparisonElement", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
 
-    addEOperation(eComparisonElementEClass, this.getEComparison(),
-        "getComparison", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    op = addEOperation(eComparisonElementEClass, null, "getComparison", 1, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEComparison());
+    g2 = createEGenericType(eComparisonElementEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eMappingEClass, EMapping.class, "EMapping", !IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -809,17 +886,32 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
-    EOperation op = addEOperation(eMappingEClass, this.getEMatch(),
-        "getMatchFor", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    op = addEOperation(eMappingEClass, null, "getMatchFor", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
     addEParameter(op, ecorePackage.getEJavaObject(), "potentialElement", 1, 1, //$NON-NLS-1$
         IS_UNIQUE, IS_ORDERED);
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     op = addEOperation(eMappingEClass, this.getElementToMatchEntry(),
         "getMatchMap", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
     addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
+
+    op = addEOperation(eMappingEClass, null, "map", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMappingEClass_E);
+    addEParameter(op, g1, "element", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, theGdiffdataPackage.getRole(), "role", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eMatchEClass, EMatch.class, "EMatch", !IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -838,20 +930,25 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         "modifiableOrderReferenceMap", null, 0, -1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEMatch_Ancestor(), ecorePackage.getEJavaObject(),
-        "ancestor", null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
-    initEAttribute(getEMatch_Reference(), ecorePackage.getEJavaObject(),
-        "reference", null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
-    initEAttribute(getEMatch_Target(), ecorePackage.getEJavaObject(), "target", //$NON-NLS-1$
-        null, 0, 1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Ancestor(), g1, "ancestor", null, 0, 1, //$NON-NLS-1$
+        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Reference(), g1, "reference", null, 0, 1, //$NON-NLS-1$
+        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Target(), g1, "target", null, 0, 1, EMatch.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    addEOperation(eMatchEClass, this.getEMapping(), "getMapping", 0, 1, //$NON-NLS-1$
-        IS_UNIQUE, IS_ORDERED);
+    op = addEOperation(eMatchEClass, null, "getMapping", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(this.getEMapping());
+    g2 = createEGenericType(eMatchEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eMergeableDifferenceEClass, EMergeableDifference.class,
         "EMergeableDifference", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
@@ -861,15 +958,23 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         "EElementRelativePresence", IS_ABSTRACT, IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
 
-    addEOperation(eElementRelativePresenceEClass, this.getEMatch(),
-        "getElementMatch", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    op = addEOperation(eElementRelativePresenceEClass, null, "getElementMatch", //$NON-NLS-1$
+        1, 1, IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eElementRelativePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eElementPresenceEClass, EElementPresence.class,
         "EElementPresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
 
-    addEOperation(eElementPresenceEClass, this.getEMatch(), "getOwnerMatch", 1, //$NON-NLS-1$
-        1, IS_UNIQUE, IS_ORDERED);
+    op = addEOperation(eElementPresenceEClass, null, "getOwnerMatch", 1, 1, //$NON-NLS-1$
+        IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eElementPresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(eValuePresenceEClass, EValuePresence.class, "EValuePresence", //$NON-NLS-1$
         IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -877,29 +982,45 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         "feature", null, 1, 1, EValuePresence.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
         !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getEValuePresence_Value(), ecorePackage.getEJavaObject(),
-        "value", null, 1, 1, EValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-        IS_ORDERED);
 
     initEClass(eAttributeValuePresenceEClass, EAttributeValuePresence.class,
         "EAttributeValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getEAttributeValuePresence_Value(),
+        ecorePackage.getEJavaObject(), "value", null, 1, 1, //$NON-NLS-1$
+        EAttributeValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+        IS_ORDERED);
 
     initEClass(eReferenceValuePresenceEClass, EReferenceValuePresence.class,
         "EReferenceValuePresence", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
-
-    addEOperation(eReferenceValuePresenceEClass,
-        this.getEReferenceValuePresence(), "getSymmetrical", 0, 1, IS_UNIQUE, //$NON-NLS-1$
+    g1 = createEGenericType(eReferenceValuePresenceEClass_E);
+    initEAttribute(getEReferenceValuePresence_Value(), g1, "value", null, 1, 1, //$NON-NLS-1$
+        EReferenceValuePresence.class, !IS_TRANSIENT, !IS_VOLATILE,
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
 
-    addEOperation(eReferenceValuePresenceEClass,
-        this.getEReferenceValuePresence(), "getSymmetricalOwnership", 0, 1, //$NON-NLS-1$
-        IS_UNIQUE, IS_ORDERED);
+    op = addEOperation(eReferenceValuePresenceEClass, null, "getSymmetrical", 0, //$NON-NLS-1$
+        1, IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEReferenceValuePresence());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
-    addEOperation(eReferenceValuePresenceEClass, this.getEMatch(),
-        "getValueMatch", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    op = addEOperation(eReferenceValuePresenceEClass, null,
+        "getSymmetricalOwnership", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    g1 = createEGenericType(this.getEReferenceValuePresence());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
+
+    op = addEOperation(eReferenceValuePresenceEClass, null, "getValueMatch", 0, //$NON-NLS-1$
+        1, IS_UNIQUE, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eReferenceValuePresenceEClass_E);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
 
     initEClass(attributeToDifferenceEntryEClass, Map.Entry.class,
         "AttributeToDifferenceEntry", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -909,7 +1030,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     g1 = createEGenericType(theGdiffdataPackage.getIAttributeValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType();
     g1.getETypeArguments().add(g2);
     initEReference(getAttributeToDifferenceEntry_Value(), g1, null, "value", //$NON-NLS-1$
         null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
@@ -937,7 +1058,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     g1 = createEGenericType(theGdiffdataPackage.getIReferenceValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType();
     g1.getETypeArguments().add(g2);
     initEReference(getReferenceToOrderDifferenceEntry_Value(), g1, null,
         "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
@@ -952,7 +1073,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     g1 = createEGenericType(theGdiffdataPackage.getIReferenceValuePresence());
-    g2 = createEGenericType(ecorePackage.getEJavaObject());
+    g2 = createEGenericType();
     g1.getETypeArguments().add(g2);
     initEReference(getElementToDifferenceEntry_Value(), g1, null, "value", null, //$NON-NLS-1$
         1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -966,10 +1087,13 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
-    initEReference(getElementToMatchEntry_Value(), this.getEMatch(), null,
-        "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType();
+    g1.getETypeArguments().add(g2);
+    initEReference(getElementToMatchEntry_Value(), g1, null, "value", null, 1, //$NON-NLS-1$
+        1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+        !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource(eNS_URI);

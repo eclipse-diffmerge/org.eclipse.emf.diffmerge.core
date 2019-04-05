@@ -18,11 +18,11 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMergeableDifference()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EMergeableDifference extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference<Object, Object, Object>,
-    EComparisonElement {
+public interface EMergeableDifference<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference<E, Object, Object>,
+    EComparisonElement<E> {
   // Nothing needed
 } // EMergeableDifference

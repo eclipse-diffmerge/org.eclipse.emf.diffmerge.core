@@ -31,6 +31,10 @@
       <eParameters name="potentialElement" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
     </eOperations>
+    <eOperations name="map" lowerBound="1" eType="#//EMatch">
+      <eParameters name="element" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
     <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EMapping">
       <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
       <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>

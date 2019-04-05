@@ -1329,6 +1329,20 @@ public class GdiffdataPackageImpl extends EPackageImpl
     addEParameter(op, g1, "value", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
     addEParameter(op, this.getRole(), "role", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+    op = addEOperation(eMappingEClass, null, "map", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+        IS_ORDERED);
+    g1 = createEGenericType(eMappingEClass_E);
+    addEParameter(op, g1, "element", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    addEParameter(op, this.getRole(), "role", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+    g1 = createEGenericType(this.getEMatch());
+    g2 = createEGenericType(eMappingEClass_E);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_A);
+    g1.getETypeArguments().add(g2);
+    g2 = createEGenericType(eMappingEClass_R);
+    g1.getETypeArguments().add(g2);
+    initEOperation(op, g1);
+
     initEClass(eMatchEClass, EMatch.class, "EMatch", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
         IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getEMatch_MatchID(), ecorePackage.getEJavaObject(),

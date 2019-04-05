@@ -11,7 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.generic.impl.scopes;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
@@ -76,7 +76,7 @@ implements IDataScope<E> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetAttributes(java.lang.Object)
    */
-  public List<?> mGetAttributes(E element_p) {
+  public Collection<?> mGetAttributes(E element_p) {
     return getScopePolicy().mGetAttributes(element_p);
   }
   
@@ -90,7 +90,7 @@ implements IDataScope<E> {
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetReferences(java.lang.Object)
    */
-  public List<?> mGetReferences(E element_p) {
+  public Collection<?> mGetReferences(E element_p) {
     return getScopePolicy().mGetReferences(element_p);
   }
   

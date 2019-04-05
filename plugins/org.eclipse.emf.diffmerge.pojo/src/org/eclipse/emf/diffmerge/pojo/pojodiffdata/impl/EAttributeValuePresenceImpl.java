@@ -21,9 +21,7 @@ import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
@@ -40,9 +38,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EAttributeValuePresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<Object, Object, Object>
-    implements EAttributeValuePresence {
+public class EAttributeValuePresenceImpl<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<E, Object, Object>
+    implements EAttributeValuePresence<E> {
   /**
    * The default value of the '{@link #getFeature() <em>Feature</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -101,8 +99,8 @@ public class EAttributeValuePresenceImpl extends
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EAttributeValuePresenceImpl(EMatch elementMatch_p,
-      EAttribute attribute_p, Object value_p, Role presenceRole_p,
+  public EAttributeValuePresenceImpl(EMatch<E> elementMatch_p,
+      Object attribute_p, Object value_p, Role presenceRole_p,
       boolean isOrder_p) {
     super(elementMatch_p, attribute_p, value_p, presenceRole_p, isOrder_p);
   }
@@ -179,8 +177,8 @@ public class EAttributeValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EMatch getElementMatch() {
-    return (EMatch) super.getElementMatch();
+  public EMatch<E> getElementMatch() {
+    return (EMatch<E>) super.getElementMatch();
   }
 
   /**
@@ -188,8 +186,8 @@ public class EAttributeValuePresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EComparison getComparison() {
-    return (EComparison) super.getComparison();
+  public EComparison<E> getComparison() {
+    return (EComparison<E>) super.getComparison();
   }
 
   /**
@@ -292,8 +290,6 @@ public class EAttributeValuePresenceImpl extends
       switch (derivedFeatureID) {
       case PojodiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__FEATURE:
         return PojodiffdataPackage.EVALUE_PRESENCE__FEATURE;
-      case PojodiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE:
-        return PojodiffdataPackage.EVALUE_PRESENCE__VALUE;
       default:
         return -1;
       }
@@ -331,8 +327,6 @@ public class EAttributeValuePresenceImpl extends
       switch (baseFeatureID) {
       case PojodiffdataPackage.EVALUE_PRESENCE__FEATURE:
         return PojodiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__FEATURE;
-      case PojodiffdataPackage.EVALUE_PRESENCE__VALUE:
-        return PojodiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__VALUE;
       default:
         return -1;
       }

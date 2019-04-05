@@ -546,10 +546,10 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        which is such that presence_p.getElementMatch() == this
    * @generated NOT
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   protected void addAttributeValuePresence(
       IAttributeValuePresence<E> presence_p) {
-    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
+    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = (EMap) getModifiableAttributeMap(
         true);
     EList<IAttributeValuePresence<E>> forAttribute = attributeMap
         .get(presence_p.getFeature());
@@ -578,11 +578,11 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        and isOrder() is true
    * @generated NOT
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   protected void addReferenceOrderDifference(
       IReferenceValuePresence<E> presence_p) {
     assert presence_p.getElementMatch() == this && presence_p.isOrder();
-    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
+    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = (EMap) getModifiableOrderReferenceMap(
         true);
     List<IReferenceValuePresence<E>> forReference = referenceMap
         .get(presence_p.getFeature());
@@ -599,11 +599,11 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    *        which is such that presence_p.getElementMatch() == this
    * @generated NOT
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   protected void addReferenceValuePresence(
       IReferenceValuePresence<E> presence_p) {
     assert presence_p.getElementMatch() == this && !presence_p.isOrder();
-    EMap<R, EMap<E, IReferenceValuePresence<E>>> referenceMap = getModifiableReferenceMap(
+    EMap<R, EMap<E, IReferenceValuePresence<E>>> referenceMap = (EMap) getModifiableReferenceMap(
         true);
     EMap<E, IReferenceValuePresence<E>> forReference = referenceMap
         .get(presence_p.getFeature());
@@ -717,11 +717,12 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getAttributeDifferences(java.lang.Object)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public Collection<IAttributeValuePresence<E>> getAttributeDifferences(
       Object attribute_p) {
     Collection<IAttributeValuePresence<E>> result = null;
     if (getModifiableAttributeMap(false) != null) {
-      EList<IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
+      EList<IAttributeValuePresence<E>> forAttribute = (EList) getModifiableAttributeMap(
           false).get(attribute_p);
       if (forAttribute != null) {
         result = Collections.unmodifiableCollection(forAttribute);
@@ -737,10 +738,11 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getAttributeOrderDifference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public IAttributeValuePresence<E> getAttributeOrderDifference(
       Object attribute_p, Role role_p) {
     IAttributeValuePresence<E> result = null;
-    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = getModifiableAttributeMap(
+    EMap<A, EList<IAttributeValuePresence<E>>> attributeMap = (EMap) getModifiableAttributeMap(
         false);
     if (attributeMap != null) {
       List<IAttributeValuePresence<E>> forAttribute = attributeMap
@@ -761,11 +763,12 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getAttributeValueDifference(java.lang.Object, java.lang.Object)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public IAttributeValuePresence<E> getAttributeValueDifference(
       Object attribute_p, Object value_p) {
     IAttributeValuePresence<E> result = null;
     if (getModifiableAttributeMap(false) != null) {
-      List<IAttributeValuePresence<E>> forAttribute = getModifiableAttributeMap(
+      List<IAttributeValuePresence<E>> forAttribute = (List) getModifiableAttributeMap(
           false).get(attribute_p);
       if (forAttribute != null) {
         for (IAttributeValuePresence<E> current : forAttribute) {
@@ -795,30 +798,36 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * Return the double map: attribute -> value -> difference
+   * Return the double map: attribute -> value -> difference.
+   * Return type should be EMap<A, EList<IAttributeValuePresence<E>>> but EMF code gen
+   * does not fully support type arguments on maps.
    * @param create_p whether the map must be created if it does not exist
    * @return a modifiable map which is not null if create_p
    * @generated NOT
    */
-  protected abstract EMap<A, EList<IAttributeValuePresence<E>>> getModifiableAttributeMap(
+  protected abstract EMap<?, ? extends EList<? extends IAttributeValuePresence<?>>> getModifiableAttributeMap(
       boolean create_p);
 
   /**
-   * Return the reference -> order differences map
+   * Return the reference -> order differences map.
+   * Return type should be EMap<R, EList<IReferenceValuePresence<E>>> but EMF code gen
+   * does not fully support type arguments on maps.
    * @param create_p whether the map must be created if it does not exist
    * @return a modifiable map which is not null if create_p
    * @generated NOT
    */
-  protected abstract EMap<R, EList<IReferenceValuePresence<E>>> getModifiableOrderReferenceMap(
+  protected abstract EMap<?, ? extends EList<? extends IReferenceValuePresence<?>>> getModifiableOrderReferenceMap(
       boolean create_p);
 
   /**
-   * Return the double map: reference -> value -> difference
+   * Return the double map: reference -> value -> difference.
+   * Return type should be EMap<R, EMap<E, IReferenceValuePresence<E>>> but EMF code gen
+   * does not fully support type arguments on maps.
    * @param create_p whether the map must be created if it does not exist
    * @return a modifiable map which is not null if create_p
    * @generated NOT
    */
-  protected abstract EMap<R, EMap<E, IReferenceValuePresence<E>>> getModifiableReferenceMap(
+  protected abstract EMap<?, ? extends EMap<?, ? extends IReferenceValuePresence<?>>> getModifiableReferenceMap(
       boolean create_p);
 
   /**
@@ -881,11 +890,12 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getReferenceDifferences(java.lang.Object)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public Collection<IReferenceValuePresence<E>> getReferenceDifferences(
       Object reference_p) {
     Collection<IReferenceValuePresence<E>> result = null;
     if (getModifiableReferenceMap(false) != null) {
-      EMap<E, IReferenceValuePresence<E>> forReference = getModifiableReferenceMap(
+      EMap<E, IReferenceValuePresence<E>> forReference = (EMap) getModifiableReferenceMap(
           false).get(reference_p);
       if (forReference != null) {
         result = Collections.unmodifiableCollection(forReference.values());
@@ -901,9 +911,10 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getReferenceOrderDifference(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public IReferenceValuePresence<E> getReferenceOrderDifference(
       Object reference_p, Role role_p) {
-    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = getModifiableOrderReferenceMap(
+    EMap<R, EList<IReferenceValuePresence<E>>> referenceMap = (EMap) getModifiableOrderReferenceMap(
         false);
     if (referenceMap != null) {
       List<IReferenceValuePresence<E>> forReference = referenceMap
@@ -921,11 +932,12 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IMatch#getReferenceValueDifference(java.lang.Object, java.lang.Object)
    * @generated NOT
    */
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public IReferenceValuePresence<E> getReferenceValueDifference(
       Object reference_p, E value_p) {
     IReferenceValuePresence<E> result = null;
     if (getModifiableReferenceMap(false) != null) {
-      EMap<E, IReferenceValuePresence<E>> forReference = getModifiableReferenceMap(
+      EMap<E, IReferenceValuePresence<E>> forReference = (EMap) getModifiableReferenceMap(
           false).get(reference_p);
       if (forReference != null) {
         result = forReference.get(value_p);

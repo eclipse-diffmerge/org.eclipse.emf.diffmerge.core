@@ -61,6 +61,10 @@
         <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/value"/>
         <genParameters ecoreParameter="GDiffData.ecore#//EMapping/isIgnoredReferenceValue/role"/>
       </genOperations>
+      <genOperations ecoreOperation="GDiffData.ecore#//EMapping/map">
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/map/element"/>
+        <genParameters ecoreParameter="GDiffData.ecore#//EMapping/map/role"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="GDiffData.ecore#//EMatch">
       <genTypeParameters ecoreTypeParameter="GDiffData.ecore#//EMatch/E"/>

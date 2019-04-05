@@ -29,16 +29,17 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMapping()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EMapping extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<Object, Object, Object>,
-    EComparisonElement {
+@SuppressWarnings("javadoc")
+public interface EMapping<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, Object, Object>,
+    EComparisonElement<E> {
   /**
    * Returns the value of the '<em><b>Ancestor Match Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch},
+   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch<?>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Ancestor Match Map</em>' map isn't clear,
@@ -47,15 +48,15 @@ public interface EMapping extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ancestor Match Map</em>' map.
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMapping_AncestorMatchMap()
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&gt;" derived="true"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&lt;?&gt;&gt;" derived="true"
    * @generated
    */
-  EMap<Object, EMatch> getAncestorMatchMap();
+  EMap<Object, EMatch<?>> getAncestorMatchMap();
 
   /**
    * Returns the value of the '<em><b>Reference Match Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch},
+   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch<?>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Reference Match Map</em>' map isn't clear,
@@ -64,15 +65,15 @@ public interface EMapping extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Match Map</em>' map.
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMapping_ReferenceMatchMap()
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&gt;" derived="true"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&lt;?&gt;&gt;" derived="true"
    * @generated
    */
-  EMap<Object, EMatch> getReferenceMatchMap();
+  EMap<Object, EMatch<?>> getReferenceMatchMap();
 
   /**
    * Returns the value of the '<em><b>Target Match Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
-   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch},
+   * and the value is of type {@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch<?>},
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Target Match Map</em>' map isn't clear,
@@ -81,10 +82,10 @@ public interface EMapping extends
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Match Map</em>' map.
    * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMapping_TargetMatchMap()
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&gt;" derived="true"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&lt;?&gt;&gt;" derived="true"
    * @generated
    */
-  EMap<Object, EMatch> getTargetMatchMap();
+  EMap<Object, EMatch<?>> getTargetMatchMap();
 
   /**
    * <!-- begin-user-doc -->
@@ -92,14 +93,22 @@ public interface EMapping extends
    * @model potentialElementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  EMatch getMatchFor(Object potentialElement, Role role);
+  EMatch<E> getMatchFor(Object potentialElement, Role role);
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&gt;" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @model mapType="org.eclipse.emf.diffmerge.pojo.pojodiffdata.ElementToMatchEntry&lt;org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch&lt;?&gt;&gt;" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  EMap<Object, EMatch> getMatchMap(Role role);
+  EMap<Object, EMatch<?>> getMatchMap(Role role);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model required="true" elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
+   * @generated
+   */
+  EMatch<E> map(E element, Role role);
 
 } // EMapping

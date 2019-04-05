@@ -12,13 +12,10 @@
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 
 import java.util.Map;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
-
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.*;
 
 import org.eclipse.emf.ecore.EClass;
@@ -107,8 +104,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison createEComparison() {
-    EComparisonImpl eComparison = new EComparisonImpl();
+  public <E extends Object> EComparison<E> createEComparison() {
+    EComparisonImpl<E> eComparison = new EComparisonImpl<E>();
     return eComparison;
   }
 
@@ -117,8 +114,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMapping createEMapping() {
-    EMappingImpl eMapping = new EMappingImpl();
+  public <E extends Object> EMapping<E> createEMapping() {
+    EMappingImpl<E> eMapping = new EMappingImpl<E>();
     return eMapping;
   }
 
@@ -127,8 +124,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMatch createEMatch() {
-    EMatchImpl eMatch = new EMatchImpl();
+  public <E extends Object> EMatch<E> createEMatch() {
+    EMatchImpl<E> eMatch = new EMatchImpl<E>();
     return eMatch;
   }
 
@@ -137,8 +134,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EElementPresence createEElementPresence() {
-    EElementPresenceImpl eElementPresence = new EElementPresenceImpl();
+  public <E extends Object> EElementPresence<E> createEElementPresence() {
+    EElementPresenceImpl<E> eElementPresence = new EElementPresenceImpl<E>();
     return eElementPresence;
   }
 
@@ -147,8 +144,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttributeValuePresence createEAttributeValuePresence() {
-    EAttributeValuePresenceImpl eAttributeValuePresence = new EAttributeValuePresenceImpl();
+  public <E extends Object> EAttributeValuePresence<E> createEAttributeValuePresence() {
+    EAttributeValuePresenceImpl<E> eAttributeValuePresence = new EAttributeValuePresenceImpl<E>();
     return eAttributeValuePresence;
   }
 
@@ -157,8 +154,8 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReferenceValuePresence createEReferenceValuePresence() {
-    EReferenceValuePresenceImpl eReferenceValuePresence = new EReferenceValuePresenceImpl();
+  public <E extends Object> EReferenceValuePresence<E> createEReferenceValuePresence() {
+    EReferenceValuePresenceImpl<E> eReferenceValuePresence = new EReferenceValuePresenceImpl<E>();
     return eReferenceValuePresence;
   }
 
@@ -167,7 +164,7 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, EList<IAttributeValuePresence<Object>>> createAttributeToDifferenceEntry() {
+  public Map.Entry<Object, EList<IAttributeValuePresence<?>>> createAttributeToDifferenceEntry() {
     AttributeToDifferenceEntryImpl attributeToDifferenceEntry = new AttributeToDifferenceEntryImpl();
     return attributeToDifferenceEntry;
   }
@@ -177,7 +174,7 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>> createReferenceToElementToDifferenceEntry() {
+  public Map.Entry<Object, EMap<Object, IReferenceValuePresence<?>>> createReferenceToElementToDifferenceEntry() {
     ReferenceToElementToDifferenceEntryImpl referenceToElementToDifferenceEntry = new ReferenceToElementToDifferenceEntryImpl();
     return referenceToElementToDifferenceEntry;
   }
@@ -187,7 +184,7 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, EList<IReferenceValuePresence<Object>>> createReferenceToOrderDifferenceEntry() {
+  public Map.Entry<Object, EList<IReferenceValuePresence<?>>> createReferenceToOrderDifferenceEntry() {
     ReferenceToOrderDifferenceEntryImpl referenceToOrderDifferenceEntry = new ReferenceToOrderDifferenceEntryImpl();
     return referenceToOrderDifferenceEntry;
   }
@@ -197,7 +194,7 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, IReferenceValuePresence<Object>> createElementToDifferenceEntry() {
+  public Map.Entry<Object, IReferenceValuePresence<?>> createElementToDifferenceEntry() {
     ElementToDifferenceEntryImpl elementToDifferenceEntry = new ElementToDifferenceEntryImpl();
     return elementToDifferenceEntry;
   }
@@ -207,7 +204,7 @@ public class PojodiffdataFactoryImpl extends EFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public Map.Entry<Object, EMatch> createElementToMatchEntry() {
+  public Map.Entry<Object, EMatch<?>> createElementToMatchEntry() {
     ElementToMatchEntryImpl elementToMatchEntry = new ElementToMatchEntryImpl();
     return elementToMatchEntry;
   }

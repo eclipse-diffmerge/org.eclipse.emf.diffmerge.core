@@ -173,6 +173,15 @@ public class EMappingImpl extends
   }
 
   /**
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @generated NOT
+   */
+  @Override
+  public EMatch map(EObject element, Role role) {
+    return (EMatch) super.map(element, role);
+  }
+
+  /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */

@@ -415,10 +415,10 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public abstract boolean disconnect(Role role, E element);
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IMapping.Editable#map(Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public IMatch.Editable<E> map(E element_p, Role role_p) {
+  public EMatch<E, A, R> map(E element_p, Role role_p) {
     assert element_p != null && role_p != null;
     IMatch<E> previous = getMatchFor(element_p, role_p);
     // Enforce consistency by removing previous match if any

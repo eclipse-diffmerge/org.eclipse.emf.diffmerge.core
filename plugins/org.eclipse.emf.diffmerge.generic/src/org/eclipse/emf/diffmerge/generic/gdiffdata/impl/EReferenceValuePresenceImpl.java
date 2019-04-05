@@ -480,7 +480,8 @@ public abstract class EReferenceValuePresenceImpl<E, A, R> extends
       E valueElement = getValue();
       if (isOwnership()) {
         // Value must be removed from its ownership so it is an element removal: disconnect element
-        getElementMatch().getMapping().disconnect(getPresenceRole(), valueElement);
+        getElementMatch().getMapping().disconnect(getPresenceRole(),
+            valueElement);
       }
       if (getFeature() != null) {
         presenceScope.removeReferenceValue(getHolder(), getFeature(),

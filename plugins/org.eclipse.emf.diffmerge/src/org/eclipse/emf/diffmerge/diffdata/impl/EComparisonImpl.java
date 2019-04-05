@@ -13,7 +13,6 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import java.util.Map;
 import java.util.Set;
-
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;

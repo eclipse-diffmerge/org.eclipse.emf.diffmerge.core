@@ -23,6 +23,7 @@ import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.ICompareNavigator;
 import org.eclipse.compare.INavigatable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -154,6 +155,16 @@ implements IEditingDomainProvider {
   public void checkInconsistency(IComparison<?> comparison_p) {
     if (comparison_p != null && !comparison_p.isConsistent()) {
       handleInconsistency(comparison_p);
+    }
+  }
+  
+  /**
+   * Check whether the given status is OK, otherwise throw a runtime exception
+   * @param status_p a non-null status
+   */
+  protected void checkStatus(IStatus status_p) {
+    if (!status_p.isOK()) {
+      throw new RuntimeException(status_p.getMessage(), status_p.getException());
     }
   }
   
@@ -561,17 +572,16 @@ implements IEditingDomainProvider {
     loadingMonitor.worked(1);
     // Loading left
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingLeft);
-    Object leftLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole);
-    _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(leftLoadingContext);
+    Object leftLoadingContext = (domain != null)? domain:
+      _comparisonMethod.getResourceSet(leftRole);
+    _leftScope = _comparisonMethod.getModelScopeDefinition(leftRole).createScope(
+        leftLoadingContext);
     if (_leftScope == null) {
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_LeftScopeNull);
     }
     if (_leftScope instanceof IPersistentDataScope<?>) {
-      try {
-        ((IPersistentDataScope<?>)_leftScope).load();
-      } catch (Exception e) {
-        throw new WrappedException(e);
-      }
+      IStatus status = ((IPersistentDataScope<?>)_leftScope).load();
+      checkStatus(status);
     }
     loadingMonitor.worked(1);
     if (loadingMonitor.isCanceled()) {
@@ -579,18 +589,16 @@ implements IEditingDomainProvider {
     }
     // Loading right
     loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingRight);
-    Object rightLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(leftRole.opposite());
+    Object rightLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(
+        leftRole.opposite());
     _rightScope = _comparisonMethod.getModelScopeDefinition(leftRole.opposite()).createScope(
         rightLoadingContext);
     if (_rightScope == null) {
       throw new RuntimeException(Messages.EMFDiffMergeEditorInput_RightScopeNull);
     }
     if (_rightScope instanceof IPersistentDataScope<?>) {
-      try {
-        ((IPersistentDataScope<?>)_rightScope).load();
-      } catch (Exception e) {
-        throw new WrappedException(e);
-      }
+      IStatus status = ((IPersistentDataScope<?>)_rightScope).load();
+      checkStatus(status);
     }
     loadingMonitor.worked(1);
     if (loadingMonitor.isCanceled()) {
@@ -599,22 +607,21 @@ implements IEditingDomainProvider {
     // Loading ancestor
     if (threeWay) {
       loadingMonitor.subTask(Messages.EMFDiffMergeEditorInput_LoadingAncestor);
-      Object ancestorLoadingContext = (domain != null)? domain: _comparisonMethod.getResourceSet(Role.ANCESTOR);
+      Object ancestorLoadingContext = (domain != null)? domain:
+        _comparisonMethod.getResourceSet(Role.ANCESTOR);
       _ancestorScope = _comparisonMethod.getModelScopeDefinition(Role.ANCESTOR).createScope(
           ancestorLoadingContext);
       if (_ancestorScope == null) {
         throw new RuntimeException(Messages.EMFDiffMergeEditorInput_AncestorScopeNull);
       }
       if (_ancestorScope instanceof IPersistentDataScope<?>) {
-        try {
-          ((IPersistentDataScope<?>)_ancestorScope).load();
-        } catch (Exception e) {
-          throw new WrappedException(e);
-        }
+        IStatus status = ((IPersistentDataScope<?>)_ancestorScope).load();
+        checkStatus(status);
       }
       loadingMonitor.worked(1);
-      if (loadingMonitor.isCanceled())
+      if (loadingMonitor.isCanceled()) {
         throw new OperationCanceledException();
+      }
     }
   }
   

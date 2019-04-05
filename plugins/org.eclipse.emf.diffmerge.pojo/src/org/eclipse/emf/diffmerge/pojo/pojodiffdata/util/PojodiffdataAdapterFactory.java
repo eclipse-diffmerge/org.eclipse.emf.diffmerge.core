@@ -17,10 +17,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.diffmerge.generic.api.IComparison.Editable;
 
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
@@ -91,82 +89,89 @@ public class PojodiffdataAdapterFactory extends AdapterFactoryImpl {
    */
   protected PojodiffdataSwitch<Adapter> modelSwitch = new PojodiffdataSwitch<Adapter>() {
     @Override
-    public Adapter caseEComparison(EComparison object) {
+    public <E extends Object> Adapter caseEComparison(EComparison<E> object) {
       return createEComparisonAdapter();
     }
 
     @Override
-    public Adapter caseEComparisonElement(EComparisonElement object) {
+    public <E extends Object> Adapter caseEComparisonElement(
+        EComparisonElement<E> object) {
       return createEComparisonElementAdapter();
     }
 
     @Override
-    public Adapter caseEMapping(EMapping object) {
+    public <E extends Object> Adapter caseEMapping(EMapping<E> object) {
       return createEMappingAdapter();
     }
 
     @Override
-    public Adapter caseEMatch(EMatch object) {
+    public <E extends Object> Adapter caseEMatch(EMatch<E> object) {
       return createEMatchAdapter();
     }
 
     @Override
-    public Adapter caseEMergeableDifference(EMergeableDifference object) {
+    public <E extends Object> Adapter caseEMergeableDifference(
+        EMergeableDifference<E> object) {
       return createEMergeableDifferenceAdapter();
     }
 
     @Override
-    public Adapter caseEElementRelativePresence(
-        EElementRelativePresence object) {
+    public <E extends Object> Adapter caseEElementRelativePresence(
+        EElementRelativePresence<E> object) {
       return createEElementRelativePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEElementPresence(EElementPresence object) {
+    public <E extends Object> Adapter caseEElementPresence(
+        EElementPresence<E> object) {
       return createEElementPresenceAdapter();
     }
 
     @Override
-    public Adapter caseEValuePresence(EValuePresence object) {
+    public <E extends Object> Adapter caseEValuePresence(
+        EValuePresence<E> object) {
       return createEValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEAttributeValuePresence(EAttributeValuePresence object) {
+    public <E extends Object> Adapter caseEAttributeValuePresence(
+        EAttributeValuePresence<E> object) {
       return createEAttributeValuePresenceAdapter();
     }
 
     @Override
-    public Adapter caseEReferenceValuePresence(EReferenceValuePresence object) {
+    public <E extends Object> Adapter caseEReferenceValuePresence(
+        EReferenceValuePresence<E> object) {
       return createEReferenceValuePresenceAdapter();
     }
 
     @Override
     public Adapter caseAttributeToDifferenceEntry(
-        Map.Entry<Object, EList<IAttributeValuePresence<Object>>> object) {
+        Map.Entry<Object, EList<IAttributeValuePresence<?>>> object) {
       return createAttributeToDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseReferenceToElementToDifferenceEntry(
-        Map.Entry<Object, EMap<Object, IReferenceValuePresence<Object>>> object) {
+        Map.Entry<Object, EMap<Object, IReferenceValuePresence<?>>> object) {
       return createReferenceToElementToDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseReferenceToOrderDifferenceEntry(
-        Map.Entry<Object, EList<IReferenceValuePresence<Object>>> object) {
+        Map.Entry<Object, EList<IReferenceValuePresence<?>>> object) {
       return createReferenceToOrderDifferenceEntryAdapter();
     }
 
     @Override
     public Adapter caseElementToDifferenceEntry(
-        Map.Entry<Object, IReferenceValuePresence<Object>> object) {
+        Map.Entry<Object, IReferenceValuePresence<?>> object) {
       return createElementToDifferenceEntryAdapter();
     }
 
     @Override
-    public Adapter caseElementToMatchEntry(Map.Entry<Object, EMatch> object) {
+    public Adapter caseElementToMatchEntry(
+        Map.Entry<Object, EMatch<?>> object) {
       return createElementToMatchEntryAdapter();
     }
 

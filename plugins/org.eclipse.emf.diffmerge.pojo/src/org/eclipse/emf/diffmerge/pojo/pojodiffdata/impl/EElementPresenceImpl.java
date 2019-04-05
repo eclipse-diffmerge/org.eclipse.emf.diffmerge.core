@@ -24,9 +24,9 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class EElementPresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<Object, Object, Object>
-    implements EElementPresence {
+public class EElementPresenceImpl<E extends Object> extends
+    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<E, Object, Object>
+    implements EElementPresence<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -42,7 +42,7 @@ public class EElementPresenceImpl extends
    * @param ownerMatch_p a potentially null match for the owner of the element
    * @generated NOT
    */
-  public EElementPresenceImpl(EMatch match_p, EMatch ownerMatch_p) {
+  public EElementPresenceImpl(EMatch<E> match_p, EMatch<E> ownerMatch_p) {
     super(match_p, ownerMatch_p);
   }
 
@@ -61,8 +61,8 @@ public class EElementPresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EMatch getOwnerMatch() {
-    return (EMatch) super.getOwnerMatch();
+  public EMatch<E> getOwnerMatch() {
+    return (EMatch<E>) super.getOwnerMatch();
   }
 
   /**
@@ -70,8 +70,8 @@ public class EElementPresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EMatch getElementMatch() {
-    return (EMatch) super.getElementMatch();
+  public EMatch<E> getElementMatch() {
+    return (EMatch<E>) super.getElementMatch();
   }
 
   /**
@@ -79,8 +79,8 @@ public class EElementPresenceImpl extends
    * @generated NOT
    */
   @Override
-  public EComparison getComparison() {
-    return (EComparison) super.getComparison();
+  public EComparison<E> getComparison() {
+    return (EComparison<E>) super.getComparison();
   }
 
 } //EElementPresenceImpl

@@ -31,6 +31,8 @@ public class Messages extends NLS {
   public static String ConfigurableMatchPolicy_Criterion_Structure_UnambiguousChildren_Tooltip;
   public static String ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren;
   public static String ConfigurableMatchPolicy_Criterion_Structure_UniqueChildren_Tooltip;
+  public static String FragmentedModelScope_ResourceNotDefined;
+  public static String SubtreeModelScope_NotLoaded;
   static {
     // initialize resource bundle
     NLS.initializeMessages(BUNDLE_NAME, Messages.class);
