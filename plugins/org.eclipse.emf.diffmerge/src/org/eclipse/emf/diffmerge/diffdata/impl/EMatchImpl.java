@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
@@ -53,32 +52,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class EMatchImpl extends
     org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference>
     implements EMatch {
-
-  /**
-   * A constant key representing order in the TARGET side in (reference, value presence) maps
-   * @generated NOT
-   */
-  protected static final EObject REFERENCE_ORDER_KEY_TARGET = EcoreFactory.eINSTANCE
-      .createEObject();
-
-  /**
-   * A constant key representing order in the REFERENCE side in (reference, value presence) maps
-   * @generated NOT
-   */
-  protected static final EObject REFERENCE_ORDER_KEY_REFERENCE = EcoreFactory.eINSTANCE
-      .createEObject();
-
-  /**
-   * A constant key representing order in the TARGET side in (attribute, value presence) maps
-   * @generated NOT
-   */
-  protected static final Object ATTRIBUTE_ORDER_KEY_TARGET = new Object();
-
-  /**
-   * A constant key representing order in the REFERENCE side in (attribute, value presence) maps
-   * @generated NOT
-   */
-  protected static final Object ATTRIBUTE_ORDER_KEY_REFERENCE = new Object();
 
   /**
    * The cached value of the '{@link #getAncestor() <em>Ancestor</em>}' reference.

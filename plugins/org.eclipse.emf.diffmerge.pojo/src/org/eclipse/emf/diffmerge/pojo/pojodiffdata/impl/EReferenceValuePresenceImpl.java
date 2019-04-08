@@ -95,6 +95,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
       Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, reference_p, value_p, valueMatch_p, presenceRole_p,
         isOrder_p);
+    setFeature(reference_p); // Override default value.
   }
 
   /**

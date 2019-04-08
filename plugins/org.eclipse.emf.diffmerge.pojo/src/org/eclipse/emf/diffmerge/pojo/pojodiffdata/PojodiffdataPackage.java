@@ -328,6 +328,33 @@ public interface PojodiffdataPackage extends EPackage {
   int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = GdiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE;
 
   /**
+   * The feature id for the '<em><b>Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EMATCH__ANCESTOR = GdiffdataPackage.EMATCH_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Reference</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EMATCH__REFERENCE = GdiffdataPackage.EMATCH_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Target</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int EMATCH__TARGET = GdiffdataPackage.EMATCH_FEATURE_COUNT + 2;
+
+  /**
    * The feature id for the '<em><b>Modifiable Attribute Map</b></em>' map.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -335,7 +362,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @ordered
    */
   int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 0;
+      + 3;
 
   /**
    * The feature id for the '<em><b>Modifiable Reference Map</b></em>' map.
@@ -345,7 +372,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @ordered
    */
   int EMATCH__MODIFIABLE_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 1;
+      + 4;
 
   /**
    * The feature id for the '<em><b>Modifiable Order Reference Map</b></em>' map.
@@ -355,34 +382,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @ordered
    */
   int EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
-      + 2;
-
-  /**
-   * The feature id for the '<em><b>Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__ANCESTOR = GdiffdataPackage.EMATCH_FEATURE_COUNT + 3;
-
-  /**
-   * The feature id for the '<em><b>Reference</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__REFERENCE = GdiffdataPackage.EMATCH_FEATURE_COUNT + 4;
-
-  /**
-   * The feature id for the '<em><b>Target</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__TARGET = GdiffdataPackage.EMATCH_FEATURE_COUNT + 5;
+      + 5;
 
   /**
    * The number of structural features of the '<em>EMatch</em>' class.
@@ -1258,7 +1258,7 @@ public interface PojodiffdataPackage extends EPackage {
   int ATTRIBUTE_TO_DIFFERENCE_ENTRY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' containment reference list.
+   * The feature id for the '<em><b>Value</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1332,7 +1332,7 @@ public interface PojodiffdataPackage extends EPackage {
   int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' containment reference list.
+   * The feature id for the '<em><b>Value</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1662,7 +1662,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Attribute To Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;?&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;?&gt;" valueMany="true"
    * @generated
    */
   EClass getAttributeToDifferenceEntry();
@@ -1679,10 +1679,10 @@ public interface PojodiffdataPackage extends EPackage {
   EAttribute getAttributeToDifferenceEntry_Key();
 
   /**
-   * Returns the meta object for the containment reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Value</em>'.
+   * @return the meta object for the reference list '<em>Value</em>'.
    * @see java.util.Map.Entry
    * @see #getAttributeToDifferenceEntry()
    * @generated
@@ -1730,7 +1730,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Reference To Order Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyDataType="org.eclipse.emf.ecore.EJavaObject" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;?&gt;" valueMany="true"
    * @generated
    */
   EClass getReferenceToOrderDifferenceEntry();
@@ -1747,10 +1747,10 @@ public interface PojodiffdataPackage extends EPackage {
   EAttribute getReferenceToOrderDifferenceEntry_Key();
 
   /**
-   * Returns the meta object for the containment reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Value</em>'.
+   * @return the meta object for the reference list '<em>Value</em>'.
    * @see java.util.Map.Entry
    * @see #getReferenceToOrderDifferenceEntry()
    * @generated
@@ -2072,7 +2072,7 @@ public interface PojodiffdataPackage extends EPackage {
         .getAttributeToDifferenceEntry_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -2130,7 +2130,7 @@ public interface PojodiffdataPackage extends EPackage {
         .getReferenceToOrderDifferenceEntry_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

@@ -36,12 +36,12 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,36 +49,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class EMatchImpl<E extends Object> extends
     org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<E, Object, Object>
     implements EMatch<E> {
-  /**
-   * The cached value of the '{@link #getModifiableAttributeMap() <em>Modifiable Attribute Map</em>}' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getModifiableAttributeMap()
-   * @generated
-   * @ordered
-   */
-  protected EMap<Object, EList<IAttributeValuePresence<?>>> modifiableAttributeMap;
-
-  /**
-   * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getModifiableReferenceMap()
-   * @generated
-   * @ordered
-   */
-  protected EMap<Object, EMap<Object, IReferenceValuePresence<?>>> modifiableReferenceMap;
-
-  /**
-   * The cached value of the '{@link #getModifiableOrderReferenceMap() <em>Modifiable Order Reference Map</em>}' map.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getModifiableOrderReferenceMap()
-   * @generated
-   * @ordered
-   */
-  protected EMap<Object, EList<IReferenceValuePresence<?>>> modifiableOrderReferenceMap;
-
   /**
    * The cached value of the '{@link #getAncestor() <em>Ancestor</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -108,6 +78,36 @@ public class EMatchImpl<E extends Object> extends
    * @ordered
    */
   protected E target;
+
+  /**
+   * The cached value of the '{@link #getModifiableAttributeMap() <em>Modifiable Attribute Map</em>}' map.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getModifiableAttributeMap()
+   * @generated
+   * @ordered
+   */
+  protected EMap<Object, EList<IAttributeValuePresence<?>>> modifiableAttributeMap;
+
+  /**
+   * The cached value of the '{@link #getModifiableReferenceMap() <em>Modifiable Reference Map</em>}' map.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getModifiableReferenceMap()
+   * @generated
+   * @ordered
+   */
+  protected EMap<Object, EMap<Object, IReferenceValuePresence<?>>> modifiableReferenceMap;
+
+  /**
+   * The cached value of the '{@link #getModifiableOrderReferenceMap() <em>Modifiable Order Reference Map</em>}' map.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getModifiableOrderReferenceMap()
+   * @generated
+   * @ordered
+   */
+  protected EMap<Object, EList<IReferenceValuePresence<?>>> modifiableOrderReferenceMap;
 
   /**
    * <!-- begin-user-doc -->
@@ -305,6 +305,12 @@ public class EMatchImpl<E extends Object> extends
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
+    case PojodiffdataPackage.EMATCH__ANCESTOR:
+      return getAncestor();
+    case PojodiffdataPackage.EMATCH__REFERENCE:
+      return getReference();
+    case PojodiffdataPackage.EMATCH__TARGET:
+      return getTarget();
     case PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       if (coreType)
         return getModifiableAttributeMap();
@@ -320,12 +326,6 @@ public class EMatchImpl<E extends Object> extends
         return getModifiableOrderReferenceMap();
       else
         return getModifiableOrderReferenceMap().map();
-    case PojodiffdataPackage.EMATCH__ANCESTOR:
-      return getAncestor();
-    case PojodiffdataPackage.EMATCH__REFERENCE:
-      return getReference();
-    case PojodiffdataPackage.EMATCH__TARGET:
-      return getTarget();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -339,6 +339,15 @@ public class EMatchImpl<E extends Object> extends
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
+    case PojodiffdataPackage.EMATCH__ANCESTOR:
+      setAncestor((E) newValue);
+      return;
+    case PojodiffdataPackage.EMATCH__REFERENCE:
+      setReference((E) newValue);
+      return;
+    case PojodiffdataPackage.EMATCH__TARGET:
+      setTarget((E) newValue);
+      return;
     case PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       ((EStructuralFeature.Setting) getModifiableAttributeMap()).set(newValue);
       return;
@@ -348,15 +357,6 @@ public class EMatchImpl<E extends Object> extends
     case PojodiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
       ((EStructuralFeature.Setting) getModifiableOrderReferenceMap())
           .set(newValue);
-      return;
-    case PojodiffdataPackage.EMATCH__ANCESTOR:
-      setAncestor((E) newValue);
-      return;
-    case PojodiffdataPackage.EMATCH__REFERENCE:
-      setReference((E) newValue);
-      return;
-    case PojodiffdataPackage.EMATCH__TARGET:
-      setTarget((E) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -370,15 +370,6 @@ public class EMatchImpl<E extends Object> extends
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
-      getModifiableAttributeMap().clear();
-      return;
-    case PojodiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
-      getModifiableReferenceMap().clear();
-      return;
-    case PojodiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
-      getModifiableOrderReferenceMap().clear();
-      return;
     case PojodiffdataPackage.EMATCH__ANCESTOR:
       setAncestor((E) null);
       return;
@@ -387,6 +378,15 @@ public class EMatchImpl<E extends Object> extends
       return;
     case PojodiffdataPackage.EMATCH__TARGET:
       setTarget((E) null);
+      return;
+    case PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
+      getModifiableAttributeMap().clear();
+      return;
+    case PojodiffdataPackage.EMATCH__MODIFIABLE_REFERENCE_MAP:
+      getModifiableReferenceMap().clear();
+      return;
+    case PojodiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
+      getModifiableOrderReferenceMap().clear();
       return;
     }
     super.eUnset(featureID);
@@ -400,6 +400,12 @@ public class EMatchImpl<E extends Object> extends
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
+    case PojodiffdataPackage.EMATCH__ANCESTOR:
+      return ancestor != null;
+    case PojodiffdataPackage.EMATCH__REFERENCE:
+      return reference != null;
+    case PojodiffdataPackage.EMATCH__TARGET:
+      return target != null;
     case PojodiffdataPackage.EMATCH__MODIFIABLE_ATTRIBUTE_MAP:
       return modifiableAttributeMap != null
           && !modifiableAttributeMap.isEmpty();
@@ -409,12 +415,6 @@ public class EMatchImpl<E extends Object> extends
     case PojodiffdataPackage.EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP:
       return modifiableOrderReferenceMap != null
           && !modifiableOrderReferenceMap.isEmpty();
-    case PojodiffdataPackage.EMATCH__ANCESTOR:
-      return ancestor != null;
-    case PojodiffdataPackage.EMATCH__REFERENCE:
-      return reference != null;
-    case PojodiffdataPackage.EMATCH__TARGET:
-      return target != null;
     }
     return super.eIsSet(featureID);
   }

@@ -14,8 +14,6 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -26,13 +24,9 @@ import org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -71,7 +65,7 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
   protected Object key = KEY_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference list.
+   * The cached value of the '{@link #getTypedValue() <em>Value</em>}' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getTypedValue()
@@ -128,26 +122,11 @@ public class AttributeToDifferenceEntryImpl extends EObjectImpl
    */
   public EList<IAttributeValuePresence<?>> getTypedValue() {
     if (value == null) {
-      value = new EObjectContainmentEList<IAttributeValuePresence<?>>(
+      value = new EObjectResolvingEList<IAttributeValuePresence<?>>(
           IAttributeValuePresence.class, this,
           PojodiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE);
     }
     return value;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd,
-      int featureID, NotificationChain msgs) {
-    switch (featureID) {
-    case PojodiffdataPackage.ATTRIBUTE_TO_DIFFERENCE_ENTRY__VALUE:
-      return ((InternalEList<?>) getTypedValue()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
   }
 
   /**

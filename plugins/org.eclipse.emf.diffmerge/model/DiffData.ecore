@@ -138,8 +138,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReferenceToOrderDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IReferenceValuePresence">
         <eTypeArguments eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
       </eGenericType>

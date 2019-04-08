@@ -26,12 +26,12 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getAncestor <em>Ancestor</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getReference <em>Reference</em>}</li>
  *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableAttributeMap <em>Modifiable Attribute Map</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableReferenceMap <em>Modifiable Reference Map</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch#getModifiableOrderReferenceMap <em>Modifiable Order Reference Map</em>}</li>
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMatch()

@@ -103,6 +103,8 @@ public class EAttributeValuePresenceImpl<E extends Object> extends
       Object attribute_p, Object value_p, Role presenceRole_p,
       boolean isOrder_p) {
     super(elementMatch_p, attribute_p, value_p, presenceRole_p, isOrder_p);
+    setFeature(attribute_p); // Override default value.
+    setValue(value_p); // Override default value.
   }
 
   /**

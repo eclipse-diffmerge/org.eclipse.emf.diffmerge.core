@@ -77,10 +77,11 @@ public class EMappingImpl<E extends Object> extends
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   protected EMappingImpl() {
     super();
+    eAdapters().add(new MatchMapSynchronizerAdapter<E>());
   }
 
   /**

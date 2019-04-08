@@ -292,7 +292,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EReference getEMatch_ModifiableAttributeMap() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(0);
+    return (EReference) eMatchEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -301,7 +301,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EReference getEMatch_ModifiableReferenceMap() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(1);
+    return (EReference) eMatchEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -310,7 +310,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EReference getEMatch_ModifiableOrderReferenceMap() {
-    return (EReference) eMatchEClass.getEStructuralFeatures().get(2);
+    return (EReference) eMatchEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -319,7 +319,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EAttribute getEMatch_Ancestor() {
-    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(3);
+    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -328,7 +328,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EAttribute getEMatch_Reference() {
-    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(4);
+    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -337,7 +337,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
    * @generated
    */
   public EAttribute getEMatch_Target() {
-    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(5);
+    return (EAttribute) eMatchEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -607,12 +607,12 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     createEReference(eMappingEClass, EMAPPING__TARGET_MATCH_MAP);
 
     eMatchEClass = createEClass(EMATCH);
-    createEReference(eMatchEClass, EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
-    createEReference(eMatchEClass, EMATCH__MODIFIABLE_REFERENCE_MAP);
-    createEReference(eMatchEClass, EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
     createEAttribute(eMatchEClass, EMATCH__ANCESTOR);
     createEAttribute(eMatchEClass, EMATCH__REFERENCE);
     createEAttribute(eMatchEClass, EMATCH__TARGET);
+    createEReference(eMatchEClass, EMATCH__MODIFIABLE_ATTRIBUTE_MAP);
+    createEReference(eMatchEClass, EMATCH__MODIFIABLE_REFERENCE_MAP);
+    createEReference(eMatchEClass, EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP);
 
     eMergeableDifferenceEClass = createEClass(EMERGEABLE_DIFFERENCE);
 
@@ -915,6 +915,18 @@ public class PojodiffdataPackageImpl extends EPackageImpl
 
     initEClass(eMatchEClass, EMatch.class, "EMatch", !IS_ABSTRACT, //$NON-NLS-1$
         !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Ancestor(), g1, "ancestor", null, 0, 1, //$NON-NLS-1$
+        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Reference(), g1, "reference", null, 0, 1, //$NON-NLS-1$
+        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    g1 = createEGenericType(eMatchEClass_E);
+    initEAttribute(getEMatch_Target(), g1, "target", null, 0, 1, EMatch.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getEMatch_ModifiableAttributeMap(),
         this.getAttributeToDifferenceEntry(), null, "modifiableAttributeMap", //$NON-NLS-1$
         null, 0, -1, EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
@@ -930,18 +942,6 @@ public class PojodiffdataPackageImpl extends EPackageImpl
         "modifiableOrderReferenceMap", null, 0, -1, EMatch.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
         !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    g1 = createEGenericType(eMatchEClass_E);
-    initEAttribute(getEMatch_Ancestor(), g1, "ancestor", null, 0, 1, //$NON-NLS-1$
-        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    g1 = createEGenericType(eMatchEClass_E);
-    initEAttribute(getEMatch_Reference(), g1, "reference", null, 0, 1, //$NON-NLS-1$
-        EMatch.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    g1 = createEGenericType(eMatchEClass_E);
-    initEAttribute(getEMatch_Target(), g1, "target", null, 0, 1, EMatch.class, //$NON-NLS-1$
-        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
-        IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     op = addEOperation(eMatchEClass, null, "getMapping", 0, 1, IS_UNIQUE, //$NON-NLS-1$
         IS_ORDERED);
@@ -1034,7 +1034,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     initEReference(getAttributeToDifferenceEntry_Value(), g1, null, "value", //$NON-NLS-1$
         null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE,
-        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(referenceToElementToDifferenceEntryEClass, Map.Entry.class,
@@ -1062,7 +1062,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     initEReference(getReferenceToOrderDifferenceEntry_Value(), g1, null,
         "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(elementToDifferenceEntryEClass, Map.Entry.class,

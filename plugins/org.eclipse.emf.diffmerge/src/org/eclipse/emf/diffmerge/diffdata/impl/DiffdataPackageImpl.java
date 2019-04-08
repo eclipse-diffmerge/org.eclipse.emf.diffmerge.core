@@ -953,7 +953,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     g1.getETypeArguments().add(g2);
     initEReference(getReferenceToOrderDifferenceEntry_Value(), g1, null,
         "value", null, 0, -1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
+        IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE,
         IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(elementToDifferenceEntryEClass, Map.Entry.class,

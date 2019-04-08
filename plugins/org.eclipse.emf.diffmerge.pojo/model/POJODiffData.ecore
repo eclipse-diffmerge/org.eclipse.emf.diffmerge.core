@@ -80,12 +80,6 @@
         <eTypeArguments eTypeParameter="#//EMatch/E"/>
       </eGenericType>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableAttributeMap"
-        upperBound="-1" eType="#//AttributeToDifferenceEntry" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableReferenceMap"
-        upperBound="-1" eType="#//ReferenceToElementToDifferenceEntry" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableOrderReferenceMap"
-        upperBound="-1" eType="#//ReferenceToOrderDifferenceEntry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestor">
       <eGenericType eTypeParameter="#//EMatch/E"/>
     </eStructuralFeatures>
@@ -95,6 +89,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="target">
       <eGenericType eTypeParameter="#//EMatch/E"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableAttributeMap"
+        upperBound="-1" eType="#//AttributeToDifferenceEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableReferenceMap"
+        upperBound="-1" eType="#//ReferenceToElementToDifferenceEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableOrderReferenceMap"
+        upperBound="-1" eType="#//ReferenceToOrderDifferenceEntry" containment="true"/>
     <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//EMatch">
       <eTypeArguments eTypeParameter="#//EMatch/E"/>
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
@@ -217,8 +217,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeToDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IAttributeValuePresence">
         <eTypeArguments/>
       </eGenericType>
@@ -232,8 +231,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ReferenceToOrderDifferenceEntry" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
-        containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1">
       <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IReferenceValuePresence">
         <eTypeArguments/>
       </eGenericType>

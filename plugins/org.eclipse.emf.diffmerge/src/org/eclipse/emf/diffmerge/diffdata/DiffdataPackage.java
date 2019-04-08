@@ -1293,7 +1293,7 @@ public interface DiffdataPackage extends EPackage {
   int REFERENCE_TO_ORDER_DIFFERENCE_ENTRY__KEY = 0;
 
   /**
-   * The feature id for the '<em><b>Value</b></em>' containment reference list.
+   * The feature id for the '<em><b>Value</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -1652,7 +1652,7 @@ public interface DiffdataPackage extends EPackage {
    * @return the meta object for class '<em>Reference To Order Difference Entry</em>'.
    * @see java.util.Map.Entry
    * @model keyType="org.eclipse.emf.ecore.EReference" keyRequired="true"
-   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueContainment="true" valueMany="true"
+   *        valueType="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;org.eclipse.emf.ecore.EObject&gt;" valueMany="true"
    * @generated
    */
   EClass getReferenceToOrderDifferenceEntry();
@@ -1669,10 +1669,10 @@ public interface DiffdataPackage extends EPackage {
   EReference getReferenceToOrderDifferenceEntry_Key();
 
   /**
-   * Returns the meta object for the containment reference list '{@link java.util.Map.Entry <em>Value</em>}'.
+   * Returns the meta object for the reference list '{@link java.util.Map.Entry <em>Value</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Value</em>'.
+   * @return the meta object for the reference list '<em>Value</em>'.
    * @see java.util.Map.Entry
    * @see #getReferenceToOrderDifferenceEntry()
    * @generated
@@ -2023,7 +2023,7 @@ public interface DiffdataPackage extends EPackage {
         .getReferenceToOrderDifferenceEntry_Key();
 
     /**
-     * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

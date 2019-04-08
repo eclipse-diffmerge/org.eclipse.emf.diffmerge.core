@@ -187,6 +187,22 @@ implements IFeaturedModelScope {
   }
   
   /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getRoots()
+   */
+  public List<EObject> getRoots() {
+    // Already specified in interface default method, here to allow for Eclipse debug
+    return getContents();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope#iterator()
+   */
+  public TreeIterator<EObject> iterator() {
+    // Already specified in interface default method, here to allow for Eclipse debug
+    return getAllContents();
+  }
+  
+  /**
    * Return whether proxies must be resolved when this scope is navigated
    */
   protected boolean resolveProxies() {
