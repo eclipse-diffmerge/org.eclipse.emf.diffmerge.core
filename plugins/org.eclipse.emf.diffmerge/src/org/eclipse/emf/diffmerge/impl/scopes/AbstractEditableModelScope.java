@@ -66,7 +66,8 @@ implements IEditableModelScope {
    * @see org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope#disconnect(java.lang.Object)
    */
   public boolean disconnect(EObject element_p) {
-    return false; // Not supported by default
+    EcoreUtil.delete(element_p);
+    return true;
   }
   
   /**

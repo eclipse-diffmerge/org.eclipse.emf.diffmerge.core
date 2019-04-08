@@ -130,10 +130,11 @@ public class MergeOperation<E> extends AbstractExpensiveOperation {
   public IStatus run() {
     getMonitor().worked(1);
     IStatus result;
-    if (isGlobal())
+    if (isGlobal()) {
       result = runOnComparison();
-    else
+    } else {
       result = runOnSet();
+    }
     if (_updateReferences && result != null && result.isOK()) {
       checkProgress();
       IMapping.Editable<E> mapping = (IMapping.Editable<E>)_comparison.getMapping();

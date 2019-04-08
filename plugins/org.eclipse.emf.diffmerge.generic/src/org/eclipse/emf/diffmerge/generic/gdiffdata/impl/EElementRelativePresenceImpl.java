@@ -262,10 +262,11 @@ public abstract class EElementRelativePresenceImpl<E, A, R>
    */
   @Override
   public final void doMergeIn(Role destination_p) {
-    if (destination_p == getPresenceRole())
+    if (destination_p == getPresenceRole()) {
       mergeRemoval();
-    else
+    } else {
       mergeAddition();
+    }
   }
 
   /**
