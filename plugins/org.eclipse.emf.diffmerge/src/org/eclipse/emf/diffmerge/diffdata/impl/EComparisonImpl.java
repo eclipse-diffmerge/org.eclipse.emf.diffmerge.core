@@ -125,13 +125,13 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#newElementPresence(org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.IMatch)
+   * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#newElementPresence(org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.IMatch, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
   public IElementPresence<EObject> newElementPresence(
-      IMatch<EObject> elementMatch_p, IMatch<EObject> ownerMatch_p) {
+      IMatch<EObject> elementMatch_p, IMatch<EObject> ownerMatch_p, Role presenceRole_p) {
     return new EElementPresenceImpl((EMatch) elementMatch_p,
-        (EMatch) ownerMatch_p);
+        (EMatch) ownerMatch_p, presenceRole_p);
   }
 
   /**

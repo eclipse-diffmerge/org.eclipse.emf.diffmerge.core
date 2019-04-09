@@ -600,7 +600,7 @@ public class DiffOperation<E> extends AbstractExpensiveOperation {
     if (result == null && getDiffPolicy().coverMatch(match_p)) {
       Role presenceRole = match_p.getUncoveredRole().opposite();
       IMatch<E> ownerMatch = getComparison().getContainerOf(match_p, presenceRole);
-      result = getComparison().newElementPresence(match_p, ownerMatch);
+      result = getComparison().newElementPresence(match_p, ownerMatch, presenceRole);
       setElementPresenceDependencies(result);
       if (getComparison().isThreeWay()) {
     	  setThreeWayProperties(result);

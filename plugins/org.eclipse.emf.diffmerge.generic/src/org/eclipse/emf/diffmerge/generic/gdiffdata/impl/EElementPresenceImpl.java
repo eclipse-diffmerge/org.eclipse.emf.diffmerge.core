@@ -16,6 +16,7 @@ import org.eclipse.emf.diffmerge.generic.api.IDiffPolicy;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
@@ -62,11 +63,12 @@ public abstract class EElementPresenceImpl<E, A, R> extends
    * Constructor
    * @param match_p the non-null match to which this difference is relative
    * @param ownerMatch_p a potentially null match for the owner of the element
+   * @param presenceRole_p the non-null role in which the element is present: TARGET or REFERENCE
    * @generated NOT
    */
   public EElementPresenceImpl(EMatch<E, A, R> match_p,
-      EMatch<E, A, R> ownerMatch_p) {
-    super(match_p, match_p.getUncoveredRole().opposite());
+      EMatch<E, A, R> ownerMatch_p, Role presenceRole_p) {
+    super(match_p, presenceRole_p);
     setOwnerMatch(ownerMatch_p);
     ((IMatch.Editable<E>) elementMatch).addRelatedDifference(this);
   }

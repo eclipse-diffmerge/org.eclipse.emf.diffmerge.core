@@ -15,6 +15,7 @@ import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -43,10 +44,11 @@ public class EElementPresenceImpl extends
    * Constructor
    * @param match_p the non-null match to which this difference is relative
    * @param ownerMatch_p a potentially null match for the owner of the element
+   * @param presenceRole_p the non-null role in which the element is present: TARGET or REFERENCE
    * @generated NOT
    */
-  public EElementPresenceImpl(EMatch match_p, EMatch ownerMatch_p) {
-    super(match_p, ownerMatch_p);
+  public EElementPresenceImpl(EMatch match_p, EMatch ownerMatch_p, Role presenceRole_p) {
+    super(match_p, ownerMatch_p, presenceRole_p);
   }
 
   /**

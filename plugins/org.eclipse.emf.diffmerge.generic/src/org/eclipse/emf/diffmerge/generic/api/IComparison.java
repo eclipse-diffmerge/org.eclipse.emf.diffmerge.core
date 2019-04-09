@@ -261,7 +261,7 @@ public interface IComparison<E> {
      * @param elementMatch_p the non-null match for the element holding the value
      * @param attribute_p the non-null attribute holding the value
      * @param value_p the non-null value held
-     * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
+     * @param presenceRole_p the non-null role in which the value is held: TARGET or REFERENCE
      * @param isOrder_p whether the value presence is solely due to ordering
      * @return a non-null attribute value presence
      */
@@ -270,13 +270,14 @@ public interface IComparison<E> {
         Role presenceRole_p, boolean isOrder_p);
     
     /**
-     * Create and return a reference value presence with the given characteristics
+     * Create and return an element presence with the given characteristics
      * @param elementMatch_p the non-null partial match for the element presence
      * @param ownerMatch_p a potentially null match for the owner of the element
+     * @param presenceRole_p the non-null role in which the element is present: TARGET or REFERENCE
      * @return a non-null element presence
      */
     IElementPresence<E> newElementPresence(IMatch<E> elementMatch_p,
-        IMatch<E> ownerMatch_p);
+        IMatch<E> ownerMatch_p, Role presenceRole_p);
     
     /**
      * Create and return a match with the given characteristics
@@ -294,7 +295,7 @@ public interface IComparison<E> {
      * @param reference_p the non-null reference holding the value
      * @param value_p the value element, which may only be null if valueMatch_p is not null
      * @param valueMatch_p an optional match, which cannot be null if value_p or reference_p is null
-     * @param presenceRole_p the role in which the value is held: TARGET or REFERENCE
+     * @param presenceRole_p the non-null role in which the value is held: TARGET or REFERENCE
      * @param isOrder_p whether the value presence is solely due to ordering
      * @return a non-null reference value presence
      */
