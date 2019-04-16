@@ -88,8 +88,9 @@ public class ModelScopeIterator implements TreeIterator<EObject> {
       _currentIsRoot = true;
     }
     _prunedOnRoot = false;
-    if (result != null)
+    if (result != null) {
       return result;
+    }
     throw new NoSuchElementException();
   }
   

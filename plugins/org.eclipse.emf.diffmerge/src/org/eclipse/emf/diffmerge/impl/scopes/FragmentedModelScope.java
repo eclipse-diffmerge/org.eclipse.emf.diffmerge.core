@@ -227,8 +227,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
     boolean wasRoot = oldResource != null && oldResource.getContents().contains(value_p);
     Object formerId = tGetID(value_p, false);
     boolean result = super.add(source_p, reference_p, value_p);
-    if (wasRoot && reference_p.isContainment()) // Intentionally not isContainment(reference_p)
+    if (wasRoot && reference_p.isContainment()) { // Intentionally not isContainment(reference_p)
       oldResource.getContents().remove(value_p); // Not automatically handled
+    }
     if (formerId != null) {
       // In case resource has changed, thus changing the extrinsic ID
       tSetID(value_p, formerId, false);
@@ -244,8 +245,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    */
   protected void addNewResource(Resource resource_p) {
     _resources.add(resource_p);
-    if (!_initiallyPresentResources.contains(resource_p))
+    if (!_initiallyPresentResources.contains(resource_p)) {
       _loadedResources.add(resource_p);
+    }
   }
   
   /**
@@ -257,8 +259,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   protected boolean containsUnnecessaryProxies(Collection<EObject> collection_p,
       EObject source_p) {
     for (EObject current : collection_p) {
-      if (current.eIsProxy() && current != ModelImplUtil.resolveIfLoaded(current, source_p))
+      if (current.eIsProxy() && current != ModelImplUtil.resolveIfLoaded(current, source_p)) {
         return true;
+      }
     }
     return false;
   }
@@ -296,8 +299,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
     // Current result, may require resolution of in-scope proxies
     List<EObject> result = super.get(source_p, reference_p);
     boolean requiresResolution = containsUnnecessaryProxies(result, source_p);
-    if (requiresResolution) // Recompute result if needed
+    if (requiresResolution) { // Recompute result if needed
       result = get(source_p, reference_p, true);
+    }
     return result;
   }
   
@@ -315,8 +319,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    */
   public List<EObject> getContents() {
     List<EObject> result = new FArrayList<EObject>();
-    for (Resource resource : _rootResources)
+    for (Resource resource : _rootResources) {
       result.addAll(resource.getContents());
+    }
     return Collections.unmodifiableList(result);
   }
   
@@ -400,8 +405,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
         List<EObject> values = get(element_p, ref, true);
         for (EObject value : values) {
           Resource valueResource = value.eResource();
-          if (valueResource != null)
+          if (valueResource != null) {
             result.add(valueResource);
+          }
         }
       }
     }
@@ -416,8 +422,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   protected Resource getResourceForNewRoot(EObject newRoot_p) {
     // Return the first suitable resource
     for (Resource resource : _resources) {
-      if (isSuitableFor(resource, newRoot_p))
+      if (isSuitableFor(resource, newRoot_p)) {
         return resource;
+      }
     }
     return null;
   }
@@ -431,8 +438,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    */
   protected Resource getResourceFromURI(ResourceSet resourceSet_p, URI uri_p) {
     Resource rootResource = resourceSet_p.getResource(uri_p, false);
-    if (rootResource == null)
+    if (rootResource == null) {
       rootResource = resourceSet_p.createResource(uri_p);
+    }
     return rootResource;
   }
   
@@ -561,8 +569,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    * @param included_p a non-null resource which is not including_p
    */
   protected void notifyInclusion(Resource including_p, Resource included_p) {
-    if (!_resources.contains(included_p))
+    if (!_resources.contains(included_p)) {
       addNewResource(included_p);
+    }
     // New inclusion
     _includedResources.add(including_p, included_p);
     // Remove from roots and referencing relation
@@ -665,8 +674,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
           _resourceIterator.hasNext()) {
         result = true;
         Resource nextResource = _resourceIterator.next();
-        if (!_exploredResources.contains(nextResource))
+        if (!_exploredResources.contains(nextResource)) {
           _contentIterator = nextResource.getAllContents();
+        }
       }
       return result;
     }
@@ -687,8 +697,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
         EObject result = _next;
         _currentResource = _next.eResource();
         _next = null;
-        if (!isFullyExplored())
+        if (!isFullyExplored()) {
           notifyExplored(result);
+        }
         return result;
       }
       throw new NoSuchElementException();
@@ -706,9 +717,10 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
           _finished = true;
           _exploredResources.clear();
           _currentResource = null;
-          if (firstExploration)
+          if (firstExploration) {
             // First exploration finished
             explorationFinished();
+          }
         } else {
           // Elements remaining
           EObject candidate = _contentIterator.next();
@@ -742,8 +754,9 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
           if (candidateOK) {
             _next = candidate;
             if (firstExploration && candidateResource != null) {
-              for (Resource additionalResource : getRelevantReferencedResources(_next))
+              for (Resource additionalResource : getRelevantReferencedResources(_next)) {
                 notifyReference(candidateResource, additionalResource);
+              }
             }
           }
         }

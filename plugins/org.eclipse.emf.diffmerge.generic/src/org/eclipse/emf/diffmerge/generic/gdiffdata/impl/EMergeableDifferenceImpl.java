@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -24,9 +25,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
+import org.eclipse.emf.diffmerge.structures.IEqualityBasedStructure;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
+import org.eclipse.emf.diffmerge.structures.common.FLinkedList;
 import org.eclipse.emf.diffmerge.structures.endo.AbstractEndorelation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -773,8 +776,8 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
         ? _allExplicitDependenciesTarget
         : _allExplicitDependenciesReference;
     if (result == null) {
-      result = new DifferenceDependencyRelation<E>(role_p, true)
-          .getTransitiveClosure(this);
+      result = reduceByImplies(new DifferenceDependencyRelation<E>(role_p, true)
+          .getTransitiveClosure(this), role_p);
       if (role_p == Role.TARGET) {
         _allExplicitDependenciesTarget = result;
       } else {
@@ -896,6 +899,27 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (!toChange.contains(difference_p)) {
       toChange.add(difference_p);
     }
+  }
+
+  /**
+   * Reduce the content of the given list based on the implies relation on the
+   * given side
+   * @param originalCollection_p a non-null, potentially empty list
+   * @param role_p TARGET or REFERENCE
+   * @return a non-null, potentially empty list
+   * @generated NOT
+   */
+  protected List<IMergeableDifference<E>> reduceByImplies(
+      Collection<IMergeableDifference<E>> originalCollection_p, Role role_p) {
+    IEqualityTester tester = (originalCollection_p instanceof IEqualityBasedStructure)
+        ? ((IEqualityBasedStructure) originalCollection_p).getEqualityTester()
+        : null;
+    List<IMergeableDifference<E>> result = new FLinkedList<IMergeableDifference<E>>(
+        originalCollection_p, tester);
+    for (IMergeableDifference<E> difference : originalCollection_p) {
+      result.removeAll(difference.getDirectImpliesDependencies(role_p));
+    }
+    return result;
   }
 
   /**

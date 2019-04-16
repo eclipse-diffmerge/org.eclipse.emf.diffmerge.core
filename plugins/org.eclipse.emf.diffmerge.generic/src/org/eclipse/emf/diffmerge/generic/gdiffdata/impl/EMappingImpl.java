@@ -405,11 +405,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * Remove dependencies (references) to the given element for its removal from the
-   * scope of the given role
-   * @param role TARGET or REFERENCE
-   * @param element a non-null element
-   * @return whether all dependencies have been successfully removed
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   public abstract boolean disconnect(Role role, E element);

@@ -68,8 +68,9 @@ public class FilteredModelScope extends RootedModelScope {
     boolean result = true;
     // If parent is not in scope, then add as root
     if ((element_p.eContainer() == null || !_inScope.contains(element_p.eContainer()))
-        && !_roots.contains(element_p))
+        && !_roots.contains(element_p)) {
       result = super.add(element_p);
+    }
     if (result) {
       _inScope.add(element_p);
       // Remove direct children from roots
@@ -132,10 +133,11 @@ public class FilteredModelScope extends RootedModelScope {
     TreeIterator<EObject> technicalIterator = element_p.eAllContents();
     while (technicalIterator.hasNext()) {
       EObject child = technicalIterator.next();
-      if (filter_p == null || filter_p.accepts(child))
+      if (filter_p == null || filter_p.accepts(child)) {
         _inScope.add(child);
-      else
+      } else {
         technicalIterator.prune();
+      }
     }
   }
   
@@ -196,8 +198,9 @@ public class FilteredModelScope extends RootedModelScope {
   @Override
   public boolean remove(EObject element_p) {
     boolean result = super.remove(element_p);
-    if (result)
+    if (result) {
       removeFromScope(element_p, true);
+    }
     return result;
   }
   

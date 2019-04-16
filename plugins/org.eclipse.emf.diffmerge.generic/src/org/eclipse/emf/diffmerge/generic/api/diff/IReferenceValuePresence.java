@@ -93,7 +93,9 @@ public interface IReferenceValuePresence<E> extends IValuePresence<E> {
   /**
    * Return whether the given reference value presence corresponds to
    * the symmetrical ownership of the same value.
-   * Postcondition: !result || isOwnership()
+   * Postcondition: !result || isOwnership() &&
+   *  getValueMatch() != null && getValueMatch() == peer_p.getValueMatch() &&
+   *  getPresenceRole() == peer_p.getPresenceRole().opposite()
    * @param peer_p a non-null reference value presence
    */
   boolean isSymmetricalOwnershipTo(IReferenceValuePresence<E> peer_p);

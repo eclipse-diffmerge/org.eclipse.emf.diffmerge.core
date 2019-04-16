@@ -55,8 +55,9 @@ public class MultiResourceTreeIterator implements TreeIterator<EObject> {
    * @see java.util.Iterator#next()
    */
   public EObject next() {
-    if (hasNext())
+    if (hasNext()) {
       return _contentIterator.next();
+    }
     throw new NoSuchElementException();
   }
   
@@ -64,9 +65,10 @@ public class MultiResourceTreeIterator implements TreeIterator<EObject> {
    * @see org.eclipse.emf.common.util.TreeIterator#prune()
    */
   public void prune() {
-    if (_contentIterator != null)
+    if (_contentIterator != null) {
       // Previous calls to update() have no impact
       _contentIterator.prune();
+    }
   }
   
   /**

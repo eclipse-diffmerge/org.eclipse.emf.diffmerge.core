@@ -58,6 +58,7 @@ public class FLinkedList<E> extends LinkedList<E> implements IEqualityBasedStruc
   /**
    * Constructor for a list filled with the elements of the given collection
    * @param collection_p a non-null, potentially empty collection
+   * @param tester_p the equality tester (null for default tester)
    * @see java.util.LinkedList#LinkedList(Collection)
    */
   public FLinkedList(Collection<? extends E> collection_p,

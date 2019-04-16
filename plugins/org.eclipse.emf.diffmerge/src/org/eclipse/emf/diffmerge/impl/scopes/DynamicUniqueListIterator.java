@@ -52,9 +52,9 @@ public class DynamicUniqueListIterator<E> implements Iterator<E> {
    */
   public boolean hasNext() {
     boolean result;
-    if (_current == null)
+    if (_current == null) {
       result = !_list.isEmpty();
-    else {
+    } else {
       int pos = _list.indexOf(_current);
       result = pos >= 0 && pos < _list.size()-1;
     }
@@ -67,12 +67,14 @@ public class DynamicUniqueListIterator<E> implements Iterator<E> {
   public E next() {
     E result = null;
     if (_current == null) {
-      if (!_list.isEmpty())
+      if (!_list.isEmpty()) {
         result = _list.get(0);
+      }
     } else {
       int pos = _list.indexOf(_current);
-      if (pos >= 0 && pos < _list.size()-1)
+      if (pos >= 0 && pos < _list.size()-1) {
         result = _list.get(pos + 1);
+      }
     }
     if (result != null) {
       _current = result;
