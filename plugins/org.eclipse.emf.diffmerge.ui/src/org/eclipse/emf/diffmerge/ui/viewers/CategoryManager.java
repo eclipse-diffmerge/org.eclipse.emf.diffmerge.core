@@ -119,10 +119,11 @@ public class CategoryManager {
    */
   protected boolean addCategoryItem(IDifferenceCategoryItem categoryItem_p) {
     boolean result = true;
-    if (categoryItem_p instanceof IDifferenceCategory)
+    if (categoryItem_p instanceof IDifferenceCategory) {
       result = addCategory((IDifferenceCategory)categoryItem_p);
-    else if (categoryItem_p instanceof IDifferenceCategorySet)
+    } else if (categoryItem_p instanceof IDifferenceCategorySet) {
       result = addCategories((IDifferenceCategorySet)categoryItem_p);
+    }
     return result;
   }
   
@@ -137,11 +138,13 @@ public class CategoryManager {
     // Non-containment differences
     int result = countNonContainmentDifferences(match_p, withFilters_p);
     // Move
-    if (isMove(match_p, withFilters_p))
+    if (isMove(match_p, withFilters_p)) {
       result++;
+    }
     // Addition/deletion
-    if (isUnmatched(match_p, withFilters_p))
+    if (isUnmatched(match_p, withFilters_p)) {
       result++;
+    }
     return result;
   }
   
@@ -217,10 +220,12 @@ public class CategoryManager {
     List<? extends IMatch<?>> candidates = comparison.getContentsOf((IMatch)match_p);
     for (IMatch<?> candidate : candidates) {
       if (isMove(candidate, false) && comparison.getContainerOf(
-          (IMatch)candidate, _node.getDrivingRole().opposite()) == match_p)
+          (IMatch)candidate, _node.getDrivingRole().opposite()) == match_p) {
         continue; // Move origin
-      if (getDifferenceNumber(candidate) > 0)
+      }
+      if (getDifferenceNumber(candidate) > 0) {
         result.add(candidate);
+      }
     }
     return Collections.unmodifiableList(result);
   }
@@ -380,8 +385,9 @@ public class CategoryManager {
    */
   public int getDifferenceNumber(IMatch<?> match_p) {
     Integer currentNb = getMatchToNb().get(match_p);
-    if (currentNb == null)
+    if (currentNb == null) {
       currentNb = Integer.valueOf(0);
+    }
     return currentNb.intValue();
   }
   
@@ -408,8 +414,9 @@ public class CategoryManager {
             ((IElementRelativeDifference<?>)diff).isUnrelatedToContainmentTree()) {
           DifferenceKind diffKind = getDifferenceKind(diff);
           result = result.with(diffKind, considerReference);
-          if (result == DifferenceKind.CONFLICT)
+          if (result == DifferenceKind.CONFLICT) {
             break;
+          }
         }
       }
     }
@@ -430,12 +437,13 @@ public class CategoryManager {
         boolean fromLeft = onLeft != null && !isAlignedWithReference(onLeft);
         IReferenceValuePresence<?> onRight = match_p.getOwnershipDifference(_node.getRoleForSide(false));
         boolean fromRight = onRight != null && !isAlignedWithReference(onRight);
-        if (fromLeft && fromRight)
+        if (fromLeft && fromRight) {
           result = DifferenceKind.CONFLICT;
-        else if (fromLeft)
+        } else if (fromLeft) {
           result = DifferenceKind.FROM_LEFT;
-        else if (fromRight)
+        } else if (fromRight) {
           result = DifferenceKind.FROM_RIGHT;
+        }
       }
     }
     return result;
@@ -450,8 +458,9 @@ public class CategoryManager {
   public List<IDifference<?>> getPendingDifferencesFiltered(Iterable<? extends IDifference<?>> differences_p) {
     List<IDifference<?>> result = new ArrayList<IDifference<?>>();
     for (IDifference<?> difference : differences_p) {
-      if (isPending(difference) && !isFiltered(difference))
+      if (isPending(difference) && !isFiltered(difference)) {
         result.add(difference);
+      }
     }
     return Collections.unmodifiableList(result);
   }
@@ -481,11 +490,14 @@ public class CategoryManager {
    * @return a positive int or 0
    */
   public int getUIDifferenceNumber(IMatch<?> match_p) {
-    if (!_node.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS)) return 0;
+    if (!_node.isUserPropertyTrue(P_SHOW_DIFFERENCE_NUMBERS)) {
+      return 0;
+    }
     int result = getDifferenceNumber(match_p);
     IElementPresence<?> eltPresence = match_p.getElementPresenceDifference();
-    if (eltPresence != null && !isFiltered(eltPresence))
+    if (eltPresence != null && !isFiltered(eltPresence)) {
       result--;
+    }
     return result;
   }
   
@@ -508,8 +520,9 @@ public class CategoryManager {
         @SuppressWarnings({ "unchecked", "rawtypes" })
         List<IMatch<?>> candidates = ((IComparison)comparison).getContentsOf(match_p, role);
         for (IMatch<?> candidate : candidates) {
-          if (getDifferenceNumber(candidate) > 0)
+          if (getDifferenceNumber(candidate) > 0) {
             return true;
+          }
         }
         return false;
   }
@@ -523,8 +536,9 @@ public class CategoryManager {
       for (IDifference<?> difference : match_p.getRelatedDifferences()) {
         if (difference instanceof IElementRelativeDifference && !isFiltered(difference)) {
           IElementRelativeDifference<?> eltDiff = (IElementRelativeDifference<?>)difference;
-          if (eltDiff.isUnrelatedToContainmentTree())
+          if (eltDiff.isUnrelatedToContainmentTree()) {
             return true;
+          }
         }
       }
     }
@@ -608,8 +622,9 @@ public class CategoryManager {
     if (comparison != null) {
       for (IMatch<?> match : comparison.getMapping().getContents()) {
         for (IDifference<?> difference : match.getAllDifferences()) {
-          if (isPending(difference) && !isFiltered(difference))
+          if (isPending(difference) && !isFiltered(difference)) {
             return false;
+          }
         }
       }
     }
@@ -755,8 +770,9 @@ public class CategoryManager {
    */
   public boolean isUIFiltering() {
     for (IDifferenceCategory category : _activeCategories) {
-      if (isUIFiltering(category))
+      if (isUIFiltering(category)) {
         return true;
+      }
     }
     return false;
   }
@@ -784,8 +800,9 @@ public class CategoryManager {
       if (actualCat != null && _activeCategories.contains(actualCat) &&
           isUIFiltering(actualCat)) {
         if (!isUIFiltering(defaultCat) ||
-            defaultCat.isInFocusMode() != actualCat.isInFocusMode())
+            defaultCat.isInFocusMode() != actualCat.isInFocusMode()) {
           return true;
+        }
       }
     }
     return false;
@@ -907,8 +924,9 @@ public class CategoryManager {
     for (IDifferenceCategory defaultCat : _defaultConfiguration) {
       String id = defaultCat.getID();
       IDifferenceCategory actualCat = getCategory(id);
-      if (actualCat != null)
+      if (actualCat != null) {
         actualCat.copyState(defaultCat);
+      }
     }
   }
   
@@ -942,8 +960,9 @@ public class CategoryManager {
   protected void updateActiveCategories() {
     _activeCategories.clear();
     for (IDifferenceCategory category : getCategories()) {
-      if (category.isApplicable(_node) && category.isActive())
+      if (category.isApplicable(_node) && category.isActive()) {
         _activeCategories.add(category);
+      }
     }
   }
   
@@ -979,8 +998,9 @@ public class CategoryManager {
       IDifferenceCategorySet parent = visibleItem.getParent();
       if (parent == null) {
         // It is a root
-        if (!_uiRootItems.contains(visibleItem))
+        if (!_uiRootItems.contains(visibleItem)) {
           _uiRootItems.add(visibleItem);
+        }
       } else {
         // It is a child: remember its parent
         Collection<IDifferenceCategoryItem> children = _uiChildrenItems.get(parent);

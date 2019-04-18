@@ -47,7 +47,8 @@ public interface IMatch<E> extends IPureMatch<E> {
       Object attribute_p);
   
   /**
-   * Return the attribute differences associated to the given attribute
+   * Return the attribute difference that represents the holding of the given
+   * value via the given attribute
    * @param attribute_p a non-null attribute
    * @param value_p a non-null object
    * @return a possibly null attribute value presence

@@ -105,8 +105,8 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
         }
       }
     } else if (isOrder()) {
-      result = getElementMatch().getAttributeValueDifference(getFeature(),
-          null);
+      result = getElementMatch().getAttributeOrderDifference(getFeature(),
+          getAbsenceRole());
     }
     return result;
   }
