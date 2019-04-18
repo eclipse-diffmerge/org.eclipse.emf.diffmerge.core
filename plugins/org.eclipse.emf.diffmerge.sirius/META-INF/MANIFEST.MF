@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.sirius;singleton:=true
-Bundle-Version: 0.11.1.qualifier
+Bundle-Version: 0.11.2.qualifier
 Bundle-Activator: org.eclipse.emf.diffmerge.sirius.SiriusDiffMergePlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.core.runtime,

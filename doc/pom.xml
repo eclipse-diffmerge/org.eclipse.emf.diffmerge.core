@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.eclipse.emf.diffmerge</groupId>
 		<artifactId>org.eclipse.emf.diffmerge.root</artifactId>
-		<version>0.11.1-SNAPSHOT</version>
+		<version>0.11.2-SNAPSHOT</version>
 	</parent>
 
 	<modules>
