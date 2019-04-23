@@ -250,11 +250,11 @@ public class EMappingImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#doDisconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   @Override
-  public boolean disconnect(Role role_p, E element_p) {
+  protected boolean doDisconnect(Role role_p, E element_p) {
     // Cannot determine what to disconnect: delegate to scope
     return getComparison().getScope(role_p).disconnect(element_p);
   }

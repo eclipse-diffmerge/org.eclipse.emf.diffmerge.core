@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
@@ -408,7 +409,23 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
-  public abstract boolean disconnect(Role role, E element);
+  public boolean disconnect(Role role_p, E element_p) {
+    boolean result = true;
+    IEditableTreeDataScope<E> scope = getComparison().getScope(role_p);
+    if (scope.tIsElementDisconnectionRequired()) {
+      result = doDisconnect(role_p, element_p);
+    }
+    return result;
+  }
+
+  /**
+   * Remove dependencies (reference values) to the given element so that its removal
+   * from the scope of the given role be possible, as required by the scope.
+   * Precondition: getComparison().getScope(role_p).tIsElementDisconnectionRequired()
+   * @see EMapping#disconnect(Role, Object)
+   * @generated NOT
+   */
+  protected abstract boolean doDisconnect(Role role_p, E element_p);
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)

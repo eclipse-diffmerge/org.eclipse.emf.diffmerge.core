@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
 
@@ -85,11 +86,12 @@ public interface EMapping<E, A, R>
   EList<IMatch<E>> getTargetCompletedMatches();
 
   /**
-   * Remove dependencies (references) to the given element so that its removal from the
-   * scope of the given role be possible. Dependencies covered by the comparison through
-   * reference value presences do not need to be taken into account. Dependencies that
-   * must be taken into account are those whose removal is necessary to the removal of
-   * the element from its scope AND that are not covered by the comparison, i.e.,
+   * Remove dependencies (reference values) to the given element so that its removal
+   * from the scope of the given role be possible, if required by the scope.
+   * Dependencies covered by the comparison through reference value presences do not
+   * need to be taken into account. Dependencies that must be taken into account are
+   * those whose removal is necessary to the removal of the element from its scope
+   * AND that are not covered by the comparison, i.e.,
    * - references from other elements of the scope that, like the element itself, are
    *    not present in the opposite scope;
    * - references from other elements of the scope that are ignored due to the diff
@@ -97,7 +99,9 @@ public interface EMapping<E, A, R>
    * - references from elements outside the scope.
    * @param role TARGET or REFERENCE
    * @param element a non-null element
-   * @return whether all dependencies have been successfully removed
+   * @return whether all dependencies have been successfully removed or the scope does
+   *          not require it
+   * @see IScopePolicy#tIsElementDisconnectionRequired()
    * @generated NOT
    */
   boolean disconnect(Role role, E element);
