@@ -26,7 +26,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IPureMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
@@ -660,23 +659,6 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * @see Object#equals(Object)
-   * @generated NOT
-   */
-  @Override
-  public boolean equals(Object object_p) {
-    boolean result = false;
-    if (object_p instanceof IPureMatch) {
-      IPureMatch<?> peer = (IPureMatch<?>) object_p;
-      result = // Equality by reference of elements
-          peer == this || peer.get(TARGET) == get(TARGET)
-              && peer.get(REFERENCE) == get(REFERENCE)
-              && peer.get(ANCESTOR) == get(ANCESTOR);
-    }
-    return result;
-  }
-
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IPureMatch#get(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
@@ -987,25 +969,6 @@ public abstract class EMatchImpl<E, A, R> extends EIdentifiedImpl
       result = TARGET;
     } else if (!coversRole(REFERENCE)) {
       result = REFERENCE;
-    }
-    return result;
-  }
-
-  /**
-   * @see Object#hashCode()
-   * @generated NOT
-   */
-  @Override
-  public int hashCode() {
-    int result = 0;
-    if (get(TARGET) != null) {
-      result += get(TARGET).hashCode();
-    }
-    if (get(REFERENCE) != null) {
-      result += get(REFERENCE).hashCode();
-    }
-    if (get(ANCESTOR) != null) {
-      result += get(ANCESTOR).hashCode();
     }
     return result;
   }
