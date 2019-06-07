@@ -17,14 +17,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.egit.core.Activator;
 import org.eclipse.egit.core.project.RepositoryMapping;
-import org.eclipse.egit.ui.internal.revision.LocalFileRevision;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
@@ -101,9 +99,6 @@ public final class GitHelper {
       IPath revisionPath = toPath(revision_p);
       if (revisionPath != null && !revisionPath.isAbsolute()) {
         return getRepository(revisionPath);
-      } else if (revision_p instanceof LocalFileRevision) {
-        IFile file = ((LocalFileRevision)revision_p).getFile();
-        return getRepository(file.getFullPath());
       }
       EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
           EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
@@ -170,9 +165,6 @@ public final class GitHelper {
     IPath revisionPath = toPath(revision_p);
     if (!revisionPath.isAbsolute()) {
       return isConflicting(repository_p, revisionPath.toString());
-    } else if (revision_p instanceof LocalFileRevision) {
-      IFile file = ((LocalFileRevision)revision_p).getFile();
-      return isConflicting(repository_p, file.getFullPath().makeRelative().toString());
     }
     EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
         EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
