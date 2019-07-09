@@ -127,9 +127,7 @@ public class SiriusScope extends GMFScope {
     }
     boolean result = super.add(source_p, reference_p, value_p);
     if (result && isDescriptorToRepresentation) {
-      DRepresentationDescriptor descriptor = (DRepresentationDescriptor)source_p;
-      String uid = getReferencedUID(descriptor);
-      _idToDescriptor.put(uid, descriptor);
+      registerRepresentationDescriptor((DRepresentationDescriptor)source_p);
     }
     return result;
   }
@@ -140,7 +138,11 @@ public class SiriusScope extends GMFScope {
   @Override
   public EObject getContainer(EObject element_p) {
     EObject result;
-    if (element_p instanceof DRepresentation && super.getContainer(element_p) == null) {
+    if (element_p instanceof DRepresentationDescriptor) {
+      registerRepresentationDescriptor((DRepresentationDescriptor)element_p);
+    }
+    EObject basicContainer = super.getContainer(element_p);
+    if (element_p instanceof DRepresentation && basicContainer == null) {
       DRepresentation representation = (DRepresentation)element_p;
       String repID = representation.getUid();
       result = _idToDescriptor.get(repID);
@@ -148,11 +150,11 @@ public class SiriusScope extends GMFScope {
         DRepresentationQuery rep2descQuery = new DRepresentationQuery((DRepresentation)element_p);
         result = rep2descQuery.getRepresentationDescriptor();
         if (result != null) {
-          _idToDescriptor.put(repID, (DRepresentationDescriptor)result);
+          registerRepresentationDescriptor((DRepresentationDescriptor)result);
         }
       }
     } else {
-      result = super.getContainer(element_p);
+      result = basicContainer;
     }
     return result;
   }
@@ -197,6 +199,7 @@ public class SiriusScope extends GMFScope {
     List<EObject> result = super.getContents(element_p);
     if (element_p instanceof DRepresentationDescriptor) {
       DRepresentationDescriptor descriptor = (DRepresentationDescriptor)element_p;
+      registerRepresentationDescriptor(descriptor);
       DRepresentation referenced = descriptor.getRepresentation();
       if (referenced != null) {
         List<EObject> originalResult = result;
@@ -345,11 +348,18 @@ public class SiriusScope extends GMFScope {
   @Override
   protected void notifyExplored(EObject element_p) {
     if (element_p instanceof DRepresentationDescriptor) {
-      DRepresentationDescriptor descriptor = (DRepresentationDescriptor)element_p;
-      String uid = getReferencedUID(descriptor);
-      if (uid != null) {
-        _idToDescriptor.put(uid, descriptor);
-      }
+      registerRepresentationDescriptor((DRepresentationDescriptor)element_p);
+    }
+  }
+  
+  /**
+   * Register the given representation descriptor for (representation -> descriptor) navigation
+   * @param descriptor_p a non-null representation descriptor
+   */
+  protected void registerRepresentationDescriptor(DRepresentationDescriptor descriptor_p) {
+    String uid = getReferencedUID(descriptor_p);
+    if (uid != null) {
+      _idToDescriptor.put(uid, descriptor_p);
     }
   }
   
