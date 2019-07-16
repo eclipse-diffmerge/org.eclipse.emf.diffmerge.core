@@ -35,4 +35,12 @@ public interface IModelScopeDefinitionFactory extends IOverridableFactory {
    */
   boolean isApplicableTo(Object entrypoint_p);
   
+  
+  /**
+   * A factory that delegates to others and should therefore have priority over them.
+   */
+  interface Delegating extends IModelScopeDefinitionFactory {
+    // Nothing added
+  }
+  
 }

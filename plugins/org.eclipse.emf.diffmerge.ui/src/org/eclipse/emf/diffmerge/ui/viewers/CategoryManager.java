@@ -220,8 +220,7 @@ public class CategoryManager {
     IComparison comparison = match_p.getMapping().getComparison();
     List<IMatch> candidates = comparison.getContentsOf(match_p);
     for (IMatch candidate : candidates) {
-      if (isMove(candidate, false) &&
-          comparison.getContainerOf(candidate, _node.getDrivingRole().opposite()) == match_p)
+      if (isMoveOrigin(candidate))
         continue; // Move origin
       if (getDifferenceNumber(candidate) > 0)
         result.add(candidate);
@@ -696,6 +695,34 @@ public class CategoryManager {
   }
   
   /**
+   * Return whether the given match represents a moved element on the side of the
+   * source of the move in the driving role
+   * @param match_p a non-null match
+   */
+  public boolean isMoveOrigin(IMatch match_p) {
+    IComparison comparison = match_p.getMapping().getComparison();
+    IMatch parent = comparison.getContainerOf(match_p, _node.getDrivingRole());
+    return isMoveOrigin(parent, match_p);
+  }
+  
+  /**
+   * Return whether the given (parent, child) couple represents a moved element on the side of
+   * the source of the move, where source corresponds to the opposite of the driving role
+   * @param parent_p a potentially null match
+   * @param child_p a non-null match
+   */
+  public boolean isMoveOrigin(IMatch parent_p, IMatch child_p) {
+    boolean result = false;
+    if (isMove(child_p, false)) {
+      IComparison comparison = child_p.getMapping().getComparison();
+      Role drivingRole = _node.getDrivingRole();
+      result = comparison.getContainerOf(child_p, drivingRole.opposite()) == parent_p &&
+          comparison.getContainerOf(child_p, drivingRole) != parent_p;
+    }
+    return result;
+  }
+  
+  /**
    * Return whether the given path represents a moved element on the side of
    * the source of the move, where source corresponds to the opposite of the driving role
    * @param path_p a non-null path
@@ -703,14 +730,11 @@ public class CategoryManager {
   public boolean isMoveOrigin(TreePath path_p) {
     boolean result = false;
     IMatch end = (IMatch)path_p.getLastSegment();
-    if (end != null && isMove(end, false)) {
+    if (end != null) {
       TreePath parentPath = path_p.getParentPath();
       IMatch father =
         parentPath == null? null: (IMatch)parentPath.getLastSegment();
-      IComparison comparison = end.getMapping().getComparison();
-      Role drivingRole = _node.getDrivingRole();
-      result = comparison.getContainerOf(end, drivingRole.opposite()) == father &&
-          comparison.getContainerOf(end, drivingRole) != father;
+      result = isMoveOrigin(father, end);
     }
     return result;
   }

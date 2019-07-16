@@ -11,9 +11,12 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
+import org.eclipse.emf.diffmerge.api.IComparison;
 import org.eclipse.emf.diffmerge.api.Role;
 import org.eclipse.emf.diffmerge.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.api.diff.IElementPresence;
+import org.eclipse.emf.diffmerge.api.diff.IPresenceDifference;
+import org.eclipse.emf.diffmerge.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
@@ -46,11 +49,19 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
    */
   public boolean covers(IDifference difference_p, EMFDiffNode node_p) {
     boolean result = false;
-    if (difference_p instanceof IElementPresence) {
-      IElementPresence presence = (IElementPresence)difference_p;
-      Role sideRole = node_p.getRoleForSide(isLeftSide());
-      result = presence.getPresenceRole() == sideRole;
-    }
+    Role sideRole = node_p.getRoleForSide(isLeftSide());
+    IComparison comparison = node_p.getActualComparison();
+    result =
+        // Presence on the concerned side and ...
+        difference_p instanceof IPresenceDifference &&
+        ((IPresenceDifference)difference_p).getPresenceRole() == sideRole &&
+        // ... element presence ...
+        (difference_p instanceof IElementPresence ||
+            // ... or containment RVP and bind presence to ownership
+            difference_p instanceof IReferenceValuePresence &&
+            ((IReferenceValuePresence)difference_p).isContainment() &&
+            comparison.getLastMergePolicy().bindPresenceToOwnership(
+                comparison.getScope(sideRole)));
     return result;
   }
   
