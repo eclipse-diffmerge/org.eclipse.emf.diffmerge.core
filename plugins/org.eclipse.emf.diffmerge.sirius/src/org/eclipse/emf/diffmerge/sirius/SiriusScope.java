@@ -143,16 +143,7 @@ public class SiriusScope extends GMFScope {
     }
     EObject basicContainer = super.getContainer(element_p);
     if (element_p instanceof DRepresentation && basicContainer == null) {
-      DRepresentation representation = (DRepresentation)element_p;
-      String repID = representation.getUid();
-      result = _idToDescriptor.get(repID);
-      if (result == null) {
-        DRepresentationQuery rep2descQuery = new DRepresentationQuery((DRepresentation)element_p);
-        result = rep2descQuery.getRepresentationDescriptor();
-        if (result != null) {
-          registerRepresentationDescriptor((DRepresentationDescriptor)result);
-        }
-      }
+      result = getRepresentationDescriptor((DRepresentation)element_p);
     } else {
       result = basicContainer;
     }
@@ -244,6 +235,26 @@ public class SiriusScope extends GMFScope {
       URI uri = rDescriptor.getResourceURI();
       if (uri != null) {
         result = uri.fragment();
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the descriptor of the given representation, if any and known
+   * @param representation_p a non-null representation
+   * @return a potentially null representation descriptor
+   */
+  public DRepresentationDescriptor getRepresentationDescriptor(
+      DRepresentation representation_p) {
+    DRepresentationDescriptor result;
+    String repID = representation_p.getUid();
+    result = _idToDescriptor.get(repID);
+    if (result == null) {
+      DRepresentationQuery rep2descQuery = new DRepresentationQuery(representation_p);
+      result = rep2descQuery.getRepresentationDescriptor();
+      if (result != null) {
+        registerRepresentationDescriptor(result);
       }
     }
     return result;
