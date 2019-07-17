@@ -205,9 +205,12 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
         String containerID = getMatchID(container, scope_p);
         if (containerID != null) {
           Map<String, String> map = new ComparableTreeMap<String, String>();
+          Entry<?, ?> asEntry = (Entry<?, ?>) entry_p;
+          Object key = asEntry.getKey();
+          Object value = asEntry.getValue();
           map.put(SEMANTIC_ID_CONTAINER_PROPERTY, containerID);
-          map.put(SEMANTIC_ID_ENTRY_KEY_PROPERTY, ((Entry<?, ?>) entry_p).getKey().toString());
-          map.put(SEMANTIC_ID_ENTRY_VALUE_PROPERTY, ((Entry<?, ?>) entry_p).getValue().toString());
+          map.put(SEMANTIC_ID_ENTRY_KEY_PROPERTY, key == null? null: key.toString());
+          map.put(SEMANTIC_ID_ENTRY_VALUE_PROPERTY, value == null? null: value.toString());
           result = map.toString();
         }
       }
