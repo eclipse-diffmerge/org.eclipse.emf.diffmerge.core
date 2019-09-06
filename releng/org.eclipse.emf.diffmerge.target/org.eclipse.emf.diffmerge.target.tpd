@@ -7,7 +7,7 @@ location "http://download.eclipse.org/eclipse/updates/4.8" {
 }
 
 location "http://download.eclipse.org/cbi/updates/license/" {
-	org.eclipse.license.feature.group [1.0.1,1.0.2)
+	org.eclipse.license.feature.group lazy
 }
 
 location "http://download.eclipse.org/releases/photon" {
@@ -26,6 +26,8 @@ location "http://download.eclipse.org/releases/photon" {
 	org.eclipse.emf.validation.sdk.feature.group lazy
 	org.eclipse.gmf.runtime.sdk.feature.group lazy
 	org.eclipse.gmf.runtime.notation.feature.group lazy
-	org.eclipse.sirius.specifier.feature.group lazy
 	com.google.guava lazy
+}
+location "https://download.eclipse.org/sirius/updates/stable/6.3.0-S20190716-100145/2019-06" {
+	org.eclipse.sirius.specifier.feature.group lazy
 }

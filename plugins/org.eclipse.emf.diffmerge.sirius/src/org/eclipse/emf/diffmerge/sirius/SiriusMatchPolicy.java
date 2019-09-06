@@ -62,7 +62,6 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
         org.eclipse.sirius.diagram.description.DescriptionPackage.eINSTANCE
     );
   
-  
   /**
    * Default constructor
    */
@@ -161,8 +160,13 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
         result = viewpoint.getName();
     } else if (element_p instanceof DRepresentationDescriptor) {
       result = ((DRepresentationDescriptor) element_p).getName();
-    } else if (element_p instanceof DRepresentation) {
-      result = ((DRepresentation) element_p).getName();
+    } else if (element_p instanceof DRepresentation && scope_p instanceof SiriusScope) {
+      SiriusScope scope = (SiriusScope)scope_p;
+      DRepresentationDescriptor descriptor =
+          scope.getRepresentationDescriptor((DRepresentation) element_p);
+      if (descriptor != null) {
+        result = descriptor.getName();
+      }
     } else if (element_p instanceof AnnotationEntry) {
       AnnotationEntry annotation = (AnnotationEntry) element_p;
       if (annotation.getSource() != null) {

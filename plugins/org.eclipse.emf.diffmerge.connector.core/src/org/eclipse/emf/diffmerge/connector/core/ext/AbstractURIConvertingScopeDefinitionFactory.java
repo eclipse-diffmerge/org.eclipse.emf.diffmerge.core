@@ -35,7 +35,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
  * the URI. The scope definition obtained through that factory is wrapped into a dedicated
  * scope definition that alters its behavior through a URIConverter.
  */
-public abstract class AbstractURIConvertingScopeDefinitionFactory extends URIScopeDefinitionFactory {
+public abstract class AbstractURIConvertingScopeDefinitionFactory
+extends URIScopeDefinitionFactory implements IModelScopeDefinitionFactory.Delegating {
   
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)

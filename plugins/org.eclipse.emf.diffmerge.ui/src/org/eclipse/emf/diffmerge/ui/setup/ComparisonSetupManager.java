@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -245,12 +246,19 @@ public class ComparisonSetupManager {
    */
   public List<IModelScopeDefinitionFactory> getApplicableModelScopeFactories(
       Object entrypoint_p) {
-    List<IModelScopeDefinitionFactory> result = new ArrayList<IModelScopeDefinitionFactory>();
+    LinkedList<IModelScopeDefinitionFactory> expandedResult =
+        new LinkedList<IModelScopeDefinitionFactory>();
     for (IModelScopeDefinitionFactory factory : getRegisteredModelScopeDefinitionFactories()) {
-      if (factory.isApplicableTo(entrypoint_p))
-        result.add(factory);
+      if (factory.isApplicableTo(entrypoint_p)) {
+        if (factory instanceof IModelScopeDefinitionFactory.Delegating) {
+          // Delegating factories have priority
+          expandedResult.addFirst(factory);
+        } else {
+          expandedResult.addLast(factory);
+        }
+      }
     }
-    result = reduceByOverride(result, _scopeFactories);
+    List<IModelScopeDefinitionFactory> result = reduceByOverride(expandedResult, _scopeFactories);
     return Collections.unmodifiableList(result);
   }
   

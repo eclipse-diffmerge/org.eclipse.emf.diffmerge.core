@@ -19,6 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -32,6 +35,8 @@ import org.eclipse.gmf.runtime.notation.NotationPackage;
 import org.eclipse.sirius.business.api.helper.SiriusUtil;
 import org.eclipse.sirius.business.api.query.DRepresentationQuery;
 import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
+import org.eclipse.sirius.business.api.session.Session;
+import org.eclipse.sirius.business.api.session.SessionManager;
 import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.viewpoint.DAnalysis;
 import org.eclipse.sirius.viewpoint.DRepresentation;
@@ -124,9 +129,7 @@ public class SiriusScope extends GMFScope {
     }
     boolean result = super.add(source_p, reference_p, value_p);
     if (result && isDescriptorToRepresentation) {
-      DRepresentationDescriptor descriptor = (DRepresentationDescriptor)source_p;
-      String uid = getReferencedUID(descriptor);
-      _idToDescriptor.put(uid, descriptor);
+      registerRepresentationDescriptor((DRepresentationDescriptor)source_p);
     }
     return result;
   }
@@ -137,19 +140,14 @@ public class SiriusScope extends GMFScope {
   @Override
   public EObject getContainer(EObject element_p) {
     EObject result;
-    if (element_p instanceof DRepresentation && super.getContainer(element_p) == null) {
-      DRepresentation representation = (DRepresentation)element_p;
-      String repID = representation.getUid();
-      result = _idToDescriptor.get(repID);
-      if (result == null) {
-        DRepresentationQuery rep2descQuery = new DRepresentationQuery((DRepresentation)element_p);
-        result = rep2descQuery.getRepresentationDescriptor();
-        if (result != null) {
-          _idToDescriptor.put(repID, (DRepresentationDescriptor)result);
-        }
-      }
+    if (element_p instanceof DRepresentationDescriptor) {
+      registerRepresentationDescriptor((DRepresentationDescriptor)element_p);
+    }
+    EObject basicContainer = super.getContainer(element_p);
+    if (element_p instanceof DRepresentation && basicContainer == null) {
+      result = getRepresentationDescriptor((DRepresentation)element_p);
     } else {
-      result = super.getContainer(element_p);
+      result = basicContainer;
     }
     return result;
   }
@@ -194,6 +192,7 @@ public class SiriusScope extends GMFScope {
     List<EObject> result = super.getContents(element_p);
     if (element_p instanceof DRepresentationDescriptor) {
       DRepresentationDescriptor descriptor = (DRepresentationDescriptor)element_p;
+      registerRepresentationDescriptor(descriptor);
       DRepresentation referenced = descriptor.getRepresentation();
       if (referenced != null) {
         List<EObject> originalResult = result;
@@ -241,6 +240,75 @@ public class SiriusScope extends GMFScope {
       }
     }
     return result;
+  }
+  
+  /**
+   * Return the descriptor of the given representation, if any and known
+   * @param representation_p a non-null representation
+   * @return a potentially null representation descriptor
+   */
+  public DRepresentationDescriptor getRepresentationDescriptor(
+      DRepresentation representation_p) {
+    DRepresentationDescriptor result;
+    String repID = representation_p.getUid();
+    result = _idToDescriptor.get(repID);
+    if (result == null) {
+      DRepresentationQuery rep2descQuery = new DRepresentationQuery(representation_p);
+      result = rep2descQuery.getRepresentationDescriptor();
+      if (result != null) {
+        registerRepresentationDescriptor(result);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return a session resource of the scope, if any
+   * @return a potentially null resource
+   */
+  protected Resource getSessionResource() {
+    for (Resource candidate : getResources()) {
+      if (isSessionResource(candidate)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+  
+  /**
+   * Return the Sirius session of the editing domain of the scope, if any
+   * @return a potentially null session
+   */
+  public Session getSession() {
+    Session result = null;
+    if (getEditingDomain() != null) {
+      Resource sessionResource = getSessionResource();
+      if (sessionResource != null) {
+        Session sessionForURI = SessionManager.INSTANCE.getExistingSession(
+            sessionResource.getURI());
+        if (sessionForURI != null && sessionForURI.getSessionResource() == sessionResource) {
+          result = sessionForURI;
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return whether the given resource is a session resource
+   * @param resource_p a non-null resource
+   */
+  protected boolean isSessionResource(Resource resource_p) {
+    URI uri = resource_p.getURI();
+    return uri != null && isSessionResourceURI(uri);
+  }
+  
+  /**
+   * Return whether the given URI is a session resource URI
+   * @param uri_p a non-null URI
+   */
+  protected boolean isSessionResourceURI(URI uri_p) {
+    return SiriusUtil.SESSION_RESOURCE_EXTENSION.equals(uri_p.fileExtension());
   }
   
   /**
@@ -293,11 +361,18 @@ public class SiriusScope extends GMFScope {
   @Override
   protected void notifyExplored(EObject element_p) {
     if (element_p instanceof DRepresentationDescriptor) {
-      DRepresentationDescriptor descriptor = (DRepresentationDescriptor)element_p;
-      String uid = getReferencedUID(descriptor);
+      registerRepresentationDescriptor((DRepresentationDescriptor)element_p);
+    }
+  }
+  
+  /**
+   * Register the given representation descriptor for (representation -> descriptor) navigation
+   * @param descriptor_p a non-null representation descriptor
+   */
+  protected void registerRepresentationDescriptor(DRepresentationDescriptor descriptor_p) {
+    String uid = getReferencedUID(descriptor_p);
       if (uid != null) {
-        _idToDescriptor.put(uid, descriptor);
-      }
+      _idToDescriptor.put(uid, descriptor_p);
     }
   }
   
@@ -315,6 +390,22 @@ public class SiriusScope extends GMFScope {
     boolean result =  super.remove(source_p, reference_p, value_p);
     if (result && isDescriptorToRepresentation) {
       _idToDescriptor.remove(uid);
+    }
+    return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.impl.scopes.FragmentedModelScope#save()
+   */
+  @Override
+  public IStatus save() {
+    IStatus result;
+    Session session = getSession();
+    if (session != null) {
+      session.save(new NullProgressMonitor());
+      result = Status.OK_STATUS;
+    } else {
+      result = super.save();
     }
     return result;
   }
