@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.gmf.GMFDiffMergeLabelProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.sirius.common.tools.api.util.MessageTranslator;
 import org.eclipse.sirius.diagram.ContainerStyle;
 import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.diagram.EdgeStyle;
@@ -110,7 +111,7 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     String result = null;
     Viewpoint viewpoint = element_p.getViewpoint();
     if (viewpoint != null) {
-      result = viewpoint.getLabel();
+      result = MessageTranslator.INSTANCE.getMessage(viewpoint, viewpoint.getLabel());
       if (result == null)
         result = viewpoint.getName();
     }
