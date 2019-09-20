@@ -43,8 +43,9 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
    * @return a non-null object
    */
   public static SiriusDiffMergeLabelProvider getInstance() {
-    if (__instance == null)
+    if (__instance == null) {
       __instance = new SiriusDiffMergeLabelProvider();
+    }
     return __instance;
   }
   
@@ -73,8 +74,9 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
   protected String getDAnalysisText(DAnalysis element_p) {
     String result = null;
     Resource resource = element_p.eResource();
-    if (resource != null && resource.getURI() != null)
+    if (resource != null && resource.getURI() != null) {
       result = URI.decode(resource.getURI().lastSegment());
+    }
     return result;
   }
   
@@ -112,8 +114,9 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     Viewpoint viewpoint = element_p.getViewpoint();
     if (viewpoint != null) {
       result = MessageTranslator.INSTANCE.getMessage(viewpoint, viewpoint.getLabel());
-      if (result == null)
+      if (result == null) {
         result = viewpoint.getName();
+      }
     }
     return result;
   }
@@ -170,8 +173,9 @@ public class SiriusDiffMergeLabelProvider extends GMFDiffMergeLabelProvider {
     } else if (element_p instanceof RGBValues) {
       result = getRGBValuesText((RGBValues)element_p);
     }
-    if (result == null)
+    if (result == null) {
       result = super.getText(element_p);
+    }
     return result;
   }
   

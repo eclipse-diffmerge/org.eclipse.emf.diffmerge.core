@@ -109,8 +109,9 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
       // Ignore certain transient elements (OK because no cross-ref)
       EObject element = match_p
           .get(match_p.getUncoveredRole().opposite());
-      if (element != null)
+      if (element != null) {
         result = !UNSIGNIFICANT_TYPES.contains(element.eClass());
+      }
     }
     return result;
   }
@@ -122,10 +123,11 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   public boolean coverValue(Object value_p, EAttribute attribute_p) {
     boolean result;
     if (IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p)
-        && ((String) value_p).length() == 0)
+        && ((String) value_p).length() == 0) {
       result = false;
-    else
+    } else {
       result = super.coverValue(value_p, attribute_p);
+    }
     return result;
   }
   

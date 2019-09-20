@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ECrossReferenceAdapter;
 import org.eclipse.sirius.diagram.DDiagramElement;
-import org.eclipse.sirius.viewpoint.DAnalysis;
 import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.DRepresentationDescriptor;
 import org.eclipse.sirius.viewpoint.DView;
@@ -74,9 +73,15 @@ public class SiriusMergePolicy extends GMFMergePolicy {
         }
       }
     } else if (container == null) {
-      DRepresentationDescriptor descriptor = getDescriptor(element_p, scope_p);
-      if (descriptor != null)
+      DRepresentationDescriptor descriptor;
+      if (scope_p instanceof SiriusScope) {
+        descriptor = ((SiriusScope)scope_p).getRepresentationDescriptor(element_p);
+      } else {
+        descriptor = SiriusScope.getRepresentationDescriptorByExploration(element_p, scope_p);
+      }
+      if (descriptor != null) {
         group_p.add(descriptor);
+      }
     }
   }
   
@@ -92,14 +97,17 @@ public class SiriusMergePolicy extends GMFMergePolicy {
     // Semantic element -> DSemanticDecorators
     extendSemanticElementAdditionGroup(group_p, element_p, scope_p);
     // Sirius 4.1: Retrieve the diagram while merging the descriptor
-    if (element_p instanceof DRepresentationDescriptor)
+    if (element_p instanceof DRepresentationDescriptor) {
       extendDescriptorAdditionGroup(group_p, (DRepresentationDescriptor)element_p, scope_p);
+    }
     // Sirius 4.1: Retrieve the descriptor while merging the diagram
-    if (element_p instanceof DRepresentation)
+    if (element_p instanceof DRepresentation) {
       extendDRepresentationAdditionGroup(group_p, (DRepresentation)element_p, scope_p);
+    }
     // Sirius/GMF consistency: GMF driven by Sirius
-    if (element_p instanceof DDiagramElement)
+    if (element_p instanceof DDiagramElement) {
       extendGMFAdditionGroupSemanticTarget(group_p, element_p, scope_p);
+    }
   }
   
   /**
@@ -117,8 +125,9 @@ public class SiriusMergePolicy extends GMFMergePolicy {
         for (EStructuralFeature.Setting setting :
             crAdapter.getNonNavigableInverseReferences(element_p, false)) {
           if (setting.getEStructuralFeature() ==
-              ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target())
+              ViewpointPackage.eINSTANCE.getDSemanticDecorator_Target()) {
             group_p.add(setting.getEObject());
+          }
         }
       }
     }
@@ -132,27 +141,6 @@ public class SiriusMergePolicy extends GMFMergePolicy {
     Set<EObject> result = super.getAdditionGroup(element_p, scope_p);
     extendSiriusAdditionGroup(result, element_p, scope_p);
     return result;
-  }
-  
-  /**
-   * Return the descriptor for the given representation within the given scope, if any
-   * @param representation_p a non-null representation
-   * @param scope_p a non-null scope
-   * @return a potentially null descriptor
-   */
-  protected DRepresentationDescriptor getDescriptor(
-      DRepresentation representation_p, IFeaturedModelScope scope_p) {
-    for (EObject root : scope_p.getContents()) {
-      if (root instanceof DAnalysis) {
-        for (DView view : ((DAnalysis)root).getOwnedViews()) {
-          for (DRepresentationDescriptor descriptor : view.getOwnedRepresentationDescriptors()) {
-            if (descriptor.getRepresentation() == representation_p)
-              return descriptor;
-          }
-        }
-      }
-    }
-    return null;
   }
   
   /**

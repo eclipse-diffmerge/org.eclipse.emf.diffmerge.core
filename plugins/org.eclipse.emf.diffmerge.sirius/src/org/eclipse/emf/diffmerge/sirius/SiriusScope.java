@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.api.scopes.IModelScope;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EObject;
@@ -40,6 +41,7 @@ import org.eclipse.sirius.viewpoint.DAnalysis;
 import org.eclipse.sirius.viewpoint.DRepresentation;
 import org.eclipse.sirius.viewpoint.DRepresentationDescriptor;
 import org.eclipse.sirius.viewpoint.DSemanticDecorator;
+import org.eclipse.sirius.viewpoint.DView;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
 import org.eclipse.sirius.viewpoint.description.style.StylePackage;
 
@@ -253,11 +255,37 @@ public class SiriusScope extends GMFScope {
     if (result == null) {
       DRepresentationQuery rep2descQuery = new DRepresentationQuery(representation_p);
       result = rep2descQuery.getRepresentationDescriptor();
+      if (result == null) {
+        result = getRepresentationDescriptorByExploration(representation_p, this);
+      }
       if (result != null) {
         registerRepresentationDescriptor(result);
       }
     }
     return result;
+  }
+  
+  /**
+   * Find and return the descriptor for the given representation, if any, by simple exploration
+   * of the given scope. It is assumed that Sirius DAnalyses are roots of the scope.
+   * The scope does not have to be a Sirius scope.
+   * @param representation_p a non-null representation
+   * @return a potentially null descriptor
+   */
+  public static DRepresentationDescriptor getRepresentationDescriptorByExploration(
+      DRepresentation representation_p, IModelScope scope_p) {
+    for (EObject root : scope_p.getContents()) {
+      if (root instanceof DAnalysis) {
+        for (DView view : ((DAnalysis)root).getOwnedViews()) {
+          for (DRepresentationDescriptor descriptor : view.getOwnedRepresentationDescriptors()) {
+            if (descriptor.getRepresentation() == representation_p) {
+              return descriptor;
+            }
+          }
+        }
+      }
+    }
+    return null;
   }
   
   /**

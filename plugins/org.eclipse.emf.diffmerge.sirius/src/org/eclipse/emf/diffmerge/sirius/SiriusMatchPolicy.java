@@ -152,8 +152,9 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
     String result = null;
     if (element_p instanceof DView) {
       Viewpoint viewpoint = ((DView) element_p).getViewpoint();
-      if (viewpoint != null)
+      if (viewpoint != null) {
         result = viewpoint.getName();
+      }
     } else if (element_p instanceof DRepresentationDescriptor) {
       result = ((DRepresentationDescriptor) element_p).getName();
     } else if (element_p instanceof DRepresentation && scope_p instanceof SiriusScope) {
@@ -169,8 +170,9 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
         result = "ANNOTATION_" + annotation.getSource(); //$NON-NLS-1$
       }
     }
-    if (result == null)
+    if (result == null) {
       result = super.getName(element_p, scope_p);
+    }
     return result;
   }
   
