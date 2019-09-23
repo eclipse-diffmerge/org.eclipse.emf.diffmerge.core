@@ -21,7 +21,6 @@
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
@@ -34,7 +33,6 @@
 							<version>0.12.0-SNAPSHOT</version>
 						</artifact>
 					</target>
-
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -54,7 +52,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-source-feature-plugin</artifactId>
@@ -64,6 +61,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -78,12 +76,11 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	
 	<profiles>
 		<profile>
 			<id>sign</id>
 			<activation>
-				<!-- Signing can be manually applied by -Psign; but can only be executed 
-					on hudson.eclipse.org -->
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
@@ -101,8 +98,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Note that plugins bound to same phase will be executed in the same 
-						order as they are listed, so that metadata generated after signing -->
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-jarsigner-plugin</artifactId>
@@ -140,14 +135,15 @@
 			</pluginRepositories>
 		</profile>
 	</profiles>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>rcptt-releases</id>
-      <name>RCPTT Maven repository</name>
-      <url>https://repo.eclipse.org/content/repositories/rcptt-releases</url>
-      <snapshots>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>rcptt-releases</id>
+			<name>RCPTT Maven repository</name>
+			<url>https://repo.eclipse.org/content/repositories/rcptt-releases</url>
+			<snapshots>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
