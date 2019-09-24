@@ -115,8 +115,9 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
         if (isThreeWay() && _roleToSession.get(Role.ANCESTOR) != null) {
           // One of them is for the ancestor: use the other
           Session sideSession = _roleToSession.get(Role.TARGET);
-          if (sideSession == null)
+          if (sideSession == null) {
             sideSession = _roleToSession.get(Role.REFERENCE);
+          }
           result = sideSession.getTransactionalEditingDomain(); // sideSession cannot be null
         } else {
           // The two sessions are for the left and right sides:
@@ -161,8 +162,9 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
   @Override
   protected EditingDomain doGetEditingDomain() {
     EditingDomain result = checkSessions();
-    if (result == null && isVerbose())
+    if (result == null && isVerbose()) {
       showNoEditingDomainWarning();
+    }
     return result;
   }
   
@@ -194,8 +196,9 @@ public class SiriusComparisonMethod extends GMFComparisonMethod {
       Session roleSession = _roleToSession.get(role_p);
       if (roleSession != null) {
         EditingDomain sessionDomain = roleSession.getTransactionalEditingDomain();
-        if (sessionDomain != null)
+        if (sessionDomain != null) {
           result = sessionDomain.getResourceSet();
+        }
       }
     }
     return result;

@@ -108,14 +108,10 @@ public class GMFDiffMergeLabelProvider extends DiffMergeLabelProvider {
       }
     }
     if (!elementLabelOK) {
-      builder.append('<');
+      builder.append('(');
       builder.append(Messages.GMFDiffMergeLabelProvider_Unnamed);
-      builder.append('>');
+      builder.append(')');
     }
-    builder.append("  "); //$NON-NLS-1$
-    builder.append('[');
-    builder.append(formatTechnicalName(getText(type_p)));
-    builder.append(']');
     return builder.toString();
   }
   

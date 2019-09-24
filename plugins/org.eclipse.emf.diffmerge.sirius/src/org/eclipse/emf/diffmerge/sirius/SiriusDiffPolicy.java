@@ -110,8 +110,9 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
       // Ignore certain transient elements (OK because no cross-ref)
       EObject element = match_p
           .get(match_p.getUncoveredRole().opposite());
-      if (element != null)
+      if (element != null) {
         result = !UNSIGNIFICANT_TYPES.contains(element.eClass());
+      }
     }
     return result;
   }
