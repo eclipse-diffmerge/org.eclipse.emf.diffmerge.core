@@ -6,9 +6,9 @@ Bundle-Version: 0.12.0.qualifier
 Bundle-Activator: org.eclipse.emf.diffmerge.gmf.GMFDiffMergePlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.diffmerge;visibility:=reexport,
+Require-Bundle: org.eclipse.emf.diffmerge;visibility:=reexport,
  org.eclipse.gmf.runtime.notation;visibility:=reexport,
+ org.eclipse.core.runtime,
  org.eclipse.gmf.runtime.emf.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

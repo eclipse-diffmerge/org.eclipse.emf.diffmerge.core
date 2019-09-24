@@ -7,8 +7,8 @@ Bundle-Activator: org.eclipse.emf.diffmerge.ui.gmf.GMFDiffMergeUIPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.emf.diffmerge.ui;visibility:=reexport,
- org.eclipse.gmf.runtime.emf.core,
- org.eclipse.emf.diffmerge.gmf;visibility:=reexport
+ org.eclipse.emf.diffmerge.gmf;visibility:=reexport,
+ org.eclipse.gmf.runtime.emf.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
