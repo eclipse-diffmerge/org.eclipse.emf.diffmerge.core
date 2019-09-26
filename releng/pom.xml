@@ -11,16 +11,34 @@
 
 	<modules>
 		<module>org.eclipse.emf.diffmerge.configuration</module>
-		<module>org.eclipse.emf.diffmerge.update</module>
 		<module>org.eclipse.emf.diffmerge.target</module>
-		<module>org.eclipse.emf.diffmerge.core.javadoc</module>
+		<module>org.eclipse.emf.diffmerge.update</module>
 	</modules>
 	<profiles>
 		<profile>
+			<id>javadoc</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.core.javadoc</module>
+			</modules>
+		</profile>
+		<profile>
 			<id>gui.test</id>
 			<modules>
-				<!-- Product for GUI test -->
 				<module>org.eclipse.emf.diffmerge.tests.ui.product</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>standalone</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.dependencies</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>all</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.core.javadoc</module>
+				<module>org.eclipse.emf.diffmerge.tests.ui.product</module>
+				<module>org.eclipse.emf.diffmerge.dependencies</module>
 			</modules>
 		</profile>
 	</profiles>
