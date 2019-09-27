@@ -21,7 +21,7 @@
       <id>JavaSE-1.7</id>
     </provides>
     <configuration>
-      <jdkHome>/opt/tools/java/oracle/jdk-8/latest</jdkHome>
+      <jdkHome>/opt/tools/java/oracle/jdk-7/latest</jdkHome>
       <bootClassPath>
         <includes>
           <include>jre/lib/*</include>
@@ -37,7 +37,7 @@
       <id>JavaSE-1.6</id>
     </provides>
     <configuration>
-      <jdkHome>/opt/tools/java/oracle/jdk-8/latest</jdkHome>
+      <jdkHome>/opt/tools/java/oracle/jdk-6/latest</jdkHome>
       <bootClassPath>
         <includes>
           <include>jre/lib/*</include>
@@ -53,7 +53,7 @@
       <id>JavaSE-1.5</id>
     </provides>
     <configuration>
-      <jdkHome>/opt/tools/java/oracle/jdk-8/latest</jdkHome>
+      <jdkHome>/opt/tools/java/oracle/jdk-5/latest</jdkHome>
       <bootClassPath>
         <includes>
           <include>jre/lib/*</include>
