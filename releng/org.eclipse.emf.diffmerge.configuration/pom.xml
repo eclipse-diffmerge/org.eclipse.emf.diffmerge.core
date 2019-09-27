@@ -157,7 +157,7 @@
 					<plugin>
 						<groupId>org.eclipse.tycho</groupId>
 						<artifactId>tycho-p2-plugin</artifactId>
-						<version>${tychoVersion}</version>
+						<version>${tycho.version}</version>
 						<executions>
 							<execution>
 								<id>default-p2-metadata-default</id>
