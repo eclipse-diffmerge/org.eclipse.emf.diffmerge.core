@@ -3,6 +3,7 @@
 
 <product name="RCPTT GUI Tests Product" uid="org.eclipse.emf.diffmerge.tests.ui.product" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -13,15 +14,17 @@
 
    <windowImages/>
 
+
    <launcher>
-      <solaris/>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
 
+
    <vm>
    </vm>
+
 
    <plugins>
    </plugins>
@@ -31,17 +34,18 @@
       <feature id="org.eclipse.emf"/>
       <feature id="org.eclipse.platform"/>
       <feature id="org.eclipse.jdt"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclient4.feature"/>
+      <feature id="org.eclipse.ecf.core.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.feature"/>
+      <feature id="org.eclipse.ecf.core.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
+      <feature id="org.eclipse.ecf.filetransfer.httpclient45.feature"/>
       <feature id="org.eclipse.emf.mapping.ecore"/>
       <feature id="org.eclipse.help"/>
-      <feature id="org.eclipse.ecf.filetransfer.httpclient4.ssl.feature"/>
       <feature id="org.eclipse.emf.common.ui"/>
       <feature id="org.eclipse.emf.codegen"/>
       <feature id="org.eclipse.emf.common"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
       <feature id="org.eclipse.emf.mapping.ui"/>
-      <feature id="org.eclipse.ecf.core.ssl.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.ssl.feature"/>
       <feature id="org.eclipse.emf.mapping"/>
       <feature id="org.eclipse.emf.edit"/>
       <feature id="org.eclipse.emf.ecore"/>
@@ -54,10 +58,8 @@
       <feature id="org.eclipse.emf.edit.ui"/>
       <feature id="org.eclipse.emf.codegen.ecore.ui"/>
       <feature id="org.eclipse.rcp"/>
-      <feature id="org.eclipse.ecf.core.feature"/>
       <feature id="org.eclipse.emf.ecore.editor"/>
       <feature id="org.eclipse.equinox.p2.rcp.feature"/>
-      <feature id="org.eclipse.ecf.filetransfer.feature"/>
       <feature id="org.eclipse.emf.mapping.ecore.editor"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.emf.ecore.edit"/>
@@ -71,8 +73,8 @@
    <configurations>
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
    </configurations>

@@ -1,25 +1,22 @@
 target "org.eclipse.emf.diffmerge"
 
-location "http://download.eclipse.org/eclipse/updates/4.8" {
-	org.eclipse.equinox.sdk.feature.group lazy
-	org.eclipse.jdt.feature.group lazy
-	org.eclipse.platform.sdk lazy
-}
-
 location "http://download.eclipse.org/cbi/updates/license/" {
-	org.eclipse.license.feature.group lazy
+	org.eclipse.license.feature.group [2.0.2.v20181016-2210,2.0.2.v20181016-2210]
 }
 
-location "http://download.eclipse.org/releases/photon" {
+location "http://download.eclipse.org/releases/2019-06" {
+	org.eclipse.equinox.sdk.feature.group lazy
+	org.eclipse.platform.sdk lazy
+	org.eclipse.jdt.feature.group lazy
 	org.eclipse.ecf.core.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.feature.feature.group lazy
 	org.eclipse.ecf.core.ssl.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.ssl.feature.feature.group lazy
-	org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group lazy
-	org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group lazy
+	org.eclipse.ecf.filetransfer.httpclient45.feature.feature.group lazy
 	org.eclipse.draw2d.feature.group lazy
-	org.eclipse.gef lazy
+	org.eclipse.gef.feature.group lazy
 	org.eclipse.jgit.feature.group lazy
+	org.eclipse.jgit.ssh.apache.feature.group lazy
 	org.eclipse.egit.feature.group lazy
 	org.eclipse.emf.sdk.feature.group lazy
 	org.eclipse.emf.transaction.sdk.feature.group lazy
