@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.emf.diffmerge.ui.gmf;visibility:=reexport,
  org.eclipse.emf.transaction,
  org.eclipse.sirius.common;bundle-version="6.3.0",
  org.eclipse.sirius.ui;bundle-version="6.3.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.emf.diffmerge.ui.sirius
 Bundle-Localization: plugin

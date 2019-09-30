@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.emf.diffmerge.tests.elements.Elements.provider.ElementsEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.emf.diffmerge.tests.elements.Elements.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.diffmerge.tests.elements;visibility:=reexport,
