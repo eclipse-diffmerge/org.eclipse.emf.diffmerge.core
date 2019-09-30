@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.structures.common;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.Spliterator;
 
 import org.eclipse.emf.common.util.AbstractEList;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
@@ -79,6 +80,13 @@ public class FOrderedSet<E> extends FArrayList<E> implements Set<E> {
   @Override
   protected final boolean isUnique() {
     return true;
+  }
+  
+  /**
+   * @see java.util.Collection#spliterator()
+   */
+  public Spliterator<E> spliterator() {
+    return super.spliterator();
   }
   
 }
