@@ -1,3 +1,4 @@
+<!-- PROFILES: javadoc, gui.test, standalone, sign -->
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.emf.diffmerge</groupId>
@@ -185,6 +186,72 @@
 					<url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
 				</pluginRepository>
 			</pluginRepositories>
+		</profile>
+		<profile>
+			<id>standalone</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/standalone</outputDirectory>
+									<resources>
+										<resource>
+											<directory>../org.eclipse.emf.diffmerge.dependencies/target</directory>
+											<includes>
+												<include>*.jar</include>
+											</includes>
+											<filtering>true</filtering>
+										</resource>
+										<resource>
+											<directory>../../plugins/org.eclipse.emf.diffmerge.structures/target</directory>
+											<includes>
+												<include>*.jar</include>
+											</includes>
+											<excludes>
+												<exclude>*sources.jar</exclude>
+											</excludes>
+											<filtering>true</filtering>
+										</resource>
+										<resource>
+											<directory>../../plugins/org.eclipse.emf.diffmerge.generic/target</directory>
+											<includes>
+												<include>*.jar</include>
+											</includes>
+											<excludes>
+												<exclude>*sources.jar</exclude>
+											</excludes>
+											<filtering>true</filtering>
+										</resource>
+										<resource>
+											<directory>../../plugins/org.eclipse.emf.diffmerge.pojo/target</directory>
+											<includes>
+												<include>*.jar</include>
+											</includes>
+											<excludes>
+												<exclude>*sources.jar</exclude>
+											</excludes>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 	

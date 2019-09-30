@@ -33,14 +33,6 @@
 				<module>org.eclipse.emf.diffmerge.dependencies</module>
 			</modules>
 		</profile>
-		<profile>
-			<id>all</id>
-			<modules>
-				<module>org.eclipse.emf.diffmerge.core.javadoc</module>
-				<module>org.eclipse.emf.diffmerge.tests.ui.product</module>
-				<module>org.eclipse.emf.diffmerge.dependencies</module>
-			</modules>
-		</profile>
 	</profiles>
 </project>
 
