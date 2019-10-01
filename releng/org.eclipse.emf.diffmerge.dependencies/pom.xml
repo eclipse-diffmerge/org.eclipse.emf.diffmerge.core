@@ -14,7 +14,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.10</version>
+				<version>${maven.dependency.version}</version>
 				<executions>
 					<execution>
 						<id>unpack-dependencies</id>
@@ -28,6 +28,62 @@
 							<outputDirectory>target/classes</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.version}</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>../org.eclipse.emf.diffmerge.update/target/standalone</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>../../plugins/org.eclipse.emf.diffmerge.structures/target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<excludes>
+										<exclude>*sources.jar</exclude>
+									</excludes>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>../../plugins/org.eclipse.emf.diffmerge.generic/target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<excludes>
+										<exclude>*sources.jar</exclude>
+									</excludes>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>../../plugins/org.eclipse.emf.diffmerge.pojo/target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<excludes>
+										<exclude>*sources.jar</exclude>
+									</excludes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

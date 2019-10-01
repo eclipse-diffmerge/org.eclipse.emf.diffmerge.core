@@ -28,12 +28,35 @@
 							<javadocOptions>
 								<additionalArguments>
 									<ignoreError>false</ignoreError>
-									<additionalArgument>-linkoffline https://docs.oracle.com/javase/8/docs/api/ ${project.basedir}/java-package-list</additionalArgument>
-									<additionalArgument>-linkoffline https://osgi.org/javadoc/r4v43/core/index.html ${project.basedir}/osgi-package-list</additionalArgument>
-									<additionalArgument>-linkoffline http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/ ${project.basedir}/emf-package-list</additionalArgument>
+									<additionalArgument>-linkoffline https://docs.oracle.com/javase/8/docs/api/ ${project.basedir}/package-lists/java</additionalArgument>
+									<additionalArgument>-linkoffline https://osgi.org/javadoc/r4v43/core/index.html ${project.basedir}/package-lists/osgi</additionalArgument>
+									<additionalArgument>-linkoffline http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/ ${project.basedir}/package-lists/emf</additionalArgument>
 									<additionalArgument>-public</additionalArgument>
 								</additionalArguments>
 							</javadocOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.version}</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>../org.eclipse.emf.diffmerge.update/target/javadoc</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/reference</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>

@@ -1,4 +1,4 @@
-<!-- PROFILES: javadoc, gui.test, standalone, sign -->
+<!-- PROFILES: javadoc, gui.test, sign, standalone -->
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.emf.diffmerge</groupId>
@@ -13,6 +13,9 @@
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<maven.dependency.version>2.10</maven.dependency.version>
+		<maven.resources.version>3.1.0</maven.resources.version>
+		<maven.toolchains.version>1.1</maven.toolchains.version>
 		<tycho.version>1.4.0</tycho.version>
 		<tycho.extras.version>${tycho.version}</tycho.extras.version>
 	</properties>
@@ -21,7 +24,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>1.1</version>
+				<version>${maven.toolchains.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -76,7 +79,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-toolchains-plugin</artifactId>
-					<version>1.1</version>
+					<version>${maven.toolchains.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -107,7 +110,6 @@
 		</pluginManagement>
 	</build>
 	<profiles>
-	
 		<profile>
 			<id>sign</id>
 			<activation>
@@ -187,108 +189,6 @@
 				</pluginRepository>
 			</pluginRepositories>
 		</profile>
-		
-		<profile>
-			<id>standalone</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}/standalone</outputDirectory>
-									<resources>
-										<resource>
-											<directory>../org.eclipse.emf.diffmerge.dependencies/target</directory>
-											<includes>
-												<include>*.jar</include>
-											</includes>
-											<filtering>true</filtering>
-										</resource>
-										<resource>
-											<directory>../../plugins/org.eclipse.emf.diffmerge.structures/target</directory>
-											<includes>
-												<include>*.jar</include>
-											</includes>
-											<excludes>
-												<exclude>*sources.jar</exclude>
-											</excludes>
-											<filtering>true</filtering>
-										</resource>
-										<resource>
-											<directory>../../plugins/org.eclipse.emf.diffmerge.generic/target</directory>
-											<includes>
-												<include>*.jar</include>
-											</includes>
-											<excludes>
-												<exclude>*sources.jar</exclude>
-											</excludes>
-											<filtering>true</filtering>
-										</resource>
-										<resource>
-											<directory>../../plugins/org.eclipse.emf.diffmerge.pojo/target</directory>
-											<includes>
-												<include>*.jar</include>
-											</includes>
-											<excludes>
-												<exclude>*sources.jar</exclude>
-											</excludes>
-											<filtering>true</filtering>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
-		<profile>
-			<id>javadoc</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<version>3.1.0</version>
-						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}/javadoc</outputDirectory>
-									<resources>
-										<resource>
-											<directory>../org.eclipse.emf.diffmerge.core.javadoc/target/reference</directory>
-											<filtering>true</filtering>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
 	</profiles>
 	<pluginRepositories>
 		<pluginRepository>
