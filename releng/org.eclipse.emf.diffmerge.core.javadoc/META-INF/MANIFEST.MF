@@ -3,5 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Javadoc for Diff/Merge Core (Incubation)
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.core.javadoc
 Bundle-Version: 0.12.0.qualifier
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Automatic-Module-Name: org.eclipse.emf.diffmerge.core.javadoc
