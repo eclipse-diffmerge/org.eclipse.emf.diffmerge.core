@@ -14,6 +14,7 @@ package org.eclipse.emf.diffmerge.sirius;
 import java.util.Set;
 
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
+import org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope;
 import org.eclipse.emf.diffmerge.gmf.GMFMergePolicy;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -73,11 +74,12 @@ public class SiriusMergePolicy extends GMFMergePolicy {
         }
       }
     } else if (container == null) {
-      DRepresentationDescriptor descriptor;
+      DRepresentationDescriptor descriptor = null;
       if (scope_p instanceof SiriusScope) {
         descriptor = ((SiriusScope)scope_p).getRepresentationDescriptor(element_p);
-      } else {
-        descriptor = SiriusScope.getRepresentationDescriptorByExploration(element_p, scope_p);
+      } else if (scope_p instanceof IPersistentModelScope) {
+        descriptor = SiriusScope.getRepresentationDescriptorByPhysicalExploration(
+            element_p, (IPersistentModelScope)scope_p);
       }
       if (descriptor != null) {
         group_p.add(descriptor);

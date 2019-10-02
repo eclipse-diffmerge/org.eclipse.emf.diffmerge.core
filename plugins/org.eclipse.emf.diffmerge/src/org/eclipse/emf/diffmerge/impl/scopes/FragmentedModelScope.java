@@ -307,10 +307,7 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
    * Result is guaranteed to be accurate only if hasBeenExplored().
    */
   public List<EObject> getContents() {
-    List<EObject> result = new FArrayList<EObject>();
-    for (Resource resource : _rootResources)
-      result.addAll(resource.getContents());
-    return Collections.unmodifiableList(result);
+    return getRawContents();
   }
   
   /**
@@ -370,6 +367,17 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   protected Map<Object, Object> getLoadOptions(Resource resource_p) {
     // Override if needed
     return new HashMap<Object, Object>();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope#getRawContents()
+   * Result is guaranteed to be accurate only if hasBeenExplored().
+   */
+  public List<EObject> getRawContents() {
+    List<EObject> result = new FArrayList<EObject>();
+    for (Resource resource : _rootResources)
+      result.addAll(resource.getContents());
+    return Collections.unmodifiableList(result);
   }
   
   /**

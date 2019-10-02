@@ -40,6 +40,12 @@ public interface IPersistentModelScope extends IModelScope {
   Object getExtrinsicID(EObject element_p);
   
   /**
+   * Return the root elements of this scope from a physical (non-logical) perspective
+   * @return a non-null, potentially empty list
+   */
+  List<EObject> getRawContents();
+  
+  /**
    * Initialize the scope by loading at least the elements that are required
    * for exploring the scope
    * Postcondition: isLoaded() if no exception is thrown

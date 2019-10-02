@@ -76,7 +76,7 @@ implements IPersistentModelScope.Editable {
    * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContents()
    */
   public List<EObject> getContents() {
-    return Collections.singletonList(getRoot());
+    return getRawContents();
   }
   
   /**
@@ -101,6 +101,13 @@ implements IPersistentModelScope.Editable {
    */
   public Resource getHoldingResource() {
     return getRoot().eResource();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.api.scopes.IPersistentModelScope#getRawContents()
+   */
+  public List<EObject> getRawContents() {
+    return Collections.singletonList(getRoot());
   }
   
   /**
