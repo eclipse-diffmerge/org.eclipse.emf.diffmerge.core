@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.sirius;
 
 import java.util.Set;
 
+import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFMergePolicy;
 import org.eclipse.emf.ecore.EObject;
@@ -59,6 +60,7 @@ public class SiriusMergePolicy extends GMFMergePolicy {
    * @param element_p a non-null element
    * @param scope_p a non-null scope
    */
+  @SuppressWarnings("unchecked")
   protected void extendDRepresentationAdditionGroup(Set<EObject> group_p,
       DRepresentation element_p, ITreeDataScope<EObject> scope_p) {
     EObject container = scope_p.getContainer(element_p);
@@ -72,11 +74,12 @@ public class SiriusMergePolicy extends GMFMergePolicy {
         }
       }
     } else if (container == null) {
-      DRepresentationDescriptor descriptor;
+      DRepresentationDescriptor descriptor = null;
       if (scope_p instanceof SiriusScope) {
         descriptor = ((SiriusScope)scope_p).getRepresentationDescriptor(element_p);
-      } else {
-        descriptor = SiriusScope.getRepresentationDescriptorByExploration(element_p, scope_p);
+      } else if (scope_p instanceof IPersistentDataScope<?>) {
+        descriptor = SiriusScope.getRepresentationDescriptorByPhysicalExploration(
+            element_p, (IPersistentDataScope<EObject>)scope_p);
       }
       if (descriptor != null) {
         group_p.add(descriptor);

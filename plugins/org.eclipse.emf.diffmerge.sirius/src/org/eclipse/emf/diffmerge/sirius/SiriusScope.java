@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
+import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EObject;
@@ -258,7 +258,7 @@ public class SiriusScope extends GMFScope {
       DRepresentationQuery rep2descQuery = new DRepresentationQuery(representation_p);
       result = rep2descQuery.getRepresentationDescriptor();
       if (result == null) {
-        result = getRepresentationDescriptorByExploration(representation_p, this);
+        result = getRepresentationDescriptorByExploration(representation_p);
       }
       if (result != null) {
         registerRepresentationDescriptor(result);
@@ -269,14 +269,27 @@ public class SiriusScope extends GMFScope {
   
   /**
    * Find and return the descriptor for the given representation, if any, by simple exploration
-   * of the given scope. It is assumed that Sirius DAnalyses are roots of the scope.
-   * The scope does not have to be a Sirius scope.
+   * of this scope
    * @param representation_p a non-null representation
    * @return a potentially null descriptor
    */
-  public static DRepresentationDescriptor getRepresentationDescriptorByExploration(
-      DRepresentation representation_p, ITreeDataScope<EObject> scope_p) {
-    for (EObject root : scope_p.getRoots()) {
+  protected DRepresentationDescriptor getRepresentationDescriptorByExploration(
+      DRepresentation representation_p) {
+    return getRepresentationDescriptorByPhysicalExploration(representation_p, this);
+  }
+  
+  /**
+   * Find and return the descriptor for the given representation, if any, by simple exploration
+   * of the given scope. It is assumed that Sirius DAnalyses are physical roots of the scope.
+   * The scope does not have to be a Sirius scope.
+   * @param representation_p a non-null representation
+   * @param scope_p a non-null scope
+   * @return a potentially null descriptor
+   */
+  public static DRepresentationDescriptor getRepresentationDescriptorByPhysicalExploration(
+      DRepresentation representation_p, IPersistentDataScope<EObject> scope_p) {
+    List<EObject> roots = scope_p.getRawRoots();
+    for (EObject root : roots) {
       if (root instanceof DAnalysis) {
         for (DView view : ((DAnalysis)root).getOwnedViews()) {
           for (DRepresentationDescriptor descriptor : view.getOwnedRepresentationDescriptors()) {
