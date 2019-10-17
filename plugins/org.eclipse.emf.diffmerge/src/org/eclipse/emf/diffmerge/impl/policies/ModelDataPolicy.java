@@ -155,17 +155,17 @@ public class ModelDataPolicy implements IDataPolicy<EObject> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsDisconnectionRequired(java.lang.Object)
-   */
-  public boolean tIsDisconnectionRequired(Object reference_p) {
-    return mIsChangeableReference(reference_p) && !((EReference)reference_p).isDerived();
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsElementDisconnectionRequired()
    */
   public boolean tIsElementDisconnectionRequired() {
     return true;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsReferenceDisconnectionRequired(java.lang.Object)
+   */
+  public boolean tIsReferenceDisconnectionRequired(Object reference_p) {
+    return mIsChangeableReference(reference_p) && !((EReference)reference_p).isDerived();
   }
   
   /**

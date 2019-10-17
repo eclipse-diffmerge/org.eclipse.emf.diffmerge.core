@@ -274,7 +274,7 @@ public class EMappingImpl extends
         @Override
         protected boolean isIncluded(EStructuralFeature feature_p) {
           return super.isIncludedEntry(feature_p)
-              && getScope().tIsDisconnectionRequired(feature_p);
+              && getScope().tIsReferenceDisconnectionRequired(feature_p);
         }
 
         /**

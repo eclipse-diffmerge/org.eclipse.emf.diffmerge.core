@@ -139,20 +139,20 @@ public interface IDataPolicy<E> {
   Object tGetID(E element_p, boolean intrinsic_p);
   
   /**
+   * Return whether elements in a scope must be disconnected from others, in terms of
+   * reference values, prior to their removal
+   * @see IEditableDataScope#disconnect(Object)
+   */
+  boolean tIsElementDisconnectionRequired();
+  
+  /**
    * Return whether a value of the given cross-reference must be explicitly deleted
    * when the value element is deleted. This operation aims at enabling the usage context
    * to determine what connections (reference values) must be removed prior to element removals.
    * If !tIsElementDisconnectionRequired(), then this operation has no impact.
    * @param reference_p a non-null reference
    */
-  boolean tIsDisconnectionRequired(Object reference_p);
-  
-  /**
-   * Return whether elements in a scope must be disconnected from others, in terms of
-   * reference values, prior to their removal
-   * @see IEditableDataScope#disconnect(Object)
-   */
-  boolean tIsElementDisconnectionRequired();
+  boolean tIsReferenceDisconnectionRequired(Object reference_p);
   
   /**
    * Create and return a new bare element, i.e., an element without particular values

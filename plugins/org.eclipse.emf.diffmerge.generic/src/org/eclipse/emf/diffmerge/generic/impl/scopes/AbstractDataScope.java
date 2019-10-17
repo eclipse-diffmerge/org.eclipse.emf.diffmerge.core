@@ -182,17 +182,17 @@ implements IDataScope<E> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsDisconnectionRequired(java.lang.Object)
-   */
-  public boolean tIsDisconnectionRequired(Object reference_p) {
-    return getDataPolicy().tIsDisconnectionRequired(reference_p);
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsElementDisconnectionRequired()
    */
   public boolean tIsElementDisconnectionRequired() {
     return getDataPolicy().tIsElementDisconnectionRequired();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsReferenceDisconnectionRequired(java.lang.Object)
+   */
+  public boolean tIsReferenceDisconnectionRequired(Object reference_p) {
+    return getDataPolicy().tIsReferenceDisconnectionRequired(reference_p);
   }
   
   /**
