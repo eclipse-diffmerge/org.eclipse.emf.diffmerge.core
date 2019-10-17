@@ -13,7 +13,7 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IDataPolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
 
@@ -101,7 +101,7 @@ public interface EMapping<E, A, R>
    * @param element a non-null element
    * @return whether all dependencies have been successfully removed or the scope does
    *          not require it
-   * @see IScopePolicy#tIsElementDisconnectionRequired()
+   * @see IDataPolicy#tIsElementDisconnectionRequired()
    * @generated NOT
    */
   boolean disconnect(Role role, E element);

@@ -20,9 +20,9 @@ import java.util.Set;
 import org.eclipse.emf.common.util.AbstractTreeIterator;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope;
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IDataPolicy;
 import org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope;
-import org.eclipse.emf.diffmerge.impl.policies.ModelScopePolicy;
+import org.eclipse.emf.diffmerge.impl.policies.ModelDataPolicy;
 import org.eclipse.emf.diffmerge.structures.common.FHashSet;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -46,11 +46,11 @@ implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope#defineScopePolicy()
+   * @see org.eclipse.emf.diffmerge.generic.impl.scopes.AbstractDataScope#defineDataPolicy()
    */
   @Override
-  protected IScopePolicy<EObject> defineScopePolicy() {
-    return ModelScopePolicy.getInstance();
+  protected IDataPolicy<EObject> defineDataPolicy() {
+    return ModelDataPolicy.getInstance();
   }
   
   /**

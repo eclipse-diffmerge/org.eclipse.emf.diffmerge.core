@@ -13,7 +13,7 @@ package org.eclipse.emf.diffmerge.generic.api.scopes;
 
 import java.util.List;
 
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IDataPolicy;
 
 
 /**
@@ -38,7 +38,7 @@ import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
  * 
  * @author Olivier Constant
  */
-public interface IDataScope<E> extends IRawDataScope<E>, IScopePolicy<E> {
+public interface IDataScope<E> extends IRawDataScope<E>, IDataPolicy<E> {
   
   /**
    * Return the values of the given element w.r.t. the give attribute/

@@ -32,7 +32,7 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableDataScope;
  * @author Matthieu Helleboid
  * @author Olivier Constant
  */
-public interface IScopePolicy<E> {
+public interface IDataPolicy<E> {
   
   /**
    * Return the set of attributes which are applicable to the given element.
@@ -69,8 +69,8 @@ public interface IScopePolicy<E> {
    * Class invariant: isContainerReference(r) ==
    *  getOppositeReference(r) != null &&
    *    isContainmentReference(getOppositeReference(r))
-   * @see IScopePolicy#mIsContainmentReference(Object)
-   * @see IScopePolicy#mGetOppositeReference(Object)
+   * @see IDataPolicy#mIsContainmentReference(Object)
+   * @see IDataPolicy#mGetOppositeReference(Object)
    * @param reference_p a non-null reference
    */
   boolean mIsContainerReference(Object reference_p);

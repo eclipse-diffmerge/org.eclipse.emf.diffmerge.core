@@ -13,13 +13,13 @@ package org.eclipse.emf.diffmerge.generic.impl.scopes;
 
 import java.util.Collection;
 
-import org.eclipse.emf.diffmerge.generic.api.IScopePolicy;
+import org.eclipse.emf.diffmerge.generic.api.IDataPolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 
 
 /**
  * A partial implementation of IDataScope that delegates meta and technological aspects
- * to an auxiliary scope policy.
+ * to an auxiliary data policy.
  * 
  * @param <E> The type of data elements.
  * 
@@ -28,8 +28,8 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IDataScope;
 public abstract class AbstractDataScope<E>
 implements IDataScope<E> {
   
-  /** A non-null scope policy to which meta and technological aspects can be delegated */
-  private final IScopePolicy<E> _scopePolicyDelegate;
+  /** A non-null data policy to which meta and technological aspects can be delegated */
+  private final IDataPolicy<E> _dataPolicyDelegate;
   
   /** A potentially null object that identifies the origin of the scope */
   private Object _originator;
@@ -39,16 +39,24 @@ implements IDataScope<E> {
    * Default constructor
    */
   protected AbstractDataScope() {
-    _scopePolicyDelegate = defineScopePolicy();
+    _dataPolicyDelegate = defineDataPolicy();
     _originator = null;
   }
   
   /**
-   * Return the scope policy to which meta and technological aspects can be delegated.
+   * Return the data policy to which meta and technological aspects can be delegated.
    * This is only called at initialization time.
-   * @return a non-null scope policy
+   * @return a non-null data policy
    */
-  protected abstract IScopePolicy<E> defineScopePolicy();
+  protected abstract IDataPolicy<E> defineDataPolicy();
+  
+  /**
+   * Return the data policy to which meta and technological aspects can be delegated
+   * @return a non-null data policy
+   */
+  protected IDataPolicy<E> getDataPolicy() {
+    return _dataPolicyDelegate;
+  }
   
   /**
    * Return an object that characterizes or identifies this scope by default
@@ -66,102 +74,94 @@ implements IDataScope<E> {
   }
   
   /**
-   * Return the scope policy to which meta and technological aspects can be delegated
-   * @return a non-null scope policy
-   */
-  protected IScopePolicy<E> getScopePolicy() {
-    return _scopePolicyDelegate;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetAttributes(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mGetAttributes(java.lang.Object)
    */
   public Collection<?> mGetAttributes(E element_p) {
-    return getScopePolicy().mGetAttributes(element_p);
+    return getDataPolicy().mGetAttributes(element_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetOppositeReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mGetOppositeReference(java.lang.Object)
    */
   public Object mGetOppositeReference(Object reference_p) {
-    return getScopePolicy().mGetOppositeReference(reference_p);
+    return getDataPolicy().mGetOppositeReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetReferences(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mGetReferences(java.lang.Object)
    */
   public Collection<?> mGetReferences(E element_p) {
-    return getScopePolicy().mGetReferences(element_p);
+    return getDataPolicy().mGetReferences(element_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mGetType(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mGetType(java.lang.Object)
    */
   public Object mGetType(E element_p) {
-    return getScopePolicy().mGetType(element_p);
+    return getDataPolicy().mGetType(element_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsChangeableAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsChangeableAttribute(java.lang.Object)
    */
   public boolean mIsChangeableAttribute(Object attribute_p) {
-    return getScopePolicy().mIsChangeableAttribute(attribute_p);
+    return getDataPolicy().mIsChangeableAttribute(attribute_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsChangeableReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsChangeableReference(java.lang.Object)
    */
   public boolean mIsChangeableReference(Object reference_p) {
-    return getScopePolicy().mIsChangeableReference(reference_p);
+    return getDataPolicy().mIsChangeableReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsContainerReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsContainerReference(java.lang.Object)
    */
   public boolean mIsContainerReference(Object reference_p) {
-    return getScopePolicy().mIsContainerReference(reference_p);
+    return getDataPolicy().mIsContainerReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsContainmentReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsContainmentReference(java.lang.Object)
    */
   public boolean mIsContainmentReference(Object reference_p) {
-    return getScopePolicy().mIsContainmentReference(reference_p);
+    return getDataPolicy().mIsContainmentReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsIDAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsIDAttribute(java.lang.Object)
    */
   public boolean mIsIDAttribute(Object attribute_p) {
-    return getScopePolicy().mIsIDAttribute(attribute_p);
+    return getDataPolicy().mIsIDAttribute(attribute_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsManyAttribute(java.lang.Object)
    */
   public boolean mIsManyAttribute(Object attribute_p) {
-    return getScopePolicy().mIsManyAttribute(attribute_p);
+    return getDataPolicy().mIsManyAttribute(attribute_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsManyReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsManyReference(java.lang.Object)
    */
   public boolean mIsManyReference(Object reference_p) {
-    return getScopePolicy().mIsManyReference(reference_p);
+    return getDataPolicy().mIsManyReference(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsOptionalAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsOptionalAttribute(java.lang.Object)
    */
   public boolean mIsOptionalAttribute(Object attribute_p) {
-    return getScopePolicy().mIsOptionalAttribute(attribute_p);
+    return getDataPolicy().mIsOptionalAttribute(attribute_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#mIsOptionalReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#mIsOptionalReference(java.lang.Object)
    */
   public boolean mIsOptionalReference(Object reference_p) {
-    return getScopePolicy().mIsOptionalReference(reference_p);
+    return getDataPolicy().mIsOptionalReference(reference_p);
   }
   
   /**
@@ -175,38 +175,38 @@ implements IDataScope<E> {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tGetID(java.lang.Object, boolean)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tGetID(java.lang.Object, boolean)
    */
   public Object tGetID(E element_p, boolean intrinsic_p) {
-    return getScopePolicy().tGetID(element_p, intrinsic_p);
+    return getDataPolicy().tGetID(element_p, intrinsic_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsDisconnectionRequired(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsDisconnectionRequired(java.lang.Object)
    */
   public boolean tIsDisconnectionRequired(Object reference_p) {
-    return getScopePolicy().tIsDisconnectionRequired(reference_p);
+    return getDataPolicy().tIsDisconnectionRequired(reference_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tIsElementDisconnectionRequired()
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tIsElementDisconnectionRequired()
    */
   public boolean tIsElementDisconnectionRequired() {
-    return getScopePolicy().tIsElementDisconnectionRequired();
+    return getDataPolicy().tIsElementDisconnectionRequired();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tNewBareElement(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tNewBareElement(java.lang.Object)
    */
   public E tNewBareElement(Object source_p) {
-    return getScopePolicy().tNewBareElement(source_p);
+    return getDataPolicy().tNewBareElement(source_p);
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.generic.api.IScopePolicy#tSetID(java.lang.Object, java.lang.Object, boolean)
+   * @see org.eclipse.emf.diffmerge.generic.api.IDataPolicy#tSetID(java.lang.Object, java.lang.Object, boolean)
    */
   public boolean tSetID(E element_p, Object id_p, boolean intrinsic_p) {
-    return getScopePolicy().tSetID(element_p, id_p, intrinsic_p);
+    return getDataPolicy().tSetID(element_p, id_p, intrinsic_p);
   }
   
 }

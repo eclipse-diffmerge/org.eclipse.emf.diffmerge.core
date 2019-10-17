@@ -141,7 +141,7 @@ public interface IMergePolicy<E> {
    * Note that if intrinsic IDs are not copied and the diff policy specifies that ID attributes
    * are covered by the diff phase, then copying an element to the given target scope will result
    * in new differences when the comparison is re-computed.
-   * @see IScopePolicy#mIsIDAttribute(Object)
+   * @see IDataPolicy#mIsIDAttribute(Object)
    * @see IDiffPolicy#coverAttribute(Object, ITreeDataScope)
    * @param source_p a non-null element
    * @param sourceScope_p a non-null scope
