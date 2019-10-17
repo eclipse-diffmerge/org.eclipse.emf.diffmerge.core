@@ -84,7 +84,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__ID = GdiffdataPackage.ECOMPARISON__ID;
+  int ECOMPARISON__ID = GdiffdataPackage.GCOMPARISON__ID;
 
   /**
    * The feature id for the '<em><b>Ancestor Scope</b></em>' attribute.
@@ -93,7 +93,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__ANCESTOR_SCOPE = GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE;
+  int ECOMPARISON__ANCESTOR_SCOPE = GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE;
 
   /**
    * The feature id for the '<em><b>Reference Scope</b></em>' attribute.
@@ -102,7 +102,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__REFERENCE_SCOPE = GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE;
+  int ECOMPARISON__REFERENCE_SCOPE = GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE;
 
   /**
    * The feature id for the '<em><b>Target Scope</b></em>' attribute.
@@ -111,7 +111,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__TARGET_SCOPE = GdiffdataPackage.ECOMPARISON__TARGET_SCOPE;
+  int ECOMPARISON__TARGET_SCOPE = GdiffdataPackage.GCOMPARISON__TARGET_SCOPE;
 
   /**
    * The feature id for the '<em><b>Last Match Policy</b></em>' attribute.
@@ -120,7 +120,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_MATCH_POLICY = GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY;
+  int ECOMPARISON__LAST_MATCH_POLICY = GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY;
 
   /**
    * The feature id for the '<em><b>Last Diff Policy</b></em>' attribute.
@@ -129,7 +129,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_DIFF_POLICY = GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY;
+  int ECOMPARISON__LAST_DIFF_POLICY = GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY;
 
   /**
    * The feature id for the '<em><b>Last Merge Policy</b></em>' attribute.
@@ -138,7 +138,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__LAST_MERGE_POLICY = GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY;
+  int ECOMPARISON__LAST_MERGE_POLICY = GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY;
 
   /**
    * The feature id for the '<em><b>Mapping</b></em>' containment reference.
@@ -147,7 +147,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON__MAPPING = GdiffdataPackage.ECOMPARISON__MAPPING;
+  int ECOMPARISON__MAPPING = GdiffdataPackage.GCOMPARISON__MAPPING;
 
   /**
    * The number of structural features of the '<em>EComparison</em>' class.
@@ -156,7 +156,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON_FEATURE_COUNT = GdiffdataPackage.ECOMPARISON_FEATURE_COUNT
+  int ECOMPARISON_FEATURE_COUNT = GdiffdataPackage.GCOMPARISON_FEATURE_COUNT
       + 0;
 
   /**
@@ -176,7 +176,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int ECOMPARISON_ELEMENT_FEATURE_COUNT = GdiffdataPackage.ECOMPARISON_ELEMENT_FEATURE_COUNT
+  int ECOMPARISON_ELEMENT_FEATURE_COUNT = GdiffdataPackage.GCOMPARISON_ELEMENT_FEATURE_COUNT
       + 0;
 
   /**
@@ -196,7 +196,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__ID = GdiffdataPackage.EMAPPING__ID;
+  int EMAPPING__ID = GdiffdataPackage.GMAPPING__ID;
 
   /**
    * The feature id for the '<em><b>Modifiable Contents</b></em>' containment reference list.
@@ -205,7 +205,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__MODIFIABLE_CONTENTS = GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS;
+  int EMAPPING__MODIFIABLE_CONTENTS = GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS;
 
   /**
    * The feature id for the '<em><b>Reference Completed Matches</b></em>' reference list.
@@ -214,7 +214,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__REFERENCE_COMPLETED_MATCHES = GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES;
+  int EMAPPING__REFERENCE_COMPLETED_MATCHES = GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES;
 
   /**
    * The feature id for the '<em><b>Target Completed Matches</b></em>' reference list.
@@ -223,7 +223,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__TARGET_COMPLETED_MATCHES = GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES;
+  int EMAPPING__TARGET_COMPLETED_MATCHES = GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES;
 
   /**
    * The feature id for the '<em><b>Ancestor Match Map</b></em>' map.
@@ -232,7 +232,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__ANCESTOR_MATCH_MAP = GdiffdataPackage.EMAPPING_FEATURE_COUNT
+  int EMAPPING__ANCESTOR_MATCH_MAP = GdiffdataPackage.GMAPPING_FEATURE_COUNT
       + 0;
 
   /**
@@ -242,7 +242,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__REFERENCE_MATCH_MAP = GdiffdataPackage.EMAPPING_FEATURE_COUNT
+  int EMAPPING__REFERENCE_MATCH_MAP = GdiffdataPackage.GMAPPING_FEATURE_COUNT
       + 1;
 
   /**
@@ -252,7 +252,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING__TARGET_MATCH_MAP = GdiffdataPackage.EMAPPING_FEATURE_COUNT + 2;
+  int EMAPPING__TARGET_MATCH_MAP = GdiffdataPackage.GMAPPING_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>EMapping</em>' class.
@@ -261,7 +261,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMAPPING_FEATURE_COUNT = GdiffdataPackage.EMAPPING_FEATURE_COUNT + 3;
+  int EMAPPING_FEATURE_COUNT = GdiffdataPackage.GMAPPING_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl.EMatchImpl <em>EMatch</em>}' class.
@@ -280,7 +280,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ID = GdiffdataPackage.EMATCH__ID;
+  int EMATCH__ID = GdiffdataPackage.GMATCH__ID;
 
   /**
    * The feature id for the '<em><b>Match ID</b></em>' attribute.
@@ -289,7 +289,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MATCH_ID = GdiffdataPackage.EMATCH__MATCH_ID;
+  int EMATCH__MATCH_ID = GdiffdataPackage.GMATCH__MATCH_ID;
 
   /**
    * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
@@ -298,7 +298,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = GdiffdataPackage.EMATCH__MODIFIABLE_RELATED_DIFFERENCES;
+  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = GdiffdataPackage.GMATCH__MODIFIABLE_RELATED_DIFFERENCES;
 
   /**
    * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
@@ -307,7 +307,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = GdiffdataPackage.EMATCH__ELEMENT_PRESENCE_DIFFERENCE;
+  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = GdiffdataPackage.GMATCH__ELEMENT_PRESENCE_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
@@ -316,7 +316,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = GdiffdataPackage.EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE;
+  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = GdiffdataPackage.GMATCH__REFERENCE_OWNERSHIP_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
@@ -325,7 +325,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = GdiffdataPackage.EMATCH__TARGET_OWNERSHIP_DIFFERENCE;
+  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = GdiffdataPackage.GMATCH__TARGET_OWNERSHIP_DIFFERENCE;
 
   /**
    * The feature id for the '<em><b>Ancestor</b></em>' attribute.
@@ -334,7 +334,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__ANCESTOR = GdiffdataPackage.EMATCH_FEATURE_COUNT + 0;
+  int EMATCH__ANCESTOR = GdiffdataPackage.GMATCH_FEATURE_COUNT + 0;
 
   /**
    * The feature id for the '<em><b>Reference</b></em>' attribute.
@@ -343,7 +343,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__REFERENCE = GdiffdataPackage.EMATCH_FEATURE_COUNT + 1;
+  int EMATCH__REFERENCE = GdiffdataPackage.GMATCH_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Target</b></em>' attribute.
@@ -352,7 +352,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__TARGET = GdiffdataPackage.EMATCH_FEATURE_COUNT + 2;
+  int EMATCH__TARGET = GdiffdataPackage.GMATCH_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Modifiable Attribute Map</b></em>' map.
@@ -361,7 +361,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_ATTRIBUTE_MAP = GdiffdataPackage.GMATCH_FEATURE_COUNT
       + 3;
 
   /**
@@ -371,7 +371,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_REFERENCE_MAP = GdiffdataPackage.GMATCH_FEATURE_COUNT
       + 4;
 
   /**
@@ -381,7 +381,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP = GdiffdataPackage.EMATCH_FEATURE_COUNT
+  int EMATCH__MODIFIABLE_ORDER_REFERENCE_MAP = GdiffdataPackage.GMATCH_FEATURE_COUNT
       + 5;
 
   /**
@@ -391,7 +391,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMATCH_FEATURE_COUNT = GdiffdataPackage.EMATCH_FEATURE_COUNT + 6;
+  int EMATCH_FEATURE_COUNT = GdiffdataPackage.GMATCH_FEATURE_COUNT + 6;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference <em>EMergeable Difference</em>}' class.
@@ -410,7 +410,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__ID = GdiffdataPackage.EMERGEABLE_DIFFERENCE__ID;
+  int EMERGEABLE_DIFFERENCE__ID = GdiffdataPackage.GMERGEABLE_DIFFERENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -419,7 +419,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR;
+  int EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -428,7 +428,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__CONFLICTING = GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING;
+  int EMERGEABLE_DIFFERENCE__CONFLICTING = GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -437,7 +437,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__IGNORED = GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED;
+  int EMERGEABLE_DIFFERENCE__IGNORED = GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -446,7 +446,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION;
+  int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -455,7 +455,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -464,7 +464,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -473,7 +473,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -482,7 +482,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -491,7 +491,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The number of structural features of the '<em>EMergeable Difference</em>' class.
@@ -500,7 +500,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = GdiffdataPackage.EMERGEABLE_DIFFERENCE_FEATURE_COUNT
+  int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = GdiffdataPackage.GMERGEABLE_DIFFERENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -520,7 +520,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__ID = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ID;
+  int EELEMENT_RELATIVE_PRESENCE__ID = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -529,7 +529,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -538,7 +538,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__CONFLICTING = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__CONFLICTING;
+  int EELEMENT_RELATIVE_PRESENCE__CONFLICTING = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -547,7 +547,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__IGNORED = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__IGNORED;
+  int EELEMENT_RELATIVE_PRESENCE__IGNORED = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -556,7 +556,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
+  int EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -565,7 +565,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -574,7 +574,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -583,7 +583,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -592,7 +592,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -601,7 +601,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -610,7 +610,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
+  int EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -619,7 +619,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
+  int EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The number of structural features of the '<em>EElement Relative Presence</em>' class.
@@ -628,7 +628,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
+  int EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -648,7 +648,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ID = GdiffdataPackage.EELEMENT_PRESENCE__ID;
+  int EELEMENT_PRESENCE__ID = GdiffdataPackage.GELEMENT_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -657,7 +657,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -666,7 +666,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__CONFLICTING = GdiffdataPackage.EELEMENT_PRESENCE__CONFLICTING;
+  int EELEMENT_PRESENCE__CONFLICTING = GdiffdataPackage.GELEMENT_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -675,7 +675,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IGNORED = GdiffdataPackage.EELEMENT_PRESENCE__IGNORED;
+  int EELEMENT_PRESENCE__IGNORED = GdiffdataPackage.GELEMENT_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -684,7 +684,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EELEMENT_PRESENCE__MERGE_DESTINATION;
+  int EELEMENT_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.GELEMENT_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -693,7 +693,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -702,7 +702,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -711,7 +711,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -720,7 +720,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -729,7 +729,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -738,7 +738,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EELEMENT_PRESENCE__ELEMENT_MATCH;
+  int EELEMENT_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.GELEMENT_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -747,7 +747,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EELEMENT_PRESENCE__PRESENCE_ROLE;
+  int EELEMENT_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.GELEMENT_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Owner Match</b></em>' reference.
@@ -756,7 +756,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE__OWNER_MATCH = GdiffdataPackage.EELEMENT_PRESENCE__OWNER_MATCH;
+  int EELEMENT_PRESENCE__OWNER_MATCH = GdiffdataPackage.GELEMENT_PRESENCE__OWNER_MATCH;
 
   /**
    * The number of structural features of the '<em>EElement Presence</em>' class.
@@ -765,7 +765,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EELEMENT_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EELEMENT_PRESENCE_FEATURE_COUNT
+  int EELEMENT_PRESENCE_FEATURE_COUNT = GdiffdataPackage.GELEMENT_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -785,7 +785,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ID = GdiffdataPackage.EVALUE_PRESENCE__ID;
+  int EVALUE_PRESENCE__ID = GdiffdataPackage.GVALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -794,7 +794,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -803,7 +803,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EVALUE_PRESENCE__CONFLICTING;
+  int EVALUE_PRESENCE__CONFLICTING = GdiffdataPackage.GVALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -812,7 +812,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IGNORED = GdiffdataPackage.EVALUE_PRESENCE__IGNORED;
+  int EVALUE_PRESENCE__IGNORED = GdiffdataPackage.GVALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -821,7 +821,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EVALUE_PRESENCE__MERGE_DESTINATION;
+  int EVALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.GVALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -830,7 +830,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -839,7 +839,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -848,7 +848,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -857,7 +857,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -866,7 +866,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -875,7 +875,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EVALUE_PRESENCE__ELEMENT_MATCH;
+  int EVALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.GVALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -884,7 +884,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EVALUE_PRESENCE__PRESENCE_ROLE;
+  int EVALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.GVALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -893,7 +893,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__ORDER = GdiffdataPackage.EVALUE_PRESENCE__ORDER;
+  int EVALUE_PRESENCE__ORDER = GdiffdataPackage.GVALUE_PRESENCE__ORDER;
 
   /**
    * The feature id for the '<em><b>Feature</b></em>' attribute.
@@ -902,7 +902,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE__FEATURE = GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
+  int EVALUE_PRESENCE__FEATURE = GdiffdataPackage.GVALUE_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -912,7 +912,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EVALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EVALUE_PRESENCE_FEATURE_COUNT
+  int EVALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.GVALUE_PRESENCE_FEATURE_COUNT
       + 1;
 
   /**
@@ -932,7 +932,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ID = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ID;
+  int EATTRIBUTE_VALUE_PRESENCE__ID = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -941,7 +941,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -950,7 +950,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__CONFLICTING;
+  int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -959,7 +959,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IGNORED;
+  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -968,7 +968,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION;
+  int EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -977,7 +977,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -986,7 +986,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -995,7 +995,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -1004,7 +1004,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -1013,7 +1013,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -1022,7 +1022,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH;
+  int EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -1031,7 +1031,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE;
+  int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -1040,7 +1040,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__ORDER = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE__ORDER;
+  int EATTRIBUTE_VALUE_PRESENCE__ORDER = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE__ORDER;
 
   /**
    * The feature id for the '<em><b>Feature</b></em>' attribute.
@@ -1049,7 +1049,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__FEATURE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
+  int EATTRIBUTE_VALUE_PRESENCE__FEATURE = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -1059,7 +1059,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
+  int EATTRIBUTE_VALUE_PRESENCE__VALUE = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
       + 1;
 
   /**
@@ -1069,7 +1069,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
+  int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.GATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT
       + 2;
 
   /**
@@ -1089,7 +1089,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ID = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ID;
+  int EREFERENCE_VALUE_PRESENCE__ID = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__ID;
 
   /**
    * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
@@ -1098,7 +1098,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+  int EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
 
   /**
    * The feature id for the '<em><b>Conflicting</b></em>' attribute.
@@ -1107,7 +1107,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__CONFLICTING;
+  int EREFERENCE_VALUE_PRESENCE__CONFLICTING = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__CONFLICTING;
 
   /**
    * The feature id for the '<em><b>Ignored</b></em>' attribute.
@@ -1116,7 +1116,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IGNORED;
+  int EREFERENCE_VALUE_PRESENCE__IGNORED = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__IGNORED;
 
   /**
    * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
@@ -1125,7 +1125,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION;
+  int EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION;
 
   /**
    * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
@@ -1134,7 +1134,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+  int EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
@@ -1143,7 +1143,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
@@ -1152,7 +1152,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
@@ -1161,7 +1161,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
@@ -1170,7 +1170,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
 
   /**
    * The feature id for the '<em><b>Element Match</b></em>' reference.
@@ -1179,7 +1179,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH;
+  int EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH;
 
   /**
    * The feature id for the '<em><b>Presence Role</b></em>' attribute.
@@ -1188,7 +1188,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE;
+  int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE;
 
   /**
    * The feature id for the '<em><b>Order</b></em>' attribute.
@@ -1197,7 +1197,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__ORDER = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__ORDER;
+  int EREFERENCE_VALUE_PRESENCE__ORDER = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__ORDER;
 
   /**
    * The feature id for the '<em><b>Value Match</b></em>' reference.
@@ -1206,7 +1206,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE__VALUE_MATCH;
+  int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE__VALUE_MATCH;
 
   /**
    * The feature id for the '<em><b>Feature</b></em>' attribute.
@@ -1215,7 +1215,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__FEATURE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
+  int EREFERENCE_VALUE_PRESENCE__FEATURE = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
       + 0;
 
   /**
@@ -1225,7 +1225,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE__VALUE = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
+  int EREFERENCE_VALUE_PRESENCE__VALUE = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
       + 1;
 
   /**
@@ -1235,7 +1235,7 @@ public interface PojodiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
+  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = GdiffdataPackage.GREFERENCE_VALUE_PRESENCE_FEATURE_COUNT
       + 2;
 
   /**

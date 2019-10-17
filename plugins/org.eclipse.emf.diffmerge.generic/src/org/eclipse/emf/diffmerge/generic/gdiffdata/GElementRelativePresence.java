@@ -23,16 +23,16 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativePresence;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getElementMatch <em>Element Match</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getPresenceRole <em>Presence Role</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getElementMatch <em>Element Match</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getPresenceRole <em>Presence Role</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementRelativePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGElementRelativePresence()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementRelativePresence&lt;E&gt;"
  * @generated
  */
-public interface EElementRelativePresence<E, A, R>
-    extends EMergeableDifference<E, A, R>, IElementRelativePresence<E> {
+public interface GElementRelativePresence<E, A, R>
+    extends GMergeableDifference<E, A, R>, IElementRelativePresence<E> {
   /**
    * Returns the value of the '<em><b>Element Match</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -42,22 +42,22 @@ public interface EElementRelativePresence<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Element Match</em>' reference.
-   * @see #setElementMatch(EMatch)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementRelativePresence_ElementMatch()
+   * @see #setElementMatch(GMatch)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGElementRelativePresence_ElementMatch()
    * @model required="true"
    * @generated
    */
-  EMatch<E, A, R> getElementMatch();
+  GMatch<E, A, R> getElementMatch();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getElementMatch <em>Element Match</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getElementMatch <em>Element Match</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Element Match</em>' reference.
    * @see #getElementMatch()
    * @generated
    */
-  void setElementMatch(EMatch<E, A, R> value);
+  void setElementMatch(GMatch<E, A, R> value);
 
   /**
    * Returns the value of the '<em><b>Presence Role</b></em>' attribute.
@@ -69,14 +69,14 @@ public interface EElementRelativePresence<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Presence Role</em>' attribute.
    * @see #setPresenceRole(Role)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementRelativePresence_PresenceRole()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGElementRelativePresence_PresenceRole()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" required="true"
    * @generated
    */
   Role getPresenceRole();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getPresenceRole <em>Presence Role</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getPresenceRole <em>Presence Role</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Presence Role</em>' attribute.
@@ -85,4 +85,4 @@ public interface EElementRelativePresence<E, A, R>
    */
   void setPresenceRole(Role value);
 
-} // EElementRelativePresence
+} // GElementRelativePresence

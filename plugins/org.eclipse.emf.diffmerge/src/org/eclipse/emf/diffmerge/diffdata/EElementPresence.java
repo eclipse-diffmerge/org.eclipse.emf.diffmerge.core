@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,8 +26,8 @@ import org.eclipse.emf.ecore.EReference;
  * @model
  * @generated
  */
-public interface EElementPresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence<EObject, EAttribute, EReference>,
+public interface EElementPresence
+    extends GElementPresence<EObject, EAttribute, EReference>,
     EElementRelativePresence {
 
   /**
@@ -37,4 +38,4 @@ public interface EElementPresence extends
    */
   EMatch getOwnerMatch();
   // Nothing needed
-} // EElementPresence
+} // GElementPresence

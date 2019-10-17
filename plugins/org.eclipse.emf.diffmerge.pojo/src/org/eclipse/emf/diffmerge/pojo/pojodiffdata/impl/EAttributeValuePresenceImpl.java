@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement;
@@ -38,8 +39,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EAttributeValuePresenceImpl<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<E, Object, Object>
+public class EAttributeValuePresenceImpl<E extends Object>
+    extends GAttributeValuePresenceImpl<E, Object, Object>
     implements EAttributeValuePresence<E> {
   /**
    * The default value of the '{@link #getFeature() <em>Feature</em>}' attribute.
@@ -142,7 +143,7 @@ public class EAttributeValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl#setAttribute(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl#setAttribute(java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -175,7 +176,7 @@ public class EAttributeValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#getElementMatch()
    * @generated NOT
    */
   @Override
@@ -184,7 +185,7 @@ public class EAttributeValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -355,4 +356,4 @@ public class EAttributeValuePresenceImpl<E extends Object> extends
     return result.toString();
   }
 
-} //EAttributeValuePresenceImpl
+} //GAttributeValuePresenceImpl

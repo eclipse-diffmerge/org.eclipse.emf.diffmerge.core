@@ -22,15 +22,15 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#isOrder <em>Order</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence#isOrder <em>Order</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGValuePresence()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IValuePresence&lt;E&gt;"
  * @generated
  */
-public interface EValuePresence<E, A, R>
-    extends EElementRelativePresence<E, A, R>, IValuePresence<E> {
+public interface GValuePresence<E, A, R>
+    extends GElementRelativePresence<E, A, R>, IValuePresence<E> {
   /**
    * Returns the value of the '<em><b>Order</b></em>' attribute.
    * The default value is <code>"false"</code>.
@@ -42,14 +42,14 @@ public interface EValuePresence<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Order</em>' attribute.
    * @see #setOrder(boolean)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEValuePresence_Order()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGValuePresence_Order()
    * @model default="false" required="true"
    * @generated
    */
   boolean isOrder();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#isOrder <em>Order</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence#isOrder <em>Order</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Order</em>' attribute.
@@ -66,4 +66,4 @@ public interface EValuePresence<E, A, R>
    */
   Object getFeature();
 
-} // EValuePresence
+} // GValuePresence

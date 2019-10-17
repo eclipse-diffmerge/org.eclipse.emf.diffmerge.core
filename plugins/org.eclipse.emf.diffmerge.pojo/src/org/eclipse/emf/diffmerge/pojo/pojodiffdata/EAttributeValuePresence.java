@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EAttribute Value Presence</b></em>'.
@@ -24,12 +26,11 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEAttributeValuePresence()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EValuePresence&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EAttributeValuePresence<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<E, Object, Object>,
-    EValuePresence<E> {
+public interface EAttributeValuePresence<E extends Object>
+    extends GAttributeValuePresence<E, Object, Object>, EValuePresence<E> {
 
   /**
    * Returns the value of the '<em><b>Value</b></em>' attribute.
@@ -57,4 +58,4 @@ public interface EAttributeValuePresence<E extends Object> extends
    */
   void setValue(Object value);
   // Nothing needed
-} // EAttributeValuePresence
+} // GAttributeValuePresence

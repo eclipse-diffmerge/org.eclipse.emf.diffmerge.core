@@ -734,7 +734,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     eReferenceValuePresenceEClass_E.getEBounds().add(g1);
 
     // Add supertypes to classes
-    g1 = createEGenericType(theGdiffdataPackage.getEComparison());
+    g1 = createEGenericType(theGdiffdataPackage.getGComparison());
     EGenericType g2 = createEGenericType(eComparisonEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -742,7 +742,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
     eComparisonEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEComparisonElement());
+    g1 = createEGenericType(theGdiffdataPackage.getGComparisonElement());
     g2 = createEGenericType(eComparisonElementEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -750,7 +750,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEJavaObject());
     g1.getETypeArguments().add(g2);
     eComparisonElementEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMapping());
+    g1 = createEGenericType(theGdiffdataPackage.getGMapping());
     g2 = createEGenericType(eMappingEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -762,7 +762,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eMappingEClass_E);
     g1.getETypeArguments().add(g2);
     eMappingEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMatch());
+    g1 = createEGenericType(theGdiffdataPackage.getGMatch());
     g2 = createEGenericType(eMatchEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -774,7 +774,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eMatchEClass_E);
     g1.getETypeArguments().add(g2);
     eMatchEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMergeableDifference());
+    g1 = createEGenericType(theGdiffdataPackage.getGMergeableDifference());
     g2 = createEGenericType(eMergeableDifferenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -786,7 +786,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eMergeableDifferenceEClass_E);
     g1.getETypeArguments().add(g2);
     eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEElementRelativePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGElementRelativePresence());
     g2 = createEGenericType(eElementRelativePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -798,7 +798,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eElementRelativePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEElementPresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGElementPresence());
     g2 = createEGenericType(eElementPresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -810,7 +810,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eElementPresenceEClass_E);
     g1.getETypeArguments().add(g2);
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGValuePresence());
     g2 = createEGenericType(eValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -822,7 +822,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEAttributeValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGAttributeValuePresence());
     g2 = createEGenericType(eAttributeValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());
@@ -834,7 +834,7 @@ public class PojodiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(eAttributeValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEReferenceValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGReferenceValuePresence());
     g2 = createEGenericType(eReferenceValuePresenceEClass_E);
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEJavaObject());

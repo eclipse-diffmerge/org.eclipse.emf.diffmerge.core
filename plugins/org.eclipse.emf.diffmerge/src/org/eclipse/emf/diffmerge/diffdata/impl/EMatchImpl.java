@@ -26,6 +26,8 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.api.IPureMatch;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EMatch</b></em>'.
+ * An implementation of the model object '<em><b>GMatch</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -54,8 +56,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMatchImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl<EObject, EAttribute, EReference>
+public class EMatchImpl extends GMatchImpl<EObject, EAttribute, EReference>
     implements EMatch {
 
   /**
@@ -276,7 +277,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see EMatch#getMapping()
+   * @see GMatch#getMapping()
    * @generated NOT
    */
   @Override
@@ -285,7 +286,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -524,7 +525,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableAttributeMap(boolean)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#getModifiableAttributeMap(boolean)
    * @generated NOT
    */
   @Override
@@ -534,7 +535,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableOrderReferenceMap(boolean)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#getModifiableOrderReferenceMap(boolean)
    * @generated NOT
    */
   @Override
@@ -545,7 +546,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#getModifiableReferenceMap(boolean)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#getModifiableReferenceMap(boolean)
    * @generated NOT
    */
   @Override
@@ -555,7 +556,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newAttributeValuePresenceList(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#newAttributeValuePresenceList(java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -568,7 +569,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newReferenceOrderDifferenceList(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#newReferenceOrderDifferenceList(java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -581,7 +582,7 @@ public class EMatchImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl#newReferenceValueToPresenceMap(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl#newReferenceValueToPresenceMap(java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -629,4 +630,4 @@ public class EMatchImpl extends
     return result;
   }
 
-} //EMatchImpl
+} //GMatchImpl

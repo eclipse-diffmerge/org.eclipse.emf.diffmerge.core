@@ -11,13 +11,13 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.ui.diffuidata;
 
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.IDisposable;
 
 /**
  * <!-- begin-user-doc -->
- * A wrapper for EComparison which contains GUI-related data.
+ * A wrapper for GComparison which contains GUI-related data.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -42,12 +42,12 @@ public interface UIComparison extends EObject, IDisposable {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Actual Comparison</em>' reference.
-   * @see #setActualComparison(EComparison)
+   * @see #setActualComparison(GComparison)
    * @see org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage#getUIComparison_ActualComparison()
    * @model required="true"
    * @generated
    */
-  EComparison<?, ?, ?> getActualComparison();
+  GComparison<?, ?, ?> getActualComparison();
 
   /**
    * Sets the value of the '{@link org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison#getActualComparison <em>Actual Comparison</em>}' reference.
@@ -57,7 +57,7 @@ public interface UIComparison extends EObject, IDisposable {
    * @see #getActualComparison()
    * @generated
    */
-  void setActualComparison(EComparison<?, ?, ?> value);
+  void setActualComparison(GComparison<?, ?, ?> value);
 
   /**
    * Returns the value of the '<em><b>Last Action Selection</b></em>' containment reference.

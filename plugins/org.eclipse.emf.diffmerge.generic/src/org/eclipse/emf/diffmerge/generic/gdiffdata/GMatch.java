@@ -18,26 +18,26 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMatch</b></em>'.
+ * A representation of the model object '<em><b>GMatch</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getMatchID <em>Match ID</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getMatchID <em>Match ID</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getElementPresenceDifference <em>Element Presence Difference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMatch&lt;E&gt;"
  * @generated
  */
-public interface EMatch<E, A, R>
-    extends EIdentified, EComparisonElement<E, A, R>, Editable<E> {
+public interface GMatch<E, A, R>
+    extends GIdentified, GComparisonElement<E, A, R>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Match ID</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -48,14 +48,14 @@ public interface EMatch<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Match ID</em>' attribute.
    * @see #setMatchID(Object)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_MatchID()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch_MatchID()
    * @model transient="true"
    * @generated
    */
   Object getMatchID();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getMatchID <em>Match ID</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getMatchID <em>Match ID</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Match ID</em>' attribute.
@@ -118,11 +118,11 @@ public interface EMatch<E, A, R>
    * @model kind="operation" required="true"
    * @generated
    */
-  EMapping<E, A, R> getMapping();
+  GMapping<E, A, R> getMapping();
 
   /**
    * Returns the value of the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference}<code>&lt;E, A, R&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Related Differences</em>' containment reference list isn't clear,
@@ -130,11 +130,11 @@ public interface EMatch<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Related Differences</em>' containment reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_ModifiableRelatedDifferences()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch_ModifiableRelatedDifferences()
    * @model containment="true"
    * @generated
    */
-  EList<EMergeableDifference<E, A, R>> getModifiableRelatedDifferences();
+  EList<GMergeableDifference<E, A, R>> getModifiableRelatedDifferences();
 
   /**
    * Returns the value of the '<em><b>Element Presence Difference</b></em>' reference.
@@ -146,14 +146,14 @@ public interface EMatch<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Element Presence Difference</em>' reference.
    * @see #setElementPresenceDifference(IElementPresence)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_ElementPresenceDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch_ElementPresenceDifference()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E&gt;"
    * @generated
    */
   IElementPresence<E> getElementPresenceDifference();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getElementPresenceDifference <em>Element Presence Difference</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Element Presence Difference</em>' reference.
@@ -172,14 +172,14 @@ public interface EMatch<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Ownership Difference</em>' reference.
    * @see #setReferenceOwnershipDifference(IReferenceValuePresence)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_ReferenceOwnershipDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch_ReferenceOwnershipDifference()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
    * @generated
    */
   IReferenceValuePresence<E> getReferenceOwnershipDifference();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Reference Ownership Difference</em>' reference.
@@ -198,14 +198,14 @@ public interface EMatch<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Ownership Difference</em>' reference.
    * @see #setTargetOwnershipDifference(IReferenceValuePresence)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMatch_TargetOwnershipDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMatch_TargetOwnershipDifference()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IReferenceValuePresence&lt;E&gt;"
    * @generated
    */
   IReferenceValuePresence<E> getTargetOwnershipDifference();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Target Ownership Difference</em>' reference.
@@ -214,4 +214,4 @@ public interface EMatch<E, A, R>
    */
   void setTargetOwnershipDifference(IReferenceValuePresence<E> value);
 
-} // EMatch
+} // GMatch

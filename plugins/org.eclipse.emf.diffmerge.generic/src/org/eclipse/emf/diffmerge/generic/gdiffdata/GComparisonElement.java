@@ -15,21 +15,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison Element</b></em>'.
+ * A representation of the model object '<em><b>GComparison Element</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparisonElement()
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparisonElement()
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface EComparisonElement<E, A, R> extends EObject {
+public interface GComparisonElement<E, A, R> extends EObject {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @model kind="operation"
    * @generated
    */
-  EComparison<E, A, R> getComparison();
+  GComparison<E, A, R> getComparison();
 
-} // EComparisonElement
+} // GComparisonElement

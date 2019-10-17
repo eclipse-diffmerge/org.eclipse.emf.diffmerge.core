@@ -14,8 +14,8 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -28,13 +28,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#isOrder <em>Order</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#isOrder <em>Order</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EValuePresenceImpl<E, A, R> extends
-    EElementRelativePresenceImpl<E, A, R> implements EValuePresence<E, A, R> {
+public abstract class GValuePresenceImpl<E, A, R> extends
+    GElementRelativePresenceImpl<E, A, R> implements GValuePresence<E, A, R> {
   /**
    * The default value of the '{@link #isOrder() <em>Order</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -60,7 +60,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * <!-- end-user-doc -->
    * @generated
    */
-  protected EValuePresenceImpl() {
+  protected GValuePresenceImpl() {
     super();
   }
 
@@ -71,7 +71,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  protected EValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
+  protected GValuePresenceImpl(GMatch<E, A, R> elementMatch_p,
       Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p);
     setOrder(isOrder_p);
@@ -84,7 +84,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.EVALUE_PRESENCE;
+    return GdiffdataPackage.Literals.GVALUE_PRESENCE;
   }
 
   /**
@@ -106,7 +106,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
     order = newOrder;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EVALUE_PRESENCE__ORDER, oldOrder, order));
+          GdiffdataPackage.GVALUE_PRESENCE__ORDER, oldOrder, order));
   }
 
   /**
@@ -125,7 +125,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EVALUE_PRESENCE__ORDER:
+    case GdiffdataPackage.GVALUE_PRESENCE__ORDER:
       return isOrder();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -140,7 +140,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EVALUE_PRESENCE__ORDER:
+    case GdiffdataPackage.GVALUE_PRESENCE__ORDER:
       setOrder((Boolean) newValue);
       return;
     }
@@ -155,7 +155,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EVALUE_PRESENCE__ORDER:
+    case GdiffdataPackage.GVALUE_PRESENCE__ORDER:
       setOrder(ORDER_EDEFAULT);
       return;
     }
@@ -170,7 +170,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EVALUE_PRESENCE__ORDER:
+    case GdiffdataPackage.GVALUE_PRESENCE__ORDER:
       return order != ORDER_EDEFAULT;
     }
     return super.eIsSet(featureID);
@@ -194,7 +194,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#canMergeTo(org.eclipse.emf.diffmerge.generic.api.Role)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#canMergeTo(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
   @Override
@@ -221,7 +221,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#mergeAddition()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#mergeAddition()
    * @generated NOT
    */
   @Override
@@ -234,7 +234,7 @@ public abstract class EValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#mergeRemoval()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#mergeRemoval()
    * @generated NOT
    */
   @Override
@@ -279,4 +279,4 @@ public abstract class EValuePresenceImpl<E, A, R> extends
         && getElementMatch() == peer_p.getElementMatch();
   }
 
-} //EValuePresenceImpl
+} //GValuePresenceImpl

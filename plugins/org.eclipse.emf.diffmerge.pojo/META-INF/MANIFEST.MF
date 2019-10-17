@@ -11,7 +11,10 @@ Export-Package: org.eclipse.emf.diffmerge.pojo,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl,
  org.eclipse.emf.diffmerge.pojo.pojodiffdata.util
-Require-Bundle: org.eclipse.emf.diffmerge.generic;visibility:=reexport,
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;visibility:=reexport,
+ org.eclipse.emf.diffmerge.generic;visibility:=reexport,
  org.eclipse.osgi
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true

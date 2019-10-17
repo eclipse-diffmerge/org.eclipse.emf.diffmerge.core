@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,8 +26,8 @@ import org.eclipse.emf.ecore.EReference;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface EElementRelativePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<EObject, EAttribute, EReference>,
+public interface EElementRelativePresence
+    extends GElementRelativePresence<EObject, EAttribute, EReference>,
     EMergeableDifference {
   /**
    * <!-- begin-user-doc -->
@@ -36,4 +37,4 @@ public interface EElementRelativePresence extends
    */
   EMatch getElementMatch();
 
-} // EElementRelativePresence
+} // GElementRelativePresence

@@ -11,18 +11,20 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement;
+
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison Element</b></em>'.
+ * A representation of the model object '<em><b>GComparison Element</b></em>'.
  * <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEComparisonElement()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EComparisonElement<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<E, Object, Object> {
+public interface EComparisonElement<E extends Object>
+    extends GComparisonElement<E, Object, Object> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -31,4 +33,4 @@ public interface EComparisonElement<E extends Object> extends
    */
   EComparison<E> getComparison();
 
-} // EComparisonElement
+} // GComparisonElement

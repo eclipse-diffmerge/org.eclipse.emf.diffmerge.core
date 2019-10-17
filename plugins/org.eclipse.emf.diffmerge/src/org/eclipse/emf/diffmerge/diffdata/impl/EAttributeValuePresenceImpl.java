@@ -17,6 +17,7 @@ import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
 import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -38,8 +39,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EAttributeValuePresenceImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl<EObject, EAttribute, EReference>
+public class EAttributeValuePresenceImpl
+    extends GAttributeValuePresenceImpl<EObject, EAttribute, EReference>
     implements EAttributeValuePresence {
   /**
    * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' reference.
@@ -159,7 +160,7 @@ public class EAttributeValuePresenceImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl#setValue(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl#setValue(java.lang.Object)
    */
   @Override
   public void setValue(Object newValue) {
@@ -171,7 +172,7 @@ public class EAttributeValuePresenceImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#getFeature()
    * @generated NOT
    */
   @Override
@@ -180,7 +181,7 @@ public class EAttributeValuePresenceImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#getElementMatch()
    * @generated NOT
    */
   @Override
@@ -189,7 +190,7 @@ public class EAttributeValuePresenceImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -285,4 +286,4 @@ public class EAttributeValuePresenceImpl extends
     return result.toString();
   }
 
-} //EAttributeValuePresenceImpl
+} //GAttributeValuePresenceImpl

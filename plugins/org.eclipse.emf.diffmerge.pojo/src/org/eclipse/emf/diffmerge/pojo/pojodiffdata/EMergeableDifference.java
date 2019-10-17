@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EMergeable Difference</b></em>'.
@@ -18,11 +20,10 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMergeableDifference()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EMergeableDifference<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference<E, Object, Object>,
-    EComparisonElement<E> {
+public interface EMergeableDifference<E extends Object>
+    extends GMergeableDifference<E, Object, Object>, EComparisonElement<E> {
   // Nothing needed
-} // EMergeableDifference
+} // GMergeableDifference

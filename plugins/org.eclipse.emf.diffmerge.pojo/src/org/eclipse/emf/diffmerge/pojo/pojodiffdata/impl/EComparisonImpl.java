@@ -17,6 +17,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMapping;
@@ -27,14 +28,13 @@ import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EComparison</b></em>'.
+ * An implementation of the model object '<em><b>GComparison</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class EComparisonImpl<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<E, Object, Object>
-    implements EComparison<E> {
+public class EComparisonImpl<E extends Object>
+    extends GComparisonImpl<E, Object, Object> implements EComparison<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -79,7 +79,7 @@ public class EComparisonImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getMapping()
    * @generated NOT
    */
   @Override
@@ -111,7 +111,7 @@ public class EComparisonImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#newMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#newMapping()
    * @generated NOT
    */
   @Override
@@ -142,4 +142,4 @@ public class EComparisonImpl<E extends Object> extends
     return result;
   }
 
-} //EComparisonImpl
+} //GComparisonImpl

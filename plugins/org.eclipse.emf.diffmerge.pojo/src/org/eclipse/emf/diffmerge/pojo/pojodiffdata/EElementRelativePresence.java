@@ -11,6 +11,8 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>EElement Relative Presence</b></em>'.
@@ -18,12 +20,11 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEElementRelativePresence()
- * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model interface="true" abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMergeableDifference&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
 public interface EElementRelativePresence<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence<E, Object, Object>,
-    EMergeableDifference<E> {
+    GElementRelativePresence<E, Object, Object>, EMergeableDifference<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -32,4 +33,4 @@ public interface EElementRelativePresence<E extends Object> extends
    */
   EMatch<E> getElementMatch();
 
-} // EElementRelativePresence
+} // GElementRelativePresence

@@ -16,10 +16,11 @@ import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMatch</b></em>'.
+ * A representation of the model object '<em><b>GMatch</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -35,12 +36,11 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMatch()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EMatch<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<E, Object, Object>,
-    EComparisonElement<E> {
+public interface EMatch<E extends Object>
+    extends GMatch<E, Object, Object>, EComparisonElement<E> {
   /**
    * Returns the value of the '<em><b>Modifiable Attribute Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
@@ -181,4 +181,4 @@ public interface EMatch<E extends Object> extends
    */
   EMapping<E> getMapping();
 
-} // EMatch
+} // GMatch

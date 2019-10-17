@@ -12,6 +12,7 @@
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EElementPresence;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch;
@@ -26,8 +27,7 @@ import org.eclipse.emf.ecore.EClass;
  * @generated
  */
 public class EElementPresenceImpl<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl<E, Object, Object>
-    implements EElementPresence<E> {
+    GElementPresenceImpl<E, Object, Object> implements EElementPresence<E> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -44,7 +44,8 @@ public class EElementPresenceImpl<E extends Object> extends
    * @param presenceRole_p the non-null role in which the element is present: TARGET or REFERENCE
    * @generated NOT
    */
-  public EElementPresenceImpl(EMatch<E> match_p, EMatch<E> ownerMatch_p, Role presenceRole_p) {
+  public EElementPresenceImpl(EMatch<E> match_p, EMatch<E> ownerMatch_p,
+      Role presenceRole_p) {
     super(match_p, ownerMatch_p, presenceRole_p);
   }
 
@@ -59,7 +60,7 @@ public class EElementPresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl#getOwnerMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl#getOwnerMatch()
    * @generated NOT
    */
   @Override
@@ -68,7 +69,7 @@ public class EElementPresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#getElementMatch()
    * @generated NOT
    */
   @Override
@@ -77,7 +78,7 @@ public class EElementPresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -85,4 +86,4 @@ public class EElementPresenceImpl<E extends Object> extends
     return (EComparison<E>) super.getComparison();
   }
 
-} //EElementPresenceImpl
+} //GElementPresenceImpl

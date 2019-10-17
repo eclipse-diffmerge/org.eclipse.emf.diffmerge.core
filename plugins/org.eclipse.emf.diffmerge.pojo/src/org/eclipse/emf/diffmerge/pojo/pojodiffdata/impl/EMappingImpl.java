@@ -17,6 +17,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMapping;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EMatch;
@@ -29,7 +30,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EMapping</b></em>'.
+ * An implementation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -42,9 +43,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EMappingImpl<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<E, Object, Object>
-    implements EMapping<E> {
+public class EMappingImpl<E extends Object>
+    extends GMappingImpl<E, Object, Object> implements EMapping<E> {
 
   /**
    * The cached value of the '{@link #getAncestorMatchMap() <em>Ancestor Match Map</em>}' map.
@@ -191,7 +191,7 @@ public class EMappingImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#clear()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#clear()
    * @generated NOT
    */
   @Override
@@ -232,7 +232,7 @@ public class EMappingImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
   @Override
@@ -241,7 +241,7 @@ public class EMappingImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -250,7 +250,7 @@ public class EMappingImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#doDisconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#doDisconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -395,7 +395,7 @@ public class EMappingImpl<E extends Object> extends
       int eventType = msg_p.getEventType();
       Object notifier = msg_p.getNotifier();
       if (feature == GdiffdataPackage.eINSTANCE
-          .getEMapping_ModifiableContents()) {
+          .getGMapping_ModifiableContents()) {
         EMapping<E> mapping = (EMapping<E>) notifier;
         if (eventType == Notification.ADD) {
           // Match addition
@@ -454,4 +454,4 @@ public class EMappingImpl<E extends Object> extends
     }
   }
 
-} //EMappingImpl
+} //GMappingImpl

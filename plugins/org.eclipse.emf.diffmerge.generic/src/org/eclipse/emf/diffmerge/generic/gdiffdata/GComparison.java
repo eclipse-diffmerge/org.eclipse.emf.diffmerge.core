@@ -19,7 +19,7 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison</b></em>'.
+ * A representation of the model object '<em><b>GComparison</b></em>'.
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
@@ -30,20 +30,20 @@ import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getReferenceScope <em>Reference Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getTargetScope <em>Target Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMatchPolicy <em>Last Match Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastDiffPolicy <em>Last Diff Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMergePolicy <em>Last Merge Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getMapping <em>Mapping</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getAncestorScope <em>Ancestor Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getReferenceScope <em>Reference Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getTargetScope <em>Target Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMatchPolicy <em>Last Match Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastDiffPolicy <em>Last Diff Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMergePolicy <em>Last Merge Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getMapping <em>Mapping</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableComparison&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableComparison&lt;E&gt;"
  * @generated
  */
-public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
+public interface GComparison<E, A, R> extends GIdentified, Editable<E> {
   /**
    * Returns the value of the '<em><b>Ancestor Scope</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -54,14 +54,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ancestor Scope</em>' attribute.
    * @see #setAncestorScope(IEditableTreeDataScope)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_AncestorScope()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_AncestorScope()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" transient="true"
    * @generated
    */
   IEditableTreeDataScope<E> getAncestorScope();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getAncestorScope <em>Ancestor Scope</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Ancestor Scope</em>' attribute.
@@ -80,14 +80,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Scope</em>' attribute.
    * @see #setReferenceScope(IEditableTreeDataScope)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_ReferenceScope()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_ReferenceScope()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" required="true" transient="true"
    * @generated
    */
   IEditableTreeDataScope<E> getReferenceScope();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getReferenceScope <em>Reference Scope</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getReferenceScope <em>Reference Scope</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Reference Scope</em>' attribute.
@@ -106,14 +106,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Scope</em>' attribute.
    * @see #setTargetScope(IEditableTreeDataScope)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_TargetScope()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_TargetScope()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableTreeDataScope&lt;E&gt;" required="true" transient="true"
    * @generated
    */
   IEditableTreeDataScope<E> getTargetScope();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getTargetScope <em>Target Scope</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getTargetScope <em>Target Scope</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Target Scope</em>' attribute.
@@ -132,14 +132,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Last Match Policy</em>' attribute.
    * @see #setLastMatchPolicy(IMatchPolicy)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_LastMatchPolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_LastMatchPolicy()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatchPolicy&lt;E&gt;" transient="true"
    * @generated
    */
   IMatchPolicy<E> getLastMatchPolicy();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMatchPolicy <em>Last Match Policy</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMatchPolicy <em>Last Match Policy</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Last Match Policy</em>' attribute.
@@ -158,14 +158,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Last Diff Policy</em>' attribute.
    * @see #setLastDiffPolicy(IDiffPolicy)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_LastDiffPolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_LastDiffPolicy()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IDiffPolicy&lt;E&gt;" transient="true"
    * @generated
    */
   IDiffPolicy<E> getLastDiffPolicy();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastDiffPolicy <em>Last Diff Policy</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastDiffPolicy <em>Last Diff Policy</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Last Diff Policy</em>' attribute.
@@ -184,14 +184,14 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * <!-- end-user-doc -->
    * @return the value of the '<em>Last Merge Policy</em>' attribute.
    * @see #setLastMergePolicy(IMergePolicy)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_LastMergePolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_LastMergePolicy()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergePolicy&lt;E&gt;" transient="true"
    * @generated
    */
   IMergePolicy<E> getLastMergePolicy();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMergePolicy <em>Last Merge Policy</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMergePolicy <em>Last Merge Policy</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Last Merge Policy</em>' attribute.
@@ -209,21 +209,21 @@ public interface EComparison<E, A, R> extends EIdentified, Editable<E> {
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Mapping</em>' containment reference.
-   * @see #setMapping(EMapping)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEComparison_Mapping()
+   * @see #setMapping(GMapping)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGComparison_Mapping()
    * @model containment="true" required="true"
    * @generated
    */
-  EMapping<E, A, R> getMapping();
+  GMapping<E, A, R> getMapping();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getMapping <em>Mapping</em>}' containment reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getMapping <em>Mapping</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Mapping</em>' containment reference.
    * @see #getMapping()
    * @generated
    */
-  void setMapping(EMapping<E, A, R> value);
+  void setMapping(GMapping<E, A, R> value);
 
-} // EComparison
+} // GComparison

@@ -22,8 +22,8 @@ import org.eclipse.emf.diffmerge.generic.Messages;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.structures.IEqualityBasedStructure;
 import org.eclipse.emf.diffmerge.structures.IEqualityTester;
@@ -44,22 +44,22 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isConflicting <em>Conflicting</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#isIgnored <em>Ignored</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getMergeDestination <em>Merge Destination</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#isConflicting <em>Conflicting</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#isIgnored <em>Ignored</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getMergeDestination <em>Merge Destination</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}</li>
  * </ul>
  *
  * @generated
  */
 @SuppressWarnings("boxing")
-public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
-    implements EMergeableDifference<E, A, R> {
+public abstract class GMergeableDifferenceImpl<E, A, R> extends GIdentifiedImpl
+    implements GMergeableDifference<E, A, R> {
   /**
    * The default value of the '{@link #isAlignedWithAncestor() <em>Aligned With Ancestor</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -219,7 +219,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  protected EMergeableDifferenceImpl() {
+  protected GMergeableDifferenceImpl() {
     this(true);
   }
 
@@ -229,7 +229,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  protected EMergeableDifferenceImpl(boolean deferInit_p) {
+  protected GMergeableDifferenceImpl(boolean deferInit_p) {
     super();
     _allImplicitDependenciesTarget = null;
     _allImplicitDependenciesReference = null;
@@ -248,7 +248,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.EMERGEABLE_DIFFERENCE;
+    return GdiffdataPackage.Literals.GMERGEABLE_DIFFERENCE;
   }
 
   /**
@@ -270,7 +270,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     alignedWithAncestor = newAlignedWithAncestor;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR,
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR,
           oldAlignedWithAncestor, alignedWithAncestor));
   }
 
@@ -293,7 +293,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     conflicting = newConflicting;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING, oldConflicting,
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING, oldConflicting,
           conflicting));
   }
 
@@ -316,7 +316,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     ignored = newIgnored;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED, oldIgnored,
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED, oldIgnored,
           ignored));
   }
 
@@ -339,7 +339,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     mergeDestination = newMergeDestination;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION,
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION,
           oldMergeDestination, mergeDestination));
   }
 
@@ -352,7 +352,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (possibleMergeDestinations == null) {
       possibleMergeDestinations = new EDataTypeUniqueEList<Role>(Role.class,
           this,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS);
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS);
     }
     return possibleMergeDestinations;
   }
@@ -366,7 +366,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (explicitDependenciesForTarget == null) {
       explicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference<E>>(
           IMergeableDifference.class, this,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET);
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET);
     }
     return explicitDependenciesForTarget;
   }
@@ -380,7 +380,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (explicitDependenciesForReference == null) {
       explicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference<E>>(
           IMergeableDifference.class, this,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE);
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE);
     }
     return explicitDependenciesForReference;
   }
@@ -394,7 +394,7 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (implicitDependenciesForTarget == null) {
       implicitDependenciesForTarget = new EObjectResolvingEList<IMergeableDifference<E>>(
           IMergeableDifference.class, this,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET);
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET);
     }
     return implicitDependenciesForTarget;
   }
@@ -408,16 +408,16 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     if (implicitDependenciesForReference == null) {
       implicitDependenciesForReference = new EObjectResolvingEList<IMergeableDifference<E>>(
           IMergeableDifference.class, this,
-          GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE);
+          GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE);
     }
     return implicitDependenciesForReference;
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement#getComparison()
    * @generated NOT
    */
-  public abstract EComparison<E, A, R> getComparison();
+  public abstract GComparison<E, A, R> getComparison();
 
   /**
    * <!-- begin-user-doc -->
@@ -427,23 +427,23 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       return isAlignedWithAncestor();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING:
       return isConflicting();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED:
       return isIgnored();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       return getMergeDestination();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
       return getPossibleMergeDestinations();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
       return getExplicitDependenciesForTarget();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
       return getExplicitDependenciesForReference();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
       return getImplicitDependenciesForTarget();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
       return getImplicitDependenciesForReference();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -458,39 +458,39 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor((Boolean) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING:
       setConflicting((Boolean) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED:
       setIgnored((Boolean) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       setMergeDestination((Role) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
       getPossibleMergeDestinations().clear();
       getPossibleMergeDestinations()
           .addAll((Collection<? extends Role>) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
       getExplicitDependenciesForTarget().clear();
       getExplicitDependenciesForTarget()
           .addAll((Collection<? extends IMergeableDifference<E>>) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getExplicitDependenciesForReference().clear();
       getExplicitDependenciesForReference()
           .addAll((Collection<? extends IMergeableDifference<E>>) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
       getImplicitDependenciesForTarget().clear();
       getImplicitDependenciesForTarget()
           .addAll((Collection<? extends IMergeableDifference<E>>) newValue);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getImplicitDependenciesForReference().clear();
       getImplicitDependenciesForReference()
           .addAll((Collection<? extends IMergeableDifference<E>>) newValue);
@@ -507,31 +507,31 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       setAlignedWithAncestor(ALIGNED_WITH_ANCESTOR_EDEFAULT);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING:
       setConflicting(CONFLICTING_EDEFAULT);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED:
       setIgnored(IGNORED_EDEFAULT);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       setMergeDestination(MERGE_DESTINATION_EDEFAULT);
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
       getPossibleMergeDestinations().clear();
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
       getExplicitDependenciesForTarget().clear();
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getExplicitDependenciesForReference().clear();
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
       getImplicitDependenciesForTarget().clear();
       return;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
       getImplicitDependenciesForReference().clear();
       return;
     }
@@ -546,28 +546,28 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR:
       return alignedWithAncestor != ALIGNED_WITH_ANCESTOR_EDEFAULT;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__CONFLICTING:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__CONFLICTING:
       return conflicting != CONFLICTING_EDEFAULT;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IGNORED:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IGNORED:
       return ignored != IGNORED_EDEFAULT;
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__MERGE_DESTINATION:
       return MERGE_DESTINATION_EDEFAULT == null ? mergeDestination != null
           : !MERGE_DESTINATION_EDEFAULT.equals(mergeDestination);
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS:
       return possibleMergeDestinations != null
           && !possibleMergeDestinations.isEmpty();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET:
       return explicitDependenciesForTarget != null
           && !explicitDependenciesForTarget.isEmpty();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE:
       return explicitDependenciesForReference != null
           && !explicitDependenciesForReference.isEmpty();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET:
       return implicitDependenciesForTarget != null
           && !implicitDependenciesForTarget.isEmpty();
-    case GdiffdataPackage.EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
+    case GdiffdataPackage.GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE:
       return implicitDependenciesForReference != null
           && !implicitDependenciesForReference.isEmpty();
     }
@@ -969,4 +969,4 @@ public abstract class EMergeableDifferenceImpl<E, A, R> extends EIdentifiedImpl
     }
   }
 
-} //EMergeableDifferenceImpl
+} //GMergeableDifferenceImpl

@@ -40,8 +40,8 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.DiffOperation;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.MatchOperation;
@@ -60,25 +60,25 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EComparison</b></em>'.
+ * An implementation of the model object '<em><b>GComparison</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getAncestorScope <em>Ancestor Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getReferenceScope <em>Reference Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getTargetScope <em>Target Scope</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getLastMatchPolicy <em>Last Match Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getLastDiffPolicy <em>Last Diff Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getLastMergePolicy <em>Last Merge Policy</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMapping <em>Mapping</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getAncestorScope <em>Ancestor Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getReferenceScope <em>Reference Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getTargetScope <em>Target Scope</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getLastMatchPolicy <em>Last Match Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getLastDiffPolicy <em>Last Diff Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getLastMergePolicy <em>Last Merge Policy</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getMapping <em>Mapping</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
-    implements EComparison<E, A, R> {
+public abstract class GComparisonImpl<E, A, R> extends GIdentifiedImpl
+    implements GComparison<E, A, R> {
   /**
    * The cached value of the '{@link #getAncestorScope() <em>Ancestor Scope</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -147,7 +147,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EMapping<E, A, R> mapping;
+  protected GMapping<E, A, R> mapping;
 
   /**
    * The non-null sets of duplicate match IDs per role
@@ -160,7 +160,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  protected EComparisonImpl() {
+  protected GComparisonImpl() {
     super();
     Map<Role, Set<Object>> duplicateIDs = new HashMap<Role, Set<Object>>(3);
     for (Role role : Role.values()) {
@@ -175,7 +175,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @param referenceScope_p the non-null model scope playing the REFERENCE comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
+  public GComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
       IEditableTreeDataScope<E> referenceScope_p) {
     this(targetScope_p, referenceScope_p, null);
   }
@@ -187,7 +187,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @param ancestorScope_p the optional model scope playing the ANCESTOR comparison role
    * @generated NOT
    */
-  public EComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
+  public GComparisonImpl(IEditableTreeDataScope<E> targetScope_p,
       IEditableTreeDataScope<E> referenceScope_p,
       IEditableTreeDataScope<E> ancestorScope_p) {
     this();
@@ -204,7 +204,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.ECOMPARISON;
+    return GdiffdataPackage.Literals.GCOMPARISON;
   }
 
   /**
@@ -226,7 +226,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     ancestorScope = newAncestorScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE, oldAncestorScope,
+          GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE, oldAncestorScope,
           ancestorScope));
   }
 
@@ -249,7 +249,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     referenceScope = newReferenceScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE, oldReferenceScope,
+          GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE, oldReferenceScope,
           referenceScope));
   }
 
@@ -272,7 +272,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     targetScope = newTargetScope;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__TARGET_SCOPE, oldTargetScope,
+          GdiffdataPackage.GCOMPARISON__TARGET_SCOPE, oldTargetScope,
           targetScope));
   }
 
@@ -295,7 +295,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     lastMatchPolicy = newLastMatchPolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY, oldLastMatchPolicy,
+          GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY, oldLastMatchPolicy,
           lastMatchPolicy));
   }
 
@@ -318,7 +318,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     lastDiffPolicy = newLastDiffPolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY, oldLastDiffPolicy,
+          GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY, oldLastDiffPolicy,
           lastDiffPolicy));
   }
 
@@ -341,7 +341,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     lastMergePolicy = newLastMergePolicy;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY, oldLastMergePolicy,
+          GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY, oldLastMergePolicy,
           lastMergePolicy));
   }
 
@@ -350,7 +350,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EMapping<E, A, R> getMapping() {
+  public GMapping<E, A, R> getMapping() {
     return mapping;
   }
 
@@ -359,14 +359,14 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  public NotificationChain basicSetMapping(EMapping<E, A, R> newMapping,
+  public NotificationChain basicSetMapping(GMapping<E, A, R> newMapping,
       NotificationChain msgs) {
     NotificationChain result = msgs;
-    EMapping<E, A, R> oldMapping = mapping;
+    GMapping<E, A, R> oldMapping = mapping;
     mapping = newMapping;
     if (eNotificationRequired()) {
       ENotificationImpl notification = new ENotificationImpl(this,
-          Notification.SET, GdiffdataPackage.ECOMPARISON__MAPPING, oldMapping,
+          Notification.SET, GdiffdataPackage.GCOMPARISON__MAPPING, oldMapping,
           newMapping);
       if (result == null) {
         result = notification;
@@ -382,23 +382,23 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setMapping(EMapping<E, A, R> newMapping) {
+  public void setMapping(GMapping<E, A, R> newMapping) {
     if (newMapping != mapping) {
       NotificationChain msgs = null;
       if (mapping != null)
         msgs = ((InternalEObject) mapping).eInverseRemove(this,
-            EOPPOSITE_FEATURE_BASE - GdiffdataPackage.ECOMPARISON__MAPPING,
+            EOPPOSITE_FEATURE_BASE - GdiffdataPackage.GCOMPARISON__MAPPING,
             null, msgs);
       if (newMapping != null)
         msgs = ((InternalEObject) newMapping).eInverseAdd(this,
-            EOPPOSITE_FEATURE_BASE - GdiffdataPackage.ECOMPARISON__MAPPING,
+            EOPPOSITE_FEATURE_BASE - GdiffdataPackage.GCOMPARISON__MAPPING,
             null, msgs);
       msgs = basicSetMapping(newMapping, msgs);
       if (msgs != null)
         msgs.dispatch();
     } else if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.ECOMPARISON__MAPPING, newMapping, newMapping));
+          GdiffdataPackage.GCOMPARISON__MAPPING, newMapping, newMapping));
   }
 
   /**
@@ -410,7 +410,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   public NotificationChain eInverseRemove(InternalEObject otherEnd,
       int featureID, NotificationChain msgs) {
     switch (featureID) {
-    case GdiffdataPackage.ECOMPARISON__MAPPING:
+    case GdiffdataPackage.GCOMPARISON__MAPPING:
       return basicSetMapping(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -424,19 +424,19 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE:
       return getAncestorScope();
-    case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE:
       return getReferenceScope();
-    case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__TARGET_SCOPE:
       return getTargetScope();
-    case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY:
       return getLastMatchPolicy();
-    case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY:
       return getLastDiffPolicy();
-    case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY:
       return getLastMergePolicy();
-    case GdiffdataPackage.ECOMPARISON__MAPPING:
+    case GdiffdataPackage.GCOMPARISON__MAPPING:
       return getMapping();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -451,26 +451,26 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE:
       setAncestorScope((IEditableTreeDataScope<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE:
       setReferenceScope((IEditableTreeDataScope<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__TARGET_SCOPE:
       setTargetScope((IEditableTreeDataScope<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY:
       setLastMatchPolicy((IMatchPolicy<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY:
       setLastDiffPolicy((IDiffPolicy<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY:
       setLastMergePolicy((IMergePolicy<E>) newValue);
       return;
-    case GdiffdataPackage.ECOMPARISON__MAPPING:
-      setMapping((EMapping<E, A, R>) newValue);
+    case GdiffdataPackage.GCOMPARISON__MAPPING:
+      setMapping((GMapping<E, A, R>) newValue);
       return;
     }
     super.eSet(featureID, newValue);
@@ -484,26 +484,26 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE:
       setAncestorScope((IEditableTreeDataScope<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE:
       setReferenceScope((IEditableTreeDataScope<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__TARGET_SCOPE:
       setTargetScope((IEditableTreeDataScope<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY:
       setLastMatchPolicy((IMatchPolicy<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY:
       setLastDiffPolicy((IDiffPolicy<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY:
       setLastMergePolicy((IMergePolicy<E>) null);
       return;
-    case GdiffdataPackage.ECOMPARISON__MAPPING:
-      setMapping((EMapping<E, A, R>) null);
+    case GdiffdataPackage.GCOMPARISON__MAPPING:
+      setMapping((GMapping<E, A, R>) null);
       return;
     }
     super.eUnset(featureID);
@@ -517,19 +517,19 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.ECOMPARISON__ANCESTOR_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__ANCESTOR_SCOPE:
       return ancestorScope != null;
-    case GdiffdataPackage.ECOMPARISON__REFERENCE_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__REFERENCE_SCOPE:
       return referenceScope != null;
-    case GdiffdataPackage.ECOMPARISON__TARGET_SCOPE:
+    case GdiffdataPackage.GCOMPARISON__TARGET_SCOPE:
       return targetScope != null;
-    case GdiffdataPackage.ECOMPARISON__LAST_MATCH_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MATCH_POLICY:
       return lastMatchPolicy != null;
-    case GdiffdataPackage.ECOMPARISON__LAST_DIFF_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_DIFF_POLICY:
       return lastDiffPolicy != null;
-    case GdiffdataPackage.ECOMPARISON__LAST_MERGE_POLICY:
+    case GdiffdataPackage.GCOMPARISON__LAST_MERGE_POLICY:
       return lastMergePolicy != null;
-    case GdiffdataPackage.ECOMPARISON__MAPPING:
+    case GdiffdataPackage.GCOMPARISON__MAPPING:
       return mapping != null;
     }
     return super.eIsSet(featureID);
@@ -959,7 +959,7 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
    * @return a non-null mapping
    * @generated NOT
    */
-  protected abstract EMapping<E, A, R> newMapping();
+  protected abstract GMapping<E, A, R> newMapping();
 
   /**
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison.Editable#swapScopes()
@@ -975,4 +975,4 @@ public abstract class EComparisonImpl<E, A, R> extends EIdentifiedImpl
     return isEmpty;
   }
 
-} //EComparisonImpl
+} //GComparisonImpl

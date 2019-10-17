@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -33,8 +34,7 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public interface EAttributeValuePresence extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence<EObject, EAttribute, EReference>,
-    EValuePresence {
+    GAttributeValuePresence<EObject, EAttribute, EReference>, EValuePresence {
 
   /**
    * Returns the value of the '<em><b>Attribute</b></em>' reference.
@@ -88,4 +88,4 @@ public interface EAttributeValuePresence extends
    */
   void setValue(Object value);
   // Nothing needed
-} // EAttributeValuePresence
+} // GAttributeValuePresence

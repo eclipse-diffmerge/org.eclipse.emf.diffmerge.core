@@ -17,8 +17,8 @@ import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.ecore.EClass;
 
@@ -29,14 +29,14 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class EAttributeValuePresenceImpl<E, A, R> extends
-    EValuePresenceImpl<E, A, R> implements EAttributeValuePresence<E, A, R> {
+public abstract class GAttributeValuePresenceImpl<E, A, R> extends
+    GValuePresenceImpl<E, A, R> implements GAttributeValuePresence<E, A, R> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected EAttributeValuePresenceImpl() {
+  protected GAttributeValuePresenceImpl() {
     super();
   }
 
@@ -49,7 +49,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    * @param isOrder_p whether the value presence is solely due to ordering
    * @generated NOT
    */
-  public EAttributeValuePresenceImpl(EMatch<E, A, R> elementMatch_p,
+  public GAttributeValuePresenceImpl(GMatch<E, A, R> elementMatch_p,
       A attribute_p, Object value_p, Role presenceRole_p, boolean isOrder_p) {
     super(elementMatch_p, presenceRole_p, isOrder_p);
     setAttribute(attribute_p);
@@ -64,17 +64,17 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.EATTRIBUTE_VALUE_PRESENCE;
+    return GdiffdataPackage.Literals.GATTRIBUTE_VALUE_PRESENCE;
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence#setValue(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence#setValue(java.lang.Object)
    * @generated NOT
    */
   public abstract void setValue(Object value);
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getFeature()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#getFeature()
    * @generated NOT
    */
   @Override
@@ -88,7 +88,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   public abstract void setAttribute(A attribute);
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#getSymmetrical()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#getSymmetrical()
    * @generated NOT
    */
   @Override
@@ -120,7 +120,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#isManyFeature()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#isManyFeature()
    * @generated NOT
    */
   @Override
@@ -137,7 +137,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#mergeOrder()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#mergeOrder()
    * @generated NOT
    */
   @Override
@@ -146,7 +146,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#mergeValueAddition()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#mergeValueAddition()
    * @generated NOT
    */
   @Override
@@ -163,7 +163,7 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl#mergeValueRemoval()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl#mergeValueRemoval()
    * @generated NOT
    */
   @Override
@@ -172,4 +172,4 @@ public abstract class EAttributeValuePresenceImpl<E, A, R> extends
     presenceScope.removeAttributeValue(getHolder(), getFeature(), getValue());
   }
 
-} //EAttributeValuePresenceImpl
+} //GAttributeValuePresenceImpl

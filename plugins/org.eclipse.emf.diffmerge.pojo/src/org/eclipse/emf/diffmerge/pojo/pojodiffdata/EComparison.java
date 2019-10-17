@@ -11,18 +11,20 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
+
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison</b></em>'.
+ * A representation of the model object '<em><b>GComparison</b></em>'.
  * <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEComparison()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
-public interface EComparison<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison<E, Object, Object> {
+public interface EComparison<E extends Object>
+    extends GComparison<E, Object, Object> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -31,4 +33,4 @@ public interface EComparison<E extends Object> extends
    */
   EMapping<E> getMapping();
 
-} // EComparison
+} // GComparison

@@ -13,26 +13,26 @@ package org.eclipse.emf.diffmerge.generic.gdiffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EIdentified</b></em>'.
+ * An implementation of the model object '<em><b>GIdentified</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EIdentifiedImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GIdentifiedImpl#getId <em>Id</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EIdentifiedImpl extends EObjectImpl
-    implements EIdentified {
+public abstract class GIdentifiedImpl extends EObjectImpl
+    implements GIdentified {
   /**
    * The default value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -58,7 +58,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected EIdentifiedImpl() {
+  protected GIdentifiedImpl() {
     super();
   }
 
@@ -69,7 +69,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.EIDENTIFIED;
+    return GdiffdataPackage.Literals.GIDENTIFIED;
   }
 
   /**
@@ -91,7 +91,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
     id = newId;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
-          GdiffdataPackage.EIDENTIFIED__ID, oldId, id));
+          GdiffdataPackage.GIDENTIFIED__ID, oldId, id));
   }
 
   /**
@@ -102,7 +102,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EIDENTIFIED__ID:
+    case GdiffdataPackage.GIDENTIFIED__ID:
       return getId();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -116,7 +116,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EIDENTIFIED__ID:
+    case GdiffdataPackage.GIDENTIFIED__ID:
       setId((String) newValue);
       return;
     }
@@ -131,7 +131,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EIDENTIFIED__ID:
+    case GdiffdataPackage.GIDENTIFIED__ID:
       setId(ID_EDEFAULT);
       return;
     }
@@ -146,7 +146,7 @@ public abstract class EIdentifiedImpl extends EObjectImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EIDENTIFIED__ID:
+    case GdiffdataPackage.GIDENTIFIED__ID:
       return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
     }
     return super.eIsSet(featureID);
@@ -169,4 +169,4 @@ public abstract class EIdentifiedImpl extends EObjectImpl
     return result.toString();
   }
 
-} //EIdentifiedImpl
+} //GIdentifiedImpl

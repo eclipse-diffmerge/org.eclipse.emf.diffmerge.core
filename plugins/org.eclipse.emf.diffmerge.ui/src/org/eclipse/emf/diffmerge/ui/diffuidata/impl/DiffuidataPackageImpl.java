@@ -480,7 +480,7 @@ public class DiffuidataPackageImpl extends EPackageImpl
     // Initialize classes and features; add operations and parameters
     initEClass(uiComparisonEClass, UIComparison.class, "UIComparison", //$NON-NLS-1$
         !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    EGenericType g1 = createEGenericType(theGdiffdataPackage.getEComparison());
+    EGenericType g1 = createEGenericType(theGdiffdataPackage.getGComparison());
     EGenericType g2 = createEGenericType();
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType();

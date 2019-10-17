@@ -13,10 +13,11 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMapping</b></em>'.
+ * A representation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -29,13 +30,12 @@ import org.eclipse.emf.diffmerge.generic.api.Role;
  * </ul>
  *
  * @see org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage#getEMapping()
- * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
+ * @model superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping&lt;E, org.eclipse.emf.ecore.EJavaObject, org.eclipse.emf.ecore.EJavaObject&gt; org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement&lt;E&gt;" EBounds="org.eclipse.emf.ecore.EJavaObject"
  * @generated
  */
 @SuppressWarnings("javadoc")
-public interface EMapping<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<E, Object, Object>,
-    EComparisonElement<E> {
+public interface EMapping<E extends Object>
+    extends GMapping<E, Object, Object>, EComparisonElement<E> {
   /**
    * Returns the value of the '<em><b>Ancestor Match Map</b></em>' map.
    * The key is of type {@link java.lang.Object},
@@ -111,4 +111,4 @@ public interface EMapping<E extends Object> extends
    */
   EMatch<E> map(E element, Role role);
 
-} // EMapping
+} // GMapping

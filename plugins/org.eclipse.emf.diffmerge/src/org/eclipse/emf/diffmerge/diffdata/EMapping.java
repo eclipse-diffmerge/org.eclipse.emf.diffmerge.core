@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.diffdata;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -20,7 +21,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMapping</b></em>'.
+ * A representation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  *
  *
@@ -28,9 +29,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @model
  * @generated
  */
-public interface EMapping extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping<EObject, EAttribute, EReference>,
-    EComparisonElement {
+public interface EMapping
+    extends GMapping<EObject, EAttribute, EReference>, EComparisonElement {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -64,4 +64,4 @@ public interface EMapping extends
    */
   EMatch map(EObject element, Role role);
 
-} // EMapping
+} // GMapping

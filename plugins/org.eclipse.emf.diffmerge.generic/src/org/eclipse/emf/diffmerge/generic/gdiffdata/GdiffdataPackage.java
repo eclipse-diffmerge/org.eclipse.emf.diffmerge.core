@@ -67,14 +67,14 @@ public interface GdiffdataPackage extends EPackage {
       .init();
 
   /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EIdentifiedImpl <em>EIdentified</em>}' class.
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GIdentifiedImpl <em>GIdentified</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EIdentifiedImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEIdentified()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GIdentifiedImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGIdentified()
    * @generated
    */
-  int EIDENTIFIED = 0;
+  int GIDENTIFIED = 0;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -83,16 +83,1058 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    * @ordered
    */
-  int EIDENTIFIED__ID = 0;
+  int GIDENTIFIED__ID = 0;
 
   /**
-   * The number of structural features of the '<em>EIdentified</em>' class.
+   * The number of structural features of the '<em>GIdentified</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EIDENTIFIED_FEATURE_COUNT = 1;
+  int GIDENTIFIED_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl <em>GComparison</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGComparison()
+   * @generated
+   */
+  int GCOMPARISON = 1;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__ID = GIDENTIFIED__ID;
+
+  /**
+   * The feature id for the '<em><b>Ancestor Scope</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__ANCESTOR_SCOPE = GIDENTIFIED_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Reference Scope</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__REFERENCE_SCOPE = GIDENTIFIED_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Target Scope</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__TARGET_SCOPE = GIDENTIFIED_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Last Match Policy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__LAST_MATCH_POLICY = GIDENTIFIED_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Last Diff Policy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__LAST_DIFF_POLICY = GIDENTIFIED_FEATURE_COUNT + 4;
+
+  /**
+   * The feature id for the '<em><b>Last Merge Policy</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__LAST_MERGE_POLICY = GIDENTIFIED_FEATURE_COUNT + 5;
+
+  /**
+   * The feature id for the '<em><b>Mapping</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON__MAPPING = GIDENTIFIED_FEATURE_COUNT + 6;
+
+  /**
+   * The number of structural features of the '<em>GComparison</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON_FEATURE_COUNT = GIDENTIFIED_FEATURE_COUNT + 7;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement <em>GComparison Element</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGComparisonElement()
+   * @generated
+   */
+  int GCOMPARISON_ELEMENT = 2;
+
+  /**
+   * The number of structural features of the '<em>GComparison Element</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GCOMPARISON_ELEMENT_FEATURE_COUNT = 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl <em>GMapping</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMapping()
+   * @generated
+   */
+  int GMAPPING = 3;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMAPPING__ID = GIDENTIFIED__ID;
+
+  /**
+   * The feature id for the '<em><b>Modifiable Contents</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMAPPING__MODIFIABLE_CONTENTS = GIDENTIFIED_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Reference Completed Matches</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMAPPING__REFERENCE_COMPLETED_MATCHES = GIDENTIFIED_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Target Completed Matches</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMAPPING__TARGET_COMPLETED_MATCHES = GIDENTIFIED_FEATURE_COUNT + 2;
+
+  /**
+   * The number of structural features of the '<em>GMapping</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMAPPING_FEATURE_COUNT = GIDENTIFIED_FEATURE_COUNT + 3;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl <em>GMatch</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMatch()
+   * @generated
+   */
+  int GMATCH = 4;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__ID = GIDENTIFIED__ID;
+
+  /**
+   * The feature id for the '<em><b>Match ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__MATCH_ID = GIDENTIFIED_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__MODIFIABLE_RELATED_DIFFERENCES = GIDENTIFIED_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__ELEMENT_PRESENCE_DIFFERENCE = GIDENTIFIED_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = GIDENTIFIED_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH__TARGET_OWNERSHIP_DIFFERENCE = GIDENTIFIED_FEATURE_COUNT + 4;
+
+  /**
+   * The number of structural features of the '<em>GMatch</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMATCH_FEATURE_COUNT = GIDENTIFIED_FEATURE_COUNT + 5;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl <em>GMergeable Difference</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMergeableDifference()
+   * @generated
+   */
+  int GMERGEABLE_DIFFERENCE = 5;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__ID = GIDENTIFIED__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = GIDENTIFIED_FEATURE_COUNT
+      + 0;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__CONFLICTING = GIDENTIFIED_FEATURE_COUNT + 1;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__IGNORED = GIDENTIFIED_FEATURE_COUNT + 2;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__MERGE_DESTINATION = GIDENTIFIED_FEATURE_COUNT + 3;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = GIDENTIFIED_FEATURE_COUNT
+      + 4;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GIDENTIFIED_FEATURE_COUNT
+      + 5;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GIDENTIFIED_FEATURE_COUNT
+      + 6;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GIDENTIFIED_FEATURE_COUNT
+      + 7;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GIDENTIFIED_FEATURE_COUNT
+      + 8;
+
+  /**
+   * The number of structural features of the '<em>GMergeable Difference</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GMERGEABLE_DIFFERENCE_FEATURE_COUNT = GIDENTIFIED_FEATURE_COUNT + 9;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl <em>GElement Relative Presence</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGElementRelativePresence()
+   * @generated
+   */
+  int GELEMENT_RELATIVE_PRESENCE = 6;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__ID = GMERGEABLE_DIFFERENCE__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR = GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__CONFLICTING = GMERGEABLE_DIFFERENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__IGNORED = GMERGEABLE_DIFFERENCE__IGNORED;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION = GMERGEABLE_DIFFERENCE__MERGE_DESTINATION;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = GMERGEABLE_DIFFERENCE_FEATURE_COUNT
+      + 0;
+
+  /**
+   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = GMERGEABLE_DIFFERENCE_FEATURE_COUNT
+      + 1;
+
+  /**
+   * The number of structural features of the '<em>GElement Relative Presence</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT = GMERGEABLE_DIFFERENCE_FEATURE_COUNT
+      + 2;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl <em>GElement Presence</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGElementPresence()
+   * @generated
+   */
+  int GELEMENT_PRESENCE = 7;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__ID = GELEMENT_RELATIVE_PRESENCE__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = GELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__CONFLICTING = GELEMENT_RELATIVE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__IGNORED = GELEMENT_RELATIVE_PRESENCE__IGNORED;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__MERGE_DESTINATION = GELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__ELEMENT_MATCH = GELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
+
+  /**
+   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__PRESENCE_ROLE = GELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
+
+  /**
+   * The feature id for the '<em><b>Owner Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE__OWNER_MATCH = GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
+      + 0;
+
+  /**
+   * The number of structural features of the '<em>GElement Presence</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GELEMENT_PRESENCE_FEATURE_COUNT = GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
+      + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl <em>GValue Presence</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGValuePresence()
+   * @generated
+   */
+  int GVALUE_PRESENCE = 8;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__ID = GELEMENT_RELATIVE_PRESENCE__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__CONFLICTING = GELEMENT_RELATIVE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__IGNORED = GELEMENT_RELATIVE_PRESENCE__IGNORED;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__MERGE_DESTINATION = GELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__ELEMENT_MATCH = GELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
+
+  /**
+   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__PRESENCE_ROLE = GELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
+
+  /**
+   * The feature id for the '<em><b>Order</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE__ORDER = GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>GValue Presence</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GVALUE_PRESENCE_FEATURE_COUNT = GELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
+      + 1;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl <em>GAttribute Value Presence</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGAttributeValuePresence()
+   * @generated
+   */
+  int GATTRIBUTE_VALUE_PRESENCE = 9;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__ID = GVALUE_PRESENCE__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__CONFLICTING = GVALUE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__IGNORED = GVALUE_PRESENCE__IGNORED;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = GVALUE_PRESENCE__MERGE_DESTINATION;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = GVALUE_PRESENCE__ELEMENT_MATCH;
+
+  /**
+   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = GVALUE_PRESENCE__PRESENCE_ROLE;
+
+  /**
+   * The feature id for the '<em><b>Order</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE__ORDER = GVALUE_PRESENCE__ORDER;
+
+  /**
+   * The number of structural features of the '<em>GAttribute Value Presence</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = GVALUE_PRESENCE_FEATURE_COUNT
+      + 0;
+
+  /**
+   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl <em>GReference Value Presence</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGReferenceValuePresence()
+   * @generated
+   */
+  int GREFERENCE_VALUE_PRESENCE = 10;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__ID = GVALUE_PRESENCE__ID;
+
+  /**
+   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = GVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
+
+  /**
+   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__CONFLICTING = GVALUE_PRESENCE__CONFLICTING;
+
+  /**
+   * The feature id for the '<em><b>Ignored</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__IGNORED = GVALUE_PRESENCE__IGNORED;
+
+  /**
+   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = GVALUE_PRESENCE__MERGE_DESTINATION;
+
+  /**
+   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = GVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = GVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
+
+  /**
+   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = GVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
+
+  /**
+   * The feature id for the '<em><b>Element Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = GVALUE_PRESENCE__ELEMENT_MATCH;
+
+  /**
+   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = GVALUE_PRESENCE__PRESENCE_ROLE;
+
+  /**
+   * The feature id for the '<em><b>Order</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__ORDER = GVALUE_PRESENCE__ORDER;
+
+  /**
+   * The feature id for the '<em><b>Value Match</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE__VALUE_MATCH = GVALUE_PRESENCE_FEATURE_COUNT
+      + 0;
+
+  /**
+   * The number of structural features of the '<em>GReference Value Presence</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = GVALUE_PRESENCE_FEATURE_COUNT
+      + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IComparison.Editable <em>IEditable Comparison</em>}' class.
@@ -105,116 +1147,6 @@ public interface GdiffdataPackage extends EPackage {
   int IEDITABLE_COMPARISON = 12;
 
   /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl <em>EComparison</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparison()
-   * @generated
-   */
-  int ECOMPARISON = 1;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__ID = EIDENTIFIED__ID;
-
-  /**
-   * The feature id for the '<em><b>Ancestor Scope</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__ANCESTOR_SCOPE = EIDENTIFIED_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Reference Scope</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__REFERENCE_SCOPE = EIDENTIFIED_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Target Scope</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__TARGET_SCOPE = EIDENTIFIED_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Last Match Policy</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__LAST_MATCH_POLICY = EIDENTIFIED_FEATURE_COUNT + 3;
-
-  /**
-   * The feature id for the '<em><b>Last Diff Policy</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__LAST_DIFF_POLICY = EIDENTIFIED_FEATURE_COUNT + 4;
-
-  /**
-   * The feature id for the '<em><b>Last Merge Policy</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__LAST_MERGE_POLICY = EIDENTIFIED_FEATURE_COUNT + 5;
-
-  /**
-   * The feature id for the '<em><b>Mapping</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON__MAPPING = EIDENTIFIED_FEATURE_COUNT + 6;
-
-  /**
-   * The number of structural features of the '<em>EComparison</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 7;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparisonElement()
-   * @generated
-   */
-  int ECOMPARISON_ELEMENT = 2;
-
-  /**
-   * The number of structural features of the '<em>EComparison Element</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ECOMPARISON_ELEMENT_FEATURE_COUNT = 0;
-
-  /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IMapping.Editable <em>IEditable Mapping</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -223,61 +1155,6 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    */
   int IEDITABLE_MAPPING = 14;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl <em>EMapping</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMapping()
-   * @generated
-   */
-  int EMAPPING = 3;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMAPPING__ID = EIDENTIFIED__ID;
-
-  /**
-   * The feature id for the '<em><b>Modifiable Contents</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMAPPING__MODIFIABLE_CONTENTS = EIDENTIFIED_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Reference Completed Matches</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMAPPING__REFERENCE_COMPLETED_MATCHES = EIDENTIFIED_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Target Completed Matches</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMAPPING__TARGET_COMPLETED_MATCHES = EIDENTIFIED_FEATURE_COUNT + 2;
-
-  /**
-   * The number of structural features of the '<em>EMapping</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMAPPING_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IMatch.Editable <em>IEditable Match</em>}' class.
@@ -290,79 +1167,6 @@ public interface GdiffdataPackage extends EPackage {
   int IEDITABLE_MATCH = 16;
 
   /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl <em>EMatch</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMatch()
-   * @generated
-   */
-  int EMATCH = 4;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__ID = EIDENTIFIED__ID;
-
-  /**
-   * The feature id for the '<em><b>Match ID</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__MATCH_ID = EIDENTIFIED_FEATURE_COUNT + 0;
-
-  /**
-   * The feature id for the '<em><b>Modifiable Related Differences</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__MODIFIABLE_RELATED_DIFFERENCES = EIDENTIFIED_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Element Presence Difference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__ELEMENT_PRESENCE_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Reference Ownership Difference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 3;
-
-  /**
-   * The feature id for the '<em><b>Target Ownership Difference</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH__TARGET_OWNERSHIP_DIFFERENCE = EIDENTIFIED_FEATURE_COUNT + 4;
-
-  /**
-   * The number of structural features of the '<em>EMatch</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMATCH_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 5;
-
-  /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable <em>IEditable Mergeable Difference</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -371,810 +1175,6 @@ public interface GdiffdataPackage extends EPackage {
    * @generated
    */
   int IEDITABLE_MERGEABLE_DIFFERENCE = 18;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl <em>EMergeable Difference</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMergeableDifference()
-   * @generated
-   */
-  int EMERGEABLE_DIFFERENCE = 5;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__ID = EIDENTIFIED__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = EIDENTIFIED_FEATURE_COUNT
-      + 0;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__CONFLICTING = EIDENTIFIED_FEATURE_COUNT + 1;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__IGNORED = EIDENTIFIED_FEATURE_COUNT + 2;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = EIDENTIFIED_FEATURE_COUNT + 3;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = EIDENTIFIED_FEATURE_COUNT
-      + 4;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EIDENTIFIED_FEATURE_COUNT
-      + 5;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EIDENTIFIED_FEATURE_COUNT
-      + 6;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EIDENTIFIED_FEATURE_COUNT
-      + 7;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EIDENTIFIED_FEATURE_COUNT
-      + 8;
-
-  /**
-   * The number of structural features of the '<em>EMergeable Difference</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EMERGEABLE_DIFFERENCE_FEATURE_COUNT = EIDENTIFIED_FEATURE_COUNT + 9;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl <em>EElement Relative Presence</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementRelativePresence()
-   * @generated
-   */
-  int EELEMENT_RELATIVE_PRESENCE = 6;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__ID = EMERGEABLE_DIFFERENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR = EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__CONFLICTING = EMERGEABLE_DIFFERENCE__CONFLICTING;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__IGNORED = EMERGEABLE_DIFFERENCE__IGNORED;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION = EMERGEABLE_DIFFERENCE__MERGE_DESTINATION;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Element Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = EMERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 0;
-
-  /**
-   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = EMERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 1;
-
-  /**
-   * The number of structural features of the '<em>EElement Relative Presence</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT = EMERGEABLE_DIFFERENCE_FEATURE_COUNT
-      + 2;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl <em>EElement Presence</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementPresence()
-   * @generated
-   */
-  int EELEMENT_PRESENCE = 7;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__ID = EELEMENT_RELATIVE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__ALIGNED_WITH_ANCESTOR = EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__CONFLICTING = EELEMENT_RELATIVE_PRESENCE__CONFLICTING;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__IGNORED = EELEMENT_RELATIVE_PRESENCE__IGNORED;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__MERGE_DESTINATION = EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Element Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__ELEMENT_MATCH = EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
-
-  /**
-   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__PRESENCE_ROLE = EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
-
-  /**
-   * The feature id for the '<em><b>Owner Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE__OWNER_MATCH = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
-      + 0;
-
-  /**
-   * The number of structural features of the '<em>EElement Presence</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EELEMENT_PRESENCE_FEATURE_COUNT = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
-      + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl <em>EValue Presence</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEValuePresence()
-   * @generated
-   */
-  int EVALUE_PRESENCE = 8;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__ID = EELEMENT_RELATIVE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = EELEMENT_RELATIVE_PRESENCE__ALIGNED_WITH_ANCESTOR;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__CONFLICTING = EELEMENT_RELATIVE_PRESENCE__CONFLICTING;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__IGNORED = EELEMENT_RELATIVE_PRESENCE__IGNORED;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__MERGE_DESTINATION = EELEMENT_RELATIVE_PRESENCE__MERGE_DESTINATION;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EELEMENT_RELATIVE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EELEMENT_RELATIVE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EELEMENT_RELATIVE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Element Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__ELEMENT_MATCH = EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH;
-
-  /**
-   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__PRESENCE_ROLE = EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE;
-
-  /**
-   * The feature id for the '<em><b>Order</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE__ORDER = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT + 0;
-
-  /**
-   * The number of structural features of the '<em>EValue Presence</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EVALUE_PRESENCE_FEATURE_COUNT = EELEMENT_RELATIVE_PRESENCE_FEATURE_COUNT
-      + 1;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEAttributeValuePresence()
-   * @generated
-   */
-  int EATTRIBUTE_VALUE_PRESENCE = 9;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__MERGE_DESTINATION = EVALUE_PRESENCE__MERGE_DESTINATION;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Element Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__ELEMENT_MATCH = EVALUE_PRESENCE__ELEMENT_MATCH;
-
-  /**
-   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
-
-  /**
-   * The feature id for the '<em><b>Order</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
-
-  /**
-   * The number of structural features of the '<em>EAttribute Value Presence</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EATTRIBUTE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
-      + 0;
-
-  /**
-   * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEReferenceValuePresence()
-   * @generated
-   */
-  int EREFERENCE_VALUE_PRESENCE = 10;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__ID = EVALUE_PRESENCE__ID;
-
-  /**
-   * The feature id for the '<em><b>Aligned With Ancestor</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__ALIGNED_WITH_ANCESTOR = EVALUE_PRESENCE__ALIGNED_WITH_ANCESTOR;
-
-  /**
-   * The feature id for the '<em><b>Conflicting</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__CONFLICTING = EVALUE_PRESENCE__CONFLICTING;
-
-  /**
-   * The feature id for the '<em><b>Ignored</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__IGNORED = EVALUE_PRESENCE__IGNORED;
-
-  /**
-   * The feature id for the '<em><b>Merge Destination</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__MERGE_DESTINATION = EVALUE_PRESENCE__MERGE_DESTINATION;
-
-  /**
-   * The feature id for the '<em><b>Possible Merge Destinations</b></em>' attribute list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS = EVALUE_PRESENCE__POSSIBLE_MERGE_DESTINATIONS;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Target</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET;
-
-  /**
-   * The feature id for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = EVALUE_PRESENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE;
-
-  /**
-   * The feature id for the '<em><b>Element Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__ELEMENT_MATCH = EVALUE_PRESENCE__ELEMENT_MATCH;
-
-  /**
-   * The feature id for the '<em><b>Presence Role</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__PRESENCE_ROLE = EVALUE_PRESENCE__PRESENCE_ROLE;
-
-  /**
-   * The feature id for the '<em><b>Order</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__ORDER = EVALUE_PRESENCE__ORDER;
-
-  /**
-   * The feature id for the '<em><b>Value Match</b></em>' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = EVALUE_PRESENCE_FEATURE_COUNT
-      + 0;
-
-  /**
-   * The number of structural features of the '<em>EReference Value Presence</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EREFERENCE_VALUE_PRESENCE_FEATURE_COUNT = EVALUE_PRESENCE_FEATURE_COUNT
-      + 1;
 
   /**
    * The meta object id for the '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}' class.
@@ -1434,444 +1434,444 @@ public interface GdiffdataPackage extends EPackage {
   int ROLE = 28;
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified <em>EIdentified</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified <em>GIdentified</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EIdentified</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified
+   * @return the meta object for class '<em>GIdentified</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified
    * @generated
    */
-  EClass getEIdentified();
+  EClass getGIdentified();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified#getId <em>Id</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified#getId <em>Id</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Id</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified#getId()
-   * @see #getEIdentified()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified#getId()
+   * @see #getGIdentified()
    * @generated
    */
-  EAttribute getEIdentified_Id();
+  EAttribute getGIdentified_Id();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison <em>EComparison</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison <em>GComparison</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EComparison</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison
+   * @return the meta object for class '<em>GComparison</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison
    * @generated
    */
-  EClass getEComparison();
+  EClass getGComparison();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getAncestorScope <em>Ancestor Scope</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getAncestorScope <em>Ancestor Scope</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Ancestor Scope</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getAncestorScope()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getAncestorScope()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_AncestorScope();
+  EAttribute getGComparison_AncestorScope();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getReferenceScope <em>Reference Scope</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getReferenceScope <em>Reference Scope</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Reference Scope</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getReferenceScope()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getReferenceScope()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_ReferenceScope();
+  EAttribute getGComparison_ReferenceScope();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getTargetScope <em>Target Scope</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getTargetScope <em>Target Scope</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Target Scope</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getTargetScope()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getTargetScope()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_TargetScope();
+  EAttribute getGComparison_TargetScope();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMatchPolicy <em>Last Match Policy</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMatchPolicy <em>Last Match Policy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Last Match Policy</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMatchPolicy()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMatchPolicy()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_LastMatchPolicy();
+  EAttribute getGComparison_LastMatchPolicy();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastDiffPolicy <em>Last Diff Policy</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastDiffPolicy <em>Last Diff Policy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Last Diff Policy</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastDiffPolicy()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastDiffPolicy()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_LastDiffPolicy();
+  EAttribute getGComparison_LastDiffPolicy();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMergePolicy <em>Last Merge Policy</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMergePolicy <em>Last Merge Policy</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Last Merge Policy</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getLastMergePolicy()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getLastMergePolicy()
+   * @see #getGComparison()
    * @generated
    */
-  EAttribute getEComparison_LastMergePolicy();
+  EAttribute getGComparison_LastMergePolicy();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getMapping <em>Mapping</em>}'.
+   * Returns the meta object for the containment reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getMapping <em>Mapping</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference '<em>Mapping</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison#getMapping()
-   * @see #getEComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison#getMapping()
+   * @see #getGComparison()
    * @generated
    */
-  EReference getEComparison_Mapping();
+  EReference getGComparison_Mapping();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement <em>GComparison Element</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EComparison Element</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
+   * @return the meta object for class '<em>GComparison Element</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement
    * @generated
    */
-  EClass getEComparisonElement();
+  EClass getGComparisonElement();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping <em>EMapping</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping <em>GMapping</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EMapping</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping
+   * @return the meta object for class '<em>GMapping</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping
    * @generated
    */
-  EClass getEMapping();
+  EClass getGMapping();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getModifiableContents <em>Modifiable Contents</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getModifiableContents <em>Modifiable Contents</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Modifiable Contents</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getModifiableContents()
-   * @see #getEMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getModifiableContents()
+   * @see #getGMapping()
    * @generated
    */
-  EReference getEMapping_ModifiableContents();
+  EReference getGMapping_ModifiableContents();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getReferenceCompletedMatches <em>Reference Completed Matches</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getReferenceCompletedMatches <em>Reference Completed Matches</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Reference Completed Matches</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getReferenceCompletedMatches()
-   * @see #getEMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getReferenceCompletedMatches()
+   * @see #getGMapping()
    * @generated
    */
-  EReference getEMapping_ReferenceCompletedMatches();
+  EReference getGMapping_ReferenceCompletedMatches();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getTargetCompletedMatches <em>Target Completed Matches</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getTargetCompletedMatches <em>Target Completed Matches</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Target Completed Matches</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getTargetCompletedMatches()
-   * @see #getEMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getTargetCompletedMatches()
+   * @see #getGMapping()
    * @generated
    */
-  EReference getEMapping_TargetCompletedMatches();
+  EReference getGMapping_TargetCompletedMatches();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch <em>EMatch</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch <em>GMatch</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EMatch</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch
+   * @return the meta object for class '<em>GMatch</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch
    * @generated
    */
-  EClass getEMatch();
+  EClass getGMatch();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getMatchID <em>Match ID</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getMatchID <em>Match ID</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Match ID</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getMatchID()
-   * @see #getEMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getMatchID()
+   * @see #getGMatch()
    * @generated
    */
-  EAttribute getEMatch_MatchID();
+  EAttribute getGMatch_MatchID();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getModifiableRelatedDifferences <em>Modifiable Related Differences</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the containment reference list '<em>Modifiable Related Differences</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getModifiableRelatedDifferences()
-   * @see #getEMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getModifiableRelatedDifferences()
+   * @see #getGMatch()
    * @generated
    */
-  EReference getEMatch_ModifiableRelatedDifferences();
+  EReference getGMatch_ModifiableRelatedDifferences();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference <em>Element Presence Difference</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getElementPresenceDifference <em>Element Presence Difference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Element Presence Difference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getElementPresenceDifference()
-   * @see #getEMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getElementPresenceDifference()
+   * @see #getGMatch()
    * @generated
    */
-  EReference getEMatch_ElementPresenceDifference();
+  EReference getGMatch_ElementPresenceDifference();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getReferenceOwnershipDifference <em>Reference Ownership Difference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Reference Ownership Difference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getReferenceOwnershipDifference()
-   * @see #getEMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getReferenceOwnershipDifference()
+   * @see #getGMatch()
    * @generated
    */
-  EReference getEMatch_ReferenceOwnershipDifference();
+  EReference getGMatch_ReferenceOwnershipDifference();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getTargetOwnershipDifference <em>Target Ownership Difference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Target Ownership Difference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch#getTargetOwnershipDifference()
-   * @see #getEMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch#getTargetOwnershipDifference()
+   * @see #getGMatch()
    * @generated
    */
-  EReference getEMatch_TargetOwnershipDifference();
+  EReference getGMatch_TargetOwnershipDifference();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference <em>EMergeable Difference</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference <em>GMergeable Difference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EMergeable Difference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference
+   * @return the meta object for class '<em>GMergeable Difference</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference
    * @generated
    */
-  EClass getEMergeableDifference();
+  EClass getGMergeableDifference();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Aligned With Ancestor</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isAlignedWithAncestor()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EAttribute getEMergeableDifference_AlignedWithAncestor();
+  EAttribute getGMergeableDifference_AlignedWithAncestor();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isConflicting <em>Conflicting</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Conflicting</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isConflicting()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isConflicting()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EAttribute getEMergeableDifference_Conflicting();
+  EAttribute getGMergeableDifference_Conflicting();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isIgnored <em>Ignored</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isIgnored <em>Ignored</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Ignored</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isIgnored()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isIgnored()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EAttribute getEMergeableDifference_Ignored();
+  EAttribute getGMergeableDifference_Ignored();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getMergeDestination <em>Merge Destination</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Merge Destination</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getMergeDestination()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getMergeDestination()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EAttribute getEMergeableDifference_MergeDestination();
+  EAttribute getGMergeableDifference_MergeDestination();
 
   /**
-   * Returns the meta object for the attribute list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}'.
+   * Returns the meta object for the attribute list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute list '<em>Possible Merge Destinations</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getPossibleMergeDestinations()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getPossibleMergeDestinations()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EAttribute getEMergeableDifference_PossibleMergeDestinations();
+  EAttribute getGMergeableDifference_PossibleMergeDestinations();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Explicit Dependencies For Target</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForTarget()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForTarget()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EReference getEMergeableDifference_ExplicitDependenciesForTarget();
+  EReference getGMergeableDifference_ExplicitDependenciesForTarget();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Explicit Dependencies For Reference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForReference()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForReference()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EReference getEMergeableDifference_ExplicitDependenciesForReference();
+  EReference getGMergeableDifference_ExplicitDependenciesForReference();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Implicit Dependencies For Target</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForTarget()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForTarget()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EReference getEMergeableDifference_ImplicitDependenciesForTarget();
+  EReference getGMergeableDifference_ImplicitDependenciesForTarget();
 
   /**
-   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}'.
+   * Returns the meta object for the reference list '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference list '<em>Implicit Dependencies For Reference</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForReference()
-   * @see #getEMergeableDifference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForReference()
+   * @see #getGMergeableDifference()
    * @generated
    */
-  EReference getEMergeableDifference_ImplicitDependenciesForReference();
+  EReference getGMergeableDifference_ImplicitDependenciesForReference();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence <em>EElement Relative Presence</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence <em>GElement Relative Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EElement Relative Presence</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence
+   * @return the meta object for class '<em>GElement Relative Presence</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence
    * @generated
    */
-  EClass getEElementRelativePresence();
+  EClass getGElementRelativePresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getElementMatch <em>Element Match</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getElementMatch <em>Element Match</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Element Match</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getElementMatch()
-   * @see #getEElementRelativePresence()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getElementMatch()
+   * @see #getGElementRelativePresence()
    * @generated
    */
-  EReference getEElementRelativePresence_ElementMatch();
+  EReference getGElementRelativePresence_ElementMatch();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getPresenceRole <em>Presence Role</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getPresenceRole <em>Presence Role</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Presence Role</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence#getPresenceRole()
-   * @see #getEElementRelativePresence()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence#getPresenceRole()
+   * @see #getGElementRelativePresence()
    * @generated
    */
-  EAttribute getEElementRelativePresence_PresenceRole();
+  EAttribute getGElementRelativePresence_PresenceRole();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence <em>EElement Presence</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence <em>GElement Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EElement Presence</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence
+   * @return the meta object for class '<em>GElement Presence</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence
    * @generated
    */
-  EClass getEElementPresence();
+  EClass getGElementPresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence#getOwnerMatch <em>Owner Match</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Owner Match</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence#getOwnerMatch()
-   * @see #getEElementPresence()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence#getOwnerMatch()
+   * @see #getGElementPresence()
    * @generated
    */
-  EReference getEElementPresence_OwnerMatch();
+  EReference getGElementPresence_OwnerMatch();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence <em>EValue Presence</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence <em>GValue Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EValue Presence</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence
+   * @return the meta object for class '<em>GValue Presence</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence
    * @generated
    */
-  EClass getEValuePresence();
+  EClass getGValuePresence();
 
   /**
-   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#isOrder <em>Order</em>}'.
+   * Returns the meta object for the attribute '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence#isOrder <em>Order</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the attribute '<em>Order</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence#isOrder()
-   * @see #getEValuePresence()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence#isOrder()
+   * @see #getGValuePresence()
    * @generated
    */
-  EAttribute getEValuePresence_Order();
+  EAttribute getGValuePresence_Order();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence <em>EAttribute Value Presence</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence <em>GAttribute Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EAttribute Value Presence</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EAttributeValuePresence
+   * @return the meta object for class '<em>GAttribute Value Presence</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GAttributeValuePresence
    * @generated
    */
-  EClass getEAttributeValuePresence();
+  EClass getGAttributeValuePresence();
 
   /**
-   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence <em>EReference Value Presence</em>}'.
+   * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GReferenceValuePresence <em>GReference Value Presence</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for class '<em>EReference Value Presence</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence
+   * @return the meta object for class '<em>GReference Value Presence</em>'.
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GReferenceValuePresence
    * @generated
    */
-  EClass getEReferenceValuePresence();
+  EClass getGReferenceValuePresence();
 
   /**
-   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch <em>Value Match</em>}'.
+   * Returns the meta object for the reference '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GReferenceValuePresence#getValueMatch <em>Value Match</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @return the meta object for the reference '<em>Value Match</em>'.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EReferenceValuePresence#getValueMatch()
-   * @see #getEReferenceValuePresence()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GReferenceValuePresence#getValueMatch()
+   * @see #getGReferenceValuePresence()
    * @generated
    */
-  EReference getEReferenceValuePresence_ValueMatch();
+  EReference getGReferenceValuePresence_ValueMatch();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}'.
@@ -2094,14 +2094,14 @@ public interface GdiffdataPackage extends EPackage {
    */
   interface Literals {
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EIdentifiedImpl <em>EIdentified</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GIdentifiedImpl <em>GIdentified</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EIdentifiedImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEIdentified()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GIdentifiedImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGIdentified()
      * @generated
      */
-    EClass EIDENTIFIED = eINSTANCE.getEIdentified();
+    EClass GIDENTIFIED = eINSTANCE.getGIdentified();
 
     /**
      * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
@@ -2109,17 +2109,17 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EIDENTIFIED__ID = eINSTANCE.getEIdentified_Id();
+    EAttribute GIDENTIFIED__ID = eINSTANCE.getGIdentified_Id();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl <em>EComparison</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl <em>GComparison</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparison()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGComparison()
      * @generated
      */
-    EClass ECOMPARISON = eINSTANCE.getEComparison();
+    EClass GCOMPARISON = eINSTANCE.getGComparison();
 
     /**
      * The meta object literal for the '<em><b>Ancestor Scope</b></em>' attribute feature.
@@ -2127,8 +2127,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__ANCESTOR_SCOPE = eINSTANCE
-        .getEComparison_AncestorScope();
+    EAttribute GCOMPARISON__ANCESTOR_SCOPE = eINSTANCE
+        .getGComparison_AncestorScope();
 
     /**
      * The meta object literal for the '<em><b>Reference Scope</b></em>' attribute feature.
@@ -2136,8 +2136,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__REFERENCE_SCOPE = eINSTANCE
-        .getEComparison_ReferenceScope();
+    EAttribute GCOMPARISON__REFERENCE_SCOPE = eINSTANCE
+        .getGComparison_ReferenceScope();
 
     /**
      * The meta object literal for the '<em><b>Target Scope</b></em>' attribute feature.
@@ -2145,8 +2145,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__TARGET_SCOPE = eINSTANCE
-        .getEComparison_TargetScope();
+    EAttribute GCOMPARISON__TARGET_SCOPE = eINSTANCE
+        .getGComparison_TargetScope();
 
     /**
      * The meta object literal for the '<em><b>Last Match Policy</b></em>' attribute feature.
@@ -2154,8 +2154,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__LAST_MATCH_POLICY = eINSTANCE
-        .getEComparison_LastMatchPolicy();
+    EAttribute GCOMPARISON__LAST_MATCH_POLICY = eINSTANCE
+        .getGComparison_LastMatchPolicy();
 
     /**
      * The meta object literal for the '<em><b>Last Diff Policy</b></em>' attribute feature.
@@ -2163,8 +2163,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__LAST_DIFF_POLICY = eINSTANCE
-        .getEComparison_LastDiffPolicy();
+    EAttribute GCOMPARISON__LAST_DIFF_POLICY = eINSTANCE
+        .getGComparison_LastDiffPolicy();
 
     /**
      * The meta object literal for the '<em><b>Last Merge Policy</b></em>' attribute feature.
@@ -2172,8 +2172,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute ECOMPARISON__LAST_MERGE_POLICY = eINSTANCE
-        .getEComparison_LastMergePolicy();
+    EAttribute GCOMPARISON__LAST_MERGE_POLICY = eINSTANCE
+        .getGComparison_LastMergePolicy();
 
     /**
      * The meta object literal for the '<em><b>Mapping</b></em>' containment reference feature.
@@ -2181,27 +2181,27 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference ECOMPARISON__MAPPING = eINSTANCE.getEComparison_Mapping();
+    EReference GCOMPARISON__MAPPING = eINSTANCE.getGComparison_Mapping();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement <em>EComparison Element</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement <em>GComparison Element</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEComparisonElement()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGComparisonElement()
      * @generated
      */
-    EClass ECOMPARISON_ELEMENT = eINSTANCE.getEComparisonElement();
+    EClass GCOMPARISON_ELEMENT = eINSTANCE.getGComparisonElement();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl <em>EMapping</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl <em>GMapping</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMapping()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMapping()
      * @generated
      */
-    EClass EMAPPING = eINSTANCE.getEMapping();
+    EClass GMAPPING = eINSTANCE.getGMapping();
 
     /**
      * The meta object literal for the '<em><b>Modifiable Contents</b></em>' containment reference list feature.
@@ -2209,8 +2209,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMAPPING__MODIFIABLE_CONTENTS = eINSTANCE
-        .getEMapping_ModifiableContents();
+    EReference GMAPPING__MODIFIABLE_CONTENTS = eINSTANCE
+        .getGMapping_ModifiableContents();
 
     /**
      * The meta object literal for the '<em><b>Reference Completed Matches</b></em>' reference list feature.
@@ -2218,8 +2218,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMAPPING__REFERENCE_COMPLETED_MATCHES = eINSTANCE
-        .getEMapping_ReferenceCompletedMatches();
+    EReference GMAPPING__REFERENCE_COMPLETED_MATCHES = eINSTANCE
+        .getGMapping_ReferenceCompletedMatches();
 
     /**
      * The meta object literal for the '<em><b>Target Completed Matches</b></em>' reference list feature.
@@ -2227,18 +2227,18 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMAPPING__TARGET_COMPLETED_MATCHES = eINSTANCE
-        .getEMapping_TargetCompletedMatches();
+    EReference GMAPPING__TARGET_COMPLETED_MATCHES = eINSTANCE
+        .getGMapping_TargetCompletedMatches();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl <em>EMatch</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl <em>GMatch</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMatchImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMatch()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMatchImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMatch()
      * @generated
      */
-    EClass EMATCH = eINSTANCE.getEMatch();
+    EClass GMATCH = eINSTANCE.getGMatch();
 
     /**
      * The meta object literal for the '<em><b>Match ID</b></em>' attribute feature.
@@ -2246,7 +2246,7 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMATCH__MATCH_ID = eINSTANCE.getEMatch_MatchID();
+    EAttribute GMATCH__MATCH_ID = eINSTANCE.getGMatch_MatchID();
 
     /**
      * The meta object literal for the '<em><b>Modifiable Related Differences</b></em>' containment reference list feature.
@@ -2254,8 +2254,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMATCH__MODIFIABLE_RELATED_DIFFERENCES = eINSTANCE
-        .getEMatch_ModifiableRelatedDifferences();
+    EReference GMATCH__MODIFIABLE_RELATED_DIFFERENCES = eINSTANCE
+        .getGMatch_ModifiableRelatedDifferences();
 
     /**
      * The meta object literal for the '<em><b>Element Presence Difference</b></em>' reference feature.
@@ -2263,8 +2263,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMATCH__ELEMENT_PRESENCE_DIFFERENCE = eINSTANCE
-        .getEMatch_ElementPresenceDifference();
+    EReference GMATCH__ELEMENT_PRESENCE_DIFFERENCE = eINSTANCE
+        .getGMatch_ElementPresenceDifference();
 
     /**
      * The meta object literal for the '<em><b>Reference Ownership Difference</b></em>' reference feature.
@@ -2272,8 +2272,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = eINSTANCE
-        .getEMatch_ReferenceOwnershipDifference();
+    EReference GMATCH__REFERENCE_OWNERSHIP_DIFFERENCE = eINSTANCE
+        .getGMatch_ReferenceOwnershipDifference();
 
     /**
      * The meta object literal for the '<em><b>Target Ownership Difference</b></em>' reference feature.
@@ -2281,18 +2281,18 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMATCH__TARGET_OWNERSHIP_DIFFERENCE = eINSTANCE
-        .getEMatch_TargetOwnershipDifference();
+    EReference GMATCH__TARGET_OWNERSHIP_DIFFERENCE = eINSTANCE
+        .getGMatch_TargetOwnershipDifference();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl <em>EMergeable Difference</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl <em>GMergeable Difference</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEMergeableDifference()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGMergeableDifference()
      * @generated
      */
-    EClass EMERGEABLE_DIFFERENCE = eINSTANCE.getEMergeableDifference();
+    EClass GMERGEABLE_DIFFERENCE = eINSTANCE.getGMergeableDifference();
 
     /**
      * The meta object literal for the '<em><b>Aligned With Ancestor</b></em>' attribute feature.
@@ -2300,8 +2300,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = eINSTANCE
-        .getEMergeableDifference_AlignedWithAncestor();
+    EAttribute GMERGEABLE_DIFFERENCE__ALIGNED_WITH_ANCESTOR = eINSTANCE
+        .getGMergeableDifference_AlignedWithAncestor();
 
     /**
      * The meta object literal for the '<em><b>Conflicting</b></em>' attribute feature.
@@ -2309,8 +2309,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMERGEABLE_DIFFERENCE__CONFLICTING = eINSTANCE
-        .getEMergeableDifference_Conflicting();
+    EAttribute GMERGEABLE_DIFFERENCE__CONFLICTING = eINSTANCE
+        .getGMergeableDifference_Conflicting();
 
     /**
      * The meta object literal for the '<em><b>Ignored</b></em>' attribute feature.
@@ -2318,8 +2318,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMERGEABLE_DIFFERENCE__IGNORED = eINSTANCE
-        .getEMergeableDifference_Ignored();
+    EAttribute GMERGEABLE_DIFFERENCE__IGNORED = eINSTANCE
+        .getGMergeableDifference_Ignored();
 
     /**
      * The meta object literal for the '<em><b>Merge Destination</b></em>' attribute feature.
@@ -2327,8 +2327,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMERGEABLE_DIFFERENCE__MERGE_DESTINATION = eINSTANCE
-        .getEMergeableDifference_MergeDestination();
+    EAttribute GMERGEABLE_DIFFERENCE__MERGE_DESTINATION = eINSTANCE
+        .getGMergeableDifference_MergeDestination();
 
     /**
      * The meta object literal for the '<em><b>Possible Merge Destinations</b></em>' attribute list feature.
@@ -2336,8 +2336,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = eINSTANCE
-        .getEMergeableDifference_PossibleMergeDestinations();
+    EAttribute GMERGEABLE_DIFFERENCE__POSSIBLE_MERGE_DESTINATIONS = eINSTANCE
+        .getGMergeableDifference_PossibleMergeDestinations();
 
     /**
      * The meta object literal for the '<em><b>Explicit Dependencies For Target</b></em>' reference list feature.
@@ -2345,8 +2345,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = eINSTANCE
-        .getEMergeableDifference_ExplicitDependenciesForTarget();
+    EReference GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_TARGET = eINSTANCE
+        .getGMergeableDifference_ExplicitDependenciesForTarget();
 
     /**
      * The meta object literal for the '<em><b>Explicit Dependencies For Reference</b></em>' reference list feature.
@@ -2354,8 +2354,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = eINSTANCE
-        .getEMergeableDifference_ExplicitDependenciesForReference();
+    EReference GMERGEABLE_DIFFERENCE__EXPLICIT_DEPENDENCIES_FOR_REFERENCE = eINSTANCE
+        .getGMergeableDifference_ExplicitDependenciesForReference();
 
     /**
      * The meta object literal for the '<em><b>Implicit Dependencies For Target</b></em>' reference list feature.
@@ -2363,8 +2363,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = eINSTANCE
-        .getEMergeableDifference_ImplicitDependenciesForTarget();
+    EReference GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_TARGET = eINSTANCE
+        .getGMergeableDifference_ImplicitDependenciesForTarget();
 
     /**
      * The meta object literal for the '<em><b>Implicit Dependencies For Reference</b></em>' reference list feature.
@@ -2372,18 +2372,18 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = eINSTANCE
-        .getEMergeableDifference_ImplicitDependenciesForReference();
+    EReference GMERGEABLE_DIFFERENCE__IMPLICIT_DEPENDENCIES_FOR_REFERENCE = eINSTANCE
+        .getGMergeableDifference_ImplicitDependenciesForReference();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl <em>EElement Relative Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl <em>GElement Relative Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementRelativePresence()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGElementRelativePresence()
      * @generated
      */
-    EClass EELEMENT_RELATIVE_PRESENCE = eINSTANCE.getEElementRelativePresence();
+    EClass GELEMENT_RELATIVE_PRESENCE = eINSTANCE.getGElementRelativePresence();
 
     /**
      * The meta object literal for the '<em><b>Element Match</b></em>' reference feature.
@@ -2391,8 +2391,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = eINSTANCE
-        .getEElementRelativePresence_ElementMatch();
+    EReference GELEMENT_RELATIVE_PRESENCE__ELEMENT_MATCH = eINSTANCE
+        .getGElementRelativePresence_ElementMatch();
 
     /**
      * The meta object literal for the '<em><b>Presence Role</b></em>' attribute feature.
@@ -2400,18 +2400,18 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = eINSTANCE
-        .getEElementRelativePresence_PresenceRole();
+    EAttribute GELEMENT_RELATIVE_PRESENCE__PRESENCE_ROLE = eINSTANCE
+        .getGElementRelativePresence_PresenceRole();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl <em>EElement Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl <em>GElement Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementPresenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEElementPresence()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementPresenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGElementPresence()
      * @generated
      */
-    EClass EELEMENT_PRESENCE = eINSTANCE.getEElementPresence();
+    EClass GELEMENT_PRESENCE = eINSTANCE.getGElementPresence();
 
     /**
      * The meta object literal for the '<em><b>Owner Match</b></em>' reference feature.
@@ -2419,18 +2419,18 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EELEMENT_PRESENCE__OWNER_MATCH = eINSTANCE
-        .getEElementPresence_OwnerMatch();
+    EReference GELEMENT_PRESENCE__OWNER_MATCH = eINSTANCE
+        .getGElementPresence_OwnerMatch();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl <em>EValue Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl <em>GValue Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EValuePresenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEValuePresence()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GValuePresenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGValuePresence()
      * @generated
      */
-    EClass EVALUE_PRESENCE = eINSTANCE.getEValuePresence();
+    EClass GVALUE_PRESENCE = eINSTANCE.getGValuePresence();
 
     /**
      * The meta object literal for the '<em><b>Order</b></em>' attribute feature.
@@ -2438,27 +2438,27 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute EVALUE_PRESENCE__ORDER = eINSTANCE.getEValuePresence_Order();
+    EAttribute GVALUE_PRESENCE__ORDER = eINSTANCE.getGValuePresence_Order();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl <em>EAttribute Value Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl <em>GAttribute Value Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EAttributeValuePresenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEAttributeValuePresence()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GAttributeValuePresenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGAttributeValuePresence()
      * @generated
      */
-    EClass EATTRIBUTE_VALUE_PRESENCE = eINSTANCE.getEAttributeValuePresence();
+    EClass GATTRIBUTE_VALUE_PRESENCE = eINSTANCE.getGAttributeValuePresence();
 
     /**
-     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl <em>EReference Value Presence</em>}' class.
+     * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl <em>GReference Value Presence</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl
-     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getEReferenceValuePresence()
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl
+     * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GdiffdataPackageImpl#getGReferenceValuePresence()
      * @generated
      */
-    EClass EREFERENCE_VALUE_PRESENCE = eINSTANCE.getEReferenceValuePresence();
+    EClass GREFERENCE_VALUE_PRESENCE = eINSTANCE.getGReferenceValuePresence();
 
     /**
      * The meta object literal for the '<em><b>Value Match</b></em>' reference feature.
@@ -2466,8 +2466,8 @@ public interface GdiffdataPackage extends EPackage {
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EREFERENCE_VALUE_PRESENCE__VALUE_MATCH = eINSTANCE
-        .getEReferenceValuePresence_ValueMatch();
+    EReference GREFERENCE_VALUE_PRESENCE__VALUE_MATCH = eINSTANCE
+        .getGReferenceValuePresence_ValueMatch();
 
     /**
      * The meta object literal for the '{@link org.eclipse.emf.diffmerge.generic.api.IComparison <em>IComparison</em>}' class.

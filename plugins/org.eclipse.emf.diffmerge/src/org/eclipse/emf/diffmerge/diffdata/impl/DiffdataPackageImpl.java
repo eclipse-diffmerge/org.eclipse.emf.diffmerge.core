@@ -674,7 +674,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    EGenericType g1 = createEGenericType(theGdiffdataPackage.getEComparison());
+    EGenericType g1 = createEGenericType(theGdiffdataPackage.getGComparison());
     EGenericType g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -682,7 +682,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
     eComparisonEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEComparisonElement());
+    g1 = createEGenericType(theGdiffdataPackage.getGComparisonElement());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -690,7 +690,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     g2 = createEGenericType(ecorePackage.getEReference());
     g1.getETypeArguments().add(g2);
     eComparisonElementEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMapping());
+    g1 = createEGenericType(theGdiffdataPackage.getGMapping());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -700,7 +700,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eMappingEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
     eMappingEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMatch());
+    g1 = createEGenericType(theGdiffdataPackage.getGMatch());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -710,7 +710,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eMatchEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
     eMatchEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEMergeableDifference());
+    g1 = createEGenericType(theGdiffdataPackage.getGMergeableDifference());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -720,7 +720,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEComparisonElement());
     eMergeableDifferenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEElementRelativePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGElementRelativePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -730,7 +730,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEMergeableDifference());
     eElementRelativePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEElementPresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGElementPresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -740,7 +740,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEElementRelativePresence());
     eElementPresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGValuePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -750,7 +750,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEElementRelativePresence());
     eValuePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEAttributeValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGAttributeValuePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());
@@ -760,7 +760,7 @@ public class DiffdataPackageImpl extends EPackageImpl
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
     g1 = createEGenericType(this.getEValuePresence());
     eAttributeValuePresenceEClass.getEGenericSuperTypes().add(g1);
-    g1 = createEGenericType(theGdiffdataPackage.getEReferenceValuePresence());
+    g1 = createEGenericType(theGdiffdataPackage.getGReferenceValuePresence());
     g2 = createEGenericType(ecorePackage.getEObject());
     g1.getETypeArguments().add(g2);
     g2 = createEGenericType(ecorePackage.getEAttribute());

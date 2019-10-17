@@ -11,6 +11,7 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -26,7 +27,6 @@ import org.eclipse.emf.ecore.EReference;
  * @generated
  */
 public interface EMergeableDifference extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference<EObject, EAttribute, EReference>,
-    EComparisonElement {
+    GMergeableDifference<EObject, EAttribute, EReference>, EComparisonElement {
   // Nothing needed
-} // EMergeableDifference
+} // GMergeableDifference

@@ -25,6 +25,7 @@ import org.eclipse.emf.diffmerge.diffdata.EMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -39,13 +40,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EMapping</b></em>'.
+ * An implementation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class EMappingImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl<EObject, EAttribute, EReference>
+public class EMappingImpl extends GMappingImpl<EObject, EAttribute, EReference>
     implements EMapping {
 
   /**
@@ -90,7 +90,7 @@ public class EMappingImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#clear()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#clear()
    * @generated NOT
    */
   @Override
@@ -173,7 +173,7 @@ public class EMappingImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
   @Override
@@ -182,7 +182,7 @@ public class EMappingImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#doDisconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#doDisconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -332,4 +332,4 @@ public class EMappingImpl extends
     }
   }
 
-} //EMappingImpl
+} //GMappingImpl

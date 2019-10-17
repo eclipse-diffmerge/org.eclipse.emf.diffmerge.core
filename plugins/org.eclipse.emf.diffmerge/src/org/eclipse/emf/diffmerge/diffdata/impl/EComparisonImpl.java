@@ -28,6 +28,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl;
 import org.eclipse.emf.diffmerge.generic.util.IExpensiveOperation;
 import org.eclipse.emf.diffmerge.impl.helpers.MatchOperation;
 import org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy;
@@ -40,14 +41,13 @@ import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EComparison</b></em>'.
+ * An implementation of the model object '<em><b>GComparison</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
 public class EComparisonImpl extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl<EObject, EAttribute, EReference>
-    implements EComparison {
+    GComparisonImpl<EObject, EAttribute, EReference> implements EComparison {
 
   /**
    * <!-- begin-user-doc -->
@@ -93,7 +93,7 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getMapping()
    * @generated NOT
    */
   @Override
@@ -102,7 +102,7 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getMatchOperation(org.eclipse.emf.diffmerge.generic.api.IMatchPolicy, java.util.Map)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getMatchOperation(org.eclipse.emf.diffmerge.generic.api.IMatchPolicy, java.util.Map)
    * @generated NOT
    */
   @Override
@@ -129,13 +129,14 @@ public class EComparisonImpl extends
    * @generated NOT
    */
   public IElementPresence<EObject> newElementPresence(
-      IMatch<EObject> elementMatch_p, IMatch<EObject> ownerMatch_p, Role presenceRole_p) {
+      IMatch<EObject> elementMatch_p, IMatch<EObject> ownerMatch_p,
+      Role presenceRole_p) {
     return new EElementPresenceImpl((EMatch) elementMatch_p,
         (EMatch) ownerMatch_p, presenceRole_p);
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#newMapping()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#newMapping()
    * @generated NOT
    */
   @Override
@@ -167,7 +168,7 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getDefaultDiffPolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getDefaultDiffPolicy()
    * @generated NOT
    */
   @Override
@@ -176,7 +177,7 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getDefaultMatchPolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getDefaultMatchPolicy()
    * @generated NOT
    */
   @Override
@@ -185,7 +186,7 @@ public class EComparisonImpl extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EComparisonImpl#getDefaultMergePolicy()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GComparisonImpl#getDefaultMergePolicy()
    * @generated NOT
    */
   @Override
@@ -193,4 +194,4 @@ public class EComparisonImpl extends
     return new DefaultMergePolicy();
   }
 
-} //EComparisonImpl
+} //GComparisonImpl

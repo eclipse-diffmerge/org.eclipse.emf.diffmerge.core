@@ -11,13 +11,14 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.diffdata;
 
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EComparison Element</b></em>'.
+ * A representation of the model object '<em><b>GComparison Element</b></em>'.
  * <!-- end-user-doc -->
  *
  *
@@ -25,8 +26,8 @@ import org.eclipse.emf.ecore.EReference;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface EComparisonElement extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement<EObject, EAttribute, EReference> {
+public interface EComparisonElement
+    extends GComparisonElement<EObject, EAttribute, EReference> {
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -35,4 +36,4 @@ public interface EComparisonElement extends
    */
   EComparison getComparison();
 
-} // EComparisonElement
+} // GComparisonElement

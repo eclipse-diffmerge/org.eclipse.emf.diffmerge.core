@@ -31,7 +31,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.impl.UIComparisonImpl;
@@ -111,7 +111,7 @@ IUserPropertyOwner {
    * Constructor
    * @param comparison_p a non-null comparison
    */
-  public EMFDiffNode(EComparison<?,?,?> comparison_p) {
+  public EMFDiffNode(GComparison<?,?,?> comparison_p) {
     this(comparison_p, null);
   }
   
@@ -120,7 +120,7 @@ IUserPropertyOwner {
    * @param comparison_p a non-null comparison
    * @param domain_p the optional editing domain for undo/redo
    */
-  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p) {
+  public EMFDiffNode(GComparison<?,?,?> comparison_p, EditingDomain domain_p) {
     this(comparison_p, domain_p, true, true);
   }
   
@@ -131,7 +131,7 @@ IUserPropertyOwner {
    * @param isLeftEditionPossible_p whether edition on the left is possible at all
    * @param isRightEditionPossible_p whether edition on the right is possible at all
    */
-  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p,
+  public EMFDiffNode(GComparison<?,?,?> comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p) {
     this(comparison_p, domain_p, isLeftEditionPossible_p, isRightEditionPossible_p,
         EMFDiffMergeUIPlugin.getDefault().getDefaultLeftRole());
@@ -145,7 +145,7 @@ IUserPropertyOwner {
    * @param isRightEditionPossible_p whether edition on the right is possible at all
    * @param leftRole_p the non-null role on the left-hand side
    */
-  public EMFDiffNode(EComparison<?,?,?> comparison_p, EditingDomain domain_p,
+  public EMFDiffNode(GComparison<?,?,?> comparison_p, EditingDomain domain_p,
       boolean isLeftEditionPossible_p, boolean isRightEditionPossible_p,
       Role leftRole_p) {
     super(
@@ -194,7 +194,7 @@ IUserPropertyOwner {
    * @param comparison_p a non-null comparison
    * @return a non-null UI comparison
    */
-  protected UIComparison createContents(EComparison<?,?,?> comparison_p) {
+  protected UIComparison createContents(GComparison<?,?,?> comparison_p) {
     return new UIComparisonImpl(comparison_p);
   }
   
@@ -257,7 +257,7 @@ IUserPropertyOwner {
    * @return a non-null comparison, unless the UI comparison has been disposed
    */
   @SuppressWarnings("rawtypes")
-  public EComparison getActualComparison() {
+  public GComparison getActualComparison() {
     return getUIComparison().getActualComparison();
   }
   

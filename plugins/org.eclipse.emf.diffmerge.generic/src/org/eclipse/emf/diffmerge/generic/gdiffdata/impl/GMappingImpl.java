@@ -25,9 +25,9 @@ import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
 import org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage;
 import org.eclipse.emf.diffmerge.generic.impl.helpers.BidirectionalComparisonCopier;
 import org.eclipse.emf.diffmerge.structures.common.FHashMap;
@@ -40,21 +40,21 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>EMapping</b></em>'.
+ * An implementation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#getModifiableContents <em>Modifiable Contents</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#getReferenceCompletedMatches <em>Reference Completed Matches</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMappingImpl#getTargetCompletedMatches <em>Target Completed Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#getModifiableContents <em>Modifiable Contents</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#getReferenceCompletedMatches <em>Reference Completed Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMappingImpl#getTargetCompletedMatches <em>Target Completed Matches</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
-    implements EMapping<E, A, R> {
+public abstract class GMappingImpl<E, A, R> extends GIdentifiedImpl
+    implements GMapping<E, A, R> {
   /**
    * The cached value of the '{@link #getModifiableContents() <em>Modifiable Contents</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -63,7 +63,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * @generated
    * @ordered
    */
-  protected EList<EMatch<E, A, R>> modifiableContents;
+  protected EList<GMatch<E, A, R>> modifiableContents;
 
   /**
    * The cached value of the '{@link #getReferenceCompletedMatches() <em>Reference Completed Matches</em>}' reference list.
@@ -96,7 +96,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated NOT
    */
-  protected EMappingImpl() {
+  protected GMappingImpl() {
     super();
     _copier = new BidirectionalComparisonCopier<E>();
   }
@@ -108,7 +108,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   @Override
   protected EClass eStaticClass() {
-    return GdiffdataPackage.Literals.EMAPPING;
+    return GdiffdataPackage.Literals.GMAPPING;
   }
 
   /**
@@ -116,10 +116,10 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<EMatch<E, A, R>> getModifiableContents() {
+  public EList<GMatch<E, A, R>> getModifiableContents() {
     if (modifiableContents == null) {
-      modifiableContents = new EObjectContainmentEList<EMatch<E, A, R>>(
-          EMatch.class, this, GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS);
+      modifiableContents = new EObjectContainmentEList<GMatch<E, A, R>>(
+          GMatch.class, this, GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS);
     }
     return modifiableContents;
   }
@@ -132,7 +132,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public EList<IMatch<E>> getReferenceCompletedMatches() {
     if (referenceCompletedMatches == null) {
       referenceCompletedMatches = new EObjectEList<IMatch<E>>(IMatch.class,
-          this, GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES);
+          this, GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES);
     }
     return referenceCompletedMatches;
   }
@@ -145,7 +145,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public EList<IMatch<E>> getTargetCompletedMatches() {
     if (targetCompletedMatches == null) {
       targetCompletedMatches = new EObjectEList<IMatch<E>>(IMatch.class, this,
-          GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES);
+          GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES);
     }
     return targetCompletedMatches;
   }
@@ -159,7 +159,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   public NotificationChain eInverseRemove(InternalEObject otherEnd,
       int featureID, NotificationChain msgs) {
     switch (featureID) {
-    case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+    case GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS:
       return ((InternalEList<?>) getModifiableContents()).basicRemove(otherEnd,
           msgs);
     }
@@ -174,11 +174,11 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType) {
     switch (featureID) {
-    case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+    case GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS:
       return getModifiableContents();
-    case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES:
       return getReferenceCompletedMatches();
-    case GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES:
       return getTargetCompletedMatches();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -193,17 +193,17 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
-    case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+    case GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS:
       getModifiableContents().clear();
       getModifiableContents()
-          .addAll((Collection<? extends EMatch<E, A, R>>) newValue);
+          .addAll((Collection<? extends GMatch<E, A, R>>) newValue);
       return;
-    case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
       getReferenceCompletedMatches()
           .addAll((Collection<? extends IMatch<E>>) newValue);
       return;
-    case GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES:
       getTargetCompletedMatches().clear();
       getTargetCompletedMatches()
           .addAll((Collection<? extends IMatch<E>>) newValue);
@@ -220,13 +220,13 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public void eUnset(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+    case GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS:
       getModifiableContents().clear();
       return;
-    case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES:
       getReferenceCompletedMatches().clear();
       return;
-    case GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES:
       getTargetCompletedMatches().clear();
       return;
     }
@@ -241,12 +241,12 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   @Override
   public boolean eIsSet(int featureID) {
     switch (featureID) {
-    case GdiffdataPackage.EMAPPING__MODIFIABLE_CONTENTS:
+    case GdiffdataPackage.GMAPPING__MODIFIABLE_CONTENTS:
       return modifiableContents != null && !modifiableContents.isEmpty();
-    case GdiffdataPackage.EMAPPING__REFERENCE_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__REFERENCE_COMPLETED_MATCHES:
       return referenceCompletedMatches != null
           && !referenceCompletedMatches.isEmpty();
-    case GdiffdataPackage.EMAPPING__TARGET_COMPLETED_MATCHES:
+    case GdiffdataPackage.GMAPPING__TARGET_COMPLETED_MATCHES:
       return targetCompletedMatches != null
           && !targetCompletedMatches.isEmpty();
     }
@@ -297,15 +297,15 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement#getComparison()
    * @generated OT
    */
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public EComparison<E, A, R> getComparison() {
-    EComparison<E, A, R> result = null;
+  public GComparison<E, A, R> getComparison() {
+    GComparison<E, A, R> result = null;
     EObject container = eContainer();
-    if (container instanceof EComparison) {
-      result = (EComparison) container;
+    if (container instanceof GComparison) {
+      result = (GComparison) container;
     }
     return result;
   }
@@ -406,7 +406,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#disconnect(org.eclipse.emf.diffmerge.generic.api.Role, java.lang.Object)
    * @generated NOT
    */
   public boolean disconnect(Role role_p, E element_p) {
@@ -422,16 +422,16 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    * Remove dependencies (reference values) to the given element so that its removal
    * from the scope of the given role be possible, as required by the scope.
    * Precondition: getComparison().getScope(role_p).tIsElementDisconnectionRequired()
-   * @see EMapping#disconnect(Role, Object)
+   * @see GMapping#disconnect(Role, Object)
    * @generated NOT
    */
   protected abstract boolean doDisconnect(Role role_p, E element_p);
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#map(java.lang.Object, org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public EMatch<E, A, R> map(E element_p, Role role_p) {
+  public GMatch<E, A, R> map(E element_p, Role role_p) {
     assert element_p != null && role_p != null;
     IMatch<E> previous = getMatchFor(element_p, role_p);
     // Enforce consistency by removing previous match if any
@@ -439,7 +439,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
       getModifiableContents().remove(previous);
     }
     @SuppressWarnings("unchecked")
-    EMatch<E, A, R> result = (EMatch<E, A, R>) getComparison().newMatch(
+    GMatch<E, A, R> result = (GMatch<E, A, R>) getComparison().newMatch(
         (Role.TARGET == role_p ? element_p : null),
         (Role.REFERENCE == role_p ? element_p : null),
         (Role.ANCESTOR == role_p ? element_p : null));
@@ -494,7 +494,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
       newMatch = getComparison().newMatch(elements.get(Role.TARGET),
           elements.get(Role.REFERENCE), elements.get(Role.ANCESTOR));
       // We assume the type of the match is compatible with the mapping
-      getModifiableContents().add((EMatch) newMatch);
+      getModifiableContents().add((GMatch) newMatch);
     } else {
       ((IMatch.Editable) newMatch).reset(elements.get(Role.TARGET),
           elements.get(Role.REFERENCE), elements.get(Role.ANCESTOR));
@@ -550,7 +550,7 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
    */
   public int size(Role role_p) {
     int result = 0;
-    for (EMatch<E, A, R> match : getModifiableContents()) {
+    for (GMatch<E, A, R> match : getModifiableContents()) {
       if (match.get(role_p) != null)
         result++;
     }
@@ -572,4 +572,4 @@ public abstract class EMappingImpl<E, A, R> extends EIdentifiedImpl
     return ECollections.unmodifiableEMap(result);
   }
 
-} //EMappingImpl
+} //GMappingImpl

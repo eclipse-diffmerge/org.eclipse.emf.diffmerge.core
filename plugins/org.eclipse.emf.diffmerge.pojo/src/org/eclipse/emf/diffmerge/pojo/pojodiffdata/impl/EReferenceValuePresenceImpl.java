@@ -13,6 +13,7 @@ package org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparison;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EComparisonElement;
 import org.eclipse.emf.diffmerge.pojo.pojodiffdata.EElementRelativePresence;
@@ -38,8 +39,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class EReferenceValuePresenceImpl<E extends Object> extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl<E, Object, Object>
+public class EReferenceValuePresenceImpl<E extends Object>
+    extends GReferenceValuePresenceImpl<E, Object, Object>
     implements EReferenceValuePresence<E> {
   /**
    * The default value of the '{@link #getFeature() <em>Feature</em>}' attribute.
@@ -109,7 +110,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getFeature()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl#getFeature()
    * @generated NOT
    */
   @Override
@@ -132,7 +133,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#setReference(java.lang.Object)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl#setReference(java.lang.Object)
    * @generated NOT
    */
   @Override
@@ -165,7 +166,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getSymmetrical()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl#getSymmetrical()
    * @generated NOT
    */
   @Override
@@ -174,7 +175,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getSymmetricalOwnership()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl#getSymmetricalOwnership()
    * @generated NOT
    */
   @Override
@@ -183,7 +184,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EReferenceValuePresenceImpl#getValueMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GReferenceValuePresenceImpl#getValueMatch()
    * @generated NOT
    */
   @Override
@@ -192,7 +193,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EElementRelativePresenceImpl#getElementMatch()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GElementRelativePresenceImpl#getElementMatch()
    * @generated NOT
    */
   @Override
@@ -201,7 +202,7 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
   }
 
   /**
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.EMergeableDifferenceImpl#getComparison()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.impl.GMergeableDifferenceImpl#getComparison()
    * @generated NOT
    */
   @Override
@@ -372,4 +373,4 @@ public class EReferenceValuePresenceImpl<E extends Object> extends
     return result.toString();
   }
 
-} //EReferenceValuePresenceImpl
+} //GReferenceValuePresenceImpl

@@ -22,15 +22,15 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IElementPresence;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence#getOwnerMatch <em>Owner Match</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementPresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGElementPresence()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GElementRelativePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IElementPresence&lt;E&gt;"
  * @generated
  */
-public interface EElementPresence<E, A, R>
-    extends EElementRelativePresence<E, A, R>, IElementPresence<E> {
+public interface GElementPresence<E, A, R>
+    extends GElementRelativePresence<E, A, R>, IElementPresence<E> {
   /**
    * Returns the value of the '<em><b>Owner Match</b></em>' reference.
    * <!-- begin-user-doc -->
@@ -40,21 +40,21 @@ public interface EElementPresence<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Owner Match</em>' reference.
-   * @see #setOwnerMatch(EMatch)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEElementPresence_OwnerMatch()
+   * @see #setOwnerMatch(GMatch)
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGElementPresence_OwnerMatch()
    * @model required="true"
    * @generated
    */
-  EMatch<E, A, R> getOwnerMatch();
+  GMatch<E, A, R> getOwnerMatch();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EElementPresence#getOwnerMatch <em>Owner Match</em>}' reference.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GElementPresence#getOwnerMatch <em>Owner Match</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Owner Match</em>' reference.
    * @see #getOwnerMatch()
    * @generated
    */
-  void setOwnerMatch(EMatch<E, A, R> value);
+  void setOwnerMatch(GMatch<E, A, R> value);
 
-} // EElementPresence
+} // GElementPresence

@@ -19,27 +19,27 @@ import org.eclipse.emf.diffmerge.generic.api.IMapping.Editable;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMapping</b></em>'.
+ * A representation of the model object '<em><b>GMapping</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getModifiableContents <em>Modifiable Contents</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getReferenceCompletedMatches <em>Reference Completed Matches</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMapping#getTargetCompletedMatches <em>Target Completed Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getModifiableContents <em>Modifiable Contents</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getReferenceCompletedMatches <em>Reference Completed Matches</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMapping#getTargetCompletedMatches <em>Target Completed Matches</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMapping()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMapping&lt;E&gt;"
  * @generated
  */
-public interface EMapping<E, A, R>
-    extends EIdentified, EComparisonElement<E, A, R>, Editable<E> {
+public interface GMapping<E, A, R>
+    extends GIdentified, GComparisonElement<E, A, R>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Modifiable Contents</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch}<code>&lt;E, A, R&gt;</code>.
+   * The list contents are of type {@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch}<code>&lt;E, A, R&gt;</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Modifiable Contents</em>' containment reference list isn't clear,
@@ -47,11 +47,11 @@ public interface EMapping<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Modifiable Contents</em>' containment reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping_ModifiableContents()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMapping_ModifiableContents()
    * @model containment="true"
    * @generated
    */
-  EList<EMatch<E, A, R>> getModifiableContents();
+  EList<GMatch<E, A, R>> getModifiableContents();
 
   /**
    * Returns the value of the '<em><b>Reference Completed Matches</b></em>' reference list.
@@ -63,7 +63,7 @@ public interface EMapping<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reference Completed Matches</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping_ReferenceCompletedMatches()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMapping_ReferenceCompletedMatches()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E&gt;" resolveProxies="false"
    * @generated
    */
@@ -79,7 +79,7 @@ public interface EMapping<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target Completed Matches</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMapping_TargetCompletedMatches()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMapping_TargetCompletedMatches()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMatch&lt;E&gt;" resolveProxies="false"
    * @generated
    */
@@ -120,6 +120,6 @@ public interface EMapping<E, A, R>
    * @model required="true" elementRequired="true" roleDataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role" roleRequired="true"
    * @generated
    */
-  EMatch<E, A, R> map(E element, Role role);
+  GMatch<E, A, R> map(E element, Role role);
 
-} // EMapping
+} // GMapping

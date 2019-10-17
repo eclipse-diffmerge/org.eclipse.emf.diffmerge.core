@@ -32,7 +32,7 @@ import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfigurator;
 import org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.diffmerge.impl.policies.ComparisonConfigurator;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy;
 import org.eclipse.emf.diffmerge.impl.policies.ConfigurableMatchPolicy;
@@ -126,7 +126,7 @@ implements IComparisonConfigurator.Provider {
   /**
    * @see org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod#createComparison(org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope, org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope, org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope)
    */
-  public EComparison<EObject, ?, ?> createComparison(
+  public GComparison<EObject, ?, ?> createComparison(
       IEditableTreeDataScope<EObject> targetScope_p,
       IEditableTreeDataScope<EObject> referenceScope_p,
       IEditableTreeDataScope<EObject> ancestorScope_p) {

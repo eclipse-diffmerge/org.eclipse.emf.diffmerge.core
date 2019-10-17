@@ -15,13 +15,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
 import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GMatch;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>EMatch</b></em>'.
+ * A representation of the model object '<em><b>GMatch</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -40,9 +41,8 @@ import org.eclipse.emf.ecore.EReference;
  * @model
  * @generated
  */
-public interface EMatch extends
-    org.eclipse.emf.diffmerge.generic.gdiffdata.EMatch<EObject, EAttribute, EReference>,
-    EComparisonElement {
+public interface EMatch
+    extends GMatch<EObject, EAttribute, EReference>, EComparisonElement {
   /**
    * <!-- begin-user-doc -->
    * <p>
@@ -187,4 +187,4 @@ public interface EMatch extends
   @SuppressWarnings("javadoc")
   EMap<EReference, EList<IReferenceValuePresence<EObject>>> getModifiableOrderReferenceMap();
 
-} // EMatch
+} // GMatch

@@ -36,7 +36,7 @@ import org.eclipse.emf.diffmerge.generic.api.IMergePolicy;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -518,12 +518,12 @@ implements IEditingDomainProvider {
    * Create and return the comparison
    * @return a non-null comparison
    */
-  protected EComparison<?,?,?> initializeComparison() {
+  protected GComparison<?,?,?> initializeComparison() {
     boolean leftIsTarget = getLeftRole() == Role.TARGET;
     IEditableTreeDataScope<?> targetScope = leftIsTarget? _leftScope: _rightScope;
     IEditableTreeDataScope<?> referenceScope = leftIsTarget? _rightScope: _leftScope;
     @SuppressWarnings({ "unchecked", "rawtypes" }) // OK because of checked applicability to the scopes
-    EComparison<?,?,?> result = ((IComparisonMethod)_comparisonMethod).createComparison(
+    GComparison<?,?,?> result = ((IComparisonMethod)_comparisonMethod).createComparison(
         targetScope, referenceScope, _ancestorScope);
     return result;
   }
@@ -533,7 +533,7 @@ implements IEditingDomainProvider {
    * @param comparison_p a non-null comparison
    * @return a non-null diff node
    */
-  protected EMFDiffNode initializeDiffNode(EComparison<?,?,?> comparison_p) {
+  protected EMFDiffNode initializeDiffNode(GComparison<?,?,?> comparison_p) {
     ResourceSet resourceSet = (getEditingDomain() != null)? getEditingDomain().getResourceSet(): null;
     if (resourceSet != null) {
       URI defaultURI = URI.createPlatformResourceURI("comparison/comparison", true); //$NON-NLS-1$
@@ -649,7 +649,7 @@ implements IEditingDomainProvider {
     try {
       if (!scopesReady)
         loadScopes(monitor.newChild(1));
-      EComparison<?,?,?> comparison = initializeComparison();
+      GComparison<?,?,?> comparison = initializeComparison();
       comparison.compute(
           (IMatchPolicy)_comparisonMethod.getMatchPolicy(),
           (IDiffPolicy)_comparisonMethod.getDiffPolicy(),

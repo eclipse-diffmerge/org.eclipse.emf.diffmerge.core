@@ -19,12 +19,12 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IAttributeValuePresence;
  * <!-- end-user-doc -->
  *
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEAttributeValuePresence()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGAttributeValuePresence()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GValuePresence&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IAttributeValuePresence&lt;E&gt;"
  * @generated
  */
-public interface EAttributeValuePresence<E, A, R>
-    extends EValuePresence<E, A, R>, IAttributeValuePresence<E> {
+public interface GAttributeValuePresence<E, A, R>
+    extends GValuePresence<E, A, R>, IAttributeValuePresence<E> {
 
   /**
    * <!-- begin-user-doc -->
@@ -50,4 +50,4 @@ public interface EAttributeValuePresence<E, A, R>
    */
   void setAttribute(A attribute);
   // Nothing needed
-} // EAttributeValuePresence
+} // GAttributeValuePresence

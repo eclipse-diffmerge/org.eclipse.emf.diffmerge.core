@@ -13,7 +13,7 @@ package org.eclipse.emf.diffmerge.ui.diffuidata.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.diffmerge.ui.diffuidata.ComparisonSelection;
 import org.eclipse.emf.diffmerge.ui.diffuidata.DiffuidataPackage;
 import org.eclipse.emf.diffmerge.ui.diffuidata.UIComparison;
@@ -45,7 +45,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * @generated
    * @ordered
    */
-  protected EComparison<?, ?, ?> actualComparison;
+  protected GComparison<?, ?, ?> actualComparison;
 
   /**
    * The cached value of the '{@link #getLastActionSelection() <em>Last Action Selection</em>}' containment reference.
@@ -71,7 +71,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * @param comparison_p a non-null comparison
    * @generated NOT
    */
-  public UIComparisonImpl(EComparison<?, ?, ?> comparison_p) {
+  public UIComparisonImpl(GComparison<?, ?, ?> comparison_p) {
     setActualComparison(comparison_p);
   }
 
@@ -90,10 +90,10 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison<?, ?, ?> getActualComparison() {
+  public GComparison<?, ?, ?> getActualComparison() {
     if (actualComparison != null && actualComparison.eIsProxy()) {
       InternalEObject oldActualComparison = (InternalEObject) actualComparison;
-      actualComparison = (EComparison<?, ?, ?>) eResolveProxy(
+      actualComparison = (GComparison<?, ?, ?>) eResolveProxy(
           oldActualComparison);
       if (actualComparison != oldActualComparison) {
         if (eNotificationRequired())
@@ -110,7 +110,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * <!-- end-user-doc -->
    * @generated
    */
-  public EComparison<?, ?, ?> basicGetActualComparison() {
+  public GComparison<?, ?, ?> basicGetActualComparison() {
     return actualComparison;
   }
 
@@ -119,8 +119,8 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setActualComparison(EComparison<?, ?, ?> newActualComparison) {
-    EComparison<?, ?, ?> oldActualComparison = actualComparison;
+  public void setActualComparison(GComparison<?, ?, ?> newActualComparison) {
+    GComparison<?, ?, ?> oldActualComparison = actualComparison;
     actualComparison = newActualComparison;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET,
@@ -252,7 +252,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
   public void eSet(int featureID, Object newValue) {
     switch (featureID) {
     case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
-      setActualComparison((EComparison<?, ?, ?>) newValue);
+      setActualComparison((GComparison<?, ?, ?>) newValue);
       return;
     case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
       setLastActionSelection((ComparisonSelection) newValue);
@@ -270,7 +270,7 @@ public class UIComparisonImpl extends EObjectImpl implements UIComparison {
   public void eUnset(int featureID) {
     switch (featureID) {
     case DiffuidataPackage.UI_COMPARISON__ACTUAL_COMPARISON:
-      setActualComparison((EComparison<?, ?, ?>) null);
+      setActualComparison((GComparison<?, ?, ?>) null);
       return;
     case DiffuidataPackage.UI_COMPARISON__LAST_ACTION_SELECTION:
       setLastActionSelection((ComparisonSelection) null);

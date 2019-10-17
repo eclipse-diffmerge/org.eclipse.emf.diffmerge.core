@@ -14,7 +14,7 @@ package org.eclipse.emf.diffmerge.ui.specification;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.config.IComparisonConfiguration;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IEditableTreeDataScope;
-import org.eclipse.emf.diffmerge.generic.gdiffdata.EComparison;
+import org.eclipse.emf.diffmerge.generic.gdiffdata.GComparison;
 import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.viewers.AbstractComparisonViewer;
 import org.eclipse.emf.diffmerge.ui.viewers.ComparisonViewer;
@@ -62,7 +62,7 @@ IEditingDomainProvider, IDisposable {
    * @see org.eclipse.emf.diffmerge.generic.api.Role
    * @return a non-null comparison
    */
-  EComparison<E,?,?> createComparison(IEditableTreeDataScope<E> targetScope_p,
+  GComparison<E,?,?> createComparison(IEditableTreeDataScope<E> targetScope_p,
       IEditableTreeDataScope<E> referenceScope_p, IEditableTreeDataScope<E> ancestorScope_p);
   
   /**

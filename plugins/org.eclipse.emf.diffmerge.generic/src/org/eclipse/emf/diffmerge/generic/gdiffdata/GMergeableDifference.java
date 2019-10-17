@@ -25,23 +25,23 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IMergeableDifference.Editable;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isIgnored <em>Ignored</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}</li>
- *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isConflicting <em>Conflicting</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isIgnored <em>Ignored</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getMergeDestination <em>Merge Destination</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getPossibleMergeDestinations <em>Possible Merge Destinations</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForTarget <em>Explicit Dependencies For Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getExplicitDependenciesForReference <em>Explicit Dependencies For Reference</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForTarget <em>Implicit Dependencies For Target</em>}</li>
+ *   <li>{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getImplicitDependenciesForReference <em>Implicit Dependencies For Reference</em>}</li>
  * </ul>
  *
- * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference()
- * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.EIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.EComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
+ * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference()
+ * @model abstract="true" superTypes="org.eclipse.emf.diffmerge.generic.gdiffdata.GIdentified org.eclipse.emf.diffmerge.generic.gdiffdata.GComparisonElement&lt;E, A, R&gt; org.eclipse.emf.diffmerge.generic.gdiffdata.IEditableMergeableDifference&lt;E&gt;"
  * @generated
  */
-public interface EMergeableDifference<E, A, R>
-    extends EIdentified, EComparisonElement<E, A, R>, Editable<E> {
+public interface GMergeableDifference<E, A, R>
+    extends GIdentified, GComparisonElement<E, A, R>, Editable<E> {
   /**
    * Returns the value of the '<em><b>Aligned With Ancestor</b></em>' attribute.
    * The default value is <code>"true"</code>.
@@ -53,14 +53,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Aligned With Ancestor</em>' attribute.
    * @see #setAlignedWithAncestor(boolean)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_AlignedWithAncestor()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_AlignedWithAncestor()
    * @model default="true" required="true"
    * @generated
    */
   boolean isAlignedWithAncestor();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isAlignedWithAncestor <em>Aligned With Ancestor</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Aligned With Ancestor</em>' attribute.
@@ -80,14 +80,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Conflicting</em>' attribute.
    * @see #setConflicting(boolean)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_Conflicting()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_Conflicting()
    * @model default="false" required="true"
    * @generated
    */
   boolean isConflicting();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isConflicting <em>Conflicting</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isConflicting <em>Conflicting</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Conflicting</em>' attribute.
@@ -106,14 +106,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ignored</em>' attribute.
    * @see #setIgnored(boolean)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_Ignored()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_Ignored()
    * @model required="true"
    * @generated
    */
   boolean isIgnored();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#isIgnored <em>Ignored</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#isIgnored <em>Ignored</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Ignored</em>' attribute.
@@ -132,14 +132,14 @@ public interface EMergeableDifference<E, A, R>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Merge Destination</em>' attribute.
    * @see #setMergeDestination(Role)
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_MergeDestination()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_MergeDestination()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role"
    * @generated
    */
   Role getMergeDestination();
 
   /**
-   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.EMergeableDifference#getMergeDestination <em>Merge Destination</em>}' attribute.
+   * Sets the value of the '{@link org.eclipse.emf.diffmerge.generic.gdiffdata.GMergeableDifference#getMergeDestination <em>Merge Destination</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Merge Destination</em>' attribute.
@@ -158,7 +158,7 @@ public interface EMergeableDifference<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Possible Merge Destinations</em>' attribute list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_PossibleMergeDestinations()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_PossibleMergeDestinations()
    * @model dataType="org.eclipse.emf.diffmerge.generic.gdiffdata.Role"
    * @generated
    */
@@ -174,7 +174,7 @@ public interface EMergeableDifference<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Explicit Dependencies For Target</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ExplicitDependenciesForTarget()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_ExplicitDependenciesForTarget()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
@@ -190,7 +190,7 @@ public interface EMergeableDifference<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Explicit Dependencies For Reference</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ExplicitDependenciesForReference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_ExplicitDependenciesForReference()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
@@ -206,7 +206,7 @@ public interface EMergeableDifference<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Implicit Dependencies For Target</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ImplicitDependenciesForTarget()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_ImplicitDependenciesForTarget()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
@@ -222,10 +222,10 @@ public interface EMergeableDifference<E, A, R>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Implicit Dependencies For Reference</em>' reference list.
-   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getEMergeableDifference_ImplicitDependenciesForReference()
+   * @see org.eclipse.emf.diffmerge.generic.gdiffdata.GdiffdataPackage#getGMergeableDifference_ImplicitDependenciesForReference()
    * @model type="org.eclipse.emf.diffmerge.generic.gdiffdata.IMergeableDifference&lt;E&gt;"
    * @generated
    */
   EList<IMergeableDifference<E>> getImplicitDependenciesForReference();
 
-} // EMergeableDifference
+} // GMergeableDifference
