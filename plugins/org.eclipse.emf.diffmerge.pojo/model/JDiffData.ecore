@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="jdiffdata" nsURI="http://www.eclipse.org/emf/diffmerge/pojo/jdiffdata/1.0.0"
+    nsPrefix="org.eclipse.emf.diffmerge.pojo">
+  <eClassifiers xsi:type="ecore:EClass" name="JComparison">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getMapping" lowerBound="1">
+      <eGenericType eClassifier="#//JMapping">
+        <eTypeArguments eTypeParameter="#//JComparison/E"/>
+      </eGenericType>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GComparison">
+      <eTypeArguments eTypeParameter="#//JComparison/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JComparisonElement" abstract="true"
+      interface="true">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getComparison" lowerBound="1">
+      <eGenericType eClassifier="#//JComparison">
+        <eTypeArguments eTypeParameter="#//JComparisonElement/E"/>
+      </eGenericType>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GComparisonElement">
+      <eTypeArguments eTypeParameter="#//JComparisonElement/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMapping">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getMatchFor">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments eTypeParameter="#//JMapping/E"/>
+      </eGenericType>
+      <eParameters name="potentialElement" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
+    <eOperations name="getMatchMap" upperBound="-1" eType="#//ElementToMatchEntry">
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
+    <eOperations name="map" lowerBound="1">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments eTypeParameter="#//JMapping/E"/>
+      </eGenericType>
+      <eParameters name="element" lowerBound="1">
+        <eGenericType eTypeParameter="#//JMapping/E"/>
+      </eParameters>
+      <eParameters name="role" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//Role"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ancestorMatchMap" upperBound="-1"
+        eType="#//ElementToMatchEntry" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceMatchMap" upperBound="-1"
+        eType="#//ElementToMatchEntry" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetMatchMap" upperBound="-1"
+        eType="#//ElementToMatchEntry" derived="true" containment="true"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GMapping">
+      <eTypeArguments eTypeParameter="#//JMapping/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JComparisonElement">
+      <eTypeArguments eTypeParameter="#//JMapping/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMatch">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getMapping">
+      <eGenericType eClassifier="#//JMapping">
+        <eTypeArguments eTypeParameter="#//JMatch/E"/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ancestor">
+      <eGenericType eTypeParameter="#//JMatch/E"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reference">
+      <eGenericType eTypeParameter="#//JMatch/E"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="target">
+      <eGenericType eTypeParameter="#//JMatch/E"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableAttributeMap"
+        upperBound="-1" eType="#//AttributeToDifferenceEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableReferenceMap"
+        upperBound="-1" eType="#//ReferenceToElementToDifferenceEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiableOrderReferenceMap"
+        upperBound="-1" eType="#//ReferenceToOrderDifferenceEntry" containment="true"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GMatch">
+      <eTypeArguments eTypeParameter="#//JMatch/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JComparisonElement">
+      <eTypeArguments eTypeParameter="#//JMatch/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JMergeableDifference" abstract="true"
+      interface="true">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GMergeableDifference">
+      <eTypeArguments eTypeParameter="#//JMergeableDifference/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JComparisonElement">
+      <eTypeArguments eTypeParameter="#//JMergeableDifference/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JElementRelativePresence" abstract="true"
+      interface="true">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getElementMatch" lowerBound="1">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments eTypeParameter="#//JElementRelativePresence/E"/>
+      </eGenericType>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GElementRelativePresence">
+      <eTypeArguments eTypeParameter="#//JElementRelativePresence/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JMergeableDifference">
+      <eTypeArguments eTypeParameter="#//JElementRelativePresence/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JElementPresence">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getOwnerMatch" lowerBound="1">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments eTypeParameter="#//JElementPresence/E"/>
+      </eGenericType>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GElementPresence">
+      <eTypeArguments eTypeParameter="#//JElementPresence/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JElementRelativePresence">
+      <eTypeArguments eTypeParameter="#//JElementPresence/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JValuePresence" abstract="true" interface="true">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GValuePresence">
+      <eTypeArguments eTypeParameter="#//JValuePresence/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JElementRelativePresence">
+      <eTypeArguments eTypeParameter="#//JValuePresence/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JAttributeValuePresence">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GAttributeValuePresence">
+      <eTypeArguments eTypeParameter="#//JAttributeValuePresence/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JValuePresence">
+      <eTypeArguments eTypeParameter="#//JAttributeValuePresence/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JReferenceValuePresence">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eOperations name="getSymmetrical">
+      <eGenericType eClassifier="#//JReferenceValuePresence">
+        <eTypeArguments eTypeParameter="#//JReferenceValuePresence/E"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getSymmetricalOwnership">
+      <eGenericType eClassifier="#//JReferenceValuePresence">
+        <eTypeArguments eTypeParameter="#//JReferenceValuePresence/E"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getValueMatch">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments eTypeParameter="#//JReferenceValuePresence/E"/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1">
+      <eGenericType eTypeParameter="#//JReferenceValuePresence/E"/>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//GReferenceValuePresence">
+      <eTypeArguments eTypeParameter="#//JReferenceValuePresence/E"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//JValuePresence">
+      <eTypeArguments eTypeParameter="#//JReferenceValuePresence/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeToDifferenceEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IAttributeValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceToElementToDifferenceEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//ElementToDifferenceEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceToOrderDifferenceEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IReferenceValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementToDifferenceEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/org.eclipse.emf.diffmerge.generic/model/GDiffData.ecore#//IReferenceValuePresence">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementToMatchEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1">
+      <eGenericType eClassifier="#//JMatch">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

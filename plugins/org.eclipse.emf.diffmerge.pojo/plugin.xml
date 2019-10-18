@@ -15,15 +15,15 @@
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <package
-            uri="http://www.eclipse.org/emf/diffmerge/1.0.0/pojodiffdata"
-            class="org.eclipse.emf.diffmerge.pojo.pojodiffdata.PojodiffdataPackage"
-            genModel="model/POJODiffData.genmodel"/>
+            uri="http://www.eclipse.org/emf/diffmerge/1.0.0/jdiffdata"
+            class="org.eclipse.emf.diffmerge.pojo.jdiffdata.JdiffdataPackage"
+            genModel="model/JDiffData.genmodel"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.extension_parser">
-      <!-- @generated POJODiffData -->
+      <!-- @generated JDiffData -->
       <parser
-            type="pojodiffdata"
-            class="org.eclipse.emf.diffmerge.pojo.pojodiffdata.util.PojodiffdataResourceFactoryImpl"/>
+            type="jdiffdata"
+            class="org.eclipse.emf.diffmerge.pojo.jdiffdata.util.JdiffdataResourceFactoryImpl"/>
    </extension>
 </plugin>

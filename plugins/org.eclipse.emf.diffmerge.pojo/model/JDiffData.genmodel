@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.emf.diffmerge.pojo/src" editDirectory="/org.eclipse.emf.diffmerge.pojo.edit/src"
+    editorDirectory="/org.eclipse.emf.diffmerge.pojo.editor/src" modelPluginID="org.eclipse.emf.diffmerge.pojo"
+    modelName="JDiffData" editPluginClass="org.eclipse.emf.diffmerge.pojo.jdiffdata.provider.DiffDataEditPlugin"
+    editorPluginClass="org.eclipse.emf.diffmerge.pojo.jdiffdata.presentation.DiffDataEditorPlugin"
+    nonNLSMarkers="true" codeFormatting="true" testSuiteClass="org.eclipse.emf.diffmerge.pojo.jdiffdata.tests.DiffDataAllTests"
+    importerID="org.eclipse.emf.importer.ecore" suppressUnsettable="true" complianceLevel="5.0"
+    copyrightFields="false" editPluginID="org.eclipse.emf.diffmerge.pojo.edit" runtimeVersion="2.6"
+    usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.emf.diffmerge.generic/model/GDiffData.genmodel#//gdiffdata"
+    importOrganizing="true">
+  <foreignModel>JDiffData.ecore</foreignModel>
+  <genPackages prefix="Jdiffdata" basePackage="org.eclipse.emf.diffmerge.pojo" resource="Basic"
+      disposableProviderFactory="true" ecorePackage="JDiffData.ecore#/">
+    <genClasses ecoreClass="JDiffData.ecore#//JComparison">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JComparison/E"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JComparison/getMapping"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="JDiffData.ecore#//JComparisonElement">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JComparisonElement/E"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JComparisonElement/getComparison"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//JMapping">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JMapping/E"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMapping/ancestorMatchMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMapping/referenceMatchMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMapping/targetMatchMap"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JMapping/getMatchFor">
+        <genParameters ecoreParameter="JDiffData.ecore#//JMapping/getMatchFor/potentialElement"/>
+        <genParameters ecoreParameter="JDiffData.ecore#//JMapping/getMatchFor/role"/>
+      </genOperations>
+      <genOperations ecoreOperation="JDiffData.ecore#//JMapping/getMatchMap">
+        <genParameters ecoreParameter="JDiffData.ecore#//JMapping/getMatchMap/role"/>
+      </genOperations>
+      <genOperations ecoreOperation="JDiffData.ecore#//JMapping/map">
+        <genParameters ecoreParameter="JDiffData.ecore#//JMapping/map/element"/>
+        <genParameters ecoreParameter="JDiffData.ecore#//JMapping/map/role"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//JMatch">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JMatch/E"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JMatch/ancestor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JMatch/reference"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JMatch/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMatch/modifiableAttributeMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMatch/modifiableReferenceMap"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//JMatch/modifiableOrderReferenceMap"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JMatch/getMapping"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="JDiffData.ecore#//JMergeableDifference">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JMergeableDifference/E"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="JDiffData.ecore#//JElementRelativePresence">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JElementRelativePresence/E"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JElementRelativePresence/getElementMatch"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//JElementPresence">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JElementPresence/E"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JElementPresence/getOwnerMatch"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="JDiffData.ecore#//JValuePresence">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JValuePresence/E"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JValuePresence/feature"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//JAttributeValuePresence">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JAttributeValuePresence/E"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JAttributeValuePresence/value"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//JReferenceValuePresence">
+      <genTypeParameters ecoreTypeParameter="JDiffData.ecore#//JReferenceValuePresence/E"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//JReferenceValuePresence/value"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JReferenceValuePresence/getSymmetrical"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JReferenceValuePresence/getSymmetricalOwnership"/>
+      <genOperations ecoreOperation="JDiffData.ecore#//JReferenceValuePresence/getValueMatch"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//AttributeToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute JDiffData.ecore#//AttributeToDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//AttributeToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//ReferenceToElementToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute JDiffData.ecore#//ReferenceToElementToDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//ReferenceToElementToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//ReferenceToOrderDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute JDiffData.ecore#//ReferenceToOrderDifferenceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDiffData.ecore#//ReferenceToOrderDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//ElementToDifferenceEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute JDiffData.ecore#//ElementToDifferenceEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference JDiffData.ecore#//ElementToDifferenceEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="JDiffData.ecore#//ElementToMatchEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDiffData.ecore#//ElementToMatchEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference JDiffData.ecore#//ElementToMatchEntry/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

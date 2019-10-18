@@ -8,9 +8,9 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.emf.diffmerge.pojo,
- org.eclipse.emf.diffmerge.pojo.pojodiffdata,
- org.eclipse.emf.diffmerge.pojo.pojodiffdata.impl,
- org.eclipse.emf.diffmerge.pojo.pojodiffdata.util
+ org.eclipse.emf.diffmerge.pojo.jdiffdata,
+ org.eclipse.emf.diffmerge.pojo.jdiffdata.impl,
+ org.eclipse.emf.diffmerge.pojo.jdiffdata.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
