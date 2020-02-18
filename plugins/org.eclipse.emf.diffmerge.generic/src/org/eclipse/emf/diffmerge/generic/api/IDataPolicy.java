@@ -169,7 +169,7 @@ public interface IDataPolicy<E> {
    * @param id_p a potentially null object
    * @param intrinsic_p whether the intrinsic (attribute-based) or extrinsic
    *          (dependent on the persistence layer) ID is concerned
-   * @return a potentially null object
+   * @return whether the operation succeeded
    */
   boolean tSetID(E element_p, Object id_p, boolean intrinsic_p);
   
