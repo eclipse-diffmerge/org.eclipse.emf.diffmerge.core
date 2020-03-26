@@ -40,7 +40,7 @@
 		<profile>
 			<id>javadoc</id>
 			<modules>
-				<module>org.eclipse.emf.diffmerge.core.javadoc</module>
+				<module>./releng/org.eclipse.emf.diffmerge.core.javadoc</module>
 			</modules>
 		</profile>
 		<profile>
@@ -53,7 +53,7 @@
 		<profile>
 			<id>standalone</id>
 			<modules>
-				<module>org.eclipse.emf.diffmerge.dependencies</module>
+				<module>./releng/org.eclipse.emf.diffmerge.dependencies</module>
 			</modules>
 		</profile>
 	</profiles>
