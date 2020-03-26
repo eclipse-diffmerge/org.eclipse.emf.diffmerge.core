@@ -200,4 +200,16 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	<distributionManagement>
+		<repository>
+			<id>repo.eclipse.org</id>
+			<name>EDM Repository - Releases</name>
+			<url>https://repo.eclipse.org/content/repositories/diffmerge-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>repo.eclipse.org</id>
+			<name>EDM Repository - Snapshots</name>
+			<url>https://repo.eclipse.org/content/repositories/diffmerge-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Workspace for Tests on EDM
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.workspace
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.13.0.qualifier
 Bundle-Vendor: Eclipse Modeling Project

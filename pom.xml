@@ -10,10 +10,51 @@
 		<relativePath>./releng/org.eclipse.emf.diffmerge.configuration</relativePath>
 	</parent>
 	<modules>
-		<module>plugins</module>
-		<module>features</module>
-		<module>tests</module>
-		<module>doc</module>
-		<module>releng</module>
+		<module>./doc/org.eclipse.emf.diffmerge.doc</module>
+		<module>./features/org.eclipse.emf.diffmerge.egit.feature</module>
+		<module>./features/org.eclipse.emf.diffmerge.feature</module>
+		<module>./features/org.eclipse.emf.diffmerge.gmf.feature</module>
+		<module>./features/org.eclipse.emf.diffmerge.sdk.feature</module>
+		<module>./features/org.eclipse.emf.diffmerge.sirius.feature</module>
+		<module>./features/org.eclipse.emf.diffmerge.tests.feature</module>
+		<module>./plugins/org.eclipse.emf.diffmerge</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.connector.core</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.connector.git</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.generic</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.gmf</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.pojo</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.sirius</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.structures</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.ui</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.ui.gmf</module>
+		<module>./plugins/org.eclipse.emf.diffmerge.ui.sirius</module>
+		<module>./tests/org.eclipse.emf.diffmerge.tests.elements</module>
+		<module>./tests/org.eclipse.emf.diffmerge.tests.elements.edit</module>
+		<module>./tests/org.eclipse.emf.diffmerge.tests.elements.editor</module>
+		<module>./tests/org.eclipse.emf.diffmerge.tests.workspace</module>
+		<module>./releng/org.eclipse.emf.diffmerge.target</module>
+		<module>./releng/org.eclipse.emf.diffmerge.update</module>
 	</modules>
+	<!-- PROFILES: javadoc, gui.test, sign, standalone -->
+	<profiles>
+		<profile>
+			<id>javadoc</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.core.javadoc</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>gui.test</id>
+			<modules>
+				<module>./tests/org.eclipse.emf.diffmerge.tests.ui</module>
+				<module>./releng/org.eclipse.emf.diffmerge.tests.ui.product</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>standalone</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.dependencies</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
