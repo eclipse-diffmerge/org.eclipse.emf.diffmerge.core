@@ -1,13 +1,12 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.eclipse.emf.diffmerge.connector.core</artifactId>
-	<packaging>eclipse-plugin</packaging>
+	<artifactId>org.eclipse.emf.diffmerge.tests</artifactId>
+	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.eclipse.emf.diffmerge</groupId>
 		<artifactId>org.eclipse.emf.diffmerge.root</artifactId>
 		<version>0.13.0-SNAPSHOT</version>
-		<relativePath>../..</relativePath>
 	</parent>
 
 	<build>
@@ -27,5 +26,20 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<modules>
+		<module>org.eclipse.emf.diffmerge.tests.elements</module>
+		<module>org.eclipse.emf.diffmerge.tests.elements.edit</module>
+		<module>org.eclipse.emf.diffmerge.tests.elements.editor</module>
+		<module>org.eclipse.emf.diffmerge.tests.workspace</module>
+	</modules>
+	<profiles>
+		<profile>
+			<id>gui.test</id>
+			<modules>
+				<module>org.eclipse.emf.diffmerge.tests.ui</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
 
