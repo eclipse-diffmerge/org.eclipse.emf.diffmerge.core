@@ -4,7 +4,7 @@ location "http://download.eclipse.org/cbi/updates/license/" {
 	org.eclipse.license.feature.group [2.0.2.v20181016-2210,2.0.2.v20181016-2210]
 }
 
-location "http://download.eclipse.org/releases/2019-06" {
+location "http://download.eclipse.org/releases/2020-06" {
 	org.eclipse.equinox.sdk.feature.group lazy
 	org.eclipse.platform.sdk lazy
 	org.eclipse.jdt.feature.group lazy
@@ -17,6 +17,8 @@ location "http://download.eclipse.org/releases/2019-06" {
 	org.eclipse.gef.feature.group lazy
 	org.eclipse.jgit.feature.group lazy
 	org.eclipse.jgit.ssh.apache.feature.group lazy
+	org.eclipse.jgit.ssh.jsch.feature.group lazy
+	org.eclipse.jgit.http.apache.feature.group lazy
 	org.eclipse.egit.feature.group lazy
 	org.eclipse.emf.sdk.feature.group lazy
 	org.eclipse.emf.transaction.sdk.feature.group lazy
@@ -25,6 +27,6 @@ location "http://download.eclipse.org/releases/2019-06" {
 	org.eclipse.gmf.runtime.notation.feature.group lazy
 	com.google.guava lazy
 }
-location "http://download.eclipse.org/sirius/updates/releases/6.3.0/2019-06" {
+location "https://download.eclipse.org/sirius/updates/stable/6.4.0-S20200716-044517/2020-06" {
 	org.eclipse.sirius.specifier.feature.group lazy
 }
