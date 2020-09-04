@@ -74,8 +74,11 @@ public interface IComparison<E> {
   
   /**
    * Return the match for the container of the given match in the given role.
-   * Result is null if and only if there is no container in the corresponding
-   * scope or no element in the role for the given match.
+   * Result is null if and only if
+   * - there is no container in the corresponding scope
+   * - or there is no element in the role for the given match
+   * - or there is such an element but it has been removed from the scope through a
+   *    merge operation.
    * @param match_p a non-null match
    * @param role_p a non-null role
    * @return a potentially null match
@@ -83,13 +86,17 @@ public interface IComparison<E> {
   IMatch<E> getContainerOf(IMatch<E> match_p, Role role_p);
   
   /**
-   * Return the matches for the roots of the TARGET and REFERENCE scopes
+   * Return the matches for the roots of the TARGET and REFERENCE scopes.
+   * The result is based on the current contents of the scope, i.e., it excludes
+   * matches of elements removed from the scope through a merge operation.
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
   List<IMatch<E>> getContents();
   
   /**
-   * Return the matches for the roots of the scope of the given role
+   * Return the matches for the roots of the scope of the given role.
+   * The result is based on the current contents of the scope, i.e., it excludes
+   * matches of elements removed from the scope through a merge operation.
    * @param role_p a non-null role
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
@@ -98,13 +105,17 @@ public interface IComparison<E> {
   /**
    * Return the matches for the contents of the given match in the TARGET and
    * REFERENCE roles. Matches from REFERENCE come first.
+   * The result is based on the current contents of the scope, i.e., it excludes
+   * matches of elements removed from the scope through a merge operation.
    * @param match_p a non-null match
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
    */
   List<IMatch<E>> getContentsOf(IMatch<E> match_p);
   
   /**
-   * Return the matches for the contents of the given match in the given role
+   * Return the matches for the contents of the given match in the given role.
+   * The result is based on the current contents of the scope, i.e., it excludes
+   * matches of elements removed from the scope through a merge operation.
    * @param match_p a non-null match
    * @param role_p a non-null role
    * @return a non-null, potentially empty, unmodifiable ordered set of matches
@@ -112,14 +123,14 @@ public interface IComparison<E> {
   List<IMatch<E>> getContentsOf(IMatch<E> match_p, Role role_p);
   
   /**
-   * Return all differences in the given role.
+   * Return all differences that are due to a presence of data in the given role.
    * This operation cannot be assumed to be efficient.
    * The resulting collection may become obsolete if the comparison is reset.
    * @param role_p a role which is TARGET or REFERENCE
    * @return a non-null, unmodifiable list which may contain duplicates if differences
    *         are not low-level, technical differences
    */
-  List<IDifference<E>> getDifferences(Role role_p);
+  Collection<IDifference<E>> getDifferences(Role role_p);
   
   /**
    * Return the set of duplicate match IDs for the given role, if any.
@@ -170,6 +181,7 @@ public interface IComparison<E> {
   
   /**
    * Return the set of differences which have not been merged.
+   * It is a subset of the union of getDifferences(TARGET) and getDifferences(REFERENCE).
    * The resulting collection may become obsolete if the comparison is reset.
    * @return a non-null, potentially empty, unmodifiable collection
    */

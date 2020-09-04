@@ -777,14 +777,12 @@ public abstract class GComparisonImpl<E, A, R> extends GIdentifiedImpl
    * @see org.eclipse.emf.diffmerge.generic.api.IComparison#getDifferences(org.eclipse.emf.diffmerge.generic.api.Role)
    * @generated NOT
    */
-  public List<IDifference<E>> getDifferences(Role role_p) {
-    List<IDifference<E>> result = new FArrayList<IDifference<E>>();
-    Iterator<IMatch<E>> it = getAllContents(role_p);
-    while (it.hasNext()) {
-      IMatch<E> current = it.next();
-      result.addAll(current.getPresenceDifferencesIn(role_p));
+  public Collection<IDifference<E>> getDifferences(Role role_p) {
+    Collection<IDifference<E>> result = new FHashSet<IDifference<E>>(IEqualityTester.BY_EQUALS);
+    for (IMatch<E> match : getMapping().getContents()) {
+      result.addAll(match.getPresenceDifferencesIn(role_p));
     }
-    return result;
+    return Collections.unmodifiableCollection(result);
   }
 
   /**
