@@ -27,6 +27,6 @@ location "http://download.eclipse.org/releases/2020-06" {
 	org.eclipse.gmf.runtime.notation.feature.group lazy
 	com.google.guava lazy
 }
-location "https://download.eclipse.org/sirius/updates/stable/6.4.0-S20200716-044517/2020-06" {
+location "https://download.eclipse.org/sirius/updates/stable/6.4.0-S20200921-043506/2020-06" {
 	org.eclipse.sirius.specifier.feature.group lazy
 }
