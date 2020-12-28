@@ -16,6 +16,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -84,6 +85,16 @@ public class MergedDifferenceCategory extends AbstractDifferenceCategory {
   @Override
   public boolean mayCoverPendingDifferences() {
     return false;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    MergedDifferenceCategory copied = new MergedDifferenceCategory();
+    copied.copyState(this);
+    return copied;
   }
   
 }

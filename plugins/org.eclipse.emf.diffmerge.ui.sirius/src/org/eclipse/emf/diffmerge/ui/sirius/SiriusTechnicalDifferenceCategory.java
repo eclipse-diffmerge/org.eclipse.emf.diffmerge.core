@@ -17,6 +17,7 @@ import java.util.Collection;
 import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
 import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
@@ -104,6 +105,16 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
    */
   protected boolean isSiriusTechnicalFeature(EStructuralFeature feature_p) {
     return SIRIUS_TECHNICAL_FEATURES.contains(feature_p);
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    SiriusTechnicalDifferenceCategory copied = new SiriusTechnicalDifferenceCategory();
+    copied.copyState(this);
+    return copied;
   }
   
 }

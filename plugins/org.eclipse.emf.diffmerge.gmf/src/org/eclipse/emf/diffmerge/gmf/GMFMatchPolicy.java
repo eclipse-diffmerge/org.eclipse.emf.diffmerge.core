@@ -104,15 +104,6 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public GMFMatchPolicy clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new GMFMatchPolicy(this);
-  }
-  
-  /**
    * Return a semantic ID for the given annotation
    * @param annotation_p a non-null element
    * @param scope_p a non-null scope that covers annotation_p

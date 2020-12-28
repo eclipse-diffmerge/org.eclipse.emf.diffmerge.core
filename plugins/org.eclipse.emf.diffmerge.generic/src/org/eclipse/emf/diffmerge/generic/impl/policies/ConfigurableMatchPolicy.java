@@ -66,15 +66,6 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public ConfigurableMatchPolicy<E> clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new ConfigurableMatchPolicy<E>(this);
-  }
-  
-  /**
    * Notify all registered listeners that the configuration changed
    * @param property_p an optional object that describes the configuration property that changed
    */

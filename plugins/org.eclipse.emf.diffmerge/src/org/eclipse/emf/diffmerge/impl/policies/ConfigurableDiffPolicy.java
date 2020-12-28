@@ -57,15 +57,6 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public ConfigurableDiffPolicy clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new ConfigurableDiffPolicy(this);
-  }
- 
-  /**
    * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#considerOrderedFeature(org.eclipse.emf.ecore.EStructuralFeature)
    */
   @Override

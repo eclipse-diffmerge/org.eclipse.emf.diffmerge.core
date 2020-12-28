@@ -16,6 +16,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -74,6 +75,16 @@ public class PropertyChangeCategory extends AbstractDifferenceCategory {
    */
   public String getText(EMFDiffNode node_p) {
     return Messages.PropertyChangeCategory_Text;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    PropertyChangeCategory copied = new PropertyChangeCategory();
+    copied.copyState(this);
+    return copied;
   }
   
 }

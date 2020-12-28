@@ -16,6 +16,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -85,6 +86,16 @@ public class ConflictCategory extends AbstractDifferenceCategory {
   @Override
   public String getDescription(EMFDiffNode node_p) {
     return Messages.ConflictCategory_Description;
+  }
+
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    ConflictCategory copied = new ConflictCategory();
+    copied.copyState(this);
+    return copied;
   }
   
 }

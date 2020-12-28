@@ -17,7 +17,7 @@ package org.eclipse.emf.diffmerge.generic.api.config;
  * and that can notify about configuration changes.
  * @author Olivier Constant
  */
-public interface IConfigurablePolicy extends Cloneable {
+public interface IConfigurablePolicy {
   
   /**
    * Register the given listener on this notifier

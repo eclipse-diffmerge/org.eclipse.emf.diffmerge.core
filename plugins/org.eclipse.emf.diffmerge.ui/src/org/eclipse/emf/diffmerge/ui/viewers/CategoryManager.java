@@ -961,12 +961,8 @@ public class CategoryManager {
   public void setDefaultConfiguration() {
     _defaultConfiguration.clear();
     for (IDifferenceCategory category : getCategories()) {
-      try {
-        IDifferenceCategory clone = category.clone();
-        _defaultConfiguration.add(clone);
-      } catch (CloneNotSupportedException e) {
-        // Exclude from default configuration and proceed
-      }
+      IDifferenceCategory clone = category.copy();
+      _defaultConfiguration.add(clone);
     }
   }
   

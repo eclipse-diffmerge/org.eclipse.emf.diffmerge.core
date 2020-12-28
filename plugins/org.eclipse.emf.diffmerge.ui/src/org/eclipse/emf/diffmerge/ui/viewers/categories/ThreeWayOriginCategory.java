@@ -17,6 +17,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IPresenceDifference;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -105,6 +106,16 @@ public class ThreeWayOriginCategory extends AbstractSideRelatedDifferenceCategor
   @Override
   public boolean isApplicable(EMFDiffNode node_p) {
     return node_p.isThreeWay();
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    ThreeWayOriginCategory copied = new ThreeWayOriginCategory(this.isLeftSide());
+    copied.copyState(this);
+    return copied;
   }
   
 }

@@ -18,12 +18,12 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
  * A category of differences for UI purposes.
  * @author Olivier Constant
  */
-public interface IDifferenceCategory extends IDifferenceCategoryItem, Cloneable {
+public interface IDifferenceCategory extends IDifferenceCategoryItem {
   
   /**
-   * @see Object#clone()
+   * Return a cloned object
    */
-  IDifferenceCategory clone() throws CloneNotSupportedException;
+  IDifferenceCategory copy();
   
   /**
    * Set the state of this category to reflect the state of the given category

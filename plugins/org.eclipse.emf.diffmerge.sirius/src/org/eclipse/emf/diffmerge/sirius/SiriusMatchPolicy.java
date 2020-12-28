@@ -79,15 +79,6 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public SiriusMatchPolicy clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new SiriusMatchPolicy(this);
-  }
-  
-  /**
    * Return a semantic ID for the given annotation entry
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p

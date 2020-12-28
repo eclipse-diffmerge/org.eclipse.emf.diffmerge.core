@@ -63,20 +63,14 @@ IComparisonConfigurator.Provider {
     IMatchPolicy<EObject> matchPolicy = comparisonMethod_p.getMatchPolicy();
     _keepMatchIDs = (matchPolicy == null)? false: matchPolicy.keepMatchIDs();
     if (matchPolicy instanceof ConfigurableMatchPolicy) {
-      try {
-        _matchPolicy = ((ConfigurableMatchPolicy)matchPolicy).clone();
-      } catch (CloneNotSupportedException e) {
-        // Keep null value
-      }
+      _matchPolicy = new ConfigurableMatchPolicy(
+          (ConfigurableMatchPolicy) matchPolicy);
     }
     // Diff policy
     IDiffPolicy<EObject> diffPolicy = comparisonMethod_p.getDiffPolicy();
     if (diffPolicy instanceof ConfigurableDiffPolicy) {
-      try {
-        _diffPolicy = ((ConfigurableDiffPolicy)diffPolicy).clone();
-      } catch (CloneNotSupportedException e) {
-        // Keep null value
-      }
+      _diffPolicy = new ConfigurableDiffPolicy(
+          (ConfigurableDiffPolicy) diffPolicy);
     }
     // Merge policy
     IMergePolicy<EObject> mergePolicy = comparisonMethod_p.getMergePolicy();

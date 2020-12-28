@@ -51,15 +51,6 @@ implements IDifferenceCategory {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public IDifferenceCategory clone() throws CloneNotSupportedException {
-    // Increase visibility, see Cloneable
-    return (IDifferenceCategory)super.clone();
-  }
-  
-  /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copyState(org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory)
    */
   public void copyState(IDifferenceCategory peer_p) {

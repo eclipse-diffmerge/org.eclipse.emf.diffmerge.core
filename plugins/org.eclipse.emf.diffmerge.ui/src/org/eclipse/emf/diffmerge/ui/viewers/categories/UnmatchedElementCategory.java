@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.generic.api.diff.IReferenceValuePresence;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -118,6 +119,16 @@ public class UnmatchedElementCategory extends AbstractSideRelatedDifferenceCateg
     else
       result = Messages.UnmatchedElementCategory_TextRight;
     return result;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    UnmatchedElementCategory copied = new UnmatchedElementCategory(this.isLeftSide());
+    copied.copyState(this);
+    return copied;
   }
   
 }

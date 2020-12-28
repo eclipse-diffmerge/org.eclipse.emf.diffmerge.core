@@ -16,6 +16,7 @@ import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
+import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -72,6 +73,16 @@ public class MoveCategory extends AbstractDifferenceCategory {
    */
   public String getText(EMFDiffNode node_p) {
     return Messages.MoveCategory_Text;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory#copy()
+   */
+  @Override
+  public IDifferenceCategory copy() {
+    MoveCategory copied = new MoveCategory();
+    copied.copyState(this);
+    return copied;
   }
   
 }

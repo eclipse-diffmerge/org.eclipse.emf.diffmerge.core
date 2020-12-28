@@ -163,15 +163,6 @@ org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy<EObject>
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public ConfigurableMatchPolicy clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new ConfigurableMatchPolicy(this);
-  }
-  
-  /**
    * Get the exact set of fine-grained match criteria that must be used according to this policy
    * @return a non-null, potentially empty, unmodifiable collection
    */
