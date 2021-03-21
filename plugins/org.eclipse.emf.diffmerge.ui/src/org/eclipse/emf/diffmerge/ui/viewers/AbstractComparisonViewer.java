@@ -294,7 +294,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
             ((IPersistentDataScope.Editable<?>)rightScope).save();
           }
         }
-        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(false));
+        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.valueOf(false));
         didSave();
       } catch (Exception e) {
         MessageDialog.openError(
@@ -596,7 +596,7 @@ implements IFlushable, IPropertyChangeNotifier, ICompareInputChangeListener, IAd
         Object[] undoCommand = getUndoCommand();
         if (undoCommand.length > 0) {
           boolean newDirty = undoCommand[0] != getLastCommandBeforeSave();
-          firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(newDirty));
+          firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.valueOf(newDirty));
         }
       }
     }
