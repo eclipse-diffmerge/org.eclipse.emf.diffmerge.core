@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 
 /**
@@ -114,8 +115,7 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * Close the active editor without saving
    */
   protected void closeEditor() {
-    IWorkbenchWindow activeWorkbenchWindow =
-        EMFDiffMergeUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+    IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     if (activeWorkbenchWindow != null) {
       IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
       if (page != null) {

@@ -198,7 +198,7 @@ public class DefaultDiffLabelDecorator extends DiffLabelDecorator {
    * @param swtColor_p an identifier of an SWT color from class SWT
    */
   public void setDifferenceColor(DifferenceColorKind colorKind_p, int swtColor_p) {
-    _differenceColors.put(colorKind_p, new Integer(swtColor_p));
+    _differenceColors.put(colorKind_p, Integer.valueOf(swtColor_p));
   }
   
 }

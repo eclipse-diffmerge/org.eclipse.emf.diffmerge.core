@@ -57,6 +57,7 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
    * @see org.eclipse.emf.diffmerge.connector.git.ext.AbstractGitURIConverter#getGitFileRevision(java.lang.String)
    */
   @Override
+  @SuppressWarnings("resource") // Just passing the repository as parameter
   protected IFileRevision getGitFileRevision(String gitPath) {
     // Check if the file being loaded is conflicting locally and return the
     // expected version from the index

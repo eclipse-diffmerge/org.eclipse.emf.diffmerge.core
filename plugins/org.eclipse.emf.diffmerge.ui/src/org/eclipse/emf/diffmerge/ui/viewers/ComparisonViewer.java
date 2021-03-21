@@ -2273,7 +2273,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         }
       });
       if (!input.isReactive()) {
-        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
+        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.valueOf(true));
         input.updateDifferenceNumbers();
       }
     }
@@ -2554,7 +2554,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       // React to merge
       input.setModified(true, toLeft_p);
       if (!input.isReactive()) {
-        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, new Boolean(true));
+        firePropertyChangeEvent(CompareEditorInput.DIRTY_STATE, Boolean.valueOf(true));
         input.updateDifferenceNumbers();
       }
       if (input.isUserPropertyTrue(P_LOG_EVENTS)) {

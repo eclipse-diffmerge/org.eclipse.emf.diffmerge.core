@@ -79,6 +79,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
    * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIConverterForRevision(org.eclipse.team.core.history.IFileRevision)
    */
   @Override
+  @SuppressWarnings("resource") // Just passing the repository as parameter
   protected URIConverter getURIConverterForRevision(IFileRevision revision_p)
       throws CoreException {
     if (revision_p instanceof IndexFileRevision) {
