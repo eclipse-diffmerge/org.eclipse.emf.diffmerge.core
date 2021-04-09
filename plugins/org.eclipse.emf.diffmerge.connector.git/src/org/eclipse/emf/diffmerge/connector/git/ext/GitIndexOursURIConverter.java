@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
@@ -38,7 +39,7 @@ public class GitIndexOursURIConverter extends AbstractGitConflictURIConverter {
    */
   @Override
   protected String getURIPathRepresentation(URI uri_p) {
-    return uri_p.toPlatformString(true);
+    return URI.decode(CommonPlugin.resolve(uri_p).devicePath());
   }
   
   /**

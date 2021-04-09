@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import org.eclipse.compare.IEditableContent;
 import org.eclipse.compare.ITypedElement;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -113,7 +115,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
       try {
         conflicting = GitHelper.INSTANCE.isConflicting(revision_p);
         if (conflicting) {
-          result = URI.createPlatformResourceURI(revision_p.getURI().toString(), false);
+          result = createPlatformResourceUriFromFileRevision(revision_p);
         } else {
           result = URI.createURI(
               GitHelper.INSTANCE.getSchemeIndex() + GitHelper.INSTANCE.getSchemeSeparator() +
@@ -125,6 +127,25 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
       }
     }
     return result;
+  }
+  
+  /**
+   * @param revision_p
+   *          revision file
+   * @return platform resource uri
+   */
+  protected URI createPlatformResourceUriFromFileRevision(
+      IFileRevision revision_p) {
+    java.net.URI revisionAbsoluteUri = ((IndexFileRevision) revision_p)
+        .getRepository().getWorkTree().toURI().resolve(revision_p.getURI());
+    IFile[] platformFiles = ResourcesPlugin.getWorkspace().getRoot()
+        .findFilesForLocationURI(revisionAbsoluteUri);
+    if (platformFiles.length > 0 && platformFiles[0].isAccessible()) {
+      IFile iFile = platformFiles[0];
+      return URI.createPlatformResourceURI(iFile.getFullPath().toString(),
+          true);
+    }
+    return null;
   }
   
   /**
