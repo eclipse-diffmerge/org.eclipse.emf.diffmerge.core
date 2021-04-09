@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.egit.core.internal.storage.GitFileRevision;
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
@@ -122,30 +123,52 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
    * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#createInputStream(org.eclipse.emf.common.util.URI, java.util.Map)
    */
   @Override
-  public InputStream createInputStream(URI uri_p, Map<?, ?> options_p) throws IOException {
+  public InputStream createInputStream(URI uri_p, Map<?, ?> options_p)
+      throws IOException {
     Repository repo = _repository;
     if (repo != null && isSupportedURI(uri_p)) {
-      // Try to locate the file locally
-      String pathRepresentation = getURIPathRepresentation(uri_p);
-      IPath newPath = new Path(repo.getWorkTree().getAbsolutePath()).append(pathRepresentation);
-      File target = newPath.toFile();
+      // Try to locate the file locally  
+      IPath absoluteFilePath = getAbsoluteFilePath(uri_p, repo);
+      IPath absoluteRepoPath = new Path(repo.getWorkTree().getCanonicalPath());
+      File target = absoluteFilePath.toFile();
+      String gitPath = absoluteFilePath.makeRelativeTo(absoluteRepoPath)
+          .toString();
       if (target != null && target.exists()) {
         try {
-          String gitPath = pathRepresentation.substring(1);
-          return getGitFileRevision(gitPath).getStorage(new NullProgressMonitor()).getContents();
+          return getGitFileRevision(gitPath)
+              .getStorage(new NullProgressMonitor()).getContents();
         } catch (CoreException e) {
-          EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
-              EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+          EMFDiffMergeGitConnectorPlugin.getDefault().getLog()
+              .log(new Status(IStatus.ERROR,
+                  EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
+                  e.getMessage(), e));
         }
       } else {
-        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
-            EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
-            String.format(Messages.AbstractGitURIConverter_CannotFindResource, newPath)));
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog()
+            .log(new Status(IStatus.ERROR,
+                EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
+                String.format(
+                    Messages.AbstractGitURIConverter_CannotFindResource,
+                    absoluteFilePath)));
       }
     }
     return super.createInputStream(uri_p, options_p);
   }
   
+  /**
+   * @param uri_p
+   * @param repo
+   * @return the absolute file path
+   */
+  protected IPath getAbsoluteFilePath(URI uri_p, Repository repo) {
+    String pathRepresentation = getURIPathRepresentation(uri_p);
+    if (uri_p.isPlatform())
+      return new Path(pathRepresentation);
+
+    return new Path(repo.getWorkTree().getAbsolutePath())
+        .append(pathRepresentation);
+  }
+ 
   /**
    * Return the file revision for the given path
    * @param gitPath_p a non-null string
