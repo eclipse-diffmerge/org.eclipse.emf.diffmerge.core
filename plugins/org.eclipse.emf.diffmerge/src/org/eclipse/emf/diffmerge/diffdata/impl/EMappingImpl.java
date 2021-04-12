@@ -95,6 +95,7 @@ public class EMappingImpl extends GMappingImpl<EObject, EAttribute, EReference>
    */
   @Override
   public void clear() {
+    super.clear();
     _targetCrossReferencer.clear();
     _referenceCrossReferencer.clear();
     eAdapters().remove(_matchAdapter);
