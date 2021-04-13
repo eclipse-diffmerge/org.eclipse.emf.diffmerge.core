@@ -68,10 +68,11 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
   @Override
   protected IFileRevision getRevision(ITypedElement typedElement_p) {
     IFileRevision result;
-    if (typedElement_p instanceof EditableRevision)
+    if (typedElement_p instanceof EditableRevision) {
       result = ((EditableRevision)typedElement_p).getFileRevision();
-    else
+    } else {
       result = super.getRevision(typedElement_p);
+    }
     return result;
   }
   
@@ -79,6 +80,7 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
    * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIConverterForRevision(org.eclipse.team.core.history.IFileRevision)
    */
   @Override
+  @SuppressWarnings("resource") // Just passing the repository as parameter
   protected URIConverter getURIConverterForRevision(IFileRevision revision_p)
       throws CoreException {
     if (revision_p instanceof IndexFileRevision) {
@@ -110,12 +112,13 @@ public class GitIndexRevisionScopeDefinitionFactory extends AbstractRevisionScop
       boolean conflicting;
       try {
         conflicting = GitHelper.INSTANCE.isConflicting(revision_p);
-        if (conflicting)
+        if (conflicting) {
           result = URI.createPlatformResourceURI(revision_p.getURI().toString(), false);
-        else
+        } else {
           result = URI.createURI(
               GitHelper.INSTANCE.getSchemeIndex() + GitHelper.INSTANCE.getSchemeSeparator() +
               revision_p.getURI().toString());
+        }
       } catch (Exception e) {
         EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
             EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));

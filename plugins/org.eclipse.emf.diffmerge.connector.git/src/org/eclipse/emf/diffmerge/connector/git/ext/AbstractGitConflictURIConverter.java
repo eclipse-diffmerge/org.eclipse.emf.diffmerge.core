@@ -57,25 +57,29 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
    * @see org.eclipse.emf.diffmerge.connector.git.ext.AbstractGitURIConverter#getGitFileRevision(java.lang.String)
    */
   @Override
+  @SuppressWarnings("resource") // Just passing the repository as parameter
   protected IFileRevision getGitFileRevision(String gitPath) {
     // Check if the file being loaded is conflicting locally and return the
     // expected version from the index
+    Repository repository = getRepository();
     try {
-      if (GitHelper.INSTANCE.isConflicting(getRepository(), gitPath))
-        return inIndex(getRepository(), gitPath, _conflictRole);
+      if (GitHelper.INSTANCE.isConflicting(repository, gitPath)) {
+        return inIndex(repository, gitPath, _conflictRole);
+      }
       ConflictCommits conflictCommits = RevUtils.getConflictCommits(
-          getRepository(), _holdingResourcePath);
+          repository, _holdingResourcePath);
       // Current file not conflicting, but root resource is.
       if (DirCacheEntry.STAGE_2 == _conflictRole) {
         return inCommit(
-            getRepository(), conflictCommits.getOurCommit(), gitPath, null);
+            repository, conflictCommits.getOurCommit(), gitPath, null);
       }
       // If Theirs, pick the git ancestor commitid for the current file.
       else if (DirCacheEntry.STAGE_3 == _conflictRole) {
         RevCommit commit = conflictCommits.getTheirCommit();
-        if (commit == null)
+        if (commit == null) {
           commit = conflictCommits.getOurCommit();
-        return inCommit(getRepository(), commit, gitPath, null);
+        }
+        return inCommit(repository, commit, gitPath, null);
       }
     } catch (IOException e) {
       EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
@@ -83,7 +87,7 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
           e.getMessage(), e));
     }
     // Default goes to index
-    return inIndex(getRepository(), gitPath);
+    return inIndex(repository, gitPath);
   }
   
 }

@@ -79,10 +79,11 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
     IResourceVariant variant = getVariant(revision);
     if (variant instanceof GitRemoteResource) {
       // Git remote
-      IPath path = ((GitRemoteResource)variant).getDisplayPath();
+      IPath path = ((GitRemoteResource) variant).getDisplayPath();
       Repository repo = GitHelper.INSTANCE.getRepository(path);
-      if (repo != null)
-        result = new GitCommitURIConverter(((GitRemoteResource)variant).getCommitId(), repo);
+      if (repo != null) {
+        result = new GitCommitURIConverter(((GitRemoteResource) variant).getCommitId(), repo);
+      }
     }
     if (result == null) {
       Repository repo = GitHelper.INSTANCE.getRepository(revision);
@@ -90,12 +91,13 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
         if (revision instanceof IndexFileRevision) {
           // Git index
           try {
-            if (GitHelper.INSTANCE.isConflicting(revision))
+            if (GitHelper.INSTANCE.isConflicting(revision)) {
               result = new GitIndexTheirsURIConverter(
                   GitHelper.INSTANCE.getRepository(revision),
-                  ((IndexFileRevision)revision).getGitPath());
-            else
+                  ((IndexFileRevision) revision).getGitPath());
+            } else {
               result = new GitIndexURIConverter(GitHelper.INSTANCE.getRepository(revision));
+            }
           } catch (IOException e) {
             EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
                 IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
@@ -105,12 +107,13 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
           }
         } else if (revision instanceof CommitFileRevision) {
           // Git commit
-          result = new GitCommitURIConverter(((CommitFileRevision)revision).getRevCommit(), repo);
+          result = new GitCommitURIConverter(((CommitFileRevision) revision).getRevCommit(), repo);
         }
       }
     }
-    if (result == null)
+    if (result == null) {
       result = super.getURIConverterForRevision(revision);
+    }
     return result;
   }
   
@@ -151,7 +154,7 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
       result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelIndex, revision_p.getName());
     } else if (revision_p instanceof CommitFileRevision) {
       result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelCommit, revision_p.getName(),
-          getContentIdentifier(((CommitFileRevision)revision_p).getRevCommit()));
+          getContentIdentifier(((CommitFileRevision) revision_p).getRevCommit()));
     } else if (revision_p instanceof WorkspaceFileRevision) {
       result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelWorkspace, revision_p.getName());
     } else {

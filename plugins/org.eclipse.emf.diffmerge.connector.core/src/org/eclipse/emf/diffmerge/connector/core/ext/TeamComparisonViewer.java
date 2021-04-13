@@ -115,7 +115,8 @@ public class TeamComparisonViewer extends Viewer implements IFlushable, IPropert
    * Close the active editor without saving
    */
   protected void closeEditor() {
-    IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    IWorkbenchWindow activeWorkbenchWindow =
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     if (activeWorkbenchWindow != null) {
       IWorkbenchPage page = activeWorkbenchWindow.getActivePage();
       if (page != null) {

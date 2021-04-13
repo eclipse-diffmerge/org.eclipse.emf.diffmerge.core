@@ -75,13 +75,15 @@ public final class GitHelper {
    */
   public Repository getRepository(IPath path_p) {
     // First look directly for connected projects using the repository mapping
-    if (RepositoryMapping.getMapping(path_p) != null)
+    if (RepositoryMapping.getMapping(path_p) != null) {
       return RepositoryMapping.getMapping(path_p).getRepository();
+    }
     // Then iterate over known repositories.
     for (Repository repo: Activator.getDefault().getRepositoryCache().getAllRepositories()) {
       Path fullPath=new Path(repo.getWorkTree().toString().concat(path_p.makeAbsolute().toString()));
-      if (fullPath.toFile().exists())
+      if (fullPath.toFile().exists()) {
         return repo;
+      }
     }
     EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
         EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),

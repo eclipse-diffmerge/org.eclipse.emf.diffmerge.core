@@ -42,6 +42,7 @@ extends URIScopeDefinitionFactory implements IModelScopeDefinitionFactory.Delega
    * @see org.eclipse.emf.diffmerge.ui.specification.ext.URIScopeDefinitionFactory#createScopeDefinition(java.lang.Object, java.lang.String, boolean)
    */
   @Override
+  @SuppressWarnings("resource") // Just passing the InputStream as parameter
   public IModelScopeDefinition createScopeDefinition(
       Object entrypoint_p, String label_p, boolean editable_p) {
     URIConvertingScopeDefinition result = null;
