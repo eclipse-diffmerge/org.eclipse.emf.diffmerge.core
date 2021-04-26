@@ -22,14 +22,11 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
   private static final String BUNDLE_NAME = "org.eclipse.emf.diffmerge.connector.git.messages"; //$NON-NLS-1$
   public static String AbstractGitURIConverter_CannotFindResource;
-  public static String GitHelper_NoConflictInfoFound;
   public static String GitHelper_NoRepoFound;
-  public static String GitIndexRevisionScopeDefinitionFactory_LabelIndexEditable;
-  public static String GitIndexRevisionScopeDefinitionFactory_LabelIndexReadOnly;
-  public static String GitIndexRevisionScopeDefinitionFactory_LabelLocal;
 
   public static String GitRevisionScopeDefinitionFactory_LabelCommit;
   public static String GitRevisionScopeDefinitionFactory_LabelIndex;
+  public static String GitRevisionScopeDefinitionFactory_LabelIndexEditable;
   public static String GitRevisionScopeDefinitionFactory_LabelRemote;
   public static String GitRevisionScopeDefinitionFactory_LabelWorkspace;
 

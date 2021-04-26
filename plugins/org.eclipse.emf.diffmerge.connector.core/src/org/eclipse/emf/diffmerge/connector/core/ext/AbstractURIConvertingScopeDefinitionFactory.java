@@ -59,8 +59,9 @@ extends URIScopeDefinitionFactory implements IModelScopeDefinitionFactory.Delega
           IModelScopeDefinitionFactory factory = factories.get(0);
           // Create scope definition and wrap it in a revision scope definition
           String label = (label_p != null) ? label_p : getLabelFor(entrypoint_p);
-          if (label == null)
+          if (label == null) {
             label = uri.toString();
+          }
           IModelScopeDefinition scopeDefinition = factory.createScopeDefinition(uri, label, editable_p);
           if (scopeDefinition != null) {
             boolean editable = isScopeEditable(entrypoint_p);

@@ -13,28 +13,47 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.COMMIT;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.INDEX;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.INDEX_CONFLICT_OURS;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.INDEX_CONFLICT_THEIRS;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.NOT_MANAGED;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.REMOTE;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.WORKING_TREE;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.eclipse.compare.IEditableContent;
+import org.eclipse.compare.ITypedElement;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.Activator;
-import org.eclipse.egit.core.project.RepositoryMapping;
+import org.eclipse.egit.core.info.GitInfo;
+import org.eclipse.egit.core.info.GitInfo.Source;
+import org.eclipse.egit.core.info.GitItemState;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
-import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
+import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.team.core.history.IFileRevision;
+import org.eclipse.team.core.variants.CachedResourceVariant;
 
 
 /**
  * A helper for Git behaviors.
  */
-@SuppressWarnings("restriction") // Specific EGit behaviors
 public final class GitHelper {
   
   /** The singleton instance */
@@ -52,6 +71,26 @@ public final class GitHelper {
   /** Post-scheme separator */
   private static final String SCHEME_SEP = ":/"; //$NON-NLS-1$
 	
+  /**
+   * A characterization of an IFileRevision w.r.t. Git.
+   */
+  public enum GitFileRevisionKind {
+    /** Not managed by Git */
+    NOT_MANAGED,
+    /** In working tree */
+    WORKING_TREE,
+    /** In the index without conflict */
+    INDEX,
+    /** In the index, conflicting and on side 'Ours' */
+    INDEX_CONFLICT_OURS,
+    /** In the index, conflicting and on side 'Theirs' */
+    INDEX_CONFLICT_THEIRS,
+    /** In a commit */
+    COMMIT,
+    /** In remote resource variant */
+    REMOTE
+  }
+  
 	
 	/**
 	 * Constructor
@@ -61,6 +100,57 @@ public final class GitHelper {
 	}
 	
   /**
+   * Return a GitInfo for the given object, if applicable and if any
+   * @param object_p a potentially null object
+   * @return a potentially null object
+   */
+  public GitInfo getGitInfo(Object object_p) {
+    return Adapters.adapt(object_p, GitInfo.class);
+  }
+  
+  /**
+   * Return the Git revision kind for the given GitInfo associated to the given
+   * typed element
+   * @param info_p a potentially null GitInfo
+   * @param typedElement_p a potentially null typed element
+   * @return a non-null object
+   */
+  @SuppressWarnings("resource") // See GitInfo#getRepository()
+  public GitFileRevisionKind getGitKind(GitInfo info_p, ITypedElement typedElement_p) {
+    GitFileRevisionKind result;
+    if (info_p == null || info_p.getRepository() == null) {
+      // Not managed by Git
+      result = NOT_MANAGED;
+    } else {
+      Source source = info_p.getSource();
+      if (source == Source.WORKING_TREE) {
+        // Working tree
+        result = WORKING_TREE;
+      } else if (source == Source.INDEX) {
+        // Index
+        if (GitHelper.INSTANCE.isConflicting(info_p)) {
+          // Conflicting
+          if (typedElement_p instanceof IEditableContent) {
+            result = INDEX_CONFLICT_OURS;
+          } else {
+            result = INDEX_CONFLICT_THEIRS;
+          }
+        } else {
+          // Index not conflicting
+          result = INDEX;
+        }
+      } else if (info_p instanceof CachedResourceVariant) {
+        // Remote resource variant
+        result = REMOTE;
+      } else {
+        // Commit
+        result = COMMIT;
+      }
+    }
+    return result;
+  }
+  
+  /**
    * Return all supported Git schemes
    * @return a non-null set
    */
@@ -69,44 +159,66 @@ public final class GitHelper {
   }
   
   /**
-   * Return the Git repository for the given resource path, if any
-   * @param path_p a non-null path
-   * @return a potentially null object
+   * Get the 'ours' commit in a conflict state for the given repository
+   * @param repository_p a non-null repository
+   * @param revWalk_p a non-null rev walk to use for parsing commits
+   * @return a non-null commit
+   * @throws IOException if the commit cannot be determined
    */
-  public Repository getRepository(IPath path_p) {
-    // First look directly for connected projects using the repository mapping
-    if (RepositoryMapping.getMapping(path_p) != null) {
-      return RepositoryMapping.getMapping(path_p).getRepository();
-    }
-    // Then iterate over known repositories.
-    for (Repository repo: Activator.getDefault().getRepositoryCache().getAllRepositories()) {
-      Path fullPath=new Path(repo.getWorkTree().toString().concat(path_p.makeAbsolute().toString()));
-      if (fullPath.toFile().exists()) {
-        return repo;
-      }
-    }
-    EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
-        EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
-        "Cannot find Git repository for resource at: " + path_p)); //$NON-NLS-1$
-    return null;
+  public RevCommit getOurs(Repository repository_p, RevWalk revWalk_p)
+      throws IOException {
+    ObjectId ours = repository_p.resolve(Constants.HEAD);
+    return revWalk_p.parseCommit(ours); // walk.markStart(head); walk.next();
   }
   
   /**
-   * Return the Git repository for the given revision
-   * @param revision_p a potentially null revision
+   * Return the Git repository for the given object, if any.
+   * Typically applies to workspace resources (IResource) or EGit objects (IFileRevisions,
+   * ITypedElements, remote resources, blob storage).
+   * @param object_p a potentially null object
    * @return a potentially null object
    */
-  public Repository getRepository(IFileRevision revision_p) {
-    if (revision_p != null) {
-      IPath revisionPath = toPath(revision_p);
-      if (revisionPath != null && !revisionPath.isAbsolute()) {
-        return getRepository(revisionPath);
+  public Repository getRepository(Object object_p) {
+    Repository result = null;
+    GitInfo gitInfo = getGitInfo(object_p);
+    if (gitInfo != null) {
+      result = gitInfo.getRepository();
+    }
+    if (result == null) {
+      // Failure: log error
+      String path = null;
+      if (gitInfo != null) {
+        path = gitInfo.getGitPath();
+      } else  {
+        IPath iPath = null;
+        if (object_p instanceof IResource) {
+          iPath = ((IResource) object_p).getFullPath();
+        } else if (object_p instanceof IFileRevision) {
+          iPath = toPath((IFileRevision) object_p);
+        }
+        if (iPath != null) {
+          path = iPath.toString();
+        }
       }
       EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
           EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
-          String.format(Messages.GitHelper_NoRepoFound, revisionPath)));
+          String.format(Messages.GitHelper_NoRepoFound, path)));
     }
-    return null;
+    return result;
+  }
+  
+  /**
+   * Return the rev walk for the given relative path in the given repository
+   * @param repository_p a non-null repository
+   * @param path_p a non-null string
+   * @return a non-null object
+   */
+  public RevWalk getRevWalk(Repository repository_p, String path_p) {
+    RevWalk result = new RevWalk(repository_p);
+    result.setTreeFilter(AndTreeFilter.create(
+          PathFilterGroup.createFromStrings(path_p),
+          TreeFilter.ANY_DIFF));
+    return result;
   }
   
   /**
@@ -142,48 +254,16 @@ public final class GitHelper {
   }
   
   /**
-   * Return whether there is a conflict on the given revision
-   * @param revision_p a non-null revision
+   * Return whether the given GitInfo indicates a conflict (false if null)
+   * @param info_p a potentially null GitInfo
    */
-  @SuppressWarnings("resource")
-  public boolean isConflicting(IFileRevision revision_p)
-      throws NoWorkTreeException, IOException {
+  public boolean isConflicting(GitInfo info_p) {
     boolean result = false;
-    Repository repo = getRepository(revision_p);
-    if (repo != null)
-      result = isConflicting(repo, revision_p);
-    return result;
-  }
-  
-  /**
-   * Return whether there is a conflict on the given revision in the given repository
-   * @param repository_p a non-null repository
-   * @param revision_p a non-null file revision
-   * @throws NoWorkTreeException if repository is bare
-   * @throws IOException if a low-level reading problem occurred
-   */
-  public boolean isConflicting(Repository repository_p,
-      IFileRevision revision_p) throws NoWorkTreeException, IOException {
-    IPath revisionPath = toPath(revision_p);
-    if (!revisionPath.isAbsolute()) {
-      return isConflicting(repository_p, revisionPath.toString());
+    if (info_p != null) {
+      GitItemState state = info_p.getGitState();
+      result = state != null && state.hasConflicts();
     }
-    EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(IStatus.ERROR,
-        EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
-        String.format(Messages.GitHelper_NoConflictInfoFound, revisionPath)));
-    return false;
-  }
-  
-  /**
-   * Return whether there is a conflict on the given path in the given repository
-   * @param repository_p a non-null repository
-   * @param path_p a non-null string
-   * @throws NoWorkTreeException if repository is bare
-   * @throws IOException if a low-level reading problem occurred
-   */
-  public boolean isConflicting(Repository repository_p, String path_p)
-      throws NoWorkTreeException, IOException {
-    return repository_p.readDirCache().getEntry(path_p).getStage() > 0;
+    return result;
   }
   
   /**

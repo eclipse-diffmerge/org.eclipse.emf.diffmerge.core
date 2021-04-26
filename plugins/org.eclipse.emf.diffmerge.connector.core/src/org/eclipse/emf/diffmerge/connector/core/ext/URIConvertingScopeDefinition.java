@@ -68,18 +68,19 @@ ITimestampProvider {
       result = _wrapped.createScope(null); // Ignore context for a fresh resource set
     }
     if (result instanceof AbstractDataScope<?>) {
-      ((AbstractDataScope<?>)result).setOriginator(_wrapped.getLabel());
+      ((AbstractDataScope<?>) result).setOriginator(_wrapped.getLabel());
     }
     if (result instanceof IPersistentModelScope) {
-      IPersistentModelScope casted = (IPersistentModelScope)result;
+      IPersistentModelScope casted = (IPersistentModelScope) result;
       if (_loadingStream != null && casted instanceof IPersistentModelScope.Editable) {
-        ((IPersistentModelScope.Editable)casted).setStream(_loadingStream);
+        ((IPersistentModelScope.Editable) casted).setStream(_loadingStream);
       }
       Resource holdingResource = casted.getHoldingResource();
       if (holdingResource != null) {
         ResourceSet rs = holdingResource.getResourceSet();
-        if (rs != null)
+        if (rs != null) {
           rs.setURIConverter(_uriConverter);
+        }
       }
     }
     return result;
@@ -111,8 +112,9 @@ ITimestampProvider {
    */
   public long getTimestamp() {
     long result = -1;
-    if (_uriConverter instanceof ITimestampProvider)
-      result = ((ITimestampProvider)_uriConverter).getTimestamp();
+    if (_uriConverter instanceof ITimestampProvider) {
+      result = ((ITimestampProvider) _uriConverter).getTimestamp();
+    }
     return result;
   }
   

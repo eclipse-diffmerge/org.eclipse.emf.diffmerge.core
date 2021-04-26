@@ -48,11 +48,12 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
     if (entrypoint_p instanceof URI) {
       result = (URI)entrypoint_p;
     } else if (entrypoint_p instanceof IResourceProvider) {
-      IResource wkResource = ((IResourceProvider)entrypoint_p).getResource();
-      if (wkResource instanceof IFile)
-        result = toPlatformURI((IFile)wkResource);
+      IResource wkResource = ((IResourceProvider) entrypoint_p).getResource();
+      if (wkResource instanceof IFile) {
+        result = toPlatformURI((IFile) wkResource);
+      }
     } else if (entrypoint_p instanceof IFile) {
-      result = toPlatformURI((IFile)entrypoint_p);
+      result = toPlatformURI((IFile) entrypoint_p);
     } else if (entrypoint_p instanceof String) {
       result = toFileURI(entrypoint_p.toString());
     }
@@ -94,17 +95,19 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
   protected String getFileExtension(Object entrypoint_p) {
     String result = null;
     if (entrypoint_p instanceof IFile) {
-      result = ((IFile)entrypoint_p).getFileExtension();
+      result = ((IFile) entrypoint_p).getFileExtension();
     } else if (entrypoint_p instanceof URI) {
-      result = ((URI)entrypoint_p).fileExtension();
+      result = ((URI) entrypoint_p).fileExtension();
     } else if (entrypoint_p instanceof String) {
-      String location = (String)entrypoint_p;
+      String location = (String) entrypoint_p;
       int dotPosition = location.lastIndexOf(File.separator);
-      if (dotPosition > -1 && dotPosition < location.length())
+      if (dotPosition > -1 && dotPosition < location.length()) {
         result = location.substring(dotPosition + 1);
+      }
     }
-    if (result != null)
+    if (result != null) {
       result = result.toLowerCase();
+    }
     return result;
   }
   
@@ -122,8 +125,9 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected String getLabelFor(Object entrypoint_p) {
     String result = null;
-    if (entrypoint_p instanceof IFile)
-      result = getLabelForFile((IFile)entrypoint_p);
+    if (entrypoint_p instanceof IFile) {
+      result = getLabelForFile((IFile) entrypoint_p);
+    }
     return result;
   }
   
@@ -136,8 +140,9 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
     String result = null;
     if (file_p != null) {
       result = file_p.getFullPath().toPortableString();
-      if (result.startsWith("/") && result.length() > 1) //$NON-NLS-1$
+      if (result.startsWith("/") && result.length() > 1) { //$NON-NLS-1$
         result = result.substring(1);
+      }
     }
     return result;
   }
@@ -156,8 +161,9 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected URI toFileURI(String file_p) {
     URI result = null;
-    if (file_p != null)
+    if (file_p != null) {
       result = URI.createFileURI(file_p);
+    }
     return result;
   }
   
@@ -168,8 +174,9 @@ public class URIScopeDefinitionFactory extends AbstractScopeDefinitionFactory {
    */
   protected URI toPlatformURI(IFile file_p) {
     URI result = null;
-    if (file_p != null)
+    if (file_p != null) {
       result = URI.createPlatformResourceURI(file_p.getFullPath().toPortableString(), true);
+    }
     return result;
   }
   

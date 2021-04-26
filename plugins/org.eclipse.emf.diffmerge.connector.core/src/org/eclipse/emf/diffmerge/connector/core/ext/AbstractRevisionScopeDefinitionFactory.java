@@ -21,8 +21,8 @@ import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -50,18 +50,20 @@ extends AbstractURIConvertingScopeDefinitionFactory {
   protected URI convertToURI(Object entrypoint_p) {
     URI result = null;
     if (entrypoint_p instanceof ITypedElement) {
-      IFileRevision revision = getRevision((ITypedElement)entrypoint_p);
+      ITypedElement typedElement = (ITypedElement) entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
       if (revision != null)
         try {
-          result = getURIForRevision(revision);
+          result = getURIForRevision(revision, typedElement);
         } catch (CoreException e) {
           EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(
               new Status(IStatus.ERROR, EMFDiffMergeCoreConnectorPlugin.getDefault().getPluginId(),
                   e.getMessage(), e));
         }
     }
-    if (result == null)
+    if (result == null) {
       result = super.convertToURI(entrypoint_p);
+    }
     return result;
   }
   
@@ -82,11 +84,13 @@ extends AbstractURIConvertingScopeDefinitionFactory {
     if (entrypoint_p instanceof ITypedElement) {
       ITypedElement typedElement = (ITypedElement)entrypoint_p;
       IFileRevision revision = getRevision(typedElement);
-      if (revision != null)
+      if (revision != null) {
         result = getLabelForRevision(revision, typedElement);
+      }
     }
-    if (result == null)
+    if (result == null) {
       result = super.getLabelFor(entrypoint_p);
+    }
     return result;
   }
   
@@ -106,18 +110,13 @@ extends AbstractURIConvertingScopeDefinitionFactory {
    * @param entrypoint_p a non-null typed element
    * @return a potentially null object
    */
-  @SuppressWarnings("cast") // Compatibility with old versions of Eclipse
   protected IFileRevision getRevision(ITypedElement entrypoint_p) {
-    IFileRevision result = null;
-    // The Adapter pattern allows avoiding internal APIs
-    if (entrypoint_p instanceof IAdaptable) {
-      IAdaptable adaptable = (IAdaptable)entrypoint_p;
-      ISharedDocumentAdapter adapter =
-          (ISharedDocumentAdapter)adaptable.getAdapter(ISharedDocumentAdapter.class);
-      if (adapter != null) {
-        IEditorInput input = adapter.getDocumentKey(entrypoint_p);
-        if (input != null)
-          result = (IFileRevision)input.getAdapter(IFileRevision.class);
+    IFileRevision result = Adapters.adapt(entrypoint_p, IFileRevision.class);
+    if (result == null) {
+      ISharedDocumentAdapter sdAdapter = Adapters.adapt(entrypoint_p, ISharedDocumentAdapter.class);
+      if (sdAdapter != null) {
+        IEditorInput input = sdAdapter.getDocumentKey(entrypoint_p);
+        result = Adapters.adapt(input, IFileRevision.class);
       }
     }
     return result;
@@ -141,16 +140,18 @@ extends AbstractURIConvertingScopeDefinitionFactory {
   protected InputStream getStream(Object entrypoint_p) throws CoreException {
     InputStream result = null;
     if (entrypoint_p instanceof ITypedElement) {
-      ITypedElement typedElement = (ITypedElement)entrypoint_p;
+      ITypedElement typedElement = (ITypedElement) entrypoint_p;
       IFileRevision revision = getRevision(typedElement);
       if (revision != null) {
         IStorage storage = getStorage(revision);
-        if (storage != null)
+        if (storage != null) {
           result = storage.getContents();
+        }
       }
     }
-    if (result == null)
+    if (result == null) {
       result = super.getStream(entrypoint_p);
+    }
     return result;
   }
   
@@ -161,10 +162,11 @@ extends AbstractURIConvertingScopeDefinitionFactory {
   protected URIConverter getURIConverter(Object entrypoint_p) {
     URIConverter result = null;
     if (entrypoint_p instanceof ITypedElement) {
-      IFileRevision revision = getRevision((ITypedElement)entrypoint_p);
+      ITypedElement typedElement = (ITypedElement) entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
       if (revision != null) {
         try {
-          result = getURIConverterForRevision(revision);
+          result = getURIConverterForRevision(revision, typedElement);
         } catch (CoreException e) {
           EMFDiffMergeCoreConnectorPlugin.getDefault().logError(e);
         }
@@ -174,35 +176,39 @@ extends AbstractURIConvertingScopeDefinitionFactory {
   }
   
   /**
-   * Return a URI converter for the given file revision, if possible.
+   * Return a URI converter for the given file revision associated to the given
+   * entry point, if possible.
    * Precondition: isApplicableToRevision(revision_p)
    * @param revision_p a non-null revision
+   * @param entrypoint_p a non-null typed element
    * @return a potentially null object
    * @throws CoreException if an error occurs
    */
-  protected URIConverter getURIConverterForRevision(IFileRevision revision_p)
-      throws CoreException {
+  protected URIConverter getURIConverterForRevision(IFileRevision revision_p,
+      ITypedElement entrypoint_p) throws CoreException {
     URIConverter result = null;
-    URI uri = getURIForRevision(revision_p);
+    URI uri = getURIForRevision(revision_p, entrypoint_p);
     if (uri != null) {
       String fullPath = uri.trimSegments(1).toString();
       final long timestamp = revision_p.getTimestamp();
       // Local history or current revision
-      if (timestamp != -1)
+      if (timestamp != -1) {
         result = new LocalHistoryURIConverter(timestamp, fullPath);
-      else
+      } else {
         result = new ExtensibleURIConverterImpl();
+      }
     }
     return result;
   }
   
   /**
-   * Return a URI for the given file revision
+   * Return a URI for the given file revision associated to the given entry point
    * @param revision_p a non-null file revision
+   * @param entrypoint_p a non-null typed element
    * @return a potentially null URI
    * @throws CoreException if an error occurs
    */
-  protected URI getURIForRevision(IFileRevision revision_p)
+  protected URI getURIForRevision(IFileRevision revision_p, ITypedElement entrypoint_p)
       throws CoreException {
     URI result = null;
     IStorage storage = getStorage(revision_p);
@@ -214,8 +220,9 @@ extends AbstractURIConvertingScopeDefinitionFactory {
       IPath fullPath = storage.getFullPath();
       IResource res = ResourcesPlugin.getWorkspace().getRoot()
           .findMember(fullPath);
-      if (res.exists() && res instanceof IFile)
+      if (res.exists() && res instanceof IFile) {
         result = toPlatformURI((IFile) res);
+      }
     } else if (storage != null) {
       result = toFileURI(storage.getFullPath().toString());
     }
@@ -227,12 +234,8 @@ extends AbstractURIConvertingScopeDefinitionFactory {
    * @param revision_p a non-null revision
    * @return a potentially null object
    */
-  @SuppressWarnings("cast") // Compatibility with old versions of Eclipse
   protected IResourceVariant getVariant(IFileRevision revision_p) {
-    IResourceVariant result = null;
-    if (revision_p instanceof IAdaptable)
-      result = (IResourceVariant)((IAdaptable)revision_p).getAdapter(IResourceVariant.class);
-    return result;
+    return Adapters.adapt(revision_p, IResourceVariant.class);
   }
   
   /**
@@ -242,10 +245,11 @@ extends AbstractURIConvertingScopeDefinitionFactory {
   public boolean isApplicableTo(Object entrypoint_p) {
     boolean result = false;
     if (entrypoint_p instanceof ITypedElement) {
-      ITypedElement typedElement = (ITypedElement)entrypoint_p;
+      ITypedElement typedElement = (ITypedElement) entrypoint_p;
       IFileRevision revision = getRevision(typedElement);
-      if (revision != null)
+      if (revision != null) {
         result = isApplicableToRevision(revision, typedElement);
+      }
     }
     return result;
   }
