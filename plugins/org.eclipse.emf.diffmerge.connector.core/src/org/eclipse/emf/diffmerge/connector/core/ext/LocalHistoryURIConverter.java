@@ -68,12 +68,14 @@ implements ITimestampProvider {
     IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(fullPath);
     if (targetFile != null && targetFile.exists()) {
       try {
-        if (targetFile.getLocalTimeStamp() <= _timestamp)
+        if (targetFile.getLocalTimeStamp() <= _timestamp) {
           return targetFile.getContents();
+        }
         IFileState[] states = targetFile.getHistory(new NullProgressMonitor());
         for (IFileState iFileState: states) {
-          if (iFileState.getModificationTime() <= _timestamp)
+          if (iFileState.getModificationTime() <= _timestamp) {
             return iFileState.getContents();
+          }
         }
       } catch (CoreException e) {
         EMFDiffMergeCoreConnectorPlugin.getDefault().getLog().log(new Status(

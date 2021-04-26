@@ -18,9 +18,4 @@
 			factory="org.eclipse.emf.diffmerge.connector.git.ext.GitRevisionScopeDefinitionFactory">
 		</scopeDefinition>
 	</extension>
-	<extension point="org.eclipse.emf.diffmerge.ui.modelComparisonContext">
-		<scopeDefinition
-			factory="org.eclipse.emf.diffmerge.connector.git.ext.GitIndexRevisionScopeDefinitionFactory">
-		</scopeDefinition>
-	</extension>
 </plugin>

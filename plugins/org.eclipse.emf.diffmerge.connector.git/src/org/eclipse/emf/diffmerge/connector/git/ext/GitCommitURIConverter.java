@@ -67,7 +67,7 @@ public class GitCommitURIConverter extends AbstractGitURIConverter {
   @Override
   @SuppressWarnings("resource") // Just passing the repository as parameter
   protected IFileRevision getGitFileRevision(String gitPath_p) {
-    return inCommit(getRepository(), _commitId, gitPath_p, null);
+    return inCommit(getRepository(), _commitId, gitPath_p);
   }
   
 }

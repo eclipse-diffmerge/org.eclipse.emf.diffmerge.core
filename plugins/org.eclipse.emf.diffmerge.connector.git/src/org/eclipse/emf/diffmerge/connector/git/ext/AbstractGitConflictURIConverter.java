@@ -17,19 +17,19 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.RevUtils;
-import org.eclipse.egit.core.RevUtils.ConflictCommits;
+import org.eclipse.egit.core.info.GitInfo;
+import org.eclipse.egit.core.util.RevCommitUtils;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.team.core.history.IFileRevision;
 
 
 /**
  * A URI Converter for file revisions in the Git index that can be used for conflict resolution.
  */
-@SuppressWarnings("restriction") // Specific EGit behaviors
 public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConverter {
   
   /** One of (STAGE_2, STAGE_3) in DirCacheEntry that defines the role held in conflict resolution */
@@ -58,28 +58,35 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
    */
   @Override
   @SuppressWarnings("resource") // Just passing the repository as parameter
-  protected IFileRevision getGitFileRevision(String gitPath) {
+  protected IFileRevision getGitFileRevision(String gitPath_p) {
     // Check if the file being loaded is conflicting locally and return the
     // expected version from the index
+    final GitHelper helper = GitHelper.INSTANCE;
     Repository repository = getRepository();
     try {
-      if (GitHelper.INSTANCE.isConflicting(repository, gitPath)) {
-        return inIndex(repository, gitPath, _conflictRole);
-      }
-      ConflictCommits conflictCommits = RevUtils.getConflictCommits(
-          repository, _holdingResourcePath);
-      // Current file not conflicting, but root resource is.
-      if (DirCacheEntry.STAGE_2 == _conflictRole) {
-        return inCommit(
-            repository, conflictCommits.getOurCommit(), gitPath, null);
-      }
-      // If Theirs, pick the git ancestor commitid for the current file.
-      else if (DirCacheEntry.STAGE_3 == _conflictRole) {
-        RevCommit commit = conflictCommits.getTheirCommit();
-        if (commit == null) {
-          commit = conflictCommits.getOurCommit();
+      try (RevWalk revWalk = helper.getRevWalk(repository, gitPath_p)) {
+        RevCommit commit = helper.getOurs(repository, revWalk);
+        GitInfo gitInfo = helper.getGitInfo(commit);
+        if (gitInfo != null && gitInfo.getGitState() != null &&
+            gitInfo.getGitState().hasConflicts()) {
+          return inIndex(repository, gitPath_p, _conflictRole);
         }
-        return inCommit(repository, commit, gitPath, null);
+      }
+      // Current file is not conflicting, but root resource is.
+      try (RevWalk revWalk = helper.getRevWalk(repository, _holdingResourcePath)) {
+        if (DirCacheEntry.STAGE_2 == _conflictRole) {
+          // Case of Ours
+          RevCommit ourCommit = helper.getOurs(repository, revWalk);
+          return inCommit(repository, ourCommit, gitPath_p);
+        } else if (DirCacheEntry.STAGE_3 == _conflictRole) {
+          // Case of Theirs: pick the ancestor commitId for the current file.
+          RevCommit commit = RevCommitUtils.getTheirs(repository, revWalk);
+          if (commit == null) {
+            revWalk.reset();
+            commit = helper.getOurs(repository, revWalk);
+          }
+          return inCommit(repository, commit, gitPath_p);
+        }
       }
     } catch (IOException e) {
       EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
@@ -87,7 +94,7 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
           e.getMessage(), e));
     }
     // Default goes to index
-    return inIndex(repository, gitPath);
+    return inIndex(repository, gitPath_p);
   }
   
 }

@@ -13,24 +13,26 @@
  *******************************************************************************/
 package org.eclipse.emf.diffmerge.connector.git.ext;
 
-import java.io.IOException;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.INDEX_CONFLICT_OURS;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.NOT_MANAGED;
+import static org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind.WORKING_TREE;
+
+import java.util.Arrays;
 
 import org.eclipse.compare.ITypedElement;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.internal.storage.CommitFileRevision;
-import org.eclipse.egit.core.internal.storage.GitFileRevision;
-import org.eclipse.egit.core.internal.storage.IndexFileRevision;
-import org.eclipse.egit.core.internal.storage.WorkspaceFileRevision;
-import org.eclipse.egit.core.synchronize.GitRemoteResource;
+import org.eclipse.egit.core.info.GitInfo;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
+import org.eclipse.emf.diffmerge.connector.git.ext.GitHelper.GitFileRevisionKind;
 import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -42,7 +44,6 @@ import org.eclipse.team.core.variants.IResourceVariant;
  * A scope definition factory for file revisions in Git repositories,
  * index (staging area) excluded.
  */
-@SuppressWarnings("restriction") // Specific EGit types
 public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefinitionFactory {
   
   /** The minimal size of commit labels that requires abbreviation */
@@ -70,72 +71,97 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIConverterForRevision(org.eclipse.team.core.history.IFileRevision)
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIConverterForRevision(org.eclipse.team.core.history.IFileRevision, org.eclipse.compare.ITypedElement)
    */
   @Override
-  @SuppressWarnings("resource")
-  protected URIConverter getURIConverterForRevision(IFileRevision revision) throws CoreException {
+  @SuppressWarnings("resource") // See GitInfo#getRepository()
+  protected URIConverter getURIConverterForRevision(IFileRevision revision_p,
+      ITypedElement entrypoint_p) throws CoreException {
     URIConverter result = null;
-    IResourceVariant variant = getVariant(revision);
-    if (variant instanceof GitRemoteResource) {
-      // Git remote
-      IPath path = ((GitRemoteResource) variant).getDisplayPath();
-      Repository repo = GitHelper.INSTANCE.getRepository(path);
-      if (repo != null) {
-        result = new GitCommitURIConverter(((GitRemoteResource) variant).getCommitId(), repo);
+    GitInfo info = GitHelper.INSTANCE.getGitInfo(revision_p);
+    GitFileRevisionKind kind = GitHelper.INSTANCE.getGitKind(info, entrypoint_p);
+    switch (kind) {
+    case NOT_MANAGED: case WORKING_TREE:
+      result = super.getURIConverterForRevision(revision_p, entrypoint_p);
+      break;
+    case INDEX:
+      result = new GitIndexURIConverter(info.getRepository());
+      break;
+    case INDEX_CONFLICT_OURS:
+      result = new GitIndexOursURIConverter(info.getRepository(), info.getGitPath());
+      break;
+    case INDEX_CONFLICT_THEIRS:
+      result = new GitIndexTheirsURIConverter(info.getRepository(), info.getGitPath());
+      break;
+    case COMMIT: case REMOTE:
+      try {
+        RevCommit commit = info.getRepository().parseCommit(info.getCommitId());
+        result = new GitCommitURIConverter(commit, info.getRepository());
+      } catch (Exception e) {
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
+            IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
       }
-    }
-    if (result == null) {
-      Repository repo = GitHelper.INSTANCE.getRepository(revision);
-      if (repo != null) {
-        if (revision instanceof IndexFileRevision) {
-          // Git index
-          try {
-            if (GitHelper.INSTANCE.isConflicting(revision)) {
-              result = new GitIndexTheirsURIConverter(
-                  GitHelper.INSTANCE.getRepository(revision),
-                  ((IndexFileRevision) revision).getGitPath());
-            } else {
-              result = new GitIndexURIConverter(GitHelper.INSTANCE.getRepository(revision));
-            }
-          } catch (IOException e) {
-            EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
-                IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
-          } catch (NoWorkTreeException e) {
-            EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
-                IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
-          }
-        } else if (revision instanceof CommitFileRevision) {
-          // Git commit
-          result = new GitCommitURIConverter(((CommitFileRevision) revision).getRevCommit(), repo);
-        }
-      }
-    }
-    if (result == null) {
-      result = super.getURIConverterForRevision(revision);
+      break;
     }
     return result;
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIForRevision(org.eclipse.team.core.history.IFileRevision)
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getURIForRevision(org.eclipse.team.core.history.IFileRevision, org.eclipse.compare.ITypedElement)
    */
   @Override
-  protected URI getURIForRevision(IFileRevision revision) throws CoreException {
-    IResourceVariant variant = getVariant(revision);
-    final String SCHEME_SEP = ":/"; //$NON-NLS-1$
-    URI result;
-    if (variant instanceof GitRemoteResource) {
-      result = URI.createURI(
-          GitHelper.INSTANCE.getSchemeRemote() + SCHEME_SEP + ((GitRemoteResource)variant).getPath());
-    } else if (revision instanceof IndexFileRevision) {
-      result = URI.createURI(
-          GitHelper.INSTANCE.getSchemeIndex() + SCHEME_SEP + revision.getURI().toString());
-    } else if (revision instanceof CommitFileRevision) {
-      result = URI.createURI(
-          GitHelper.INSTANCE.getSchemeCommit() + SCHEME_SEP + revision.getURI().toString());
-    } else {
-      result = super.getURIForRevision(revision);
+  protected URI getURIForRevision(IFileRevision revision_p, ITypedElement entrypoint_p)
+      throws CoreException {
+    GitInfo info = GitHelper.INSTANCE.getGitInfo(revision_p);
+    GitFileRevisionKind kind = GitHelper.INSTANCE.getGitKind(info, entrypoint_p);
+    URI result = null;
+    String scheme;
+    switch (kind) {
+    case INDEX_CONFLICT_OURS:
+      scheme = null;
+      result = createPlatformResourceUriFromFileRevision(revision_p);
+      break;
+    case INDEX:
+    case INDEX_CONFLICT_THEIRS:
+      scheme = GitHelper.INSTANCE.getSchemeIndex();
+      break;
+    case COMMIT:
+      scheme = GitHelper.INSTANCE.getSchemeCommit();
+      break;
+    case REMOTE:
+      scheme = GitHelper.INSTANCE.getSchemeRemote();
+      break;
+    default:
+      scheme = null;
+    }
+    if (result == null) {
+      if (scheme != null) {
+        result = URI.createURI(
+            scheme + GitHelper.INSTANCE.getSchemeSeparator() + info.getGitPath());
+      } else {
+        result = super.getURIForRevision(revision_p, entrypoint_p);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Return the workspace-relative URI for the given file revision
+   * @param revision_p a non-null file revision
+   * @return a potentially null URI
+   */
+  @SuppressWarnings("resource") // See GitInfo#getRepository()
+  protected URI createPlatformResourceUriFromFileRevision(IFileRevision revision_p) {
+    URI result = null;
+    Repository repo = GitHelper.INSTANCE.getRepository(revision_p);
+    if (repo != null) {
+      java.net.URI revisionAbsoluteUri = repo.getWorkTree().toURI().resolve(revision_p.getURI());
+      IWorkspaceRoot wkRoot = ResourcesPlugin.getWorkspace().getRoot();
+      IFile[] platformFiles = wkRoot.findFilesForLocationURI(revisionAbsoluteUri);
+      if (platformFiles.length > 0 && platformFiles[0].isAccessible()) {
+        IFile iFile = platformFiles[0];
+        result = URI.createPlatformResourceURI(iFile.getFullPath().toString(), true);
+      }
     }
     return result;
   }
@@ -144,20 +170,42 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
    * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractRevisionScopeDefinitionFactory#getLabelForRevision(org.eclipse.team.core.history.IFileRevision, org.eclipse.compare.ITypedElement)
    */
   @Override
+  @SuppressWarnings({ "resource", "incomplete-switch" }) // See GitInfo#getRepository()
   protected String getLabelForRevision(IFileRevision revision_p, ITypedElement entrypoint_p) {
-    String result;
-    IResourceVariant variant = getVariant(revision_p);
-    if (variant instanceof GitRemoteResource) {
+    String result = null;
+    GitInfo info = GitHelper.INSTANCE.getGitInfo(revision_p);
+    GitFileRevisionKind kind = GitHelper.INSTANCE.getGitKind(info, entrypoint_p);
+    switch (kind) {
+    case WORKING_TREE:
+      result = String.format(
+          Messages.GitRevisionScopeDefinitionFactory_LabelWorkspace, revision_p.getName());
+      break;
+    case INDEX_CONFLICT_OURS:
+      result = String.format(
+          Messages.GitRevisionScopeDefinitionFactory_LabelIndexEditable, revision_p.getName());
+      break;
+    case INDEX:
+    case INDEX_CONFLICT_THEIRS:
+      result = String.format(
+          Messages.GitRevisionScopeDefinitionFactory_LabelIndex, revision_p.getName());
+      break;
+    case COMMIT:
+      try {
+        RevCommit commit = info.getRepository().parseCommit(info.getCommitId());
+        result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelCommit, revision_p.getName(),
+            getContentIdentifier(commit));
+      } catch (Exception e) {
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(new Status(
+            IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(), e.getMessage(), e));
+      }
+      break;
+    case REMOTE:
+      IResourceVariant variant = getVariant(revision_p);
       result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelRemote,
-          revision_p.getName(), variant.getContentIdentifier());
-    } else if (revision_p instanceof IndexFileRevision) {
-      result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelIndex, revision_p.getName());
-    } else if (revision_p instanceof CommitFileRevision) {
-      result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelCommit, revision_p.getName(),
-          getContentIdentifier(((CommitFileRevision) revision_p).getRevCommit()));
-    } else if (revision_p instanceof WorkspaceFileRevision) {
-      result = String.format(Messages.GitRevisionScopeDefinitionFactory_LabelWorkspace, revision_p.getName());
-    } else {
+          revision_p.getName(), variant == null? null: variant.getContentIdentifier());
+      break;
+    }
+    if (result == null) {
       result = super.getLabelForRevision(revision_p, entrypoint_p);
     }
     return result;
@@ -168,8 +216,24 @@ public class GitRevisionScopeDefinitionFactory extends AbstractRevisionScopeDefi
    */
   @Override
   protected boolean isApplicableToRevision(IFileRevision revision_p, ITypedElement entrypoint_p) {
-    return revision_p instanceof GitFileRevision ||
-        getVariant(revision_p) instanceof GitRemoteResource;
+    GitInfo info = GitHelper.INSTANCE.getGitInfo(revision_p);
+    return GitHelper.INSTANCE.getGitKind(info, entrypoint_p) != NOT_MANAGED;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.connector.core.ext.AbstractURIConvertingScopeDefinitionFactory#isScopeEditable(java.lang.Object)
+   */
+  @Override
+  protected boolean isScopeEditable(Object entrypoint_p) {
+    boolean result = false;
+    if (entrypoint_p instanceof ITypedElement) {
+      ITypedElement typedElement = (ITypedElement) entrypoint_p;
+      IFileRevision revision = getRevision(typedElement);
+      GitInfo info = GitHelper.INSTANCE.getGitInfo(revision);
+      GitFileRevisionKind kind = GitHelper.INSTANCE.getGitKind(info, typedElement);
+      result = Arrays.asList(NOT_MANAGED, WORKING_TREE, INDEX_CONFLICT_OURS).contains(kind);
+    }
+    return result;
   }
   
 }

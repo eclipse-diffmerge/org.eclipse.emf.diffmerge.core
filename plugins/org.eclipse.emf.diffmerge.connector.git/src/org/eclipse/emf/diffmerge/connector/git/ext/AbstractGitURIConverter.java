@@ -15,7 +15,6 @@ package org.eclipse.emf.diffmerge.connector.git.ext;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -25,16 +24,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.internal.storage.GitFileRevision;
-import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.egit.core.revisions.FileRevisionFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.emf.diffmerge.connector.git.Messages;
 import org.eclipse.emf.ecore.resource.ContentHandler;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.jgit.dircache.DirCacheCheckout;
-import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.team.core.history.IFileRevision;
@@ -43,13 +39,7 @@ import org.eclipse.team.core.history.IFileRevision;
 /**
  * A base URI Converter for Git.
  */
-@SuppressWarnings("restriction")
 public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl {
-  
-  /** The "inCommit" method for EGit version 5 */
-  private static Method __inCommitEGit5Method = null;
-  /** The "inCommit" method for EGit prior to version 5 */
-  private static Method __inCommitLegacyMethod = null;
   
   /** The non-null Git repository */
   private final Repository _repository;
@@ -77,49 +67,6 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
   }
   
   /**
-   * Check which "inCommit" method is provided by EGit/JGit
-   */
-  @SuppressWarnings("nls")
-  private static void checkEGitMethod() {
-    if (__inCommitEGit5Method == null && __inCommitLegacyMethod == null) {
-      // Not initialized (successfully) yet
-      final String inCommitMethodName = "inCommit";
-      // Looking for EGit 5 method
-      // First, looking for EGit 5 parameter class for the method
-      final String egit5ParameterClassName = "CheckoutMetadata";
-      Class<?> egit5ParameterClass = null;
-      for (Class<?> nested : DirCacheCheckout.class.getDeclaredClasses()) {
-        if (egit5ParameterClassName.equals(nested.getSimpleName())) {
-          egit5ParameterClass = nested;
-          break;
-        }
-      }
-      if (egit5ParameterClass != null) {
-        // EGit 5 parameter class found: using it to retrieve EGit 5 method
-        try {
-          __inCommitEGit5Method = GitFileRevision.class.getMethod(
-              inCommitMethodName, Repository.class,
-              RevCommit.class, String.class, ObjectId.class,
-              egit5ParameterClass);
-        } catch (NoSuchMethodException e) {
-          // Failure: method not found
-        }
-      }
-      if (__inCommitEGit5Method == null) {
-        // EGit 5 method not found, looking for legacy method
-        try {
-          __inCommitLegacyMethod = GitFileRevision.class.getMethod(
-              inCommitMethodName, Repository.class,
-              RevCommit.class, String.class, ObjectId.class);
-        } catch (Exception e) {
-          // Failure too, which is unexpected
-          e.printStackTrace();
-        }
-      }
-    }
-  }
-  
-  /**
    * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#createInputStream(org.eclipse.emf.common.util.URI, java.util.Map)
    */
   @Override
@@ -135,18 +82,15 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
           .toString();
       if (target != null && target.exists()) {
         try {
-          return getGitFileRevision(gitPath)
-              .getStorage(new NullProgressMonitor()).getContents();
+          return getGitFileRevision(gitPath).getStorage(new NullProgressMonitor()).getContents();
         } catch (CoreException e) {
-          EMFDiffMergeGitConnectorPlugin.getDefault().getLog()
-              .log(new Status(IStatus.ERROR,
-                  EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
+          EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(
+              new Status(IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
                   e.getMessage(), e));
         }
       } else {
-        EMFDiffMergeGitConnectorPlugin.getDefault().getLog()
-            .log(new Status(IStatus.ERROR,
-                EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
+        EMFDiffMergeGitConnectorPlugin.getDefault().getLog().log(
+            new Status(IStatus.ERROR, EMFDiffMergeGitConnectorPlugin.getDefault().getPluginId(),
                 String.format(
                     Messages.AbstractGitURIConverter_CannotFindResource,
                     absoluteFilePath)));
@@ -156,19 +100,22 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
   }
   
   /**
-   * @param uri_p
-   * @param repo
-   * @return the absolute file path
+   * Return the absolute file path for the given URI
+   * @param uri_p a non-null URI
+   * @param repository_p a non-null repository
+   * @return a non-null path
    */
-  protected IPath getAbsoluteFilePath(URI uri_p, Repository repo) {
+  protected IPath getAbsoluteFilePath(URI uri_p, Repository repository_p) {
     String pathRepresentation = getURIPathRepresentation(uri_p);
-    if (uri_p.isPlatform())
-      return new Path(pathRepresentation);
-
-    return new Path(repo.getWorkTree().getAbsolutePath())
-        .append(pathRepresentation);
+    IPath result;
+    if (uri_p.isPlatform()) {
+      result = new Path(pathRepresentation);
+    } else {
+      result = new Path(repository_p.getWorkTree().getAbsolutePath()).append(pathRepresentation);
+    }
+    return result;
   }
- 
+  
   /**
    * Return the file revision for the given path
    * @param gitPath_p a non-null string
@@ -198,41 +145,24 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
   }
   
   /**
-   * See GitFileRevision#inCommit(...)
+   * See FileRevisionFactory#inCommit(Repository, RevCommit, String)
    */
-  protected GitFileRevision inCommit(Repository db_p, RevCommit commit_p, String path_p,
-      ObjectId blobId_p) {
-    checkEGitMethod();
-    Object returned = null;
-    try {
-      if (__inCommitEGit5Method != null) {
-        returned = __inCommitEGit5Method.invoke(
-            null, db_p, commit_p, path_p, blobId_p, null);
-      } else if (__inCommitLegacyMethod != null) {
-        returned = __inCommitLegacyMethod.invoke(
-            null, db_p, commit_p, path_p, blobId_p);
-      }
-    } catch (Exception e) {
-      // Unexpected
-      e.printStackTrace();
+  protected IFileRevision inCommit(Repository db_p, RevCommit commit_p, String path_p) {
+    return FileRevisionFactory.inCommit(db_p, commit_p, path_p);
     }
-    GitFileRevision result = (returned instanceof GitFileRevision)?
-        (GitFileRevision)returned: null;
-    return result;
+  
+  /**
+   * @see FileRevisionFactory#inIndex(Repository, String)
+   */
+  protected IFileRevision inIndex(Repository db_p, String path_p) {
+    return FileRevisionFactory.inIndex(db_p, path_p);
   }
   
   /**
-   * @see GitFileRevision#inIndex(Repository, String)
+   * @see FileRevisionFactory#inIndex(Repository, String, int)
    */
-  protected GitFileRevision inIndex(Repository db_p, String path_p) {
-    return GitFileRevision.inIndex(db_p, path_p);
-  }
-  
-  /**
-   * @see GitFileRevision#inIndex(Repository, String, int)
-   */
-  protected GitFileRevision inIndex(Repository db_p, String path_p, int stage_p) {
-    return GitFileRevision.inIndex(db_p, path_p, stage_p);
+  protected IFileRevision inIndex(Repository db_p, String path_p, int stage_p) {
+    return FileRevisionFactory.inIndex(db_p, path_p, stage_p);
   }
   
   /**
