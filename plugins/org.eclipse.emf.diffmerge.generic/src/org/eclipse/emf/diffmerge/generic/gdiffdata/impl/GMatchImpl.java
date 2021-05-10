@@ -901,9 +901,11 @@ public abstract class GMatchImpl<E, A, R> extends GIdentifiedImpl
     if (referenceMap != null) {
       List<IReferenceValuePresence<E>> forReference = referenceMap
           .get(reference_p);
-      for (IReferenceValuePresence<E> orderDifference : forReference) {
-        if (orderDifference.getPresenceRole() == role_p) {
-          return orderDifference;
+      if (forReference != null) {
+        for (IReferenceValuePresence<E> orderDifference : forReference) {
+          if (orderDifference.getPresenceRole() == role_p) {
+            return orderDifference;
+          }
         }
       }
     }
