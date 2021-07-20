@@ -16,6 +16,7 @@ pipeline {
     NIGHTLY_KEY = "${BRANCH_NAME}".replaceFirst(/^v/, "").replaceAll('/','-');
     NIGHTLY_DIR = "/home/data/httpd/download.eclipse.org/diffmerge/nightly/${NIGHTLY_KEY}"
   }
+  
   stages {
     stage('Package') {
       steps {
