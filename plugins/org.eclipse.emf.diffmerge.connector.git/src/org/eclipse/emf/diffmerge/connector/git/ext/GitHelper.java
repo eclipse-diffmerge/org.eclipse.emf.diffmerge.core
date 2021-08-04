@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.Activator;
+import org.eclipse.egit.core.RepositoryCache;
 import org.eclipse.egit.core.project.RepositoryMapping;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
@@ -79,7 +79,7 @@ public final class GitHelper {
       return RepositoryMapping.getMapping(path_p).getRepository();
     }
     // Then iterate over known repositories.
-    for (Repository repo: Activator.getDefault().getRepositoryCache().getAllRepositories()) {
+    for (Repository repo: RepositoryCache.getInstance().getAllRepositories()) {
       Path fullPath=new Path(repo.getWorkTree().toString().concat(path_p.makeAbsolute().toString()));
       if (fullPath.toFile().exists()) {
         return repo;

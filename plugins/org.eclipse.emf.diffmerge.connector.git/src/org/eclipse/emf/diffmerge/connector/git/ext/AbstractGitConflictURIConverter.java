@@ -17,19 +17,18 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.egit.core.RevUtils;
-import org.eclipse.egit.core.RevUtils.ConflictCommits;
+import org.eclipse.egit.core.util.RevCommitUtils;
 import org.eclipse.emf.diffmerge.connector.git.EMFDiffMergeGitConnectorPlugin;
 import org.eclipse.jgit.dircache.DirCacheEntry;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.team.core.history.IFileRevision;
 
 
 /**
  * A URI Converter for file revisions in the Git index that can be used for conflict resolution.
  */
-@SuppressWarnings("restriction") // Specific EGit behaviors
 public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConverter {
   
   /** One of (STAGE_2, STAGE_3) in DirCacheEntry that defines the role held in conflict resolution */
@@ -66,18 +65,18 @@ public abstract class AbstractGitConflictURIConverter extends AbstractGitURIConv
       if (GitHelper.INSTANCE.isConflicting(repository, gitPath)) {
         return inIndex(repository, gitPath, _conflictRole);
       }
-      ConflictCommits conflictCommits = RevUtils.getConflictCommits(
-          repository, _holdingResourcePath);
+      RevWalk walk = new RevWalk(repository);
+      RevCommit ourCommit = walk.next();
       // Current file not conflicting, but root resource is.
       if (DirCacheEntry.STAGE_2 == _conflictRole) {
         return inCommit(
-            repository, conflictCommits.getOurCommit(), gitPath, null);
+            repository, ourCommit, gitPath, null);
       }
       // If Theirs, pick the git ancestor commitid for the current file.
       else if (DirCacheEntry.STAGE_3 == _conflictRole) {
-        RevCommit commit = conflictCommits.getTheirCommit();
+        RevCommit commit = RevCommitUtils.getTheirs(repository);
         if (commit == null) {
-          commit = conflictCommits.getOurCommit();
+          commit = ourCommit;
         }
         return inCommit(repository, commit, gitPath, null);
       }
