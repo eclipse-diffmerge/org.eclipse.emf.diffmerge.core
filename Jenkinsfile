@@ -2,7 +2,7 @@ pipeline {
   agent { label 'migration' }
   tools {
         maven 'apache-maven-latest'
-        jdk 'oracle-jdk8-latest'
+        jdk 'openjdk-jdk11-latest'
   }
   environment {
     FROM_PR = "${BRANCH_NAME}".contains("PR-");
