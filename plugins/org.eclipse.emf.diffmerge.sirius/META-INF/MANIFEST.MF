@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.emf.diffmerge.gmf;visibility:=reexport,
  org.eclipse.sirius.diagram;visibility:=reexport,
  org.eclipse.sirius.diagram.sequence;visibility:=reexport,
  org.eclipse.core.runtime
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.emf.diffmerge.sirius
 Bundle-Localization: plugin

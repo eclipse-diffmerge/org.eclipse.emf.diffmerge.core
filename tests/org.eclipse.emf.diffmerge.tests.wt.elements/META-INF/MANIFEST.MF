@@ -1,5 +1,5 @@
 Bundle-ManifestVersion: 2
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Manifest-Version: 1.0
 Bundle-Activator: org.eclipse.emf.diffmerge.tests.wt.elements.Activator
 Require-Bundle: org.eclipse.core.runtime,

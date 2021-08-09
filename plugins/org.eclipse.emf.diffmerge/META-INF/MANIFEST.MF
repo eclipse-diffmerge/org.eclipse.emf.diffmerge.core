@@ -7,7 +7,7 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Activator: org.eclipse.emf.diffmerge.EMFDiffMergePlugin
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.emf.diffmerge,
  org.eclipse.emf.diffmerge.api.scopes,
  org.eclipse.emf.diffmerge.diffdata,
