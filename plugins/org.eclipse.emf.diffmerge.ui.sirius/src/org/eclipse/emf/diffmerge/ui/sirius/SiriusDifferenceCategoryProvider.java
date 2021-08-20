@@ -40,6 +40,10 @@ public class SiriusDifferenceCategoryProvider extends DefaultDifferenceCategoryP
     IDifferenceCategorySet diagramCategorySet = new DifferenceCategorySet(
         Messages.SiriusDifferenceCategoryProvider_SiriusSet_Text,
         Messages.SiriusDifferenceCategoryProvider_SiriusSet_Description);
+    diagramCategorySet.getChildren().add(new SiriusLayoutDifferenceCategory());
+    diagramCategorySet.getChildren().add(new SiriusNameDifferenceCategory());
+    diagramCategorySet.getChildren().add(new SiriusVisibilityDifferenceCategory());
+    diagramCategorySet.getChildren().add(new SiriusStylingDifferenceCategory());
     diagramCategorySet.getChildren().add(new SiriusTechnicalDifferenceCategory());
     node_p.getCategoryManager().addCategories(diagramCategorySet);
   }

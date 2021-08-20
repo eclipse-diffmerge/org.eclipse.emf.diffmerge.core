@@ -13,9 +13,12 @@ package org.eclipse.emf.diffmerge.ui.viewers.categories;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategoryItem;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategorySet;
+import org.eclipse.swt.graphics.Image;
 
 
 /**
@@ -105,6 +108,14 @@ implements IDifferenceCategorySet {
    */
   public String getDescription(EMFDiffNode node_p) {
     return _description;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategoryItem#getImage(org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
+   */
+  @Override
+  public Image getImage(EMFDiffNode node_p) {
+    return EMFDiffMergeUIPlugin.getDefault().getImage(ImageID.FILTER);
   }
   
   /**

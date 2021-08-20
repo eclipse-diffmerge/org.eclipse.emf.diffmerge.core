@@ -26,8 +26,16 @@ public class Messages extends NLS {
   public static String SiriusDifferenceCategoryProvider_SiriusSet_Text;
   public static String SiriusDiffMergeLabelProvider_DAnalysisCustomDataLabel;
   public static String SiriusDiffMergeLabelProvider_DRepresentationLabel;
+  public static String SiriusLayoutDifferenceCategory_Description;
+  public static String SiriusLayoutDifferenceCategory_Name;
+  public static String SiriusNameDifferenceCategory_Description;
+  public static String SiriusNameDifferenceCategory_Name;
+  public static String SiriusStylingDifferenceCategory_Description;
+  public static String SiriusStylingDifferenceCategory_Name;
   public static String SiriusTechnicalDifferenceCategory_Description;
   public static String SiriusTechnicalDifferenceCategory_Text;
+  public static String SiriusVisibilityDifferenceCategory_Description;
+  public static String SiriusVisibilityDifferenceCategory_Name;
   static {
     // initialize resource bundle
     NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -15,6 +15,9 @@ import java.util.Set;
 
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.api.diff.IDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IElementRelativeDifference;
+import org.eclipse.emf.diffmerge.generic.api.diff.IValuePresence;
 import org.eclipse.emf.diffmerge.structures.common.FOrderedSet;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
@@ -68,9 +71,47 @@ implements IDifferenceCategory {
   }
   
   /**
+   * Return an element the given difference is relative to, if any
+   * @param difference_p a non-null difference
+   * @return a potentially null object
+   */
+  protected Object getDifferenceElement(IDifference<?> difference_p) {
+    Object result = null;
+    if (difference_p instanceof IElementRelativeDifference<?>) {
+      IElementRelativeDifference<?> casted = (IElementRelativeDifference<?>) difference_p;
+      IMatch<?> match = casted.getElementMatch();
+      result = getElement(match);
+    }
+    return result;
+  }
+  
+  /**
+   * Return the feature the given difference is relative to, if any
+   * @param difference_p a non-null difference
+   * @return a potentially null object
+   */
+  protected Object getDifferenceFeature(IDifference<?> difference_p) {
+    Object result = null;
+    if (difference_p instanceof IValuePresence<?>) {
+      IValuePresence<?> casted = (IValuePresence<?>) difference_p;
+      result = casted.getFeature();
+    }
+    return result;
+  }
+  
+  /**
+   * Return an arbitrarily-chosen element bound by the given match
+   * @param match_p a non-null match
+   * @return a non-null element
+   */
+  protected Object getElement(IMatch<?> match_p) {
+    return getElements(match_p).iterator().next();
+  }
+  
+  /**
    * Return the elements bound together by the given match
    * @param match_p a non-null match
-   * @return a non-null, potentially empty set
+   * @return a non-null, non-empty set
    */
   protected Set<Object> getElements(IMatch<?> match_p) {
     Set<Object> result = new FOrderedSet<Object>();
