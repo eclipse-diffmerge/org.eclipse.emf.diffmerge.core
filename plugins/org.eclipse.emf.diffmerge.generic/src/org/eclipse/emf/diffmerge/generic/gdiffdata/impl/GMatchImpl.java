@@ -18,6 +18,7 @@ import static org.eclipse.emf.diffmerge.generic.api.Role.TARGET;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -935,14 +936,14 @@ public abstract class GMatchImpl<E, A, R> extends GIdentifiedImpl
    * @generated NOT
    */
   public Collection<Object> getReferencesWithDifferences() {
-    Set<Object> result;
-    if (getModifiableReferenceMap(false) == null) {
-      result = Collections.emptySet();
-    } else {
-      result = Collections
-          .unmodifiableSet(getModifiableReferenceMap(false).keySet());
+    Set<Object> result = new HashSet<>();
+    if (getModifiableReferenceMap(false) != null) {
+      result.addAll(getModifiableReferenceMap(false).keySet());
     }
-    return result;
+    if (getModifiableOrderReferenceMap(false) != null) {
+      result.addAll(getModifiableOrderReferenceMap(false).keySet());
+    }
+    return Collections.unmodifiableSet(result);
   }
 
   /**
