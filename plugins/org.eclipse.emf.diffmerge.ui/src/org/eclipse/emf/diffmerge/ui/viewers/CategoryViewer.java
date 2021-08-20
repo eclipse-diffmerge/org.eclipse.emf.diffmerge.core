@@ -92,8 +92,9 @@ public class CategoryViewer extends Viewer {
        * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
        */
       public void propertyChange(PropertyChangeEvent event_p) {
-        if (Input.PROPERTY_CONFIGURATION.equals(event_p.getProperty()))
+        if (Input.PROPERTY_CONFIGURATION.equals(event_p.getProperty())) {
           refresh();
+        }
       }
     };
     createControls(parent_p);
@@ -134,8 +135,9 @@ public class CategoryViewer extends Viewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         Input input = getInput();
-        if (input != null)
+        if (input != null) {
           input.setAll(NORMAL);
+        }
       }
     });
     // Column 3: Filtered
@@ -152,8 +154,9 @@ public class CategoryViewer extends Viewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         Input input = getInput();
-        if (input != null)
+        if (input != null) {
           input.setAll(FILTERED);
+        }
       }
     });
     // Column 4: Focused
@@ -170,8 +173,9 @@ public class CategoryViewer extends Viewer {
       @Override
       public void widgetSelected(SelectionEvent e_p) {
         Input input = getInput();
-        if (input != null)
+        if (input != null) {
           input.setAll(FOCUSED);
+        }
       }
     });
     // Overall
@@ -224,10 +228,12 @@ public class CategoryViewer extends Viewer {
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
-    if (oldInput_p instanceof Input)
+    if (oldInput_p instanceof Input) {
       ((Input)oldInput_p).removePropertyChangeListener(_configUpdater);
-    if (input_p instanceof Input)
+    }
+    if (input_p instanceof Input) {
       ((Input)input_p).addPropertyChangeListener(_configUpdater);
+    }
   }
   
   /**
@@ -393,8 +399,9 @@ public class CategoryViewer extends Viewer {
      */
     public CategoryState getStateWithChanges(IDifferenceCategory category_p) {
       CategoryState result = _changedCategories.get(category_p);
-      if (result == null)
+      if (result == null) {
         result = getActualState(category_p);
+      }
       return result;
     }
     /**
@@ -437,8 +444,9 @@ public class CategoryViewer extends Viewer {
         // Lost its last change or gained its first change
         firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
       }
-      if (hadImpact)
+      if (hadImpact) {
         firePropertyChangeEvent(PROPERTY_CONFIGURATION, null);
+      }
     }
     /**
      * Set the state of all categories to the given one, when possible
@@ -458,8 +466,9 @@ public class CategoryViewer extends Viewer {
         // Lost its last change or gained its first change
         firePropertyChangeEvent(PROPERTY_HAS_CHANGES, Boolean.valueOf(hasChanges));
       }
-      if (hadImpact)
+      if (hadImpact) {
         firePropertyChangeEvent(PROPERTY_CONFIGURATION, null);
+      }
     }
   }
   
@@ -483,10 +492,11 @@ public class CategoryViewer extends Viewer {
       if (parentElement_p instanceof IDifferenceCategorySet) {
         IDifferenceCategorySet catSet = (IDifferenceCategorySet)parentElement_p;
         List<IDifferenceCategoryItem> listResult;
-        if (_input == null)
+        if (_input == null) {
           listResult = catSet.getChildren();
-        else
+        } else {
           listResult = _input.getNode().getCategoryManager().getUIChildrenItems(catSet);
+        }
         result = listResult.toArray();
       } else {
         result = new Object[0];
@@ -505,8 +515,9 @@ public class CategoryViewer extends Viewer {
      */
     public Object getParent(Object element_p) {
       Object result = null;
-      if (element_p instanceof IDifferenceCategoryItem)
+      if (element_p instanceof IDifferenceCategoryItem) {
         result = ((IDifferenceCategoryItem)element_p).getParent();
+      }
       return result;
     }
     /**
@@ -520,8 +531,9 @@ public class CategoryViewer extends Viewer {
      */
     public void inputChanged(Viewer viewer_p, Object oldInput_p,
         Object newInput_p) {
-      if (newInput_p instanceof Input)
+      if (newInput_p instanceof Input) {
         _input = (Input)newInput_p;
+      }
     }
   }
   
@@ -596,10 +608,11 @@ public class CategoryViewer extends Viewer {
         IDifferenceCategory cat = (IDifferenceCategory)element_p;
         boolean selected = isSelected(cat);
         ImageID imageId;
-        if (cat.isModifiable())
+        if (cat.isModifiable()) {
           imageId = selected? ImageID.CHECKED: ImageID.UNCHECKED;
-        else
+        } else {
           imageId = selected? ImageID.CHECKED_DISABLED: ImageID.UNCHECKED_DISABLED;
+        }
         result = EMFDiffMergeUIPlugin.getDefault().getImage(imageId);
       }
       return result;
@@ -673,9 +686,10 @@ public class CategoryViewer extends Viewer {
          */
         @Override
         public void activate(ColumnViewerEditorActivationEvent activationEvent_p) {
-          if (activationEvent_p.eventType != ColumnViewerEditorActivationEvent.TRAVERSAL)
+          if (activationEvent_p.eventType != ColumnViewerEditorActivationEvent.TRAVERSAL) {
             // All mouse, key and programmatic events, excluding mouse traversal events
             super.activate(activationEvent_p);
+          }
         }
         /**
          * @see org.eclipse.jface.viewers.CellEditor#createControl(org.eclipse.swt.widgets.Composite)
@@ -742,8 +756,9 @@ public class CategoryViewer extends Viewer {
      * @param category_p a non-null difference category
      */
     protected void selectState(IDifferenceCategory category_p) {
-      if (category_p.isModifiable())
+      if (category_p.isModifiable()) {
         CategoryViewer.this.getInput().addChange(category_p, _state);
+      }
     }
   }
   
