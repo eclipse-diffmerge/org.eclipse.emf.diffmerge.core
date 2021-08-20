@@ -876,18 +876,22 @@ public abstract class GMatchImpl<E, A, R> extends GIdentifiedImpl
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public Collection<IReferenceValuePresence<E>> getReferenceDifferences(
       Object reference_p) {
-    Collection<IReferenceValuePresence<E>> result = null;
+    Collection<IReferenceValuePresence<E>> result = new HashSet<>();
     if (getModifiableReferenceMap(false) != null) {
       EMap<E, IReferenceValuePresence<E>> forReference = (EMap) getModifiableReferenceMap(
           false).get(reference_p);
       if (forReference != null) {
-        result = Collections.unmodifiableCollection(forReference.values());
+        result.addAll(forReference.values());
       }
     }
-    if (result == null) {
-      result = Collections.emptyList();
+    if (getModifiableOrderReferenceMap(false) != null) {
+      List<IReferenceValuePresence<E>> orderForReference = (List) getModifiableOrderReferenceMap(
+          false).get(reference_p);
+      if (orderForReference != null) {
+        result.addAll(orderForReference);
+      }
     }
-    return result;
+    return Collections.unmodifiableCollection(result);
   }
 
   /**
