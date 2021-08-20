@@ -20,6 +20,7 @@ import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
 import org.eclipse.emf.diffmerge.ui.viewers.IDifferenceCategory;
 import org.eclipse.emf.diffmerge.ui.viewers.categories.AbstractDifferenceCategory;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
 import org.eclipse.sirius.viewpoint.provider.SiriusEditPlugin;
 import org.eclipse.swt.graphics.Image;
@@ -65,6 +66,10 @@ public class SiriusTechnicalDifferenceCategory extends AbstractDifferenceCategor
     if (difference_p instanceof IValuePresence) {
       IValuePresence<?> vp = (IValuePresence<?>)difference_p;
       result = isSiriusTechnicalFeature((EStructuralFeature)vp.getFeature());
+      if (!result) {
+        result = vp.isOrder() &&
+            vp.getFeature() == DiagramPackage.eINSTANCE.getDDiagram_ActivatedFilters();
+      }
     }
     return result;
   }
