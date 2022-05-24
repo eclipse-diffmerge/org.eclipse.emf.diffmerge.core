@@ -20,7 +20,9 @@ pipeline {
     stage('Package') {
       steps {
       	sh 'env'
-        sh 'mvn clean install -t ${WORKSPACE}/releng/org.eclipse.emf.diffmerge.configuration/toolchains-hipp.xml -Psign -Pstandalone -Pgui.test'
+        wrap([$class: 'Xvnc', takeScreenshot: false, useXauthority: true]) {
+		  sh 'mvn clean install -t ${WORKSPACE}/releng/org.eclipse.emf.diffmerge.configuration/toolchains-hipp.xml -Psign -Pstandalone -Pgui.test'
+        }
       }
     }
 	stage('Publish artifacts') {
@@ -58,6 +60,12 @@ pipeline {
         build job: "diffmerge-coevolution/${SUB_BRANCH}", parameters: [string(name: 'CORE_BRANCH', value:"${BUILD_KEY}")], wait: false
         build job: "diffmerge-patterns/${SUB_BRANCH}", parameters: [string(name: 'CORE_BRANCH', value:"${BUILD_KEY}")], wait: false
       }
+    }
+  }
+  
+  post {
+    always {
+      archiveArtifacts artifacts: '**/*.log, *.log, *.exec', allowEmptyArchive: true
     }
   }
 }
