@@ -33,6 +33,7 @@
 		<module>org.eclipse.emf.diffmerge.tests.elements.edit</module>
 		<module>org.eclipse.emf.diffmerge.tests.elements.editor</module>
 		<module>org.eclipse.emf.diffmerge.tests.workspace</module>
+		<module>org.eclipse.emf.diffmerge.tests.ju</module>
 	</modules>
 	<profiles>
 		<profile>

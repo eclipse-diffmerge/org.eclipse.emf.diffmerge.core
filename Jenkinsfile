@@ -22,6 +22,7 @@ pipeline {
       	sh 'env'
         wrap([$class: 'Xvnc', takeScreenshot: false, useXauthority: true]) {
 		  sh 'mvn clean install -t ${WORKSPACE}/releng/org.eclipse.emf.diffmerge.configuration/toolchains-hipp.xml -Psign -Pstandalone -Pgui.test'
+		  junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
         }
       }
     }
@@ -65,7 +66,7 @@ pipeline {
   
   post {
     always {
-      archiveArtifacts artifacts: '**/*.log, *.log, *.exec', allowEmptyArchive: true
+      archiveArtifacts artifacts: '**/*.log, *.log, **/*.xml, *.exec', allowEmptyArchive: true
     }
   }
 }
