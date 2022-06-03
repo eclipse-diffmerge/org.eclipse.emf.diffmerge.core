@@ -12,6 +12,7 @@
 package org.eclipse.emf.diffmerge.impl.scopes;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
@@ -138,7 +139,12 @@ implements IEditableModelScope {
     // Differs from EcoreUtil.remove in the non-many case
     if (FeatureMapUtil.isMany(source_p, feature_p)) {
       result = ((List<?>)source_p.eGet(feature_p)).remove(value_p);
-    } else if (source_p.eGet(feature_p) == value_p) {
+      
+    } else if (feature_p instanceof EAttribute && Objects.equals(source_p.eGet(feature_p), value_p)) {
+      source_p.eUnset(feature_p);
+      result = true;
+      
+    } else if (feature_p instanceof EReference && source_p.eGet(feature_p) == value_p) {
       source_p.eUnset(feature_p);
       result = true;
     }
