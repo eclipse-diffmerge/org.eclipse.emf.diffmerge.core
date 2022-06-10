@@ -33,7 +33,10 @@
 		<topic href="html/EMF-DiffMerge.html#Difference_Resolution_in_a_Nutshell" label="Difference Resolution in a Nutshell">
 			<topic href="html/EMF-DiffMerge.html#Opening_the_GUI" label="Opening the GUI"></topic>
 			<topic href="html/EMF-DiffMerge.html#Resolving_Differences" label="Resolving Differences"></topic>
-			<topic href="html/EMF-DiffMerge.html#Saving_Merge_Decisions" label="Saving Merge Decisions"></topic>
+			<topic href="html/EMF-DiffMerge.html#Saving_Merge_Decisions" label="Saving Merge Decisions">
+				<topic href="html/EMF-DiffMerge.html#Absence_of_visible_differences" label="Absence of visible differences"></topic>
+				<topic href="html/EMF-DiffMerge.html#References_toward_images" label="References toward images"></topic>
+			</topic>
 		</topic>
 		<topic href="html/EMF-DiffMerge.html#Integration_with_Version_Control" label="Integration with Version Control">
 			<topic href="html/EMF-DiffMerge.html#Local_File_History" label="Local File History"></topic>
