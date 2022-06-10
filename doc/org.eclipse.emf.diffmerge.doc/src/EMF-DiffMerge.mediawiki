@@ -318,7 +318,7 @@ A click on the triangle-shaped button in the Property section brings a few optio
 
 * ''''Show all values'''': when selected, all the values of the current attribute or reference are 	shown in the Value sections. Those that are different are highlighted.
 
-* ''''Show all values and properties'''': when selected, all the properties (attributes and references) of the current element are shown in the Details section. The properties that have differences are highlighted as in the snapshot below. It is thus possible to see all properties of a model element, although it is generally advised to use the [https://wiki.eclipse.org/ModelingAmalgam/ContextualExplorer Contextual Explorer of Modeling Amalgam] view instead.
+* ''''Show all values and properties'''': when selected, all the properties (attributes and references) of the current element are shown in the Details section. The properties that have differences are highlighted as in the snapshot below. It is thus possible to see all properties of a model element, although it is generally advised to use the [https://github.com/eclipse/amalgam/wiki/Contextual-Explorer Contextual Explorer of Modeling Amalgam] view instead.
 
 * ''''Use technical representation'''': when selected, properties are displayed in a technical form that provides harder to read but more accurate naming, and typing information.
  
@@ -414,10 +414,14 @@ Resolution of differences is considered to be finished when the content of the S
  
 [[Image:Images/Model-DiffMerge_html_m4d91695e.png]]
 
- 
+==== Absence of visible differences ====
+
 Note that the absence of visible differences does not mean that the left and right models are identical. It simply means that all differences have been considered by the user and either merged or explicitly ignored or filtered out.
 
- 
+==== References toward images ====
+
+When using Diffmerge within a Sirius application, description on elements or diagram elements may refer to some external images. Note that when the user will merge some references toward images, please make sure that those images are also available by the destination model, otherwise images will not be loaded properly.
+
 <br>
 == Integration with Version Control ==
 
