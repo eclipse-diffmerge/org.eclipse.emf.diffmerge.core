@@ -78,8 +78,14 @@ public class ProjectHelper {
           });
       if (!session.isOpen()) {
         session.open(new NullProgressMonitor());
-      }
-      session.save(new NullProgressMonitor());
+      } 
+      session.getTransactionalEditingDomain().getCommandStack()
+      .execute(new RecordingCommand(session.getTransactionalEditingDomain()) {
+        @Override
+        protected void doExecute() {
+          session.save(new NullProgressMonitor());
+        }
+      });
       return session;
 
     } catch (CoreException e) {
