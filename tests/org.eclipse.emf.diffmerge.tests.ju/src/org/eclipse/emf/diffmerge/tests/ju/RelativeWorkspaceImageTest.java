@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.sirius.SiriusScope;
 import org.eclipse.emf.transaction.RecordingCommand;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.sirius.business.api.session.Session;
 import org.eclipse.sirius.diagram.DiagramFactory;
 import org.eclipse.sirius.diagram.DiagramPackage;
@@ -41,8 +42,8 @@ public class RelativeWorkspaceImageTest {
   }
 
   protected void setPath(WorkspaceImage element, String path) {
-    scope.getSession().getTransactionalEditingDomain().getCommandStack()
-        .execute(new RecordingCommand(scope.getSession().getTransactionalEditingDomain()) {
+    scope.getEditingDomain().getCommandStack()
+        .execute(new RecordingCommand((TransactionalEditingDomain) scope.getEditingDomain()) {
           @Override
           protected void doExecute() {
             element.setWorkspacePath(path);
