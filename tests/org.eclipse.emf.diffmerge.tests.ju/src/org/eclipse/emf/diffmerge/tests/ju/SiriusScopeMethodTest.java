@@ -68,6 +68,12 @@ public class SiriusScopeMethodTest {
     assertTrue(helper.getProjectFromUri(URI.createURI("any:/projectm/project/model.aird")).equals("project"));
   }
 
+  @Test
+  public void projectOnRootGit() {
+    SiriusHelper helper = new SiriusHelper();
+    assertTrue(helper.getProjectFromUri(URI.createURI("commit:/model.aird")).equals("model"));
+  }
+
   private class SiriusHelper extends SiriusImageHelper {
     
     public String getProjectFromUri(URI uri_p) {
