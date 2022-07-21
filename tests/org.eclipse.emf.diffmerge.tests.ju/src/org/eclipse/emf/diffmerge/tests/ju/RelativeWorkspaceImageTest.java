@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.sirius.SiriusImageHelper;
 import org.eclipse.emf.diffmerge.sirius.SiriusScope;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -75,9 +76,9 @@ public class RelativeWorkspaceImageTest {
 
   @Test
   public void subFolderWithProtocol() {
-    setPath(element, "protocol:/a/image.png");
+    setPath(element, "cdo:/a/image.png");
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
-    assertEquals("Sub folder with project name shall be changed", "protocol:/./image.png",
+    assertEquals("Sub folder with project name shall be changed", "cdo:/./image.png",
         object.iterator().next().toString());
   }
 
@@ -87,6 +88,39 @@ public class RelativeWorkspaceImageTest {
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
     assertEquals("Image on sub folder of root project shall be changed", "./b/image.png",
         object.iterator().next().toString());
+  }
+  
+
+  @Test
+  public void addLocal() {
+    setPath(element, "");
+    Object value = new SiriusImageHelper().adaptAddValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
+    assertEquals("Relative image shall be replaced by project harcoded path",
+        "a/image.png", value.toString());
+  }
+  
+  @Test
+  public void addLocalWithProtocol() {
+    setPath(element, "");
+    Object value = new SiriusImageHelper().adaptAddValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
+    assertEquals("Relative image shall be replaced by project harcoded path",
+        "cdo:/a/image.png", value.toString());
+  }
+
+  @Test
+  public void removeLocal() {
+    setPath(element, "My image is <img src=\"./image.png\"></img> src=\"c/image.png\"></img>");
+    Object value = new SiriusImageHelper().adaptRemoveValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
+    assertEquals("Relative image shall be replaced by project harcoded path",
+        "a/image.png", value.toString());
+  }
+  
+  @Test
+  public void removeLocalWithProtocol() {
+    setPath(element, "My image is <img src=\"cdo:/./image.png\"></img> src=\"cdo:/c/image.png\"></img>");
+    Object value = new SiriusImageHelper().adaptRemoveValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
+    assertEquals("Relative image shall be replaced by project harcoded path",
+        "cdo:/a/image.png", value.toString());
   }
 
 }

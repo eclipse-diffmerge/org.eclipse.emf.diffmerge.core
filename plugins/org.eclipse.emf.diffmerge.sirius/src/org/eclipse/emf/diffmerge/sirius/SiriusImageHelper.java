@@ -92,7 +92,7 @@ public class SiriusImageHelper {
    * 
    * @param source_p  the element
    * @param value_p the richtext description that can contain image paths
-   * @implNote Notice the ':' we need to keep protocol in it (commit: for instance)
+   * @implNote Notice the 'cdo:/'. Sirius will change urls to cdo:/ if located on remote repository
    * @return a richtext description containing relative paths on images located in the root project
    */
   protected String replaceRichtextToRelative(EObject source_p, String value_p) {
@@ -100,7 +100,7 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
-    return value_p.replaceAll("src=\"([^/]+:/)?" + projectName + "/", "src=\"$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return value_p.replaceAll("src=\"(cdo:/)?" + projectName + "/", "src=\"$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
@@ -108,6 +108,7 @@ public class SiriusImageHelper {
    * 
    * @param source_p the element
    * @param value_p the richtext description that can contain image paths
+   * @implNote Notice the 'cdo:/'. Sirius will change urls to cdo:/ if located on remote repository
    * @return a richtext description containing relative paths on images located in the root project
    */
   protected String replaceRichtextToHardcodedProject(EObject source_p, String value_p) {
@@ -115,7 +116,7 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
-    return value_p.replaceAll("src=\"\\./", "src=\"" + projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return value_p.replaceAll("src=\"(cdo:/)?\\./", "src=\"$1" + projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
@@ -126,7 +127,7 @@ public class SiriusImageHelper {
    *          the element
    * @param value_p
    *          the {@link WorkspaceImage} workspace path
-   * @implNote Notice the ':' we need to keep protocol in it (commit: for instance)
+   * @implNote Notice the 'cdo:/'. Sirius will change urls to cdo:/ if located on remote repository
    * @return a workspace path containing relative path if image was located in the root project
    */
   protected String replaceWorkspaceImageToRelative(EObject source_p, String value_p) {
@@ -134,7 +135,7 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
-    return value_p.replaceAll("^([^/]+:/)?" + projectName + "/", "$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return value_p.replaceAll("^(cdo:/)?" + projectName + "/", "$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
@@ -143,6 +144,7 @@ public class SiriusImageHelper {
    * 
    * @param source_p the element
    * @param value_p the {@link WorkspaceImage} workspace path
+   * @implNote Notice the 'cdo:/'. Sirius will change urls to cdo:/ if located on remote repository
    * @return a workspace path containing absolute path if image was located in the root project
    */
   protected String replaceWorkspaceImageToHardcodedProject(EObject source_p, String value_p) {
@@ -150,11 +152,14 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
-    return value_p.replaceAll("^\\./", projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$
+    return value_p.replaceAll("^(cdo:/)?\\./", "$1" + projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
    * For a given object, retrieve its project
+   * 
+   * @implSpec Note that the project name containing the element source_p might be different than the IProject containing the
+   *           Sirius session. Here we lookup for the project name owning the resource containing the element
    */
   protected String getProjectName(EObject source_p) {
     EObject root = EcoreUtil.getRootContainer(source_p, true);
@@ -189,9 +194,6 @@ public class SiriusImageHelper {
   
   /**
    * For an element, retrieve it's project name
-   * 
-   * @implSpec Note that the project name containing the element source_p might be different than the IProject containing the
-   *           Sirius session. Here we lookup for the project name owning the resource containing the element
    */
   protected String getMainProjectName(EObject source_p) {
     EObject root = EcoreUtil.getRootContainer(source_p);
