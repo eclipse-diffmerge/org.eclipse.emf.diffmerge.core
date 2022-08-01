@@ -13,11 +13,14 @@ package org.eclipse.emf.diffmerge.tests.ju;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.sirius.SiriusImageHelper;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.Element;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.impl.URIConverterImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.junit.Test;
 
@@ -25,10 +28,10 @@ public class SiriusScopeMethodTest {
 
   @Test
   public void projectForAllElements() {
-    XMIResourceImpl mainResource = new XMIResourceImpl(URI.createPlatformResourceURI("root/a/a.elements", true));
+    XMIResourceImpl mainResource = new XMIResourceImpl(URI.createPlatformResourceURI("a/a.elements", true));
     Element element = ElementsFactory.eINSTANCE.createElement();
     
-    XMIResourceImpl childResource = new XMIResourceImpl(URI.createPlatformResourceURI("root/a/subfolder/b.elements", true));
+    XMIResourceImpl childResource = new XMIResourceImpl(URI.createPlatformResourceURI("a/subfolder/b.elements", true));
     Element element2 = ElementsFactory.eINSTANCE.createElement();
 
     mainResource.getContents().add(element);
@@ -42,10 +45,10 @@ public class SiriusScopeMethodTest {
 
   @Test
   public void projectForSeveralResources() {
-    XMIResourceImpl aResource = new XMIResourceImpl(URI.createPlatformResourceURI("root/a/a.elements", true));
+    XMIResourceImpl aResource = new XMIResourceImpl(URI.createPlatformResourceURI("a/a.elements", true));
     Element element = ElementsFactory.eINSTANCE.createElement();
     
-    XMIResourceImpl bResource = new XMIResourceImpl(URI.createPlatformResourceURI("root/b/b.elements", true));
+    XMIResourceImpl bResource = new XMIResourceImpl(URI.createPlatformResourceURI("b/b.elements", true));
     Element element2 = ElementsFactory.eINSTANCE.createElement();
     Element element3 = ElementsFactory.eINSTANCE.createElement();
 
@@ -59,25 +62,46 @@ public class SiriusScopeMethodTest {
     assertTrue("The project of an child element is the parent folder of its root container", helper.getMainProjectName(element2).equals("a"));
     assertTrue("The project of a root element is it's parent folder", helper.getMainProjectName(element3).equals("b"));
   }
+
+  @Test
+  public void projectPlatformResource() {
+    SiriusHelper helper = new SiriusHelper();
+
+    assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/model.aird")).equals("project"));
+    assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/fragments/model.airdfragments")).equals("project"));
+    assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/.representations/model.srm")).equals("project"));
+    assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/fragments/.representations/model.srm")).equals("project"));
+  }
+  
+  @Test
+  public void projectRemoteSirius() {
+    SiriusHelper helper = new SiriusHelper();
+    
+    assertTrue(helper.getProjectFromUri(URI.createURI("cdo://repository/project/model.aird")).equals("project"));
+    assertTrue(helper.getProjectFromUri(URI.createURI("cdo://repository/project/.representations/model.srm")).equals("project"));
+    assertTrue(helper.getProjectFromUri(URI.createURI("cdo://repository/project/fragments/.representations/model.srm")).equals("project"));
+    
+  }
   
   @Test
   public void projectByProtocol() {
     SiriusHelper helper = new SiriusHelper();
     assertTrue(helper.getProjectFromUri(URI.createURI("commit:/root/sub/project/model.aird")).equals("project"));
-    assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/model.aird")).equals("project"));
-    assertTrue(helper.getProjectFromUri(URI.createURI("any:/projectm/project/model.aird")).equals("project"));
-  }
-
-  @Test
-  public void projectOnRootGit() {
-    SiriusHelper helper = new SiriusHelper();
     assertTrue(helper.getProjectFromUri(URI.createURI("commit:/model.aird")).equals("model"));
+
+    assertTrue(helper.getProjectFromUri(URI.createURI("any:/projectm/project/model.aird")).equals("project"));
   }
 
   private class SiriusHelper extends SiriusImageHelper {
     
     public String getProjectFromUri(URI uri_p) {
-      return super.getProjectFromUri(uri_p);
+      return super.getProjectFromUri(uri_p, new URIConverterImpl() {
+        @Override
+        public boolean exists(URI uri, Map<?, ?> options) {
+          // We retrieve true only if we look for a .project on the project folder
+          return uri.toString().endsWith("/project/.project");
+        }
+      });
     }
     
     @Override
