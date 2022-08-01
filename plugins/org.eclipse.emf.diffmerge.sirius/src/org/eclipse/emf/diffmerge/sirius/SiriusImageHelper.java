@@ -177,16 +177,24 @@ public class SiriusImageHelper {
    * 
    * @apiNote this api suppose that the given resource is directly located in it's root project. 
    *          (which is the case in caller methods)
-   * @implNote URI can be from platform:/resource, commit:/ or other protocol such as cdo:/
-   *          on normal cases, the model uri contains the project name, but if the project is stored
-   *          on a root git repository, we retrieve the model name
+   * @implNote URI can be from platform:/resource, commit:/ local:/ remote:/ cdo:/
+   *          if the project is stored on a root git repository, we retrieve the model name
    */
   protected String getProjectFromUri(URI uri_p) {
-    if (uri_p.segmentCount() > 1) {
+    
+    if (uri_p.isPlatformResource()) {
+      return uri_p.segment(1);
+      
+    } else if ("cdo".equals(uri_p.scheme())) { //$NON-NLS-1$
+      return uri_p.segment(0);
+      
+    } else if (uri_p.segmentCount() > 1) {
       return uri_p.segment(uri_p.segmentCount() - 2);
       
-    } else if (uri_p.segmentCount() > 0) {
+    } else if (uri_p.segmentCount() == 1) {
+      // When the project is directly stored under git, we cannot retrieve a project name as there is none
       return uri_p.trimFileExtension().segment(uri_p.segmentCount() - 1);
+    
     }
     
     return null;
