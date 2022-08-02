@@ -15,10 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.sirius.business.api.image.RichTextAttributeRegistry;
 import org.eclipse.sirius.diagram.DiagramPackage;
@@ -166,7 +169,8 @@ public class SiriusImageHelper {
     if (root != null) {
       Resource resource = root.eResource();
       if (resource != null) {
-        return getProjectFromUri(resource.getURI());
+        ResourceSet set = resource.getResourceSet();
+        return getProjectFromUri(resource.getURI(), set != null ? set.getURIConverter() : null);
       }
     }
     return null;
@@ -174,22 +178,30 @@ public class SiriusImageHelper {
 
   /**
    * For a given resource URI, retrieve the root segment describing the root project name
-   * 
-   * @apiNote this api suppose that the given resource is directly located in it's root project. 
-   *          (which is the case in caller methods)
-   * @implNote URI can be from platform:/resource, commit:/ or other protocol such as cdo:/
-   *          on normal cases, the model uri contains the project name, but if the project is stored
-   *          on a root git repository, we retrieve the model name
    */
-  protected String getProjectFromUri(URI uri_p) {
-    if (uri_p.segmentCount() > 1) {
-      return uri_p.segment(uri_p.segmentCount() - 2);
-      
-    } else if (uri_p.segmentCount() > 0) {
+  protected String getProjectFromUri(URI uri_p, URIConverter converter) {
+    
+    if (uri_p.segmentCount() == 1) {
+      // When the model is directly stored under git, we cannot retrieve a project name as there is none
       return uri_p.trimFileExtension().segment(uri_p.segmentCount() - 1);
     }
+
+    // otherwise we look for the parent containing a .project
+    if (converter != null) {
+      URI uri = uri_p;
+      while (uri.segmentCount() > 1) {
+        uri = uri.trimSegments(1);
+        if (converter.exists(uri.appendSegment(IProjectDescription.DESCRIPTION_FILE_NAME), null)) {
+          return uri.segment(uri.segmentCount() - 1);
+        }
+      }
+    }
     
-    return null;
+    // if none, we retrieve the root folder
+    if (uri_p.isPlatform()) {
+      return uri_p.segment(1);
+    }
+    return uri_p.segment(0);
   }
   
   /**
