@@ -11,11 +11,13 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.sirius;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -180,9 +182,14 @@ public class SiriusImageHelper {
    * For a given resource URI, retrieve the root segment describing the root project name
    */
   protected String getProjectFromUri(URI uri_p, URIConverter converter) {
-    
+
+    // if platform, we retrieve the second segment (platform:/resource/projectName)
+    if (uri_p.isPlatform()) {
+      return uri_p.segment(1);
+    }
+
+    // When the model is directly stored under git, we cannot retrieve a project name as there is none
     if (uri_p.segmentCount() == 1) {
-      // When the model is directly stored under git, we cannot retrieve a project name as there is none
       return uri_p.trimFileExtension().segment(uri_p.segmentCount() - 1);
     }
 
@@ -191,17 +198,30 @@ public class SiriusImageHelper {
       URI uri = uri_p;
       while (uri.segmentCount() > 1) {
         uri = uri.trimSegments(1);
-        if (converter.exists(uri.appendSegment(IProjectDescription.DESCRIPTION_FILE_NAME), null)) {
-          return uri.segment(uri.segmentCount() - 1);
+        URI project = uri.appendSegment(IProjectDescription.DESCRIPTION_FILE_NAME);
+        if (converter.exists(project, null)) {
+          return getNameFromDotProject(project, converter);
         }
       }
     }
-    
-    // if none, we retrieve the root folder
-    if (uri_p.isPlatform()) {
-      return uri_p.segment(1);
-    }
+
+    // otherwise we retrieve the first segment
     return uri_p.segment(0);
+  }
+
+  /**
+   * Retrieve the name of a .project. On an unexpected error, retrieve the folder of the project
+   * 
+   * @apiNote the .project file shall exists.
+   */
+  protected String getNameFromDotProject(URI projectUri, URIConverter converter) {
+    try (InputStream stream = converter.createInputStream(projectUri)) {
+      IProjectDescription description = ResourcesPlugin.getWorkspace().loadProjectDescription(stream);
+      return description.getName();
+      
+    } catch (Exception e) {
+      return projectUri.segment(projectUri.segmentCount() - 2);
+    }
   }
   
   /**
