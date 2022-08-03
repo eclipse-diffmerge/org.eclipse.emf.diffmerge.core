@@ -67,7 +67,31 @@ public abstract class AbstractGitURIConverter extends ExtensibleURIConverterImpl
   }
   
   /**
-   * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#createInputStream(org.eclipse.emf.common.util.URI, java.util.Map)
+   * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#exists(org.eclipse.emf.common.util.URI,
+   *      java.util.Map)
+   */
+  @Override
+  public boolean exists(URI uri_p, Map<?, ?> options_p) {
+    try {
+      Repository repo = _repository;
+      if (repo != null && isSupportedURI(uri_p)) {
+        // Try to locate the file locally
+        IPath absoluteFilePath = getAbsoluteFilePath(uri_p, repo);
+        IPath absoluteRepoPath = new Path(
+            repo.getWorkTree().getCanonicalPath());
+
+        String gitPath = absoluteFilePath.makeRelativeTo(absoluteRepoPath).toString();
+        return getGitFileRevision(gitPath).exists();
+      }
+    } catch (Exception e) {
+      // Nothing here
+    }
+    return super.exists(uri_p, options_p);
+  }
+
+  /**
+   * @see org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl#createInputStream(org.eclipse.emf.common.util.URI,
+   *      java.util.Map)
    */
   @Override
   public InputStream createInputStream(URI uri_p, Map<?, ?> options_p)
