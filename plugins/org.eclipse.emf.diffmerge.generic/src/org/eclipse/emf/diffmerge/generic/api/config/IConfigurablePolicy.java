@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2017-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2017-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -38,6 +38,10 @@ public interface IConfigurablePolicy {
    */
   boolean update(IConfigurablePolicy policy_p);
   
+  /**
+   * Return a cloned object
+   */
+  IConfigurablePolicy copy();
   
   /**
    * An observer of a configuration.

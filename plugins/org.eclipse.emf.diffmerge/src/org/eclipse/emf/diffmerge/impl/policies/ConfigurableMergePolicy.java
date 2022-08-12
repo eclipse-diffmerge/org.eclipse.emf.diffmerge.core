@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2013-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2013-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -52,15 +52,6 @@ implements IConfigurablePolicy {
   }
   
   /**
-   * @see java.lang.Object#clone()
-   */
-  @Override
-  public ConfigurableMergePolicy clone() throws CloneNotSupportedException {
-    // Override in subclasses if the configurable state is extended or modified
-    return new ConfigurableMergePolicy(this);
-  }
-  
-  /**
    * Notify all registered listeners that the configuration changed
    * @param property_p an optional object that describes the configuration property that changed
    */
@@ -82,6 +73,14 @@ implements IConfigurablePolicy {
    */
   public boolean update(IConfigurablePolicy policy_p) {
     return policy_p instanceof ConfigurableMergePolicy;
+  }
+  
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#copy()
+   */
+  @Override
+  public ConfigurableMergePolicy copy() {
+    return new ConfigurableMergePolicy(this);
   }
   
 }

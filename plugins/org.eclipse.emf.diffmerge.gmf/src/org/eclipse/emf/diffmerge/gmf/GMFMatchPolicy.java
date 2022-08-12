@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -387,4 +387,11 @@ public class GMFMatchPolicy extends ConfigurableMatchPolicy {
     return "NoteAttachment".equals(connector_p.getType()); //$NON-NLS-1$
   }
   
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.api.config.IConfigurablePolicy#copy()
+   */
+  @Override
+  public GMFMatchPolicy copy() {
+    return new GMFMatchPolicy(this);
+  }
 }
