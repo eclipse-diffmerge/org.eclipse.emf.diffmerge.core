@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2017-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2017-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -63,23 +63,17 @@ IComparisonConfigurator.Provider {
     IMatchPolicy<EObject> matchPolicy = comparisonMethod_p.getMatchPolicy();
     _keepMatchIDs = (matchPolicy == null)? false: matchPolicy.keepMatchIDs();
     if (matchPolicy instanceof ConfigurableMatchPolicy) {
-      _matchPolicy = new ConfigurableMatchPolicy(
-          (ConfigurableMatchPolicy) matchPolicy);
+      _matchPolicy = ((ConfigurableMatchPolicy)matchPolicy).copy();
     }
     // Diff policy
     IDiffPolicy<EObject> diffPolicy = comparisonMethod_p.getDiffPolicy();
     if (diffPolicy instanceof ConfigurableDiffPolicy) {
-      _diffPolicy = new ConfigurableDiffPolicy(
-          (ConfigurableDiffPolicy) diffPolicy);
+      _diffPolicy = ((ConfigurableDiffPolicy) diffPolicy).copy();
     }
     // Merge policy
     IMergePolicy<EObject> mergePolicy = comparisonMethod_p.getMergePolicy();
     if (mergePolicy instanceof ConfigurableMergePolicy) {
-      try {
-        _mergePolicy = ((ConfigurableMergePolicy)mergePolicy).clone();
-      } catch (CloneNotSupportedException e) {
-        // Keep null value
-      }
+      _mergePolicy = ((ConfigurableMergePolicy)mergePolicy).copy();
     }
     _configurators = new ArrayList<IComparisonConfigurator>(
         comparisonMethod_p.getConfigurators());

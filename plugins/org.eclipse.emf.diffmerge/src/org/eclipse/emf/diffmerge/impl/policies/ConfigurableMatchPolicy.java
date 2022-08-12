@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2013-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2013-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -805,4 +805,11 @@ org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy<EObject>
     return _selectedCriteria.contains(criterion_p);
   }
   
+  /**
+   * @see org.eclipse.emf.diffmerge.generic.impl.policies.ConfigurableMatchPolicy#copy()
+   */
+  @Override
+  public ConfigurableMatchPolicy copy() {
+    return new ConfigurableMatchPolicy(this);
+  }
 }
