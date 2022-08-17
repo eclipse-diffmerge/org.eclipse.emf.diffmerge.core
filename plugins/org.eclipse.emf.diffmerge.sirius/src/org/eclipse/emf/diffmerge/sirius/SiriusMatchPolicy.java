@@ -104,22 +104,6 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
   }
   
   /**
-   * Return a semantic ID for the given annotation
-   * @param annotation_p a non-null element
-   * @param scope_p a non-null scope that covers annotation_p
-   * @return a potentially null string
-   */
-  protected String getDAnnotationSemanticID(DAnnotation annotation_p,
-      ITreeDataScope<EObject> scope_p) {
-    String result = null;
-    if (annotation_p.getSource() != null) {
-      // Based on container ID and source
-      result = getContainerRelativeID(annotation_p, scope_p, annotation_p.getSource(), null);
-    }
-    return result;
-  }
-  
-  /**
    * Return a semantic ID for the given DView
    * @param element_p a non-null element
    * @param scope_p a non-null scope that covers element_p
@@ -303,10 +287,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
       result = getDViewSemanticID((DView)element_p, scope_p);
     } else if (element_p instanceof AnnotationEntry) {
       // AnnotationEntry
-      result = getAnnotationEntrySemanticID((AnnotationEntry)element_p, scope_p);
-    } else if (element_p instanceof DAnnotation) {
-      // DAnnotation
-      result = getDAnnotationSemanticID((DAnnotation)element_p, scope_p);
+      result = getAnnotationEntrySemanticID((AnnotationEntry) element_p, scope_p);
     } else if (isViewpointElement(element_p)) {
       // Viewpoint element
       result = getViewpointElementSemanticID(element_p, scope_p);
@@ -405,7 +386,7 @@ public class SiriusMatchPolicy extends GMFMatchPolicy {
       EPackage pkg = clazz.getEPackage();
       result = SIRIUS_DESCRIPTION_PACKAGES.contains(pkg);
     }
-    return result;
+    return result && !(element_p instanceof DAnnotation);
   }
   
   /**
