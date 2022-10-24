@@ -1,0 +1,97 @@
+--- RCPTT testcase ---
+Format-Version: 1.0
+Element-Name: TC_Update
+Element-Type: testcase
+Element-Version: 3.0
+External-Reference: 
+Id: _DSxw0FE7Ee23K9eYQGHnKA
+Runtime-Version: 2.5.2.202204252353
+Save-Time: 10/24/22, 11:01 AM
+Testcase-Type: ecl
+
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa
+Content-Type: text/plain
+Entry-Name: .description
+
+Update of merge direction on a graph model.
+------=_.description-216f885c-d591-38ce-8ea2-e4f8cb4d6ffa--
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac
+Content-Type: text/ecl
+Entry-Name: .content
+
+/* Copy current test files to Example project */
+copy-example "Update"
+/* Compare Example models */
+compare-examples-for-impact-analysis
+
+//Merge direction : any		
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree | select "Root root (2)/Element element1"
+    get-button "Apply changes to the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex2.elements"] | select "Root root/Element element1"
+    get-tree -after [get-label "/Example/Ex1.elements"] | key-type "M1+z"
+    get-button "Apply deletion on the left" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | key-type "M1+z"
+    get-tree | select "Root root (2)/Element element2"
+    get-button "Apply changes to the left" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | select "Root root/Element element2" | key-type "M1+z"
+    get-button "Apply deletion on the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+
+
+//Update to left to right
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | key-type "M1+z"
+    get-button -index 9 | click
+    get-toolbar -after [get-label Synthesis] | get-menu -path "Update..." | click
+}
+with [get-window "EMF Diff/Merge"] {
+    get-group Roles | get-button "Left to right" | click
+    get-button Finish | click
+}
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | select "Root root/Element element1"
+    get-button "Apply changes to the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | key-type "M1+z"
+    get-tree | select "Root root (2)/Element element1"
+    get-tree -after [get-label "/Example/Ex2.elements"] | select "Root root/Element element2"
+    get-button "Apply deletion on the right" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex2.elements"] | key-type "M1+z"
+    get-button -index 9 | click
+    get-toolbar -after [get-label Synthesis] | get-menu -path "Update..." | click
+}
+//Update to Right to left
+with [get-window "EMF Diff/Merge"] {
+    get-group Roles | get-button "Right to left" | click
+    get-button Finish | click
+}
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | select "Root root/Element element1"
+    get-button "Apply deletion on the left" | click
+}
+get-window "Merge Operation" | get-button OK | click
+with [get-editor "Compare ('Ex1' - 'Ex2')"] {
+    get-tree -after [get-label "/Example/Ex1.elements"] | key-type "M1+z"
+    get-tree -after [get-label "/Example/Ex2.elements"] | select "Root root/Element element2"
+    get-button "Apply changes to the left" | click
+}
+get-window "Merge Operation" | get-button OK | click
+get-editor "Compare ('Ex1' - 'Ex2')" | get-tree -after [get-label "/Example/Ex1.elements"] 
+    | select "Root root/Element element2" | key-type "M1+z"
+------=_.content-0a7243a0-75d3-3d5f-9791-539de0e5b7ac--

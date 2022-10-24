@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S and others.
+ * Copyright (c) 2010-2022 Thales Global Services S.A.S and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -898,7 +898,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     };
     action.setImageDescriptor(getImageDescriptor(ImageID.NEXT_DIFF_NAV));
     action.setToolTipText(Messages.ComparisonViewer_NextTooltip);
-    ActionContributionItem result = new ActionContributionItem(action);
+    ActionContributionItem result = new ActionContributionItem(action);//
     context_p.add(result);
     return result;
   }
@@ -3374,8 +3374,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
     protected IStatus run(IProgressMonitor monitor_p) {
       final EMFDiffNode diffNode = _editorInput.getCompareResult();
       // Set GUI to read-only mode
-      final boolean editionPossibleLeft = diffNode.isEditionPossible(true);
-      final boolean editionPossibleRight = diffNode.isEditionPossible(false);
       Display.getDefault().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
@@ -3383,7 +3381,6 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         public void run() {
           diffNode.setEditionPossible(false, true);
           diffNode.setEditionPossible(false, false);
-          refreshTools();
         }
       });
       // Isolate from resource set to avoid unwanted interactions with listeners
@@ -3398,14 +3395,14 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       if (rs != null) {
         rs.getResources().add(comparisonResource);
       }
+
       // Dismiss GUI read-only mode and refresh
       Display.getDefault().syncExec(new Runnable() {
         /**
          * @see java.lang.Runnable#run()
          */
         public void run() {
-          diffNode.setEditionPossible(editionPossibleLeft, true);
-          diffNode.setEditionPossible(editionPossibleRight, false);
+          setSelection(StructuredSelection.EMPTY, false);
           firePropertyChangeEvent(PROPERTY_CURRENT_INPUT, null);
           refresh();
         }
@@ -3424,8 +3421,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
       newMethod.setVerbose(false);
       EMFDiffNode diffNode = _editorInput.getCompareResult();
       diffNode.getUIComparison().clear();
+      diffNode.setLeftRole(newMethod.getLeftRole());
       if (_sidesSwapped) {
-        diffNode.setLeftRole(diffNode.getRoleForSide(false));
         diffNode.getActualComparison().swapScopes();
       }
       diffNode.setReferenceRole(newMethod.getTwoWayReferenceRole());
