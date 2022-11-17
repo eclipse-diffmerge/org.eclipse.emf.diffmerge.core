@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2018-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2018-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -121,6 +121,10 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
     }
   }
   
+  /**
+   * If true, indicates that the comparison is left-to-right or right-to-left
+   */
+  private boolean isDirectedComparison = false;
   
   /** The non-null diff label decorator */
   private IDiffLabelDecorator _diffDecorator;
@@ -288,6 +292,9 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
    * @return a non-null object
    */
   protected IDiffLabelDecorator getDefaultDiffLabelDecorator() {
+    if(isDirectedComparison) {
+      return GitLikeDiffLabelDecorator.getInstance();
+    }
     return DefaultDiffLabelDecorator.getInstance();
   }
   
@@ -773,4 +780,22 @@ implements IUndecoratingLabelProvider, ITreePathLabelProvider, IDiffLabelDecorat
     cacheClear();
   }
   
+
+  /**
+   * 
+   * @param value
+   *          : true if left-to-right or right-to-left When true, the decorators
+   *          are changed to git decorators
+   */
+  public void setDirected(boolean value) {
+    if(value != isDirectedComparison) {
+      isDirectedComparison = value;
+      if(isDirectedComparison) {
+        setDiffLabelDecorator(GitLikeDiffLabelDecorator.getInstance());
+      } else {
+        setDiffLabelDecorator(DefaultDiffLabelDecorator.getInstance());
+      }
+    }
+    
+  }
 }

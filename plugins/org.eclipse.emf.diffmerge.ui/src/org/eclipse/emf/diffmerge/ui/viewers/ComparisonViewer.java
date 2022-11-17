@@ -636,7 +636,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           Messages.ComparisonViewer_FilterText;
     action.setText(text);
     action.setToolTipText(Messages.ComparisonViewer_EnhancedFilterToolTip);
-    action.setImageDescriptor(getImageDescriptor(ImageID.FILTER));
+    action.setImageDescriptor(getImageDescriptor(ImageID.FILTERS_MENU));
     action.setChecked(false);
     if (_filterSelectionListener == null) {
       _filterSelectionListener = new FilterSelectionListener();
@@ -2371,13 +2371,22 @@ public class ComparisonViewer extends AbstractComparisonViewer {
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
     super.inputChanged(input_p, oldInput_p);
+
+    EMFDiffNode input = getInput();
+    IEditorInput editorInput = input.getEditorInput();
+    if (editorInput instanceof EMFDiffMergeEditorInput) {
+      EMFDiffMergeEditorInput diffInput = (EMFDiffMergeEditorInput) editorInput;
+      boolean isDirected = diffInput.getComparisonMethod().isDirected();
+      setDirected(isDirected);
+    }
+
     _viewerFeatures.setInput(null);
     _viewerValuesLeft.setInput(null);
     _viewerValuesRight.setInput(null);
     _viewerSynthesisMain.setInput(input_p);
     _viewerSynthesisLeft.setInput(input_p);
     _viewerSynthesisRight.setInput(input_p);
-    EMFDiffNode input = getInput();
+
     if (input != null && input.isUserPropertyTrue(P_LOG_EVENTS)) {
       getLogger().log(new CompareLogEvent(getEditingDomain(), input));
     }
@@ -2842,6 +2851,8 @@ public class ComparisonViewer extends AbstractComparisonViewer {
         IModelScopeDefinition newTargetScopeDef =
             editorInput.getComparisonMethod().getModelScopeDefinition(Role.TARGET);
         boolean sidesSwapped = newTargetScopeDef != originalTargetScopeDef;
+        boolean isDirected = editorInput.getComparisonMethod().isDirected();
+        setDirected(isDirected);
         Job job = new RestartJob(editorInput, sidesSwapped);
         job.setUser(true);
         job.schedule();
@@ -3441,6 +3452,12 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           newMethod.getMergePolicy(), monitor_p);
       diffNode.getCategoryManager().update();
     }
+  }
+
+  private void setDirected(boolean isDirected) {
+    _viewerSynthesisMain.setDirected(isDirected);
+    _viewerSynthesisLeft.setDirected(isDirected);
+    _viewerSynthesisRight.setDirected(isDirected);
   }
   
 }

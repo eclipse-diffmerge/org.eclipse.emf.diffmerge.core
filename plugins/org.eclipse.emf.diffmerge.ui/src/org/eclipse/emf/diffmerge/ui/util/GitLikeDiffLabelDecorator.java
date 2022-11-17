@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2018-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2018-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -12,20 +12,15 @@
 package org.eclipse.emf.diffmerge.ui.util;
 
 import org.eclipse.emf.diffmerge.generic.api.Role;
-import org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin.ImageID;
 import org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-
 
 /**
  * A DiffLabelDecorator that uses decorations inspired by the EGit Eclipse project.
  * @author Olivier Constant
  */
-public class GitLikeDiffLabelDecorator extends DiffLabelDecorator {
-  
+public class GitLikeDiffLabelDecorator extends DefaultDiffLabelDecorator {
+
   /** The instance of this class (singleton pattern) */
   private static GitLikeDiffLabelDecorator __instance = null;
   
@@ -34,38 +29,8 @@ public class GitLikeDiffLabelDecorator extends DiffLabelDecorator {
    * Default constructor
    */
   public GitLikeDiffLabelDecorator() {
-    // Nothing needed
+    super();
   }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getFont(java.lang.Object, org.eclipse.swt.graphics.Font, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
-   */
-  @Override
-  public Font getFont(Object object_p, Font base_p, DifferenceKind diffKind_p,
-      Role side_p, EMFDiffNode node_p) {
-    Font result = super.getFont(object_p, base_p, diffKind_p, side_p, node_p);
-    if (result != null && diffKind_p == DifferenceKind.COUNTED) {
-      result = UIUtil.getItalic(result);
-    }
-    return result;
-  }
-  
-  /**
-   * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getForeground(java.lang.Object, org.eclipse.swt.graphics.Color, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
-   */
-  @Override
-  public Color getForeground(Object object_p, Color base_p,
-      DifferenceKind diffKind_p, Role side_p, EMFDiffNode node_p) {
-    Color result;
-    if (!(object_p instanceof IRawDataScope<?>) &&
-        (diffKind_p == DifferenceKind.COUNTED || diffKind_p == DifferenceKind.NONE)) {
-      result = UIUtil.getColor(SWT.COLOR_DARK_GRAY);
-    } else {
-      result = super.getForeground(object_p, base_p, diffKind_p, side_p, node_p);
-    }
-    return result;
-  }
-  
   /**
    * @see org.eclipse.emf.diffmerge.ui.util.DiffLabelDecorator#getImageOverlay(java.lang.Object, org.eclipse.emf.diffmerge.ui.util.DifferenceKind, org.eclipse.emf.diffmerge.generic.api.Role, org.eclipse.emf.diffmerge.ui.viewers.EMFDiffNode)
    */

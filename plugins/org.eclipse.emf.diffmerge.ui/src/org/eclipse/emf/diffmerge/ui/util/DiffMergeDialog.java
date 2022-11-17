@@ -58,7 +58,7 @@ public class DiffMergeDialog extends Dialog {
   @Override
   protected void configureShell(Shell newShell_p) {
     super.configureShell(newShell_p);
-    newShell_p.setText(_title != null? _title: EMFDiffMergeUIPlugin.LABEL);
+    newShell_p.setText(_title != null ? _title : EMFDiffMergeUIPlugin.LABEL);
   }
   
   /**
@@ -106,7 +106,7 @@ public class DiffMergeDialog extends Dialog {
    */
   protected Button createOKButton(Composite parent_p) {
     Button result = createButton(
-        parent_p, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        parent_p, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
     IComparison<?> comparison = _input.getActualComparison();
     boolean enabled = comparison != null? comparison.hasRemainingDifferences(): false;
     result.setEnabled(enabled);
