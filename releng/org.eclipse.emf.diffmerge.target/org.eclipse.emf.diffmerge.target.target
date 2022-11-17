@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="org.eclipse.emf.diffmerge" sequenceNumber="1653385373">
+<target name="org.eclipse.emf.diffmerge" sequenceNumber="1668693717">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.gmf.runtime.notation.sdk.feature.group" version="0.0.0"/>
@@ -41,7 +41,7 @@
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.sirius.specifier.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/sirius/updates/stable/7.0.1-S20220519-115310/2021-06"/>
+      <repository location="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
     </location>
   </locations>
 </target>
