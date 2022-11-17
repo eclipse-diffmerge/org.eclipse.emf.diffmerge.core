@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.Messages;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
@@ -94,6 +95,7 @@ public final class UIUtil {
     MenuDropDownAction action = new MenuDropDownAction(IAction.AS_PUSH_BUTTON);
     action.setImageDescriptor(EMFDiffMergeUIPlugin.getDefault().getImageDescriptor(
         EMFDiffMergeUIPlugin.ImageID.VIEW_MENU));
+    action.setToolTipText(Messages.ComparisonViewer_ViewMenuTooltip);
     context_p.add(action);
     return action.getMenuManager();
   }

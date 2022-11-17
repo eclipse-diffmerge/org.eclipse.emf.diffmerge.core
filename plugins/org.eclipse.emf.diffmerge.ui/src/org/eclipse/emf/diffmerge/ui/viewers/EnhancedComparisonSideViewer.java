@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2014-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2014-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -23,38 +23,51 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
-
 /**
- * A ComparisonSideViewer with a header.
- * Input, Elements: see ComparisonSideViewer.
+ * A ComparisonSideViewer with a header. Input, Elements: see
+ * ComparisonSideViewer.
+ * 
  * @see ComparisonSideViewer
  * @author Olivier Constant
  */
-public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideViewer> {
-  
-  /** Whether the viewer represents information on the left-hand side of a comparison */
+public class EnhancedComparisonSideViewer
+    extends HeaderViewer<ComparisonSideViewer> {
+
+  /**
+   * Whether the viewer represents information on the left-hand side of a
+   * comparison
+   */
   protected final boolean _isLeftSide;
-  
-  
+
+  /**
+   * The comparison side viewer
+   */
+  protected ComparisonSideViewer sideViewer;
+
   /**
    * Constructor
-   * @param parent_p a non-null composite
-   * @param isLeftSide_p whether the side is left or right
+   * 
+   * @param parent_p
+   *          a non-null composite
+   * @param isLeftSide_p
+   *          whether the side is left or right
    */
-  public EnhancedComparisonSideViewer(Composite parent_p, boolean isLeftSide_p) {
+  public EnhancedComparisonSideViewer(Composite parent_p,
+      boolean isLeftSide_p) {
     super();
     _isLeftSide = isLeftSide_p;
-    createControls(parent_p); 
+    createControls(parent_p);
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createInnerViewer(org.eclipse.swt.widgets.Composite)
    */
   @Override
   protected ComparisonSideViewer createInnerViewer(Composite parent_p) {
-    return new ComparisonSideViewer(parent_p, _isLeftSide);
+    sideViewer = new ComparisonSideViewer(parent_p, _isLeftSide);
+    return sideViewer;
   }
-  
+
   /**
    * Refresh this viewer ignoring the inner viewer
    */
@@ -70,9 +83,10 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
       updateHeaderImage(imageLabel, input, scope);
     }
   }
-  
+
   /**
    * Return a label provider for header information
+   * 
    * @return a non-null label provider
    */
   protected ILabelProvider getHeaderLabelProvider() {
@@ -81,7 +95,7 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
       // Use LP of inner viewer if available
       IBaseLabelProvider baseLP = getInnerViewer().getLabelProvider();
       if (baseLP instanceof ILabelProvider) {
-        result = (ILabelProvider)baseLP;
+        result = (ILabelProvider) baseLP;
       }
     }
     if (result == null) {
@@ -89,15 +103,15 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
     }
     return result;
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getInput()
    */
   @Override
   public EMFDiffNode getInput() {
-    return (EMFDiffNode)super.getInput();
+    return (EMFDiffNode) super.getInput();
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getSelection()
    */
@@ -105,16 +119,17 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
   public ITreeSelection getSelection() {
     return getInnerViewer().getSelection();
   }
-  
+
   /**
-   * @see org.eclipse.jface.viewers.Viewer#inputChanged(java.lang.Object, java.lang.Object)
+   * @see org.eclipse.jface.viewers.Viewer#inputChanged(java.lang.Object,
+   *      java.lang.Object)
    */
   @Override
   protected void inputChanged(Object input_p, Object oldInput_p) {
     super.inputChanged(input_p, oldInput_p);
     doRefresh();
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#refresh()
    */
@@ -123,13 +138,17 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
     super.refresh();
     doRefresh();
   }
-  
+
   /**
-   * Update the given "header image" widget so as to reflect the given scope
-   * of the given input
-   * @param headerImageWidget_p a non-null widget
-   * @param input_p a potentially null input object
-   * @param scope_p a potentially null model scope
+   * Update the given "header image" widget so as to reflect the given scope of
+   * the given input
+   * 
+   * @param headerImageWidget_p
+   *          a non-null widget
+   * @param input_p
+   *          a potentially null input object
+   * @param scope_p
+   *          a potentially null model scope
    */
   protected void updateHeaderImage(Label headerImageWidget_p,
       EMFDiffNode input_p, ITreeDataScope<?> scope_p) {
@@ -138,28 +157,41 @@ public class EnhancedComparisonSideViewer extends HeaderViewer<ComparisonSideVie
       headerImageWidget_p.setImage(image);
       Control mainControl = getControl();
       if (mainControl instanceof Composite) {
-        ((Composite)mainControl).layout();
+        ((Composite) mainControl).layout();
       }
     }
   }
-  
+
   /**
-   * Update the given "header text" widget so as to reflect the given scope
-   * of the given input
-   * @param headerTextWidget_p a non-null widget
-   * @param input_p a potentially null input object
-   * @param scope_p a potentially null model scope
+   * Update the given "header text" widget so as to reflect the given scope of
+   * the given input
+   * 
+   * @param headerTextWidget_p
+   *          a non-null widget
+   * @param input_p
+   *          a potentially null input object
+   * @param scope_p
+   *          a potentially null model scope
    */
-  protected void updateHeaderText(Label headerTextWidget_p,
-      EMFDiffNode input_p, ITreeDataScope<?> scope_p) {
+  protected void updateHeaderText(Label headerTextWidget_p, EMFDiffNode input_p,
+      ITreeDataScope<?> scope_p) {
     ILabelProvider lp = getHeaderLabelProvider();
     if (lp instanceof IColorProvider) {
-      Color newColor = ((IColorProvider)lp).getForeground(scope_p);
+      Color newColor = ((IColorProvider) lp).getForeground(scope_p);
       headerTextWidget_p.setForeground(newColor);
     }
     String label = lp.getText(scope_p);
     headerTextWidget_p.setText(label);
     headerTextWidget_p.setToolTipText(label);
   }
-  
+
+  /**
+   * 
+   * @param directed
+   *          : true if left-to-right or right-to-left When true, the decorators
+   *          are changed to git decorators
+   */
+  protected void setDirected(boolean directed) {
+    sideViewer.setDirected(directed);
+  }
 }

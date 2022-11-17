@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S and others.
+ * Copyright (c) 2010-2022 Thales Global Services S.A.S and others.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -14,9 +14,9 @@ package org.eclipse.emf.diffmerge.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-
 /**
  * String management.
+ * 
  * @author Olivier Constant
  */
 @SuppressWarnings("javadoc")
@@ -28,6 +28,7 @@ public class Messages extends NLS {
   public static String AbstractComparisonViewer_CatSetText3Way;
   public static String AbstractComparisonViewer_CatSetTextBasic;
   public static String AbstractComparisonViewer_CatSetTextMerge;
+  public static String CapellaFilteredTree_FILTER_TEXT_PLACEHOLDER;
   public static String CategoryDialog_ApplyLabel;
   public static String CategoryDialog_Description;
   public static String CategoryDialog_Header;
@@ -131,6 +132,7 @@ public class Messages extends NLS {
   public static String ComparisonViewer_ToolUpdate_Tooltip;
   public static String ComparisonViewer_UseTechnicalRepresentation;
   public static String ComparisonViewer_UseTechnicalRepresentationTooltip;
+  public static String ComparisonViewer_ViewMenuTooltip;
   public static String ConfigurableComparisonMethod_Usage_Transfer;
   public static String ConfigurableComparisonMethod_Usage_Transfer_Tooltip;
   public static String ConfigurableComparisonMethod_Usage_Versions;

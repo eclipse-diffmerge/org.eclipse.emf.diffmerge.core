@@ -32,7 +32,7 @@ Whenever the menu item is clicked, a '''setup dialog''' involving the selected f
  
 * The ''''Modifiable'''' check boxes allow defining which model(s) can be modified. If a check box is unselected, it will not be possible to carry out merge actions which would modify the corresponding model. This is a way to protect a model against accidental changes due to a wrong usage of the tool.
  
-* The ''''Merge direction'''' radio buttons specify the direction of the merge, i.e., which model is the source of changes and to which model the changes can be applied. These radio buttons have an impact on the 'Modifiable' check boxes. If 'Any' is chosen, then the comparison is represented in a symmetric way and both models can be modified.
+* The ''''Merge direction'''' radio buttons specify the direction of the merge, i.e., which model is the source of changes and to which model the changes can be applied. These radio buttons have an impact on the 'Modifiable' check boxes. If 'Any' is chosen, then the comparison is represented in a symmetric way and both models can be modified. While 'Any' uses arrow decorators to indicate merge direction, 'Left to right' and "Right to left' uses git like decorators instead.
  
 * The ''''Comparison method'''' combo box allows selecting the way models are compared. A default, configurable comparison method that is suitable, e.g., for version control is available. Other methods can be added via extensions of the diff/merge tool.
 
@@ -230,6 +230,9 @@ The Synthesis section represents the differences between models in terms of addi
 
 The location of an element, with respect to the model tree, is considered as a property of the element named ''''Container''''. A difference on this property can be interpreted as a '''move'''. If an element is at a different location in the left and right models, it is represented in the Synthesis section at the same location as in the left model. 
 
+This section contains a textual filter at the top of the viewer, which can be used to keep all elements whose label matches the text.
+The filter isn't computed while the user types the text to search, but is only computed once 'Enter' is pressed.
+
 The buttons in the Synthesis section are respectively meant to:
  
 * [[Image:Images/nextdiff.png|18x18px]] Fast navigation to the next element that has differences. 
@@ -274,11 +277,11 @@ Additional features are available via a click on the triangle-shaped button.
 
 
 <br>
-=== Difference Categories Dialog === 
+=== Filters and Customization Dialog === 
 
-The [[Image:Images/categories_icon.png]] button or the 'Difference categories...' menu item allow filtering out the displayed differences in order to ease their understanding and split the merge activity into successive phases that focus on different kinds of differences.
+The [[Image:Images/categories_icon.png]] button or the 'Filters and Customization...' menu item allow filtering out the displayed differences in order to ease their understanding and split the merge activity into successive phases that focus on different kinds of differences.
 
-A difference category covers a subset of the differences or model elements in a comparison. Conversely, a given difference or element can belong to several categories. The ''''Difference Categories'''' dialog provides control over difference categories.
+A difference category covers a subset of the differences or model elements in a comparison. Conversely, a given difference or element can belong to several categories. The ''''Filters and Customization'''' dialog provides control over difference categories.
 
 [[Image:Images/Categories.png|500px]]
 
@@ -295,11 +298,11 @@ Additionally, four buttons are proposed in the dialog.
 * ''''Reset'''': Set all categories to their default mode, which may vary according to the category.
 * ''''Cancel'''': Keep the modes that are currently applied, dismiss all changes made since the last application and close the dialog.
 
-Note that the 'Difference Categories' dialog is not modal, so differences can be navigated while the dialog is open.
+Note that the 'Filters and Customization' dialog is not modal, so differences can be navigated while the dialog is open.
 
 If there are chances that differences that are visible with default settings are filtered out due to the selected category modes, the ''''[filtered]'''' mention appears in the header of the Synthesis section (figure below). It is a warning that even though the GUI may not show any difference, the work for difference resolution may not be finished. Just click the 'Reset' button then the 'OK' or 'Apply' button to make remaining differences visible.
 
-[[Image:Images/FilteredWarning.png|300px]]
+[[Image:Images/FilteredWarning.png|400px]]
 
 
 <br>

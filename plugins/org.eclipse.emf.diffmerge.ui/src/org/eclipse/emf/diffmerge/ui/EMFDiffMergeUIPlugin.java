@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -52,12 +52,10 @@ public class EMFDiffMergeUIPlugin extends AbstractUIPlugin {
   /** Identifiers for UI images */
   @SuppressWarnings({"javadoc", "nls"})
   public enum ImageID {
-    CHECKED, CHECKED_DISABLED, CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, COMPARE, CONFLICT_STAT,
-    DELETE, DOWN, EMPTY, EXPANDALL, FILTER, GIT_ADDED(true), GIT_DIRTY(true), GIT_REMOVED(true),
-    GIT_STAGED(true), INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED, LOCK_OPEN,
-    MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT,
-    PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED,
-    UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU, WARNING;
+    CHECKED, CHECKED_DISABLED, CHECKIN_ACTION, CHECKOUT_ACTION, COLLAPSEALL, COMPARE, CONFLICT_STAT, DELETE, DOWN, EMPTY, EXPANDALL, FILTER, FILTERS_MENU(
+        true), GIT_ADDED(true), GIT_DIRTY(true), GIT_REMOVED(true), GIT_STAGED(
+            true), INC_STAT, INC_ADD_STAT, INC_REM_STAT, LEFT, LOCK, LOCK_CLOSED, LOCK_OPEN, MODIFIED_STAT, NEXT_CHANGE_NAV, NEXT_DIFF_NAV, OUT_STAT, OUT_ADD_STAT, OUT_REM_STAT, PLUS, PREV_CHANGE_NAV, PREV_DIFF_NAV, REDO, RIGHT, SHOW, SORT, SWAP, SYNCED, TREE, UNCHECKED, UNCHECKED_DISABLED, UNDO, UP, UPDATE, VIEW_MENU(
+                true), WARNING;
     /** Whether the image file is a PNG instead of a GIF */
     private boolean _isPNG;
     /** Default constructor */

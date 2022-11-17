@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2014-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2014-2022 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -17,24 +17,31 @@ import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-
 /**
- * A ComparisonTreeViewer with a header.
- * Input, Elements: see ComparisonTreeViewer.
+ * A ComparisonTreeViewer with a header. Input, Elements: see
+ * ComparisonTreeViewer.
+ * 
  * @see ComparisonTreeViewer
  * @author Olivier Constant
  */
-public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeViewer> {
-  
+public class EnhancedComparisonTreeViewer
+    extends HeaderViewer<ComparisonTreeViewer> {
+  /**
+   * the comparisonTreeViewer with a textualFilter
+   */
+  protected ComparisonTreeViewerWithTextualFilter innerViewer = null;
+
   /**
    * Constructor
-   * @param parent_p a non-null composite
+   * 
+   * @param parent_p
+   *          a non-null composite
    */
   public EnhancedComparisonTreeViewer(Composite parent_p) {
     super();
-    createControls(parent_p); 
+    createControls(parent_p);
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createHeaderContent(org.eclipse.swt.widgets.Composite)
    */
@@ -43,7 +50,7 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
     super.createHeaderContent(parent_p);
     setHeaderText(getDefaultHeaderText());
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createImageLabel(org.eclipse.swt.widgets.Composite)
    */
@@ -51,15 +58,16 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
   protected Label createImageLabel(Composite parent_p) {
     return null;
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createInnerViewer(org.eclipse.swt.widgets.Composite)
    */
   @Override
   protected ComparisonTreeViewer createInnerViewer(Composite parent_p) {
-    return new ComparisonTreeViewer(parent_p);
+    innerViewer = new ComparisonTreeViewerWithTextualFilter(parent_p);
+    return innerViewer.getViewer();
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#createTextLabel(org.eclipse.swt.widgets.Composite)
    */
@@ -69,29 +77,50 @@ public class EnhancedComparisonTreeViewer extends HeaderViewer<ComparisonTreeVie
     result.setFont(UIUtil.getBold(result.getFont()));
     return result;
   }
-  
+
   /**
    * Return the default text for the header
+   * 
    * @return a non-null string
    */
   public String getDefaultHeaderText() {
     return Messages.EnhancedComparisonTreeViewer_DefaultHeader;
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getInput()
    */
   @Override
   public EMFDiffNode getInput() {
-    return (EMFDiffNode)super.getInput();
+    return (EMFDiffNode) super.getInput();
   }
-  
+
   /**
    * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#getSelection()
    */
   @Override
   public ITreeSelection getSelection() {
-    return (ITreeSelection)super.getSelection();
+    return (ITreeSelection) super.getSelection();
   }
-  
+
+  /**
+   * 
+   * @see org.eclipse.emf.diffmerge.ui.viewers.HeaderViewer#inputChanged(java.lang.Object,
+   *      java.lang.Object)
+   */
+  @Override
+  protected void inputChanged(Object input_p, Object oldInput_p) {
+    innerViewer.inputChanged(input_p, oldInput_p);
+    super.inputChanged(input_p, oldInput_p);
+  }
+
+  /**
+   * 
+   * @param directed
+   *          : true if left-to-right or right-to-left When true, the decorators
+   *          are changed to git decorators
+   */
+  protected void setDirected(boolean directed) {
+    innerViewer.setDirected(directed);
+  }
 }
