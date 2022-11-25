@@ -442,4 +442,4 @@ This can be achieved by
 * Installing the EMF Diff/Merge plug-in for this client (at this time, only EGit).
 * Declaring the file extension of the models as XMI: Window - Preferences - General - Content Types - Text - XML - XMI Metadata Interchange - Add: type, for example, '*.myfileextension'.
 
-If this setup is successful, VCS-based features, for example those available through the 'Compare with...' contextual menu, will automatically use the EMF Diff/Merge GUI when appropriate. In the case of EGit, be careful to not directly use content that is pre-merged by Git (see Window - Preferences - Team - Git, 'Merge tool content': do not select 'Workspace').
+If this setup is successful, VCS-based features, for example those available through the 'Compare with...' contextual menu, will automatically use the EMF Diff/Merge GUI when appropriate. In the case of EGit, be careful to not directly use content that is pre-merged by Git (see Window - Preferences - Team - Git, 'Merge tool content': select 'Last HEAD (unmerged)' ).
