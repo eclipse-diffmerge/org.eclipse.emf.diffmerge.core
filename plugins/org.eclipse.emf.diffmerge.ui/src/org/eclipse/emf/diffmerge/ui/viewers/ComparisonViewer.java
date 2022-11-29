@@ -636,7 +636,7 @@ public class ComparisonViewer extends AbstractComparisonViewer {
           Messages.ComparisonViewer_FilterText;
     action.setText(text);
     action.setToolTipText(Messages.ComparisonViewer_EnhancedFilterToolTip);
-    action.setImageDescriptor(getImageDescriptor(ImageID.FILTERS_MENU));
+    action.setImageDescriptor(getImageDescriptor(ImageID.FILTER));
     action.setChecked(false);
     if (_filterSelectionListener == null) {
       _filterSelectionListener = new FilterSelectionListener();
