@@ -13,7 +13,7 @@
 <feature
       id="org.eclipse.emf.diffmerge.gmf.feature"
       label="%featureName"
-      version="0.14.0.qualifier"
+      version="0.14.1.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.license"
       license-feature-version="2.0.2.v20181016-2210">
