@@ -185,12 +185,12 @@ public class SiriusImageHelper {
 
     // if platform, we retrieve the second segment (platform:/resource/projectName)
     if (uri_p.isPlatform()) {
-      return uri_p.segment(1);
+      return URI.decode(uri_p.segment(1));
     }
 
     // When the model is directly stored under git, we cannot retrieve a project name as there is none
     if (uri_p.segmentCount() == 1) {
-      return uri_p.trimFileExtension().segment(uri_p.segmentCount() - 1);
+      return URI.decode(uri_p.trimFileExtension().segment(uri_p.segmentCount() - 1));
     }
 
     // otherwise we look for the parent containing a .project
@@ -206,7 +206,7 @@ public class SiriusImageHelper {
     }
 
     // otherwise we retrieve the first segment
-    return uri_p.segment(0);
+    return URI.decode(uri_p.segment(0));
   }
 
   /**
@@ -220,7 +220,7 @@ public class SiriusImageHelper {
       return description.getName();
       
     } catch (Exception e) {
-      return projectUri.segment(projectUri.segmentCount() - 2);
+      return URI.decode(projectUri.segment(projectUri.segmentCount() - 2));
     }
   }
   
