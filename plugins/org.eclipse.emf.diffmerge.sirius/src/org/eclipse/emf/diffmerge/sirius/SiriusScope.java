@@ -136,6 +136,7 @@ public class SiriusScope extends GMFScope {
     if (result && isDescriptorToRepresentation) {
       registerRepresentationDescriptor((DRepresentationDescriptor)source_p);
     }
+    
     return result;
   }
 
@@ -150,13 +151,16 @@ public class SiriusScope extends GMFScope {
     return objects;
   }
 
+  
   /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#add(org.eclipse.emf.ecore.EObject,
    *      org.eclipse.emf.ecore.EAttribute, java.lang.Object)
    */
   @Override
   public boolean add(EObject source_p, EAttribute attribute_p, Object value_p) {
+    
     Object value = siriusImageHelper.adaptAddValue(source_p, attribute_p, value_p);
+    
     return super.add(source_p, attribute_p, value);
   }
   
@@ -458,6 +462,7 @@ public class SiriusScope extends GMFScope {
   public boolean remove(EObject source_p, EReference reference_p, EObject value_p) {
     boolean isDescriptorToRepresentation =
         reference_p == SIRIUS_DESCRIPTOR_TO_REPRESENTATION_FEATURE;
+    
     String uid = null;
     if (isDescriptorToRepresentation) {
       uid = getReferencedUID((DRepresentationDescriptor)source_p);

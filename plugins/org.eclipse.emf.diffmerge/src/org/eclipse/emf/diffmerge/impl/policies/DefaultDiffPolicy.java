@@ -108,6 +108,7 @@ org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy<EObject> {
    */
   @Override
   public boolean coverMatch(IMatch<EObject> match_p) {
+    
     boolean result = super.coverMatch(match_p);
     if (result && !coverTransientFeatures() && match_p.isPartial()) {
       // Ignore elements owned by a transient containment

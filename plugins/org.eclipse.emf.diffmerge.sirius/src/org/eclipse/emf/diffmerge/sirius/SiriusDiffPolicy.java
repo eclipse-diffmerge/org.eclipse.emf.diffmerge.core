@@ -11,11 +11,21 @@
  **********************************************************************/
 package org.eclipse.emf.diffmerge.sirius;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.diffdata.EMapping;
+import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
@@ -100,11 +110,16 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
         !UNSIGNIFICANT_REFERENCES.contains(reference_p) && super.coverReference(reference_p, scope_p);
   }
   
-  /**
-   * @see org.eclipse.emf.diffmerge.impl.policies.DefaultDiffPolicy#coverMatch(org.eclipse.emf.diffmerge.generic.api.IMatch)
-   */
+  static Collection<IMapping<EObject>> mappings = new HashSet<IMapping<EObject>>();
+  
+  static IMatch getMatch(final EObject object, final Role role) {
+    return mappings.stream().map(x -> x.getMatchFor(object, role)).filter(Objects::nonNull).findFirst().orElse(null);
+  }
+  
   @Override
-  public boolean coverMatch(IMatch<EObject> match_p) {
+  public boolean coverMatch(IMatch<EObject> match_p) { 
+    mappings.add(match_p.getMapping());
+    
     boolean result = super.coverMatch(match_p);
     if (result && match_p.isPartial()) {
       // Ignore certain transient elements (OK because no cross-ref)
