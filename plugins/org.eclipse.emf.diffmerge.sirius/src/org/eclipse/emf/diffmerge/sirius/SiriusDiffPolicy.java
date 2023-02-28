@@ -16,6 +16,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy;
 import org.eclipse.emf.ecore.EAttribute;
@@ -24,9 +25,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.sirius.business.api.resource.ResourceDescriptor;
+import org.eclipse.sirius.business.internal.image.ImageDependenciesAnnotationHelper;
 import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.diagram.sequence.ordering.OrderingPackage;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
+import org.eclipse.sirius.viewpoint.description.DAnnotationEntry;
+import org.eclipse.sirius.viewpoint.description.DescriptionPackage;
 
 
 /**
@@ -106,6 +110,9 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   @Override
   public boolean coverMatch(IMatch<EObject> match_p) {
     boolean result = super.coverMatch(match_p);
+
+    if (result && isAnnotationEntryImageDependency(match_p.get(Role.REFERENCE)))
+      result = false;
     if (result && match_p.isPartial()) {
       // Ignore certain transient elements (OK because no cross-ref)
       EObject element = match_p
@@ -117,6 +124,13 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
     return result;
   }
   
+  private boolean isAnnotationEntryImageDependency(EObject object) {
+    if (object instanceof DAnnotationEntry && ((DAnnotationEntry) object).getSource()
+        .equals(ImageDependenciesAnnotationHelper.IMAGES_DEPENDENCIES_ANNOTATION_SOURCE_NAME))
+      return true;
+    return false;
+  }
+
   /**
    * @see org.eclipse.emf.diffmerge.generic.impl.policies.DefaultDiffPolicy#coverValue(java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
@@ -124,15 +138,21 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   public boolean coverValue(Object value_p, Object attribute_p,
       ITreeDataScope<EObject> scope_p) {
     boolean result;
-    if (IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p)
-        && ((String) value_p).length() == 0) {
+    if (IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p) && ((String) value_p).length() == 0) {
       result = false;
     } else {
       result = super.coverValue(value_p, attribute_p, scope_p);
     }
     return result;
   }
-  
+
+  private boolean shouldNotCoverValue(Object value_p, Object attribute_p) {
+    if ((IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p) && ((String) value_p).length() == 0)
+        || DescriptionPackage.eINSTANCE.getDAnnotationEntry_Details() == attribute_p)
+      return true;
+    return false;
+  }
+
   /**
    * @see org.eclipse.emf.diffmerge.impl.policies.ConfigurableDiffPolicy#doConsiderOrdered(org.eclipse.emf.ecore.EStructuralFeature)
    */
