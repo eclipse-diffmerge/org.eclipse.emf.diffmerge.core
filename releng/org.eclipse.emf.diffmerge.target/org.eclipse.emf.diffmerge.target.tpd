@@ -1,6 +1,6 @@
 target "org.eclipse.emf.diffmerge"
 
-include "https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/targets/modules/gmf-runtime-1.14.tpd"
+include "https://download.eclipse.org/sirius/updates/stable/7.1.0-S20230302-034329/2021-06/targets/modules/gmf-runtime-1.15.tpd"
 
 with source, requirements
 
@@ -30,7 +30,7 @@ location "http://download.eclipse.org/releases/2021-06" {
 	com.google.guava lazy
 }
 
-location "https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/" {
+location "https://download.eclipse.org/sirius/updates/stable/7.1.0-S20230302-034329/2021-06/" {
 	org.eclipse.sirius.specifier.feature.group lazy
 	org.eclipse.sirius.runtime.ide.ui.feature.group lazy
 }

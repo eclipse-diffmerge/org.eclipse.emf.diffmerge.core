@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
 <!-- generated with https://github.com/eclipse-cbi/targetplatform-dsl -->
-<target name="org.eclipse.emf.diffmerge" sequenceNumber="1668693717">
+<target name="org.eclipse.emf.diffmerge" sequenceNumber="1668693718">
   <locations>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.gmf.runtime.notation.sdk.feature.group" version="0.0.0"/>
-      <repository id="GMF-Notation-1.13.0" location="https://download.eclipse.org/modeling/gmp/gmf-notation/updates/releases/R202004160913"/>
+      <repository id="GMF-Notation-1.13.1" location="https://download.eclipse.org/modeling/gmp/gmf-notation/updates/releases/R202211151334"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.gmf.runtime.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.gmf.runtime.thirdparty.feature.group" version="0.0.0"/>
-      <repository id="GMF-Runtime-1.14.2" location="https://download.eclipse.org/modeling/gmp/gmf-runtime/updates/releases/R202204130739"/>
+      <repository id="GMF-Runtime-1.15.3" location="https://download.eclipse.org/modeling/gmp/gmf-runtime/updates/releases/R202211041032/"/>
+    </location>
+    <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
+      <unit id="org.eclipse.gef.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.gef.sdk.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.draw2d.sdk.feature.group" version="0.0.0"/>
+      <repository id="GEF-Classic" location="https://download.eclipse.org/tools/gef/classic/releases/3.14.0"/>
     </location>
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.license.feature.group" version="0.0.0"/>
@@ -25,8 +31,6 @@
       <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.httpclient45.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.draw2d.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.gef.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.ssh.apache.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.ssh.jsch.feature.group" version="0.0.0"/>
@@ -41,7 +45,7 @@
     <location includeMode="planner" includeAllPlatforms="false" includeSource="true" includeConfigurePhase="false" type="InstallableUnit">
       <unit id="org.eclipse.sirius.specifier.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.sirius.runtime.ide.ui.feature.group" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/sirius/updates/releases/7.0.4/2021-06/"/>
+      <repository location="https://download.eclipse.org/sirius/updates/stable/7.1.0-S20230302-034329/2021-06/"/>
     </location>
   </locations>
 </target>
