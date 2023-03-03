@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.generic.api.IMatch;
+import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -228,7 +230,25 @@ public class SiriusImageHelper {
    * For an element, retrieve it's project name
    */
   protected String getMainProjectName(EObject source_p) {
-    EObject root = EcoreUtil.getRootContainer(source_p);
+    EObject root = source_p;
+
+    IMatch match = SiriusDiffPolicy.getMatch(root, Role.TARGET);
+    if (match != null) {
+      while (root != null && match.getElementPresenceDifference() != null) {
+        match = match.getElementPresenceDifference().getOwnerMatch();
+        root = (EObject) match.get(Role.TARGET);
+      }
+    }
+
+    match = SiriusDiffPolicy.getMatch(root, Role.REFERENCE);
+    if (match != null) {
+      while (root != null && match.getElementPresenceDifference() != null) {
+        match = match.getElementPresenceDifference().getOwnerMatch();
+        root = (EObject) match.get(Role.REFERENCE);
+        break;
+      }
+    }
+    root = EcoreUtil.getRootContainer(root);
     if (!_mainProjectNames.containsKey(root)) {
       String string = getProjectName(root);
       _mainProjectNames.put(root, string);

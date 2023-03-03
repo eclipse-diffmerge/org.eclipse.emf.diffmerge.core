@@ -13,8 +13,11 @@ package org.eclipse.emf.diffmerge.sirius;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
@@ -30,12 +33,12 @@ import org.eclipse.sirius.diagram.DiagramPackage;
 import org.eclipse.sirius.diagram.sequence.ordering.OrderingPackage;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
 import org.eclipse.sirius.viewpoint.description.DAnnotationEntry;
-import org.eclipse.sirius.viewpoint.description.DescriptionPackage;
 
 
 /**
  * A diff policy for Sirius models.
  */
+@SuppressWarnings("restriction")
 public class SiriusDiffPolicy extends GMFDiffPolicy {
   
   /**
@@ -76,6 +79,12 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   private static final Collection<EAttribute> IGNORING_EMPTY_STRING_ATTRIBUTES = Arrays
       .asList(DiagramPackage.eINSTANCE.getDDiagramElement_TooltipText());
   
+  static Collection<IMapping<EObject>> mappings = new HashSet<IMapping<EObject>>();
+
+  static IMatch getMatch(final EObject object, final Role role) {
+    return mappings.stream().map(mapping -> mapping.getMatchFor(object, role)).filter(Objects::nonNull).findFirst()
+        .orElse(null);
+  }
   
   /**
    * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
@@ -109,6 +118,8 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
    */
   @Override
   public boolean coverMatch(IMatch<EObject> match_p) {
+    mappings.add(match_p.getMapping());
+
     boolean result = super.coverMatch(match_p);
 
     if (result && isAnnotationEntryImageDependency(match_p.get(Role.REFERENCE)))
@@ -144,13 +155,6 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
       result = super.coverValue(value_p, attribute_p, scope_p);
     }
     return result;
-  }
-
-  private boolean shouldNotCoverValue(Object value_p, Object attribute_p) {
-    if ((IGNORING_EMPTY_STRING_ATTRIBUTES.contains(attribute_p) && ((String) value_p).length() == 0)
-        || DescriptionPackage.eINSTANCE.getDAnnotationEntry_Details() == attribute_p)
-      return true;
-    return false;
   }
 
   /**
