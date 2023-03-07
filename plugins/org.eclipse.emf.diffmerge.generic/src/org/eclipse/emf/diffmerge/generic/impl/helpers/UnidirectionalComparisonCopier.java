@@ -84,8 +84,6 @@ public class UnidirectionalComparisonCopier<E> {
     E element = partialMatch_p.get(_sourceRole);
     E result = copy(element);
     assert result != null;
-    // _mapping.mapIncrementally(
-    // element, _sourceRole, result, _sourceRole.opposite());
     getCompletedMatches().add(_mapping.getMatchFor(element, _sourceRole));
     return result;
   }

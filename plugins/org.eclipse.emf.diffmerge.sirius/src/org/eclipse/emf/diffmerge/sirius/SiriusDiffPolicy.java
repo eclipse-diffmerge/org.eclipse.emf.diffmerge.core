@@ -13,11 +13,8 @@ package org.eclipse.emf.diffmerge.sirius;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
 import org.eclipse.emf.diffmerge.generic.api.Role;
 import org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope;
@@ -79,13 +76,6 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
   private static final Collection<EAttribute> IGNORING_EMPTY_STRING_ATTRIBUTES = Arrays
       .asList(DiagramPackage.eINSTANCE.getDDiagramElement_TooltipText());
   
-  static Collection<IMapping<EObject>> mappings = new HashSet<IMapping<EObject>>();
-
-  static IMatch getMatch(final EObject object, final Role role) {
-    return mappings.stream().map(mapping -> mapping.getMatchFor(object, role)).filter(Objects::nonNull).findFirst()
-        .orElse(null);
-  }
-  
   /**
    * @see org.eclipse.emf.diffmerge.gmf.GMFDiffPolicy#considerEqual(java.lang.Object, java.lang.Object, java.lang.Object, org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope)
    */
@@ -118,8 +108,6 @@ public class SiriusDiffPolicy extends GMFDiffPolicy {
    */
   @Override
   public boolean coverMatch(IMatch<EObject> match_p) {
-    mappings.add(match_p.getMapping());
-
     boolean result = super.coverMatch(match_p);
 
     if (result && isAnnotationEntryImageDependency(match_p.get(Role.REFERENCE)))
