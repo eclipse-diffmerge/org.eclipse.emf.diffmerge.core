@@ -13,6 +13,10 @@ package org.eclipse.emf.diffmerge.diffdata.impl;
 
 import java.util.Map;
 import java.util.Set;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.diffmerge.api.scopes.IComparisonDependantScope;
 import org.eclipse.emf.diffmerge.diffdata.DiffdataPackage;
 import org.eclipse.emf.diffmerge.diffdata.EAttributeValuePresence;
 import org.eclipse.emf.diffmerge.diffdata.EComparison;
@@ -192,6 +196,23 @@ public class EComparisonImpl extends
   @Override
   protected IMergePolicy<EObject> getDefaultMergePolicy() {
     return new DefaultMergePolicy();
+  }
+
+  /**
+   * If the scopes require the comparison object, add it before compute
+   * 
+   * @generated NOT
+   */
+  @Override
+  public IStatus compute(IMatchPolicy<EObject> matchPolicy_p,
+      IDiffPolicy<EObject> diffPolicy_p, IMergePolicy<EObject> mergePolicy_p,
+      IProgressMonitor monitor_p) {
+    if (targetScope instanceof IComparisonDependantScope)
+      ((IComparisonDependantScope) targetScope).setComparison(this);
+    if (referenceScope instanceof IComparisonDependantScope)
+      ((IComparisonDependantScope) referenceScope).setComparison(this);
+
+    return super.compute(matchPolicy_p, diffPolicy_p, mergePolicy_p, monitor_p);
   }
 
 } //GComparisonImpl

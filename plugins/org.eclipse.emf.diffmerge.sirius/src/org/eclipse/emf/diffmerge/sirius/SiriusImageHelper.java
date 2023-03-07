@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
+import org.eclipse.emf.diffmerge.generic.api.Role;
+import org.eclipse.emf.diffmerge.generic.impl.helpers.ComparisonRootContainerHelper;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -36,6 +39,12 @@ public class SiriusImageHelper {
 
   /** @see org.eclipse.emf.diffmerge.sirius.SiriusImageHelper getMainProjectName */
   private HashMap<EObject, String> _mainProjectNames = new HashMap<>();
+
+  private ComparisonRootContainerHelper comparisonRootContainerHelper;
+
+  public SiriusImageHelper(IComparison comparison) {
+    comparisonRootContainerHelper = new ComparisonRootContainerHelper(comparison);
+  }
 
   /**
    * @see org.eclipse.emf.diffmerge.impl.scopes.AbstractEditableModelScope#get(org.eclipse.emf.ecore.EObject,
@@ -228,7 +237,9 @@ public class SiriusImageHelper {
    * For an element, retrieve it's project name
    */
   protected String getMainProjectName(EObject source_p) {
-    EObject root = EcoreUtil.getRootContainer(source_p);
+    EObject root = comparisonRootContainerHelper.getRootFromScope(source_p, Role.TARGET);
+    root = comparisonRootContainerHelper.getRootFromScope(root, Role.REFERENCE);
+    
     if (!_mainProjectNames.containsKey(root)) {
       String string = getProjectName(root);
       _mainProjectNames.put(root, string);

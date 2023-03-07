@@ -32,7 +32,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.diffmerge.Messages;
+import org.eclipse.emf.diffmerge.api.scopes.IComparisonDependantScope;
 import org.eclipse.emf.diffmerge.api.scopes.IFragmentedModelScope;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.structures.binary.HashBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.binary.IBinaryRelation;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -66,7 +68,8 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
  * @author Olivier Constant
  */
 public class FragmentedModelScope extends AbstractEditableModelScope
-implements IFragmentedModelScope.Editable, IEditingDomainProvider {
+    implements IFragmentedModelScope.Editable, IEditingDomainProvider,
+    IComparisonDependantScope {
   
   /** Whether the resources should be opened in read-only mode */
   private final boolean _isReadOnly;
@@ -124,6 +127,8 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
   /** The current state of the scope */
   protected ScopeState _state;
   
+  /** The comparison that uses this scope */
+  protected IComparison comparison;
   
   /**
    * Constructor
@@ -769,6 +774,10 @@ implements IFragmentedModelScope.Editable, IEditingDomainProvider {
         }
       }
     }
+  }
+
+  public void setComparison(IComparison comparison_p) {
+    comparison = comparison_p;
   }
   
 }

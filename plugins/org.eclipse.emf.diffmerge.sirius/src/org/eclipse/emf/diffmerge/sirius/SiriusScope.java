@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.scopes.IPersistentDataScope;
 import org.eclipse.emf.diffmerge.gmf.GMFScope;
 import org.eclipse.emf.diffmerge.structures.common.FArrayList;
@@ -80,7 +81,7 @@ public class SiriusScope extends GMFScope {
       new HashMap<String, DRepresentationDescriptor>();
   
   /** An helper for image helpers */
-  private SiriusImageHelper siriusImageHelper = new SiriusImageHelper();
+  private SiriusImageHelper siriusImageHelper;
   
   /**
    * Constructor
@@ -483,6 +484,12 @@ public class SiriusScope extends GMFScope {
       result = super.save();
     }
     return result;
+  }
+
+  @Override
+  public void setComparison(IComparison comparison_p) {
+    super.setComparison(comparison_p);
+    siriusImageHelper = new SiriusImageHelper(comparison);
   }
   
 }
