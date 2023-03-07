@@ -84,8 +84,6 @@ public class UnidirectionalComparisonCopier<E> {
     E element = partialMatch_p.get(_sourceRole);
     E result = copy(element);
     assert result != null;
-    _mapping.mapIncrementally(
-        element, _sourceRole, result, _sourceRole.opposite());
     getCompletedMatches().add(_mapping.getMatchFor(element, _sourceRole));
     return result;
   }
@@ -98,6 +96,13 @@ public class UnidirectionalComparisonCopier<E> {
     setComparison(comparison_p);
     copyReferences();
   }
+
+  protected E createBareMatch(E sourceElement_p) {
+    E result = _destinationScope.tNewBareElement(sourceElement_p);
+    _mapping.mapIncrementally(sourceElement_p, _sourceRole, result,
+        _sourceRole.opposite());
+    return result;
+  }
   
   /**
    * Return a (shallow) copy of the given element.
@@ -108,7 +113,7 @@ public class UnidirectionalComparisonCopier<E> {
    */
   protected E copy(E sourceElement_p) {
     assert _mergePolicy != null;
-    E result = _destinationScope.tNewBareElement(sourceElement_p);
+    E result = createBareMatch(sourceElement_p);
     for (Object attribute : _sourceScope.mGetAttributes(sourceElement_p)) {
       if (coverAttribute(attribute)) {
         copyAttribute(attribute, sourceElement_p, result);
