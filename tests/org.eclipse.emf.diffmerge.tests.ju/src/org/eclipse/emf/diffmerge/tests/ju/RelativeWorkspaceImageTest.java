@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.sirius.SiriusImageHelper;
 import org.eclipse.emf.diffmerge.sirius.SiriusScope;
 import org.eclipse.emf.transaction.RecordingCommand;
@@ -39,6 +40,7 @@ public class RelativeWorkspaceImageTest {
     ProjectHelper.saveSemanticResource(semantic, img);
     Session session = ProjectHelper.createSessionOn(semantic);
     scope = new SiriusScope(session.getSessionResource().getURI(), session.getTransactionalEditingDomain(), true);
+    scope.setComparison(new EComparisonImpl(null, null, null));
     element = (WorkspaceImage) session.getSemanticResources().iterator().next().getContents().iterator().next();
   }
 
@@ -94,7 +96,8 @@ public class RelativeWorkspaceImageTest {
   @Test
   public void addLocal() {
     setPath(element, "");
-    Object value = new SiriusImageHelper().adaptAddValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
+        DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "a/image.png", value.toString());
   }
@@ -102,7 +105,8 @@ public class RelativeWorkspaceImageTest {
   @Test
   public void addLocalWithProtocol() {
     setPath(element, "");
-    Object value = new SiriusImageHelper().adaptAddValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
+        DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "cdo:/a/image.png", value.toString());
   }
@@ -110,7 +114,8 @@ public class RelativeWorkspaceImageTest {
   @Test
   public void removeLocal() {
     setPath(element, "My image is <img src=\"./image.png\"></img> src=\"c/image.png\"></img>");
-    Object value = new SiriusImageHelper().adaptRemoveValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
+        DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "a/image.png", value.toString());
   }
@@ -118,7 +123,8 @@ public class RelativeWorkspaceImageTest {
   @Test
   public void removeLocalWithProtocol() {
     setPath(element, "My image is <img src=\"cdo:/./image.png\"></img> src=\"cdo:/c/image.png\"></img>");
-    Object value = new SiriusImageHelper().adaptRemoveValue(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
+        DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "cdo:/a/image.png", value.toString());
   }

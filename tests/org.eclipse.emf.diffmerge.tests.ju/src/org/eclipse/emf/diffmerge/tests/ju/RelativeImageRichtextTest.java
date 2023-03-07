@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.sirius.SiriusImageHelper;
 import org.eclipse.emf.diffmerge.sirius.SiriusScope;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.Element;
@@ -45,6 +46,7 @@ public class RelativeImageRichtextTest {
     ProjectHelper.saveSemanticResource(semantic, root);
     Session session = ProjectHelper.createSessionOn(semantic);
     scope = new SiriusScope(session.getSessionResource().getURI(), session.getTransactionalEditingDomain(), true);
+    scope.setComparison(new EComparisonImpl(null, null, null));
     element = (Element) session.getSemanticResources().iterator().next().getEObject("a");
   }
 
@@ -133,7 +135,8 @@ public class RelativeImageRichtextTest {
   @Test
   public void addLocal() {
     setName(element, "");
-    Object value = new SiriusImageHelper().adaptAddValue(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
+        ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "My image is <img src=\"a/image.png\"></img>", value.toString());
   }
@@ -141,7 +144,8 @@ public class RelativeImageRichtextTest {
   @Test
   public void addLocalWithProtocol() {
     setName(element, "");
-    Object value = new SiriusImageHelper().adaptAddValue(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
+        ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "My image is <img src=\"cdo:/a/image.png\"></img>", value.toString());
   }
@@ -149,7 +153,8 @@ public class RelativeImageRichtextTest {
   @Test
   public void removeLocal() {
     setName(element, "My image is <img src=\"./image.png\"></img> src=\"c/image.png\"></img>");
-    Object value = new SiriusImageHelper().adaptRemoveValue(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
+        ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "My image is <img src=\"a/image.png\"></img>", value.toString());
   }
@@ -157,7 +162,8 @@ public class RelativeImageRichtextTest {
   @Test
   public void removeLocalWithProtocol() {
     setName(element, "My image is <img src=\"cdo:/./image.png\"></img> src=\"cdo:/c/image.png\"></img>");
-    Object value = new SiriusImageHelper().adaptRemoveValue(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
+    Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
+        ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
         "My image is <img src=\"cdo:/a/image.png\"></img>", value.toString());
   }
