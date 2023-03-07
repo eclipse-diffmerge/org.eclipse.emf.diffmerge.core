@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
+import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.sirius.SiriusImageHelper;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.Element;
 import org.eclipse.emf.diffmerge.tests.elements.Elements.ElementsFactory;
@@ -39,7 +41,7 @@ public class SiriusScopeMethodTest {
     childResource.getContents().add(element2);
     element.setSingleContent(element2);
 
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
     assertTrue("The project of a root element is it's parent folder", helper.getMainProjectName(element).equals("a"));
     assertTrue("The project of an child element is the parent folder of its root container",
         helper.getMainProjectName(element2).equals("a"));
@@ -59,7 +61,7 @@ public class SiriusScopeMethodTest {
     bResource.getContents().add(element3);
     element.setSingleContent(element2);
 
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
     assertTrue("The project of a root element is it's parent folder", helper.getMainProjectName(element).equals("a"));
     assertTrue("The project of an child element is the parent folder of its root container",
         helper.getMainProjectName(element2).equals("a"));
@@ -68,7 +70,7 @@ public class SiriusScopeMethodTest {
 
   @Test
   public void projectPlatformResource() {
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
 
     assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/model.aird")).equals("project"));
     assertTrue(helper.getProjectFromUri(URI.createURI("platform:/resource/project/fragments/model.airdfragments"))
@@ -82,7 +84,7 @@ public class SiriusScopeMethodTest {
 
   @Test
   public void projectRemoteSirius() {
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
 
     assertTrue(helper.getProjectFromUri(URI.createURI("cdo://repository/project/model.aird")).equals("project"));
     assertTrue(helper.getProjectFromUri(URI.createURI("cdo://repository/project/.representations/model.srm"))
@@ -94,7 +96,7 @@ public class SiriusScopeMethodTest {
 
   @Test
   public void projectByProtocol() {
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
     assertTrue(helper.getProjectFromUri(URI.createURI("commit:/root/sub/project/model.aird")).equals("project"));
     assertTrue(helper.getProjectFromUri(URI.createURI("commit:/model.aird")).equals("model"));
 
@@ -103,11 +105,15 @@ public class SiriusScopeMethodTest {
   
   @Test
   public void projectName() {
-    SiriusHelper helper = new SiriusHelper();
+    SiriusHelper helper = new SiriusHelper(new EComparisonImpl(null, null, null));
     assertTrue(helper.getNameFromDotProject(URI.createURI("commit:/root/sub/project/.project"), null).equals("project"));
   }
 
   private class SiriusHelper extends SiriusImageHelper {
+
+    public SiriusHelper(IComparison comparison) {
+      super(comparison);
+    }
 
     public String getProjectFromUri(URI uri_p) {
       return super.getProjectFromUri(uri_p, new URIConverterImpl() {

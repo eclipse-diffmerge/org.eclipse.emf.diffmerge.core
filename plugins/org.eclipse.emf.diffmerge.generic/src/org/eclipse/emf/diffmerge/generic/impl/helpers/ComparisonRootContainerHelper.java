@@ -1,9 +1,5 @@
 package org.eclipse.emf.diffmerge.generic.impl.helpers;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-
 import org.eclipse.emf.diffmerge.generic.api.IComparison;
 import org.eclipse.emf.diffmerge.generic.api.IMapping;
 import org.eclipse.emf.diffmerge.generic.api.IMatch;
@@ -13,15 +9,16 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public class ComparisonRootContainerHelper {
 
-  private Collection<IMapping> mappings = new HashSet<>();
+  private IMapping mapping = null;
 
   public ComparisonRootContainerHelper(IComparison comparison) {
-    mappings.add(comparison.getMapping());
+    mapping = comparison.getMapping();
   }
 
   private IMatch getMatch(final EObject object, final Role role) {
-    return mappings.stream().map(mapping -> mapping.getMatchFor(object, role))
-        .filter(Objects::nonNull).findFirst().orElse(null);
+    if (mapping != null)
+      return mapping.getMatchFor(object, role);
+    return null;
   }
 
   public EObject getRootFromScope(EObject object, Role role) {
