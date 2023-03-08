@@ -42,6 +42,10 @@ public class SiriusImageHelper {
 
   private ComparisonRootContainerHelper comparisonRootContainerHelper;
 
+  public SiriusImageHelper() {
+
+  }
+
   public SiriusImageHelper(IComparison comparison) {
     comparisonRootContainerHelper = new ComparisonRootContainerHelper(comparison);
   }
@@ -237,8 +241,15 @@ public class SiriusImageHelper {
    * For an element, retrieve it's project name
    */
   protected String getMainProjectName(EObject source_p) {
-    EObject root = comparisonRootContainerHelper.getRootFromScope(source_p, Role.TARGET);
-    root = comparisonRootContainerHelper.getRootFromScope(root, Role.REFERENCE);
+    EObject root;
+
+    if (comparisonRootContainerHelper == null)
+      root = EcoreUtil.getRootContainer(source_p);
+    else {
+      root = comparisonRootContainerHelper.getRootFromScope(source_p, Role.TARGET);
+      if (root == source_p)
+        root = comparisonRootContainerHelper.getRootFromScope(root, Role.REFERENCE);
+    }
     
     if (!_mainProjectNames.containsKey(root)) {
       String string = getProjectName(root);
