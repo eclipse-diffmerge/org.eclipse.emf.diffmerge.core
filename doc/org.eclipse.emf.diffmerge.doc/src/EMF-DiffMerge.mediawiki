@@ -425,6 +425,10 @@ Note that the absence of visible differences does not mean that the left and rig
 
 When using Diffmerge within a Sirius application, description on elements or diagram elements may refer to some external images. Note that when the user will merge some references toward images, please make sure that those images are also available by the destination model, otherwise images will not be loaded properly.
 
+==== Merging into a resource without an open session ====
+
+In the case of Sirius applications, when the target resource does not have the session opened external image dependencies will not be added to it, which may lead to various issues. In order to work around this, it's recommended to either have the session opened on the target of the Diffmerge or, after the process is finished, to update the external dependencies of the target resource. See more regarding that at the last bullet point of [[../help/topic/org.eclipse.sirius.doc/doc/Release_Notes.html#UserVisibleChanges|Changes in Sirius 7.1.0 - User-visible changes]].
+
 <br>
 == Integration with Version Control ==
 

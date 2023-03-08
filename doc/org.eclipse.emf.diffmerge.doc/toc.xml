@@ -36,6 +36,8 @@
 			<topic href="html/EMF-DiffMerge.html#Saving_Merge_Decisions" label="Saving Merge Decisions">
 				<topic href="html/EMF-DiffMerge.html#Absence_of_visible_differences" label="Absence of visible differences"></topic>
 				<topic href="html/EMF-DiffMerge.html#References_toward_images" label="References toward images"></topic>
+    <topic href="html/EMF-DiffMerge.html#Merging_into_a_resource_without_an_open_session" label="Merging into a resource without an open session">
+    </topic>
 			</topic>
 		</topic>
 		<topic href="html/EMF-DiffMerge.html#Integration_with_Version_Control" label="Integration with Version Control">
