@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2022 Thales Global Services S.A.S.
+ * Copyright (c) 2022, 2023 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -118,6 +118,10 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
+    // the cdo path is always encoded so it is needed to encode the project name
+    if (value_p.contains("src=\"cdo:/")) { //$NON-NLS-1$
+      projectName = URI.encodeFragment(projectName, true);
+    }
     return value_p.replaceAll("src=\"(cdo:/)?" + projectName + "/", "src=\"$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
@@ -133,6 +137,11 @@ public class SiriusImageHelper {
     String projectName = getMainProjectName(source_p);
     if (projectName == null) {
       return value_p;
+    }
+
+    // the cdo path is always encoded so it is needed to encode the project name
+    if (value_p.contains("src=\"cdo:/")) { //$NON-NLS-1$
+      projectName = URI.encodeFragment(projectName, true);
     }
     return value_p.replaceAll("src=\"(cdo:/)?\\./", "src=\"$1" + projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
@@ -153,6 +162,11 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
+    // the cdo path is always encoded so it is needed to encode the project name
+    if (value_p.startsWith("cdo:/")) { //$NON-NLS-1$
+      projectName = URI.encodeFragment(projectName, true);
+    }
+
     return value_p.replaceAll("^(cdo:/)?" + projectName + "/", "$1./"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
@@ -170,14 +184,20 @@ public class SiriusImageHelper {
     if (projectName == null) {
       return value_p;
     }
+    // the cdo path is always encoded so it is needed to encode the project name
+    if (value_p.startsWith("cdo:/")) { //$NON-NLS-1$
+      projectName = URI.encodeFragment(projectName, true);
+    }
     return value_p.replaceAll("^(cdo:/)?\\./", "$1" + projectName + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
   }
 
   /**
-   * For a given object, retrieve its project
+   * For a given object, retrieve its project.<br/>
+   * The name is always decode.
    * 
-   * @implSpec Note that the project name containing the element source_p might be different than the IProject containing the
-   *           Sirius session. Here we lookup for the project name owning the resource containing the element
+   * @implSpec Note that the project name containing the element source_p might be different than the IProject
+   *           containing the Sirius session. Here we lookup for the project name owning the resource containing the
+   *           element
    */
   protected String getProjectName(EObject source_p) {
     EObject root = EcoreUtil.getRootContainer(source_p, true);

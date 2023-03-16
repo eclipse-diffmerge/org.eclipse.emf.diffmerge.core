@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2006-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2006-2023 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -81,7 +81,7 @@ public class SiriusScope extends GMFScope {
       new HashMap<String, DRepresentationDescriptor>();
   
   /** An helper for image helpers */
-  private SiriusImageHelper siriusImageHelper;
+  private SiriusImageHelper siriusImageHelper = new SiriusImageHelper();
   
   /**
    * Constructor
