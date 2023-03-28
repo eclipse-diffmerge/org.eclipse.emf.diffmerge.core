@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2022 Thales Global Services S.A.S.
+ * Copyright (c) 2022, 2023 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -36,7 +36,7 @@ public class RelativeWorkspaceImageTest {
   @BeforeClass
   public static void createSessionWithElement() {
     WorkspaceImage img = DiagramFactory.eINSTANCE.createWorkspaceImage();
-    URI semantic = URI.createPlatformResourceURI("a/a.elements", true);
+    URI semantic = URI.createPlatformResourceURI("a space/a space.elements", false);
     ProjectHelper.saveSemanticResource(semantic, img);
     Session session = ProjectHelper.createSessionOn(semantic);
     scope = new SiriusScope(session.getSessionResource().getURI(), session.getTransactionalEditingDomain(), true);
@@ -56,7 +56,7 @@ public class RelativeWorkspaceImageTest {
 
   @Test
   public void rootProject() {
-    setPath(element, "a/image.png");
+    setPath(element, "a space/image.png");
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
     assertEquals("Image on root project shall be changed", "./image.png", object.iterator().next().toString());
   }
@@ -70,15 +70,15 @@ public class RelativeWorkspaceImageTest {
 
   @Test
   public void subFolderWithProjectName() {
-    setPath(element, "b/a/image.png");
+    setPath(element, "b/a space/image.png");
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
-    assertEquals("Sub folder with project name shall not be changed", "b/a/image.png",
+    assertEquals("Sub folder with project name shall not be changed", "b/a space/image.png",
         object.iterator().next().toString());
   }
 
   @Test
   public void subFolderWithProtocol() {
-    setPath(element, "cdo:/a/image.png");
+    setPath(element, "cdo:/a%20space/image.png");
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
     assertEquals("Sub folder with project name shall be changed", "cdo:/./image.png",
         object.iterator().next().toString());
@@ -86,7 +86,7 @@ public class RelativeWorkspaceImageTest {
 
   @Test
   public void rootWithSubFolder() {
-    setPath(element, "a/b/image.png");
+    setPath(element, "a space/b/image.png");
     List<Object> object = scope.get(element, DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH);
     assertEquals("Image on sub folder of root project shall be changed", "./b/image.png",
         object.iterator().next().toString());
@@ -99,7 +99,7 @@ public class RelativeWorkspaceImageTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
         DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "a/image.png", value.toString());
+        "a space/image.png", value.toString());
   }
   
   @Test
@@ -108,7 +108,7 @@ public class RelativeWorkspaceImageTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
         DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "cdo:/a/image.png", value.toString());
+        "cdo:/a%20space/image.png", value.toString());
   }
 
   @Test
@@ -117,7 +117,7 @@ public class RelativeWorkspaceImageTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
         DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "a/image.png", value.toString());
+        "a space/image.png", value.toString());
   }
   
   @Test
@@ -126,7 +126,7 @@ public class RelativeWorkspaceImageTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
         DiagramPackage.Literals.WORKSPACE_IMAGE__WORKSPACE_PATH, "cdo:/./image.png");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "cdo:/a/image.png", value.toString());
+        "cdo:/a%20space/image.png", value.toString());
   }
 
 }
