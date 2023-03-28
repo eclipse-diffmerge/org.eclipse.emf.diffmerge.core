@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2022 Thales Global Services S.A.S.
+ * Copyright (c) 2022, 2023 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -42,7 +42,7 @@ public class RelativeImageRichtextTest {
     RichTextAttributeRegistry.INSTANCE.add(ElementsPackage.Literals.NAMED_ELEMENT__NAME);
     root.getContent().add(e);
 
-    URI semantic = URI.createPlatformResourceURI("a/a.elements", true);
+    URI semantic = URI.createPlatformResourceURI("a space/a space.elements", false);
     ProjectHelper.saveSemanticResource(semantic, root);
     Session session = ProjectHelper.createSessionOn(semantic);
     scope = new SiriusScope(session.getSessionResource().getURI(), session.getTransactionalEditingDomain(), true);
@@ -62,7 +62,7 @@ public class RelativeImageRichtextTest {
 
   @Test
   public void rootProject() {
-    setName(element, "My image is <img src=\"a/image.png\"></img>");
+    setName(element, "My image is <img src=\"a space/image.png\"></img>");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
     assertEquals("Image on root project shall be changed", "My image is <img src=\"./image.png\"></img>",
         object.iterator().next().toString());
@@ -79,7 +79,7 @@ public class RelativeImageRichtextTest {
   @Test
   public void many() {
     setName(element,
-        "My image is <img src=\"a/image.png\"></img> <img src=\"b/image.png\"></img> <img src=\"a/image.png\"></img> <img src=\"b/image.png\"></img>");
+        "My image is <img src=\"a space/image.png\"></img> <img src=\"b/image.png\"></img> <img src=\"a space/image.png\"></img> <img src=\"b/image.png\"></img>");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
     assertEquals("Many images shall be changed",
         "My image is <img src=\"./image.png\"></img> <img src=\"b/image.png\"></img> <img src=\"./image.png\"></img> <img src=\"b/image.png\"></img>",
@@ -88,23 +88,23 @@ public class RelativeImageRichtextTest {
 
   @Test
   public void otherReferences() {
-    setName(element, "My image is <a href=\"a/image.png\"> ../a/image.png");
+    setName(element, "My image is <a href=\"a space/image.png\"> ../a space/image.png");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
-    assertEquals("Other kind of references shall not be changed", "My image is <a href=\"a/image.png\"> ../a/image.png",
+    assertEquals("Other kind of references shall not be changed", "My image is <a href=\"a space/image.png\"> ../a space/image.png",
         object.iterator().next().toString());
   }
 
   @Test
   public void subFolderWithProjectName() {
-    setName(element, "My image is <img src=\"b/a/image.png\"></img>");
+    setName(element, "My image is <img src=\"b/a space/image.png\"></img>");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
-    assertEquals("Sub folder with project name shall not be changed", "My image is <img src=\"b/a/image.png\"></img>",
+    assertEquals("Sub folder with project name shall not be changed", "My image is <img src=\"b/a space/image.png\"></img>",
         object.iterator().next().toString());
   }
 
   @Test
   public void subFolderWithProtocol() {
-    setName(element, "My image is <img src=\"cdo:/a/image.png\"></img>");
+    setName(element, "My image is <img src=\"cdo:/a%20space/image.png\"></img>");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
     assertEquals("Sub folder with project name shall be changed", "My image is <img src=\"cdo:/./image.png\"></img>",
         object.iterator().next().toString());
@@ -112,7 +112,7 @@ public class RelativeImageRichtextTest {
   
   @Test
   public void rootWithSubFolder() {
-    setName(element, "My image is <img src=\"a/b/image.png\"></img>");
+    setName(element, "My image is <img src=\"a space/b/image.png\"></img>");
     List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
     assertEquals("Image on sub folder of root project shall be changed",
         "My image is <img src=\"./b/image.png\"></img>", object.iterator().next().toString());
@@ -122,9 +122,9 @@ public class RelativeImageRichtextTest {
   public void nonRegisteredAttribute() {
     try {
       RichTextAttributeRegistry.INSTANCE.getEAttributes().remove(ElementsPackage.Literals.NAMED_ELEMENT__NAME);
-      setName(element, "My image is <img src=\"a/image.png\"></img>");
+      setName(element, "My image is <img src=\"a space/image.png\"></img>");
       List<Object> object = scope.get(element, ElementsPackage.Literals.NAMED_ELEMENT__NAME);
-      assertEquals("Relative on unregistered attribute shall not be changed", "My image is <img src=\"a/image.png\"></img>",
+      assertEquals("Relative on unregistered attribute shall not be changed", "My image is <img src=\"a space/image.png\"></img>",
           object.iterator().next().toString());
       
     } finally {
@@ -138,7 +138,7 @@ public class RelativeImageRichtextTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
         ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "My image is <img src=\"a/image.png\"></img>", value.toString());
+        "My image is <img src=\"a space/image.png\"></img>", value.toString());
   }
   
   @Test
@@ -147,7 +147,7 @@ public class RelativeImageRichtextTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptAddValue(element,
         ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "My image is <img src=\"cdo:/a/image.png\"></img>", value.toString());
+        "My image is <img src=\"cdo:/a%20space/image.png\"></img>", value.toString());
   }
 
   @Test
@@ -156,7 +156,7 @@ public class RelativeImageRichtextTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
         ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "My image is <img src=\"a/image.png\"></img>", value.toString());
+        "My image is <img src=\"a space/image.png\"></img>", value.toString());
   }
   
   @Test
@@ -165,6 +165,6 @@ public class RelativeImageRichtextTest {
     Object value = new SiriusImageHelper(new EComparisonImpl(null, null, null)).adaptRemoveValue(element,
         ElementsPackage.Literals.NAMED_ELEMENT__NAME, "My image is <img src=\"cdo:/./image.png\"></img>");
     assertEquals("Relative image shall be replaced by project harcoded path",
-        "My image is <img src=\"cdo:/a/image.png\"></img>", value.toString());
+        "My image is <img src=\"cdo:/a%20space/image.png\"></img>", value.toString());
   }
 }
