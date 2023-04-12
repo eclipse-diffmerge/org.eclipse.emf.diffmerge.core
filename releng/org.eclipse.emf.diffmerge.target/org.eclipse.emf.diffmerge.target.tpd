@@ -1,14 +1,21 @@
 target "org.eclipse.emf.diffmerge"
 
-include "https://download.eclipse.org/sirius/updates/stable/7.1.0-S20230302-034329/2021-06/targets/modules/gmf-runtime-1.15.tpd"
-
 with source, requirements
+
+location GMF-Notation-1.13.1 "https://download.eclipse.org/modeling/gmp/gmf-notation/updates/releases/R202211151334" {
+    org.eclipse.gmf.runtime.notation.sdk.feature.group lazy
+}
+
+location GMF-Runtime-1.15.3 "https://download.eclipse.org/modeling/gmp/gmf-runtime/updates/releases/R202211041032/" {
+    org.eclipse.gmf.runtime.sdk.feature.group lazy
+    org.eclipse.gmf.runtime.thirdparty.feature.group lazy
+}
 
 location "http://download.eclipse.org/cbi/updates/license/" {
 	org.eclipse.license.feature.group lazy
 }
 
-location "http://download.eclipse.org/releases/2021-06" {
+location "http://download.eclipse.org/releases/2023-03" {
 	org.eclipse.equinox.sdk.feature.group lazy
 	org.eclipse.platform.sdk lazy
 	org.eclipse.jdt.feature.group lazy
@@ -16,7 +23,7 @@ location "http://download.eclipse.org/releases/2021-06" {
 	org.eclipse.ecf.filetransfer.feature.feature.group lazy
 	org.eclipse.ecf.core.ssl.feature.feature.group lazy
 	org.eclipse.ecf.filetransfer.ssl.feature.feature.group lazy
-	org.eclipse.ecf.filetransfer.httpclient45.feature.feature.group lazy
+	org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group lazy
 	org.eclipse.draw2d.feature.group lazy
 	org.eclipse.gef.feature.group lazy
 	org.eclipse.jgit.feature.group lazy
@@ -30,7 +37,7 @@ location "http://download.eclipse.org/releases/2021-06" {
 	com.google.guava lazy
 }
 
-location "https://download.eclipse.org/sirius/updates/stable/7.1.0-S20230302-034329/2021-06/" {
+location "https://download.eclipse.org/sirius/updates/stable/7.2.0-S20230411-075209/2023-03" {
 	org.eclipse.sirius.specifier.feature.group lazy
 	org.eclipse.sirius.runtime.ide.ui.feature.group lazy
 }
