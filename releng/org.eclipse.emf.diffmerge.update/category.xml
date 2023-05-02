@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipse.emf.diffmerge.feature_0.14.1.qualifier.jar" id="org.eclipse.emf.diffmerge.feature" version="0.14.1.qualifier">
+   <feature url="features/org.eclipse.emf.diffmerge.feature_0.15.0.qualifier.jar" id="org.eclipse.emf.diffmerge.feature" version="0.15.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
-   <feature url="features/org.eclipse.emf.diffmerge.egit.feature_0.14.1.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.feature" version="0.14.1.qualifier">
+   <feature url="features/org.eclipse.emf.diffmerge.egit.feature_0.15.0.qualifier.jar" id="org.eclipse.emf.diffmerge.egit.feature" version="0.15.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
-   <feature url="features/org.eclipse.emf.diffmerge.gmf.feature_0.14.1.qualifier.jar" id="org.eclipse.emf.diffmerge.gmf.feature" version="0.14.1.qualifier">
+   <feature url="features/org.eclipse.emf.diffmerge.gmf.feature_0.15.0.qualifier.jar" id="org.eclipse.emf.diffmerge.gmf.feature" version="0.15.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
-   <feature url="features/org.eclipse.emf.diffmerge.sirius.feature_0.14.1.qualifier.jar" id="org.eclipse.emf.diffmerge.sirius.feature" version="0.14.1.qualifier">
+   <feature url="features/org.eclipse.emf.diffmerge.sirius.feature_0.15.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sirius.feature" version="0.15.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
-   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature.source_0.14.1.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature.source" version="0.14.1.qualifier">
+   <feature url="features/org.eclipse.emf.diffmerge.sdk.feature.source_0.15.0.qualifier.jar" id="org.eclipse.emf.diffmerge.sdk.feature.source" version="0.15.0.qualifier">
       <category name="org.eclipse.emf.diffmerge.category"/>
    </feature>
    <category-def name="org.eclipse.emf.diffmerge.category" label="EMF Diff/Merge (Incubation)"/>
