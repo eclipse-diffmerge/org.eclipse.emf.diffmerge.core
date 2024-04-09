@@ -38,7 +38,7 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<targetDefinitionIncludeSource>ignore</targetDefinitionIncludeSource>
-					<executionEnvironment>JavaSE-11</executionEnvironment>
+					<executionEnvironment>JavaSE-17</executionEnvironment>
 					<target>
 						<artifact>
 							<groupId>org.eclipse.emf.diffmerge</groupId>
@@ -90,7 +90,7 @@
 							<configuration>
 								<toolchains>
 									<jdk>
-										<id>JavaSE-${java.version}</id>
+										<id>JavaSE-17</id>
 									</jdk>
 								</toolchains>
 							</configuration>
