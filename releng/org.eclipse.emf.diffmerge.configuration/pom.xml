@@ -16,7 +16,7 @@
 		<maven.dependency.version>2.10</maven.dependency.version>
 		<maven.resources.version>3.1.0</maven.resources.version>
 		<maven.toolchains.version>1.1</maven.toolchains.version>
-		<tycho.version>2.7.5</tycho.version>
+		<tycho.version>5.0.4</tycho.version>
 		<tycho.extras.version>${tycho.version}</tycho.extras.version>
 	</properties>
 
@@ -38,7 +38,7 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<targetDefinitionIncludeSource>ignore</targetDefinitionIncludeSource>
-					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<executionEnvironment>JavaSE-21</executionEnvironment>
 					<target>
 						<artifact>
 							<groupId>org.eclipse.emf.diffmerge</groupId>
@@ -67,8 +67,8 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
 					<labelSuffix xml:space="preserve"> with Sources</labelSuffix>
@@ -90,7 +90,7 @@
 							<configuration>
 								<toolchains>
 									<jdk>
-										<id>JavaSE-17</id>
+										<id>JavaSE-21</id>
 									</jdk>
 								</toolchains>
 							</configuration>
