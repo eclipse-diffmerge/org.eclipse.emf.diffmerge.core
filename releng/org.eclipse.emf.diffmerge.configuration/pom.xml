@@ -7,17 +7,15 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<cbi.jarsigner.version>1.3.2</cbi.jarsigner.version>
+		<cbi.jarsigner.version>1.5.8</cbi.jarsigner.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rcptt.version>2.5.3</rcptt.version>
 		<java.version>11</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<maven.dependency.version>2.10</maven.dependency.version>
-		<maven.resources.version>3.1.0</maven.resources.version>
-		<maven.toolchains.version>1.1</maven.toolchains.version>
-		<tycho.version>5.0.4</tycho.version>
-		<tycho.extras.version>${tycho.version}</tycho.extras.version>
+		<maven.dependency.version>3.11.0</maven.dependency.version>
+		<maven.resources.version>3.5.0</maven.resources.version>
+		<maven.toolchains.version>3.3.0</maven.toolchains.version>
 	</properties>
 
 	<build>
@@ -64,14 +62,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<labelSuffix xml:space="preserve"> with Sources</labelSuffix>
-				</configuration>
-			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -97,13 +87,17 @@
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-source-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
 						<source>${java.version}</source>
 						<target>${java.version}</target>
 						<useJDK>BREE</useJDK>
-						<useProjectSettings>true</useProjectSettings>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -120,9 +114,6 @@
 	<profiles>
 		<profile>
 			<id>sign</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
 			<build>
 				<plugins>
 					<plugin>
