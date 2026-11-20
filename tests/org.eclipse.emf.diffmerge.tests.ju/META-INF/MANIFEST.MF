@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.ju
 Bundle-Vendor: %providerName
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 0.16.0.qualifier
 Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.emf.diffmerge.tests.ju
 Bundle-RequiredExecutionEnvironment: JavaSE-11
