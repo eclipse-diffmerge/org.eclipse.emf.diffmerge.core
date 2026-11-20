@@ -10,9 +10,6 @@
 		<cbi.jarsigner.version>1.5.8</cbi.jarsigner.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rcptt.version>2.5.3</rcptt.version>
-		<java.version>11</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.dependency.version>3.11.0</maven.dependency.version>
 		<maven.resources.version>3.5.0</maven.resources.version>
 		<maven.toolchains.version>3.3.0</maven.toolchains.version>
@@ -95,8 +92,6 @@
 					<artifactId>tycho-compiler-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
 						<useJDK>BREE</useJDK>
 					</configuration>
 				</plugin>
