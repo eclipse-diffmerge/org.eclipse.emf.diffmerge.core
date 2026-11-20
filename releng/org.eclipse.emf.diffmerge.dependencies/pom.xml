@@ -26,7 +26,6 @@
 							<excludes>org/apache/felix/resolver/</excludes>
 							<includes>**/*.class,**/*.properties,**/*.ini,**/*.html,**/*.txt</includes>
 							<outputDirectory>target/classes</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
