@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<artifactId>org.eclipse.emf.diffmerge.core.javadoc</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
@@ -28,12 +28,19 @@
 							<!-- Do not generate toc.xml for Eclipse help -->
 							<skipTocGen>true</skipTocGen>
 							<javadocOptions>
+								<ignoreError>false</ignoreError>
 								<additionalArguments>
-									<ignoreError>false</ignoreError>
-									<additionalArgument>-linkoffline https://docs.oracle.com/javase/8/docs/api/ ${project.basedir}/package-lists/java</additionalArgument>
 									<additionalArgument>-linkoffline https://osgi.org/javadoc/r4v43/core/index.html ${project.basedir}/package-lists/osgi</additionalArgument>
 									<additionalArgument>-linkoffline http://download.eclipse.org/modeling/emf/emf/javadoc/2.11/ ${project.basedir}/package-lists/emf</additionalArgument>
 									<additionalArgument>-public</additionalArgument>
+									<!-- Javadoc tags from the EMF-generated Java code. -->
+									<additionalArgument>-tag model:X</additionalArgument>
+									<additionalArgument>-tag generated:X</additionalArgument>
+									<additionalArgument>-tag ordered:X</additionalArgument>
+									<!-- Javadoc tags from the JDK. -->
+									<additionalArgument>-tag apiNote:a:"API Note:"</additionalArgument>
+									<additionalArgument>-tag implNote:a:"Implementation Note:"</additionalArgument>
+									<additionalArgument>-tag implSpec:a:"Implementation Requirements:"</additionalArgument>
 								</additionalArguments>
 							</javadocOptions>
 						</configuration>

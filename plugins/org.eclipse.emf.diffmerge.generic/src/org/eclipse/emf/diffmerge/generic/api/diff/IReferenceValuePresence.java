@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -86,16 +86,16 @@ public interface IReferenceValuePresence<E> extends IValuePresence<E> {
   /**
    * Return whether this reference value presence represents an ownership,
    * i.e., it represents an arc in the containment tree.
-   * Class invariant: isOwnership() == (!isOrder() && isContainment())
+   * Class invariant: {@code isOwnership() == (!isOrder() && isContainment())}
    */
   boolean isOwnership();
   
   /**
    * Return whether the given reference value presence corresponds to
    * the symmetrical ownership of the same value.
-   * Postcondition: !result || isOwnership() &&
+   * Postcondition: {@code !result || isOwnership() &&
    *  getValueMatch() != null && getValueMatch() == peer_p.getValueMatch() &&
-   *  getPresenceRole() == peer_p.getPresenceRole().opposite()
+   *  getPresenceRole() == peer_p.getPresenceRole().opposite()}
    * @param peer_p a non-null reference value presence
    */
   boolean isSymmetricalOwnershipTo(IReferenceValuePresence<E> peer_p);
