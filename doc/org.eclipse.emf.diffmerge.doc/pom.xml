@@ -32,7 +32,7 @@
 				<configuration>
 					<sourceFolder>src</sourceFolder>
 					<copyrightNotice>${help.copyrightNotice}</copyrightNotice>
-					<title>${help.documentTitle}</title>
+					<title>${help.title}</title>
 					<multipleOutputFiles>true</multipleOutputFiles>
 					<navigationImages>true</navigationImages>
 					<formatOutput>true</formatOutput>
