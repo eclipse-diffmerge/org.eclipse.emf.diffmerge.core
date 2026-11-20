@@ -24,7 +24,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>${maven.toolchains.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
