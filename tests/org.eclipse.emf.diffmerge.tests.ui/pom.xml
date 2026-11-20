@@ -37,7 +37,6 @@
 						<explicit>${autPath}</explicit>
 						<vmArgs>
 							<vmArg>-Xmx2048m</vmArg>
-							<vmArg>-XX:MaxPermSize=512m</vmArg>
 						</vmArgs>
 					</aut>
 					<runner>
