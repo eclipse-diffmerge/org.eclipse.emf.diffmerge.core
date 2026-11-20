@@ -14,26 +14,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<executions>
-					<execution>
-						<id>source-feature</id>
-						<phase>package</phase>
-						<goals>
-							<goal>feature-source</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<excludes>
-						<plugin id="org.eclipse.emf.diffmerge.tests.workspace" />
-						<plugin id="org.eclipse.emf.diffmerge.doc"/>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<executions>
