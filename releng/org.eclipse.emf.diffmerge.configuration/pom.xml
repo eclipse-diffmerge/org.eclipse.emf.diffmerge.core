@@ -46,7 +46,6 @@
 							<version>0.15.0-SNAPSHOT</version>
 						</artifact>
 					</target>
-					<includePackedArtifacts>true</includePackedArtifacts>
 					<environments>
 						<environment>
 							<os>linux</os>
