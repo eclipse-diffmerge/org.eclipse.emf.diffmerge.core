@@ -1,12 +1,14 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<artifactId>org.eclipse.emf.diffmerge.doc</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
 	<parent>
 		<groupId>org.eclipse.emf.diffmerge</groupId>
 		<artifactId>org.eclipse.emf.diffmerge.docs</artifactId>
-		<version>0.15.0-SNAPSHOT</version>
+		<version>0.16.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -23,14 +25,6 @@
 		<wikitext.version>3.0.6</wikitext.version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.eclipse.mylyn.docs</groupId>
-			<artifactId>org.eclipse.mylyn.wikitext.maven</artifactId>
-			<version>${wikitext.version}</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -40,7 +34,7 @@
 				<configuration>
 					<sourceFolder>src</sourceFolder>
 					<copyrightNotice>${help.copyrightNotice}</copyrightNotice>
-					<title>${help.documentTitle}</title>
+					<title>${help.title}</title>
 					<multipleOutputFiles>true</multipleOutputFiles>
 					<navigationImages>true</navigationImages>
 					<formatOutput>true</formatOutput>

@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -36,12 +36,12 @@ public interface IMatchPolicy<E> {
    * the match policy is considered to be non-applicable to the scope.
    * More formally:
    * Two elements E1, E2 from scopes S1, S2 will match if and only if
-   * getMatchID(E1, S1) != null && getMatchID(E1, S1).equals(getMatchID(E2, S2)).
+   * {@code getMatchID(E1, S1) != null && getMatchID(E1, S1).equals(getMatchID(E2, S2))}.
    * Precondition: scope_p.covers(element_p)
    * Class invariant (uniqueness):
-   *  FOR EVERY E1, E2 IN scope_p.getAllContentsAsSet() :
+   *  {@code FOR EVERY E1, E2 IN scope_p.getAllContentsAsSet() :
    *  E1 != E2 && getMatchID(E1, scope_p) != null IMPLIES
-   *  !getMatchID(E1, scope_p).equals(getMatchID(E2, scope_p))
+   *  !getMatchID(E1, scope_p).equals(getMatchID(E2, scope_p))}
    * @param element_p a non-null element
    * @param scope_p a non-null scope
    * @return a potentially null object

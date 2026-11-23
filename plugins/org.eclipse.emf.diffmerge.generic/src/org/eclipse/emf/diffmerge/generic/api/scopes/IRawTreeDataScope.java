@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -54,7 +54,7 @@ public interface IRawTreeDataScope<E> extends IRawDataScope<E> {
    * Result must be consistent with getChildren(EObject).
    * Operation should not be expensive.
    * Class invariant:
-   *   (this.covers(X) && getContainer(X) == null) == this.getRoots().contains(X)
+   *   {@code (this.covers(X) && getContainer(X) == null) == this.getRoots().contains(X)}
    * @param element_p a non-null element which belongs to this data scope
    * @return a potentially null element
    */

@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -104,7 +104,7 @@ implements IEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#remove(EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope.Editable#remove(java.lang.Object)
    */
   public boolean remove(EObject element_p) {
     // Warning: this implementation ignores cross-references from outside the scope.

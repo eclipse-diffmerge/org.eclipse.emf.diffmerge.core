@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -137,7 +137,7 @@ implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getAllContents(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getAllContents(java.lang.Object)
    */
   public TreeIterator<EObject> getAllContents(EObject root_p) {
     // Return an iterator which is derived from getContents(EObject)
@@ -166,14 +166,14 @@ implements IFeaturedModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContainer(EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getContainer(java.lang.Object)
    */
   public EObject getContainer(EObject element_p) {
     return element_p.eContainer();
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IFeaturedModelScope#getContainment(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.ITreeDataScope#getContainment(java.lang.Object)
    */
   public EReference getContainment(EObject element_p) {
     return element_p.eContainmentFeature();

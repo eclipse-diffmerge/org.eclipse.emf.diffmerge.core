@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -55,7 +55,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope.Editable#add(java.lang.Object)
    */
   public boolean add(EObject element_p) {
     // Must be called by redefinitions in subclasses
@@ -75,7 +75,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#covers(EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope#covers(java.lang.Object)
    */
   @Override
   public boolean covers(EObject element_p) {
@@ -83,7 +83,7 @@ public class RootedModelScope extends AbstractEditableModelScope {
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IModelScope#getContainer(EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawTreeDataScope#getContainer(java.lang.Object)
    */
   @Override
   public EObject getContainer(EObject element_p) {

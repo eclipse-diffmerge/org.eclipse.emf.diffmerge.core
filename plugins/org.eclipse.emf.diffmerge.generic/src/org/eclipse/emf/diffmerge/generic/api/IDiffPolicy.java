@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -93,8 +93,8 @@ public interface IDiffPolicy<E> {
    * Return whether the given reference must be covered by the difference
    * detection algorithm.
    * Precondition: 
-   *  !scope_p.mIsContainmentReference(reference_p) &&
-   *    !scope_p.mIsContainerReference(reference_p)
+   *  {@code !scope_p.mIsContainmentReference(reference_p) &&
+   *    !scope_p.mIsContainerReference(reference_p)}
    * In other terms, this method is never called for containment or container
    * references. This is because those are implicitly determined by the elements
    * that are present in the compared model scopes.

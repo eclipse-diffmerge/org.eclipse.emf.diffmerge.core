@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -134,7 +134,7 @@ public class FragmentedModelScope extends AbstractEditableModelScope
    * Constructor
    * @param resource_p a non-null resource that belongs to a non-null resource set
    * @param readOnly_p whether the scope is in read-only mode, if applicable
-   * Precondition: resource_p != null && resource_p.getResourceSet() != null
+   * Precondition: {@code resource_p != null && resource_p.getResourceSet() != null}
    */
   public FragmentedModelScope(Resource resource_p, boolean readOnly_p) {
     this(resource_p.getURI(), resource_p.getResourceSet(), readOnly_p);
@@ -210,7 +210,7 @@ public class FragmentedModelScope extends AbstractEditableModelScope
   }
   
   /**
-   * @see org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope#add(org.eclipse.emf.ecore.EObject)
+   * @see org.eclipse.emf.diffmerge.generic.api.scopes.IRawDataScope.Editable#add(java.lang.Object)
    */
   public boolean add(EObject element_p) {
     boolean result = false;

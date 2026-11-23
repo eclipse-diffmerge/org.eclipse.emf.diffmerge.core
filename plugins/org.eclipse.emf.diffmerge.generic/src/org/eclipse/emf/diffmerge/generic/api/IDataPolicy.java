@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2010-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2010-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -66,9 +66,9 @@ public interface IDataPolicy<E> {
   
   /**
    * Return whether the given reference is the opposite of a containment.
-   * Class invariant: isContainerReference(r) ==
+   * Class invariant: {@code isContainerReference(r) ==
    *  getOppositeReference(r) != null &&
-   *    isContainmentReference(getOppositeReference(r))
+   *    isContainmentReference(getOppositeReference(r))}
    * @see IDataPolicy#mIsContainmentReference(Object)
    * @see IDataPolicy#mGetOppositeReference(Object)
    * @param reference_p a non-null reference

@@ -1,5 +1,5 @@
 /*********************************************************************
- * Copyright (c) 2016-2019 Thales Global Services S.A.S.
+ * Copyright (c) 2016-2026 Thales Global Services S.A.S.
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -24,7 +24,7 @@ public interface IPropertyValue<V> {
   /**
    * Return whether the actual value cannot be the given one, i.e.,
    * the value is known and it is not equal to the given one.
-   * Postcondition: result == isKnown() && !is(value_p)
+   * Postcondition: {@code result == isKnown() && !is(value_p)}
    * @param value_p a potentially null object
    */
   boolean cannotBe(V value_p);

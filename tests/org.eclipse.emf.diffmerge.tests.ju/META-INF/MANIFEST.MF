@@ -1,8 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Junits
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.emf.diffmerge.tests.ju
-Bundle-Version: 0.15.0.qualifier
+Bundle-Vendor: %providerName
+Bundle-Version: 0.16.0.qualifier
+Bundle-Localization: plugin
 Automatic-Module-Name: org.eclipse.emf.diffmerge.tests.ju
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.junit,

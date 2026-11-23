@@ -1,30 +1,25 @@
-<!-- PROFILES: javadoc, gui.test, sign, standalone -->
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>org.eclipse.emf.diffmerge</groupId>
 	<artifactId>org.eclipse.emf.diffmerge.configuration</artifactId>
-	<version>0.15.0-SNAPSHOT</version>
+	<version>0.16.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
-		<cbi.jarsigner.version>1.3.2</cbi.jarsigner.version>
+		<cbi.jarsigner.version>1.5.8</cbi.jarsigner.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rcptt.version>2.5.3</rcptt.version>
-		<java.version>11</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<maven.dependency.version>2.10</maven.dependency.version>
-		<maven.resources.version>3.1.0</maven.resources.version>
-		<maven.toolchains.version>1.1</maven.toolchains.version>
-		<tycho.version>2.7.5</tycho.version>
-		<tycho.extras.version>${tycho.version}</tycho.extras.version>
+		<maven.dependency.version>3.11.0</maven.dependency.version>
+		<maven.resources.version>3.5.0</maven.resources.version>
+		<maven.toolchains.version>3.3.0</maven.toolchains.version>
 	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-toolchains-plugin</artifactId>
-				<version>${maven.toolchains.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -38,15 +33,14 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<targetDefinitionIncludeSource>ignore</targetDefinitionIncludeSource>
-					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<executionEnvironment>JavaSE-21</executionEnvironment>
 					<target>
 						<artifact>
 							<groupId>org.eclipse.emf.diffmerge</groupId>
 							<artifactId>org.eclipse.emf.diffmerge.target</artifactId>
-							<version>0.15.0-SNAPSHOT</version>
+							<version>0.16.0-SNAPSHOT</version>
 						</artifact>
 					</target>
-					<includePackedArtifacts>true</includePackedArtifacts>
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -66,16 +60,8 @@
 					</environments>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-source-feature-plugin</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>
-					<labelSuffix xml:space="preserve"> with Sources</labelSuffix>
-				</configuration>
-			</plugin>
 		</plugins>
-		
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -90,7 +76,7 @@
 							<configuration>
 								<toolchains>
 									<jdk>
-										<id>JavaSE-17</id>
+										<id>JavaSE-21</id>
 									</jdk>
 								</toolchains>
 							</configuration>
@@ -99,13 +85,23 @@
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-source-plugin</artifactId>
+					<version>${tycho.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
 					<artifactId>tycho-compiler-plugin</artifactId>
 					<version>${tycho.version}</version>
 					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
 						<useJDK>BREE</useJDK>
-						<useProjectSettings>true</useProjectSettings>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>${tycho.version}</version>
+					<configuration>
+						<includeAllSources>true</includeAllSources>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -114,9 +110,6 @@
 	<profiles>
 		<profile>
 			<id>sign</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -146,7 +139,7 @@
 							</execution>
 							<execution>
 								<id>attach-p2-metadata</id>
-								<phase>package</phase>
+								<phase>verify</phase>
 								<goals>
 									<goal>p2-metadata</goal>
 								</goals>
